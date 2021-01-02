@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":9,"i34":9,"i35":9,"i36":9,"i37":9,"i38":9,"i39":9,"i40":9,"i41":9,"i42":9,"i43":9,"i44":9,"i45":9,"i46":10,"i47":10,"i48":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":9,"i34":9,"i35":9,"i36":9,"i37":9,"i38":9,"i39":9,"i40":9,"i41":9,"i42":9,"i43":9,"i44":9,"i45":9,"i46":9,"i47":9,"i48":10,"i49":10,"i50":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -479,108 +479,122 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i31" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasPacketCaching()">hasPacketCaching</a></span>()</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasGroupedPacket()">hasGroupedPacket</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the packet caching feature is enabled.</div>
 </td>
 </tr>
 <tr id="i32" class="altColor">
+<td class="colFirst"><code>static boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasPacketCaching()">hasPacketCaching</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets if the packet caching feature is enabled.</div>
+</td>
+</tr>
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>static <a href="MinecraftServer.html" title="class in net.minestom.server">MinecraftServer</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#init()">init</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isStarted()">isStarted</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the server is up and running.</div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isStopping()">isStopping</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the server is currently being shutdown using <a href="#stopCleanly()"><code>stopCleanly()</code></a>.</div>
 </td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBrandName(java.lang.String)">setBrandName</a></span>&#8203;(java.lang.String&nbsp;brandName)</code></th>
 <td class="colLast">
 <div class="block">Changes the server brand name and send the change to all connected players.</div>
 </td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChunkViewDistance(int)">setChunkViewDistance</a></span>&#8203;(int&nbsp;chunkViewDistance)</code></th>
 <td class="colLast">
 <div class="block">Changes the chunk view distance of the server.</div>
 </td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCompressionThreshold(int)">setCompressionThreshold</a></span>&#8203;(int&nbsp;compressionThreshold)</code></th>
 <td class="colLast">
 <div class="block">Changes the compression threshold of the server.</div>
 </td>
 </tr>
-<tr id="i38" class="altColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDifficulty(net.minestom.server.world.Difficulty)">setDifficulty</a></span>&#8203;(<a href="world/Difficulty.html" title="enum in net.minestom.server.world">Difficulty</a>&nbsp;difficulty)</code></th>
 <td class="colLast">
 <div class="block">Changes the server difficulty and send the appropriate packet to all connected clients.</div>
 </td>
 </tr>
-<tr id="i39" class="rowColor">
+<tr id="i40" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEntityViewDistance(int)">setEntityViewDistance</a></span>&#8203;(int&nbsp;entityViewDistance)</code></th>
 <td class="colLast">
 <div class="block">Changes the entity view distance of the server.</div>
 </td>
 </tr>
-<tr id="i40" class="altColor">
+<tr id="i41" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setGroupedPacket(boolean)">setGroupedPacket</a></span>&#8203;(boolean&nbsp;groupedPacket)</code></th>
+<td class="colLast">
+<div class="block">Enables or disable grouped packet.</div>
+</td>
+</tr>
+<tr id="i42" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMaxPacketSize(int)">setMaxPacketSize</a></span>&#8203;(int&nbsp;maxPacketSize)</code></th>
 <td class="colLast">
 <div class="block">Changes the maximum packet size (in bytes) that a client can send without getting disconnected.</div>
 </td>
 </tr>
-<tr id="i41" class="rowColor">
+<tr id="i43" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setNettyThreadCount(int)">setNettyThreadCount</a></span>&#8203;(int&nbsp;nettyThreadCount)</code></th>
 <td class="colLast">
 <div class="block">Changes the number of threads used by Netty.</div>
 </td>
 </tr>
-<tr id="i42" class="altColor">
+<tr id="i44" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPacketCaching(boolean)">setPacketCaching</a></span>&#8203;(boolean&nbsp;packetCaching)</code></th>
 <td class="colLast">
 <div class="block">Enables or disable packet caching.</div>
 </td>
 </tr>
-<tr id="i43" class="rowColor">
+<tr id="i45" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRateLimit(int)">setRateLimit</a></span>&#8203;(int&nbsp;rateLimit)</code></th>
 <td class="colLast">
 <div class="block">Changes the number of packet a client can send over 1 second without being disconnected.</div>
 </td>
 </tr>
-<tr id="i44" class="altColor">
+<tr id="i46" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setShouldProcessNettyErrors(boolean)">setShouldProcessNettyErrors</a></span>&#8203;(boolean&nbsp;processNettyErrors)</code></th>
 <td class="colLast">
 <div class="block">Sets if the server should process netty errors and other unnecessary netty events.</div>
 </td>
 </tr>
-<tr id="i45" class="rowColor">
+<tr id="i47" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shouldProcessNettyErrors()">shouldProcessNettyErrors</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the server should process netty errors and other unnecessary netty events.</div>
 </td>
 </tr>
-<tr id="i46" class="altColor">
+<tr id="i48" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#start(java.lang.String,int)">start</a></span>&#8203;(java.lang.String&nbsp;address,
      int&nbsp;port)</code></th>
@@ -588,7 +602,7 @@ extends java.lang.Object</pre>
 <div class="block">Starts the server.</div>
 </td>
 </tr>
-<tr id="i47" class="rowColor">
+<tr id="i49" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#start(java.lang.String,int,net.minestom.server.ping.ResponseDataConsumer)">start</a></span>&#8203;(java.lang.String&nbsp;address,
      int&nbsp;port,
@@ -597,7 +611,7 @@ extends java.lang.Object</pre>
 <div class="block">Starts the server.</div>
 </td>
 </tr>
-<tr id="i48" class="altColor">
+<tr id="i50" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stopCleanly()">stopCleanly</a></span>()</code></th>
 <td class="colLast">
@@ -1319,6 +1333,45 @@ public static&nbsp;<a href="event/GlobalEventHandler.html" title="class in net.m
 <dd><code>java.lang.IllegalStateException</code> - if this is called after the server started</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="#hasPacketCaching()"><code>hasPacketCaching()</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="hasGroupedPacket()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasGroupedPacket</h4>
+<pre class="methodSignature">public static&nbsp;boolean&nbsp;hasGroupedPacket()</pre>
+<div class="block">Gets if the packet caching feature is enabled.
+ <p>
+ This features allow sending the exact same packet/buffer to multiple connections.
+ It does provide a great performance benefit by allocating and writing/compressing only once.
+ <p>
+ It is enabled by default and it is our recommendation,
+ you should only disable it if you want to modify packet per-players instead of sharing it.
+ Disabling the feature would result in performance decrease.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the grouped packet feature is enabled, false otherwise</dd>
+</dl>
+</li>
+</ul>
+<a id="setGroupedPacket(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setGroupedPacket</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;setGroupedPacket&#8203;(boolean&nbsp;groupedPacket)</pre>
+<div class="block">Enables or disable grouped packet.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>groupedPacket</code> - true to enable grouped packet</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.IllegalStateException</code> - if this is called after the server started</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#hasGroupedPacket()"><code>hasGroupedPacket()</code></a></dd>
 </dl>
 </li>
 </ul>
