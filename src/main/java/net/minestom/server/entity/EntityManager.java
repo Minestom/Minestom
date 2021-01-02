@@ -107,8 +107,14 @@ public final class EntityManager {
                 final String username = asyncPlayerPreLoginEvent.getUsername();
                 final UUID uuid = asyncPlayerPreLoginEvent.getPlayerUuid();
 
-                player.setUsername(username);
-                player.setUuid(uuid);
+                if (!player.getUsername().equals(username)) {
+                    player.setUsername(username);
+                }
+
+                if (!player.getUuid().equals(uuid)) {
+                    player.setUuid(uuid);
+                }
+
             }
 
             // Add the player to the waiting list

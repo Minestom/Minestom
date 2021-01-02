@@ -6,6 +6,7 @@ import net.minestom.server.potion.Potion;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityPotionRemoveEvent extends EntityEvent {
+
     private final Potion potion;
 
     public EntityPotionRemoveEvent(@NotNull Entity entity, @NotNull Potion potion) {
@@ -18,6 +19,7 @@ public class EntityPotionRemoveEvent extends EntityEvent {
      *
      * @return the removed potion.
      */
+    @NotNull
     public Potion getPotion() {
         return potion;
     }

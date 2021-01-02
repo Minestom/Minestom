@@ -6,6 +6,7 @@ import net.minestom.server.potion.Potion;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityPotionAddEvent extends EntityEvent {
+
     private final Potion potion;
 
     public EntityPotionAddEvent(@NotNull Entity entity, @NotNull Potion potion) {
@@ -18,6 +19,7 @@ public class EntityPotionAddEvent extends EntityEvent {
      *
      * @return the added potion.
      */
+    @NotNull
     public Potion getPotion() {
         return potion;
     }

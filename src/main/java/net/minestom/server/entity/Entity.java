@@ -10,12 +10,7 @@ import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
-import net.minestom.server.event.entity.EntityDeathEvent;
-import net.minestom.server.event.entity.EntitySpawnEvent;
-import net.minestom.server.event.entity.EntityPotionAddEvent;
-import net.minestom.server.event.entity.EntityPotionRemoveEvent;
-import net.minestom.server.event.entity.EntityTickEvent;
-import net.minestom.server.event.entity.EntityVelocityEvent;
+import net.minestom.server.event.entity.*;
 import net.minestom.server.event.handler.EventHandler;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -404,24 +399,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
             return;
         }
 
-        // remove expired effects
-        {
-            this.effects.removeIf(timedPotion -> {
-                final long potionTime = (long) timedPotion.getPotion().getDuration() * MinecraftServer.TICK_MS;
-                // Remove if the potion should be expired
-                if (time >= timedPotion.getStartingTime() + potionTime) {
-                    // Send the packet that the potion should no longer be applied
-                    timedPotion.getPotion().sendRemovePacket(this);
-                    callEvent(EntityPotionRemoveEvent.class, new EntityPotionRemoveEvent(
-                            this,
-                            timedPotion.getPotion()
-                    ));
-                    return true;
-                }
-                return false;
-            });
-        }
-
         // scheduled tasks
         if (!nextTick.isEmpty()) {
             Consumer<Entity> callback;
@@ -572,7 +549,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                 sendSynchronization();
                 // Verify if velocity packet has to be sent
                 if (hasVelocity() || gravityTickCount > 0) {
-                    sendVelocityPacket();
+                    sendPacketsToViewers(getVelocityPacket());
                 }
             }
 
@@ -614,6 +591,24 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
             ticks++;
             callEvent(EntityTickEvent.class, tickEvent); // reuse tickEvent to avoid recreating it each tick
+
+            // remove expired effects
+            {
+                this.effects.removeIf(timedPotion -> {
+                    final long potionTime = (long) timedPotion.getPotion().getDuration() * MinecraftServer.TICK_MS;
+                    // Remove if the potion should be expired
+                    if (time >= timedPotion.getStartingTime() + potionTime) {
+                        // Send the packet that the potion should no longer be applied
+                        timedPotion.getPotion().sendRemovePacket(this);
+                        callEvent(EntityPotionRemoveEvent.class, new EntityPotionRemoveEvent(
+                                this,
+                                timedPotion.getPotion()
+                        ));
+                        return true;
+                    }
+                    return false;
+                });
+            }
         }
 
         // Scheduled synchronization
@@ -625,13 +620,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         if (shouldRemove() && !MinecraftServer.isStopping()) {
             remove();
         }
-    }
-
-    /**
-     * Equivalent to <code>sendPacketsToViewers(getVelocityPacket());</code>.
-     */
-    public void sendVelocityPacket() {
-        sendPacketsToViewers(getVelocityPacket());
     }
 
     /**
@@ -694,6 +682,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param uuid the new entity uuid
      */
     protected void setUuid(@NotNull UUID uuid) {
+        // Refresh internal map
+        Entity.entityByUuid.remove(this.uuid);
+        Entity.entityByUuid.put(uuid, this);
+
         this.uuid = uuid;
     }
 
@@ -1243,6 +1235,47 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     }
 
     /**
+     * Gets all the potion effect of this entity.
+     *
+     * @return an unmodifiable list of all this entity effects
+     */
+    @NotNull
+    public List<TimedPotion> getActiveEffects() {
+        return Collections.unmodifiableList(effects);
+    }
+
+    /**
+     * Removes effect from entity, if it has it.
+     *
+     * @param effect The effect to remove
+     */
+    public void removeEffect(@NotNull PotionEffect effect) {
+        this.effects.removeIf(timedPotion -> {
+            if (timedPotion.getPotion().getEffect() == effect) {
+                timedPotion.getPotion().sendRemovePacket(this);
+                callEvent(EntityPotionRemoveEvent.class, new EntityPotionRemoveEvent(
+                        this,
+                        timedPotion.getPotion()
+                ));
+                return true;
+            }
+            return false;
+        });
+    }
+
+    /**
+     * Adds an effect to an entity.
+     *
+     * @param potion The potion to add
+     */
+    public void addEffect(@NotNull Potion potion) {
+        removeEffect(potion.getEffect());
+        this.effects.add(new TimedPotion(potion, System.currentTimeMillis()));
+        potion.sendAddPacket(this);
+        callEvent(EntityPotionAddEvent.class, new EntityPotionAddEvent(this, potion));
+    }
+
+    /**
      * Removes the entity from the server immediately.
      * <p>
      * WARNING: this does not trigger {@link EntityDeathEvent}.
@@ -1466,50 +1499,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         SPIN_ATTACK,
         SNEAKING,
         DYING
-    }
-
-    /**
-     * Gets all the potion effect of this entity.
-     *
-     * @return an unmodifiable list of all this entity effects
-     */
-    @NotNull
-    public List<TimedPotion> getActiveEffects() {
-        return Collections.unmodifiableList(effects);
-    }
-
-    /**
-     * Removes effect from entity, if it has it.
-     *
-     * @param effect The effect to remove
-     */
-    public void removeEffect(@NotNull PotionEffect effect) {
-        this.effects.removeIf(timedPotion -> {
-            if (timedPotion.getPotion().getEffect() == effect) {
-                timedPotion.getPotion().sendRemovePacket(this);
-                callEvent(EntityPotionRemoveEvent.class, new EntityPotionRemoveEvent(
-                        this,
-                        timedPotion.getPotion()
-                ));
-                return true;
-            }
-            return false;
-        });
-    }
-
-    /**
-     * Adds an effect to an entity.
-     *
-     * @param potion The potion to add
-     */
-    public void addEffect(@NotNull Potion potion) {
-        removeEffect(potion.getEffect());
-        this.effects.add(new TimedPotion(potion, System.currentTimeMillis()));
-        potion.sendAddPacket(this);
-        callEvent(EntityPotionAddEvent.class, new EntityPotionAddEvent(
-                this,
-                potion
-        ));
     }
 
     protected boolean shouldRemove() {
