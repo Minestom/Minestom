@@ -49,7 +49,6 @@ public final class PlayerInventoryUtils {
             case 8:
                 return BOOTS_SLOT;
         }
-        System.out.println("ENTRY: " + slot + " | " + offset);
         final int rowSize = 9;
         slot -= offset;
         if (slot >= rowSize * 3 && slot < rowSize * 4) {
@@ -57,7 +56,6 @@ public final class PlayerInventoryUtils {
         } else {
             slot = slot + rowSize;
         }
-        System.out.println("CONVERT: " + slot);
         return slot;
     }
 
