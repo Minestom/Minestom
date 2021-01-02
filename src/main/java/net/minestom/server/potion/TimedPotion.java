@@ -1,6 +1,5 @@
 package net.minestom.server.potion;
 
-import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 public class TimedPotion {
