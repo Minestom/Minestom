@@ -47,12 +47,31 @@ public final class PacketUtils {
         if (players.isEmpty())
             return;
 
-        final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
-        if (success) {
-            final ByteBuf finalBuffer = createFramedPacket(packet, false);
-            final FramedPacket framedPacket = new FramedPacket(finalBuffer);
+        if (MinecraftServer.hasGroupedPacket()) {
+            // Send grouped packet...
+            final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
+            if (success) {
+                final ByteBuf finalBuffer = createFramedPacket(packet, false);
+                final FramedPacket framedPacket = new FramedPacket(finalBuffer);
 
-            // Send packet to all players
+                // Send packet to all players
+                for (Player player : players) {
+
+                    // Verify if the player should receive the packet
+                    if (playerValidator != null && !playerValidator.isValid(player))
+                        continue;
+
+                    final PlayerConnection playerConnection = player.getPlayerConnection();
+                    if (playerConnection instanceof NettyPlayerConnection) {
+                        final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
+                        nettyPlayerConnection.write(framedPacket);
+                    } else {
+                        playerConnection.sendPacket(packet);
+                    }
+                }
+            }
+        } else {
+            // Write the same packet for each individual players
             for (Player player : players) {
 
                 // Verify if the player should receive the packet
@@ -60,12 +79,7 @@ public final class PacketUtils {
                     continue;
 
                 final PlayerConnection playerConnection = player.getPlayerConnection();
-                if (playerConnection instanceof NettyPlayerConnection) {
-                    final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
-                    nettyPlayerConnection.write(framedPacket);
-                } else {
-                    playerConnection.sendPacket(packet);
-                }
+                playerConnection.sendPacket(packet);
             }
         }
     }

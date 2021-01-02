@@ -133,6 +133,7 @@ public final class MinecraftServer {
     private static int entityViewDistance = 5;
     private static int compressionThreshold = 256;
     private static boolean packetCaching = true;
+    private static boolean groupedPacket = true;
     private static ResponseDataConsumer responseDataConsumer;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
@@ -569,6 +570,34 @@ public final class MinecraftServer {
     public static void setPacketCaching(boolean packetCaching) {
         Check.stateCondition(started, "You cannot change the packet caching value after the server has been started.");
         MinecraftServer.packetCaching = packetCaching;
+    }
+
+    /**
+     * Gets if the packet caching feature is enabled.
+     * <p>
+     * This features allow sending the exact same packet/buffer to multiple connections.
+     * It does provide a great performance benefit by allocating and writing/compressing only once.
+     * <p>
+     * It is enabled by default and it is our recommendation,
+     * you should only disable it if you want to modify packet per-players instead of sharing it.
+     * Disabling the feature would result in performance decrease.
+     *
+     * @return true if the grouped packet feature is enabled, false otherwise
+     */
+    public static boolean hasGroupedPacket() {
+        return groupedPacket;
+    }
+
+    /**
+     * Enables or disable grouped packet.
+     *
+     * @param groupedPacket true to enable grouped packet
+     * @throws IllegalStateException if this is called after the server started
+     * @see #hasGroupedPacket()
+     */
+    public static void setGroupedPacket(boolean groupedPacket) {
+        Check.stateCondition(started, "You cannot change the grouped packet value after the server has been started.");
+        MinecraftServer.groupedPacket = groupedPacket;
     }
 
     /**
