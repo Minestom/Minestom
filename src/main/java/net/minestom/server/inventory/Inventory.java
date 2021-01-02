@@ -405,7 +405,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         }
 
         if (isInWindow) {
-                setItemStack(slot, clickResult.getClicked());
+            setItemStack(slot, clickResult.getClicked());
         } else {
             playerInventory.setItemStack(slot, offset, clickResult.getClicked());
         }
