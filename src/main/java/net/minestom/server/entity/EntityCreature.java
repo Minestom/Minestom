@@ -236,7 +236,7 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
      *
      * @param target the new entity target
      */
-    public void setTarget(@NotNull Entity target) {
+    public void setTarget(@Nullable Entity target) {
         this.target = target;
     }
 
