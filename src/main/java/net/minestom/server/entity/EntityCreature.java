@@ -224,7 +224,7 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
     /**
      * Gets the entity target.
      *
-     * @return the entity target
+     * @return the entity target, can be null if not any
      */
     @Nullable
     public Entity getTarget() {
@@ -234,7 +234,7 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
     /**
      * Changes the entity target.
      *
-     * @param target the new entity target
+     * @param target the new entity target, null to remove
      */
     public void setTarget(@Nullable Entity target) {
         this.target = target;
