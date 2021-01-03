@@ -218,19 +218,20 @@ public interface EquipmentHandler {
 
         final Entity entity = (Entity) this;
 
-        EntityEquipmentPacket equipmentPacket = new EntityEquipmentPacket();
-        equipmentPacket.entityId = entity.getEntityId();
+        final EntityEquipmentPacket.Slot[] slots = EntityEquipmentPacket.Slot.values();
 
-        List<EntityEquipmentPacket.Slot> slots = new ArrayList<>();
-        List<ItemStack> itemStacks = new ArrayList<>();
+        List<ItemStack> itemStacks = new ArrayList<>(slots.length);
 
-        for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
-            final ItemStack itemStack = getEquipment(slot);
-            slots.add(slot);
-            itemStacks.add(itemStack);
+        // Fill items
+        for (EntityEquipmentPacket.Slot slot : slots) {
+            final ItemStack equipment = getEquipment(slot);
+            itemStacks.add(equipment);
         }
 
-        equipmentPacket.slots = slots.toArray(new EntityEquipmentPacket.Slot[0]);
+        // Create equipment packet
+        EntityEquipmentPacket equipmentPacket = new EntityEquipmentPacket();
+        equipmentPacket.entityId = entity.getEntityId();
+        equipmentPacket.slots = slots;
         equipmentPacket.itemStacks = itemStacks.toArray(new ItemStack[0]);
         return equipmentPacket;
     }
