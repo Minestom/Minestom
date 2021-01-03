@@ -134,6 +134,9 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         }
         // Send the cleared inventory to the inventory's owner
         update();
+
+        // Update equipments for viewers
+        this.player.syncEquipments();
     }
 
     @Override

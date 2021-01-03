@@ -53,6 +53,7 @@ public class EntityEquipmentPacket implements ServerPacket {
         CHESTPLATE,
         HELMET;
 
+        @NotNull
         public static Slot fromArmorSlot(ArmorEquipEvent.ArmorSlot armorSlot) {
             switch (armorSlot) {
                 case HELMET:
@@ -63,9 +64,8 @@ public class EntityEquipmentPacket implements ServerPacket {
                     return LEGGINGS;
                 case BOOTS:
                     return BOOTS;
-                default:
-                    return null;
             }
+            throw new IllegalStateException("Something weird happened");
         }
 
     }
