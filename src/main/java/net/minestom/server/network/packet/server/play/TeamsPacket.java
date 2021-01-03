@@ -80,7 +80,11 @@ public class TeamsPacket implements ServerPacket {
         }
 
         if (action == Action.CREATE_TEAM || action == Action.ADD_PLAYERS_TEAM || action == Action.REMOVE_PLAYERS_TEAM) {
-            writer.writeStringArray(entities);
+            if (entities == null || entities.length == 0) {
+                writer.writeVarInt(0); // Empty
+            } else {
+                writer.writeStringArray(entities);
+            }
         }
 
     }
