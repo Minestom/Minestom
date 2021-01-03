@@ -908,7 +908,7 @@ public&nbsp;<a href="Entity.html" title="class in net.minestom.server.entity">En
 <div class="block">Gets the entity target.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the entity target</dd>
+<dd>the entity target, can be null if not any</dd>
 </dl>
 </li>
 </ul>
@@ -918,12 +918,12 @@ public&nbsp;<a href="Entity.html" title="class in net.minestom.server.entity">En
 <ul class="blockList">
 <li class="blockList">
 <h4>setTarget</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setTarget&#8203;(@NotNull
+<pre class="methodSignature">public&nbsp;void&nbsp;setTarget&#8203;(@Nullable
                       <a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;target)</pre>
 <div class="block">Changes the entity target.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>target</code> - the new entity target</dd>
+<dd><code>target</code> - the new entity target, null to remove</dd>
 </dl>
 </li>
 </ul>
