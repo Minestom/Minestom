@@ -453,6 +453,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         // Entity tick
         {
 
+            // Cache the number of "gravity tick"
+            if (!onGround) {
+                gravityTickCount++;
+            } else {
+                gravityTickCount = 0;
+            }
+
             // Velocity
             boolean applyVelocity;
             // Non-player entities with either velocity or gravity enabled
@@ -467,32 +474,19 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                 final float newZ = position.getZ() + velocity.getZ() / tps;
                 Position newPosition = new Position(newX, newY, newZ);
 
-                // Gravity
-                {
-                    // Cache the number of "gravity tick"
-                    if (!onGround) {
-                        gravityTickCount++;
-                    } else {
-                        gravityTickCount = 0;
-                    }
-
-                    // Compute the gravity change (drag per tick + acceleration)
-                    final float gravityY = Math.min(
-                            gravityDragPerTick + (gravityAcceleration * (float) gravityTickCount),
-                            gravityTerminalVelocity);
-
-                    // Change velocity to apply gravity
-                    if (!noGravity) {
-                        velocity.setY(velocity.getY() - gravityY);
-                    }
-                }
-
                 Vector newVelocityOut = new Vector();
+
+                // Gravity force
+                final float gravityY = !noGravity ? Math.min(
+                        gravityDragPerTick + (gravityAcceleration * (float) gravityTickCount),
+                        gravityTerminalVelocity) : 0f;
+
                 final Vector deltaPos = new Vector(
                         getVelocity().getX() / tps,
-                        getVelocity().getY() / tps,
+                        (getVelocity().getY() - gravityY) / tps,
                         getVelocity().getZ() / tps
                 );
+
                 this.onGround = CollisionUtils.handlePhysics(this, deltaPos, newPosition, newVelocityOut);
 
                 // Stop here if the position is the same
@@ -535,7 +529,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
                         // Stop player velocity
                         if (PlayerUtils.isNettyClient(this)) {
-                            velocity.zero();
+                            this.velocity.zero();
                         }
                     } else {
                         drag = 0.98f; // air drag

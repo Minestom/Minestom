@@ -8,7 +8,6 @@ import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.type.monster.EntityZombie;
-import net.minestom.server.entity.type.other.EntityEndCrystal;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.entity.EntityPotionAddEvent;
@@ -192,12 +191,6 @@ public class PlayerInit {
             EntityZombie entityZombie = new EntityZombie(new Position(0, 41, 0));
             entityZombie.setInstance(player.getInstance());
             entityZombie.setPathTo(player.getPosition());
-
-            {
-                EntityEndCrystal entityEndCrystal = new EntityEndCrystal(player.getPosition());
-                entityEndCrystal.setInstance(instanceContainer);
-                entityEndCrystal.setBeamTarget(player.getPosition().toBlockPosition().add(5, 5, 0));
-            }
         });
 
         globalEventHandler.addEventCallback(PlayerDisconnectEvent.class, event -> {
@@ -223,7 +216,7 @@ public class PlayerInit {
 
         globalEventHandler.addEventCallback(PlayerSpawnEvent.class, event -> {
             final Player player = event.getPlayer();
-            player.setGameMode(GameMode.SURVIVAL);
+            player.setGameMode(GameMode.CREATIVE);
 
             PlayerInventory inventory = player.getInventory();
             ItemStack itemStack = new ItemStack(Material.STONE, (byte) 64);

@@ -26,7 +26,10 @@ public class CollisionUtils {
      * @param velocityOut   the Vector object in which the new velocity will be saved
      * @return whether this entity is on the ground
      */
-    public static boolean handlePhysics(Entity entity, Vector deltaPosition, Position positionOut, Vector velocityOut) {
+    public static boolean handlePhysics(@NotNull Entity entity,
+                                        @NotNull Vector deltaPosition,
+                                        @NotNull Position positionOut,
+                                        @NotNull Vector velocityOut) {
         // TODO handle collisions with nearby entities (should it be done here?)
         final Instance instance = entity.getInstance();
         final Position currentPosition = entity.getPosition();
@@ -75,7 +78,7 @@ public class CollisionUtils {
      * @param stepAmount    how much to step in the direction (in blocks)
      * @param positionOut   the vector in which to store the new position
      * @param corners       the corners to check against
-     * @return true iif a collision has been found
+     * @return true if a collision has been found
      */
     private static boolean stepAxis(Instance instance, Vector startPosition, Vector axis, float stepAmount, Vector positionOut, Vector... corners) {
         positionOut.copy(startPosition);

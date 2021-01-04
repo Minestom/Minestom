@@ -130,7 +130,6 @@ public class Player extends LivingEntity implements CommandSender {
     protected final Set<Chunk> viewableChunks = new CopyOnWriteArraySet<>();
     private final AtomicInteger teleportId = new AtomicInteger();
 
-    protected boolean onGround;
     private final Queue<ClientPlayPacket> packets = Queues.newConcurrentLinkedQueue();
     private final boolean levelFlat;
     private final PlayerSettings settings;
