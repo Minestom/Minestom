@@ -5,6 +5,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -91,6 +92,16 @@ public class BlockManager {
     @Nullable
     public CustomBlock getCustomBlock(short id) {
         return customBlocksInternalId[id];
+    }
+
+    /**
+     * Gets all the registered custom blocks.
+     *
+     * @return a {@link Collection} containing the registered custom blocks
+     */
+    @NotNull
+    public Collection<CustomBlock> getCustomBlocks() {
+        return customBlocksId.values();
     }
 
 }
