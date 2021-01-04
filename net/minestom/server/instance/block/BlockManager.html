@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -202,13 +202,20 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>java.util.Collection&lt;<a href="CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCustomBlocks()">getCustomBlocks</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets all the registered custom blocks.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#registerBlockPlacementRule(net.minestom.server.instance.block.rule.BlockPlacementRule)">registerBlockPlacementRule</a></span>&#8203;(<a href="rule/BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule">BlockPlacementRule</a>&nbsp;blockPlacementRule)</code></th>
 <td class="colLast">
 <div class="block">Registers a <a href="rule/BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule"><code>BlockPlacementRule</code></a>.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#registerCustomBlock(net.minestom.server.instance.block.CustomBlock)">registerCustomBlock</a></span>&#8203;(<a href="CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&nbsp;customBlock)</code></th>
 <td class="colLast">
@@ -349,7 +356,7 @@ public&nbsp;<a href="CustomBlock.html" title="class in net.minestom.server.insta
 <a id="getCustomBlock(short)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getCustomBlock</h4>
 <pre class="methodSignature">@Nullable
@@ -360,6 +367,21 @@ public&nbsp;<a href="CustomBlock.html" title="class in net.minestom.server.insta
 <dd><code>id</code> - the custom block id</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the <a href="CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> associated with the id, null if not any</dd>
+</dl>
+</li>
+</ul>
+<a id="getCustomBlocks()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getCustomBlocks</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;java.util.Collection&lt;<a href="CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&gt;&nbsp;getCustomBlocks()</pre>
+<div class="block">Gets all the registered custom blocks.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a <code>Collection</code> containing the registered custom blocks</dd>
 </dl>
 </li>
 </ul>
