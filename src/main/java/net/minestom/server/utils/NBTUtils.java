@@ -145,10 +145,12 @@ public final class NBTUtils {
             }
         }
 
+        // Enchantments
         if (nbt.containsKey("Enchantments")) {
             loadEnchantments(nbt.getList("Enchantments"), item::setEnchantment);
         }
 
+        // Attributes
         if (nbt.containsKey("AttributeModifiers")) {
             NBTList<NBTCompound> attributes = nbt.getList("AttributeModifiers");
             for (NBTCompound attributeNBT : attributes) {
@@ -182,6 +184,20 @@ public final class NBTUtils {
                 final ItemAttribute itemAttribute =
                         new ItemAttribute(uuid, name, attribute, attributeOperation, value, attributeSlot);
                 item.addAttribute(itemAttribute);
+            }
+        }
+
+        // Hide flags
+        {
+            if (nbt.containsKey("HideFlags")) {
+                item.setHideFlag(nbt.getInt("HideFlags"));
+            }
+        }
+
+        // Custom model data
+        {
+            if (nbt.containsKey("CustomModelData")) {
+                item.setCustomModelData(nbt.getInt("CustomModelData"));
             }
         }
 
