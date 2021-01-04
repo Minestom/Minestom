@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":18,"i6":18,"i7":18,"i8":6,"i9":18,"i10":38,"i11":18};
+var data = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":18,"i6":18,"i7":18,"i8":6,"i9":18,"i10":38,"i11":18,"i12":18};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -225,6 +225,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>default boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathTo(net.minestom.server.utils.Position)">setPathTo</a></span>&#8203;(<a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>default boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathTo(net.minestom.server.utils.Position,boolean)">setPathTo</a></span>&#8203;(<a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
+         boolean&nbsp;bestEffort)</code></th>
 <td class="colLast">
 <div class="block">Retrieves the path to <code>position</code> and ask the entity to follow the path.</div>
 </td>
@@ -274,14 +280,15 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre class="methodSignature">default&nbsp;void&nbsp;jump&#8203;(float&nbsp;height)</pre>
 </li>
 </ul>
-<a id="setPathTo(net.minestom.server.utils.Position)">
+<a id="setPathTo(net.minestom.server.utils.Position,boolean)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setPathTo</h4>
 <pre class="methodSignature">default&nbsp;boolean&nbsp;setPathTo&#8203;(@Nullable
-                          <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
+                          <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
+                          boolean&nbsp;bestEffort)</pre>
 <div class="block">Retrieves the path to <code>position</code> and ask the entity to follow the path.
  <p>
  Can be set to null to reset the pathfinder.
@@ -291,8 +298,24 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>position</code> - the position to find the path to, null to reset the pathfinder</dd>
+<dd><code>bestEffort</code> - whether to use the best-effort algorithm to the destination,
+                   if false then this method is more likely to return immediately</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if a path has been found</dd>
+</dl>
+</li>
+</ul>
+<a id="setPathTo(net.minestom.server.utils.Position)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setPathTo</h4>
+<pre class="methodSignature">default&nbsp;boolean&nbsp;setPathTo&#8203;(@Nullable
+                          <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#setPathTo(net.minestom.server.utils.Position,boolean)"><code>with  sets to .</code></a></dd>
 </dl>
 </li>
 </ul>

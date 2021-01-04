@@ -480,9 +480,7 @@ implements <a href="pathfinding/NavigableEntity.html" title="interface in net.mi
 <tr id="i32" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathTo(net.minestom.server.utils.Position)">setPathTo</a></span>&#8203;(<a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
-<td class="colLast">
-<div class="block">Retrieves the path to <code>position</code> and ask the entity to follow the path.</div>
-</td>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i33" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -567,7 +565,7 @@ implements <a href="pathfinding/NavigableEntity.html" title="interface in net.mi
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;net.minestom.server.entity.pathfinding.<a href="pathfinding/NavigableEntity.html" title="interface in net.minestom.server.entity.pathfinding">NavigableEntity</a></h3>
-<code><a href="pathfinding/NavigableEntity.html#jump(float)">jump</a>, <a href="pathfinding/NavigableEntity.html#moveTowards(net.minestom.server.utils.Position,float)">moveTowards</a>, <a href="pathfinding/NavigableEntity.html#setPathfindingPriority(com.extollit.gaming.ai.path.SchedulingPriority)">setPathfindingPriority</a></code></li>
+<code><a href="pathfinding/NavigableEntity.html#jump(float)">jump</a>, <a href="pathfinding/NavigableEntity.html#moveTowards(net.minestom.server.utils.Position,float)">moveTowards</a>, <a href="pathfinding/NavigableEntity.html#setPathfindingPriority(com.extollit.gaming.ai.path.SchedulingPriority)">setPathfindingPriority</a>, <a href="pathfinding/NavigableEntity.html#setPathTo(net.minestom.server.utils.Position,boolean)">setPathTo</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.permission.PermissionHandler">
@@ -1198,20 +1196,11 @@ public&nbsp;<a href="../item/ItemStack.html" title="class in net.minestom.server
 <h4>setPathTo</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;setPathTo&#8203;(@Nullable
                          <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="pathfinding/NavigableEntity.html#setPathTo(net.minestom.server.utils.Position)">NavigableEntity</a></code></span></div>
-<div class="block">Retrieves the path to <code>position</code> and ask the entity to follow the path.
- <p>
- Can be set to null to reset the pathfinder.
- <p>
- The position is cloned, if you want the entity to continually follow this position object
- you need to call this when you want the path to update.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="pathfinding/NavigableEntity.html#setPathTo(net.minestom.server.utils.Position)">setPathTo</a></code>&nbsp;in interface&nbsp;<code><a href="pathfinding/NavigableEntity.html" title="interface in net.minestom.server.entity.pathfinding">NavigableEntity</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>position</code> - the position to find the path to, null to reset the pathfinder</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if a path has been found</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="pathfinding/NavigableEntity.html#setPathTo(net.minestom.server.utils.Position,boolean)"><code>with  sets to .</code></a></dd>
 </dl>
 </li>
 </ul>
