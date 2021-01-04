@@ -56,6 +56,12 @@ public final class PacketProcessor {
                 channel, c -> new NettyPlayerConnection((SocketChannel) channel.channel())
         );
 
+        // Prevent the client from sending packets when disconnected (kick)
+        if (!playerConnection.isOnline()) {
+            playerConnection.disconnect();
+            return;
+        }
+
         if (MinecraftServer.getRateLimit() > 0)
             playerConnection.getPacketCounter().incrementAndGet();
 

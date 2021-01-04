@@ -1743,7 +1743,6 @@ public class Player extends LivingEntity implements CommandSender {
         DisconnectPacket disconnectPacket = new DisconnectPacket();
         disconnectPacket.message = text;
         playerConnection.sendPacket(disconnectPacket);
-        playerConnection.disconnect();
         playerConnection.refreshOnline(false);
     }
 
