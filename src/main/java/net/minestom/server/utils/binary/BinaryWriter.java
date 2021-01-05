@@ -164,19 +164,6 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Writes a string to the buffer.
-     * <p>
-     * The size is a short type.
-     *
-     * @param string the string to write
-     */
-    public void writeShortSizedString(@NotNull String string) {
-        final byte[] bytes = string.getBytes(StandardCharsets.UTF_8);
-        writeShort((short) bytes.length);
-        writeBytes(bytes);
-    }
-
-    /**
      * Writes a var-int array to the buffer.
      * <p>
      * It is sized by another var-int at the beginning.
