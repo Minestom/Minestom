@@ -57,12 +57,12 @@ public interface CommandProcessor {
     boolean hasAccess(@NotNull Player player);
 
     /**
-     * Needed to enable {@link #onWrite(String)} callback.
+     * Needed to enable {@link #onWrite(CommandSender, String)} callback.
      * <p>
      * Be aware that enabling it can cost some performance because of how often it will be called.
      *
      * @return true to enable writing tracking (and server auto completion)
-     * @see #onWrite(String)
+     * @see #onWrite(CommandSender, String)
      */
     default boolean enableWritingTracking() {
         return false;
@@ -72,21 +72,6 @@ public interface CommandProcessor {
      * Allows for tab auto completion, this is called everytime the player press a key in the chat.
      * <p>
      * WARNING: {@link #enableWritingTracking()} needs to return true, you need to override it by default.
-     *
-     * @param text the whole player text
-     * @return the array containing all the suggestion for the current arg (split " "), can be null
-     * @see #enableWritingTracking()
-     */
-    @Nullable
-    default String[] onWrite(@NotNull String text) {
-        return null;
-    }
-
-    /**
-     * Allows for tab auto completion, this is called everytime the player press a key in the chat.
-     * <p>
-     * WARNING: {@link #enableWritingTracking()} needs to return true, you need to override it by default.
-     * This does not work if {@link #onWrite(String) is overriden}
      *
      * @param sender the command sender
      * @param text the whole player text

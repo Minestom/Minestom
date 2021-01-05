@@ -80,7 +80,7 @@ public class ReloadExtensionCommand extends Command {
 
     @Nullable
     @Override
-    public String[] onDynamicWrite(@NotNull String text) {
+    public String[] onDynamicWrite(@NotNull CommandSender sender, @NotNull String text) {
         return extensionsName;
     }
 

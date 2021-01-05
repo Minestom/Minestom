@@ -25,10 +25,7 @@ public class TabCompleteListener {
         final CommandProcessor commandProcessor = COMMAND_MANAGER.getCommandProcessor(commandName);
         if (commandProcessor != null) {
             final int start = findStart(text, split);
-            String[] matches = commandProcessor.onWrite(text);
-            if (matches == null) {
-                matches = commandProcessor.onWrite(player, text);
-            }
+            final String[] matches = commandProcessor.onWrite(player, text);
             if (matches != null && matches.length > 0) {
                 sendTabCompletePacket(packet.transactionId, start, matches, player);
             }
@@ -37,7 +34,7 @@ public class TabCompleteListener {
             final Command command = COMMAND_MANAGER.getCommand(commandName);
             if (command != null) {
                 final int start = findStart(text, split);
-                final String[] matches = command.onDynamicWrite(text);
+                final String[] matches = command.onDynamicWrite(player, text);
                 if (matches != null && matches.length > 0) {
                     sendTabCompletePacket(packet.transactionId, start, matches, player);
                 }

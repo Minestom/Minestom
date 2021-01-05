@@ -254,11 +254,12 @@ public class Command {
      * when in a dynamic argument ({@link ArgumentDynamicWord} (when {@link SuggestionType#ASK_SERVER} is used)
      * and {@link ArgumentDynamicStringArray}).
      *
-     * @param text the whole player's text
+     * @param sender the command sender
+     * @param text   the whole player's text
      * @return the array containing all the suggestion for the current arg (split " "), can be null
      */
     @Nullable
-    public String[] onDynamicWrite(@NotNull String text) {
+    public String[] onDynamicWrite(@NotNull CommandSender sender, @NotNull String text) {
         return null;
     }
 
