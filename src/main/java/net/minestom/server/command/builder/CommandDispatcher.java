@@ -107,6 +107,7 @@ public class CommandDispatcher {
         return commandMap.getOrDefault(commandName, null);
     }
 
+    @NotNull
     private CommandResult findCommandResult(@NotNull Command command, @NotNull String[] args) {
         CommandResult result = new CommandResult();
         result.command = command;

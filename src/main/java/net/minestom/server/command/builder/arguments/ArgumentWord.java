@@ -29,7 +29,7 @@ public class ArgumentWord extends Argument<String> {
      * WARNING: having an array too long would result in a packet too big or the client being stuck during login.
      *
      * @param restrictions the accepted words
-     * @return 'this'
+     * @return 'this' for chaining
      */
     @NotNull
     public ArgumentWord from(@Nullable String... restrictions) {
@@ -42,6 +42,15 @@ public class ArgumentWord extends Argument<String> {
         if (value.contains(" "))
             return SPACE_ERROR;
 
+        // Check restrictions (acting as literal)
+        if (hasRestrictions()) {
+            for (String r : restrictions) {
+                if (value.equalsIgnoreCase(r))
+                    return SUCCESS;
+            }
+            return RESTRICTION_ERROR;
+        }
+
         return SUCCESS;
     }
 
@@ -53,15 +62,6 @@ public class ArgumentWord extends Argument<String> {
 
     @Override
     public int getConditionResult(@NotNull String value) {
-        // Check restrictions
-        if (hasRestrictions()) {
-            for (String r : restrictions) {
-                if (value.equalsIgnoreCase(r))
-                    return SUCCESS;
-            }
-            return RESTRICTION_ERROR;
-        }
-
         return SUCCESS;
     }
 
