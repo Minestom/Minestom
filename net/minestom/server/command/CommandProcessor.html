@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":18,"i1":6,"i2":6,"i3":6,"i4":18,"i5":18,"i6":6};
+var data = {"i0":18,"i1":6,"i2":6,"i3":6,"i4":18,"i5":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -129,7 +129,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
  start by <a href="#getCommandName()"><code>getCommandName()</code></a> or any of the aliases in <a href="#getAliases()"><code>getAliases()</code></a>.
  <p>
  Tab-completion can be activated by overriding <a href="#enableWritingTracking()"><code>enableWritingTracking()</code></a> and return true, you should then listen to
- <a href="#onWrite(java.lang.String)"><code>onWrite(String)</code></a> and return the possible completions to suggest.
+ <a href="#onWrite(net.minestom.server.command.CommandSender,java.lang.String)"><code>onWrite(CommandSender, String)</code></a> and return the possible completions to suggest.
  <p>
  Please be sure to check <a href="builder/Command.html" title="class in net.minestom.server.command.builder"><code>Command</code></a> as it is likely to be better for your use case.</div>
 </li>
@@ -156,7 +156,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <td class="colFirst"><code>default boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#enableWritingTracking()">enableWritingTracking</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Needed to enable <a href="#onWrite(java.lang.String)"><code>onWrite(String)</code></a> callback.</div>
+<div class="block">Needed to enable <a href="#onWrite(net.minestom.server.command.CommandSender,java.lang.String)"><code>onWrite(CommandSender, String)</code></a> callback.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -182,20 +182,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>default java.lang.String[]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onWrite(java.lang.String)">onWrite</a></span>&#8203;(java.lang.String&nbsp;text)</code></th>
-<td class="colLast">
-<div class="block">Allows for tab auto completion, this is called everytime the player press a key in the chat.</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>default java.lang.String[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onWrite(net.minestom.server.command.CommandSender,java.lang.String)">onWrite</a></span>&#8203;(<a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
        java.lang.String&nbsp;text)</code></th>
 <td class="colLast">
 <div class="block">Allows for tab auto completion, this is called everytime the player press a key in the chat.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#process(net.minestom.server.command.CommandSender,java.lang.String,java.lang.String%5B%5D)">process</a></span>&#8203;(<a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
        java.lang.String&nbsp;command,
@@ -303,36 +296,14 @@ java.lang.String[]&nbsp;getAliases()</pre>
 <li class="blockList">
 <h4>enableWritingTracking</h4>
 <pre class="methodSignature">default&nbsp;boolean&nbsp;enableWritingTracking()</pre>
-<div class="block">Needed to enable <a href="#onWrite(java.lang.String)"><code>onWrite(String)</code></a> callback.
+<div class="block">Needed to enable <a href="#onWrite(net.minestom.server.command.CommandSender,java.lang.String)"><code>onWrite(CommandSender, String)</code></a> callback.
  <p>
  Be aware that enabling it can cost some performance because of how often it will be called.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true to enable writing tracking (and server auto completion)</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="#onWrite(java.lang.String)"><code>onWrite(String)</code></a></dd>
-</dl>
-</li>
-</ul>
-<a id="onWrite(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>onWrite</h4>
-<pre class="methodSignature">@Nullable
-default&nbsp;java.lang.String[]&nbsp;onWrite&#8203;(@NotNull
-                                   java.lang.String&nbsp;text)</pre>
-<div class="block">Allows for tab auto completion, this is called everytime the player press a key in the chat.
- <p>
- WARNING: <a href="#enableWritingTracking()"><code>enableWritingTracking()</code></a> needs to return true, you need to override it by default.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>text</code> - the whole player text</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the array containing all the suggestion for the current arg (split " "), can be null</dd>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="#enableWritingTracking()"><code>enableWritingTracking()</code></a></dd>
+<dd><a href="#onWrite(net.minestom.server.command.CommandSender,java.lang.String)"><code>onWrite(CommandSender, String)</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -348,8 +319,7 @@ default&nbsp;java.lang.String[]&nbsp;onWrite&#8203;(@NotNull
                                    java.lang.String&nbsp;text)</pre>
 <div class="block">Allows for tab auto completion, this is called everytime the player press a key in the chat.
  <p>
- WARNING: <a href="#enableWritingTracking()"><code>enableWritingTracking()</code></a> needs to return true, you need to override it by default.
- This does not work if <a href="#onWrite(java.lang.String)"><code>is overriden</code></a></div>
+ WARNING: <a href="#enableWritingTracking()"><code>enableWritingTracking()</code></a> needs to return true, you need to override it by default.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>sender</code> - the command sender</dd>

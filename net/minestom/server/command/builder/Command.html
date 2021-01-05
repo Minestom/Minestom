@@ -287,7 +287,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>java.lang.String[]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onDynamicWrite(java.lang.String)">onDynamicWrite</a></span>&#8203;(java.lang.String&nbsp;text)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onDynamicWrite(net.minestom.server.command.CommandSender,java.lang.String)">onDynamicWrite</a></span>&#8203;(<a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
+              java.lang.String&nbsp;text)</code></th>
 <td class="colLast">
 <div class="block">Allows for tab auto completion, this is called everytime the player press a key in the chat
  when in a dynamic argument (<a href="arguments/ArgumentDynamicWord.html" title="class in net.minestom.server.command.builder.arguments"><code>ArgumentDynamicWord</code></a> (when <a href="arguments/minecraft/SuggestionType.html#ASK_SERVER"><code>SuggestionType.ASK_SERVER</code></a> is used)
@@ -590,7 +591,7 @@ public&nbsp;java.util.Collection&lt;<a href="CommandSyntax.html" title="class in
 </dl>
 </li>
 </ul>
-<a id="onDynamicWrite(java.lang.String)">
+<a id="onDynamicWrite(net.minestom.server.command.CommandSender,java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -598,12 +599,15 @@ public&nbsp;java.util.Collection&lt;<a href="CommandSyntax.html" title="class in
 <h4>onDynamicWrite</h4>
 <pre class="methodSignature">@Nullable
 public&nbsp;java.lang.String[]&nbsp;onDynamicWrite&#8203;(@NotNull
+                                         <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
+                                         @NotNull
                                          java.lang.String&nbsp;text)</pre>
 <div class="block">Allows for tab auto completion, this is called everytime the player press a key in the chat
  when in a dynamic argument (<a href="arguments/ArgumentDynamicWord.html" title="class in net.minestom.server.command.builder.arguments"><code>ArgumentDynamicWord</code></a> (when <a href="arguments/minecraft/SuggestionType.html#ASK_SERVER"><code>SuggestionType.ASK_SERVER</code></a> is used)
  and <a href="arguments/ArgumentDynamicStringArray.html" title="class in net.minestom.server.command.builder.arguments"><code>ArgumentDynamicStringArray</code></a>).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>sender</code> - the command sender</dd>
 <dd><code>text</code> - the whole player's text</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the array containing all the suggestion for the current arg (split " "), can be null</dd>
