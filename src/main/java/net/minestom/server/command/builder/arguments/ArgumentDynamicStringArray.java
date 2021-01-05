@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.utils.callback.validator.StringArrayValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -8,7 +9,7 @@ import java.util.regex.Pattern;
 
 /**
  * Same as {@link ArgumentStringArray} with the exception
- * that this argument can trigger {@link net.minestom.server.command.builder.Command#onDynamicWrite(String)}.
+ * that this argument can trigger {@link net.minestom.server.command.builder.Command#onDynamicWrite(CommandSender, String)}.
  */
 public class ArgumentDynamicStringArray extends Argument<String[]> {
 

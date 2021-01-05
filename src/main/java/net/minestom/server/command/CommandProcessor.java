@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
  * start by {@link #getCommandName()} or any of the aliases in {@link #getAliases()}.
  * <p>
  * Tab-completion can be activated by overriding {@link #enableWritingTracking()} and return true, you should then listen to
- * {@link #onWrite(String)} and return the possible completions to suggest.
+ * {@link #onWrite(CommandSender, String)} and return the possible completions to suggest.
  * <p>
  * Please be sure to check {@link net.minestom.server.command.builder.Command} as it is likely to be better for your use case.
  */
@@ -74,7 +74,7 @@ public interface CommandProcessor {
      * WARNING: {@link #enableWritingTracking()} needs to return true, you need to override it by default.
      *
      * @param sender the command sender
-     * @param text the whole player text
+     * @param text   the whole player text
      * @return the array containing all the suggestions for the current arg (split " "), can be null
      * @see #enableWritingTracking()
      */
