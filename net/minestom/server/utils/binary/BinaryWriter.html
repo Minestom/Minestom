@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -339,47 +339,40 @@ extends java.io.OutputStream</pre>
 </tr>
 <tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeShortSizedString(java.lang.String)">writeShortSizedString</a></span>&#8203;(java.lang.String&nbsp;string)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeSizedString(java.lang.String)">writeSizedString</a></span>&#8203;(java.lang.String&nbsp;string)</code></th>
 <td class="colLast">
 <div class="block">Writes a string to the buffer.</div>
 </td>
 </tr>
 <tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeSizedString(java.lang.String)">writeSizedString</a></span>&#8203;(java.lang.String&nbsp;string)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeStringArray(java.lang.String%5B%5D)">writeStringArray</a></span>&#8203;(java.lang.String[]&nbsp;array)</code></th>
 <td class="colLast">
 <div class="block">Writes a string to the buffer.</div>
 </td>
 </tr>
 <tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeStringArray(java.lang.String%5B%5D)">writeStringArray</a></span>&#8203;(java.lang.String[]&nbsp;array)</code></th>
-<td class="colLast">
-<div class="block">Writes a string to the buffer.</div>
-</td>
-</tr>
-<tr id="i23" class="rowColor">
-<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeUuid(java.util.UUID)">writeUuid</a></span>&#8203;(java.util.UUID&nbsp;uuid)</code></th>
 <td class="colLast">
 <div class="block">Writes an <code>UUID</code>.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeVarInt(int)">writeVarInt</a></span>&#8203;(int&nbsp;i)</code></th>
 <td class="colLast">
 <div class="block">Writes a single var-int to the buffer.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeVarIntArray(int%5B%5D)">writeVarIntArray</a></span>&#8203;(int[]&nbsp;array)</code></th>
 <td class="colLast">
 <div class="block">Writes a var-int array to the buffer.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeVarLong(long)">writeVarLong</a></span>&#8203;(long&nbsp;l)</code></th>
 <td class="colLast">
@@ -632,23 +625,6 @@ extends java.io.OutputStream</pre>
 <div class="block">Writes a string to the buffer.
  <p>
  The size is a var-int type.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>string</code> - the string to write</dd>
-</dl>
-</li>
-</ul>
-<a id="writeShortSizedString(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>writeShortSizedString</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;writeShortSizedString&#8203;(@NotNull
-                                  java.lang.String&nbsp;string)</pre>
-<div class="block">Writes a string to the buffer.
- <p>
- The size is a short type.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>string</code> - the string to write</dd>
