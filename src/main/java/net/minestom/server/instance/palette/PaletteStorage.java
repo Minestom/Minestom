@@ -224,8 +224,9 @@ public class PaletteStorage implements PublicCloneable<PaletteStorage> {
      *
      * @param newBitsPerEntry the new bits per entry count
      */
-    private synchronized void resize(int newBitsPerEntry) {
+    private void resize(int newBitsPerEntry) {
         newBitsPerEntry = fixBitsPerEntry(newBitsPerEntry);
+
         PaletteStorage paletteStorageCache = new PaletteStorage(newBitsPerEntry, bitsIncrement);
         paletteStorageCache.paletteBlockMaps = paletteBlockMaps;
         paletteStorageCache.blockPaletteMaps = blockPaletteMaps;
@@ -239,13 +240,12 @@ public class PaletteStorage implements PublicCloneable<PaletteStorage> {
             }
         }
 
-        this.bitsPerEntry = newBitsPerEntry;
+        this.bitsPerEntry = paletteStorageCache.bitsPerEntry;
 
         this.valuesPerLong = paletteStorageCache.valuesPerLong;
         this.hasPalette = paletteStorageCache.hasPalette;
 
         this.sectionBlocks = paletteStorageCache.sectionBlocks;
-
     }
 
     /**
