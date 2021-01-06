@@ -2,7 +2,6 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.PlayerEvent;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -38,7 +37,6 @@ public class AsyncPlayerPreLoginEvent extends PlayerEvent {
      * @param username the new player username
      */
     public void setUsername(@NotNull String username) {
-        Check.notNull(username, "The player username cannot be null");
         this.username = username;
     }
 
@@ -58,7 +56,6 @@ public class AsyncPlayerPreLoginEvent extends PlayerEvent {
      * @param playerUuid the new player uuid
      */
     public void setPlayerUuid(@NotNull UUID playerUuid) {
-        Check.notNull(playerUuid, "The player uuid cannot be null");
         this.playerUuid = playerUuid;
     }
 }
