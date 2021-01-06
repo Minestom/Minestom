@@ -31,11 +31,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -507,12 +503,15 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      */
     @NotNull
     protected EntityPropertiesPacket getPropertiesPacket() {
+        // Get all the attributes which should be sent to the client
+        final AttributeInstance[] instances = attributeModifiers.values().stream()
+                .filter(i -> i.getAttribute().isShared())
+                .toArray(AttributeInstance[]::new);
+
+
         EntityPropertiesPacket propertiesPacket = new EntityPropertiesPacket();
         propertiesPacket.entityId = getEntityId();
 
-        AttributeInstance[] instances = attributeModifiers.values().stream()
-                .filter(i -> i.getAttribute().isShared())
-                .toArray(AttributeInstance[]::new);
         EntityPropertiesPacket.Property[] properties = new EntityPropertiesPacket.Property[instances.length];
         for (int i = 0; i < properties.length; ++i) {
             EntityPropertiesPacket.Property property = new EntityPropertiesPacket.Property();
@@ -535,7 +534,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      */
     private void setupAttributes() {
         for (Attribute attribute : Attribute.values()) {
-            attributeModifiers.put(attribute.getKey(), new AttributeInstance(attribute, this::onAttributeChanged));
+            final AttributeInstance attributeInstance = new AttributeInstance(attribute, this::onAttributeChanged);
+            this.attributeModifiers.put(attribute.getKey(), attributeInstance);
         }
     }
 

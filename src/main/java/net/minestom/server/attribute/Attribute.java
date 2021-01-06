@@ -13,6 +13,10 @@ public class Attribute {
 
     private static final Map<String, Attribute> ATTRIBUTES = new HashMap<>();
 
+    static {
+        Attributes.init();
+    }
+
     private final String key;
     private final float defaultValue;
     private final float maxValue;

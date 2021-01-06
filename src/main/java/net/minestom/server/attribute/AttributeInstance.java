@@ -24,6 +24,7 @@ public class AttributeInstance {
         this.attribute = attribute;
         this.propertyChangeListener = listener;
         this.baseValue = attribute.getDefaultValue();
+        refreshCachedValue();
     }
 
     /**
@@ -90,6 +91,7 @@ public class AttributeInstance {
      *
      * @return the modifiers.
      */
+    @NotNull
     public Collection<AttributeModifier> getModifiers() {
         return modifiers.values();
     }
@@ -107,18 +109,19 @@ public class AttributeInstance {
      * Recalculate the value of this attribute instance using the modifiers.
      */
     protected void refreshCachedValue() {
+        final Collection<AttributeModifier> modifiers = getModifiers();
         float base = getBaseValue();
 
-        for (var modifier : modifiers.values().stream().filter(mod -> mod.getOperation() == AttributeOperation.ADDITION).toArray(AttributeModifier[]::new)) {
+        for (var modifier : modifiers.stream().filter(mod -> mod.getOperation() == AttributeOperation.ADDITION).toArray(AttributeModifier[]::new)) {
             base += modifier.getAmount();
         }
 
         float result = base;
 
-        for (var modifier : modifiers.values().stream().filter(mod -> mod.getOperation() == AttributeOperation.MULTIPLY_BASE).toArray(AttributeModifier[]::new)) {
+        for (var modifier : modifiers.stream().filter(mod -> mod.getOperation() == AttributeOperation.MULTIPLY_BASE).toArray(AttributeModifier[]::new)) {
             result += (base * modifier.getAmount());
         }
-        for (var modifier : modifiers.values().stream().filter(mod -> mod.getOperation() == AttributeOperation.MULTIPLY_TOTAL).toArray(AttributeModifier[]::new)) {
+        for (var modifier : modifiers.stream().filter(mod -> mod.getOperation() == AttributeOperation.MULTIPLY_TOTAL).toArray(AttributeModifier[]::new)) {
             result *= (1.0f + modifier.getAmount());
         }
 
