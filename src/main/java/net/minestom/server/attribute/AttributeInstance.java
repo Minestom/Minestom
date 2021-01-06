@@ -105,8 +105,6 @@ public class AttributeInstance {
 
     /**
      * Recalculate the value of this attribute instance using the modifiers.
-     *
-     * @return the attribute value
      */
     protected void refreshCachedValue() {
         float base = getBaseValue();
@@ -124,7 +122,6 @@ public class AttributeInstance {
             result *= (1.0f + modifier.getAmount());
         }
 
-        final float finalValue = Math.min(result, getAttribute().getMaxValue());
-        this.cachedValue = finalValue;
+        this.cachedValue = Math.min(result, getAttribute().getMaxValue());
     }
 }
