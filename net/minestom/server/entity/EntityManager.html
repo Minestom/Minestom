@@ -177,7 +177,7 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addWaitingPlayer(net.minestom.server.entity.Player)">addWaitingPlayer</a></span>&#8203;(<a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
-<div class="block">Calls the player initialization callbacks and the event <a href="../event/player/AsyncPlayerPreLoginEvent.html" title="class in net.minestom.server.event.player"><code>AsyncPlayerPreLoginEvent</code></a>.</div>
+<div class="block">Adds a player into the waiting list, to be handled during the next server tick.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -269,15 +269,10 @@ extends java.lang.Object</pre>
 <h4>addWaitingPlayer</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;addWaitingPlayer&#8203;(@NotNull
                              <a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
-<div class="block">Calls the player initialization callbacks and the event <a href="../event/player/AsyncPlayerPreLoginEvent.html" title="class in net.minestom.server.event.player"><code>AsyncPlayerPreLoginEvent</code></a>.
- If the <a href="Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> hasn't been kicked, add him to the waiting list.
- <p>
- Can be considered as a pre-init thing,
- currently executed in <a href="../network/ConnectionManager.html#createPlayer(java.util.UUID,java.lang.String,net.minestom.server.network.player.PlayerConnection)"><code>ConnectionManager.createPlayer(UUID, String, PlayerConnection)</code></a>
- and <a href="fakeplayer/FakePlayer.html#initPlayer(java.util.UUID,java.lang.String,net.minestom.server.entity.fakeplayer.FakePlayerOption,java.util.function.Consumer)"><code>FakePlayer.initPlayer(UUID, String, FakePlayerOption, Consumer)</code></a>.</div>
+<div class="block">Adds a player into the waiting list, to be handled during the next server tick.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>player</code> - the <a href="Player.html" title="class in net.minestom.server.entity"><code>player</code></a> to add to the waiting list</dd>
+<dd><code>player</code> - the <a href="Player.html" title="class in net.minestom.server.entity"><code>player</code></a> to add into the waiting list</dd>
 </dl>
 </li>
 </ul>

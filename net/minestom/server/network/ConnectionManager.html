@@ -198,56 +198,40 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createPlayer(java.util.UUID,java.lang.String,net.minestom.server.network.player.PlayerConnection)">createPlayer</a></span>&#8203;(java.util.UUID&nbsp;uuid,
-            java.lang.String&nbsp;username,
-            <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></th>
-<td class="colLast">
-<div class="block">Creates a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> object and register it.</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createPlayer(net.minestom.server.entity.Player)">createPlayer</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
-<td class="colLast">
-<div class="block">Adds a new <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> in the players list.</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code><a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findPlayer(java.lang.String)">findPlayer</a></span>&#8203;(java.lang.String&nbsp;username)</code></th>
 <td class="colLast">
 <div class="block">Finds the closest player matching a given username.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.util.Collection&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOnlinePlayers()">getOnlinePlayers</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all online players.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayer(java.lang.String)">getPlayer</a></span>&#8203;(java.lang.String&nbsp;username)</code></th>
 <td class="colLast">
 <div class="block">Gets the first player which validate <code>String.equalsIgnoreCase(String)</code>.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayer(java.util.UUID)">getPlayer</a></span>&#8203;(java.util.UUID&nbsp;uuid)</code></th>
 <td class="colLast">
 <div class="block">Gets the first player which validate <code>UUID.equals(Object)</code>.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayer(net.minestom.server.network.player.PlayerConnection)">getPlayer</a></span>&#8203;(<a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> linked to a <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player"><code>PlayerConnection</code></a>.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>java.util.UUID</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayerConnectionUuid(net.minestom.server.network.player.PlayerConnection,java.lang.String)">getPlayerConnectionUuid</a></span>&#8203;(<a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;playerConnection,
                        java.lang.String&nbsp;username)</code></th>
@@ -255,97 +239,113 @@ extends java.lang.Object</pre>
 <div class="block">Computes the UUID of the specified connection.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>java.util.List&lt;java.util.function.Consumer&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayerInitializations()">getPlayerInitializations</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Those are all the consumers called when a new <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> join.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="PlayerProvider.html" title="interface in net.minestom.server.network">PlayerProvider</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayerProvider()">getPlayerProvider</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Retrieves the current <a href="PlayerProvider.html" title="interface in net.minestom.server.network"><code>PlayerProvider</code></a>, can be the default one if none is defined.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="../listener/manager/ClientPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ClientPacketConsumer</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getReceivePacketConsumers()">getReceivePacketConsumers</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the listeners which are called for each packet received.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="../listener/manager/ServerPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ServerPacketConsumer</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSendPacketConsumers()">getSendPacketConsumers</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the listeners which are called for each packet sent.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getShutdownText()">getShutdownText</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the kick reason when the server is shutdown using <a href="../MinecraftServer.html#stopCleanly()"><code>MinecraftServer.stopCleanly()</code></a>.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onPacketReceive(net.minestom.server.listener.manager.ClientPacketConsumer)">onPacketReceive</a></span>&#8203;(<a href="../listener/manager/ClientPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ClientPacketConsumer</a>&nbsp;clientPacketConsumer)</code></th>
 <td class="colLast">
 <div class="block">Adds a consumer to call once a packet is received.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)">onPacketSend</a></span>&#8203;(<a href="../listener/manager/ServerPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ServerPacketConsumer</a>&nbsp;serverPacketConsumer)</code></th>
 <td class="colLast">
 <div class="block">Adds a consumer to call once a packet is sent.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i16" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#registerPlayer(net.minestom.server.entity.Player)">registerPlayer</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<td class="colLast">
+<div class="block">Adds a new <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> in the players list.</div>
+</td>
+</tr>
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removePlayer(net.minestom.server.network.player.PlayerConnection)">removePlayer</a></span>&#8203;(<a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></th>
 <td class="colLast">
 <div class="block">Removes a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> from the players list.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPlayerProvider(net.minestom.server.network.PlayerProvider)">setPlayerProvider</a></span>&#8203;(<a href="PlayerProvider.html" title="interface in net.minestom.server.network">PlayerProvider</a>&nbsp;playerProvider)</code></th>
 <td class="colLast">
 <div class="block">Changes the <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> provider, to change which object to link to him.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setShutdownText(net.minestom.server.chat.JsonMessage)">setShutdownText</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;shutdownText)</code></th>
 <td class="colLast">
 <div class="block">Changes the kick reason in case of a shutdown.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUuidProvider(net.minestom.server.network.UuidProvider)">setUuidProvider</a></span>&#8203;(<a href="UuidProvider.html" title="interface in net.minestom.server.network">UuidProvider</a>&nbsp;uuidProvider)</code></th>
 <td class="colLast">
 <div class="block">Changes how <code>UUID</code> are attributed to players.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shutdown()">shutdown</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Shutdowns the connection manager by kicking all the currently connected players</div>
+<div class="block">Shutdowns the connection manager by kicking all the currently connected players.</div>
+</td>
+</tr>
+<tr id="i22" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#startPlayState(net.minestom.server.entity.Player)">startPlayState</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<td class="colLast">
+<div class="block">Calls the player initialization callbacks and the event <a href="../event/player/AsyncPlayerPreLoginEvent.html" title="class in net.minestom.server.event.player"><code>AsyncPlayerPreLoginEvent</code></a>.</div>
 </td>
 </tr>
 <tr id="i23" class="rowColor">
 <td class="colFirst"><code><a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#startPlayState(net.minestom.server.network.player.PlayerConnection,java.util.UUID,java.lang.String)">startPlayState</a></span>&#8203;(<a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#startPlayState(net.minestom.server.network.player.PlayerConnection,java.util.UUID,java.lang.String,boolean)">startPlayState</a></span>&#8203;(<a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection,
               java.util.UUID&nbsp;uuid,
-              java.lang.String&nbsp;username)</code></th>
+              java.lang.String&nbsp;username,
+              boolean&nbsp;register)</code></th>
 <td class="colLast">
-<div class="block">Sends a <a href="packet/server/login/LoginSuccessPacket.html" title="class in net.minestom.server.network.packet.server.login"><code>LoginSuccessPacket</code></a> and change the connection state to <a href="ConnectionState.html#PLAY"><code>ConnectionState.PLAY</code></a>.</div>
+<div class="block">Creates a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> using the defined <a href="PlayerProvider.html" title="interface in net.minestom.server.network"><code>PlayerProvider</code></a>
+ and execute <a href="#startPlayState(net.minestom.server.entity.Player)"><code>startPlayState(Player)</code></a>.</div>
 </td>
 </tr>
 </table>
@@ -719,14 +719,14 @@ public&nbsp;<a href="../chat/JsonMessage.html" title="class in net.minestom.serv
 </dl>
 </li>
 </ul>
-<a id="createPlayer(net.minestom.server.entity.Player)">
+<a id="registerPlayer(net.minestom.server.entity.Player)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>createPlayer</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;createPlayer&#8203;(@NotNull
-                         <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+<h4>registerPlayer</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;registerPlayer&#8203;(@NotNull
+                           <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 <div class="block">Adds a new <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> in the players list.
  Is currently used at
  <a href="packet/client/login/LoginStartPacket.html#process(net.minestom.server.network.player.PlayerConnection)"><code>LoginStartPacket.process(PlayerConnection)</code></a>
@@ -734,30 +734,6 @@ public&nbsp;<a href="../chat/JsonMessage.html" title="class in net.minestom.serv
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>player</code> - the player to add</dd>
-</dl>
-</li>
-</ul>
-<a id="createPlayer(java.util.UUID,java.lang.String,net.minestom.server.network.player.PlayerConnection)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>createPlayer</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;createPlayer&#8203;(@NotNull
-                           java.util.UUID&nbsp;uuid,
-                           @NotNull
-                           java.lang.String&nbsp;username,
-                           @NotNull
-                           <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</pre>
-<div class="block">Creates a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> object and register it.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>uuid</code> - the new player uuid</dd>
-<dd><code>username</code> - the new player username</dd>
-<dd><code>connection</code> - the new player connection</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the newly created player object</dd>
 </dl>
 </li>
 </ul>
@@ -780,7 +756,25 @@ public&nbsp;<a href="../entity/Player.html" title="class in net.minestom.server.
 </dl>
 </li>
 </ul>
-<a id="startPlayState(net.minestom.server.network.player.PlayerConnection,java.util.UUID,java.lang.String)">
+<a id="startPlayState(net.minestom.server.entity.Player)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>startPlayState</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;startPlayState&#8203;(@NotNull
+                           <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+<div class="block">Calls the player initialization callbacks and the event <a href="../event/player/AsyncPlayerPreLoginEvent.html" title="class in net.minestom.server.event.player"><code>AsyncPlayerPreLoginEvent</code></a>.
+ <p>
+ Sends a <a href="packet/server/login/LoginSuccessPacket.html" title="class in net.minestom.server.network.packet.server.login"><code>LoginSuccessPacket</code></a> if successful (not kicked)
+ and change the connection state to <a href="ConnectionState.html#PLAY"><code>ConnectionState.PLAY</code></a>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>player</code> - the player</dd>
+</dl>
+</li>
+</ul>
+<a id="startPlayState(net.minestom.server.network.player.PlayerConnection,java.util.UUID,java.lang.String,boolean)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -792,15 +786,17 @@ public&nbsp;<a href="../entity/Player.html" title="class in net.minestom.server.
                              @NotNull
                              java.util.UUID&nbsp;uuid,
                              @NotNull
-                             java.lang.String&nbsp;username)</pre>
-<div class="block">Sends a <a href="packet/server/login/LoginSuccessPacket.html" title="class in net.minestom.server.network.packet.server.login"><code>LoginSuccessPacket</code></a> and change the connection state to <a href="ConnectionState.html#PLAY"><code>ConnectionState.PLAY</code></a>.</div>
+                             java.lang.String&nbsp;username,
+                             boolean&nbsp;register)</pre>
+<div class="block">Creates a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> using the defined <a href="PlayerProvider.html" title="interface in net.minestom.server.network"><code>PlayerProvider</code></a>
+ and execute <a href="#startPlayState(net.minestom.server.entity.Player)"><code>startPlayState(Player)</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>connection</code> - the player connection</dd>
-<dd><code>uuid</code> - the uuid of the player</dd>
-<dd><code>username</code> - the username of the player</dd>
+<dd><code>register</code> - true to register the newly created player in <a href="ConnectionManager.html" title="class in net.minestom.server.network"><code>ConnectionManager</code></a> lists</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the newly created player object</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#startPlayState(net.minestom.server.entity.Player)"><code>startPlayState(Player)</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -811,7 +807,7 @@ public&nbsp;<a href="../entity/Player.html" title="class in net.minestom.server.
 <li class="blockList">
 <h4>shutdown</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;shutdown()</pre>
-<div class="block">Shutdowns the connection manager by kicking all the currently connected players</div>
+<div class="block">Shutdowns the connection manager by kicking all the currently connected players.</div>
 </li>
 </ul>
 </li>
