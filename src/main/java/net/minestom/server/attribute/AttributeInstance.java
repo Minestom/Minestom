@@ -18,7 +18,6 @@ public class AttributeInstance {
     private final Map<UUID, AttributeModifier> modifiers = new HashMap<>();
     private final Consumer<AttributeInstance> propertyChangeListener;
     private float baseValue;
-    private boolean dirty = true;
     private float cachedValue = 0.0f;
 
     public AttributeInstance(@NotNull Attribute attribute, @Nullable Consumer<AttributeInstance> listener) {
@@ -48,19 +47,6 @@ public class AttributeInstance {
     }
 
     /**
-     * Sets this instance dirty to trigger calculation of the new value.
-     * Triggers the {@link #propertyChangeListener}.
-     */
-    private void setDirty() {
-        if (!dirty) {
-            dirty = true;
-            if (propertyChangeListener != null) {
-                propertyChangeListener.accept(this);
-            }
-        }
-    }
-
-    /**
      * Sets the base value of this instance.
      *
      * @param baseValue the new base value
@@ -69,7 +55,11 @@ public class AttributeInstance {
     public void setBaseValue(float baseValue) {
         if (this.baseValue != baseValue) {
             this.baseValue = baseValue;
-            setDirty();
+            refreshCachedValue();
+
+            if (propertyChangeListener != null) {
+                propertyChangeListener.accept(this);
+            }
         }
     }
 
@@ -80,7 +70,7 @@ public class AttributeInstance {
      */
     public void addModifier(@NotNull AttributeModifier modifier) {
         if (modifiers.putIfAbsent(modifier.getId(), modifier) == null) {
-            setDirty();
+            refreshCachedValue();
         }
     }
 
@@ -91,7 +81,7 @@ public class AttributeInstance {
      */
     public void removeModifier(@NotNull AttributeModifier modifier) {
         if (modifiers.remove(modifier.getId()) != null) {
-            setDirty();
+            refreshCachedValue();
         }
     }
 
@@ -110,10 +100,6 @@ public class AttributeInstance {
      * @return the attribute value
      */
     public float getValue() {
-        if (dirty) {
-            cachedValue = processModifiers();
-            dirty = false;
-        }
         return cachedValue;
     }
 
@@ -122,7 +108,7 @@ public class AttributeInstance {
      *
      * @return the attribute value
      */
-    protected float processModifiers() {
+    protected void refreshCachedValue() {
         float base = getBaseValue();
 
         for (var modifier : modifiers.values().stream().filter(mod -> mod.getOperation() == AttributeOperation.ADDITION).toArray(AttributeModifier[]::new)) {
@@ -138,6 +124,7 @@ public class AttributeInstance {
             result *= (1.0f + modifier.getAmount());
         }
 
-        return Math.min(result, getAttribute().getMaxValue());
+        final float finalValue = Math.min(result, getAttribute().getMaxValue());
+        this.cachedValue = finalValue;
     }
 }

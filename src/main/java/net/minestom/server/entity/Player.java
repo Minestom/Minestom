@@ -1079,9 +1079,11 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     @Override
-    protected void onAttributeChanged(@NotNull final AttributeInstance instance) {
-        if (instance.getAttribute().isShared() && playerConnection != null)
+    protected void onAttributeChanged(@NotNull final AttributeInstance attributeInstance) {
+        if (attributeInstance.getAttribute().isShared() &&
+                playerConnection.getConnectionState() == ConnectionState.PLAY) {
             playerConnection.sendPacket(getPropertiesPacket());
+        }
     }
 
     @Override

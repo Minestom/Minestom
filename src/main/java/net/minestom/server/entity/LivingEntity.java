@@ -613,7 +613,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     public List<BlockPosition> getLineOfSight(int maxDistance) {
         List<BlockPosition> blocks = new ArrayList<>();
         Iterator<BlockPosition> it = new BlockIterator(this, maxDistance);
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             BlockPosition position = it.next();
             if (Block.fromStateId(getInstance().getBlockStateId(position)) != Block.AIR) blocks.add(position);
         }
@@ -628,7 +628,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      */
     public BlockPosition getTargetBlockPosition(int maxDistance) {
         Iterator<BlockPosition> it = new BlockIterator(this, maxDistance);
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             BlockPosition position = it.next();
             if (Block.fromStateId(getInstance().getBlockStateId(position)) != Block.AIR) return position;
         }
