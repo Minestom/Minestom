@@ -1219,7 +1219,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setInstance(net.minestom.server.instance.Instance)">setInstance</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
 <td class="colLast">
 <div class="block">Changes the player instance without changing its position (defaulted to <a href="#getRespawnPoint()"><code>getRespawnPoint()</code></a>
- if the player is not in any instance.</div>
+ if the player is not in any instance).</div>
 </td>
 </tr>
 <tr id="i128" class="altColor">
@@ -1791,7 +1791,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <h4>setInstance</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setInstance&#8203;(@NotNull
                         <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                        @Nullable
+                        @NotNull
                         <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition)</pre>
 <div class="block">Changes the player instance and load surrounding chunks if needed.
  <p>
@@ -1800,8 +1800,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>instance</code> - the new player instance</dd>
-<dd><code>spawnPosition</code> - the new position of the player,
-                      can be null or <a href="Entity.html#getPosition()"><code>Entity.getPosition()</code></a> if you do not want to teleport the player</dd>
+<dd><code>spawnPosition</code> - the new position of the player</dd>
 </dl>
 </li>
 </ul>
@@ -1814,7 +1813,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <pre class="methodSignature">public&nbsp;void&nbsp;setInstance&#8203;(@NotNull
                         <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</pre>
 <div class="block">Changes the player instance without changing its position (defaulted to <a href="#getRespawnPoint()"><code>getRespawnPoint()</code></a>
- if the player is not in any instance.</div>
+ if the player is not in any instance).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="Entity.html#setInstance(net.minestom.server.instance.Instance)">setInstance</a></code>&nbsp;in class&nbsp;<code><a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></dd>
