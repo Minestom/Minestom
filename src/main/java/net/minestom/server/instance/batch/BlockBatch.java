@@ -1,35 +1,23 @@
 package net.minestom.server.instance.batch;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
+import net.minestom.server.data.Data;
+import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import net.minestom.server.data.Data;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.instance.block.CustomBlock;
-import net.minestom.server.utils.block.CustomBlockUtils;
-import net.minestom.server.utils.chunk.ChunkUtils;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Used when the blocks you want to place need to be divided in multiple chunks,
- * use a {@link ChunkBatch} instead otherwise.
- * Can be created using {@link Instance#createBlockBatch()}, and executed with {@link #flush(Runnable)}.
- *
- * @see InstanceBatch
- */
 public class BlockBatch implements InstanceBatch {
-
     private final InstanceContainer instance;
     private final BatchOption batchOption;
 
-    private final Map<Chunk, List<BlockData>> data = new HashMap<>();
+    // In the form of <Chunk Index, Batch>
+    private final Map<Long, ChunkBatch> data = new HashMap<>();
 
     public BlockBatch(@NotNull InstanceContainer instance, @NotNull BatchOption batchOption) {
         this.instance = instance;
@@ -60,76 +48,24 @@ public class BlockBatch implements InstanceBatch {
     }
 
     private void addBlockData(@NotNull Chunk chunk, int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data) {
-        List<BlockData> blocksData = this.data.get(chunk);
-        if (blocksData == null)
-            blocksData = new ArrayList<>();
+        long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
 
-        BlockData blockData = new BlockData();
-        blockData.x = x;
-        blockData.y = y;
-        blockData.z = z;
-        blockData.blockStateId = blockStateId;
-        blockData.customBlockId = customBlockId;
-        blockData.data = data;
+        ChunkBatch chunkBatch = this.data.get(chunkIndex);
+        if (chunkBatch == null)
+            chunkBatch = new ChunkBatch(this.instance, chunk, this.batchOption, false);
 
-        blocksData.add(blockData);
+        int relativeX = x - (chunk.getChunkX() * Chunk.CHUNK_SIZE_X);
+        int relativeZ = z - (chunk.getChunkZ() * Chunk.CHUNK_SIZE_Z);
+        chunkBatch.setSeparateBlocks(relativeX, y, relativeZ, blockStateId, customBlockId, data);
 
-        this.data.put(chunk, blocksData);
+        this.data.put(chunkIndex, chunkBatch);
     }
 
     public void flush(@Nullable Runnable callback) {
-    	this.flush(callback, false);
-    }
-    
-    public void flush(@Nullable Runnable callback, boolean shouldLoadChunks) {
         synchronized (data) {
-        	// Load chunks if applicable
-        	if (shouldLoadChunks) {
-        		
-        		// Get chunks
-            	Chunk[] chunks = data.keySet().toArray(new Chunk[data.size()]);
-            	
-            	// Get chunk indexs
-            	long[] indexs = new long[chunks.length];
-            	for (int i = 0; i < chunks.length; i++) {
-            		indexs[i] = ChunkUtils.getChunkIndex(chunks[i].getChunkX(), chunks[i].getChunkZ());
-            	}
-            	
-            	// Load all chunks + flush block data
-        		ChunkUtils.optionalLoadAll(instance, indexs, null, (chunk) -> {
-        			flushBlockData(callback);
-        		});
-        	} else {
-        		flushBlockData(callback);
-        	}
-        }
-    }
-    
-    private void flushBlockData(@Nullable Runnable callback) {
-    	AtomicInteger counter = new AtomicInteger();
-        for (Map.Entry<Chunk, List<BlockData>> entry : data.entrySet()) {
-            final Chunk chunk = entry.getKey();
-            final List<BlockData> dataList = entry.getValue();
-            BLOCK_BATCH_POOL.execute(() -> {
-                synchronized (chunk) {
-                    if (!chunk.isLoaded())
-                        return;
-
-                    if (batchOption.isFullChunk()) {
-                        chunk.reset();
-                    }
-
-                    for (BlockData data : dataList) {
-                        data.apply(chunk);
-                    }
-
-                    // Refresh chunk for viewers
-                    if (batchOption.isFullChunk()) {
-                        chunk.sendChunk();
-                    } else {
-                        chunk.sendChunkUpdate();
-                    }
-
+            AtomicInteger counter = new AtomicInteger();
+            for (ChunkBatch chunkBatch : data.values()) {
+                chunkBatch.flush(c -> {
                     final boolean isLast = counter.incrementAndGet() == data.size();
 
                     // Execute the callback if this was the last chunk to process
@@ -139,23 +75,8 @@ public class BlockBatch implements InstanceBatch {
                             this.instance.scheduleNextTick(inst -> callback.run());
                         }
                     }
-
-                }
-            });
+                });
+            }
         }
     }
-
-    private static class BlockData {
-
-        private int x, y, z;
-        private short blockStateId;
-        private short customBlockId;
-        private Data data;
-
-        public void apply(Chunk chunk) {
-            chunk.UNSAFE_setBlock(x, y, z, blockStateId, customBlockId, data, CustomBlockUtils.hasUpdate(customBlockId));
-        }
-
-    }
-
 }
