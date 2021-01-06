@@ -54,7 +54,7 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
                     nettyConnection.setEncryptionKey(getSecretKey());
 
                     MinecraftServer.LOGGER.info("UUID of player {} is {}", loginUsername, gameProfile.getId());
-                    CONNECTION_MANAGER.startPlayState(connection, gameProfile.getId(), gameProfile.getName());
+                    CONNECTION_MANAGER.startPlayState(connection, gameProfile.getId(), gameProfile.getName(), true);
                 }
             } catch (AuthenticationUnavailableException e) {
                 e.printStackTrace();

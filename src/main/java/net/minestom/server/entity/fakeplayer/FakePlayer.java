@@ -3,6 +3,7 @@ package net.minestom.server.entity.fakeplayer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerSpawnEvent;
+import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.player.FakePlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.time.TimeUnit;
@@ -22,6 +23,8 @@ import java.util.function.Consumer;
  */
 public class FakePlayer extends Player {
 
+    private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
+
     private final FakePlayerOption option;
     private final FakePlayerController fakePlayerController;
 
@@ -32,16 +35,29 @@ public class FakePlayer extends Player {
      * @param username The username for the fake player.
      * @param option   Any option for the fake player.
      */
-    private FakePlayer(@NotNull UUID uuid, @NotNull String username, @NotNull FakePlayerOption option) {
+    private FakePlayer(@NotNull UUID uuid, @NotNull String username,
+                       @NotNull FakePlayerOption option,
+                       @Nullable Consumer<FakePlayer> spawnCallback) {
         super(uuid, username, new FakePlayerConnection());
 
         this.option = option;
 
         this.fakePlayerController = new FakePlayerController(this);
 
-        if (option.isRegistered()) {
-            MinecraftServer.getConnectionManager().createPlayer(this);
+        if (spawnCallback != null) {
+            addEventCallback(PlayerSpawnEvent.class,
+                    event -> {
+                        if (event.isFirstSpawn()) {
+                            spawnCallback.accept(this);
+                        }
+                    });
         }
+
+        if (option.isRegistered()) {
+            CONNECTION_MANAGER.registerPlayer(this);
+        }
+
+        CONNECTION_MANAGER.startPlayState(this);
     }
 
     /**
@@ -53,18 +69,7 @@ public class FakePlayer extends Player {
      */
     public static void initPlayer(@NotNull UUID uuid, @NotNull String username,
                                   @NotNull FakePlayerOption option, @Nullable Consumer<FakePlayer> spawnCallback) {
-        final FakePlayer fakePlayer = new FakePlayer(uuid, username, option);
-
-        if (spawnCallback != null) {
-            fakePlayer.addEventCallback(PlayerSpawnEvent.class,
-                    event -> {
-                        if (event.isFirstSpawn()) {
-                            spawnCallback.accept(fakePlayer);
-                        }
-                    });
-        }
-
-        MinecraftServer.getEntityManager().addWaitingPlayer(fakePlayer);
+        new FakePlayer(uuid, username, option, spawnCallback);
     }
 
     /**

@@ -3,12 +3,10 @@ package net.minestom.server.entity;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import net.minestom.server.utils.url.URLUtils;
+import net.minestom.server.utils.mojang.MojangUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -35,27 +33,19 @@ public class PlayerSkin {
      */
     @Nullable
     public static PlayerSkin fromUuid(@NotNull String uuid) {
-        final String url = "https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false";
+        final JsonObject jsonObject = MojangUtils.fromUuid(uuid);
+        final JsonArray propertiesArray = jsonObject.get("properties").getAsJsonArray();
 
-        try {
-            final String response = URLUtils.getText(url);
-            final JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
-            final JsonArray propertiesArray = jsonObject.get("properties").getAsJsonArray();
-
-            for (JsonElement jsonElement : propertiesArray) {
-                final JsonObject propertyObject = jsonElement.getAsJsonObject();
-                final String name = propertyObject.get("name").getAsString();
-                if (!name.equals("textures"))
-                    continue;
-                final String textureValue = propertyObject.get("value").getAsString();
-                final String signatureValue = propertyObject.get("signature").getAsString();
-                return new PlayerSkin(textureValue, signatureValue);
-            }
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+        for (JsonElement jsonElement : propertiesArray) {
+            final JsonObject propertyObject = jsonElement.getAsJsonObject();
+            final String name = propertyObject.get("name").getAsString();
+            if (!name.equals("textures"))
+                continue;
+            final String textureValue = propertyObject.get("value").getAsString();
+            final String signatureValue = propertyObject.get("signature").getAsString();
+            return new PlayerSkin(textureValue, signatureValue);
         }
+        return null;
     }
 
     /**
@@ -66,19 +56,10 @@ public class PlayerSkin {
      */
     @Nullable
     public static PlayerSkin fromUsername(@NotNull String username) {
-        final String url = "https://api.mojang.com/users/profiles/minecraft/" + username;
-
-        try {
-            // Retrieve the mojang uuid from the name
-            final String response = URLUtils.getText(url);
-            final JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
-            final String uuid = jsonObject.get("id").getAsString();
-            // Retrieve the skin data from the mojang uuid
-            return fromUuid(uuid);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+        final JsonObject jsonObject = MojangUtils.fromUsername(username);
+        final String uuid = jsonObject.get("id").getAsString();
+        // Retrieve the skin data from the mojang uuid
+        return fromUuid(uuid);
     }
 
     /**

@@ -89,7 +89,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
                     ((NettyPlayerConnection) connection).getBungeeUuid() :
                     CONNECTION_MANAGER.getPlayerConnectionUuid(connection, username);
 
-            Player player = CONNECTION_MANAGER.startPlayState(connection, playerUuid, username);
+            Player player = CONNECTION_MANAGER.startPlayState(connection, playerUuid, username, true);
             if (bungee && isNettyClient) {
                 player.setSkin(((NettyPlayerConnection) connection).getBungeeSkin());
             }

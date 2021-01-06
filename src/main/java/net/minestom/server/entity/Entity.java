@@ -675,7 +675,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      *
      * @param uuid the new entity uuid
      */
-    protected void setUuid(@NotNull UUID uuid) {
+    public void setUuid(@NotNull UUID uuid) {
         // Refresh internal map
         Entity.entityByUuid.remove(this.uuid);
         Entity.entityByUuid.put(uuid, this);

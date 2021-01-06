@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class LoginDisconnectPacket implements ServerPacket {
 
-    private String kickMessage; // JSON text
+    private final String kickMessage; // JSON text
 
     public LoginDisconnectPacket(@NotNull String kickMessage) {
         this.kickMessage = kickMessage;

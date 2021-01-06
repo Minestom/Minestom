@@ -7,11 +7,10 @@ import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.entity.type.monster.EntityZombie;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.entity.EntityAttackEvent;
-import net.minestom.server.event.entity.EntityPotionAddEvent;
-import net.minestom.server.event.entity.EntityPotionRemoveEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.event.player.*;
@@ -242,6 +241,8 @@ public class PlayerInit {
         globalEventHandler.addEventCallback(PlayerUseItemEvent.class, useEvent -> {
             final Player player = useEvent.getPlayer();
             player.sendMessage("Using item in air: " + useEvent.getItemStack().getMaterial());
+
+            FakePlayer.initPlayer(UUID.randomUUID(), "test", null);
         });
 
         globalEventHandler.addEventCallback(PlayerUseItemOnBlockEvent.class, useEvent -> {
@@ -265,16 +266,22 @@ public class PlayerInit {
             }
         });
 
-        globalEventHandler.addEventCallback(EntityPotionAddEvent.class, event -> {
-            if (event.getEntity() instanceof Player) {
-                ((Player) event.getEntity()).sendMessage("Potion added: " + event.getPotion().getEffect());
-            }
+        globalEventHandler.addEventCallback(PlayerLoginEvent.class, event -> {
+            //event.setPlayerUuid(UUID.randomUUID());
+            //System.out.println("random "+event.getPlayerUuid());
+            System.out.println("lOGIN EVENT");
         });
 
-        globalEventHandler.addEventCallback(EntityPotionRemoveEvent.class, event -> {
-            if (event.getEntity() instanceof Player) {
-                ((Player) event.getEntity()).sendMessage("Potion removed: " + event.getPotion().getEffect());
-            }
+        globalEventHandler.addEventCallback(AsyncPlayerPreLoginEvent.class, event -> {
+            //event.setPlayerUuid(UUID.randomUUID());
+            //System.out.println("random "+event.getPlayerUuid());
+            //event.getPlayer().kick("test");
+            System.out.println("PRElOGIN EVENT");
+
+        });
+
+        globalEventHandler.addEventCallback(PlayerSkinInitEvent.class, event -> {
+            //event.setSkin(PlayerSkin.fromUsername("TheMode911"));
         });
     }
 
