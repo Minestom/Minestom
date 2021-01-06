@@ -51,27 +51,32 @@ public final class PacketProcessor {
     }
 
     public void process(@NotNull ChannelHandlerContext channel, @NotNull InboundPacket packet) {
+        final SocketChannel socketChannel = (SocketChannel) channel.channel();
+
         // Create the netty player connection object if not existing
         PlayerConnection playerConnection = connectionPlayerConnectionMap.computeIfAbsent(
-                channel, c -> new NettyPlayerConnection((SocketChannel) channel.channel())
+                channel, c -> new NettyPlayerConnection(socketChannel)
         );
 
         // Prevent the client from sending packets when disconnected (kick)
-        if (!playerConnection.isOnline()) {
+        if (!playerConnection.isOnline() || !socketChannel.isActive()) {
             playerConnection.disconnect();
             return;
         }
 
-        if (MinecraftServer.getRateLimit() > 0)
+        // Increment packet count (checked in PlayerConnection#update)
+        if (MinecraftServer.getRateLimit() > 0) {
             playerConnection.getPacketCounter().incrementAndGet();
+        }
 
         final ConnectionState connectionState = playerConnection.getConnectionState();
 
-        BinaryReader binaryReader = new BinaryReader(packet.body);
+        final int packetId = packet.getPacketId();
+        BinaryReader binaryReader = new BinaryReader(packet.getBody());
 
         if (connectionState == ConnectionState.UNKNOWN) {
             // Should be handshake packet
-            if (packet.packetId == 0) {
+            if (packetId == 0) {
                 HandshakePacket handshakePacket = new HandshakePacket();
                 safeRead(playerConnection, handshakePacket, binaryReader);
                 handshakePacket.process(playerConnection);
@@ -82,17 +87,18 @@ public final class PacketProcessor {
         switch (connectionState) {
             case PLAY:
                 final Player player = playerConnection.getPlayer();
-                ClientPlayPacket playPacket = (ClientPlayPacket) playPacketsHandler.getPacketInstance(packet.packetId);
+                ClientPlayPacket playPacket = (ClientPlayPacket) playPacketsHandler.getPacketInstance(packetId);
                 safeRead(playerConnection, playPacket, binaryReader);
+                assert player != null;
                 player.addPacketToQueue(playPacket);
                 break;
             case LOGIN:
-                final ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.getPacketInstance(packet.packetId);
+                final ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.getPacketInstance(packetId);
                 safeRead(playerConnection, loginPacket, binaryReader);
                 loginPacket.process(playerConnection);
                 break;
             case STATUS:
-                final ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusPacketsHandler.getPacketInstance(packet.packetId);
+                final ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusPacketsHandler.getPacketInstance(packetId);
                 safeRead(playerConnection, statusPacket, binaryReader);
                 statusPacket.process(playerConnection);
                 break;

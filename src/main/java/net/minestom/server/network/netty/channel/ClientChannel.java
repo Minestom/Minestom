@@ -1,5 +1,6 @@
 package net.minestom.server.network.netty.channel;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import net.minestom.server.MinecraftServer;
@@ -35,15 +36,21 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            final int availableBytes = packet.body.readableBytes();
+            // Check remaining
+            final ByteBuf body = packet.getBody();
+            final int packetId = packet.getPacketId();
+
+            final int availableBytes = body.readableBytes();
 
             if (availableBytes > 0) {
                 final PlayerConnection playerConnection = packetProcessor.getPlayerConnection(ctx);
 
-                LOGGER.warn("WARNING: Packet 0x" + Integer.toHexString(packet.packetId)
-                        + " not fully read (" + availableBytes + " bytes left), " + playerConnection);
+                LOGGER.warn("WARNING: Packet 0x{} not fully read ({} bytes left), {}",
+                        Integer.toHexString(packetId),
+                        availableBytes,
+                        playerConnection);
 
-                packet.body.skipBytes(availableBytes);
+                body.skipBytes(availableBytes);
             }
         }
     }
