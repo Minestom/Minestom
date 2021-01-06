@@ -13,7 +13,7 @@ public class GroupedPacketHandler extends MessageToByteEncoder<FramedPacket> {
 
     @Override
     protected ByteBuf allocateBuffer(ChannelHandlerContext ctx, FramedPacket msg, boolean preferDirect) {
-        return msg.body.retainedSlice();
+        return msg.getBody().retainedSlice();
     }
 
 }

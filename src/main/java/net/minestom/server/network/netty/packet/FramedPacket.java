@@ -9,10 +9,14 @@ import org.jetbrains.annotations.NotNull;
  */
 public class FramedPacket {
 
-    public final ByteBuf body;
+    private final ByteBuf body;
 
     public FramedPacket(@NotNull ByteBuf body) {
         this.body = body;
     }
 
+    @NotNull
+    public ByteBuf getBody() {
+        return body;
+    }
 }
