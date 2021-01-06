@@ -25,7 +25,7 @@ public abstract class PlayerConnection {
     protected static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
 
     private Player player;
-    private ConnectionState connectionState;
+    private volatile ConnectionState connectionState;
     private boolean online;
 
     // Text used to kick client sending too many packets
