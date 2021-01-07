@@ -143,7 +143,7 @@ extends java.lang.Object
 implements <a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a>, <a href="../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a></pre>
 <div class="block">A chunk is a part of an <a href="Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a>, limited by a size of 16x256x16 blocks and subdivided in 16 sections of 16 blocks height.
  Should contains all the blocks located at those positions and manage their tick updates.
- Be aware that implementations do not need to be thread-safe.
+ Be aware that implementations do not need to be thread-safe, all chunks are guarded by their own instance ('this').
  <p>
  Chunks can be serialized using <a href="#getSerializedData()"><code>getSerializedData()</code></a> and deserialized back with <a href="#readChunk(net.minestom.server.utils.binary.BinaryReader,net.minestom.server.utils.chunk.ChunkCallback)"><code>readChunk(BinaryReader, ChunkCallback)</code></a>,
  allowing you to implement your own storage solution if needed.
