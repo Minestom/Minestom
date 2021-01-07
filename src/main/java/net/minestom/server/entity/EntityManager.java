@@ -62,7 +62,7 @@ public final class EntityManager {
 
             Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
 
-            waitingPlayer.init();
+            waitingPlayer.init(spawningInstance);
 
             // Spawn the player at Player#getRespawnPoint during the next instance tick
             spawningInstance.scheduleNextTick(waitingPlayer::setInstance);

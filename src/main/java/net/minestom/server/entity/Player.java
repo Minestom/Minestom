@@ -215,7 +215,7 @@ public class Player extends LivingEntity implements CommandSender {
         refreshAnswerKeepAlive(true);
 
         this.gameMode = GameMode.SURVIVAL;
-        this.dimensionType = DimensionType.OVERWORLD;
+        this.dimensionType = DimensionType.OVERWORLD; // Default dimension
         this.levelFlat = true;
         getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1f);
 
@@ -228,8 +228,12 @@ public class Player extends LivingEntity implements CommandSender {
      * Init the player and spawn him.
      * <p>
      * WARNING: executed in the main update thread
+     *
+     * @param spawnInstance the player spawn instance (defined in {@link PlayerLoginEvent})
      */
-    protected void init() {
+    protected void init(@NotNull Instance spawnInstance) {
+        this.dimensionType = spawnInstance.getDimensionType();
+
         JoinGamePacket joinGamePacket = new JoinGamePacket();
         joinGamePacket.entityId = getEntityId();
         joinGamePacket.gameMode = gameMode;
