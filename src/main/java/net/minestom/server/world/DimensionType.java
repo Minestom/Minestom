@@ -1,6 +1,7 @@
 package net.minestom.server.world;
 
 import net.minestom.server.utils.NamespaceID;
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Objects;
@@ -30,6 +31,8 @@ public class DimensionType {
             .build();
 
     private final int id = idCounter.getAndIncrement();
+
+    protected volatile boolean registered;
 
     private final NamespaceID name;
     private final boolean natural;
@@ -76,6 +79,7 @@ public class DimensionType {
         return new DimensionTypeBuilder();
     }
 
+    @NotNull
     public NBTCompound toIndexedNBT() {
         NBTCompound nbt = new NBTCompound();
         NBTCompound element = toNBT();
@@ -85,6 +89,7 @@ public class DimensionType {
         return nbt;
     }
 
+    @NotNull
     public NBTCompound toNBT() {
         NBTCompound nbt = new NBTCompound()
                 .setFloat("ambient_light", ambientLight)
@@ -112,6 +117,10 @@ public class DimensionType {
 
     public int getId() {
         return this.id;
+    }
+
+    public boolean isRegistered() {
+        return registered;
     }
 
     public NamespaceID getName() {
@@ -152,6 +161,10 @@ public class DimensionType {
 
     public boolean isBedSafe() {
         return this.bedSafe;
+    }
+
+    public String getEffects() {
+        return effects;
     }
 
     public boolean isPiglinSafe() {

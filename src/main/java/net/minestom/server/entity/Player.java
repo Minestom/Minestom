@@ -679,11 +679,12 @@ public class Player extends LivingEntity implements CommandSender {
                 viewableChunk.removeViewer(this);
             }
 
-            // Send the new dimension
-            if (this.instance != null) {
+            // Send the new dimension if player isn't in any instance or if the dimension is different
+            {
                 final DimensionType instanceDimensionType = instance.getDimensionType();
-                if (dimensionType != instanceDimensionType)
+                if (this.instance == null || dimensionType != instanceDimensionType) {
                     sendDimension(instanceDimensionType);
+                }
             }
 
             // Load all the required chunks
