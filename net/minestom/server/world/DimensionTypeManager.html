@@ -193,7 +193,9 @@ extends java.lang.Object</pre>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>org.jglrxavpok.hephaistos.nbt.NBTCompound</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toNBT()">toNBT</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Creates the <code>NBTCompound</code> containing all the registered dimensions.</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&gt;</code></td>
@@ -298,7 +300,15 @@ public&nbsp;java.util.List&lt;<a href="DimensionType.html" title="class in net.m
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toNBT</h4>
-<pre class="methodSignature">public&nbsp;org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;toNBT()</pre>
+<pre class="methodSignature">@NotNull
+public&nbsp;org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;toNBT()</pre>
+<div class="block">Creates the <code>NBTCompound</code> containing all the registered dimensions.
+ <p>
+ Used when a player connects.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an nbt compound containing the registered dimensions</dd>
+</dl>
 </li>
 </ul>
 </li>
