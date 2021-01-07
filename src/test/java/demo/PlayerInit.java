@@ -7,8 +7,7 @@ import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.fakeplayer.FakePlayer;
-import net.minestom.server.entity.type.monster.EntityZombie;
+import net.minestom.server.entity.type.decoration.EntityArmorStand;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
@@ -53,14 +52,6 @@ public class PlayerInit {
         instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
         instanceContainer.setChunkGenerator(chunkGeneratorDemo);
-
-        // Load some chunks beforehand
-        final int loopStart = -10;
-        final int loopEnd = 10;
-        for (int x = loopStart; x < loopEnd; x++)
-            for (int z = loopStart; z < loopEnd; z++) {
-                //instanceContainer.loadChunk(x, z);
-            }
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");
         /*inventory.addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
@@ -117,18 +108,16 @@ public class PlayerInit {
         globalEventHandler.addEventCallback(EntityAttackEvent.class, event -> {
             final Entity source = event.getEntity();
             final Entity entity = event.getTarget();
-            if (entity instanceof EntityCreature) {
-                EntityCreature creature = (EntityCreature) entity;
-                creature.damage(DamageType.fromEntity(source), 0);
-                Vector velocity = source.getPosition().clone().getDirection().multiply(3);
-                velocity.setY(3f);
-                entity.setVelocity(velocity);
-            } else if (entity instanceof Player) {
+            if (entity instanceof Player) {
                 Player target = (Player) entity;
                 Vector velocity = source.getPosition().clone().getDirection().multiply(4);
                 velocity.setY(3.5f);
                 target.setVelocity(velocity);
                 target.damage(DamageType.fromEntity(source), 5);
+            }else{
+                Vector velocity = source.getPosition().clone().getDirection().multiply(3);
+                velocity.setY(3f);
+                entity.setVelocity(velocity);
             }
 
             if (source instanceof Player) {
@@ -187,9 +176,8 @@ public class PlayerInit {
             Vector velocity = player.getPosition().clone().getDirection().multiply(6);
             itemEntity.setVelocity(velocity);
 
-            EntityZombie entityZombie = new EntityZombie(new Position(0, 41, 0));
-            entityZombie.setInstance(player.getInstance());
-            entityZombie.setPathTo(player.getPosition());
+            EntityArmorStand entity = new EntityArmorStand(new Position(0, 41, 0));
+            entity.setInstance(player.getInstance());
         });
 
         globalEventHandler.addEventCallback(PlayerDisconnectEvent.class, event -> {
@@ -241,8 +229,6 @@ public class PlayerInit {
         globalEventHandler.addEventCallback(PlayerUseItemEvent.class, useEvent -> {
             final Player player = useEvent.getPlayer();
             player.sendMessage("Using item in air: " + useEvent.getItemStack().getMaterial());
-
-            FakePlayer.initPlayer(UUID.randomUUID(), "test", null);
         });
 
         globalEventHandler.addEventCallback(PlayerUseItemOnBlockEvent.class, useEvent -> {
@@ -264,24 +250,6 @@ public class PlayerInit {
             if (chunk.getViewers().isEmpty()) {
                 //player.getInstance().unloadChunk(chunk);
             }
-        });
-
-        globalEventHandler.addEventCallback(PlayerLoginEvent.class, event -> {
-            //event.setPlayerUuid(UUID.randomUUID());
-            //System.out.println("random "+event.getPlayerUuid());
-            System.out.println("lOGIN EVENT");
-        });
-
-        globalEventHandler.addEventCallback(AsyncPlayerPreLoginEvent.class, event -> {
-            //event.setPlayerUuid(UUID.randomUUID());
-            //System.out.println("random "+event.getPlayerUuid());
-            //event.getPlayer().kick("test");
-            System.out.println("PRElOGIN EVENT");
-
-        });
-
-        globalEventHandler.addEventCallback(PlayerSkinInitEvent.class, event -> {
-            //event.setSkin(PlayerSkin.fromUsername("TheMode911"));
         });
     }
 
