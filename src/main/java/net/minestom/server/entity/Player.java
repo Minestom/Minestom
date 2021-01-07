@@ -682,7 +682,7 @@ public class Player extends LivingEntity implements CommandSender {
             // Send the new dimension if player isn't in any instance or if the dimension is different
             {
                 final DimensionType instanceDimensionType = instance.getDimensionType();
-                if (this.instance == null || dimensionType != instanceDimensionType) {
+                if (dimensionType != instanceDimensionType) {
                     sendDimension(instanceDimensionType);
                 }
             }
