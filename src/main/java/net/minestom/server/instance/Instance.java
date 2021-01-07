@@ -618,7 +618,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public short getBlockStateId(int x, int y, int z) {
         final Chunk chunk = getChunkAt(x, z);
         Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
-        return chunk.getBlockStateId(x, y, z);
+        synchronized (chunk) {
+            return chunk.getBlockStateId(x, y, z);
+        }
     }
 
     /**
@@ -655,7 +657,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     public CustomBlock getCustomBlock(int x, int y, int z) {
         final Chunk chunk = getChunkAt(x, z);
         Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
-        return chunk.getCustomBlock(x, y, z);
+        synchronized (chunk) {
+            return chunk.getCustomBlock(x, y, z);
+        }
     }
 
     /**
@@ -705,7 +709,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         final Chunk chunk = getChunkAt(x, z);
         Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
         final int index = ChunkUtils.getBlockIndex(x, y, z);
-        return chunk.getBlockData(index);
+        synchronized (chunk) {
+            return chunk.getBlockData(index);
+        }
     }
 
     /**
