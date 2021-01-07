@@ -39,7 +39,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 /**
  * A chunk is a part of an {@link Instance}, limited by a size of 16x256x16 blocks and subdivided in 16 sections of 16 blocks height.
  * Should contains all the blocks located at those positions and manage their tick updates.
- * Be aware that implementations do not need to be thread-safe.
+ * Be aware that implementations do not need to be thread-safe, all chunks are guarded by their own instance ('this').
  * <p>
  * Chunks can be serialized using {@link #getSerializedData()} and deserialized back with {@link #readChunk(BinaryReader, ChunkCallback)},
  * allowing you to implement your own storage solution if needed.
