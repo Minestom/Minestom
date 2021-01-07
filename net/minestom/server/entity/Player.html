@@ -667,7 +667,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i51" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#init()">init</a></span>()</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#init(net.minestom.server.instance.Instance)">init</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;spawnInstance)</code></th>
 <td class="colLast">
 <div class="block">Used when the player is created.</div>
 </td>
@@ -1628,17 +1628,22 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </dl>
 </li>
 </ul>
-<a id="init()">
+<a id="init(net.minestom.server.instance.Instance)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>init</h4>
-<pre class="methodSignature">protected&nbsp;void&nbsp;init()</pre>
+<pre class="methodSignature">protected&nbsp;void&nbsp;init&#8203;(@NotNull
+                    <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;spawnInstance)</pre>
 <div class="block">Used when the player is created.
  Init the player and spawn him.
  <p>
  WARNING: executed in the main update thread</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>spawnInstance</code> - the player spawn instance (defined in <a href="../event/player/PlayerLoginEvent.html" title="class in net.minestom.server.event.player"><code>PlayerLoginEvent</code></a>)</dd>
+</dl>
 </li>
 </ul>
 <a id="playerConnectionInit()">
