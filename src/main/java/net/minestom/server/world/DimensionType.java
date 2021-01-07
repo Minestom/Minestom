@@ -41,12 +41,16 @@ public class DimensionType {
     private final boolean respawnAnchorSafe;
     private final boolean ultrawarm;
     private final boolean bedSafe;
+    private final String effects;
     private final boolean piglinSafe;
     private final int logicalHeight;
     private final int coordinateScale;
     private final NamespaceID infiniburn;
 
-    DimensionType(NamespaceID name, boolean natural, float ambientLight, boolean ceilingEnabled, boolean skylightEnabled, Optional<Long> fixedTime, boolean raidCapable, boolean respawnAnchorSafe, boolean ultrawarm, boolean bedSafe, boolean piglinSafe, int logicalHeight, int coordinateScale, NamespaceID infiniburn) {
+    DimensionType(NamespaceID name, boolean natural, float ambientLight, boolean ceilingEnabled,
+                  boolean skylightEnabled, Optional<Long> fixedTime, boolean raidCapable,
+                  boolean respawnAnchorSafe, boolean ultrawarm, boolean bedSafe, String effects, boolean piglinSafe,
+                  int logicalHeight, int coordinateScale, NamespaceID infiniburn) {
         this.name = name;
         this.natural = natural;
         this.ambientLight = ambientLight;
@@ -57,6 +61,7 @@ public class DimensionType {
         this.respawnAnchorSafe = respawnAnchorSafe;
         this.ultrawarm = ultrawarm;
         this.bedSafe = bedSafe;
+        this.effects = effects;
         this.piglinSafe = piglinSafe;
         this.logicalHeight = logicalHeight;
         this.coordinateScale = coordinateScale;
@@ -91,6 +96,7 @@ public class DimensionType {
                 .setByte("has_raids", (byte) (raidCapable ? 0x01 : 0x00))
                 .setByte("respawn_anchor_works", (byte) (respawnAnchorSafe ? 0x01 : 0x00))
                 .setByte("bed_works", (byte) (bedSafe ? 0x01 : 0x00))
+                .setString("effects", effects)
                 .setByte("piglin_safe", (byte) (piglinSafe ? 0x01 : 0x00))
                 .setInt("logical_height", logicalHeight)
                 .setInt("coordinate_scale", coordinateScale)
@@ -189,6 +195,7 @@ public class DimensionType {
         private boolean respawnAnchorSafe;
         private boolean ultrawarm;
         private boolean bedSafe = true;
+        private String effects = "minecraft:overworld";
         private boolean piglinSafe = false;
         private int logicalHeight = 256;
         private int coordinateScale = 1;
@@ -247,6 +254,11 @@ public class DimensionType {
             return this;
         }
 
+        public DimensionType.DimensionTypeBuilder effects(String effects) {
+            this.effects = effects;
+            return this;
+        }
+
         public DimensionType.DimensionTypeBuilder piglinSafe(boolean piglinSafe) {
             this.piglinSafe = piglinSafe;
             return this;
@@ -269,7 +281,7 @@ public class DimensionType {
 
         public DimensionType build() {
             return new DimensionType(name, natural, ambientLight, ceilingEnabled, skylightEnabled,
-                    fixedTime, raidCapable, respawnAnchorSafe, ultrawarm, bedSafe,
+                    fixedTime, raidCapable, respawnAnchorSafe, ultrawarm, bedSafe, effects,
                     piglinSafe, logicalHeight, coordinateScale, infiniburn);
         }
     }
