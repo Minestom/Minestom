@@ -133,11 +133,9 @@ public class BlockPlacementListener {
 
                             // Place the block
                             final short customBlockId = playerBlockPlaceEvent.getCustomBlockId();
-                            if (customBlockId != 0) {
-                                instance.setSeparateBlocks(blockPosition, blockStateId, customBlockId);
-                            } else {
-                                instance.setBlockStateId(blockPosition, blockStateId);
-                            }
+                            final Data blockData = playerBlockPlaceEvent.getBlockData(); // Possibly null
+                            instance.setSeparateBlocks(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(),
+                                    blockStateId, customBlockId, blockData);
 
                             // Block consuming
                             if (playerBlockPlaceEvent.doesConsumeBlock()) {
