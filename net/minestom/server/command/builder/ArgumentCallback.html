@@ -151,9 +151,8 @@ public interface <span class="typeNameLabel">ArgumentCallback</span></pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(net.minestom.server.command.CommandSender,java.lang.String,int)">apply</a></span>&#8203;(<a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
-     java.lang.String&nbsp;value,
-     int&nbsp;error)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(net.minestom.server.command.CommandSender,net.minestom.server.command.builder.exception.ArgumentSyntaxException)">apply</a></span>&#8203;(<a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
+     <a href="exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a>&nbsp;exception)</code></th>
 <td class="colLast">
 <div class="block">Executed when an error is found.</div>
 </td>
@@ -175,23 +174,21 @@ public interface <span class="typeNameLabel">ArgumentCallback</span></pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="apply(net.minestom.server.command.CommandSender,java.lang.String,int)">
+<a id="apply(net.minestom.server.command.CommandSender,net.minestom.server.command.builder.exception.ArgumentSyntaxException)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>apply</h4>
 <pre class="methodSignature">void&nbsp;apply&#8203;(@NotNull
-           <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
+           <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
            @NotNull
-           java.lang.String&nbsp;value,
-           int&nbsp;error)</pre>
+           <a href="exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a>&nbsp;exception)</pre>
 <div class="block">Executed when an error is found.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>source</code> - the sender which executed the command</dd>
-<dd><code>value</code> - the raw string argument which is responsible for the error</dd>
-<dd><code>error</code> - the error id (you can check its meaning in the specific argument class or ask the developer about it)</dd>
+<dd><code>sender</code> - the sender which executed the command</dd>
+<dd><code>exception</code> - the exception containing the message, input and error code related to the issue</dd>
 </dl>
 </li>
 </ul>

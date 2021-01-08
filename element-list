@@ -14,6 +14,7 @@ net.minestom.server.command.builder.arguments.minecraft.registry
 net.minestom.server.command.builder.arguments.number
 net.minestom.server.command.builder.arguments.relative
 net.minestom.server.command.builder.condition
+net.minestom.server.command.builder.exception
 net.minestom.server.data
 net.minestom.server.data.type
 net.minestom.server.data.type.array

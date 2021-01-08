@@ -26,12 +26,6 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
-var altColor = "altColor";
-var rowColor = "rowColor";
-var tableTab = "tableTab";
-var activeTableTab = "activeTableTab";
 var pathtoroot = "../../../../../../../";
 var useModuleDirectories = true;
 loadScripts(document, 'script');</script>
@@ -96,7 +90,7 @@ loadScripts(document, 'script');</script>
 <li>Detail:&nbsp;</li>
 <li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#method.detail">Method</a></li>
+<li>Method</li>
 </ul>
 </div>
 <a id="skip.navbar.top">
@@ -172,13 +166,6 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.command.builder.arguments.Argument">
-<!--   -->
-</a>
-<h3>Fields inherited from class&nbsp;net.minestom.server.command.builder.arguments.<a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a></h3>
-<code><a href="../Argument.html#SUCCESS">SUCCESS</a>, <a href="../Argument.html#UNDEFINED_ERROR">UNDEFINED_ERROR</a></code></li>
-</ul>
 </li>
 </ul>
 </section>
@@ -210,27 +197,12 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <!--   -->
 </a>
 <h3>Method Summary</h3>
-<table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Method</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-<tr id="i0" class="altColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getConditionResult(T)">getConditionResult</a></span>&#8203;(<a href="ArgumentRange.html" title="type parameter in ArgumentRange">T</a>&nbsp;value)</code></th>
-<td class="colLast">
-<div class="block">Called after <a href="../Argument.html#parse(java.lang.String)"><code>Argument.parse(String)</code></a> meaning that <code>value</code> should already represent a valid representation of the input.</div>
-</td>
-</tr>
-</table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.command.builder.arguments.Argument">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.command.builder.arguments.<a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a></h3>
-<code><a href="../Argument.html#allowSpace()">allowSpace</a>, <a href="../Argument.html#getCallback()">getCallback</a>, <a href="../Argument.html#getCorrectionResult(java.lang.String)">getCorrectionResult</a>, <a href="../Argument.html#getDefaultValue()">getDefaultValue</a>, <a href="../Argument.html#getId()">getId</a>, <a href="../Argument.html#hasErrorCallback()">hasErrorCallback</a>, <a href="../Argument.html#isOptional()">isOptional</a>, <a href="../Argument.html#parse(java.lang.String)">parse</a>, <a href="../Argument.html#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a>, <a href="../Argument.html#setDefaultValue(T)">setDefaultValue</a>, <a href="../Argument.html#useRemaining()">useRemaining</a></code></li>
+<code><a href="../Argument.html#allowSpace()">allowSpace</a>, <a href="../Argument.html#getCallback()">getCallback</a>, <a href="../Argument.html#getDefaultValue()">getDefaultValue</a>, <a href="../Argument.html#getId()">getId</a>, <a href="../Argument.html#hasErrorCallback()">hasErrorCallback</a>, <a href="../Argument.html#isOptional()">isOptional</a>, <a href="../Argument.html#parse(java.lang.String)">parse</a>, <a href="../Argument.html#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a>, <a href="../Argument.html#setDefaultValue(T)">setDefaultValue</a>, <a href="../Argument.html#useRemaining()">useRemaining</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -285,41 +257,6 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <li class="blockList">
 <h4>ArgumentRange</h4>
 <pre>public&nbsp;ArgumentRange&#8203;(java.lang.String&nbsp;id)</pre>
-</li>
-</ul>
-</li>
-</ul>
-</section>
-<!-- ============ METHOD DETAIL ========== -->
-<section role="region">
-<ul class="blockList">
-<li class="blockList"><a id="method.detail">
-<!--   -->
-</a>
-<h3>Method Detail</h3>
-<a id="getConditionResult(java.lang.Object)">
-<!--   -->
-</a><a id="getConditionResult(T)">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>getConditionResult</h4>
-<pre class="methodSignature">public&nbsp;int&nbsp;getConditionResult&#8203;(@NotNull
-                              <a href="ArgumentRange.html" title="type parameter in ArgumentRange">T</a>&nbsp;value)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../Argument.html#getConditionResult(T)">Argument</a></code></span></div>
-<div class="block">Called after <a href="../Argument.html#parse(java.lang.String)"><code>Argument.parse(String)</code></a> meaning that <code>value</code> should already represent a valid representation of the input.
- <p>
- The condition result has for goal to check the optional conditions that are user configurable (eg min/max values for a number, a specific material
- for an item, etc...).</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../Argument.html#getConditionResult(T)">getConditionResult</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="ArgumentRange.html" title="type parameter in ArgumentRange">T</a>&gt;</code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>value</code> - The parsed argument</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the error code or <a href="../Argument.html#SUCCESS"><code>Argument.SUCCESS</code></a></dd>
-</dl>
 </li>
 </ul>
 </li>
@@ -382,7 +319,7 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <li>Detail:&nbsp;</li>
 <li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#method.detail">Method</a></li>
+<li>Method</li>
 </ul>
 </div>
 <a id="skip.navbar.bottom">
