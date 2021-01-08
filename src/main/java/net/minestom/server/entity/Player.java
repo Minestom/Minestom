@@ -749,11 +749,19 @@ public class Player extends LivingEntity implements CommandSender {
 
         super.setInstance(instance);
 
+        // runnable used to send newly visible chunks to player once spawned in the instance
+        final Runnable refreshRunnable = () -> {
+            final Chunk chunk = getChunk();
+            if (chunk != null) {
+                refreshVisibleChunks(chunk);
+            }
+        };
+
         if (spawnPosition != null && !position.isSimilar(spawnPosition)) {
             teleport(spawnPosition,
-                    position.inSameChunk(spawnPosition) ? () -> refreshVisibleChunks(getChunk()) : null);
+                    position.inSameChunk(spawnPosition) ? refreshRunnable : null);
         } else {
-            refreshVisibleChunks(getChunk());
+            refreshRunnable.run();
         }
 
         PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
