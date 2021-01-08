@@ -9,7 +9,6 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -85,8 +84,8 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
     protected void apply(@NotNull InstanceContainer instance, @Nullable Runnable callback, boolean safeCallback) {
         synchronized (chunkBatchesMap) {
             AtomicInteger counter = new AtomicInteger();
-            for (Map.Entry<Long, ChunkBatch> entry : chunkBatchesMap.long2ObjectEntrySet()) {
-                final long chunkIndex = entry.getKey();
+            for (Long2ObjectMap.Entry<ChunkBatch> entry : chunkBatchesMap.long2ObjectEntrySet()) {
+                final long chunkIndex = entry.getLongKey();
                 final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
                 final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
                 final ChunkBatch batch = entry.getValue();
