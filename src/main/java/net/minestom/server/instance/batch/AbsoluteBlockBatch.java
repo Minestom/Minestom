@@ -1,4 +1,4 @@
-package net.minestom.server.instance.batch.v2;
+package net.minestom.server.instance.batch;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;

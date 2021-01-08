@@ -2,8 +2,6 @@ package net.minestom.server.instance;
 
 import net.minestom.server.data.Data;
 import net.minestom.server.entity.Player;
-import net.minestom.server.instance.batch.BlockBatch;
-import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
@@ -66,16 +64,6 @@ public class SharedInstance extends Instance {
     @Override
     public void saveChunksToStorage(@Nullable Runnable callback) {
         instanceContainer.saveChunksToStorage(callback);
-    }
-
-    @Override
-    public BlockBatch createBlockBatch() {
-        return instanceContainer.createBlockBatch();
-    }
-
-    @Override
-    public ChunkBatch createChunkBatch(@NotNull Chunk chunk) {
-        return instanceContainer.createChunkBatch(chunk);
     }
 
     @Override

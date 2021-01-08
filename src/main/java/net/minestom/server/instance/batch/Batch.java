@@ -1,4 +1,4 @@
-package net.minestom.server.instance.batch.v2;
+package net.minestom.server.instance.batch;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;

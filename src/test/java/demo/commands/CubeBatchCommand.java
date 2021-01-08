@@ -8,8 +8,8 @@ import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.instance.batch.v2.AbsoluteBlockBatch;
-import net.minestom.server.instance.batch.v2.ChunkBatch;
+import net.minestom.server.instance.batch.AbsoluteBlockBatch;
+import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.time.TimeUnit;
 
@@ -31,20 +31,20 @@ public class CubeBatchCommand extends Command {
         Player player = sender.asPlayer();
         InstanceContainer instance = (InstanceContainer) player.getInstance();
 
-//        applyChunkShape(instance);
+        applyChunkShape(instance);
 
-        AbsoluteBlockBatch batch = new AbsoluteBlockBatch();
-
-        int offset = 50;
-        for (int x = 0; x < 50; x += 2) {
-            for (int y = 0; y < 50; y += 2) {
-                for (int z = 0; z < 50; z += 2) {
-                    batch.setBlockStateId(x + offset, y + offset, z + offset, Block.STONE.getBlockId());
-                }
-            }
-        }
-
-        batch.apply(instance, () -> sender.sendMessage(ColoredText.of(ChatColor.BRIGHT_GREEN, "Created cube.")));
+//        AbsoluteBlockBatch batch = new AbsoluteBlockBatch();
+//
+//        int offset = 50;
+//        for (int x = 0; x < 50; x += 2) {
+//            for (int y = 0; y < 50; y += 2) {
+//                for (int z = 0; z < 50; z += 2) {
+//                    batch.setBlockStateId(x + offset, y + offset, z + offset, Block.STONE.getBlockId());
+//                }
+//            }
+//        }
+//
+//        batch.apply(instance, () -> sender.sendMessage(ColoredText.of(ChatColor.BRIGHT_GREEN, "Created cube.")));
     }
 
     private void applyChunkShape(InstanceContainer instance) {
