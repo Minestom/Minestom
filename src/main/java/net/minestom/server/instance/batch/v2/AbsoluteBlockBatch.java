@@ -30,19 +30,15 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
 
     @Override
     public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data) {
-        int chunkX = ChunkUtils.getChunkCoordinate(x);
-        int chunkZ = ChunkUtils.getChunkCoordinate(z);
-        long chunkIndex = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+        final int chunkX = ChunkUtils.getChunkCoordinate(x);
+        final int chunkZ = ChunkUtils.getChunkCoordinate(z);
+        final long chunkIndex = ChunkUtils.getChunkIndex(chunkX, chunkZ);
 
-        ChunkBatch chunkBatch = this.data.get(chunkIndex);
-        if (chunkBatch == null)
-            chunkBatch = new ChunkBatch();
+        final ChunkBatch chunkBatch = this.data.computeIfAbsent(chunkIndex, i -> new ChunkBatch());
 
-        int relativeX = x - (chunkX * Chunk.CHUNK_SIZE_X);
-        int relativeZ = z - (chunkZ * Chunk.CHUNK_SIZE_Z);
+        final int relativeX = x - (chunkX * Chunk.CHUNK_SIZE_X);
+        final int relativeZ = z - (chunkZ * Chunk.CHUNK_SIZE_Z);
         chunkBatch.setSeparateBlocks(relativeX, y, relativeZ, blockStateId, customBlockId, data);
-
-        this.data.put(chunkIndex, chunkBatch);
     }
 
     @Override
@@ -84,12 +80,12 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      */
     protected void apply(@NotNull InstanceContainer instance, @Nullable Runnable callback, boolean safeCallback) {
         synchronized (data) {
-            AtomicInteger counter = new AtomicInteger();
+            final AtomicInteger counter = new AtomicInteger();
             for (Map.Entry<Long, ChunkBatch> entry : data.entrySet()) {
-                long chunkIndex = entry.getKey();
-                int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-                int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-                ChunkBatch batch = entry.getValue();
+                final long chunkIndex = entry.getKey();
+                final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+                final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+                final ChunkBatch batch = entry.getValue();
 
                 batch.apply(instance, chunkX, chunkZ, c -> {
                     final boolean isLast = counter.incrementAndGet() == data.size();
