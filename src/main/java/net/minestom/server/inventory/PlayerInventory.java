@@ -34,8 +34,8 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     public static final int INVENTORY_SIZE = 46;
 
-    private final Player player;
-    private final ItemStack[] items = new ItemStack[INVENTORY_SIZE];
+    protected final Player player;
+    protected final ItemStack[] items = new ItemStack[INVENTORY_SIZE];
     private ItemStack cursorItem = ItemStack.getAirItem();
 
     private final List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
@@ -261,7 +261,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
      * @throws IllegalArgumentException if the slot {@code slot} does not exist
      * @throws NullPointerException     if {@code itemStack} is null
      */
-    private synchronized void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
+    protected synchronized void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
         Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
                 "The slot " + slot + " does not exist for player");
         Check.notNull(itemStack, "The ItemStack cannot be null, you can set air instead");
