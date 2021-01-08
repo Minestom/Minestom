@@ -112,6 +112,13 @@ public class NettyPlayerConnection extends PlayerConnection {
      */
     @Override
     public void sendPacket(@NotNull ServerPacket serverPacket) {
+
+        // Directly send packet before playing state
+        if (getConnectionState() != ConnectionState.PLAY) {
+            writeAndFlush(serverPacket);
+            return;
+        }
+
         if (shouldSendPacket(serverPacket)) {
             if (getPlayer() != null) {
                 // Flush happen during #update()
