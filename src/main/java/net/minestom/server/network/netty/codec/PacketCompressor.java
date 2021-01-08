@@ -43,7 +43,7 @@ public class PacketCompressor extends ByteToMessageCodec<ByteBuf> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf from, ByteBuf to) {
-        PacketUtils.compressBuffer(deflater, buffer, from, to);
+        PacketUtils.compressBuffer(deflater, buffer, from, to, false);
     }
 
     @Override
@@ -68,13 +68,11 @@ public class PacketCompressor extends ByteToMessageCodec<ByteBuf> {
                 buf.readBytes(input);
 
                 inflater.setInput(input);
-
                 byte[] output = new byte[i];
-
                 inflater.inflate(output);
-                out.add(Unpooled.wrappedBuffer(output));
-
                 inflater.reset();
+
+                out.add(Unpooled.wrappedBuffer(output));
             }
         }
     }
