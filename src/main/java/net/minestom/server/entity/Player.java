@@ -673,15 +673,11 @@ public class Player extends LivingEntity implements CommandSender {
         Check.argCondition(this.instance == instance, "Instance should be different than the current one");
 
         // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (eg SharedInstance)
-        final boolean needWorldRefresh = !InstanceUtils.areLinked(this.instance, instance);
+        final boolean needWorldRefresh = !InstanceUtils.areLinked(this.instance, instance) ||
+                !spawnPosition.inSameChunk(this.position);
 
         if (needWorldRefresh) {
             final boolean firstSpawn = this.instance == null; // TODO: Handle player reconnections, must be false in that case too
-
-            // Remove all previous viewable chunks (from the previous instance)
-            for (Chunk viewableChunk : viewableChunks) {
-                viewableChunk.removeViewer(this);
-            }
 
             // Send the new dimension if player isn't in any instance or if the dimension is different
             {
@@ -707,7 +703,7 @@ public class Player extends LivingEntity implements CommandSender {
 
             final ChunkCallback endCallback = chunk -> {
                 // This is the last chunk to be loaded , spawn player
-                spawnPlayer(instance, spawnPosition, firstSpawn);
+                spawnPlayer(instance, spawnPosition, firstSpawn, true);
             };
 
             // Chunk 0;0 always needs to be loaded
@@ -718,7 +714,7 @@ public class Player extends LivingEntity implements CommandSender {
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
-            spawnPlayer(instance, spawnPosition, false);
+            spawnPlayer(instance, spawnPosition, false, false);
         }
     }
 
@@ -744,13 +740,19 @@ public class Player extends LivingEntity implements CommandSender {
      * @param spawnPosition the position to teleport the player
      * @param firstSpawn    true if this is the player first spawn
      */
-    private void spawnPlayer(@NotNull Instance instance, @Nullable Position spawnPosition, boolean firstSpawn) {
+    private void spawnPlayer(@NotNull Instance instance, @Nullable Position spawnPosition,
+                             boolean firstSpawn, boolean updateChunks) {
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
 
         super.setInstance(instance);
 
-        // runnable used to send newly visible chunks to player once spawned in the instance
+        // Runnable used to send newly visible chunks to player once spawned in the instance
         final Runnable refreshRunnable = () -> {
+            if (!updateChunks)
+                return;
+
+            // Remove all previous viewable chunks (from the previous instance)
+            this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
             final Chunk chunk = getChunk();
             if (chunk != null) {
                 refreshVisibleChunks(chunk);
@@ -758,8 +760,7 @@ public class Player extends LivingEntity implements CommandSender {
         };
 
         if (spawnPosition != null && !position.isSimilar(spawnPosition)) {
-            teleport(spawnPosition,
-                    position.inSameChunk(spawnPosition) ? refreshRunnable : null);
+            teleport(spawnPosition, refreshRunnable);
         } else {
             refreshRunnable.run();
         }
@@ -1573,7 +1574,7 @@ public class Player extends LivingEntity implements CommandSender {
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
 
-            instance.loadOptionalChunk(chunkX, chunkZ, chunk -> {
+            this.instance.loadOptionalChunk(chunkX, chunkZ, chunk -> {
                 if (chunk == null) {
                     // Cannot load chunk (auto load is not enabled)
                     return;
