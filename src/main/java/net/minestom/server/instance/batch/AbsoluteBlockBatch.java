@@ -80,7 +80,8 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      *
      * @param instance     The instance in which the batch should be applied
      * @param callback     The callback to be executed when the batch is applied
-     * @param safeCallback If true, the callback will be executed in the next instance update. Otherwise it will be executed immediately upon completion
+     * @param safeCallback If true, the callback will be executed in the next instance update.
+     *                     Otherwise it will be executed immediately upon completion
      */
     protected void apply(@NotNull Instance instance, @Nullable Runnable callback, boolean safeCallback) {
         synchronized (chunkBatchesMap) {

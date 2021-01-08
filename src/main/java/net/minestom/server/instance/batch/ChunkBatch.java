@@ -97,7 +97,8 @@ public class ChunkBatch implements Batch<ChunkCallback> {
     public void apply(@NotNull Instance instance, int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
         final Chunk chunk = instance.getChunk(chunkX, chunkZ);
         if (chunk == null) {
-            LOGGER.warn("Unable to apply ChunkBatch to unloaded chunk ({}, {}) in {}.", chunkX, chunkZ, instance.getUniqueId());
+            LOGGER.warn("Unable to apply ChunkBatch to unloaded chunk ({}, {}) in {}.",
+                    chunkX, chunkZ, instance.getUniqueId());
             return;
         }
         apply(instance, chunk, callback);
@@ -132,23 +133,29 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @param instance     The instance in which the batch should be applied
      * @param chunk        The target chunk
      * @param callback     The callback to be executed when the batch is applied
-     * @param safeCallback If true, the callback will be executed in the next instance update. Otherwise it will be executed immediately upon completion
+     * @param safeCallback If true, the callback will be executed in the next instance update.
+     *                     Otherwise it will be executed immediately upon completion
      */
-    protected void apply(@NotNull Instance instance, @NotNull Chunk chunk, @Nullable ChunkCallback callback, boolean safeCallback) {
+    protected void apply(@NotNull Instance instance,
+                         @NotNull Chunk chunk, @Nullable ChunkCallback callback,
+                         boolean safeCallback) {
         BLOCK_BATCH_POOL.execute(() -> singleThreadFlush(instance, chunk, callback, safeCallback));
     }
 
     /**
      * Applies this batch in the current thread, executing the callback upon completion.
      */
-    private void singleThreadFlush(Instance instance, Chunk chunk, @Nullable ChunkCallback callback, boolean safeCallback) {
+    private void singleThreadFlush(Instance instance,
+                                   Chunk chunk, @Nullable ChunkCallback callback,
+                                   boolean safeCallback) {
         if (blocks.isEmpty()) {
             OptionalCallback.execute(callback, chunk);
             return;
         }
 
         if (!chunk.isLoaded()) {
-            LOGGER.warn("Unable to apply ChunkBatch to unloaded chunk ({}, {}) in {}.", chunk.getChunkX(), chunk.getChunkZ(), instance.getUniqueId());
+            LOGGER.warn("Unable to apply ChunkBatch to unloaded chunk ({}, {}) in {}.",
+                    chunk.getChunkX(), chunk.getChunkZ(), instance.getUniqueId());
             return;
         }
 
