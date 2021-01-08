@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -159,6 +159,11 @@ extends java.lang.Object</pre>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="EntityFinder.EntitySort.html" title="enum in net.minestom.server.utils.entity">EntityFinder.EntitySort</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="EntityFinder.TargetSelector.html" title="enum in net.minestom.server.utils.entity">EntityFinder.TargetSelector</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -200,29 +205,47 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#find()">find</a></span>()</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#find(net.minestom.server.instance.Instance,net.minestom.server.entity.Entity)">find</a></span>&#8203;(<a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+    <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;self)</code></th>
 <td class="colLast">
 <div class="block">Find a list of entities (could be empty) based on the conditions</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isOnlyPlayers()">isOnlyPlayers</a></span>()</code></th>
+<td class="colFirst"><code><a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDifference(double,double,double)">setDifference</a></span>&#8203;(double&nbsp;dx,
+             double&nbsp;dy,
+             double&nbsp;dz)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isOnlySingleEntity()">isOnlySingleEntity</a></span>()</code></th>
+<td class="colFirst"><code><a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDistance(net.minestom.server.utils.math.IntRange)">setDistance</a></span>&#8203;(<a href="../math/IntRange.html" title="class in net.minestom.server.utils.math">IntRange</a>&nbsp;distance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setOnlyPlayers(boolean)">setOnlyPlayers</a></span>&#8203;(boolean&nbsp;onlyPlayers)</code></th>
+<td class="colFirst"><code><a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEntitySort(net.minestom.server.utils.entity.EntityFinder.EntitySort)">setEntitySort</a></span>&#8203;(<a href="EntityFinder.EntitySort.html" title="enum in net.minestom.server.utils.entity">EntityFinder.EntitySort</a>&nbsp;entitySort)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setOnlySingleEntity(boolean)">setOnlySingleEntity</a></span>&#8203;(boolean&nbsp;onlySingleEntity)</code></th>
+<td class="colFirst"><code><a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLevel(net.minestom.server.utils.math.IntRange)">setLevel</a></span>&#8203;(<a href="../math/IntRange.html" title="class in net.minestom.server.utils.math">IntRange</a>&nbsp;level)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLimit(int)">setLimit</a></span>&#8203;(int&nbsp;limit)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code><a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStartPosition(net.minestom.server.utils.Position)">setStartPosition</a></span>&#8203;(<a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;startPosition)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code><a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTargetSelector(net.minestom.server.utils.entity.EntityFinder.TargetSelector)">setTargetSelector</a></span>&#8203;(<a href="EntityFinder.TargetSelector.html" title="enum in net.minestom.server.utils.entity">EntityFinder.TargetSelector</a>&nbsp;targetSelector)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -268,53 +291,91 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="isOnlySingleEntity()">
+<a id="setTargetSelector(net.minestom.server.utils.entity.EntityFinder.TargetSelector)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>isOnlySingleEntity</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;isOnlySingleEntity()</pre>
+<h4>setTargetSelector</h4>
+<pre class="methodSignature">public&nbsp;<a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a>&nbsp;setTargetSelector&#8203;(@NotNull
+                                      <a href="EntityFinder.TargetSelector.html" title="enum in net.minestom.server.utils.entity">EntityFinder.TargetSelector</a>&nbsp;targetSelector)</pre>
 </li>
 </ul>
-<a id="setOnlySingleEntity(boolean)">
+<a id="setEntitySort(net.minestom.server.utils.entity.EntityFinder.EntitySort)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setOnlySingleEntity</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setOnlySingleEntity&#8203;(boolean&nbsp;onlySingleEntity)</pre>
+<h4>setEntitySort</h4>
+<pre class="methodSignature">public&nbsp;<a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a>&nbsp;setEntitySort&#8203;(@NotNull
+                                  <a href="EntityFinder.EntitySort.html" title="enum in net.minestom.server.utils.entity">EntityFinder.EntitySort</a>&nbsp;entitySort)</pre>
 </li>
 </ul>
-<a id="isOnlyPlayers()">
+<a id="setStartPosition(net.minestom.server.utils.Position)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>isOnlyPlayers</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;isOnlyPlayers()</pre>
+<h4>setStartPosition</h4>
+<pre class="methodSignature">public&nbsp;<a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a>&nbsp;setStartPosition&#8203;(@NotNull
+                                     <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;startPosition)</pre>
 </li>
 </ul>
-<a id="setOnlyPlayers(boolean)">
+<a id="setDistance(net.minestom.server.utils.math.IntRange)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setOnlyPlayers</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setOnlyPlayers&#8203;(boolean&nbsp;onlyPlayers)</pre>
+<h4>setDistance</h4>
+<pre class="methodSignature">public&nbsp;<a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a>&nbsp;setDistance&#8203;(@NotNull
+                                <a href="../math/IntRange.html" title="class in net.minestom.server.utils.math">IntRange</a>&nbsp;distance)</pre>
 </li>
 </ul>
-<a id="find()">
+<a id="setLimit(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setLimit</h4>
+<pre class="methodSignature">public&nbsp;<a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a>&nbsp;setLimit&#8203;(int&nbsp;limit)</pre>
+</li>
+</ul>
+<a id="setLevel(net.minestom.server.utils.math.IntRange)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setLevel</h4>
+<pre class="methodSignature">public&nbsp;<a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a>&nbsp;setLevel&#8203;(@NotNull
+                             <a href="../math/IntRange.html" title="class in net.minestom.server.utils.math">IntRange</a>&nbsp;level)</pre>
+</li>
+</ul>
+<a id="setDifference(double,double,double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDifference</h4>
+<pre class="methodSignature">public&nbsp;<a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a>&nbsp;setDifference&#8203;(double&nbsp;dx,
+                                  double&nbsp;dy,
+                                  double&nbsp;dz)</pre>
+</li>
+</ul>
+<a id="find(net.minestom.server.instance.Instance,net.minestom.server.entity.Entity)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>find</h4>
-<pre class="methodSignature">public&nbsp;java.util.List&lt;<a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&nbsp;find()</pre>
+<pre class="methodSignature">@NotNull
+public&nbsp;java.util.List&lt;<a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&nbsp;find&#8203;(@NotNull
+                                   <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                                   @Nullable
+                                   <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;self)</pre>
 <div class="block">Find a list of entities (could be empty) based on the conditions</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>all entities validating the conditions</dd>
+<dd>all entities validating the conditions, can be empty</dd>
 </dl>
 </li>
 </ul>
