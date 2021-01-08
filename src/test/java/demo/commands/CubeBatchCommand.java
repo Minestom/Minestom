@@ -10,6 +10,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.batch.AbsoluteBlockBatch;
 import net.minestom.server.instance.batch.ChunkBatch;
+import net.minestom.server.instance.batch.RelativeBlockBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.time.TimeUnit;
 
@@ -31,7 +32,8 @@ public class CubeBatchCommand extends Command {
         Player player = sender.asPlayer();
         InstanceContainer instance = (InstanceContainer) player.getInstance();
 
-        applyChunkShape(instance);
+//        applyChunkShape(instance);
+        applyBlockShape(instance);
 
 //        AbsoluteBlockBatch batch = new AbsoluteBlockBatch();
 //
@@ -43,13 +45,82 @@ public class CubeBatchCommand extends Command {
 //                }
 //            }
 //        }
-//
-//        batch.apply(instance, () -> sender.sendMessage(ColoredText.of(ChatColor.BRIGHT_GREEN, "Created cube.")));
+
+//        RelativeBlockBatch batch = new RelativeBlockBatch();
+//        for (int x = 0; x < 50; x += 2) {
+//            for (int y = 0; y < 50; y += 2) {
+//                for (int z = 0; z < 50; z += 2) {
+//                    batch.setBlockStateId(x, y, z, Block.STONE.getBlockId());
+//                }
+//            }
+//        }
+//        batch.apply(instance, 0, 50, 0, () -> sender.sendMessage(ColoredText.of(ChatColor.BRIGHT_GREEN, "Created cube.")));
+
+
+    }
+
+    private void applyBlockShape(InstanceContainer instance) {
+        for (int i = 0; i < 5; i++) {
+            AbsoluteBlockBatch batch = new AbsoluteBlockBatch();
+            for (int x = -100; x < 101; x++) {
+                for (int z = -100; z < 101; z++) {
+                    batch.setBlockStateId(x, 50, z, (short) (Block.BLUE_CONCRETE.getBlockId() + i));
+                }
+            }
+            MinecraftServer.getSchedulerManager().buildTask(() -> {
+                batch.apply(instance, null);
+            }).delay(i * 3, TimeUnit.TICK).repeat(15, TimeUnit.TICK).schedule();
+        }
+
+
+        // Bad
+//        for (int i = 0; i < 5; i++) {
+//            RelativeBlockBatch batch = makeBatch((short) (Block.BLUE_CONCRETE.getBlockId() + i));
+//            MinecraftServer.getSchedulerManager().buildTask(() -> {
+//                batch.apply(instance,
+//                        ThreadLocalRandom.current().nextInt(100) - 100,
+//                        50,
+//                        ThreadLocalRandom.current().nextInt(100) - 100,
+//                        null);
+//            }).delay(10, TimeUnit.TICK).repeat(1, TimeUnit.TICK).schedule();
+//        }
+
+
+//        for (int i = 0; i < 5; i++) {
+//            RelativeBlockBatch batch = makeBatch((short) 0);
+//            MinecraftServer.getSchedulerManager().buildTask(() -> {
+//                batch.apply(instance,
+//                        ThreadLocalRandom.current().nextInt(50) - 50,
+//                        ThreadLocalRandom.current().nextInt(50) + 50,
+//                        ThreadLocalRandom.current().nextInt(50) - 50,
+//                        null);
+//            }).delay(10, TimeUnit.TICK).repeat(1, TimeUnit.TICK).schedule();
+//        }
+//        for (int i = 0; i < 5; i++) {
+//            RelativeBlockBatch batch = makeBatch((short) (Block.STONE.getBlockId() + i));
+//            MinecraftServer.getSchedulerManager().buildTask(() -> {
+//                batch.apply(instance,
+//                        ThreadLocalRandom.current().nextInt(50) - 50,
+//                        ThreadLocalRandom.current().nextInt(50) + 50,
+//                        ThreadLocalRandom.current().nextInt(50) - 50,
+//                        null);
+//            }).delay(10, TimeUnit.TICK).repeat(1, TimeUnit.TICK).schedule();
+//        }
+    }
+
+    private RelativeBlockBatch makeBatch(short block) {
+        final RelativeBlockBatch batch = new RelativeBlockBatch();
+        for (int x = 0; x < 100; x += 2) {
+//            for (int y = 0; y < 50; y += 2) {
+                for (int z = 0; z < 100; z += 2) {
+                    batch.setBlockStateId(x, 0, z, block);
+                }
+//            }
+        }
+        return batch;
     }
 
     private void applyChunkShape(InstanceContainer instance) {
-
-
         for (int i = 0; i < 20; i++) {
             final ChunkBatch relBatch = new ChunkBatch();
 
@@ -67,7 +138,5 @@ public class CubeBatchCommand extends Command {
                         null);
             }).delay(10, TimeUnit.TICK).repeat(1, TimeUnit.TICK).schedule();
         }
-
-
     }
 }
