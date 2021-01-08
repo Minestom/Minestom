@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutorService;
  * A Batch is a tool used to cache a list of block changes, and apply the changes whenever you want.
  * <p>
  * Batches offer a performance benefit because clients are not notified of any change until all of
- * the blocks have been placed.
+ * the blocks have been placed, and because changes can happen with less synchronization.
  * <p>
  * All batches may be rotated using {link}, however rotate operations do not mutate the batch, so the
  * result should be cached if used multiple times.
@@ -30,6 +30,7 @@ import java.util.concurrent.ExecutorService;
  * @see RelativeBlockBatch
  */
 public interface Batch<Callback> extends BlockModifier {
+
     ExecutorService BLOCK_BATCH_POOL = new MinestomThread(MinecraftServer.THREAD_COUNT_BLOCK_BATCH, MinecraftServer.THREAD_NAME_BLOCK_BATCH);
 
     @Override

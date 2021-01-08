@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
  * @see Batch
  */
 public class ChunkBatch implements Batch<ChunkCallback> {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ChunkBatch.class);
 
     // Need to be synchronized manually
@@ -187,7 +188,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
     /**
      * Updates the given chunk for all of its viewers, and executes the callback.
      */
-    private void updateChunk(InstanceContainer instance, Chunk chunk, @Nullable ChunkCallback callback, boolean safeCallback) {
+    private void updateChunk(@NotNull InstanceContainer instance, @NotNull Chunk chunk, @Nullable ChunkCallback callback, boolean safeCallback) {
         // Refresh chunk for viewers
 
         // Formerly this had an option to do a Chunk#sendChunkUpdate
