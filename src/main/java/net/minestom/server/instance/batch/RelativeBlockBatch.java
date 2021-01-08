@@ -29,8 +29,8 @@ public class RelativeBlockBatch implements Batch<Runnable> {
     public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data) {
 
         // Save the offsets if it is the first entry
-        if (!firstEntry) {
-            this.firstEntry = true;
+        if (firstEntry) {
+            this.firstEntry = false;
 
             this.offsetX = x;
             this.offsetY = y;
