@@ -2,8 +2,13 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.entity.Entity;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.utils.entity.EntityFinder;
+import net.minestom.server.utils.math.IntRange;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -15,21 +20,30 @@ import java.util.List;
  * Represents the target selector argument.
  * https://minecraft.gamepedia.com/Commands#Target_selectors
  */
-public class ArgumentEntities extends Argument<List<Entity>> {
+public class ArgumentEntities extends Argument<EntityFinder> {
 
     private static final int SUCCESS = 0;
 
     public static final int INVALID_SYNTAX = -2;
     public static final int ONLY_SINGLE_ENTITY_ERROR = -3;
     public static final int ONLY_PLAYERS_ERROR = -4;
+    public static final int INVALID_ARGUMENT_NAME = -5;
+    public static final int INVALID_ARGUMENT_VALUE = -6;
     private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
     private static final List<String> selectorVariables = Arrays.asList("@p", "@r", "@a", "@e", "@s");
     private static final List<String> playersOnlySelector = Arrays.asList("@p", "@r", "@a", "@s");
     private static final List<String> singleOnlySelector = Arrays.asList("@p", "@r", "@s");
+    // List with all the valid arguments
     private static final List<String> validArguments = Arrays.asList("x", "y", "z",
             "distance", "dx", "dy", "dz",
-            "scores", "tag", "team", "limit", "sort", "level", "gamemode", "name",
+            "scores", "tag", "team", "limit", "sort", "level", "gamemode",
             "x_rotation", "y_rotation", "type", "nbt", "advancements", "predicate");
+
+    // List with all the easily parsable arguments which only require reading until a specific character (comma)
+    private static final List<String> simpleArguments = Arrays.asList("x", "y", "z",
+            "distance", "dx", "dy", "dz",
+            "scores", "tag", "team", "limit", "sort", "level", "gamemode", "name",
+            "x_rotation", "y_rotation", "type", "advancements", "predicate");
     private boolean onlySingleEntity;
     private boolean onlyPlayers;
 
@@ -47,76 +61,162 @@ public class ArgumentEntities extends Argument<List<Entity>> {
         return this;
     }
 
-    public int getCorrectionResult(@NotNull String value) {
-        System.out.println("check: " + value);
+    @NotNull
+    @Override
+    public EntityFinder parse(@NotNull String input) throws ArgumentSyntaxException {
+        System.out.println("check: " + input);
 
         // Check for raw player name
-        if (value.length() <= 16) {
-            if (CONNECTION_MANAGER.getPlayer(value) != null)
-                return SUCCESS;
+        if (input.length() <= 16) {
+            if (CONNECTION_MANAGER.getPlayer(input) != null) {
+                // TODO success
+            }
         }
 
         // The minimum size is always 0 (for the selector variable, ex: @p)
-        if (value.length() < 2)
-            return INVALID_SYNTAX;
+        if (input.length() < 2)
+            throw new ArgumentSyntaxException("Length needs to be > 1", input, INVALID_SYNTAX);
 
         // The target selector variable always start by '@'
-        if (!value.startsWith("@"))
-            return INVALID_SYNTAX;
+        if (!input.startsWith("@"))
+            throw new ArgumentSyntaxException("Target selector needs to start with @", input, INVALID_SYNTAX);
 
-        final String selectorVariable = value.substring(0, 2);
+        final String selectorVariable = input.substring(0, 2);
 
         // Check if the selector variable used exists
         if (!selectorVariables.contains(selectorVariable))
-            return INVALID_SYNTAX;
+            throw new ArgumentSyntaxException("Invalid selector variable", input, INVALID_SYNTAX);
 
         // Check if it should only select single entity and if the selector variable valid the condition
         if (onlySingleEntity && !singleOnlySelector.contains(selectorVariable))
-            return ONLY_SINGLE_ENTITY_ERROR;
+            throw new ArgumentSyntaxException("Argument requires only a single entity", input, ONLY_SINGLE_ENTITY_ERROR);
 
         // Check if it should only select players and if the selector variable valid the condition
         if (onlyPlayers && !playersOnlySelector.contains(selectorVariable))
-            return ONLY_PLAYERS_ERROR;
+            throw new ArgumentSyntaxException("Argument requires only players", input, ONLY_PLAYERS_ERROR);
+
+        // Create the EntityFinder which will be used for the rest of the parsing
+        final EntityFinder entityFinder = new EntityFinder()
+                .setTargetSelector(toTargetSelector(selectorVariable));
 
         // The selector is a single selector variable which verify all the conditions
-        if (value.length() == 2)
-            return SUCCESS;
+        if (input.length() == 2)
+            return entityFinder;
 
         // START PARSING THE STRUCTURE
-        final String structure = value.substring(2);
+        final String structure = input.substring(2);
+        return parseStructure(input, entityFinder, structure);
+    }
 
+    @NotNull
+    private EntityFinder parseStructure(@NotNull String input,
+                                        @NotNull EntityFinder entityFinder,
+                                        @NotNull String structure) throws ArgumentSyntaxException {
         // The structure isn't opened or closed properly
         if (!structure.startsWith("[") || !structure.endsWith("]"))
-            return INVALID_SYNTAX;
+            throw new ArgumentSyntaxException("Target selector needs to start and end with brackets", input, INVALID_SYNTAX);
+
+        // Remove brackets
         final String structureData = structure.substring(1, structure.length() - 1);
+        System.out.println("structure data: " + structureData);
 
         String currentArgument = "";
         for (int i = 0; i < structureData.length(); i++) {
             final char c = structureData.charAt(i);
             if (c == '=') {
-                i = retrieveArgument(structureData, currentArgument, i);
+                System.out.println("type: " + currentArgument);
+
+                if (!validArguments.contains(currentArgument))
+                    throw new ArgumentSyntaxException("Argument name '" + currentArgument + "' does not exist", input, INVALID_ARGUMENT_NAME);
+
+                i = parseArgument(entityFinder, currentArgument, input, structureData, i);
+                currentArgument = ""; // Reset current argument
             } else {
                 currentArgument += c;
             }
         }
 
-        return 0;
+        return entityFinder;
     }
 
-    private int retrieveArgument(String structureData, String argument, int index) {
-        int finalIndex = index;
-        for (int i = index + 1; i < structureData.length(); i++) {
-            System.out.println("char: " + structureData.charAt(i));
-            System.out.println("retrieve: " + argument);
+    private int parseArgument(@NotNull EntityFinder entityFinder,
+                              @NotNull String argumentName,
+                              @NotNull String input,
+                              @NotNull String structureData, int beginIndex) throws ArgumentSyntaxException {
+        final char comma = ',';
+        final boolean isSimple = simpleArguments.contains(argumentName);
+
+        int finalIndex = beginIndex + 1;
+        StringBuilder valueBuilder = new StringBuilder();
+        for (; finalIndex < structureData.length(); finalIndex++) {
+            final char c = structureData.charAt(finalIndex);
+
+            // Command is parsed
+            if (isSimple && c == comma)
+                break;
+
+            valueBuilder.append(c);
+        }
+
+        final String value = valueBuilder.toString().trim();
+
+        //System.out.println("value: " + value);
+        switch (argumentName) {
+            case "type": {
+                final boolean include = !value.startsWith("!");
+                final String entityName = include ? value : value.substring(1);
+                final EntityType entityType = Registries.getEntityType(entityName);
+                if (entityType == null)
+                    throw new ArgumentSyntaxException("Invalid entity name", input, INVALID_ARGUMENT_VALUE);
+                entityFinder.setEntity(entityType, include ? EntityFinder.ToggleableType.INCLUDE : EntityFinder.ToggleableType.EXCLUDE);
+                break;
+            }
+            case "gamemode": {
+                final boolean include = !value.startsWith("!");
+                final String gameModeName = include ? value : value.substring(1);
+                try {
+                    final GameMode gameMode = GameMode.valueOf(gameModeName);
+                    entityFinder.setGameMode(gameMode, include ? EntityFinder.ToggleableType.INCLUDE : EntityFinder.ToggleableType.EXCLUDE);
+                } catch (IllegalArgumentException e) {
+                    throw new ArgumentSyntaxException("Invalid entity game mode", input, INVALID_ARGUMENT_VALUE);
+                }
+                break;
+            }
+            case "limit":
+                try {
+                    final int limit = Integer.parseInt(value);
+                    entityFinder.setLimit(limit);
+                } catch (NumberFormatException e) {
+                    throw new ArgumentSyntaxException("Invalid limit number", input, INVALID_ARGUMENT_VALUE);
+                }
+                break;
+            case "sort":
+                try {
+                    EntityFinder.EntitySort entitySort = EntityFinder.EntitySort.valueOf(value.toUpperCase());
+                    entityFinder.setEntitySort(entitySort);
+                } catch (IllegalArgumentException e) {
+                    throw new ArgumentSyntaxException("Invalid entity sort", input, INVALID_ARGUMENT_VALUE);
+                }
+                break;
+            case "level":
+                try {
+                    final IntRange level = ArgumentIntRange.staticParse(value);
+                    entityFinder.setLevel(level);
+                } catch (ArgumentSyntaxException e) {
+                    throw new ArgumentSyntaxException("Invalid level number", input, INVALID_ARGUMENT_VALUE);
+                }
+                break;
+            case "distance":
+                try {
+                    final IntRange distance = ArgumentIntRange.staticParse(value);
+                    entityFinder.setDistance(distance);
+                } catch (ArgumentSyntaxException e) {
+                    throw new ArgumentSyntaxException("Invalid level number", input, INVALID_ARGUMENT_VALUE);
+                }
+                break;
         }
 
         return finalIndex;
-    }
-
-    @NotNull
-    @Override
-    public List<Entity> parse(@NotNull String value) {
-        return null;
     }
 
     public boolean isOnlySingleEntity() {
@@ -125,5 +225,19 @@ public class ArgumentEntities extends Argument<List<Entity>> {
 
     public boolean isOnlyPlayers() {
         return onlyPlayers;
+    }
+
+    private static EntityFinder.TargetSelector toTargetSelector(@NotNull String selectorVariable) {
+        if (selectorVariable.equals("@p"))
+            return EntityFinder.TargetSelector.NEAREST_PLAYER;
+        if (selectorVariable.equals("@r"))
+            return EntityFinder.TargetSelector.RANDOM_PLAYER;
+        if (selectorVariable.equals("@a"))
+            return EntityFinder.TargetSelector.ALL_PLAYERS;
+        if (selectorVariable.equals("@e"))
+            return EntityFinder.TargetSelector.ALL_ENTITIES;
+        if (selectorVariable.equals("@s"))
+            return EntityFinder.TargetSelector.SELF;
+        throw new IllegalStateException("Weird selector variable: " + selectorVariable);
     }
 }

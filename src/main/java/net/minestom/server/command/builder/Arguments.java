@@ -2,13 +2,13 @@ package net.minestom.server.command.builder;
 
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.utils.entity.EntityFinder;
 import net.minestom.server.utils.location.RelativeBlockPosition;
 import net.minestom.server.utils.location.RelativeVec;
 import net.minestom.server.utils.math.FloatRange;
@@ -20,7 +20,6 @@ import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -122,8 +121,8 @@ public final class Arguments {
     }
 
     @NotNull
-    public List<Entity> getEntities(@NotNull String id) {
-        return (List<Entity>) getObject(id);
+    public EntityFinder getEntities(@NotNull String id) {
+        return (EntityFinder) getObject(id);
     }
 
     @NotNull

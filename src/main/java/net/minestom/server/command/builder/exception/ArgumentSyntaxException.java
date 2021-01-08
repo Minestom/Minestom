@@ -9,6 +9,9 @@ import org.jetbrains.annotations.NotNull;
  * Exception triggered when an {@link Argument} is wrongly parsed.
  * <p>
  * Retrieved in {@link ArgumentCallback} defined in {@link Command#setArgumentCallback(ArgumentCallback, Argument)}.
+ * <p>
+ * Be aware that the message returned by {@link #getMessage()} is only here for debugging purpose,
+ * you should refer to {@link #getErrorCode()} to identify the exceptions.
  */
 public class ArgumentSyntaxException extends Exception {
 

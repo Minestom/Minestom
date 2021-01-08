@@ -20,6 +20,11 @@ public class ArgumentIntRange extends ArgumentRange<IntRange> {
     @NotNull
     @Override
     public IntRange parse(@NotNull String input) throws ArgumentSyntaxException {
+        return staticParse(input);
+    }
+
+    @NotNull
+    public static IntRange staticParse(@NotNull String input) throws ArgumentSyntaxException {
         try {
             if (input.contains("..")) {
                 final int index = input.indexOf('.');

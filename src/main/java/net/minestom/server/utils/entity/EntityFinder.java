@@ -35,10 +35,10 @@ public class EntityFinder {
 
     // By traits
     private OptionalInt limit;
-    private ToggleableMap<EntityType> entityTypes;
+    private final ToggleableMap<EntityType> entityTypes = new ToggleableMap<>();
 
     // Players specific
-    private ToggleableMap<GameMode> gameModes;
+    private final ToggleableMap<GameMode> gameModes = new ToggleableMap<>();
     private IntRange level;
 
     public EntityFinder setTargetSelector(@NotNull TargetSelector targetSelector) {
@@ -68,6 +68,16 @@ public class EntityFinder {
 
     public EntityFinder setLevel(@NotNull IntRange level) {
         this.level = level;
+        return this;
+    }
+
+    public EntityFinder setEntity(@NotNull EntityType entityType, @NotNull ToggleableType toggleableType) {
+        this.entityTypes.put(entityType, toggleableType.getValue());
+        return this;
+    }
+
+    public EntityFinder setGameMode(@NotNull GameMode gameMode, @NotNull ToggleableType toggleableType) {
+        this.gameModes.put(gameMode, toggleableType.getValue());
         return this;
     }
 
@@ -125,7 +135,7 @@ public class EntityFinder {
         }
 
         // Entity type
-        if (entityTypes != null && !entityTypes.isEmpty()) {
+        if (!entityTypes.isEmpty()) {
             final EntityType requirement = entityTypes.requirement;
             result = result.stream().filter(entity -> {
                 final EntityType entityType = entity.getEntityType();
@@ -137,7 +147,7 @@ public class EntityFinder {
         }
 
         // GameMode
-        if (gameModes != null && !gameModes.isEmpty()) {
+        if (!gameModes.isEmpty()) {
             final GameMode requirement = gameModes.requirement;
             result = result.stream().filter(entity -> {
                 if (!(entity instanceof Player))
@@ -203,6 +213,20 @@ public class EntityFinder {
 
     public enum EntitySort {
         ARBITRARY, FURTHEST, NEAREST, RANDOM
+    }
+
+    public enum ToggleableType {
+        INCLUDE(true), EXCLUDE(false);
+
+        private final boolean value;
+
+        ToggleableType(boolean value) {
+            this.value = value;
+        }
+
+        public boolean getValue() {
+            return value;
+        }
     }
 
     private static class ToggleableMap<T> extends Object2BooleanOpenHashMap<T> {
