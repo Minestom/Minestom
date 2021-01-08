@@ -75,7 +75,7 @@ public interface CommandProcessor {
      *
      * @param sender the command sender
      * @param text   the whole player text
-     * @return the array containing all the suggestions for the current arg (split " "), can be null
+     * @return the array containing all the suggestions for the current arg (split SPACE), can be null
      * @see #enableWritingTracking()
      */
     @Nullable

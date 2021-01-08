@@ -9,6 +9,7 @@ import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.server.play.ChatMessagePacket;
 import net.minestom.server.utils.PacketUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;
 import java.util.function.Function;
@@ -72,8 +73,8 @@ public class ChatMessageListener {
 
         return RichMessage.of(usernameText)
                 .setHoverEvent(ChatHoverEvent.showText("Click to send a message to " + username))
-                .setClickEvent(ChatClickEvent.suggestCommand("/msg " + username + " "))
-                .append(ColoredText.of(" " + chatEvent.getMessage()));
+                .setClickEvent(ChatClickEvent.suggestCommand("/msg " + username + StringUtils.SPACE))
+                .append(ColoredText.of(StringUtils.SPACE + chatEvent.getMessage()));
     }
 
 }

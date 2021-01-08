@@ -6,6 +6,7 @@ import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
 import org.jetbrains.annotations.NotNull;
@@ -74,8 +75,8 @@ public class ReloadExtensionCommand extends Command {
         }
     }
 
-    private void gameModeCallback(CommandSender sender, String extension, int error) {
-        sender.sendMessage("'" + extension + "' is not a valid extension name!");
+    private void gameModeCallback(CommandSender sender, ArgumentSyntaxException argumentSyntaxException) {
+        sender.sendMessage("'" + argumentSyntaxException.getInput() + "' is not a valid extension name!");
     }
 
     @Nullable

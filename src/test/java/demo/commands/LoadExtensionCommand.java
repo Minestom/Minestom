@@ -6,6 +6,7 @@ import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.extensions.ExtensionManager;
 
 import java.io.IOException;
@@ -19,7 +20,7 @@ public class LoadExtensionCommand extends Command {
 
         Argument extension = ArgumentType.DynamicStringArray("extensionName");
 
-        setArgumentCallback(this::gameModeCallback, extension);
+        setArgumentCallback(this::extensionCallback, extension);
 
         addSyntax(this::execute, extension);
     }
@@ -59,8 +60,8 @@ public class LoadExtensionCommand extends Command {
         }
     }
 
-    private void gameModeCallback(CommandSender sender, String extension, int error) {
-        sender.sendMessage("'" + extension + "' is not a valid extension name!");
+    private void extensionCallback(CommandSender sender, ArgumentSyntaxException exception) {
+        sender.sendMessage("'" + exception.getInput() + "' is not a valid extension name!");
     }
 
     private String join(String[] extensionNameParts) {

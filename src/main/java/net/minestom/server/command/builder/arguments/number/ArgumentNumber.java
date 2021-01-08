@@ -81,6 +81,7 @@ public abstract class ArgumentNumber<T extends Number> extends Argument<T> {
         return max;
     }
 
+    @NotNull
     protected String parseValue(@NotNull String value) {
         if (value.startsWith("0b")) {
             value = value.replaceFirst(Pattern.quote("0b"), "");

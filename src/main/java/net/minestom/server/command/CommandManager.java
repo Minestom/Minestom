@@ -22,6 +22,7 @@ import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.callback.CommandCallback;
 import net.minestom.server.utils.validate.Check;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -209,7 +210,7 @@ public final class CommandManager {
                 return true;
             } else {
                 // Check for legacy-command
-                final String[] splitCommand = command.split(" ");
+                final String[] splitCommand = command.split(StringUtils.SPACE);
                 final String commandName = splitCommand[0];
                 final CommandProcessor commandProcessor = commandProcessorMap.get(commandName.toLowerCase());
                 if (commandProcessor == null) {
@@ -220,7 +221,7 @@ public final class CommandManager {
                 }
 
                 // Execute the legacy-command
-                final String[] args = command.substring(command.indexOf(" ") + 1).split(" ");
+                final String[] args = command.substring(command.indexOf(StringUtils.SPACE) + 1).split(StringUtils.SPACE);
 
                 return commandProcessor.process(sender, commandName, args);
             }

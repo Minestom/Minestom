@@ -6,7 +6,6 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.network.ConnectionManager;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,6 +16,8 @@ import java.util.List;
  * https://minecraft.gamepedia.com/Commands#Target_selectors
  */
 public class ArgumentEntities extends Argument<List<Entity>> {
+
+    private static final int SUCCESS = 0;
 
     public static final int INVALID_SYNTAX = -2;
     public static final int ONLY_SINGLE_ENTITY_ERROR = -3;
@@ -46,7 +47,6 @@ public class ArgumentEntities extends Argument<List<Entity>> {
         return this;
     }
 
-    @Override
     public int getCorrectionResult(@NotNull String value) {
         System.out.println("check: " + value);
 
@@ -117,11 +117,6 @@ public class ArgumentEntities extends Argument<List<Entity>> {
     @Override
     public List<Entity> parse(@NotNull String value) {
         return null;
-    }
-
-    @Override
-    public int getConditionResult(@NotNull List<Entity> value) {
-        return SUCCESS;
     }
 
     public boolean isOnlySingleEntity() {

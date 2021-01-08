@@ -1,5 +1,7 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
@@ -15,19 +17,9 @@ public class ArgumentStringArray extends Argument<String[]> {
         super(id, true, true);
     }
 
-    @Override
-    public int getCorrectionResult(@NotNull String value) {
-        return SUCCESS;
-    }
-
     @NotNull
     @Override
-    public String[] parse(@NotNull String value) {
-        return value.split(Pattern.quote(" "));
-    }
-
-    @Override
-    public int getConditionResult(@NotNull String[] value) {
-        return SUCCESS;
+    public String[] parse(@NotNull String input) throws ArgumentSyntaxException {
+        return input.split(Pattern.quote(StringUtils.SPACE));
     }
 }

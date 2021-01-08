@@ -2,6 +2,7 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,20 +18,13 @@ public class ArgumentColor extends Argument<ChatColor> {
         super(id);
     }
 
-    @Override
-    public int getCorrectionResult(@NotNull String value) {
-        final ChatColor color = ChatColor.fromName(value);
-        return color == ChatColor.NO_COLOR ? UNDEFINED_COLOR : SUCCESS;
-    }
-
     @NotNull
     @Override
-    public ChatColor parse(@NotNull String value) {
-        return ChatColor.fromName(value);
-    }
+    public ChatColor parse(@NotNull String input) throws ArgumentSyntaxException {
+        final ChatColor color = ChatColor.fromName(input);
+        if (color == ChatColor.NO_COLOR)
+            throw new ArgumentSyntaxException("Undefined color", input, UNDEFINED_COLOR);
 
-    @Override
-    public int getConditionResult(@NotNull ChatColor value) {
-        return SUCCESS;
+        return color;
     }
 }

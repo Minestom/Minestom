@@ -256,7 +256,7 @@ public class Command {
      *
      * @param sender the command sender
      * @param text   the whole player's text
-     * @return the array containing all the suggestion for the current arg (split " "), can be null
+     * @return the array containing all the suggestion for the current arg (split SPACE), can be null
      */
     @Nullable
     public String[] onDynamicWrite(@NotNull CommandSender sender, @NotNull String text) {

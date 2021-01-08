@@ -6,8 +6,10 @@ import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -22,7 +24,7 @@ public class UnloadExtensionCommand extends Command {
 
         Argument extension = ArgumentType.DynamicStringArray("extensionName");
 
-        setArgumentCallback(this::gameModeCallback, extension);
+        setArgumentCallback(this::extensionCallback, extension);
 
         addSyntax(this::execute, extension);
     }
@@ -33,11 +35,11 @@ public class UnloadExtensionCommand extends Command {
 
     private void execute(CommandSender sender, Arguments arguments) {
         String name = join(arguments.getStringArray("extensionName"));
-        sender.sendMessage("extensionName = "+name+"....");
+        sender.sendMessage("extensionName = " + name + "....");
 
         ExtensionManager extensionManager = MinecraftServer.getExtensionManager();
         Extension ext = extensionManager.getExtension(name);
-        if(ext != null) {
+        if (ext != null) {
             try {
                 extensionManager.unloadExtension(name);
             } catch (Throwable t) {
@@ -47,27 +49,27 @@ public class UnloadExtensionCommand extends Command {
                     t.printStackTrace(new PrintStream(baos));
                     baos.flush();
                     baos.close();
-                    String contents = new String(baos.toByteArray(), StandardCharsets.UTF_8);
+                    String contents = baos.toString(StandardCharsets.UTF_8);
                     contents.lines().forEach(sender::sendMessage);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         } else {
-            sender.sendMessage("Extension '"+name+"' does not exist.");
+            sender.sendMessage("Extension '" + name + "' does not exist.");
         }
     }
 
-    private void gameModeCallback(CommandSender sender, String extension, int error) {
-        sender.sendMessage("'" + extension + "' is not a valid extension name!");
+    private void extensionCallback(CommandSender sender, ArgumentSyntaxException exception) {
+        sender.sendMessage("'" + exception.getInput() + "' is not a valid extension name!");
     }
 
     private String join(String[] extensionNameParts) {
         StringBuilder b = new StringBuilder();
         for (int i = 0; i < extensionNameParts.length; i++) {
             String s = extensionNameParts[i];
-            if(i != 0) {
-                b.append(" ");
+            if (i != 0) {
+                b.append(StringUtils.SPACE);
             }
             b.append(s);
         }

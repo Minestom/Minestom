@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,21 +16,15 @@ public class ArgumentBoolean extends Argument<Boolean> {
         super(id);
     }
 
-    @Override
-    public int getCorrectionResult(@NotNull String value) {
-        return (value.equalsIgnoreCase("true")
-                || value.equalsIgnoreCase("false")) ? SUCCESS : NOT_BOOLEAN_ERROR;
-    }
-
     @NotNull
     @Override
-    public Boolean parse(@NotNull String value) {
-        return Boolean.parseBoolean(value);
-    }
+    public Boolean parse(@NotNull String input) throws ArgumentSyntaxException {
+        if (input.equalsIgnoreCase("true"))
+            return true;
+        if (input.equalsIgnoreCase("false"))
+            return false;
 
-    @Override
-    public int getConditionResult(@NotNull Boolean value) {
-        return SUCCESS;
+        throw new ArgumentSyntaxException("Not a boolean", input, NOT_BOOLEAN_ERROR);
     }
 
 }

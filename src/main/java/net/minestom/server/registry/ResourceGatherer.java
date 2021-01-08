@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,7 +96,7 @@ public class ResourceGatherer {
         ProcessBuilder dataGenerator = new ProcessBuilder("java", "-cp", serverJar.getName(), "net.minecraft.data.Main", "--all", "--server", "--dev");
         dataGenerator.directory(TMP_FOLDER);
         LOGGER.info("Now running data generator with options '--dev', '--server', '--all'");
-        LOGGER.info("Executing: {}", String.join(" ", dataGenerator.command()));
+        LOGGER.info("Executing: {}", String.join(StringUtils.SPACE, dataGenerator.command()));
         LOGGER.info("Minestom will now wait for it to finish, here's its output:");
         LOGGER.info("");
         Process dataGeneratorProcess = dataGenerator.start();

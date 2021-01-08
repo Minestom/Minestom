@@ -1,11 +1,11 @@
 package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.callback.validator.StringArrayValidator;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.regex.Pattern;
 
 /**
  * Same as {@link ArgumentStringArray} with the exception
@@ -21,28 +21,19 @@ public class ArgumentDynamicStringArray extends Argument<String[]> {
         super(id, true, true);
     }
 
-    @Override
-    public int getCorrectionResult(@NotNull String value) {
-        return SUCCESS;
-    }
-
     @NotNull
     @Override
-    public String[] parse(@NotNull String value) {
-        return value.split(Pattern.quote(" "));
-    }
-
-    @Override
-    public int getConditionResult(@NotNull String[] value) {
+    public String[] parse(@NotNull String input) throws ArgumentSyntaxException {
+        final String[] value = input.split(StringUtils.SPACE);
 
         // true if 'value' is valid based on the dynamic restriction
         final boolean restrictionCheck = dynamicRestriction == null || dynamicRestriction.isValid(value);
 
         if (!restrictionCheck) {
-            return RESTRICTION_ERROR;
+            throw new ArgumentSyntaxException("Argument does not respect the dynamic restriction", input, RESTRICTION_ERROR);
         }
 
-        return SUCCESS;
+        return value;
     }
 
     /**
