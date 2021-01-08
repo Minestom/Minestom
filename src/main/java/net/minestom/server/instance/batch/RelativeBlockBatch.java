@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.data.Data;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.validate.Check;
@@ -72,23 +73,23 @@ public class RelativeBlockBatch implements Batch<Runnable> {
     }
 
     @Override
-    public void apply(@NotNull InstanceContainer instance, @Nullable Runnable callback) {
+    public void apply(@NotNull Instance instance, @Nullable Runnable callback) {
         apply(instance, 0, 0, 0, callback);
     }
 
-    public void apply(@NotNull InstanceContainer instance, @NotNull BlockPosition position, @Nullable Runnable callback) {
+    public void apply(@NotNull Instance instance, @NotNull BlockPosition position, @Nullable Runnable callback) {
         apply(instance, position.getX(), position.getY(), position.getZ(), callback);
     }
 
-    public void apply(@NotNull InstanceContainer instance, int x, int y, int z, @Nullable Runnable callback) {
+    public void apply(@NotNull Instance instance, int x, int y, int z, @Nullable Runnable callback) {
         apply(instance, x, y, z, callback, true);
     }
 
-    public void applyUnsafe(@NotNull InstanceContainer instance, int x, int y, int z, @Nullable Runnable callback) {
+    public void applyUnsafe(@NotNull Instance instance, int x, int y, int z, @Nullable Runnable callback) {
         apply(instance, x, y, z, callback, false);
     }
 
-    protected void apply(@NotNull InstanceContainer instance, int x, int y, int z, @Nullable Runnable callback, boolean safeCallback) {
+    protected void apply(@NotNull Instance instance, int x, int y, int z, @Nullable Runnable callback, boolean safeCallback) {
         AbsoluteBlockBatch batch = new AbsoluteBlockBatch();
 
         synchronized (blockIdMap) {

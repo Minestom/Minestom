@@ -3,7 +3,7 @@ package net.minestom.server.instance.batch;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.instance.BlockModifier;
-import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.validate.Check;
@@ -69,7 +69,7 @@ public interface Batch<Callback> extends BlockModifier {
      * @param instance The instance in which the batch should be applied
      * @param callback The callback to be executed when the batch is applied
      */
-    void apply(@NotNull InstanceContainer instance, @Nullable Callback callback);
+    void apply(@NotNull Instance instance, @Nullable Callback callback);
 
 //    @NotNull
 //    Batch<Callback> reversableApply(@NotNull InstanceContainer instance, @Nullable Callback callback);

@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.data.Data;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
@@ -59,7 +60,7 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      * @param callback The callback to be executed when the batch is applied
      */
     @Override
-    public void apply(@NotNull InstanceContainer instance, @Nullable Runnable callback) {
+    public void apply(@NotNull Instance instance, @Nullable Runnable callback) {
         apply(instance, callback, true);
     }
 
@@ -70,7 +71,7 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      * @param instance The instance in which the batch should be applied
      * @param callback The callback to be executed when the batch is applied
      */
-    public void unsafeApply(@NotNull InstanceContainer instance, @Nullable Runnable callback) {
+    public void unsafeApply(@NotNull Instance instance, @Nullable Runnable callback) {
         apply(instance, callback, false);
     }
 
@@ -81,7 +82,7 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      * @param callback     The callback to be executed when the batch is applied
      * @param safeCallback If true, the callback will be executed in the next instance update. Otherwise it will be executed immediately upon completion
      */
-    protected void apply(@NotNull InstanceContainer instance, @Nullable Runnable callback, boolean safeCallback) {
+    protected void apply(@NotNull Instance instance, @Nullable Runnable callback, boolean safeCallback) {
         synchronized (chunkBatchesMap) {
             AtomicInteger counter = new AtomicInteger();
             for (Long2ObjectMap.Entry<ChunkBatch> entry : chunkBatchesMap.long2ObjectEntrySet()) {
@@ -95,7 +96,12 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
 
                     // Execute the callback if this was the last chunk to process
                     if (isLast) {
-                        instance.refreshLastBlockChangeTime();
+
+                        if (instance instanceof InstanceContainer) {
+                            // FIXME: put method in Instance instead
+                            ((InstanceContainer) instance).refreshLastBlockChangeTime();
+                        }
+
                         if (callback != null) {
                             if (safeCallback) {
                                 instance.scheduleNextTick(inst -> callback.run());

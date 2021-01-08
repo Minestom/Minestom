@@ -1,10 +1,7 @@
 package net.minestom.server.instance.batch;
 
 import net.minestom.server.data.Data;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.ChunkGenerator;
-import net.minestom.server.instance.ChunkPopulator;
-import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.*;
 import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +54,9 @@ public class ChunkGenerationBatch extends ChunkBatch {
     }
 
     @Override
-    protected void apply(@NotNull InstanceContainer instance, @NotNull Chunk chunk, @Nullable ChunkCallback callback, boolean safeCallback) {
+    protected void apply(@NotNull Instance instance,
+                         @NotNull Chunk chunk, @Nullable ChunkCallback callback,
+                         boolean safeCallback) {
         throw new IllegalStateException("#apply is not supported for chunk generation batch.");
     }
 }

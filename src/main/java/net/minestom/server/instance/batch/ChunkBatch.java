@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongList;
 import net.minestom.server.data.Data;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
@@ -81,7 +82,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @param callback The callback to be executed when the batch is applied
      */
     @Override
-    public void apply(@NotNull InstanceContainer instance, @Nullable ChunkCallback callback) {
+    public void apply(@NotNull Instance instance, @Nullable ChunkCallback callback) {
         apply(instance, 0, 0, callback);
     }
 
@@ -89,11 +90,11 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * Apply this batch to the given chunk.
      *
      * @param instance The instance in which the batch should be applied
-     * @param chunkX The x chunk coordinate of the target chunk
-     * @param chunkZ The z chunk coordinate of the target chunk
+     * @param chunkX   The x chunk coordinate of the target chunk
+     * @param chunkZ   The z chunk coordinate of the target chunk
      * @param callback The callback to be executed when the batch is applied.
      */
-    public void apply(@NotNull InstanceContainer instance, int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
+    public void apply(@NotNull Instance instance, int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
         final Chunk chunk = instance.getChunk(chunkX, chunkZ);
         if (chunk == null) {
             LOGGER.warn("Unable to apply ChunkBatch to unloaded chunk ({}, {}) in {}.", chunkX, chunkZ, instance.getUniqueId());
@@ -106,10 +107,10 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * Apply this batch to the given chunk.
      *
      * @param instance The instance in which the batch should be applied
-     * @param chunk The target chunk
+     * @param chunk    The target chunk
      * @param callback The callback to be executed when the batch is applied
      */
-    public void apply(@NotNull InstanceContainer instance, @NotNull Chunk chunk, @Nullable ChunkCallback callback) {
+    public void apply(@NotNull Instance instance, @NotNull Chunk chunk, @Nullable ChunkCallback callback) {
         apply(instance, chunk, callback, true);
     }
 
@@ -118,29 +119,29 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * immediately when the blocks have been applied, in an unknown thread.
      *
      * @param instance The instance in which the batch should be applied
-     * @param chunk The target chunk
+     * @param chunk    The target chunk
      * @param callback The callback to be executed when the batch is applied
      */
-    public void unsafeApply(@NotNull InstanceContainer instance, @NotNull Chunk chunk, @Nullable ChunkCallback callback) {
+    public void unsafeApply(@NotNull Instance instance, @NotNull Chunk chunk, @Nullable ChunkCallback callback) {
         apply(instance, chunk, callback, false);
     }
 
     /**
      * Apply this batch to the given chunk, and execute the callback depending on safeCallback.
      *
-     * @param instance The instance in which the batch should be applied
-     * @param chunk The target chunk
-     * @param callback The callback to be executed when the batch is applied
+     * @param instance     The instance in which the batch should be applied
+     * @param chunk        The target chunk
+     * @param callback     The callback to be executed when the batch is applied
      * @param safeCallback If true, the callback will be executed in the next instance update. Otherwise it will be executed immediately upon completion
      */
-    protected void apply(@NotNull InstanceContainer instance, @NotNull Chunk chunk, @Nullable ChunkCallback callback, boolean safeCallback) {
+    protected void apply(@NotNull Instance instance, @NotNull Chunk chunk, @Nullable ChunkCallback callback, boolean safeCallback) {
         BLOCK_BATCH_POOL.execute(() -> singleThreadFlush(instance, chunk, callback, safeCallback));
     }
 
     /**
      * Applies this batch in the current thread, executing the callback upon completion.
      */
-    private void singleThreadFlush(InstanceContainer instance, Chunk chunk, @Nullable ChunkCallback callback, boolean safeCallback) {
+    private void singleThreadFlush(Instance instance, Chunk chunk, @Nullable ChunkCallback callback, boolean safeCallback) {
         if (blocks.isEmpty()) {
             OptionalCallback.execute(callback, chunk);
             return;
@@ -187,14 +188,18 @@ public class ChunkBatch implements Batch<ChunkCallback> {
     /**
      * Updates the given chunk for all of its viewers, and executes the callback.
      */
-    private void updateChunk(InstanceContainer instance, Chunk chunk, @Nullable ChunkCallback callback, boolean safeCallback) {
+    private void updateChunk(@NotNull Instance instance, Chunk chunk, @Nullable ChunkCallback callback, boolean safeCallback) {
         // Refresh chunk for viewers
 
         // Formerly this had an option to do a Chunk#sendChunkUpdate
         // however Chunk#sendChunk does the same including a light update
-        chunk.sendChunk();
+        chunk.sendChunkUpdate();
+        //chunk.sendChunk();
 
-        instance.refreshLastBlockChangeTime();
+        if (instance instanceof InstanceContainer) {
+            // FIXME: put method in Instance instead
+            ((InstanceContainer) instance).refreshLastBlockChangeTime();
+        }
 
         if (callback != null) {
             if (safeCallback) {
