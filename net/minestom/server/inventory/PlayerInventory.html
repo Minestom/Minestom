@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -161,6 +161,16 @@ implements <a href="InventoryModifier.html" title="interface in net.minestom.ser
 <tr class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#INVENTORY_SIZE">INVENTORY_SIZE</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>[]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#items">items</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#player">player</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -380,62 +390,70 @@ implements <a href="InventoryModifier.html" title="interface in net.minestom.ser
 </tr>
 <tr id="i24" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#safeItemInsert(int,net.minestom.server.item.ItemStack)">safeItemInsert</a></span>&#8203;(int&nbsp;slot,
+              <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
+<td class="colLast">
+<div class="block">Inserts an item safely (synchronized) in the appropriate slot.</div>
+</td>
+</tr>
+<tr id="i25" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendSlotRefresh(short,net.minestom.server.item.ItemStack)">sendSlotRefresh</a></span>&#8203;(short&nbsp;slot,
                <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Refreshes an inventory slot.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBoots(net.minestom.server.item.ItemStack)">setBoots</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Changes the boots.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChestplate(net.minestom.server.item.ItemStack)">setChestplate</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Changes the chestplate.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCursorItem(net.minestom.server.item.ItemStack)">setCursorItem</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursorItem)</code></th>
 <td class="colLast">
 <div class="block">Changes the player cursor item.</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setData(net.minestom.server.data.Data)">setData</a></span>&#8203;(<a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
 <td class="colLast">
 <div class="block">Sets the <a href="../data/Data.html" title="class in net.minestom.server.data"><code>Data</code></a> of this container.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setHelmet(net.minestom.server.item.ItemStack)">setHelmet</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Changes the helmet.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setItemInMainHand(net.minestom.server.item.ItemStack)">setItemInMainHand</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Changes the main hand <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a>.</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setItemInOffHand(net.minestom.server.item.ItemStack)">setItemInOffHand</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Changes the off hand <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a>.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setItemStack(int,int,net.minestom.server.item.ItemStack)">setItemStack</a></span>&#8203;(int&nbsp;slot,
             int&nbsp;offset,
@@ -444,7 +462,7 @@ implements <a href="InventoryModifier.html" title="interface in net.minestom.ser
 <div class="block">Sets an item from a packet slot.</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setItemStack(int,net.minestom.server.item.ItemStack)">setItemStack</a></span>&#8203;(int&nbsp;slot,
             <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
@@ -452,20 +470,20 @@ implements <a href="InventoryModifier.html" title="interface in net.minestom.ser
 <div class="block">Sets an <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> at the specified slot and send relevant update to the viewer(s).</div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setItemStackInternal(int,net.minestom.server.item.ItemStack)">setItemStackInternal</a></span>&#8203;(int&nbsp;slot,
                     <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLeggings(net.minestom.server.item.ItemStack)">setLeggings</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Changes the leggings.</div>
 </td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shiftClick(net.minestom.server.entity.Player,int)">shiftClick</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
           int&nbsp;slot)</code></th>
@@ -473,7 +491,7 @@ implements <a href="InventoryModifier.html" title="interface in net.minestom.ser
 <div class="block">Called when a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> shift click in the inventory</div>
 </td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update()">update</a></span>()</code></th>
 <td class="colLast">
@@ -521,7 +539,7 @@ implements <a href="InventoryModifier.html" title="interface in net.minestom.ser
 <a id="INVENTORY_SIZE">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>INVENTORY_SIZE</h4>
 <pre>public static final&nbsp;int INVENTORY_SIZE</pre>
@@ -529,6 +547,24 @@ implements <a href="InventoryModifier.html" title="interface in net.minestom.ser
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../constant-values.html#net.minestom.server.inventory.PlayerInventory.INVENTORY_SIZE">Constant Field Values</a></dd>
 </dl>
+</li>
+</ul>
+<a id="player">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>player</h4>
+<pre>protected final&nbsp;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a> player</pre>
+</li>
+</ul>
+<a id="items">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>items</h4>
+<pre>protected final&nbsp;<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>[] items</pre>
 </li>
 </ul>
 </li>
@@ -976,6 +1012,26 @@ public&nbsp;<a href="../item/ItemStack.html" title="class in net.minestom.server
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>cursorItem</code> - the new cursor item</dd>
+</dl>
+</li>
+</ul>
+<a id="safeItemInsert(int,net.minestom.server.item.ItemStack)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>safeItemInsert</h4>
+<pre class="methodSignature">protected&nbsp;void&nbsp;safeItemInsert&#8203;(int&nbsp;slot,
+                              @NotNull
+                              <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
+<div class="block">Inserts an item safely (synchronized) in the appropriate slot.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>slot</code> - an internal slot</dd>
+<dd><code>itemStack</code> - the item to insert at the slot</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.IllegalArgumentException</code> - if the slot <code>slot</code> does not exist</dd>
+<dd><code>java.lang.NullPointerException</code> - if <code>itemStack</code> is null</dd>
 </dl>
 </li>
 </ul>
