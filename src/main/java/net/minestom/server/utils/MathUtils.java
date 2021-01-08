@@ -59,6 +59,14 @@ public final class MathUtils {
         return number >= min && number <= max;
     }
 
+    public static boolean isBetweenUnordered(float number, float compare1, float compare2) {
+        if (compare1 > compare2) {
+            return isBetween(number, compare2, compare1);
+        } else {
+            return isBetween(number, compare1, compare2);
+        }
+    }
+
     public static int clamp(int value, int min, int max) {
         if (value < min) {
             return min;

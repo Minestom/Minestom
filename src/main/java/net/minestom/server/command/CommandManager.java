@@ -388,9 +388,9 @@ public final class CommandManager {
         nodes.add(literalNode);
 
         // Contains the arguments of the already-parsed syntaxes
-        List<Argument[]> syntaxesArguments = new ArrayList<>();
+        List<Argument<?>[]> syntaxesArguments = new ArrayList<>();
         // Contains the nodes of an argument
-        Map<Argument, List<DeclareCommandsPacket.Node>> storedArgumentsNodes = new HashMap<>();
+        Map<Argument<?>, List<DeclareCommandsPacket.Node>> storedArgumentsNodes = new HashMap<>();
 
         for (CommandSyntax syntax : syntaxes) {
             final CommandCondition commandCondition = syntax.getCommandCondition();
@@ -406,16 +406,17 @@ public final class CommandManager {
             // Represent the children of the last node
             IntList argChildren = null;
 
-            final Argument[] arguments = syntax.getArguments();
+            final Argument<?>[] arguments = syntax.getArguments();
             for (int i = 0; i < arguments.length; i++) {
-                final Argument argument = arguments[i];
+                final Argument<?> argument = arguments[i];
                 final boolean isFirst = i == 0;
                 final boolean isLast = i == arguments.length - 1;
 
+                // Find shared part
                 boolean foundSharedPart = false;
-                for (Argument[] parsedArguments : syntaxesArguments) {
+                for (Argument<?>[] parsedArguments : syntaxesArguments) {
                     if (ArrayUtils.sameStart(arguments, parsedArguments, i + 1)) {
-                        final Argument sharedArgument = parsedArguments[i];
+                        final Argument<?> sharedArgument = parsedArguments[i];
 
                         argChildren = new IntArrayList();
                         lastNodes = storedArgumentsNodes.get(sharedArgument);
@@ -442,9 +443,10 @@ public final class CommandManager {
 
                     if (lastNodes != null) {
                         final int[] children = ArrayUtils.toArray(argChildren);
-                        lastNodes.forEach(n -> n.children = n.children == null ?
-                                children :
-                                ArrayUtils.concatenateIntArrays(n.children, children));
+                        lastNodes.forEach(n ->
+                                n.children = n.children == null ?
+                                        children :
+                                        ArrayUtils.concatenateIntArrays(n.children, children));
                     }
 
                     nodes.add(node);
