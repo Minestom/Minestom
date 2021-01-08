@@ -10,6 +10,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -27,7 +28,20 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
     // In the form of <Chunk Index, Batch>
     private final Long2ObjectMap<ChunkBatch> chunkBatchesMap = new Long2ObjectOpenHashMap<>();
 
+    private final CountDownLatch readyLatch;
+    private final BatchOption options;
+
     public AbsoluteBlockBatch() {
+        this(new BatchOption());
+    }
+
+    public AbsoluteBlockBatch(BatchOption options) {
+        this(options, true);
+    }
+
+    private AbsoluteBlockBatch(BatchOption options, boolean ready) {
+        this.readyLatch = new CountDownLatch(ready ? 0 : 1);
+        this.options = options;
     }
 
     @Override
@@ -38,7 +52,7 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
 
         final ChunkBatch chunkBatch;
         synchronized (chunkBatchesMap) {
-            chunkBatch = chunkBatchesMap.computeIfAbsent(chunkIndex, i -> new ChunkBatch());
+            chunkBatch = chunkBatchesMap.computeIfAbsent(chunkIndex, i -> new ChunkBatch(this.options));
         }
 
         final int relativeX = x - (chunkX * Chunk.CHUNK_SIZE_X);
@@ -53,6 +67,20 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
         }
     }
 
+    @Override
+    public boolean isReady() {
+        return this.readyLatch.getCount() == 0;
+    }
+
+    @Override
+    public void awaitReady() {
+        try {
+            this.readyLatch.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException("#awaitReady interrupted!", e);
+        }
+    }
+
     /**
      * Applies this batch to the given instance.
      *
@@ -60,8 +88,8 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      * @param callback The callback to be executed when the batch is applied
      */
     @Override
-    public void apply(@NotNull Instance instance, @Nullable Runnable callback) {
-        apply(instance, callback, true);
+    public AbsoluteBlockBatch apply(@NotNull Instance instance, @Nullable Runnable callback) {
+        return apply(instance, callback, true);
     }
 
     /**
@@ -71,8 +99,8 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      * @param instance The instance in which the batch should be applied
      * @param callback The callback to be executed when the batch is applied
      */
-    public void unsafeApply(@NotNull Instance instance, @Nullable Runnable callback) {
-        apply(instance, callback, false);
+    public AbsoluteBlockBatch unsafeApply(@NotNull Instance instance, @Nullable Runnable callback) {
+        return apply(instance, callback, false);
     }
 
     /**
@@ -83,7 +111,10 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      * @param safeCallback If true, the callback will be executed in the next instance update.
      *                     Otherwise it will be executed immediately upon completion
      */
-    protected void apply(@NotNull Instance instance, @Nullable Runnable callback, boolean safeCallback) {
+    protected AbsoluteBlockBatch apply(@NotNull Instance instance, @Nullable Runnable callback, boolean safeCallback) {
+        if (!this.options.isUnsafeApply()) this.awaitReady();
+
+        final AbsoluteBlockBatch inverse = this.options.shouldCalculateInverse() ? new AbsoluteBlockBatch() : null;
         synchronized (chunkBatchesMap) {
             AtomicInteger counter = new AtomicInteger();
             for (Long2ObjectMap.Entry<ChunkBatch> entry : chunkBatchesMap.long2ObjectEntrySet()) {
@@ -92,11 +123,12 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
                 final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
                 final ChunkBatch batch = entry.getValue();
 
-                batch.apply(instance, chunkX, chunkZ, c -> {
+                ChunkBatch chunkInverse = batch.apply(instance, chunkX, chunkZ, c -> {
                     final boolean isLast = counter.incrementAndGet() == chunkBatchesMap.size();
 
                     // Execute the callback if this was the last chunk to process
                     if (isLast) {
+                        if (inverse != null) inverse.readyLatch.countDown();
 
                         if (instance instanceof InstanceContainer) {
                             // FIXME: put method in Instance instead
@@ -112,7 +144,12 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
                         }
                     }
                 });
+
+                if (inverse != null)
+                    inverse.chunkBatchesMap.put(chunkIndex, chunkInverse);
             }
         }
+
+        return inverse;
     }
 }

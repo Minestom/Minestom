@@ -49,6 +49,22 @@ public interface Batch<Callback> extends BlockModifier {
     void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data);
 
     /**
+     * Gets if the batch is ready to be applied to an instance.
+     * <p>
+     * This is true by default, and will only be false while a reversal is being generated.
+     *
+     * @return true if the batch is ready to apply
+     */
+    default boolean isReady() { return true; }
+
+    /**
+     * Blocks the current thread until the batch is ready to be applied.
+     *
+     * @see #isReady() for a non-blocking way to determine if the batch is ready
+     */
+    default void awaitReady() {}
+
+    /**
      * Removes all block data from this batch.
      */
     void clear();
@@ -68,9 +84,8 @@ public interface Batch<Callback> extends BlockModifier {
      *
      * @param instance The instance in which the batch should be applied
      * @param callback The callback to be executed when the batch is applied
+     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    void apply(@NotNull Instance instance, @Nullable Callback callback);
-
-//    @NotNull
-//    Batch<Callback> reversableApply(@NotNull InstanceContainer instance, @Nullable Callback callback);
+    @Nullable
+    Batch<Callback> apply(@NotNull Instance instance, @Nullable Callback callback);
 }

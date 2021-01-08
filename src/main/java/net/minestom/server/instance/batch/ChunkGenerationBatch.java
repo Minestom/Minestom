@@ -14,7 +14,7 @@ public class ChunkGenerationBatch extends ChunkBatch {
     private final Chunk chunk;
 
     public ChunkGenerationBatch(InstanceContainer instance, Chunk chunk) {
-        super(null, null);
+        super(null, null, new BatchOption());
 
         this.instance = instance;
         this.chunk = chunk;
@@ -54,9 +54,7 @@ public class ChunkGenerationBatch extends ChunkBatch {
     }
 
     @Override
-    protected void apply(@NotNull Instance instance,
-                         @NotNull Chunk chunk, @Nullable ChunkCallback callback,
-                         boolean safeCallback) {
+    protected ChunkBatch apply(@NotNull Instance instance, @NotNull Chunk chunk, @Nullable ChunkCallback callback, boolean safeCallback) {
         throw new IllegalStateException("#apply is not supported for chunk generation batch.");
     }
 }

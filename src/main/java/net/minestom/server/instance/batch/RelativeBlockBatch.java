@@ -22,8 +22,18 @@ public class RelativeBlockBatch implements Batch<Runnable> {
     // relative pos - data
     private final Long2ObjectMap<Data> blockDataMap = new Long2ObjectOpenHashMap<>();
 
+    private final BatchOption options;
+
     private volatile boolean firstEntry = true;
     private int offsetX, offsetY, offsetZ;
+
+    public RelativeBlockBatch() {
+        this(new BatchOption());
+    }
+
+    public RelativeBlockBatch(BatchOption options) {
+        this.options = options;
+    }
 
     @Override
     public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data) {
@@ -72,25 +82,34 @@ public class RelativeBlockBatch implements Batch<Runnable> {
     }
 
     @Override
-    public void apply(@NotNull Instance instance, @Nullable Runnable callback) {
-        apply(instance, 0, 0, 0, callback);
+    public AbsoluteBlockBatch apply(@NotNull Instance instance, @Nullable Runnable callback) {
+        return apply(instance, 0, 0, 0, callback);
     }
 
-    public void apply(@NotNull Instance instance, @NotNull BlockPosition position, @Nullable Runnable callback) {
-        apply(instance, position.getX(), position.getY(), position.getZ(), callback);
+    public AbsoluteBlockBatch apply(@NotNull Instance instance, @NotNull BlockPosition position, @Nullable Runnable callback) {
+        return apply(instance, position.getX(), position.getY(), position.getZ(), callback);
     }
 
-    public void apply(@NotNull Instance instance, int x, int y, int z, @Nullable Runnable callback) {
-        apply(instance, x, y, z, callback, true);
+    public AbsoluteBlockBatch apply(@NotNull Instance instance, int x, int y, int z, @Nullable Runnable callback) {
+        return apply(instance, x, y, z, callback, true);
     }
 
-    public void applyUnsafe(@NotNull Instance instance, int x, int y, int z, @Nullable Runnable callback) {
-        apply(instance, x, y, z, callback, false);
+    public AbsoluteBlockBatch applyUnsafe(@NotNull Instance instance, int x, int y, int z, @Nullable Runnable callback) {
+        return apply(instance, x, y, z, callback, false);
     }
 
-    protected void apply(@NotNull Instance instance, int x, int y, int z, @Nullable Runnable callback, boolean safeCallback) {
-        AbsoluteBlockBatch batch = new AbsoluteBlockBatch();
+    protected AbsoluteBlockBatch apply(@NotNull Instance instance, int x, int y, int z, @Nullable Runnable callback, boolean safeCallback) {
+        return this.toAbsoluteBatch(x, y, z).apply(instance, callback, safeCallback);
+    }
 
+    @NotNull
+    public AbsoluteBlockBatch toAbsoluteBatch() {
+        return toAbsoluteBatch(0, 0, 0);
+    }
+
+    @NotNull
+    public AbsoluteBlockBatch toAbsoluteBatch(int x, int y, int z) {
+        final AbsoluteBlockBatch batch = new AbsoluteBlockBatch(this.options);
         synchronized (blockIdMap) {
             for (Long2IntMap.Entry entry : blockIdMap.long2IntEntrySet()) {
                 final long pos = entry.getLongKey();
@@ -116,7 +135,6 @@ public class RelativeBlockBatch implements Batch<Runnable> {
                 batch.setSeparateBlocks(finalX, finalY, finalZ, blockStateId, customBlockId, data);
             }
         }
-
-        batch.apply(instance, callback, safeCallback);
+        return batch;
     }
 }
