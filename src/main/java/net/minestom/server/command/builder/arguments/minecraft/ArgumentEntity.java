@@ -64,6 +64,12 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     @NotNull
     @Override
     public EntityFinder parse(@NotNull String input) throws ArgumentSyntaxException {
+        return staticParse(input, onlySingleEntity, onlyPlayers);
+    }
+
+    @NotNull
+    public static EntityFinder staticParse(@NotNull String input,
+                                           boolean onlySingleEntity, boolean onlyPlayers) throws ArgumentSyntaxException {
         // Check for raw player name
         if (input.length() <= 16) {
             if (CONNECTION_MANAGER.getPlayer(input) != null) {
@@ -109,9 +115,9 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     }
 
     @NotNull
-    private EntityFinder parseStructure(@NotNull String input,
-                                        @NotNull EntityFinder entityFinder,
-                                        @NotNull String structure) throws ArgumentSyntaxException {
+    private static EntityFinder parseStructure(@NotNull String input,
+                                               @NotNull EntityFinder entityFinder,
+                                               @NotNull String structure) throws ArgumentSyntaxException {
         // The structure isn't opened or closed properly
         if (!structure.startsWith("[") || !structure.endsWith("]"))
             throw new ArgumentSyntaxException("Target selector needs to start and end with brackets", input, INVALID_SYNTAX);
@@ -139,10 +145,10 @@ public class ArgumentEntity extends Argument<EntityFinder> {
         return entityFinder;
     }
 
-    private int parseArgument(@NotNull EntityFinder entityFinder,
-                              @NotNull String argumentName,
-                              @NotNull String input,
-                              @NotNull String structureData, int beginIndex) throws ArgumentSyntaxException {
+    private static int parseArgument(@NotNull EntityFinder entityFinder,
+                                     @NotNull String argumentName,
+                                     @NotNull String input,
+                                     @NotNull String structureData, int beginIndex) throws ArgumentSyntaxException {
         final char comma = ',';
         final boolean isSimple = simpleArguments.contains(argumentName);
 
