@@ -26,6 +26,14 @@ public class Hologram implements Viewable {
 
     private boolean removed;
 
+    /**
+     * Constructs a new {@link Hologram} with the given parameters.
+     *
+     * @param instance      The instance where the hologram should be spawned.
+     * @param spawnPosition The spawn position of this hologram.
+     * @param text          The text of this hologram.
+     * @param autoViewable  {@code true}if the hologram should be visible automatically, otherwise {@code false}.
+     */
     public Hologram(Instance instance, Position spawnPosition, JsonMessage text, boolean autoViewable) {
         this.entity = new HologramEntity(spawnPosition.clone().add(0, OFFSET_Y, 0));
         this.entity.setInstance(instance);
@@ -35,6 +43,13 @@ public class Hologram implements Viewable {
         setText(text);
     }
 
+    /**
+     * Constructs a new {@link Hologram} with the given parameters.
+     *
+     * @param instance      The instance where the hologram should be spawned.
+     * @param spawnPosition The spawn position of this hologram.
+     * @param text          The text of this hologram.
+     */
     public Hologram(Instance instance, Position spawnPosition, JsonMessage text) {
         this(instance, spawnPosition, text, true);
     }
@@ -106,29 +121,46 @@ public class Hologram implements Viewable {
         return entity;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean addViewer(@NotNull Player player) {
         return entity.addViewer(player);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean removeViewer(@NotNull Player player) {
         return entity.removeViewer(player);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public Set<Player> getViewers() {
         return entity.getViewers();
     }
 
+    /**
+     * @see #isRemoved()
+     */
     private void checkRemoved() {
         Check.stateCondition(isRemoved(), "You cannot interact with a removed Hologram");
     }
 
 
-    private static class HologramEntity extends EntityArmorStand {
+    public static class HologramEntity extends EntityArmorStand {
 
+        /**
+         * Constructs a new {@link HologramEntity} with the given {@code spawnPosition}.
+         *
+         * @param spawnPosition The spawn position of this hologram entity.
+         */
         public HologramEntity(Position spawnPosition) {
             super(spawnPosition);
             setSmall(true);
