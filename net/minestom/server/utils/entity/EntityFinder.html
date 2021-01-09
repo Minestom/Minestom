@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -218,9 +218,9 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDifference(double,double,double)">setDifference</a></span>&#8203;(double&nbsp;dx,
-             double&nbsp;dy,
-             double&nbsp;dz)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDifference(float,float,float)">setDifference</a></span>&#8203;(float&nbsp;dx,
+             float&nbsp;dy,
+             float&nbsp;dz)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
@@ -257,10 +257,16 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStartPosition(net.minestom.server.utils.Position)">setStartPosition</a></span>&#8203;(<a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;startPosition)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setName(java.lang.String,net.minestom.server.utils.entity.EntityFinder.ToggleableType)">setName</a></span>&#8203;(java.lang.String&nbsp;name,
+       <a href="EntityFinder.ToggleableType.html" title="enum in net.minestom.server.utils.entity">EntityFinder.ToggleableType</a>&nbsp;toggleableType)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
+<td class="colFirst"><code><a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStartPosition(net.minestom.server.utils.Position)">setStartPosition</a></span>&#8203;(<a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;startPosition)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTargetSelector(net.minestom.server.utils.entity.EntityFinder.TargetSelector)">setTargetSelector</a></span>&#8203;(<a href="EntityFinder.TargetSelector.html" title="enum in net.minestom.server.utils.entity">EntityFinder.TargetSelector</a>&nbsp;targetSelector)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -379,6 +385,18 @@ extends java.lang.Object</pre>
                               <a href="EntityFinder.ToggleableType.html" title="enum in net.minestom.server.utils.entity">EntityFinder.ToggleableType</a>&nbsp;toggleableType)</pre>
 </li>
 </ul>
+<a id="setName(java.lang.String,net.minestom.server.utils.entity.EntityFinder.ToggleableType)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setName</h4>
+<pre class="methodSignature">public&nbsp;<a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a>&nbsp;setName&#8203;(@NotNull
+                            java.lang.String&nbsp;name,
+                            @NotNull
+                            <a href="EntityFinder.ToggleableType.html" title="enum in net.minestom.server.utils.entity">EntityFinder.ToggleableType</a>&nbsp;toggleableType)</pre>
+</li>
+</ul>
 <a id="setGameMode(net.minestom.server.entity.GameMode,net.minestom.server.utils.entity.EntityFinder.ToggleableType)">
 <!--   -->
 </a>
@@ -391,15 +409,15 @@ extends java.lang.Object</pre>
                                 <a href="EntityFinder.ToggleableType.html" title="enum in net.minestom.server.utils.entity">EntityFinder.ToggleableType</a>&nbsp;toggleableType)</pre>
 </li>
 </ul>
-<a id="setDifference(double,double,double)">
+<a id="setDifference(float,float,float)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setDifference</h4>
-<pre class="methodSignature">public&nbsp;<a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a>&nbsp;setDifference&#8203;(double&nbsp;dx,
-                                  double&nbsp;dy,
-                                  double&nbsp;dz)</pre>
+<pre class="methodSignature">public&nbsp;<a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a>&nbsp;setDifference&#8203;(float&nbsp;dx,
+                                  float&nbsp;dy,
+                                  float&nbsp;dz)</pre>
 </li>
 </ul>
 <a id="find(net.minestom.server.instance.Instance,net.minestom.server.entity.Entity)">
