@@ -130,7 +130,9 @@ public class ArgumentEntity extends Argument<EntityFinder> {
         for (int i = 0; i < structureData.length(); i++) {
             final char c = structureData.charAt(i);
             if (c == '=') {
-                //System.out.println("type: " + currentArgument);
+
+                // Replace all unnecessary spaces
+                currentArgument = currentArgument.trim();
 
                 if (!validArguments.contains(currentArgument))
                     throw new ArgumentSyntaxException("Argument name '" + currentArgument + "' does not exist", input, INVALID_ARGUMENT_NAME);
