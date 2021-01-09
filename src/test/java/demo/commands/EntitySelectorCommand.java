@@ -3,12 +3,10 @@ package demo.commands;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntities;
-import net.minestom.server.entity.Entity;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.utils.entity.EntityFinder;
-
-import java.util.List;
 
 public class EntitySelectorCommand extends Command {
 
@@ -17,16 +15,17 @@ public class EntitySelectorCommand extends Command {
 
         setDefaultExecutor((sender, args) -> System.out.println("DEFAULT"));
 
-        ArgumentEntities argumentEntities = ArgumentType.Entities("entities");
+        Argument test = ArgumentType.String("test");
 
-        setArgumentCallback((sender, exception) -> exception.printStackTrace(), argumentEntities);
+        ArgumentEntity argumentEntity = ArgumentType.Entities("entities");
 
-        addSyntax(this::executor, argumentEntities);
+        setArgumentCallback((sender, exception) -> exception.printStackTrace(), argumentEntity);
+
+        addSyntax(this::executor, test);
 
     }
 
     private void executor(CommandSender commandSender, Arguments arguments) {
-        EntityFinder query = arguments.getEntities("entities");
-        System.out.println("SUCCESS COMMAND");
+        System.out.println("test "+arguments.getString("test"));
     }
 }

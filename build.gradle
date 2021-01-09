@@ -112,6 +112,9 @@ dependencies {
     api 'io.netty:netty-transport-native-kqueue:4.1.56.Final:osx-x86_64'
     api 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.2.Final:linux-x86_64'
 
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-text
+    compile group: 'org.apache.commons', name: 'commons-text', version: '1.9'
+
     // https://mvnrepository.com/artifact/it.unimi.dsi/fastutil
     api 'it.unimi.dsi:fastutil:8.4.4'
 

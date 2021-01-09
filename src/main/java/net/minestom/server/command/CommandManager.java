@@ -634,16 +634,16 @@ public final class CommandManager {
         } else if (argument instanceof ArgumentFloatRange) {
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
             argumentNode.parser = "minecraft:float_range";
-        } else if (argument instanceof ArgumentEntities) {
-            ArgumentEntities argumentEntities = (ArgumentEntities) argument;
+        } else if (argument instanceof ArgumentEntity) {
+            ArgumentEntity argumentEntity = (ArgumentEntity) argument;
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
             argumentNode.parser = "minecraft:entity";
             argumentNode.properties = packetWriter -> {
                 byte mask = 0;
-                if (argumentEntities.isOnlySingleEntity()) {
+                if (argumentEntity.isOnlySingleEntity()) {
                     mask += 1;
                 }
-                if (argumentEntities.isOnlyPlayers()) {
+                if (argumentEntity.isOnlyPlayers()) {
                     mask += 2;
                 }
                 packetWriter.writeByte(mask);

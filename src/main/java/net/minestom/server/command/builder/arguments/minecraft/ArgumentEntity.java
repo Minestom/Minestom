@@ -20,7 +20,7 @@ import java.util.List;
  * Represents the target selector argument.
  * https://minecraft.gamepedia.com/Commands#Target_selectors
  */
-public class ArgumentEntities extends Argument<EntityFinder> {
+public class ArgumentEntity extends Argument<EntityFinder> {
 
     private static final int SUCCESS = 0;
 
@@ -49,16 +49,16 @@ public class ArgumentEntities extends Argument<EntityFinder> {
     private boolean onlySingleEntity;
     private boolean onlyPlayers;
 
-    public ArgumentEntities(String id) {
+    public ArgumentEntity(String id) {
         super(id, true);
     }
 
-    public ArgumentEntities singleEntity(boolean singleEntity) {
+    public ArgumentEntity singleEntity(boolean singleEntity) {
         this.onlySingleEntity = singleEntity;
         return this;
     }
 
-    public ArgumentEntities onlyPlayers(boolean onlyPlayers) {
+    public ArgumentEntity onlyPlayers(boolean onlyPlayers) {
         this.onlyPlayers = onlyPlayers;
         return this;
     }

@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import org.apache.commons.text.StringEscapeUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -19,6 +20,11 @@ public class ArgumentString extends Argument<String> {
     @NotNull
     @Override
     public String parse(@NotNull String input) throws ArgumentSyntaxException {
+        return staticParse(input);
+    }
+
+    @NotNull
+    public static String staticParse(@NotNull String input) throws ArgumentSyntaxException {
         // Check if value start and end with quote
         final char first = input.charAt(0);
         final char last = input.charAt(input.length() - 1);
@@ -26,26 +32,20 @@ public class ArgumentString extends Argument<String> {
         if (!quote)
             throw new ArgumentSyntaxException("String argument needs to start and end with quotes", input, QUOTE_ERROR);
 
+        // Remove first and last characters (quotes)
+        input = input.substring(1, input.length() - 1);
+
         // Verify backslashes
         for (int i = 1; i < input.length(); i++) {
             final char c = input.charAt(i);
             if (c == '\"') {
                 final char lastChar = input.charAt(i - 1);
-                if (lastChar == '\\') {
-                    continue;
-                } else if (i == input.length() - 1) {
-
-                    // Remove first and last characters (quote)
-                    input = input.substring(1, input.length() - 1);
-
-                    // Remove all backslashes
-                    input = input.replace("\\", "");
-
-                    return input;
+                if (lastChar != '\\') {
+                    throw new ArgumentSyntaxException("Non-escaped quote", input, QUOTE_ERROR);
                 }
             }
         }
 
-        throw new ArgumentSyntaxException("Last quote is escaped", input, QUOTE_ERROR);
+        return StringEscapeUtils.unescapeJava(input);
     }
 }
