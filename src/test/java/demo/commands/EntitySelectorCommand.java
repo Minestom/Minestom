@@ -3,10 +3,13 @@ package demo.commands;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
-import net.minestom.server.utils.entity.EntityFinder;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.Player;
+import net.minestom.server.instance.Instance;
+
+import java.util.List;
 
 public class EntitySelectorCommand extends Command {
 
@@ -15,17 +18,17 @@ public class EntitySelectorCommand extends Command {
 
         setDefaultExecutor((sender, args) -> System.out.println("DEFAULT"));
 
-        Argument test = ArgumentType.String("test");
-
-        ArgumentEntity argumentEntity = ArgumentType.Entities("entities");
+        ArgumentEntity argumentEntity = ArgumentType.Entities("entities").onlyPlayers(true);
 
         setArgumentCallback((sender, exception) -> exception.printStackTrace(), argumentEntity);
 
-        addSyntax(this::executor, test);
+        addSyntax(this::executor, argumentEntity);
 
     }
 
     private void executor(CommandSender commandSender, Arguments arguments) {
-        System.out.println("test "+arguments.getString("test"));
+        Instance instance = commandSender.asPlayer().getInstance();
+        List<Entity> entities = arguments.getEntities("entities").find(instance, null);
+        System.out.println("test " + ((Player) entities.get(0)).getUsername());
     }
 }

@@ -30,12 +30,13 @@ public class EntityFinder {
 
     // Position
     private Position startPosition = new Position();
-    private OptionalDouble dx, dy, dz;
+    private Float dx, dy, dz;
     private IntRange distance;
 
     // By traits
-    private OptionalInt limit;
+    private Integer limit;
     private final ToggleableMap<EntityType> entityTypes = new ToggleableMap<>();
+    private final ToggleableMap<String> names = new ToggleableMap<>();
 
     // Players specific
     private final ToggleableMap<GameMode> gameModes = new ToggleableMap<>();
@@ -62,7 +63,7 @@ public class EntityFinder {
     }
 
     public EntityFinder setLimit(int limit) {
-        this.limit = OptionalInt.of(limit);
+        this.limit = limit;
         return this;
     }
 
@@ -76,15 +77,20 @@ public class EntityFinder {
         return this;
     }
 
+    public EntityFinder setName(@NotNull String name, @NotNull ToggleableType toggleableType) {
+        this.names.put(name, toggleableType.getValue());
+        return this;
+    }
+
     public EntityFinder setGameMode(@NotNull GameMode gameMode, @NotNull ToggleableType toggleableType) {
         this.gameModes.put(gameMode, toggleableType.getValue());
         return this;
     }
 
-    public EntityFinder setDifference(double dx, double dy, double dz) {
-        this.dx = OptionalDouble.of(dx);
-        this.dy = OptionalDouble.of(dy);
-        this.dz = OptionalDouble.of(dz);
+    public EntityFinder setDifference(float dx, float dy, float dz) {
+        this.dx = dx;
+        this.dy = dy;
+        this.dz = dz;
         return this;
     }
 
@@ -112,22 +118,22 @@ public class EntityFinder {
         }
 
         // Diff X/Y/Z
-        if (dx.isPresent() || dy.isPresent() || dz.isPresent()) {
+        if (dx != null || dy != null || dz != null) {
             result = result.stream().filter(entity -> {
                 final Position entityPosition = entity.getPosition();
-                if (dx.isPresent() && !MathUtils.isBetweenUnordered(
+                if (dx != null && !MathUtils.isBetweenUnordered(
                         entityPosition.getX(),
-                        startPosition.getX(), (float) dx.getAsDouble()))
+                        startPosition.getX(), dx))
                     return false;
 
-                if (dy.isPresent() && !MathUtils.isBetweenUnordered(
+                if (dy != null && !MathUtils.isBetweenUnordered(
                         entityPosition.getY(),
-                        startPosition.getY(), (float) dy.getAsDouble()))
+                        startPosition.getY(), dy))
                     return false;
 
-                if (dz.isPresent() && !MathUtils.isBetweenUnordered(
+                if (dz != null && !MathUtils.isBetweenUnordered(
                         entityPosition.getZ(),
-                        startPosition.getZ(), (float) dz.getAsDouble()))
+                        startPosition.getZ(), dz))
                     return false;
 
                 return true;
@@ -136,14 +142,9 @@ public class EntityFinder {
 
         // Entity type
         if (!entityTypes.isEmpty()) {
-            final EntityType requirement = entityTypes.requirement;
-            result = result.stream().filter(entity -> {
-                final EntityType entityType = entity.getEntityType();
-                // true if the entity type has not been mentioned or if is accepted
-                return (!entityTypes.containsKey(entityType) && requirement == null) ||
-                        Objects.equals(requirement, entityType) ||
-                        entityTypes.getBoolean(entityType);
-            }).collect(Collectors.toList());
+            result = result.stream().filter(entity ->
+                    filterToggleableMap(entity, entity.getEntityType(), entityTypes))
+                    .collect(Collectors.toList());
         }
 
         // GameMode
@@ -152,12 +153,7 @@ public class EntityFinder {
             result = result.stream().filter(entity -> {
                 if (!(entity instanceof Player))
                     return false;
-
-                final GameMode gameMode = ((Player) entity).getGameMode();
-                // true if the entity type has not been mentioned or if is accepted
-                return (!gameModes.containsKey(gameMode) && requirement == null) ||
-                        Objects.equals(requirement, gameMode) ||
-                        gameModes.getBoolean(gameMode);
+                return filterToggleableMap(entity, ((Player) entity).getGameMode(), gameModes);
             }).collect(Collectors.toList());
         }
 
@@ -174,9 +170,19 @@ public class EntityFinder {
             }).collect(Collectors.toList());
         }
 
+        // Name
+        if (!names.isEmpty()) {
+            // TODO entity name
+            result = result.stream().filter(entity -> {
+                if (!(entity instanceof Player))
+                    return false;
+                return filterToggleableMap(entity, ((Player) entity).getUsername(), names);
+            }).collect(Collectors.toList());
+        }
+
 
         // Sort & limit
-        if (entitySort != EntitySort.ARBITRARY || limit.isPresent()) {
+        if (entitySort != EntitySort.ARBITRARY || limit != null) {
             result = result.stream()
                     .sorted((ent1, ent2) -> {
                         switch (entitySort) {
@@ -195,7 +201,7 @@ public class EntityFinder {
                         }
                         return 1;
                     })
-                    .limit(limit.isPresent() ? limit.getAsInt() : Integer.MAX_VALUE)
+                    .limit(limit != null ? limit : Integer.MAX_VALUE)
                     .collect(Collectors.toList());
 
             if (entitySort == EntitySort.RANDOM) {
@@ -266,5 +272,16 @@ public class EntityFinder {
             return Arrays.asList(self);
         }
         throw new IllegalStateException("Weird thing happened");
+    }
+
+    private static <T> boolean filterToggleableMap(@NotNull Entity entity, @NotNull T value, @NotNull ToggleableMap<T> map) {
+        if (!(entity instanceof Player))
+            return false;
+
+        final T requirement = map.requirement;
+        // true if the entity type has not been mentioned or if is accepted
+        return (!map.containsKey(value) && requirement == null) ||
+                Objects.equals(requirement, value) ||
+                map.getBoolean(value);
     }
 }

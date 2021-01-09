@@ -22,8 +22,6 @@ import java.util.List;
  */
 public class ArgumentEntity extends Argument<EntityFinder> {
 
-    private static final int SUCCESS = 0;
-
     public static final int INVALID_SYNTAX = -2;
     public static final int ONLY_SINGLE_ENTITY_ERROR = -3;
     public static final int ONLY_PLAYERS_ERROR = -4;
@@ -69,7 +67,9 @@ public class ArgumentEntity extends Argument<EntityFinder> {
         // Check for raw player name
         if (input.length() <= 16) {
             if (CONNECTION_MANAGER.getPlayer(input) != null) {
-                // TODO success
+                return new EntityFinder()
+                        .setTargetSelector(EntityFinder.TargetSelector.ALL_PLAYERS)
+                        .setName(input, EntityFinder.ToggleableType.INCLUDE);
             }
         }
 
