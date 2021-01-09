@@ -5,9 +5,11 @@ import demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.chat.ColoredText;
-import net.minestom.server.entity.*;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.GameMode;
+import net.minestom.server.entity.ItemEntity;
+import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.type.decoration.EntityArmorStand;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
@@ -114,7 +116,7 @@ public class PlayerInit {
                 velocity.setY(3.5f);
                 target.setVelocity(velocity);
                 target.damage(DamageType.fromEntity(source), 5);
-            }else{
+            } else {
                 Vector velocity = source.getPosition().clone().getDirection().multiply(3);
                 velocity.setY(3f);
                 entity.setVelocity(velocity);
@@ -175,9 +177,6 @@ public class PlayerInit {
             itemEntity.setInstance(player.getInstance());
             Vector velocity = player.getPosition().clone().getDirection().multiply(6);
             itemEntity.setVelocity(velocity);
-
-            EntityArmorStand entity = new EntityArmorStand(new Position(0, 41, 0));
-            entity.setInstance(player.getInstance());
         });
 
         globalEventHandler.addEventCallback(PlayerDisconnectEvent.class, event -> {
@@ -204,6 +203,8 @@ public class PlayerInit {
         globalEventHandler.addEventCallback(PlayerSpawnEvent.class, event -> {
             final Player player = event.getPlayer();
             player.setGameMode(GameMode.CREATIVE);
+
+            player.setPermissionLevel(4);
 
             PlayerInventory inventory = player.getInventory();
             ItemStack itemStack = new ItemStack(Material.STONE, (byte) 64);

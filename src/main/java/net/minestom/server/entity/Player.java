@@ -313,12 +313,6 @@ public class Player extends LivingEntity implements CommandSender {
         }
         // Tags end
 
-        // Permission
-        {
-            // Required to use the target selector argument
-            setPermissionLevel(2);
-        }
-
         // Some client update
         this.playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
         refreshHealth(); // Heal and send health packet
