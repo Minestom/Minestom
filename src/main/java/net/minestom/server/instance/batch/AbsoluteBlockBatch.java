@@ -28,7 +28,8 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
     // In the form of <Chunk Index, Batch>
     private final Long2ObjectMap<ChunkBatch> chunkBatchesMap = new Long2ObjectOpenHashMap<>();
 
-    private final CountDownLatch readyLatch;
+    // Available for other implementations to handle.
+    protected final CountDownLatch readyLatch;
     private final BatchOption options;
 
     public AbsoluteBlockBatch() {
@@ -86,6 +87,7 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      *
      * @param instance The instance in which the batch should be applied
      * @param callback The callback to be executed when the batch is applied
+     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     @Override
     public AbsoluteBlockBatch apply(@NotNull Instance instance, @Nullable Runnable callback) {
@@ -98,6 +100,7 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      *
      * @param instance The instance in which the batch should be applied
      * @param callback The callback to be executed when the batch is applied
+     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     public AbsoluteBlockBatch unsafeApply(@NotNull Instance instance, @Nullable Runnable callback) {
         return apply(instance, callback, false);
@@ -110,6 +113,7 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
      * @param callback     The callback to be executed when the batch is applied
      * @param safeCallback If true, the callback will be executed in the next instance update.
      *                     Otherwise it will be executed immediately upon completion
+     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     protected AbsoluteBlockBatch apply(@NotNull Instance instance, @Nullable Runnable callback, boolean safeCallback) {
         if (!this.options.isUnsafeApply()) this.awaitReady();

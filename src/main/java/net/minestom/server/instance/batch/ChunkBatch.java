@@ -42,7 +42,8 @@ public class ChunkBatch implements Batch<ChunkCallback> {
     // block index - data
     private final Int2ObjectMap<Data> blockDataMap;
 
-    private final CountDownLatch readyLatch;
+    // Available for other implementations to handle.
+    protected final CountDownLatch readyLatch;
     private final BatchOption options;
 
     public ChunkBatch() {
@@ -110,6 +111,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      *
      * @param instance The instance in which the batch should be applied
      * @param callback The callback to be executed when the batch is applied
+     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     @Override
     public ChunkBatch apply(@NotNull Instance instance, @Nullable ChunkCallback callback) {
@@ -123,6 +125,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @param chunkX   The x chunk coordinate of the target chunk
      * @param chunkZ   The z chunk coordinate of the target chunk
      * @param callback The callback to be executed when the batch is applied.
+     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     public ChunkBatch apply(@NotNull Instance instance, int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
         final Chunk chunk = instance.getChunk(chunkX, chunkZ);
@@ -140,6 +143,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @param instance The instance in which the batch should be applied
      * @param chunk    The target chunk
      * @param callback The callback to be executed when the batch is applied
+     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     public ChunkBatch apply(@NotNull Instance instance, @NotNull Chunk chunk, @Nullable ChunkCallback callback) {
         return apply(instance, chunk, callback, true);
@@ -152,6 +156,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @param instance The instance in which the batch should be applied
      * @param chunk    The target chunk
      * @param callback The callback to be executed when the batch is applied
+     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     public ChunkBatch unsafeApply(@NotNull Instance instance, @NotNull Chunk chunk, @Nullable ChunkCallback callback) {
         return apply(instance, chunk, callback, false);
@@ -165,6 +170,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @param callback     The callback to be executed when the batch is applied
      * @param safeCallback If true, the callback will be executed in the next instance update.
      *                     Otherwise it will be executed immediately upon completion
+     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     protected ChunkBatch apply(@NotNull Instance instance,
                          @NotNull Chunk chunk, @Nullable ChunkCallback callback,

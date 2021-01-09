@@ -50,8 +50,6 @@ public interface Batch<Callback> extends BlockModifier {
 
     /**
      * Gets if the batch is ready to be applied to an instance.
-     * <p>
-     * This is true by default, and will only be false while a reversal is being generated.
      *
      * @return true if the batch is ready to apply
      */

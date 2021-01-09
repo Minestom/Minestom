@@ -11,6 +11,25 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * A {@link Batch} which can be used when changes are required across chunk borders, and
+ * are going to be reused in different places. If translation is not required, {@link AbsoluteBlockBatch}
+ * should be used instead for efficiency purposes.
+ * <p>
+ * Coordinates are relative to (0, 0, 0) with some limitations. All coordinates must
+ * fit within a 16 bit integer of the first coordinate (32,767 blocks). If blocks must
+ * be spread out over a larger area, an {@link AbsoluteBlockBatch} should be used.
+ * <p>
+ * All inverses are {@link AbsoluteBlockBatch}s and represent the inverse of the application
+ * at the position which it was applied.
+ * <p>
+ * If a batch will be used multiple times at the same coordinate, it is suggested
+ * to convert it to an {@link AbsoluteBlockBatch} and cache the result. Application
+ * of absolute batches (currently) is significantly faster than their relative counterpart.
+ *
+ * @see Batch
+ * @see AbsoluteBlockBatch
+ */
 public class RelativeBlockBatch implements Batch<Runnable> {
     // relative pos format: nothing/relative x/relative y/relative z (16/16/16/16 bits)
 
@@ -81,32 +100,92 @@ public class RelativeBlockBatch implements Batch<Runnable> {
         }
     }
 
+    /**
+     * Applies this batch to the given instance at the origin (0, 0, 0) of the instance.
+     *
+     * @param instance The instance in which the batch should be applied
+     * @param callback The callback to be executed when the batch is applied
+     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
+     */
     @Override
     public AbsoluteBlockBatch apply(@NotNull Instance instance, @Nullable Runnable callback) {
         return apply(instance, 0, 0, 0, callback);
     }
 
+    /**
+     * Applies this batch to the given instance at the given block position.
+     *
+     * @param instance The instance in which the batch should be applied
+     * @param position The position to apply the batch
+     * @param callback The callback to be executed when the batch is applied
+     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
+     */
     public AbsoluteBlockBatch apply(@NotNull Instance instance, @NotNull BlockPosition position, @Nullable Runnable callback) {
         return apply(instance, position.getX(), position.getY(), position.getZ(), callback);
     }
 
+    /**
+     * Applies this batch to the given instance at the given position.
+     *
+     * @param instance The instance in which the batch should be applied
+     * @param x The x position to apply the batch
+     * @param y The y position to apply the batch
+     * @param z The z position to apply the batch
+     * @param callback The callback to be executed when the batch is applied
+     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
+     */
     public AbsoluteBlockBatch apply(@NotNull Instance instance, int x, int y, int z, @Nullable Runnable callback) {
         return apply(instance, x, y, z, callback, true);
     }
 
+    /**
+     * Applies this batch to the given instance at the given position, and execute the callback
+     * immediately when the blocks have been applied, int an unknown thread.
+     *
+     * @param instance The instance in which the batch should be applied
+     * @param x The x position to apply the batch
+     * @param y The y position to apply the batch
+     * @param z The z position to apply the batch
+     * @param callback The callback to be executed when the batch is applied
+     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
+     */
     public AbsoluteBlockBatch applyUnsafe(@NotNull Instance instance, int x, int y, int z, @Nullable Runnable callback) {
         return apply(instance, x, y, z, callback, false);
     }
 
+    /**
+     * Applies this batch to the given instance at the given position, execute the callback depending on safeCallback.
+     *
+     * @param instance The instance in which the batch should be applied
+     * @param x The x position to apply the batch
+     * @param y The y position to apply the batch
+     * @param z The z position to apply the batch
+     * @param callback The callback to be executed when the batch is applied
+     * @param safeCallback If true, the callback will be executed in the next instance update. Otherwise it will be executed immediately upon completion
+     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
+     */
     protected AbsoluteBlockBatch apply(@NotNull Instance instance, int x, int y, int z, @Nullable Runnable callback, boolean safeCallback) {
         return this.toAbsoluteBatch(x, y, z).apply(instance, callback, safeCallback);
     }
 
+    /**
+     * Converts this batch to an absolute batch at the origin (0, 0, 0).
+     *
+     * @return An absolute batch of this batch at the origin
+     */
     @NotNull
     public AbsoluteBlockBatch toAbsoluteBatch() {
         return toAbsoluteBatch(0, 0, 0);
     }
 
+    /**
+     * Converts this batch to an absolute batch at the given coordinates.
+     *
+     * @param x The x position of the batch in the world
+     * @param y The y position of the batch in the world
+     * @param z The z position of the batch in the world
+     * @return An absolute batch of this batch at (x, y, z)
+     */
     @NotNull
     public AbsoluteBlockBatch toAbsoluteBatch(int x, int y, int z) {
         final AbsoluteBlockBatch batch = new AbsoluteBlockBatch(this.options);
