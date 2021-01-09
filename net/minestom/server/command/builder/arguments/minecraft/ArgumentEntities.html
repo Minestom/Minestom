@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -122,7 +122,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">net.minestom.server.command.builder.arguments.Argument</a>&lt;java.util.List&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&gt;</li>
+<li><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">net.minestom.server.command.builder.arguments.Argument</a>&lt;<a href="../../../../utils/entity/EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a>&gt;</li>
 <li>
 <ul class="inheritance">
 <li>net.minestom.server.command.builder.arguments.minecraft.ArgumentEntities</li>
@@ -136,7 +136,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <hr>
 <pre>public class <span class="typeNameLabel">ArgumentEntities</span>
-extends <a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;java.util.List&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&gt;</pre>
+extends <a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../utils/entity/EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a>&gt;</pre>
 <div class="block">Represents the target selector argument.
  https://minecraft.gamepedia.com/Commands#Target_selectors</div>
 </li>
@@ -158,6 +158,16 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Field</th>
 <th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#INVALID_ARGUMENT_NAME">INVALID_ARGUMENT_NAME</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#INVALID_ARGUMENT_VALUE">INVALID_ARGUMENT_VALUE</a></span></code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static int</code></td>
@@ -214,34 +224,29 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCorrectionResult(java.lang.String)">getCorrectionResult</a></span>&#8203;(java.lang.String&nbsp;value)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isOnlyPlayers()">isOnlyPlayers</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isOnlySingleEntity()">isOnlySingleEntity</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="ArgumentEntities.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentEntities</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onlyPlayers(boolean)">onlyPlayers</a></span>&#8203;(boolean&nbsp;onlyPlayers)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(java.lang.String&nbsp;value)</code></th>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="../../../../utils/entity/EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(java.lang.String&nbsp;input)</code></th>
 <td class="colLast">
 <div class="block">Parses the given input, and throw an <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
  if the input cannot be convert to <code>T</code></div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="ArgumentEntities.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentEntities</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#singleEntity(boolean)">singleEntity</a></span>&#8203;(boolean&nbsp;singleEntity)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -306,13 +311,39 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <a id="ONLY_PLAYERS_ERROR">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>ONLY_PLAYERS_ERROR</h4>
 <pre>public static final&nbsp;int ONLY_PLAYERS_ERROR</pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../../../constant-values.html#net.minestom.server.command.builder.arguments.minecraft.ArgumentEntities.ONLY_PLAYERS_ERROR">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+<a id="INVALID_ARGUMENT_NAME">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>INVALID_ARGUMENT_NAME</h4>
+<pre>public static final&nbsp;int INVALID_ARGUMENT_NAME</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../../../constant-values.html#net.minestom.server.command.builder.arguments.minecraft.ArgumentEntities.INVALID_ARGUMENT_NAME">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+<a id="INVALID_ARGUMENT_VALUE">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>INVALID_ARGUMENT_VALUE</h4>
+<pre>public static final&nbsp;int INVALID_ARGUMENT_VALUE</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../../../constant-values.html#net.minestom.server.command.builder.arguments.minecraft.ArgumentEntities.INVALID_ARGUMENT_VALUE">Constant Field Values</a></dd>
 </dl>
 </li>
 </ul>
@@ -363,16 +394,6 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <pre class="methodSignature">public&nbsp;<a href="ArgumentEntities.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentEntities</a>&nbsp;onlyPlayers&#8203;(boolean&nbsp;onlyPlayers)</pre>
 </li>
 </ul>
-<a id="getCorrectionResult(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getCorrectionResult</h4>
-<pre class="methodSignature">public&nbsp;int&nbsp;getCorrectionResult&#8203;(@NotNull
-                               java.lang.String&nbsp;value)</pre>
-</li>
-</ul>
 <a id="parse(java.lang.String)">
 <!--   -->
 </a>
@@ -380,18 +401,21 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <li class="blockList">
 <h4>parse</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.List&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&nbsp;parse&#8203;(@NotNull
-                                    java.lang.String&nbsp;value)</pre>
+public&nbsp;<a href="../../../../utils/entity/EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a>&nbsp;parse&#8203;(@NotNull
+                          java.lang.String&nbsp;input)
+                   throws <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../Argument.html#parse(java.lang.String)">Argument</a></code></span></div>
 <div class="block">Parses the given input, and throw an <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
  if the input cannot be convert to <code>T</code></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../Argument.html#parse(java.lang.String)">parse</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;java.util.List&lt;<a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&gt;</code></dd>
+<dd><code><a href="../Argument.html#parse(java.lang.String)">parse</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../utils/entity/EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>value</code> - the argument to parse</dd>
+<dd><code>input</code> - the argument to parse</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the parsed argument</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></code> - if <code>value</code> is not valid</dd>
 </dl>
 </li>
 </ul>
