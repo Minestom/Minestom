@@ -29,6 +29,7 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.metadata.WrittenBookMeta;
 import net.minestom.server.listener.PlayerDiggingListener;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
@@ -1088,6 +1089,30 @@ public class Player extends LivingEntity implements CommandSender {
         TitlePacket titlePacket = new TitlePacket();
         titlePacket.action = TitlePacket.Action.RESET;
         playerConnection.sendPacket(titlePacket);
+    }
+
+    /**
+     * Opens a book ui for the player with the given book metadata.
+     *
+     * @param bookMeta The metadata of the book to open
+     */
+    public void openBook(@NotNull WrittenBookMeta bookMeta) {
+        // Set book in offhand
+        final ItemStack writtenBook = new ItemStack(Material.WRITTEN_BOOK, (byte) 1);
+        writtenBook.setItemMeta(bookMeta);
+        final SetSlotPacket setSlotPacket = new SetSlotPacket();
+        setSlotPacket.windowId = 0;
+        setSlotPacket.slot = 45;
+        setSlotPacket.itemStack = writtenBook;
+        this.playerConnection.sendPacket(setSlotPacket);
+
+        // Open the book
+        final OpenBookPacket openBookPacket = new OpenBookPacket();
+        openBookPacket.hand = Hand.OFF;
+        this.playerConnection.sendPacket(openBookPacket);
+
+        // Update inventory to remove book (which the actual inventory does not have)
+        this.inventory.update();
     }
 
     @Override
