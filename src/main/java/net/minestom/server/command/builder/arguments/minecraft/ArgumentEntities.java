@@ -66,8 +66,6 @@ public class ArgumentEntities extends Argument<EntityFinder> {
     @NotNull
     @Override
     public EntityFinder parse(@NotNull String input) throws ArgumentSyntaxException {
-        System.out.println("check: " + input);
-
         // Check for raw player name
         if (input.length() <= 16) {
             if (CONNECTION_MANAGER.getPlayer(input) != null) {
@@ -120,13 +118,13 @@ public class ArgumentEntities extends Argument<EntityFinder> {
 
         // Remove brackets
         final String structureData = structure.substring(1, structure.length() - 1);
-        System.out.println("structure data: " + structureData);
+        //System.out.println("structure data: " + structureData);
 
         String currentArgument = "";
         for (int i = 0; i < structureData.length(); i++) {
             final char c = structureData.charAt(i);
             if (c == '=') {
-                System.out.println("type: " + currentArgument);
+                //System.out.println("type: " + currentArgument);
 
                 if (!validArguments.contains(currentArgument))
                     throw new ArgumentSyntaxException("Argument name '" + currentArgument + "' does not exist", input, INVALID_ARGUMENT_NAME);

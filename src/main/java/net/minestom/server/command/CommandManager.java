@@ -443,10 +443,9 @@ public final class CommandManager {
 
                     if (lastNodes != null) {
                         final int[] children = ArrayUtils.toArray(argChildren);
-                        lastNodes.forEach(n ->
-                                n.children = n.children == null ?
-                                        children :
-                                        ArrayUtils.concatenateIntArrays(n.children, children));
+                        lastNodes.forEach(n -> n.children = n.children == null ?
+                                children :
+                                ArrayUtils.concatenateIntArrays(n.children, children));
                     }
 
                     nodes.add(node);
