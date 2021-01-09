@@ -34,15 +34,17 @@ public class ArgumentEntities extends Argument<EntityFinder> {
     private static final List<String> playersOnlySelector = Arrays.asList("@p", "@r", "@a", "@s");
     private static final List<String> singleOnlySelector = Arrays.asList("@p", "@r", "@s");
     // List with all the valid arguments
-    private static final List<String> validArguments = Arrays.asList("x", "y", "z",
+    private static final List<String> validArguments = Arrays.asList(
+            "x", "y", "z",
             "distance", "dx", "dy", "dz",
-            "scores", "tag", "team", "limit", "sort", "level", "gamemode",
+            "scores", "tag", "team", "limit", "sort", "level", "gamemode", "name",
             "x_rotation", "y_rotation", "type", "nbt", "advancements", "predicate");
 
     // List with all the easily parsable arguments which only require reading until a specific character (comma)
-    private static final List<String> simpleArguments = Arrays.asList("x", "y", "z",
+    private static final List<String> simpleArguments = Arrays.asList(
+            "x", "y", "z",
             "distance", "dx", "dy", "dz",
-            "scores", "tag", "team", "limit", "sort", "level", "gamemode", "name",
+            "scores", "tag", "team", "limit", "sort", "level", "gamemode",
             "x_rotation", "y_rotation", "type", "advancements", "predicate");
     private boolean onlySingleEntity;
     private boolean onlyPlayers;
