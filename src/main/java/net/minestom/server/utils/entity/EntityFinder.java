@@ -1,6 +1,7 @@
 package net.minestom.server.utils.entity;
 
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
@@ -97,13 +98,16 @@ public class EntityFinder {
     /**
      * Find a list of entities (could be empty) based on the conditions
      *
+     * @param instance the instance to search from,
+     *                 null if the query can be executed using global data (all online players)
+     * @param self     the source of the query, null if not any
      * @return all entities validating the conditions, can be empty
      */
     @NotNull
-    public List<Entity> find(@NotNull Instance instance, @Nullable Entity self) {
+    public List<Entity> find(@Nullable Instance instance, @Nullable Entity self) {
         List<Entity> result = findTarget(instance, targetSelector, startPosition, self);
 
-        // Fast exist if there is nothing to process
+        // Fast exit if there is nothing to process
         if (result.isEmpty())
             return result;
 
@@ -243,14 +247,15 @@ public class EntityFinder {
     }
 
     @NotNull
-    private static List<Entity> findTarget(@NotNull Instance instance, @NotNull TargetSelector targetSelector,
+    private static List<Entity> findTarget(@Nullable Instance instance, @NotNull TargetSelector targetSelector,
                                            @NotNull Position startPosition, @Nullable Entity self) {
 
         if (targetSelector == TargetSelector.NEAREST_PLAYER) {
             Entity entity = null;
             float closestDistance = Float.MAX_VALUE;
 
-            Set<Player> instancePlayers = instance.getPlayers();
+            Collection<Player> instancePlayers = instance != null ?
+                    instance.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers();
             for (Player player : instancePlayers) {
                 final float distance = player.getPosition().getDistance(startPosition);
                 if (distance < closestDistance) {
@@ -260,12 +265,14 @@ public class EntityFinder {
             }
             return Arrays.asList(entity);
         } else if (targetSelector == TargetSelector.RANDOM_PLAYER) {
-            Set<Player> instancePlayers = instance.getPlayers();
+            Collection<Player> instancePlayers = instance != null ?
+                    instance.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers();
             final int index = ThreadLocalRandom.current().nextInt(instancePlayers.size());
             final Player player = instancePlayers.stream().skip(index).findFirst().orElseThrow();
             return Arrays.asList(player);
         } else if (targetSelector == TargetSelector.ALL_PLAYERS) {
-            return new ArrayList<>(instance.getPlayers());
+            return new ArrayList<>(instance != null ?
+                    instance.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers());
         } else if (targetSelector == TargetSelector.ALL_ENTITIES) {
             return new ArrayList<>(instance.getEntities());
         } else if (targetSelector == TargetSelector.SELF) {
