@@ -113,7 +113,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     private long lastAbsoluteSynchronizationTime;
 
     // Events
-    private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
+    @SuppressWarnings("rawtypes")
+	private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
 
     // Metadata
     protected boolean onFire;
@@ -635,7 +636,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         }
     }
 
-    @NotNull
+    @SuppressWarnings("rawtypes")
+	@NotNull
     @Override
     public Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap() {
         return eventCallbacks;

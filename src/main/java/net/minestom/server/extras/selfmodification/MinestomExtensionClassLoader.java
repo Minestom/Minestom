@@ -68,7 +68,8 @@ public class MinestomExtensionClassLoader extends HierarchyClassLoader {
         }
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     protected void finalize() throws Throwable {
         super.finalize();
         System.err.println("Class loader "+getName()+" finalized.");

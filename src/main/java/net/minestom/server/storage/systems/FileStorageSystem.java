@@ -31,11 +31,18 @@ public class FileStorageSystem implements StorageSystem {
 
     @Override
     public void open(@NotNull String location, @NotNull StorageOptions storageOptions) {
-        Options options = new Options().setCreateIfMissing(true);
+        Options options = new Options();
+        
+        options.setCreateIfMissing(true);
 
         if (storageOptions.hasCompression()) {
             options.setCompressionType(CompressionType.ZSTD_COMPRESSION);
-            options.setCompressionOptions(new CompressionOptions().setLevel(1));
+            
+            CompressionOptions compressionOptions = new CompressionOptions();
+            
+            compressionOptions.setLevel(1);
+            
+            options.setCompressionOptions(compressionOptions);
         }
 
         try {
@@ -43,6 +50,8 @@ public class FileStorageSystem implements StorageSystem {
         } catch (RocksDBException e) {
             e.printStackTrace();
         }
+        
+        options.close();
     }
 
     @Override

@@ -1,7 +1,19 @@
 package net.minestom.server.instance;
 
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
-import it.unimi.dsi.fastutil.ints.*;
+
+import it.unimi.dsi.fastutil.ints.Int2LongMap;
+import it.unimi.dsi.fastutil.ints.Int2LongOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntIterator;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
 import net.minestom.server.MinecraftServer;
@@ -23,10 +35,6 @@ import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biomes.Biome;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Set;
 
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
@@ -209,7 +217,8 @@ public class DynamicChunk extends Chunk {
      *
      * @return the serialized chunk data
      */
-    @Override
+    @SuppressWarnings("resource")
+	@Override
     public byte[] getSerializedData() {
 
         // Used for blocks data (unused if empty at the end)
@@ -292,7 +301,7 @@ public class DynamicChunk extends Chunk {
                 versionWriter.getBuffer(),
                 dataIndexWriter.getBuffer(),
                 chunkWriter.getBuffer());
-
+        
         return finalBuffer.toByteArray();
     }
 
@@ -315,7 +324,7 @@ public class DynamicChunk extends Chunk {
 
                 // VERSION DATA
                 final int dataFormatVersion = reader.readInteger();
-                final int dataProtocol = reader.readInteger();
+                // final int dataProtocol = reader.readInteger();
 
                 if (dataFormatVersion != DATA_FORMAT_VERSION) {
                     throw new UnsupportedOperationException(

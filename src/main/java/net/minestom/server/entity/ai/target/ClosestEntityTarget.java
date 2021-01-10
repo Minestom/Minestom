@@ -22,7 +22,7 @@ public class ClosestEntityTarget extends TargetSelector {
     private final Class<? extends LivingEntity>[] entitiesTarget;
 
     public ClosestEntityTarget(@NotNull EntityCreature entityCreature, float range,
-                               @NotNull Class<? extends LivingEntity>... entitiesTarget) {
+                               @SuppressWarnings("unchecked") @NotNull Class<? extends LivingEntity>... entitiesTarget) {
         super(entityCreature);
         this.range = range;
         this.entitiesTarget = entitiesTarget;

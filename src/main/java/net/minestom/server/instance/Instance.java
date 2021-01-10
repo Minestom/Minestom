@@ -78,7 +78,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     // Field for tick events
     private long lastTickAge = System.currentTimeMillis();
 
-    private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
+    @SuppressWarnings("rawtypes")
+	private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
 
     // Entities present in this instance
     protected final Set<Entity> entities = new CopyOnWriteArraySet<>();
@@ -834,7 +835,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
         this.data = data;
     }
 
-    @NotNull
+    @SuppressWarnings("rawtypes")
+	@NotNull
     @Override
     public Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap() {
         return eventCallbacks;

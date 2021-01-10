@@ -153,7 +153,7 @@ public class EntityFinder {
 
         // GameMode
         if (!gameModes.isEmpty()) {
-            final GameMode requirement = gameModes.requirement;
+            // final GameMode requirement = gameModes.requirement;
             result = result.stream().filter(entity -> {
                 if (!(entity instanceof Player))
                     return false;
@@ -259,7 +259,13 @@ public class EntityFinder {
 
     private static class ToggleableMap<T> extends Object2BooleanOpenHashMap<T> {
 
-        @Nullable
+        /**
+		 * Default serial ID
+		 * Minestom versioning TBD 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		@Nullable
         private T requirement;
 
     }

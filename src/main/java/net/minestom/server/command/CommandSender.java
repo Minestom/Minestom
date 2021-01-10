@@ -1,10 +1,10 @@
 package net.minestom.server.command;
 
-import net.minestom.server.chat.ColoredText;
+import org.jetbrains.annotations.NotNull;
+
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.permission.PermissionHandler;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents something which can send commands to the server.

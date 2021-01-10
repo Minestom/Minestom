@@ -27,7 +27,7 @@ public class SerializableDataImpl extends SerializableData {
      * Class name -> Class
      * Used to cache class instances so we don't load them by name every time
      */
-    private static final ConcurrentHashMap<String, Class> nameToClassMap = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, Class<?>> nameToClassMap = new ConcurrentHashMap<>();
 
     protected final ConcurrentHashMap<String, Object> data = new ConcurrentHashMap<>();
 
@@ -35,7 +35,7 @@ public class SerializableDataImpl extends SerializableData {
      * Data key = Class
      * Used to know the type of an element of this data object (for serialization purpose)
      */
-    protected final ConcurrentHashMap<String, Class> dataType = new ConcurrentHashMap<>();
+    protected final ConcurrentHashMap<String, Class<?>> dataType = new ConcurrentHashMap<>();
 
     /**
      * Sets a value to a specific key.
@@ -63,12 +63,14 @@ public class SerializableDataImpl extends SerializableData {
         }
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public <T> T get(@NotNull String key) {
         return (T) data.get(key);
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public <T> T getOrDefault(@NotNull String key, T defaultValue) {
         return (T) data.getOrDefault(key, defaultValue);
     }
@@ -107,7 +109,7 @@ public class SerializableDataImpl extends SerializableData {
             final String key = entry.getKey();
             final Object value = entry.getValue();
 
-            final Class type = dataType.get(key);
+            final Class<?> type = dataType.get(key);
             final short typeIndex;
             {
                 // Find the type name
@@ -133,7 +135,8 @@ public class SerializableDataImpl extends SerializableData {
             binaryWriter.writeSizedString(key);
 
             // Write the data (no length)
-            final DataType dataType = DATA_MANAGER.getDataType(type);
+            @SuppressWarnings("unchecked")
+			final DataType<Object> dataType = (DataType<Object>) DATA_MANAGER.getDataType(type);
             Check.notNull(dataType, "Tried to encode a type not registered in DataManager: " + type);
             dataType.encode(binaryWriter, value);
         }
@@ -152,7 +155,8 @@ public class SerializableDataImpl extends SerializableData {
         return binaryWriter.toByteArray();
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public void readSerializedData(@NotNull BinaryReader reader, @NotNull Object2ShortMap<String> typeToIndexMap) {
         // Map used to convert an index to the class name (opposite of typeToIndexMap)
         final Short2ObjectMap<String> indexToTypeMap = new Short2ObjectOpenHashMap<>(typeToIndexMap.size());
@@ -174,11 +178,11 @@ public class SerializableDataImpl extends SerializableData {
                 break;
             }
 
-            final Class type;
+            final Class<Object> type;
             {
                 // Retrieve the class type
                 final String className = indexToTypeMap.get(typeIndex);
-                type = nameToClassMap.computeIfAbsent(className, s -> {
+                type = (Class<Object>) nameToClassMap.computeIfAbsent(className, s -> {
                     // First time that this type is retrieved
                     try {
                         return Class.forName(className);
@@ -197,7 +201,7 @@ public class SerializableDataImpl extends SerializableData {
             // Get the data
             final Object value;
             {
-                final DataType dataType = DATA_MANAGER.getDataType(type);
+                final DataType<Object> dataType = (DataType<Object>) DATA_MANAGER.getDataType(type);
                 Check.notNull(dataType, "The DataType for " + type + " does not exist or is not registered.");
 
                 value = dataType.decode(reader);

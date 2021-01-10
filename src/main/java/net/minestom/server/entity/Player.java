@@ -402,7 +402,9 @@ public class Player extends LivingEntity implements CommandSender {
                             continue;
                         PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(experienceOrb);
                         callCancellableEvent(PickupExperienceEvent.class, pickupExperienceEvent, () -> {
-                            short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
+                            
+                        	setExp(getExp() + pickupExperienceEvent.getExperienceCount());
+                        	
                             entity.remove();
                         });
                     }

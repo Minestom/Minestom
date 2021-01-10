@@ -5,7 +5,8 @@ import java.util.Map;
 
 public class PrimitiveConversion {
 
-    private static Map<Class, Class> primitiveToBoxedTypeMap = new HashMap<>();
+    @SuppressWarnings("rawtypes")
+	private static Map<Class, Class> primitiveToBoxedTypeMap = new HashMap<>();
 
     static {
         // Primitive
@@ -37,7 +38,8 @@ public class PrimitiveConversion {
      * @param clazz the class to convert
      * @return the boxed class type of the primitive one, {@code clazz} otherwise
      */
-    public static Class getObjectClass(Class clazz) {
+    @SuppressWarnings("rawtypes")
+	public static Class getObjectClass(Class clazz) {
         return primitiveToBoxedTypeMap.getOrDefault(clazz, clazz);
     }
 

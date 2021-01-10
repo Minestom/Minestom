@@ -8,7 +8,6 @@ import net.minestom.server.utils.time.TimeUnit;
 public class EntityFireEvent extends EntityEvent implements CancellableEvent {
 
     private int duration;
-    private TimeUnit timeUnit;
 
     private boolean cancelled;
 
@@ -31,7 +30,6 @@ public class EntityFireEvent extends EntityEvent implements CancellableEvent {
 
     public void setFireTime(int duration, TimeUnit timeUnit) {
         this.duration = duration;
-        this.timeUnit = timeUnit;
     }
 
     @Override

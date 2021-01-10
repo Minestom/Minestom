@@ -19,7 +19,7 @@ public class DataImpl extends Data {
      * Data key = Class
      * Used to know the type of an element of this data object (for serialization purpose)
      */
-    protected final ConcurrentHashMap<String, Class> dataType = new ConcurrentHashMap<>();
+    protected final ConcurrentHashMap<String, Class<?>> dataType = new ConcurrentHashMap<>();
 
     @Override
     public synchronized <T> void set(@NotNull String key, @Nullable T value, @Nullable Class<T> type) {
@@ -32,12 +32,14 @@ public class DataImpl extends Data {
         }
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public <T> T get(@NotNull String key) {
         return (T) data.get(key);
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public <T> T getOrDefault(@NotNull String key, T defaultValue) {
         return (T) data.getOrDefault(key, defaultValue);
     }

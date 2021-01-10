@@ -482,7 +482,8 @@ public class ExtensionManager {
             LOGGER.warn("Current class loader is not a MinestomOverwriteClassLoader, but {}. This disables code modifiers (Mixin support is therefore disabled)", cl);
             return;
         }
-        MinestomRootClassLoader modifiableClassLoader = (MinestomRootClassLoader) cl;
+        @SuppressWarnings("resource")
+		MinestomRootClassLoader modifiableClassLoader = (MinestomRootClassLoader) cl;
         LOGGER.info("Start loading code modifiers...");
         for (DiscoveredExtension extension : extensions) {
             try {

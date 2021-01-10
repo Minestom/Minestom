@@ -157,7 +157,8 @@ public class PotionMeta extends ItemMeta {
 
     }
 
-    @NotNull
+    @SuppressWarnings("unchecked")
+	@NotNull
     @Override
     public ItemMeta clone() {
         PotionMeta potionMeta = (PotionMeta) super.clone();

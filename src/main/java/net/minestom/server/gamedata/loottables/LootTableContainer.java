@@ -30,7 +30,7 @@ class LootTableContainer {
 
     private static class Pool {
         private ConditionContainer[] conditions;
-        private FunctionContainer[] functions;
+        // private FunctionContainer[] functions;
         private RangeContainer rolls;
         private RangeContainer bonus_rools;
 

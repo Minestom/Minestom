@@ -102,6 +102,8 @@ public final class PacketProcessor {
                 safeRead(playerConnection, statusPacket, binaryReader);
                 statusPacket.process(playerConnection);
                 break;
+			default:
+				break;
         }
     }
 

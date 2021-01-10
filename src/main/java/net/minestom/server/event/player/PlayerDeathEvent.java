@@ -1,11 +1,11 @@
 package net.minestom.server.event.player;
 
-import net.minestom.server.chat.ColoredText;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.PlayerEvent;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Called when a player die in {@link Player#kill()}.

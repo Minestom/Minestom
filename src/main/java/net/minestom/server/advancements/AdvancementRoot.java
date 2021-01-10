@@ -1,11 +1,11 @@
 package net.minestom.server.advancements;
 
-import net.minestom.server.chat.ColoredText;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents an {@link Advancement} which is the root of an {@link AdvancementTab}.

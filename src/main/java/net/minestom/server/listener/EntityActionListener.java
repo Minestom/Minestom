@@ -21,6 +21,8 @@ public class EntityActionListener {
                 player.setSprinting(false);
                 break;
             // TODO do remaining actions
+			default:
+				break;
         }
     }
 }

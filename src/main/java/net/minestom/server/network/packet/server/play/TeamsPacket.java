@@ -77,6 +77,8 @@ public class TeamsPacket implements ServerPacket {
             case REMOVE_TEAM:
 
                 break;
+            default:
+            	break;
         }
 
         if (action == Action.CREATE_TEAM || action == Action.ADD_PLAYERS_TEAM || action == Action.REMOVE_PLAYERS_TEAM) {

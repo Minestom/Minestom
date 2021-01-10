@@ -38,7 +38,7 @@ import java.util.*;
  */
 public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
 
-    public static final OwnershipHandler<Data> DATA_OWNERSHIP = new OwnershipHandler();
+    public static final OwnershipHandler<Data> DATA_OWNERSHIP = new OwnershipHandler<Data>();
     public static final String OWNERSHIP_DATA_KEY = "ownership_identifier";
     private static final StackingRule VANILLA_STACKING_RULE = new VanillaStackingRule(64);
 

@@ -51,7 +51,12 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
             NBTCompound compound;
             try {
-                compound = (NBTCompound) new SNBTParser(new StringReader(sNBT)).parse();
+            	StringReader reader = new StringReader(sNBT);
+            	SNBTParser parser = new SNBTParser(reader);
+            	
+                compound = (NBTCompound) parser.parse();
+                
+                parser.close();
             } catch (NBTException e) {
                 throw new ArgumentSyntaxException("Item NBT is invalid", input, INVALID_NBT);
             }

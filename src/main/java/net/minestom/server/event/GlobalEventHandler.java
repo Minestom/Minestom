@@ -13,9 +13,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class GlobalEventHandler implements EventHandler {
 
     // Events
-    private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
+    @SuppressWarnings("rawtypes")
+	private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
 
-    @NotNull
+    @SuppressWarnings("rawtypes")
+	@NotNull
     @Override
     public Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap() {
         return eventCallbacks;

@@ -35,11 +35,12 @@ public class PluginMessagePacket implements ServerPacket {
         brandMessage.channel = "minecraft:brand";
 
         final String brandName = MinecraftServer.getBrandName();
-        BinaryWriter writer = new BinaryWriter(4 + brandName.length());
+        @SuppressWarnings("resource")
+		BinaryWriter writer = new BinaryWriter(4 + brandName.length());
         writer.writeSizedString(brandName);
 
         brandMessage.data = writer.toByteArray();
-
+        
         return brandMessage;
     }
 }

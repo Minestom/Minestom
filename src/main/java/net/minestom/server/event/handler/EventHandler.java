@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 /**
  * Represents an element which can have {@link Event} listeners assigned to it.
  */
+@SuppressWarnings("rawtypes")
 public interface EventHandler {
 
     /**
@@ -25,7 +26,7 @@ public interface EventHandler {
      *
      * @return a {@link Map} with all the listeners
      */
-    @NotNull
+	@NotNull
     Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap();
 
     /**
@@ -131,7 +132,8 @@ public interface EventHandler {
         }
     }
 
-    private <E extends Event> void runEvent(@NotNull Collection<EventCallback> eventCallbacks, @NotNull E event) {
+    @SuppressWarnings("unchecked")
+	private <E extends Event> void runEvent(@NotNull Collection<EventCallback> eventCallbacks, @NotNull E event) {
         for (EventCallback<E> eventCallback : eventCallbacks) {
             eventCallback.run(event);
         }

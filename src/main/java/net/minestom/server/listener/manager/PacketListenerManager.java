@@ -21,7 +21,8 @@ public final class PacketListenerManager {
     public final static Logger LOGGER = LoggerFactory.getLogger(PacketListenerManager.class);
     private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 
-    private final Map<Class<? extends ClientPlayPacket>, PacketListenerConsumer> listeners = new ConcurrentHashMap<>();
+    @SuppressWarnings("rawtypes")
+	private final Map<Class<? extends ClientPlayPacket>, PacketListenerConsumer> listeners = new ConcurrentHashMap<>();
 
     public PacketListenerManager() {
         setListener(ClientKeepAlivePacket.class, KeepAliveListener::listener);
@@ -63,11 +64,13 @@ public final class PacketListenerManager {
      * @param player the player who sent the packet
      * @param <T>    the packet type
      */
-    public <T extends ClientPlayPacket> void processClientPacket(@NotNull T packet, @NotNull Player player) {
-
+	public <T extends ClientPlayPacket> void processClientPacket(@NotNull T packet, @NotNull Player player) {
+		
+		@SuppressWarnings("rawtypes")
         final Class clazz = packet.getClass();
 
-        PacketListenerConsumer<T> packetListenerConsumer = listeners.get(clazz);
+        @SuppressWarnings("unchecked")
+		PacketListenerConsumer<T> packetListenerConsumer = listeners.get(clazz);
 
         // Listener can be null if none has been set before, call PacketConsumer anyway
         if (packetListenerConsumer == null) {

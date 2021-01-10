@@ -32,13 +32,15 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
      * Classes that cannot be loaded/modified by this classloader.
      * Will go through parent class loader
      */
-    public final Set<String> protectedClasses = new HashSet<>() {
+    @SuppressWarnings("serial")
+	public final Set<String> protectedClasses = new HashSet<>() {
         {
             add("net.minestom.server.extras.selfmodification.CodeModifier");
             add("net.minestom.server.extras.selfmodification.MinestomOverwriteClassLoader");
         }
     };
-    public final Set<String> protectedPackages = new HashSet<>() {
+    @SuppressWarnings("serial")
+	public final Set<String> protectedPackages = new HashSet<>() {
         {
             add("com.google");
             add("com.mojang");

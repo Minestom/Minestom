@@ -27,8 +27,13 @@ public class ArgumentNbtCompoundTag extends Argument<NBTCompound> {
     @Override
     public NBTCompound parse(@NotNull String input) throws ArgumentSyntaxException {
         try {
-            NBT nbt = new SNBTParser(new StringReader(input)).parse();
-
+        	StringReader reader = new StringReader(input);
+        	SNBTParser parser = new SNBTParser(reader);
+        	
+            NBT nbt = parser.parse();
+            
+            parser.close();
+            
             if (!(nbt instanceof NBTCompound))
                 throw new ArgumentSyntaxException("NBTCompound is invalid", input, INVALID_NBT);
 

@@ -7,11 +7,12 @@ import org.jetbrains.annotations.NotNull;
 
 public class LegacyServerListPingPacket implements ClientPreplayPacket {
 
-    private byte payload;
+    @SuppressWarnings("unused")
+	private byte payload;
 
     @Override
     public void process(@NotNull PlayerConnection connection) {
-
+    	
     }
 
     @Override

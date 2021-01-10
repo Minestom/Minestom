@@ -2069,8 +2069,9 @@ public enum Material {
             case HONEY_BOTTLE:
             case CHORUS_FRUIT:
             return true;
+		default:
+			return false;
         }
-        return false;
     }
 
     public boolean hasState() {
@@ -2080,7 +2081,8 @@ public enum Material {
             case CROSSBOW:
             case SHIELD:
             return true;
+            default:
+            	return isFood();
         }
-        return isFood();
     }
 }

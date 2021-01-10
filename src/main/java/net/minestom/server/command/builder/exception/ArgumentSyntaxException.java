@@ -15,7 +15,14 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ArgumentSyntaxException extends Exception {
 
-    private final String input;
+	/**
+	 * Default serial ID
+	 * 
+	 * Minestom versioning TBD
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private final String input;
     private final int errorCode;
 
     public ArgumentSyntaxException(@NotNull String message, @NotNull String input, int errorCode) {

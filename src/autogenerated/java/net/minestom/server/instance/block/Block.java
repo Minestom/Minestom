@@ -2495,7 +2495,8 @@ public enum Block {
     @Nullable
     private NamespaceID blockEntity;
 
-    private boolean singleState;
+    @SuppressWarnings("unused")
+	private boolean singleState;
 
     private List<BlockAlternative> alternatives = new java.util.ArrayList<>();
 

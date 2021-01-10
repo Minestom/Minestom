@@ -455,7 +455,8 @@ public class Sidebar implements Scoreboard {
          *
          * @return the entity name
          */
-        private String getEntityName() {
+        @SuppressWarnings("unused")
+		private String getEntityName() {
             return entityName;
         }
 

@@ -1,5 +1,21 @@
 package net.minestom.server.network;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.Consumer;
+
+import org.apache.commons.text.similarity.JaroWinklerDistance;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import io.netty.channel.Channel;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
@@ -19,15 +35,6 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
-import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.function.Consumer;
 
 /**
  * Manages the connected clients.
@@ -85,7 +92,7 @@ public final class ConnectionManager {
         String lowercase = username.toLowerCase();
         double currentDistance = 0;
         for (Player player : getOnlinePlayers()) {
-            double distance = StringUtils.getJaroWinklerDistance(lowercase, player.getUsername().toLowerCase());
+			double distance = new JaroWinklerDistance().apply(lowercase, player.getUsername().toLowerCase());
             if (distance > currentDistance) {
                 currentDistance = distance;
                 exact = player;

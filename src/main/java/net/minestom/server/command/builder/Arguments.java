@@ -35,7 +35,8 @@ public final class Arguments {
 
     private Map<String, Object> args = new HashMap<>();
 
-    @NotNull
+    @SuppressWarnings("unchecked")
+	@NotNull
     public <T> T get(@NotNull Argument<T> argument) {
         return (T) getObject(argument.getId());
     }

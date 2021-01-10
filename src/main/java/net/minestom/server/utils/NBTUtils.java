@@ -377,7 +377,8 @@ public final class NBTUtils {
      * @param supportDataType true to allow using a {@link DataType} to encode {@code value} into a byte array if not a primitive type
      * @return the converted value, null if {@code type} is not a primitive type and {@code supportDataType} is false
      */
-    @Nullable
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	@Nullable
     public static NBT toNBT(@NotNull Object value, @NotNull Class type, boolean supportDataType) {
         type = PrimitiveConversion.getObjectClass(type);
         if (type.equals(Boolean.class)) {
@@ -409,7 +410,7 @@ public final class NBTUtils {
         } else {
             if (supportDataType) {
                 // Custom NBT type, try to encode using the data manager
-                DataType dataType = MinecraftServer.getDataManager().getDataType(type);
+				DataType dataType = MinecraftServer.getDataManager().getDataType(type);
                 Check.notNull(dataType, "The type '" + type + "' is not registered in DataManager and not a primitive type.");
 
                 BinaryWriter writer = new BinaryWriter();
@@ -433,7 +434,8 @@ public final class NBTUtils {
      * @return the value representation of a tag
      * @throws UnsupportedOperationException if the tag type is not supported
      */
-    @NotNull
+    @SuppressWarnings("rawtypes")
+	@NotNull
     public static Object fromNBT(@NotNull NBT nbt) {
         if (nbt instanceof NBTNumber) {
             return ((NBTNumber) nbt).getValue();

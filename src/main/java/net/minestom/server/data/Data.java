@@ -72,7 +72,8 @@ public abstract class Data implements PublicCloneable<Data> {
      * @param value the value object, null to remove the key
      * @param <T>   the value generic
      */
-    public <T> void set(@NotNull String key, @Nullable T value) {
+    @SuppressWarnings("unchecked")
+	public <T> void set(@NotNull String key, @Nullable T value) {
         set(key, value, value != null ? (Class<T>) value.getClass() : null);
     }
 

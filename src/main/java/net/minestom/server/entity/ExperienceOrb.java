@@ -1,13 +1,13 @@
 package net.minestom.server.entity;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.server.play.SpawnExperienceOrbPacket;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ExperienceOrb extends Entity {
 
@@ -35,16 +35,16 @@ public class ExperienceOrb extends Entity {
     @Override
     public void update(long time) {
 
-        // TODO slide toward nearest player
+        // TODO: slide toward nearest player
 
-        //todo water movement
+        // TODO: water movement
         if (hasNoGravity()) {
             setVelocity(getVelocity().add(0, -0.3f, 0));
         }
 
-        //todo lava
+        // TODO: lava
 
-        double d = 8.0;
+        // double d = 8.0;
         if (lastTargetUpdateTick < time - 20 + getEntityId() % 100) {
             if (target == null || target.getPosition().getDistanceSquared(getPosition()) > 64) {
                 this.target = getClosestPlayer(this, 8);

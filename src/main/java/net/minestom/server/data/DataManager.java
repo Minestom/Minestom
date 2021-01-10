@@ -25,7 +25,7 @@ import java.util.UUID;
  */
 public final class DataManager {
 
-    private final Map<Class, DataType> dataTypeMap = new HashMap<>();
+    private final Map<Class<?>, DataType<?>> dataTypeMap = new HashMap<>();
 
     {
         registerType(Byte.class, new ByteData());
@@ -73,7 +73,8 @@ public final class DataManager {
      * @param <T>      the data type
      * @throws IllegalStateException if the type {@code clazz} is already registered
      */
-    public <T> void registerType(@NotNull Class<T> clazz, @NotNull DataType<T> dataType) {
+    @SuppressWarnings("unchecked")
+	public <T> void registerType(@NotNull Class<T> clazz, @NotNull DataType<T> dataType) {
         clazz = PrimitiveConversion.getObjectClass(clazz);
         Check.stateCondition(dataTypeMap.containsKey(clazz),
                 "Type " + clazz.getName() + " has already been registered");
@@ -88,10 +89,11 @@ public final class DataManager {
      * @param <T>   the data type
      * @return the {@link DataType} associated to the class, null if not found
      */
-    @Nullable
+    @SuppressWarnings("unchecked")
+	@Nullable
     public <T> DataType<T> getDataType(@NotNull Class<T> clazz) {
         clazz = PrimitiveConversion.getObjectClass(clazz);
-        return dataTypeMap.get(clazz);
+        return (DataType<T>) dataTypeMap.get(clazz);
     }
 
 }

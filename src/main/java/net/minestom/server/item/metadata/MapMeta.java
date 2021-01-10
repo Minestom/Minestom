@@ -194,7 +194,8 @@ public class MapMeta extends ItemMeta {
         }
     }
 
-    @NotNull
+    @SuppressWarnings("unchecked")
+	@NotNull
     @Override
     public ItemMeta clone() {
         MapMeta mapMeta = (MapMeta) super.clone();
