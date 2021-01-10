@@ -217,6 +217,24 @@ public class EntityFinder {
         return result;
     }
 
+    /**
+     * Shortcut of {@link #find(Instance, Entity)} to retrieve the first
+     * player element in the list.
+     *
+     * @return the first player returned by {@link #find(Instance, Entity)}
+     * @see #find(Instance, Entity)
+     */
+    @Nullable
+    public Player findFirstPlayer(@Nullable Instance instance, @Nullable Entity self) {
+        List<Entity> entities = find(instance, self);
+        for (Entity entity : entities) {
+            if (entity instanceof Player) {
+                return (Player) entity;
+            }
+        }
+        return null;
+    }
+
     public enum TargetSelector {
         NEAREST_PLAYER, RANDOM_PLAYER, ALL_PLAYERS, ALL_ENTITIES, SELF
     }
