@@ -4,6 +4,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 /**
  * Represents a json message which can be send to a player.
  * <p>
@@ -41,6 +43,7 @@ public abstract class JsonMessage {
      *
      * @return The message without formatting or effects
      */
+    @NotNull
     public String getRawMessage() {
         return getTextMessage(getJsonObject()).toString();
     }
@@ -66,13 +69,27 @@ public abstract class JsonMessage {
         return compiledJson;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        JsonMessage message = (JsonMessage) o;
+        return Objects.equals(toString(), message.toString());
+    }
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+
     /**
      * Recursively collects the 'text' field from the provided object and it's 'extra's.
      *
      * @param obj The object to parse
      * @return The text content of the object and its 'extra's
      */
-    private StringBuilder getTextMessage(JsonObject obj) {
+    @NotNull
+    private static StringBuilder getTextMessage(@NotNull JsonObject obj) {
         StringBuilder message = new StringBuilder(obj.get("text").getAsString());
         JsonElement extra = obj.get("extra");
         if (extra != null && extra.isJsonArray()) {
