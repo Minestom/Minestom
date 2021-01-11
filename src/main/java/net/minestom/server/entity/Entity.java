@@ -489,9 +489,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
                 this.onGround = CollisionUtils.handlePhysics(this, deltaPos, newPosition, newVelocityOut);
 
-                // Stop here if the position is the same
-                final boolean updatePosition = !newPosition.isSimilar(position);
-
                 // World border collision
                 final Position finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
                 final Chunk finalChunk = instance.getChunkAt(finalVelocityPosition);
@@ -501,8 +498,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                     return;
                 }
 
-                // Apply the position
-                if (updatePosition) {
+                // Apply the position if changed
+                if (!newPosition.isSimilar(position)) {
                     refreshPosition(finalVelocityPosition);
                 }
 
