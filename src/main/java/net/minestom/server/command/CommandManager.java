@@ -509,7 +509,6 @@ public final class CommandManager {
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
 
             argumentNode.parser = "brigadier:bool";
-            argumentNode.properties = packetWriter -> packetWriter.writeByte((byte) 0);
         } else if (argument instanceof ArgumentDouble) {
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
 
