@@ -16,6 +16,8 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class CubeBatchCommand extends Command {
 
@@ -37,8 +39,55 @@ public class CubeBatchCommand extends Command {
         Player player = sender.asPlayer();
         InstanceContainer instance = (InstanceContainer) player.getInstance();
 
+        RelativeBlockBatch rotBatch = new RelativeBlockBatch();
+        for (int x = 0; x < 50; x += 2) {
+            for (int y = 0; y < 50; y += 2) {
+                for (int z = 0; z < 10; z += 2) {
+                    rotBatch.setBlockStateId(x, y, z, Block.BLUE_CONCRETE.getBlockId());
+                }
+            }
+        }
+        rotBatch.apply(instance, 50, 50, 50, null);
+        rotBatch.rotate(90).apply(instance, 50, 50, 50, null);
+        rotBatch.rotate(180).apply(instance, 50, 50, 50, null);
+        rotBatch.rotate(270).apply(instance, 50, 50, 50, null);
+
+//        ChunkBatch rotBatch = new ChunkBatch(new BatchOption().setFullChunk(true));
+//        for (int x = 0; x < 16; x += 2) {
+//            for (int y = 0; y < 50; y += 2) {
+//                for (int z = 0; z < 8; z += 2) {
+//                    rotBatch.setBlockStateId(x, y + 50, z, Block.BLUE_CONCRETE.getBlockId());
+//                }
+//            }
+//        }
+//
+//        for (int i = 0; i < 4; i++) {
+//            rotBatch.apply(instance, 1, i * 2, null);
+//            rotBatch = rotBatch.squareRotate(1);
+//        }
+
+//        for (int x = 0; x < 10; x++) {
+//            for (int z = 0; z < 10; z++) {
+//                final int chunkX = x - 5;
+//                final int chunkZ = z - 5;
+//
+//                AtomicReference<ChunkBatch> b = new AtomicReference<>(rotBatch.rotate(0));
+//                MinecraftServer.getSchedulerManager().buildTask(() -> {
+//                    final ChunkBatch current = b.get();
+//                    final ChunkBatch next = current.rotate(90);
+//                    b.set(next);
+//                    next.apply(instance, chunkX, chunkZ, null);
+//
+//                }).delay(10, TimeUnit.TICK).repeat(ThreadLocalRandom.current().nextInt(10) + 1, TimeUnit.TICK).schedule();
+//            }
+//        }
+
+
+
+
+
 //        applyChunkShape(instance);
-        applyBlockShape(instance);
+//        applyBlockShape(instance);
 
 //        AbsoluteBlockBatch batch = new AbsoluteBlockBatch();
 //

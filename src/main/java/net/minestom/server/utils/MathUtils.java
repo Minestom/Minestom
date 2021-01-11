@@ -94,4 +94,14 @@ public final class MathUtils {
     public static double mod(final double a, final double b) {
         return (a % b + b) % b;
     }
+
+    private static final int[] MAGIC_TRIG = {0, 1, 0, -1};
+
+    public static int squareRotateX(int degree, int x, int z) {
+        return MAGIC_TRIG[(degree + 1) % 4]*x - MAGIC_TRIG[degree]*z;
+    }
+
+    public static int squareRotateZ(int degree, int x, int z) {
+        return MAGIC_TRIG[degree]*x + MAGIC_TRIG[(degree + 1) % 4]*z;
+    }
 }

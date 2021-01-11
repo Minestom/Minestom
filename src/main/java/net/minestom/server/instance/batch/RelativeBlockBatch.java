@@ -7,6 +7,8 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.data.Data;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.Rotation;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -98,6 +100,53 @@ public class RelativeBlockBatch implements Batch<Runnable> {
         synchronized (blockIdMap) {
             this.blockIdMap.clear();
         }
+    }
+
+    @Override
+    public RelativeBlockBatch rotate(int degrees) {
+        return squareRotate((degrees / 90) % 4);
+    }
+
+    @Override
+    public RelativeBlockBatch rotate(Rotation rotation) {
+        return squareRotate(rotation.ordinal() / 2);
+    }
+
+    @Override
+    public RelativeBlockBatch squareRotate(int degree) {
+        if ((degree %= 4) < 0) degree += 4;
+
+        final RelativeBlockBatch rotated = new RelativeBlockBatch();
+        rotated.offsetX = this.offsetX;
+        rotated.offsetY = this.offsetY;
+        rotated.offsetZ = this.offsetZ;
+
+        synchronized (blockIdMap) {
+            for (Long2IntMap.Entry entry : blockIdMap.long2IntEntrySet()) {
+                final long pos = entry.getLongKey();
+                final short relZ = (short) (pos & 0xFFFF);
+                final short relY = (short) ((pos >> 16) & 0xFFFF);
+                final short relX = (short) ((pos >> 32) & 0xFFFF);
+
+                final int ids = entry.getIntValue();
+                final short customBlockId = (short) (ids & 0xFFFF);
+                final short blockStateId = (short) ((ids >> 16) & 0xFFFF);
+
+                Data data = null;
+                if (!blockDataMap.isEmpty()) {
+                    synchronized (blockDataMap) {
+                        data = blockDataMap.get(pos);
+                    }
+                }
+
+                final int finalX = MathUtils.squareRotateX(degree, relX, relZ);
+                final int finalZ = MathUtils.squareRotateZ(degree, relX, relZ);
+
+                rotated.setSeparateBlocks(finalX, relY, finalZ, blockStateId, customBlockId, data);
+            }
+        }
+
+        return rotated;
     }
 
     /**
