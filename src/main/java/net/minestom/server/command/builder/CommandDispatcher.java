@@ -257,23 +257,19 @@ public class CommandDispatcher {
         {
             // Get closest valid syntax
             if (!syntaxesSuggestions.isEmpty()) {
-                final int max = syntaxesSuggestions.firstKey(); // number of correct arguments
-                // Check if at least 1 argument of the syntax is correct
-                if (max > 0) {
-                    // Get the data of the closest syntax
-                    final CommandSuggestionHolder suggestionHolder = syntaxesSuggestions.get(max);
-                    final CommandSyntax syntax = suggestionHolder.syntax;
-                    final ArgumentSyntaxException argumentSyntaxException = suggestionHolder.argumentSyntaxException;
-                    final int argIndex = suggestionHolder.argIndex;
+                final int max = syntaxesSuggestions.firstKey(); // number of correct arguments in the most correct syntax
+                final CommandSuggestionHolder suggestionHolder = syntaxesSuggestions.get(max);
+                final CommandSyntax syntax = suggestionHolder.syntax;
+                final ArgumentSyntaxException argumentSyntaxException = suggestionHolder.argumentSyntaxException;
+                final int argIndex = suggestionHolder.argIndex;
 
-                    // Found the closest syntax with at least 1 correct argument
-                    final Argument<?> argument = syntax.getArguments()[argIndex];
-                    if (argument.hasErrorCallback()) {
-                        result.callback = argument.getCallback();
-                        result.argumentSyntaxException = argumentSyntaxException;
+                // Found the closest syntax with at least 1 correct argument
+                final Argument<?> argument = syntax.getArguments()[argIndex];
+                if (argument.hasErrorCallback()) {
+                    result.callback = argument.getCallback();
+                    result.argumentSyntaxException = argumentSyntaxException;
 
-                        return result;
-                    }
+                    return result;
                 }
             }
         }
