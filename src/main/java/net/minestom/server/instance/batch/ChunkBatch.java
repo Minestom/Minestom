@@ -8,8 +8,6 @@ import net.minestom.server.data.Data;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.Rotation;
 import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
@@ -20,8 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CountDownLatch;
-
-import static net.minestom.server.utils.MathUtils.isBetween;
 
 /**
  * A Batch used when all of the block changed are contained inside a single chunk.
@@ -36,8 +32,6 @@ import static net.minestom.server.utils.MathUtils.isBetween;
  * @see Batch
  */
 public class ChunkBatch implements Batch<ChunkCallback> {
-    private static final int HALF_CHUNK_SIZE = 7;
-//    private static final int HALF_CHUNK_SIZE = Chunk.CHUNK_SIZE_X / 2;
     private static final Logger LOGGER = LoggerFactory.getLogger(ChunkBatch.class);
 
     // Need to be synchronized manually
@@ -110,50 +104,6 @@ public class ChunkBatch implements Batch<ChunkCallback> {
         } catch (InterruptedException e) {
             throw new RuntimeException("#awaitReady interrupted!", e);
         }
-    }
-
-    @Override
-    public ChunkBatch rotate(int degrees) {
-        return squareRotate((degrees / 90) % 4);
-    }
-
-    @Override
-    public ChunkBatch rotate(Rotation rotation) {
-        return squareRotate(rotation.ordinal() / 2);
-    }
-
-    @Override
-    public ChunkBatch squareRotate(int degree) {
-        if ((degree %= 4) < 0) degree += 4;
-
-        final ChunkBatch rotated = new ChunkBatch(this.options);
-
-        synchronized (blocks) {
-            for (long value : blocks) {
-                final short customBlockId = (short) (value & 0xFFFF);
-                final short blockId = (short) ((value >> 16) & 0xFFFF);
-                final int index = (int) ((value >> 32) & 0xFFFFFFFFL);
-
-                Data data = null;
-                if (!blockDataMap.isEmpty()) {
-                    synchronized (blockDataMap) {
-                        data = blockDataMap.get(index);
-                    }
-                }
-
-                final int x = ChunkUtils.blockIndexToChunkPositionX(index);
-                final int y = ChunkUtils.blockIndexToChunkPositionY(index);
-                final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
-
-                final int newX = MathUtils.squareRotateX(degree, x, z) + (isBetween(degree, 1, 2) ? 15 : 0);
-                final int newZ = MathUtils.squareRotateZ(degree, x, z) + (isBetween(degree, 2, 3) ? 15 : 0);
-
-                rotated.setSeparateBlocks(newX, y, newZ, blockId, customBlockId, data);
-            }
-        }
-
-
-        return rotated;
     }
 
     /**
@@ -247,10 +197,6 @@ public class ChunkBatch implements Batch<ChunkCallback> {
                 LOGGER.warn("Unable to apply ChunkBatch to unloaded chunk ({}, {}) in {}.",
                         chunk.getChunkX(), chunk.getChunkZ(), instance.getUniqueId());
                 return;
-            }
-
-            if (this.options.isFullChunk()) {
-                chunk.reset();
             }
 
             synchronized (blocks) {

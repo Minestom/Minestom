@@ -82,11 +82,6 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
         }
     }
 
-    @Override
-    public AbsoluteBlockBatch squareRotate(int degree) {
-        throw new IllegalStateException("Rotation not supported on AbsoluteBlockBatch.");
-    }
-
     /**
      * Applies this batch to the given instance.
      *

@@ -5,7 +5,6 @@ import net.minestom.server.data.Data;
 import net.minestom.server.instance.BlockModifier;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.CustomBlock;
-import net.minestom.server.utils.Rotation;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -68,47 +67,7 @@ public interface Batch<Callback> extends BlockModifier {
      */
     void clear();
 
-    /**
-     * Creates a new batch with the blocks currently inside this batch,
-     * rotated the given amount of degrees.
-     * <p>
-     * At the moment, only rotations of 90 degree increments may be applied.
-     * All rotations will be rounded down to the nearest 90 degree increment.
-     *
-     * @param degrees The number of degrees to rotate
-     * @return A new batch with the rotation applied
-     *
-     * @see #squareRotate(int)
-     */
-    default Batch<Callback> rotate(int degrees) {
-        return squareRotate((degrees / 90) % 4);
-    }
-
-    /**
-     * Creates a new batch with the blocks currently inside this batch,
-     * rotated the given {@link Rotation}.
-     * <p>
-     * At the moment, only rotations of 90 degree increments may be applied.
-     * 45 degree rotations will have undefined behavior.
-     *
-     * @param rotation The rotation to apply
-     * @return A new batch with the rotation applied
-     */
-    default Batch<Callback> rotate(Rotation rotation) {
-        return squareRotate(rotation.ordinal() / 2);
-    }
-
-    /**
-     * Creates a new batch with the blocks currently inside this batch,
-     * rotated the given 'degree'.
-     * <p>
-     * The 'degree' is the number of 90 degree rotations to apply. For
-     * example: degree of 1 = 90°, 2 = 180°, -2 = -180°
-     *
-     * @param degree The degree to rotate
-     * @return A new batch with the rotation applied
-     */
-    Batch<Callback> squareRotate(int degree);
+    // Batch rotate(? );
 
     /**
      * Called to apply the batch to the given instance.

@@ -54,11 +54,6 @@ public class ChunkGenerationBatch extends ChunkBatch {
     }
 
     @Override
-    public ChunkBatch squareRotate(int degree) {
-        throw new IllegalStateException("Rotation is not supported for chunk generation batch.");
-    }
-
-    @Override
     protected ChunkBatch apply(@NotNull Instance instance, @NotNull Chunk chunk, @Nullable ChunkCallback callback, boolean safeCallback) {
         throw new IllegalStateException("#apply is not supported for chunk generation batch.");
     }
