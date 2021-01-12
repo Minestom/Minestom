@@ -56,6 +56,11 @@ public class ClosestEntityTarget extends TargetSelector {
                     continue;
                 }
 
+                if (ent.isRemoved()) {
+                    // Entity not valid
+                    return null;
+                }
+
                 // Check if the entity type can be targeted
                 final Class<? extends Entity> clazz = ent.getClass();
                 boolean correct = false;
