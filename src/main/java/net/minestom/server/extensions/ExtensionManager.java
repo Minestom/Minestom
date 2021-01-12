@@ -479,7 +479,9 @@ public class ExtensionManager {
     private void setupCodeModifiers(@NotNull List<DiscoveredExtension> extensions) {
         final ClassLoader cl = getClass().getClassLoader();
         if (!(cl instanceof MinestomRootClassLoader)) {
-            LOGGER.warn("Current class loader is not a MinestomOverwriteClassLoader, but {}. This disables code modifiers (Mixin support is therefore disabled)", cl);
+            LOGGER.warn("Current class loader is not a MinestomOverwriteClassLoader, but {}. " +
+                    "This disables code modifiers (Mixin support is therefore disabled). " +
+                    "This can be fixed by starting your server using Bootstrap#bootstrap (optional).", cl);
             return;
         }
         MinestomRootClassLoader modifiableClassLoader = (MinestomRootClassLoader) cl;
