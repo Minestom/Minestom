@@ -107,6 +107,10 @@ public class BlockPlacementListener {
                 boolean intersect = player.getBoundingBox().intersect(blockPosition);
                 if (!intersect && block.isSolid()) {
                     for (Entity entity : entities) {
+                        // 'player' has already been checked
+                        if (entity == player)
+                            continue;
+
                         intersect = entity.getBoundingBox().intersect(blockPosition);
                         if (intersect)
                             break;
