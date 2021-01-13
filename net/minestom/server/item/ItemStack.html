@@ -937,12 +937,12 @@ public&nbsp;<a href="../chat/JsonMessage.html" title="class in net.minestom.serv
 <ul class="blockList">
 <li class="blockList">
 <h4>getLore</h4>
-<pre class="methodSignature">@Nullable
+<pre class="methodSignature">@NotNull
 public&nbsp;java.util.List&lt;<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;&nbsp;getLore()</pre>
 <div class="block">Gets the item lore.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a modifiable list containing the item lore, can be null if not present</dd>
+<dd>a modifiable list containing the item lore, can be empty if not present</dd>
 </dl>
 </li>
 </ul>
@@ -952,12 +952,12 @@ public&nbsp;java.util.List&lt;<a href="../chat/JsonMessage.html" title="class in
 <ul class="blockList">
 <li class="blockList">
 <h4>setLore</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setLore&#8203;(@Nullable
+<pre class="methodSignature">public&nbsp;void&nbsp;setLore&#8203;(@NotNull
                     java.util.List&lt;<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;&nbsp;lore)</pre>
 <div class="block">Sets the item lore.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>lore</code> - the item lore, can be null to remove</dd>
+<dd><code>lore</code> - the item lore, can be empty to remove</dd>
 </dl>
 </li>
 </ul>
