@@ -53,11 +53,7 @@ public class FakePlayer extends Player {
                     });
         }
 
-        if (option.isRegistered()) {
-            CONNECTION_MANAGER.registerPlayer(this);
-        }
-
-        CONNECTION_MANAGER.startPlayState(this);
+        CONNECTION_MANAGER.startPlayState(this, option.isRegistered());
     }
 
     /**

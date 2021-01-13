@@ -347,9 +347,10 @@ public final class ConnectionManager {
      * Sends a {@link LoginSuccessPacket} if successful (not kicked)
      * and change the connection state to {@link ConnectionState#PLAY}.
      *
-     * @param player the player
+     * @param player   the player
+     * @param register true to register the newly created player in {@link ConnectionManager} lists
      */
-    public void startPlayState(@NotNull Player player) {
+    public void startPlayState(@NotNull Player player, boolean register) {
         // Init player (register events)
         for (Consumer<Player> playerInitialization : getPlayerInitializations()) {
             playerInitialization.accept(player);
@@ -397,23 +398,30 @@ public final class ConnectionManager {
                 final PlayerConnection connection = player.getPlayerConnection();
 
                 LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(uuid, username);
-                connection.sendPacket(loginSuccessPacket);
+                if (connection instanceof NettyPlayerConnection) {
+                    ((NettyPlayerConnection) connection).writeAndFlush(loginSuccessPacket);
+                } else {
+                    connection.sendPacket(loginSuccessPacket);
+                }
 
                 connection.setConnectionState(ConnectionState.PLAY);
             }
 
             // Add the player to the waiting list
             MinecraftServer.getEntityManager().addWaitingPlayer(player);
+
+            if (register) {
+                registerPlayer(player);
+            }
         });
     }
 
     /**
      * Creates a {@link Player} using the defined {@link PlayerProvider}
-     * and execute {@link #startPlayState(Player)}.
+     * and execute {@link #startPlayState(Player, boolean)}.
      *
-     * @param register true to register the newly created player in {@link ConnectionManager} lists
      * @return the newly created player object
-     * @see #startPlayState(Player)
+     * @see #startPlayState(Player, boolean)
      */
     @NotNull
     public Player startPlayState(@NotNull PlayerConnection connection,
@@ -421,11 +429,7 @@ public final class ConnectionManager {
                                  boolean register) {
         final Player player = getPlayerProvider().createPlayer(uuid, username, connection);
 
-        if (register) {
-            registerPlayer(player);
-        }
-
-        startPlayState(player);
+        startPlayState(player, register);
 
         return player;
     }

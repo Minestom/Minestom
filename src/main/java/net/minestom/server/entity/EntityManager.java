@@ -8,6 +8,7 @@ import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
+import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,8 +42,9 @@ public final class EntityManager {
         for (Player player : CONNECTION_MANAGER.getOnlinePlayers()) {
             final long lastKeepAlive = tickStart - player.getLastKeepAlive();
             if (lastKeepAlive > KEEP_ALIVE_DELAY && player.didAnswerKeepAlive()) {
+                final PlayerConnection playerConnection = player.getPlayerConnection();
                 player.refreshKeepAlive(tickStart);
-                player.getPlayerConnection().sendPacket(keepAlivePacket);
+                playerConnection.sendPacket(keepAlivePacket);
             } else if (lastKeepAlive >= KEEP_ALIVE_KICK) {
                 player.kick(TIMEOUT_TEXT);
             }
