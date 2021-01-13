@@ -46,6 +46,9 @@ public interface InventoryModifier {
 
     /**
      * Gets all the {@link ItemStack} in the inventory.
+     * <p>
+     * Be aware that the returned array does not need to be the original one,
+     * meaning that modifying it directly may not work.
      *
      * @return an array containing all the inventory's items
      */
