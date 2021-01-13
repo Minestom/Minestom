@@ -285,9 +285,9 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
     /**
      * Gets the item lore.
      *
-     * @return a modifiable list containing the item lore, can be null if not present
+     * @return a modifiable list containing the item lore, can be empty if not present
      */
-    @Nullable
+    @NotNull
     public List<JsonMessage> getLore() {
         return lore;
     }
@@ -295,9 +295,9 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
     /**
      * Sets the item lore.
      *
-     * @param lore the item lore, can be null to remove
+     * @param lore the item lore, can be empty to remove
      */
-    public void setLore(@Nullable List<JsonMessage> lore) {
+    public void setLore(@NotNull List<JsonMessage> lore) {
         this.lore = lore;
     }
 
@@ -690,7 +690,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
         if (material == Material.WRITTEN_BOOK)
             return new WrittenBookMeta();
 
-        if(material == Material.FIREWORK_STAR)
+        if (material == Material.FIREWORK_STAR)
             return new FireworkEffectMeta();
 
         if (material == Material.FIREWORK_ROCKET)
