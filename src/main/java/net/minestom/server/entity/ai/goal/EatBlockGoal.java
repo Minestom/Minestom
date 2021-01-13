@@ -39,7 +39,14 @@ public class EatBlockGoal extends GoalSelector {
         if (RANDOM.nextInt(chancePerTick) != 0) {
             return false;
         }
+
         final Instance instance = entityCreature.getInstance();
+
+        // An entity shouldn't be eating blocks on null instances.
+        if (instance == null) {
+            return false;
+        }
+
         final BlockPosition blockPosition = entityCreature.getPosition().toBlockPosition();
         final short blockStateIdIn = instance.getBlockStateId(blockPosition.clone().subtract(0, 1, 0));
         final short blockStateIdBelow = instance.getBlockStateId(blockPosition.clone().subtract(0, 2, 0));
