@@ -717,6 +717,17 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     public void setBoundingBox(float x, float y, float z) {
         this.boundingBox = new BoundingBox(this, x, y, z);
     }
+    
+    /**
+     * Changes the internal entity bounding box.
+     * <p>
+     * WARNING: this does not change the entity hit-box which is client-side.
+     *
+     * @param boundingBox the new bounding box
+     */
+    public void setBoundingBox(BoundingBox boundingBox) {
+        this.boundingBox = boundingBox;
+    }
 
     /**
      * Convenient method to get the entity current chunk.
