@@ -1,5 +1,6 @@
 package net.minestom.server.entity.ai.goal;
 
+import it.unimi.dsi.fastutil.shorts.Short2ShortArrayMap;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.instance.Instance;
@@ -11,8 +12,8 @@ import java.util.Random;
 
 public class EatBlockGoal extends GoalSelector {
     private static final Random RANDOM = new Random();
-    private final Map<Short, Short> eatBelowMap;
-    private final Map<Short, Short> eatInMap;
+    private final Short2ShortArrayMap eatBelowMap;
+    private final Short2ShortArrayMap eatInMap;
     private final int chancePerTick;
     private int eatAnimationTick;
 
@@ -24,8 +25,8 @@ public class EatBlockGoal extends GoalSelector {
      */
     public EatBlockGoal(
             @NotNull EntityCreature entityCreature,
-            @NotNull Map<Short, Short> eatInMap,
-            @NotNull Map<Short, Short> eatBelowMap,
+            @NotNull Short2ShortArrayMap eatInMap,
+            @NotNull Short2ShortArrayMap eatBelowMap,
             int chancePerTick) {
         super(entityCreature);
         this.eatInMap = eatInMap;
