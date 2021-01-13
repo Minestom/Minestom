@@ -332,7 +332,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#startPlayState(net.minestom.server.entity.Player)">startPlayState</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#startPlayState(net.minestom.server.entity.Player,boolean)">startPlayState</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+              boolean&nbsp;register)</code></th>
 <td class="colLast">
 <div class="block">Calls the player initialization callbacks and the event <a href="../event/player/AsyncPlayerPreLoginEvent.html" title="class in net.minestom.server.event.player"><code>AsyncPlayerPreLoginEvent</code></a>.</div>
 </td>
@@ -345,7 +346,7 @@ extends java.lang.Object</pre>
               boolean&nbsp;register)</code></th>
 <td class="colLast">
 <div class="block">Creates a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> using the defined <a href="PlayerProvider.html" title="interface in net.minestom.server.network"><code>PlayerProvider</code></a>
- and execute <a href="#startPlayState(net.minestom.server.entity.Player)"><code>startPlayState(Player)</code></a>.</div>
+ and execute <a href="#startPlayState(net.minestom.server.entity.Player,boolean)"><code>startPlayState(Player, boolean)</code></a>.</div>
 </td>
 </tr>
 </table>
@@ -756,14 +757,15 @@ public&nbsp;<a href="../chat/JsonMessage.html" title="class in net.minestom.serv
 </dl>
 </li>
 </ul>
-<a id="startPlayState(net.minestom.server.entity.Player)">
+<a id="startPlayState(net.minestom.server.entity.Player,boolean)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>startPlayState</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;startPlayState&#8203;(@NotNull
-                           <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+                           <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                           boolean&nbsp;register)</pre>
 <div class="block">Calls the player initialization callbacks and the event <a href="../event/player/AsyncPlayerPreLoginEvent.html" title="class in net.minestom.server.event.player"><code>AsyncPlayerPreLoginEvent</code></a>.
  <p>
  Sends a <a href="packet/server/login/LoginSuccessPacket.html" title="class in net.minestom.server.network.packet.server.login"><code>LoginSuccessPacket</code></a> if successful (not kicked)
@@ -771,6 +773,7 @@ public&nbsp;<a href="../chat/JsonMessage.html" title="class in net.minestom.serv
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>player</code> - the player</dd>
+<dd><code>register</code> - true to register the newly created player in <a href="ConnectionManager.html" title="class in net.minestom.server.network"><code>ConnectionManager</code></a> lists</dd>
 </dl>
 </li>
 </ul>
@@ -789,14 +792,12 @@ public&nbsp;<a href="../entity/Player.html" title="class in net.minestom.server.
                              java.lang.String&nbsp;username,
                              boolean&nbsp;register)</pre>
 <div class="block">Creates a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> using the defined <a href="PlayerProvider.html" title="interface in net.minestom.server.network"><code>PlayerProvider</code></a>
- and execute <a href="#startPlayState(net.minestom.server.entity.Player)"><code>startPlayState(Player)</code></a>.</div>
+ and execute <a href="#startPlayState(net.minestom.server.entity.Player,boolean)"><code>startPlayState(Player, boolean)</code></a>.</div>
 <dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>register</code> - true to register the newly created player in <a href="ConnectionManager.html" title="class in net.minestom.server.network"><code>ConnectionManager</code></a> lists</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the newly created player object</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="#startPlayState(net.minestom.server.entity.Player)"><code>startPlayState(Player)</code></a></dd>
+<dd><a href="#startPlayState(net.minestom.server.entity.Player,boolean)"><code>startPlayState(Player, boolean)</code></a></dd>
 </dl>
 </li>
 </ul>
