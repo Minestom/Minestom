@@ -110,6 +110,11 @@ public interface NavigableEntity {
             return false;
         }
 
+        // Can't path with a null instance.
+        if (instance == null) {
+            return false;
+        }
+
         // Can't path outside of the world border
         final WorldBorder worldBorder = instance.getWorldBorder();
         if (!worldBorder.isInside(position)) {
