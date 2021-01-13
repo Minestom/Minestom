@@ -638,7 +638,10 @@ public&nbsp;<a href="../item/ItemStack.html" title="class in net.minestom.server
 <pre class="methodSignature">@NotNull
 public&nbsp;<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>[]&nbsp;getItemStacks()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="InventoryModifier.html#getItemStacks()">InventoryModifier</a></code></span></div>
-<div class="block">Gets all the <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> in the inventory.</div>
+<div class="block">Gets all the <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> in the inventory.
+ <p>
+ Be aware that the returned array does not need to be the original one,
+ meaning that modifying it directly may not work.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="InventoryModifier.html#getItemStacks()">getItemStacks</a></code>&nbsp;in interface&nbsp;<code><a href="InventoryModifier.html" title="interface in net.minestom.server.inventory">InventoryModifier</a></code></dd>

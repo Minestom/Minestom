@@ -300,7 +300,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>getItemStacks</h4>
 <pre class="methodSignature">@NotNull
 <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>[]&nbsp;getItemStacks()</pre>
-<div class="block">Gets all the <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> in the inventory.</div>
+<div class="block">Gets all the <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> in the inventory.
+ <p>
+ Be aware that the returned array does not need to be the original one,
+ meaning that modifying it directly may not work.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an array containing all the inventory's items</dd>
