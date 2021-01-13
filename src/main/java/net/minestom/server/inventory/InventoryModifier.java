@@ -2,6 +2,7 @@ package net.minestom.server.inventory;
 
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -72,4 +73,22 @@ public interface InventoryModifier {
      * @param inventoryCondition the inventory condition to add
      */
     void addInventoryCondition(@NotNull InventoryCondition inventoryCondition);
+
+    /**
+     * Places all the items of {@code itemStacks} into the internal array.
+     *
+     * @param itemStacks the array to copy the content from
+     * @throws IllegalArgumentException if the size of the array is not equal to {@link #getSize()}
+     * @throws NullPointerException     if {@code itemStacks} contains one null element or more
+     */
+    default void copyContents(@NotNull ItemStack[] itemStacks) {
+        Check.argCondition(itemStacks.length != getSize(),
+                "The size of the array has to be of the same size as the inventory: " + getSize());
+
+        for (int i = 0; i < itemStacks.length; i++) {
+            final ItemStack itemStack = itemStacks[i];
+            Check.notNull(itemStack, "The item array cannot contain any null element!");
+            setItemStack(i, itemStack);
+        }
+    }
 }
