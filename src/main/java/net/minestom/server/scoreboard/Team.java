@@ -11,6 +11,7 @@ import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule;
 import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility;
 import net.minestom.server.utils.PacketUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.Set;
@@ -65,16 +66,11 @@ public class Team {
     private JsonMessage suffix;
 
     /**
-     * Identifiers for the entities in this team
-     */
-    private String[] entities;
-
-    /**
      * Default constructor to creates a team.
      *
      * @param teamName The registry name for the team
      */
-    protected Team(String teamName) {
+    protected Team(@NotNull String teamName) {
         this.teamName = teamName;
 
         this.teamDisplayName = ColoredText.of("");
@@ -86,7 +82,6 @@ public class Team {
         this.prefix = ColoredText.of("");
         this.suffix = ColoredText.of("");
 
-        this.entities = new String[0];
         this.members = new CopyOnWriteArraySet<>();
     }
 
@@ -97,12 +92,7 @@ public class Team {
      *
      * @param member The member to be added
      */
-    public void addMember(String member) {
-        final String[] entitiesCache = new String[this.entities.length + 1];
-        System.arraycopy(this.entities, 0, entitiesCache, 0, this.entities.length);
-        entitiesCache[this.entities.length] = member;
-        this.entities = entitiesCache;
-
+    public void addMember(@NotNull String member) {
         // Adds a new member to the team
         this.members.add(member);
 
@@ -110,7 +100,7 @@ public class Team {
         final TeamsPacket addPlayerPacket = new TeamsPacket();
         addPlayerPacket.teamName = this.teamName;
         addPlayerPacket.action = TeamsPacket.Action.ADD_PLAYERS_TEAM;
-        addPlayerPacket.entities = new String[]{member};
+        addPlayerPacket.entities = members.toArray(new String[0]);
 
         // Sends to all online players the add player packet
         PacketUtils.sendGroupedPacket(CONNECTION_MANAGER.getOnlinePlayers(), addPlayerPacket);
@@ -121,24 +111,18 @@ public class Team {
      *
      * @param member The member to be removed
      */
-    public void removeMember(String member) {
+    public void removeMember(@NotNull String member) {
+        // Removes the member from the team
+        this.members.remove(member);
+
         // Initializes remove player packet
         final TeamsPacket removePlayerPacket = new TeamsPacket();
         removePlayerPacket.teamName = this.teamName;
         removePlayerPacket.action = TeamsPacket.Action.REMOVE_PLAYERS_TEAM;
-        removePlayerPacket.entities = new String[]{member};
+        removePlayerPacket.entities = members.toArray(new String[0]);
+
         // Sends to all online player teh remove player packet
         PacketUtils.sendGroupedPacket(CONNECTION_MANAGER.getOnlinePlayers(), removePlayerPacket);
-
-        // Removes the player from the
-        this.members.remove(member);
-
-        final String[] entitiesCache = new String[this.entities.length - 1];
-        int count = 0;
-        for (String teamMember : this.members) {
-            entitiesCache[count++] = teamMember;
-        }
-        this.entities = entitiesCache;
     }
 
     /**
@@ -168,8 +152,9 @@ public class Team {
      * <b>Warning:</b> This is only changed on the <b>server side</b>.
      *
      * @param visibility The new tag visibility
+     * @see #updateNameTagVisibility(NameTagVisibility)
      */
-    public void setNameTagVisibility(NameTagVisibility visibility) {
+    public void setNameTagVisibility(@NotNull NameTagVisibility visibility) {
         this.nameTagVisibility = visibility;
     }
 
@@ -178,7 +163,7 @@ public class Team {
      *
      * @param nameTagVisibility The new tag visibility
      */
-    public void updateNameTagVisibility(NameTagVisibility nameTagVisibility) {
+    public void updateNameTagVisibility(@NotNull NameTagVisibility nameTagVisibility) {
         this.setNameTagVisibility(nameTagVisibility);
         sendUpdatePacket();
     }
@@ -189,8 +174,9 @@ public class Team {
      * <b>Warning:</b> This is only changed on the <b>server side</b>.
      *
      * @param rule The new rule
+     * @see #updateCollisionRule(CollisionRule)
      */
-    public void setCollisionRule(CollisionRule rule) {
+    public void setCollisionRule(@NotNull CollisionRule rule) {
         this.collisionRule = rule;
     }
 
@@ -199,7 +185,7 @@ public class Team {
      *
      * @param collisionRule The new collision rule
      */
-    public void updateCollisionRule(CollisionRule collisionRule) {
+    public void updateCollisionRule(@NotNull CollisionRule collisionRule) {
         this.setCollisionRule(collisionRule);
         sendUpdatePacket();
     }
@@ -210,8 +196,9 @@ public class Team {
      * <b>Warning:</b> This is only changed on the <b>server side</b>.
      *
      * @param color The new team color
+     * @see #updateTeamColor(ChatColor)
      */
-    public void setTeamColor(ChatColor color) {
+    public void setTeamColor(@NotNull ChatColor color) {
         this.teamColor = color;
     }
 
@@ -220,7 +207,7 @@ public class Team {
      *
      * @param teamColor The new team color
      */
-    public void updateTeamColor(ChatColor teamColor) {
+    public void updateTeamColor(@NotNull ChatColor teamColor) {
         this.setTeamColor(teamColor);
         sendUpdatePacket();
     }
@@ -302,6 +289,7 @@ public class Team {
      *
      * @return the packet to add the team
      */
+    @NotNull
     public TeamsPacket createTeamsCreationPacket() {
         TeamsPacket teamsCreationPacket = new TeamsPacket();
         teamsCreationPacket.teamName = teamName;
@@ -313,7 +301,7 @@ public class Team {
         teamsCreationPacket.teamColor = this.teamColor.getId();
         teamsCreationPacket.teamPrefix = this.prefix;
         teamsCreationPacket.teamSuffix = this.suffix;
-        teamsCreationPacket.entities = this.entities;
+        teamsCreationPacket.entities = this.members.toArray(new String[0]);
 
         return teamsCreationPacket;
     }
@@ -323,6 +311,7 @@ public class Team {
      *
      * @return the packet to remove the team
      */
+    @NotNull
     public TeamsPacket createTeamDestructionPacket() {
         TeamsPacket teamsPacket = new TeamsPacket();
         teamsPacket.teamName = teamName;
@@ -335,6 +324,7 @@ public class Team {
      *
      * @return an unmodifiable {@link Set} of registered players
      */
+    @NotNull
     public Set<String> getMembers() {
         return Collections.unmodifiableSet(members);
     }
@@ -362,6 +352,7 @@ public class Team {
      *
      * @return the tag visibility
      */
+    @NotNull
     public NameTagVisibility getNameTagVisibility() {
         return nameTagVisibility;
     }
@@ -371,6 +362,7 @@ public class Team {
      *
      * @return the collision rule
      */
+    @NotNull
     public CollisionRule getCollisionRule() {
         return collisionRule;
     }
@@ -380,6 +372,7 @@ public class Team {
      *
      * @return the team color
      */
+    @NotNull
     public ChatColor getTeamColor() {
         return teamColor;
     }
@@ -400,10 +393,6 @@ public class Team {
      */
     public JsonMessage getSuffix() {
         return suffix;
-    }
-
-    public String[] getEntities() {
-        return entities;
     }
 
     /**
