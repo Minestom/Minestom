@@ -19,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.BiConsumer;
 
 public class InventoryClickProcessor {
@@ -161,12 +160,12 @@ public class InventoryClickProcessor {
             if (cursor.isAir()) {
                 // if held item [key] is air then set clicked to held
                 resultClicked = ItemStack.getAirItem();
-                resultHeld = clicked;
             } else {
                 // Otherwise replace held item and held
                 resultClicked = cursor;
-                resultHeld = clicked;
             }
+
+            resultHeld = clicked;
         }
 
         clickResult.setClicked(resultClicked);
@@ -278,7 +277,7 @@ public class InventoryClickProcessor {
                 // End left
                 if (!leftDraggingMap.containsKey(player))
                     return null;
-                final Set<Integer> slots = leftDraggingMap.get(player);
+                final IntSet slots = leftDraggingMap.get(player);
                 final int slotCount = slots.size();
                 final int cursorAmount = stackingRule.getAmount(cursor);
                 if (slotCount > cursorAmount)
@@ -287,7 +286,7 @@ public class InventoryClickProcessor {
                 final int slotSize = (int) ((float) cursorAmount / (float) slotCount);
                 int finalCursorAmount = cursorAmount;
 
-                for (Integer s : slots) {
+                for (int s : slots) {
                     final ItemStack draggedItem = cursor.clone();
                     ItemStack slotItem = itemGetter.apply(s);
 

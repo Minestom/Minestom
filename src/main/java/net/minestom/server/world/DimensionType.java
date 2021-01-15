@@ -2,10 +2,10 @@ package net.minestom.server.world;
 
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -24,7 +24,7 @@ public class DimensionType {
             .raidCapable(true)
             .skylightEnabled(true)
             .ceilingEnabled(false)
-            .fixedTime(Optional.empty())
+            .fixedTime(null)
             .ambientLight(0.0f)
             .logicalHeight(256)
             .infiniburn(NamespaceID.from("minecraft:infiniburn_overworld"))
@@ -39,7 +39,10 @@ public class DimensionType {
     private final float ambientLight;
     private final boolean ceilingEnabled;
     private final boolean skylightEnabled;
-    private final Optional<Long> fixedTime;
+
+    @Nullable
+    private final Long fixedTime;
+
     private final boolean raidCapable;
     private final boolean respawnAnchorSafe;
     private final boolean ultrawarm;
@@ -51,7 +54,7 @@ public class DimensionType {
     private final NamespaceID infiniburn;
 
     DimensionType(NamespaceID name, boolean natural, float ambientLight, boolean ceilingEnabled,
-                  boolean skylightEnabled, Optional<Long> fixedTime, boolean raidCapable,
+                  boolean skylightEnabled, @Nullable Long fixedTime, boolean raidCapable,
                   boolean respawnAnchorSafe, boolean ultrawarm, boolean bedSafe, String effects, boolean piglinSafe,
                   int logicalHeight, int coordinateScale, NamespaceID infiniburn) {
         this.name = name;
@@ -106,7 +109,7 @@ public class DimensionType {
                 .setInt("logical_height", logicalHeight)
                 .setInt("coordinate_scale", coordinateScale)
                 .setString("name", name.toString());
-        fixedTime.ifPresent(time -> nbt.setLong("fixed_time", time));
+        if (fixedTime != null) nbt.setLong("fixed_time", fixedTime);
         return nbt;
     }
 
@@ -143,7 +146,8 @@ public class DimensionType {
         return this.skylightEnabled;
     }
 
-    public Optional<Long> getFixedTime() {
+    @Nullable
+    public Long getFixedTime() {
         return this.fixedTime;
     }
 
@@ -203,7 +207,9 @@ public class DimensionType {
         private float ambientLight;
         private boolean ceilingEnabled;
         private boolean skylightEnabled;
-        private Optional<Long> fixedTime = Optional.empty();
+
+        @Nullable
+        private Long fixedTime = null;
         private boolean raidCapable;
         private boolean respawnAnchorSafe;
         private boolean ultrawarm;
@@ -242,7 +248,7 @@ public class DimensionType {
             return this;
         }
 
-        public DimensionType.DimensionTypeBuilder fixedTime(Optional<Long> fixedTime) {
+        public DimensionType.DimensionTypeBuilder fixedTime(Long fixedTime) {
             this.fixedTime = fixedTime;
             return this;
         }
