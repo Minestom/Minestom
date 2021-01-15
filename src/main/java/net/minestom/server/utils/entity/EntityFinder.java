@@ -281,20 +281,20 @@ public class EntityFinder {
                     closestDistance = distance;
                 }
             }
-            return Arrays.asList(entity);
+            return Collections.singletonList(entity);
         } else if (targetSelector == TargetSelector.RANDOM_PLAYER) {
             Collection<Player> instancePlayers = instance != null ?
                     instance.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers();
             final int index = ThreadLocalRandom.current().nextInt(instancePlayers.size());
             final Player player = instancePlayers.stream().skip(index).findFirst().orElseThrow();
-            return Arrays.asList(player);
+            return Collections.singletonList(player);
         } else if (targetSelector == TargetSelector.ALL_PLAYERS) {
             return new ArrayList<>(instance != null ?
                     instance.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers());
         } else if (targetSelector == TargetSelector.ALL_ENTITIES) {
             return new ArrayList<>(instance.getEntities());
         } else if (targetSelector == TargetSelector.SELF) {
-            return Arrays.asList(self);
+            return Collections.singletonList(self);
         }
         throw new IllegalStateException("Weird thing happened");
     }

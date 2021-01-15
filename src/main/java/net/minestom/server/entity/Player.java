@@ -536,7 +536,7 @@ public class Player extends LivingEntity implements CommandSender {
 
             // #buildDeathScreenText can return null, check here
             if (deathText != null) {
-                CombatEventPacket deathPacket = CombatEventPacket.death(this, Optional.empty(), deathText);
+                CombatEventPacket deathPacket = CombatEventPacket.death(this, null, deathText);
                 playerConnection.sendPacket(deathPacket);
             }
 

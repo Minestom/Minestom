@@ -25,11 +25,10 @@ public class ReloadExtensionCommand extends Command {
     private static String[] extensionsName;
 
     static {
-        List<String> extensionsName = MinecraftServer.getExtensionManager().getExtensions()
+        ReloadExtensionCommand.extensionsName = MinecraftServer.getExtensionManager().getExtensions()
                 .stream()
                 .map(extension -> extension.getDescription().getName())
-                .collect(Collectors.toList());
-        ReloadExtensionCommand.extensionsName = extensionsName.toArray(new String[0]);
+                .toArray(String[]::new);
     }
 
     public ReloadExtensionCommand() {
