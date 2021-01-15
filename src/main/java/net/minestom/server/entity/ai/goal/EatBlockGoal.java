@@ -7,7 +7,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
 import java.util.Random;
 
 public class EatBlockGoal extends GoalSelector {

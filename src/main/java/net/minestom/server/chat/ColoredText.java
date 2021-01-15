@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 public class ColoredText extends JsonMessage {
 
     // the raw text
-    private StringBuilder message = new StringBuilder();
+    private final StringBuilder message = new StringBuilder();
 
     /**
      * Creates a colored text.
@@ -160,7 +160,7 @@ public class ColoredText extends JsonMessage {
     protected List<JsonObject> getComponents() {
         final List<JsonObject> objects = new ArrayList<>();
         // No message, return empty list
-        if (message.isEmpty())
+        if (getMessage().isEmpty())
             return objects;
 
         boolean inFormat = false;

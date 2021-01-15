@@ -58,6 +58,7 @@ public class CommandDispatcher {
      * @param commandString the command (containing the command name and the args if any)
      * @return the result of the parsing, null if the command doesn't exist
      */
+    @Nullable
     public CommandResult parse(@NotNull String commandString) {
         commandString = commandString.trim();
 
