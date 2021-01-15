@@ -486,7 +486,7 @@ public final class MinecraftServer {
 
                     player.refreshVisibleChunks(playerChunk);
                 }
-            });
+            }
         }
     }
 

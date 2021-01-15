@@ -197,7 +197,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @return the block entities in this chunk
      */
     @NotNull
-    public abstract IntSet getBlockEntities();
+    public abstract Set<Integer> getBlockEntities();
 
     /**
      * Gets the last time that this chunk changed.

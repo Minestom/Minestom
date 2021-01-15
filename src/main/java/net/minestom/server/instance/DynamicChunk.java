@@ -193,7 +193,7 @@ public class DynamicChunk extends Chunk {
 
     @NotNull
     @Override
-    public IntSet getBlockEntities() {
+    public Set<Integer> getBlockEntities() {
         return blockEntities;
     }
 
