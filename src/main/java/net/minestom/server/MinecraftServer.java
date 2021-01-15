@@ -476,9 +476,7 @@ public final class MinecraftServer {
         MinecraftServer.chunkViewDistance = chunkViewDistance;
         if (started) {
 
-            final Collection<Player> players = connectionManager.getOnlinePlayers();
-
-            players.forEach(player -> {
+            for (final Player player : connectionManager.getOnlinePlayers()) {
                 final Chunk playerChunk = player.getChunk();
                 if (playerChunk != null) {
 
@@ -512,12 +510,12 @@ public final class MinecraftServer {
                 "The entity view distance must be between 0 and 32");
         MinecraftServer.entityViewDistance = entityViewDistance;
         if (started) {
-            connectionManager.getOnlinePlayers().forEach(player -> {
+            for (final Player player : connectionManager.getOnlinePlayers()) {
                 final Chunk playerChunk = player.getChunk();
                 if (playerChunk != null) {
                     player.refreshVisibleEntities(playerChunk);
                 }
-            });
+            }
         }
     }
 
