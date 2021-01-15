@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 public class ColoredText extends JsonMessage {
 
     // the raw text
-    private String message;
+    private StringBuilder message = new StringBuilder();
 
     /**
      * Creates a colored text.
@@ -31,7 +31,7 @@ public class ColoredText extends JsonMessage {
      * @see #of(String) to create a colored text
      */
     private ColoredText(@NotNull String message) {
-        this.message = message;
+        this.message.append(message);
         refreshUpdate();
     }
 
@@ -79,7 +79,7 @@ public class ColoredText extends JsonMessage {
      */
     @NotNull
     public ColoredText append(@NotNull ChatColor color, @NotNull String message) {
-        this.message += color + message;
+        this.message.append(color).append(message);
         refreshUpdate();
         return this;
     }
@@ -116,7 +116,7 @@ public class ColoredText extends JsonMessage {
      */
     @NotNull
     public String getMessage() {
-        return message;
+        return message.toString();
     }
 
     /**
