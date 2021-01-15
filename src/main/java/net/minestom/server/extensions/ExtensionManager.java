@@ -193,7 +193,7 @@ public class ExtensionManager {
 
         // Set extension description
         try {
-            Field descriptionField = extensionClass.getSuperclass().getDeclaredField("description");
+            Field descriptionField = Extension.class.getDeclaredField("description");
             descriptionField.setAccessible(true);
             descriptionField.set(extension, extensionDescription);
         } catch (IllegalAccessException e) {
@@ -205,7 +205,7 @@ public class ExtensionManager {
 
         // Set logger
         try {
-            Field loggerField = extensionClass.getSuperclass().getDeclaredField("logger");
+            Field loggerField = Extension.class.getDeclaredField("logger");
             loggerField.setAccessible(true);
             loggerField.set(extension, LoggerFactory.getLogger(extensionClass));
         } catch (IllegalAccessException e) {
