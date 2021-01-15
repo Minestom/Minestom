@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
 import net.minestom.server.data.Data;
@@ -196,7 +197,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @return the block entities in this chunk
      */
     @NotNull
-    public abstract Set<Integer> getBlockEntities();
+    public abstract IntSet getBlockEntities();
 
     /**
      * Gets the last time that this chunk changed.

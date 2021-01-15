@@ -1,5 +1,8 @@
 package net.minestom.server.map;
 
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -10,7 +13,7 @@ import java.util.Map;
 public class PaletteGenerator {
 
     public static void main(String[] args) {
-        Map<Integer, Integer> colors = new HashMap<>();
+        Int2IntMap colors = new Int2IntOpenHashMap();
         int highestIndex = 0;
         for(MapColors c : MapColors.values()) {
             if (c == MapColors.NONE)

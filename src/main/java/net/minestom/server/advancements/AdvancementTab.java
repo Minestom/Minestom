@@ -73,7 +73,6 @@ public class AdvancementTab implements Viewable {
      * @param parent      the parent of this advancement, it cannot be null
      */
     public void createAdvancement(@NotNull String identifier, @NotNull Advancement advancement, @NotNull Advancement parent) {
-        Check.argCondition(identifier == null, "the advancement identifier cannot be null");
         Check.stateCondition(!advancementMap.containsKey(parent),
                 "You tried to set a parent which doesn't exist or isn't registered");
         cacheAdvancement(identifier, advancement, parent);

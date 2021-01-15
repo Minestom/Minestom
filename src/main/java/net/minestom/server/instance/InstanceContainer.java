@@ -508,7 +508,6 @@ public class InstanceContainer extends Instance {
 
     @Override
     public ChunkBatch createChunkBatch(@NotNull Chunk chunk) {
-        Check.notNull(chunk, "The chunk of a ChunkBatch cannot be null");
         return new ChunkBatch(this, chunk, false);
     }
 
@@ -587,7 +586,6 @@ public class InstanceContainer extends Instance {
      * @throws NullPointerException if {@code chunkSupplier} is null
      */
     public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
-        Check.notNull(chunkSupplier, "The chunk supplier cannot be null!");
         this.chunkSupplier = chunkSupplier;
     }
 

@@ -272,7 +272,6 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * @return true if damage has been applied, false if it didn't
      */
     public boolean damage(@NotNull DamageType type, float value) {
-        Check.notNull(type, "The damage type cannot be null!");
         if (isDead())
             return false;
         if (isInvulnerable() || isImmune(type)) {

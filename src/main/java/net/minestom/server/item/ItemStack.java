@@ -117,7 +117,6 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      * @throws NullPointerException if {@code defaultStackingRule} is null
      */
     public static void setDefaultStackingRule(@NotNull StackingRule defaultStackingRule) {
-        Check.notNull(defaultStackingRule, "StackingRule cannot be null!");
         ItemStack.defaultStackingRule = defaultStackingRule;
     }
 
@@ -635,7 +634,6 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      * @throws NullPointerException if {@code stackingRule} is null
      */
     public void setStackingRule(@NotNull StackingRule stackingRule) {
-        Check.notNull(stackingRule, "The stacking rule cannot be null!");
         this.stackingRule = stackingRule;
     }
 

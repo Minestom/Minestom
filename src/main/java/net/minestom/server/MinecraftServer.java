@@ -217,7 +217,6 @@ public final class MinecraftServer {
      * @throws NullPointerException if {@code brandName} is null
      */
     public static void setBrandName(@NotNull String brandName) {
-        Check.notNull(brandName, "The brand name cannot be null");
         MinecraftServer.brandName = brandName;
 
         PacketUtils.sendGroupedPacket(connectionManager.getOnlinePlayers(), PluginMessagePacket.getBrandPacket());
@@ -275,7 +274,6 @@ public final class MinecraftServer {
      * @param difficulty the new server difficulty
      */
     public static void setDifficulty(@NotNull Difficulty difficulty) {
-        Check.notNull(difficulty, "The server difficulty cannot be null.");
         MinecraftServer.difficulty = difficulty;
 
         // Send the packet to all online players

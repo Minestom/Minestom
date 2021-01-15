@@ -322,12 +322,12 @@ public class InventoryClickProcessor {
                 // End right
                 if (!rightDraggingMap.containsKey(player))
                     return null;
-                final Set<Integer> slots = rightDraggingMap.get(player);
+                final IntSet slots = rightDraggingMap.get(player);
                 final int size = slots.size();
                 int cursorAmount = stackingRule.getAmount(cursor);
                 if (size > cursorAmount)
                     return null;
-                for (Integer s : slots) {
+                for (int s : slots) {
                     ItemStack draggedItem = cursor.clone();
                     ItemStack slotItem = itemGetter.apply(s);
 

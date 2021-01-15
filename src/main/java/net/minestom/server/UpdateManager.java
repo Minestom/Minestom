@@ -140,7 +140,6 @@ public final class UpdateManager {
      * @throws NullPointerException if <code>threadProvider</code> is null
      */
     public synchronized void setThreadProvider(ThreadProvider threadProvider) {
-        Check.notNull(threadProvider, "The thread provider cannot be null");
         this.threadProvider = threadProvider;
     }
 

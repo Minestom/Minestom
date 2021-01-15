@@ -14,7 +14,6 @@ public class ResourcePack {
     private final String hash;
 
     public ResourcePack(@NotNull String url, @Nullable String hash) {
-        Check.notNull(url, "The resource pack url cannot be null");
         this.url = url;
         // Optional, set to empty if null
         this.hash = hash == null ? "" : hash;
