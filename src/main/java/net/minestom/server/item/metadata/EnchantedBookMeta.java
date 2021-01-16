@@ -1,17 +1,18 @@
 package net.minestom.server.item.metadata;
 
+import it.unimi.dsi.fastutil.objects.Object2ShortMap;
+import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.utils.NBTUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 public class EnchantedBookMeta extends ItemMeta {
 
-    private final Map<Enchantment, Short> storedEnchantmentMap = new HashMap<>();
+    private final Object2ShortMap<Enchantment> storedEnchantmentMap = new Object2ShortOpenHashMap<>();
 
     /**
      * Gets the stored enchantment map.
@@ -45,7 +46,7 @@ public class EnchantedBookMeta extends ItemMeta {
      * @param enchantment the enchantment type
      */
     public void removeStoredEnchantment(@NotNull Enchantment enchantment) {
-        this.storedEnchantmentMap.remove(enchantment);
+        this.storedEnchantmentMap.removeShort(enchantment);
     }
 
     /**

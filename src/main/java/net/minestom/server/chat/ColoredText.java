@@ -19,7 +19,10 @@ import java.util.regex.Pattern;
  */
 public class ColoredText extends JsonMessage {
 
-    // the raw text
+    /**
+     * The raw text StringBuilder
+     * Its a single StringBuilder instance for easier and faster concenation
+     */
     private final StringBuilder message = new StringBuilder();
 
     /**
