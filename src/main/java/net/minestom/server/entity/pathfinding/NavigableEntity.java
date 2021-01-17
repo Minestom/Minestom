@@ -30,7 +30,6 @@ public interface NavigableEntity {
      * @param speed     define how far the entity will move
      */
     default void moveTowards(@NotNull Position direction, float speed) {
-        Check.notNull(direction, "The direction cannot be null");
 
         final Position position = getNavigableEntity().getPosition();
 

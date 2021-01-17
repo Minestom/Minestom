@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
@@ -58,6 +59,7 @@ public class CommandDispatcher {
      * @param commandString the command (containing the command name and the args if any)
      * @return the result of the parsing, null if the command doesn't exist
      */
+    @Nullable
     public CommandResult parse(@NotNull String commandString) {
         commandString = commandString.trim();
 
@@ -131,7 +133,7 @@ public class CommandDispatcher {
 
         // Contains all the syntaxes that are not fully correct, used to later, retrieve the "most correct syntax"
         // Number of correct argument - The data about the failing argument
-        TreeMap<Integer, CommandSuggestionHolder> syntaxesSuggestions = new TreeMap<>(Collections.reverseOrder());
+        Int2ObjectRBTreeMap<CommandSuggestionHolder> syntaxesSuggestions = new Int2ObjectRBTreeMap<>(Collections.reverseOrder());
 
         for (CommandSyntax syntax : syntaxes) {
             final Argument<?>[] arguments = syntax.getArguments();
@@ -257,7 +259,7 @@ public class CommandDispatcher {
         {
             // Get closest valid syntax
             if (!syntaxesSuggestions.isEmpty()) {
-                final int max = syntaxesSuggestions.firstKey(); // number of correct arguments in the most correct syntax
+                final int max = syntaxesSuggestions.firstIntKey(); // number of correct arguments in the most correct syntax
                 final CommandSuggestionHolder suggestionHolder = syntaxesSuggestions.get(max);
                 final CommandSyntax syntax = suggestionHolder.syntax;
                 final ArgumentSyntaxException argumentSyntaxException = suggestionHolder.argumentSyntaxException;

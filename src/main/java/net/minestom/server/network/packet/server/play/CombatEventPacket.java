@@ -31,19 +31,19 @@ public class CombatEventPacket implements ServerPacket {
         return packet;
     }
 
-    public static CombatEventPacket end(int durationInTicks, Optional<Entity> opponent) {
+    public static CombatEventPacket end(int durationInTicks, Entity opponent) {
         CombatEventPacket packet = new CombatEventPacket();
         packet.type = EventType.END_COMBAT;
         packet.duration = durationInTicks;
-        packet.opponent = opponent.map(Entity::getEntityId).orElse(-1);
+        packet.opponent = opponent != null ? opponent.getEntityId() : -1;
         return packet;
     }
 
-    public static CombatEventPacket death(Player player, Optional<Entity> killer, JsonMessage message) {
+    public static CombatEventPacket death(Player player, Entity killer, JsonMessage message) {
         CombatEventPacket packet = new CombatEventPacket();
         packet.type = EventType.DEATH;
         packet.playerID = player.getEntityId();
-        packet.opponent = killer.map(Entity::getEntityId).orElse(-1);
+        packet.opponent = killer != null ? killer.getEntityId() : -1;
         packet.deathMessage = message;
         return packet;
     }

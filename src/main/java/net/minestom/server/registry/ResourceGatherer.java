@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.io.FastBufferedInputStream;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -169,7 +170,7 @@ public class ResourceGatherer {
     private static File download(@NotNull String version, @NotNull String url, @NotNull String sha1Source) throws IOException {
         File target = new File(TMP_FOLDER, "server_" + version + ".jar");
         // Download
-        try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream())) {
+        try (FastBufferedInputStream in = new FastBufferedInputStream(new URL(url).openStream())) {
             Files.copy(in, target.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new IOException("Failed to download Minecraft server jar.", e);

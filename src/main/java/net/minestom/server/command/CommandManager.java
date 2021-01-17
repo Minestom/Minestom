@@ -185,8 +185,6 @@ public final class CommandManager {
      * @return true if the command hadn't been cancelled and has been successful
      */
     public boolean execute(@NotNull CommandSender sender, @NotNull String command) {
-        Check.notNull(sender, "Source cannot be null");
-        Check.notNull(command, "Command string cannot be null");
 
         // Command event
         if (sender instanceof Player) {

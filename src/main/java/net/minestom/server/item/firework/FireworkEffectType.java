@@ -1,7 +1,7 @@
 package net.minestom.server.item.firework;
 
-import java.util.HashMap;
-import java.util.Map;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
+import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 
 /**
  * An enumeration that representing all available firework types.
@@ -15,7 +15,7 @@ public enum FireworkEffectType {
     BURST((byte) 4),
     ;
 
-    private static final Map<Byte, FireworkEffectType> BY_ID = new HashMap<>();
+    private static final Byte2ObjectMap<FireworkEffectType> BY_ID = new Byte2ObjectOpenHashMap<>();
 
     static {
         for (FireworkEffectType value : values()) {

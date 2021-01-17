@@ -217,7 +217,6 @@ public final class MinecraftServer {
      * @throws NullPointerException if {@code brandName} is null
      */
     public static void setBrandName(@NotNull String brandName) {
-        Check.notNull(brandName, "The brand name cannot be null");
         MinecraftServer.brandName = brandName;
 
         PacketUtils.sendGroupedPacket(connectionManager.getOnlinePlayers(), PluginMessagePacket.getBrandPacket());
@@ -275,7 +274,6 @@ public final class MinecraftServer {
      * @param difficulty the new server difficulty
      */
     public static void setDifficulty(@NotNull Difficulty difficulty) {
-        Check.notNull(difficulty, "The server difficulty cannot be null.");
         MinecraftServer.difficulty = difficulty;
 
         // Send the packet to all online players
@@ -478,9 +476,7 @@ public final class MinecraftServer {
         MinecraftServer.chunkViewDistance = chunkViewDistance;
         if (started) {
 
-            final Collection<Player> players = connectionManager.getOnlinePlayers();
-
-            players.forEach(player -> {
+            for (final Player player : connectionManager.getOnlinePlayers()) {
                 final Chunk playerChunk = player.getChunk();
                 if (playerChunk != null) {
 
@@ -490,7 +486,7 @@ public final class MinecraftServer {
 
                     player.refreshVisibleChunks(playerChunk);
                 }
-            });
+            }
         }
     }
 
@@ -514,12 +510,12 @@ public final class MinecraftServer {
                 "The entity view distance must be between 0 and 32");
         MinecraftServer.entityViewDistance = entityViewDistance;
         if (started) {
-            connectionManager.getOnlinePlayers().forEach(player -> {
+            for (final Player player : connectionManager.getOnlinePlayers()) {
                 final Chunk playerChunk = player.getChunk();
                 if (playerChunk != null) {
                     player.refreshVisibleEntities(playerChunk);
                 }
-            });
+            }
         }
     }
 
