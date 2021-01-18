@@ -1,12 +1,11 @@
 package net.minestom.server;
 
 import com.google.common.collect.Queues;
-import net.minestom.server.entity.EntityManager;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.thread.PerInstanceThreadProvider;
 import net.minestom.server.thread.ThreadProvider;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -50,7 +49,7 @@ public final class UpdateManager {
      * Starts the server loop in the update thread.
      */
     protected void start() {
-        final EntityManager entityManager = MinecraftServer.getEntityManager();
+        final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
 
         updateExecutionService.scheduleAtFixedRate(() -> {
             try {
@@ -66,10 +65,10 @@ public final class UpdateManager {
                 doTickCallback(tickStartCallbacks, tickStart);
 
                 // Waiting players update (newly connected clients waiting to get into the server)
-                entityManager.updateWaitingPlayers();
+                connectionManager.updateWaitingPlayers();
 
                 // Keep Alive Handling
-                entityManager.handleKeepAlive(tickStart);
+                connectionManager.handleKeepAlive(tickStart);
 
                 // Server tick (chunks/entities)
                 serverTick(tickStart);

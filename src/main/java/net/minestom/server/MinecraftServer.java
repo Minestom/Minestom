@@ -6,7 +6,6 @@ import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.data.DataType;
 import net.minestom.server.data.SerializableData;
-import net.minestom.server.entity.EntityManager;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
@@ -56,7 +55,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Collection;
 
 /**
  * The main server class used to start the server and retrieve all the managers.
@@ -105,7 +103,6 @@ public final class MinecraftServer {
     private static ConnectionManager connectionManager;
     private static InstanceManager instanceManager;
     private static BlockManager blockManager;
-    private static EntityManager entityManager;
     private static CommandManager commandManager;
     private static RecipeManager recipeManager;
     private static StorageManager storageManager;
@@ -167,7 +164,6 @@ public final class MinecraftServer {
 
         instanceManager = new InstanceManager();
         blockManager = new BlockManager();
-        entityManager = new EntityManager();
         commandManager = new CommandManager();
         recipeManager = new RecipeManager();
         storageManager = new StorageManager();
@@ -333,16 +329,6 @@ public final class MinecraftServer {
     public static BlockManager getBlockManager() {
         checkInitStatus(blockManager);
         return blockManager;
-    }
-
-    /**
-     * Gets the manager handling waiting players.
-     *
-     * @return the entity manager
-     */
-    public static EntityManager getEntityManager() {
-        checkInitStatus(entityManager);
-        return entityManager;
     }
 
     /**

@@ -232,7 +232,7 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param spawnInstance the player spawn instance (defined in {@link PlayerLoginEvent})
      */
-    protected void init(@NotNull Instance spawnInstance) {
+    public void init(@NotNull Instance spawnInstance) {
         this.dimensionType = spawnInstance.getDimensionType();
 
         JoinGamePacket joinGamePacket = new JoinGamePacket();
