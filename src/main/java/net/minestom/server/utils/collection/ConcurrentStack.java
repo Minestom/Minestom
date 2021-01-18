@@ -16,6 +16,11 @@ public final class ConcurrentStack<E> {
 
     }
 
+    /**
+     * Adds a new element to the top of the stack
+     *
+     * @param item The item to add to the top of the stack
+     */
     public void push(E item) {
         Node<E> newHead = new Node<>(item);
         Node<E> oldHead;
@@ -25,6 +30,11 @@ public final class ConcurrentStack<E> {
         } while (!top.compareAndSet(oldHead, newHead));
     }
 
+    /**
+     * Removes an element from the top of the stack
+     *
+     * @return The removed element.
+     */
     public E pop() {
         Node<E> oldHead;
         Node<E> newHead;
@@ -35,6 +45,10 @@ public final class ConcurrentStack<E> {
             newHead = oldHead.next;
         } while (!top.compareAndSet(oldHead, newHead));
         return oldHead.item;
+    }
+
+    public void clear() {
+        top.set(null);
     }
 
     private static class Node<E> {
