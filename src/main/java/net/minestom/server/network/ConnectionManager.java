@@ -479,13 +479,12 @@ public final class ConnectionManager {
         final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(tickStart);
         for (Player player : getOnlinePlayers()) {
             final long lastKeepAlive = tickStart - player.getLastKeepAlive();
-            // Occasionally a packet may be dropped, this is very useful for networks that experience lag / packet loss.
-            if (lastKeepAlive >= KEEP_ALIVE_KICK) {
-                player.kick(TIMEOUT_TEXT);
-            } else if (lastKeepAlive > KEEP_ALIVE_DELAY) {
+            if (lastKeepAlive > KEEP_ALIVE_DELAY && player.didAnswerKeepAlive()) {
                 final PlayerConnection playerConnection = player.getPlayerConnection();
                 player.refreshKeepAlive(tickStart);
                 playerConnection.sendPacket(keepAlivePacket);
+            } else if (lastKeepAlive >= KEEP_ALIVE_KICK) {
+                player.kick(TIMEOUT_TEXT);
             }
         }
     }
