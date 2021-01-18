@@ -503,7 +503,7 @@ public final class ConnectionManager {
 
             Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
 
-            waitingPlayer.init(spawningInstance);
+            waitingPlayer.UNSAFE_init(spawningInstance);
 
             // Spawn the player at Player#getRespawnPoint during the next instance tick
             spawningInstance.scheduleNextTick(waitingPlayer::setInstance);
