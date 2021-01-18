@@ -495,7 +495,7 @@ public final class ConnectionManager {
      */
     private void waitingPlayersTick() {
         Player waitingPlayer;
-        while ((waitingPlayer = waitingPlayers.remove()) != null) {
+        while ((waitingPlayer = waitingPlayers.poll()) != null) {
 
             PlayerLoginEvent loginEvent = new PlayerLoginEvent(waitingPlayer);
             waitingPlayer.callEvent(PlayerLoginEvent.class, loginEvent);
