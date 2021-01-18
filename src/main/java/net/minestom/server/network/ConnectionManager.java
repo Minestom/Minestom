@@ -22,7 +22,6 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
-import net.minestom.server.utils.collection.ConcurrentStack;
 import net.minestom.server.utils.validate.Check;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
@@ -43,7 +43,7 @@ public final class ConnectionManager {
     private static final long KEEP_ALIVE_KICK = 30_000;
     private static final ColoredText TIMEOUT_TEXT = ColoredText.of(ChatColor.RED + "Timeout");
 
-    private final ConcurrentStack<Player> waitingPlayers = new ConcurrentStack<>();
+    private final Queue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
     private final Set<Player> players = new CopyOnWriteArraySet<>();
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
 
@@ -495,7 +495,7 @@ public final class ConnectionManager {
      */
     private void waitingPlayersTick() {
         Player waitingPlayer;
-        while ((waitingPlayer = waitingPlayers.pop()) != null) {
+        while ((waitingPlayer = waitingPlayers.remove()) != null) {
 
             PlayerLoginEvent loginEvent = new PlayerLoginEvent(waitingPlayer);
             waitingPlayer.callEvent(PlayerLoginEvent.class, loginEvent);
@@ -516,6 +516,6 @@ public final class ConnectionManager {
      * @param player the {@link Player player} to add into the waiting list
      */
     public void addWaitingPlayer(@NotNull Player player) {
-        this.waitingPlayers.push(player);
+        this.waitingPlayers.add(player);
     }
 }
