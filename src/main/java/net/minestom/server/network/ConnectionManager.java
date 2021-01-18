@@ -8,23 +8,28 @@ import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
+import net.minestom.server.event.player.PlayerLoginEvent;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.listener.manager.ClientPacketConsumer;
 import net.minestom.server.listener.manager.ServerPacketConsumer;
 import net.minestom.server.network.packet.client.login.LoginStartPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.ChatMessagePacket;
 import net.minestom.server.network.packet.server.play.DisconnectPacket;
+import net.minestom.server.network.packet.server.play.KeepAlivePacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
+import net.minestom.server.utils.validate.Check;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
@@ -34,6 +39,11 @@ import java.util.function.Consumer;
  */
 public final class ConnectionManager {
 
+    private static final long KEEP_ALIVE_DELAY = 10_000;
+    private static final long KEEP_ALIVE_KICK = 30_000;
+    private static final ColoredText TIMEOUT_TEXT = ColoredText.of(ChatColor.RED + "Timeout");
+
+    private final Queue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
     private final Set<Player> players = new CopyOnWriteArraySet<>();
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
 
@@ -408,7 +418,7 @@ public final class ConnectionManager {
             }
 
             // Add the player to the waiting list
-            MinecraftServer.getEntityManager().addWaitingPlayer(player);
+            addWaitingPlayer(player);
 
             if (register) {
                 registerPlayer(player);
@@ -450,5 +460,62 @@ public final class ConnectionManager {
         }
         this.players.clear();
         this.connectionPlayerMap.clear();
+    }
+
+    /**
+     * Connects waiting players.
+     */
+    public void updateWaitingPlayers() {
+        // Connect waiting players
+        waitingPlayersTick();
+    }
+
+    /**
+     * Updates keep alive by checking the last keep alive packet and send a new one if needed.
+     *
+     * @param tickStart the time of the update in milliseconds, forwarded to the packet
+     */
+    public void handleKeepAlive(long tickStart) {
+        final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(tickStart);
+        for (Player player : getOnlinePlayers()) {
+            final long lastKeepAlive = tickStart - player.getLastKeepAlive();
+            // Occasionally a packet may be dropped, this is very useful for networks that experience lag / packet loss.
+            if (lastKeepAlive >= KEEP_ALIVE_KICK) {
+                player.kick(TIMEOUT_TEXT);
+            } else if (lastKeepAlive > KEEP_ALIVE_DELAY) {
+                final PlayerConnection playerConnection = player.getPlayerConnection();
+                player.refreshKeepAlive(tickStart);
+                playerConnection.sendPacket(keepAlivePacket);
+            }
+        }
+    }
+
+    /**
+     * Adds connected clients after the handshake (used to free the networking threads).
+     */
+    private void waitingPlayersTick() {
+        Player waitingPlayer;
+        while ((waitingPlayer = waitingPlayers.poll()) != null) {
+
+            PlayerLoginEvent loginEvent = new PlayerLoginEvent(waitingPlayer);
+            waitingPlayer.callEvent(PlayerLoginEvent.class, loginEvent);
+            final Instance spawningInstance = loginEvent.getSpawningInstance();
+
+            Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
+
+            waitingPlayer.UNSAFE_init(spawningInstance);
+
+            // Spawn the player at Player#getRespawnPoint during the next instance tick
+            spawningInstance.scheduleNextTick(waitingPlayer::setInstance);
+        }
+    }
+
+    /**
+     * Adds a player into the waiting list, to be handled during the next server tick.
+     *
+     * @param player the {@link Player player} to add into the waiting list
+     */
+    public void addWaitingPlayer(@NotNull Player player) {
+        this.waitingPlayers.add(player);
     }
 }

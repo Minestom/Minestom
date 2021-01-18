@@ -229,10 +229,11 @@ public class Player extends LivingEntity implements CommandSender {
      * Init the player and spawn him.
      * <p>
      * WARNING: executed in the main update thread
+     * UNSAFE: Only meant to be used when a netty player connects through the server.
      *
      * @param spawnInstance the player spawn instance (defined in {@link PlayerLoginEvent})
      */
-    protected void init(@NotNull Instance spawnInstance) {
+    public void UNSAFE_init(@NotNull Instance spawnInstance) {
         this.dimensionType = spawnInstance.getDimensionType();
 
         JoinGamePacket joinGamePacket = new JoinGamePacket();
