@@ -9,17 +9,20 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.entity.Player;
 
 public class TitleCommand extends Command {
+
+    private static final ArgumentString content = ArgumentType.String("content");
+
     public TitleCommand() {
         super("title");
         setDefaultExecutor((source, args) -> {
             source.sendMessage("Unknown syntax (note: title must be quoted)");
         });
-
-        Argument content = ArgumentType.String("content");
 
         addSyntax(this::handleTitle, content);
     }
@@ -31,7 +34,7 @@ public class TitleCommand extends Command {
         }
 
         Player player = source.asPlayer();
-        String titleContent = args.getString("content");
+        String titleContent = args.get(content);
 
         player.sendTitleTime(10, 100, 10);
         try {

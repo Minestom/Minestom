@@ -13,12 +13,12 @@ import java.util.List;
 
 public class EntitySelectorCommand extends Command {
 
+    private static final ArgumentEntity argumentEntity = ArgumentType.Entities("entities").onlyPlayers(true);
+
     public EntitySelectorCommand() {
         super("ent");
 
         setDefaultExecutor((sender, args) -> System.out.println("DEFAULT"));
-
-        ArgumentEntity argumentEntity = ArgumentType.Entities("entities").onlyPlayers(true);
 
         setArgumentCallback((sender, exception) -> exception.printStackTrace(), argumentEntity);
 
@@ -28,7 +28,7 @@ public class EntitySelectorCommand extends Command {
 
     private void executor(CommandSender commandSender, Arguments arguments) {
         Instance instance = commandSender.asPlayer().getInstance();
-        List<Entity> entities = arguments.getEntities("entities").find(instance, null);
+        List<Entity> entities = arguments.get(argumentEntity).find(instance, null);
         System.out.println("test " + ((Player) entities.get(0)).getUsername());
     }
 }

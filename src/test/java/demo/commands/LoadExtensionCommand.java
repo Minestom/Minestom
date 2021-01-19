@@ -4,7 +4,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.ArgumentDynamicStringArray;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.extensions.ExtensionManager;
@@ -13,12 +13,13 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class LoadExtensionCommand extends Command {
+
+    private static final ArgumentDynamicStringArray extension = ArgumentType.DynamicStringArray("extensionName");
+
     public LoadExtensionCommand() {
         super("load");
 
         setDefaultExecutor(this::usage);
-
-        Argument extension = ArgumentType.DynamicStringArray("extensionName");
 
         setArgumentCallback(this::extensionCallback, extension);
 
@@ -30,7 +31,7 @@ public class LoadExtensionCommand extends Command {
     }
 
     private void execute(CommandSender sender, Arguments arguments) {
-        String name = join(arguments.getStringArray("extensionName"));
+        String name = join(arguments.get(extension));
         sender.sendMessage("extensionFile = "+name+"....");
 
         ExtensionManager extensionManager = MinecraftServer.getExtensionManager();
