@@ -150,7 +150,7 @@ public class NettyPlayerConnection extends PlayerConnection {
         if (MinecraftServer.shouldProcessNettyErrors()) {
             return channelFuture.addListener(future -> {
                 if (!future.isSuccess()) {
-                    future.cause().printStackTrace();
+                    MinecraftServer.getExceptionManager().handleException(future.cause());
                 }
             });
         } else {
@@ -165,7 +165,7 @@ public class NettyPlayerConnection extends PlayerConnection {
         if (MinecraftServer.shouldProcessNettyErrors()) {
             return channelFuture.addListener(future -> {
                 if (!future.isSuccess()) {
-                    future.cause().printStackTrace();
+                    MinecraftServer.getExceptionManager().handleException(future.cause());
                 }
             });
         } else {

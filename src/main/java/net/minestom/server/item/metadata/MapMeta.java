@@ -1,5 +1,6 @@
 package net.minestom.server.item.metadata;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.utils.clone.CloneUtils;
 import net.minestom.server.utils.clone.PublicCloneable;
@@ -271,7 +272,7 @@ public class MapMeta extends ItemMeta {
             try {
                 return (MapDecoration) super.clone();
             } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(e);
                 throw new IllegalStateException("Something weird happened");
             }
         }

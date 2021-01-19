@@ -1,6 +1,7 @@
 package net.minestom.server.timer;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -65,7 +66,7 @@ public class Task implements Runnable {
                         this.id,
                         e.getMessage()
                 );
-                e.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(e);
             } finally {
                 if (this.repeat == 0) this.finish();
                 this.currentThreadTask = null;

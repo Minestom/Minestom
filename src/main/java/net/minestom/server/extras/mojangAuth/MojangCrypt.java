@@ -1,5 +1,6 @@
 package net.minestom.server.extras.mojangAuth;
 
+import net.minestom.server.MinecraftServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +21,7 @@ public final class MojangCrypt {
             keyGen.initialize(1024);
             return keyGen.generateKeyPair();
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             LOGGER.error("Key pair generation failed!");
             return null;
         }
@@ -31,7 +32,7 @@ public final class MojangCrypt {
         try {
             return digestData("SHA-1", data.getBytes("ISO_8859_1"), secretKey.getEncoded(), publicKey.getEncoded());
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             return null;
         }
     }
@@ -47,7 +48,7 @@ public final class MojangCrypt {
 
             return digest.digest();
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             return null;
         }
     }
@@ -64,7 +65,7 @@ public final class MojangCrypt {
         try {
             return setupCipher(mode, key.getAlgorithm(), key).doFinal(data);
         } catch (IllegalBlockSizeException | BadPaddingException var4) {
-            var4.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(var4);
         }
 
         LOGGER.error("Cipher data failed!");
@@ -77,7 +78,7 @@ public final class MojangCrypt {
             cipher4.init(mode, key);
             return cipher4;
         } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException var4) {
-            var4.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(var4);
         }
 
         LOGGER.error("Cipher creation failed!");

@@ -2,6 +2,7 @@ package net.minestom.server.item;
 
 import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
@@ -596,7 +597,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
 
             return itemStack;
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             return null;
         }
     }

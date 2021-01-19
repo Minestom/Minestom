@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
@@ -203,7 +204,7 @@ public class Position implements PublicCloneable<Position> {
         try {
             return (Position) super.clone();
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             return null;
         }
     }

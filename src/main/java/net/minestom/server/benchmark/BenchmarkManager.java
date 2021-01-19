@@ -67,7 +67,7 @@ public final class BenchmarkManager {
                 try {
                     Thread.sleep(time);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    MinecraftServer.getExceptionManager().handleException(e);
                 }
             }
 

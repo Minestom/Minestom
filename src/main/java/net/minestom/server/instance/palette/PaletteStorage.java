@@ -2,6 +2,7 @@ package net.minestom.server.instance.palette;
 
 import it.unimi.dsi.fastutil.shorts.Short2ShortLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.Short2ShortOpenHashMap;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -171,7 +172,7 @@ public class PaletteStorage implements PublicCloneable<PaletteStorage> {
             paletteStorage.blockPaletteMaps = blockPaletteMaps.clone();
             return paletteStorage;
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             throw new IllegalStateException("Weird thing happened");
         }
     }

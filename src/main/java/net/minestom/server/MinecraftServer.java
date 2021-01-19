@@ -9,6 +9,7 @@ import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
+import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.fluids.Fluid;
@@ -99,6 +100,8 @@ public final class MinecraftServer {
     private static int nettyThreadCount = Runtime.getRuntime().availableProcessors();
     private static boolean processNettyErrors = false;
 
+    private static ExceptionManager exceptionManager;
+
     // In-Game Manager
     private static ConnectionManager connectionManager;
     private static InstanceManager instanceManager;
@@ -140,6 +143,10 @@ public final class MinecraftServer {
     public static MinecraftServer init() {
         if (minecraftServer != null) // don't init twice
             return minecraftServer;
+
+        // Initialize the ExceptionManager at first
+        exceptionManager = new ExceptionManager();
+
         extensionManager = new ExtensionManager();
 
         // warmup/force-init registries
@@ -399,6 +406,16 @@ public final class MinecraftServer {
     public static BenchmarkManager getBenchmarkManager() {
         checkInitStatus(benchmarkManager);
         return benchmarkManager;
+    }
+
+    /**
+     * Gets the exception manager for exception handling.
+     *
+     * @return the exception manager
+     */
+    public static ExceptionManager getExceptionManager() {
+        checkInitStatus(exceptionManager);
+        return exceptionManager;
     }
 
     /**

@@ -3,6 +3,7 @@ package net.minestom.server.extensions;
 import com.google.gson.Gson;
 import net.minestom.dependencies.DependencyGetter;
 import net.minestom.dependencies.maven.MavenRepository;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import net.minestom.server.ping.ResponseDataConsumer;
@@ -98,7 +99,7 @@ public class ExtensionManager {
                 setupClassLoader(discoveredExtension);
             } catch (Exception e) {
                 discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.FAILED_TO_SETUP_CLASSLOADER;
-                e.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(e);
                 LOGGER.error("Failed to load extension {}", discoveredExtension.getName());
                 LOGGER.error("Failed to load extension", e);
             }
@@ -113,9 +114,8 @@ public class ExtensionManager {
                 attemptSingleLoad(discoveredExtension);
             } catch (Exception e) {
                 discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.LOAD_FAILED;
-                e.printStackTrace();
                 LOGGER.error("Failed to load extension {}", discoveredExtension.getName());
-                LOGGER.error("Failed to load extension", e);
+                MinecraftServer.getExceptionManager().handleException(e);
             }
         }
     }
@@ -210,7 +210,7 @@ public class ExtensionManager {
             loggerField.set(extension, LoggerFactory.getLogger(extensionClass));
         } catch (IllegalAccessException e) {
             // We made it accessible, should not occur
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         } catch (NoSuchFieldException e) {
             // This should also not occur (unless someone changed the logger in Extension superclass).
             LOGGER.error("Main class '{}' in '{}' has no logger field.", mainClass, extensionName, e);
@@ -265,7 +265,7 @@ public class ExtensionManager {
                     extensions.add(extension);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(e);
             }
         }
         return extensions;
@@ -284,7 +284,7 @@ public class ExtensionManager {
 
             return extension;
         } catch (IOException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             return null;
         }
     }
@@ -497,7 +497,7 @@ public class ExtensionManager {
                     LOGGER.info("Found mixin in extension {}: {}", extension.getName(), mixinConfigFile);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(e);
                 LOGGER.error("Failed to load code modifier for extension in files: " +
                         extension.files
                                 .stream()
@@ -531,7 +531,7 @@ public class ExtensionManager {
             // close resources
             classloader.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
         MinestomRootClassLoader.getInstance().removeChildInHierarchy(classloader);
     }

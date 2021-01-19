@@ -3,6 +3,7 @@ package net.minestom.server.gamedata.loottables;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.gamedata.Condition;
 import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.utils.NamespaceID;
@@ -84,7 +85,7 @@ public final class LootTableManager {
         try (reader) {
             return cache.computeIfAbsent(name, _name -> create(reader));
         } catch (IOException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             return null;
         }
     }

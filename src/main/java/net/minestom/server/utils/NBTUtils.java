@@ -118,7 +118,7 @@ public final class NBTUtils {
                 loadDataIntoItem(item, nbt);
             }
         } catch (IOException | NBTException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
 
         return item;

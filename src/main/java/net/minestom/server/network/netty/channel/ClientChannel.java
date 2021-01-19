@@ -34,7 +34,7 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
         try {
             packetProcessor.process(ctx, packet);
         } catch (Exception e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         } finally {
             // Check remaining
             final ByteBuf body = packet.getBody();
@@ -74,7 +74,7 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         if (MinecraftServer.shouldProcessNettyErrors()) {
             LOGGER.info(cause.getMessage());
-            cause.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(cause);
         }
         ctx.close();
     }
