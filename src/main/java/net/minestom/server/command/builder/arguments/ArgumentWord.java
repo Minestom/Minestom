@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.utils.validate.Check;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,11 +31,21 @@ public class ArgumentWord extends Argument<String> {
      * <p>
      * WARNING: having an array too long would result in a packet too big or the client being stuck during login.
      *
-     * @param restrictions the accepted words
+     * @param restrictions the accepted words,
+     *                     can be null but if an array is passed
+     *                     you need to ensure that it is filled with non-null values
      * @return 'this' for chaining
+     * @throws NullPointerException if {@code restrictions} is not null but contains null value(s)
      */
     @NotNull
     public ArgumentWord from(@Nullable String... restrictions) {
+        if (restrictions != null) {
+            for (String restriction : restrictions) {
+                Check.notNull(restriction,
+                        "ArgumentWord restriction cannot be null, you can pass 'null' instead of an empty array");
+            }
+        }
+
         this.restrictions = restrictions;
         return this;
     }
