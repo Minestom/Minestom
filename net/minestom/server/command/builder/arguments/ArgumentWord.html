@@ -364,9 +364,13 @@ public&nbsp;<a href="ArgumentWord.html" title="class in net.minestom.server.comm
  WARNING: having an array too long would result in a packet too big or the client being stuck during login.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>restrictions</code> - the accepted words</dd>
+<dd><code>restrictions</code> - the accepted words,
+                     can be null but if an array is passed
+                     you need to ensure that it is filled with non-null values</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>'this' for chaining</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.NullPointerException</code> - if <code>restrictions</code> is not null but contains null value(s)</dd>
 </dl>
 </li>
 </ul>
