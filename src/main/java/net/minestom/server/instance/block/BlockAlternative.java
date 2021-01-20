@@ -30,6 +30,16 @@ public class BlockAlternative {
         }
         return map;
     }
+    
+    public String withProperties(String key) {
+        for (String p : properties) {
+            String[] parts = p.split("=");
+            if (parts.length > 1)
+                if (parts[0].equals(key))
+                    return parts[1];
+        }
+        return "";
+    }
 
     @Override
     public String toString() {
