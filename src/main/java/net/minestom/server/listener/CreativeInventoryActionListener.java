@@ -18,7 +18,7 @@ public class CreativeInventoryActionListener {
 
         if (slot != -1) {
             // Set item
-            slot = (short) PlayerInventoryUtils.convertSlot(slot, PlayerInventoryUtils.OFFSET);
+            slot = (short) PlayerInventoryUtils.convertPlayerInventorySlot(slot, PlayerInventoryUtils.OFFSET);
             PlayerInventory inventory = player.getInventory();
             inventory.setItemStack(slot, item);
         } else {

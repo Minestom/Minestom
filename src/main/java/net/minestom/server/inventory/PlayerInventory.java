@@ -43,7 +43,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     private Data data;
 
-    public PlayerInventory(Player player) {
+    public PlayerInventory(@NotNull Player player) {
         this.player = player;
 
         ArrayUtils.fill(items, ItemStack::getAirItem);
@@ -70,8 +70,8 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     @Override
     public void addInventoryCondition(@NotNull InventoryCondition inventoryCondition) {
         InventoryCondition condition = (p, slot, clickType, inventoryConditionResult) -> {
-            slot = convertSlot(slot, OFFSET);
-            inventoryCondition.accept(p, slot, clickType, inventoryConditionResult);
+            final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
+            inventoryCondition.accept(p, convertedSlot, clickType, inventoryConditionResult);
         };
 
         this.inventoryConditions.add(condition);
@@ -320,8 +320,8 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
      * @param itemStack the item stack to set
      */
     protected void setItemStack(int slot, int offset, ItemStack itemStack) {
-        slot = convertSlot(slot, offset);
-        setItemStack(slot, itemStack);
+        final int convertedSlot = convertPlayerInventorySlot(slot, offset);
+        setItemStack(convertedSlot, itemStack);
     }
 
     /**
@@ -332,8 +332,8 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
      * @return the item in the specified slot
      */
     protected ItemStack getItemStack(int slot, int offset) {
-        slot = convertSlot(slot, offset);
-        return this.items[slot];
+        final int convertedSlot = convertPlayerInventorySlot(slot, offset);
+        return this.items[convertedSlot];
     }
 
     /**
@@ -373,7 +373,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     @Override
     public boolean leftClick(@NotNull Player player, int slot) {
         final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = getItemStack(convertSlot(slot, OFFSET));
+        final ItemStack clicked = getItemStack(convertPlayerInventorySlot(slot, OFFSET));
 
         final InventoryClickResult clickResult = clickProcessor.leftClick(null, player, slot, clicked, cursor);
 
@@ -446,7 +446,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
                             if (hotBarClick) {
                                 return i < 9 ? i + 9 : i - 9;
                             } else {
-                                return convertSlot(i, OFFSET);
+                                return convertPlayerInventorySlot(i, OFFSET);
                             }
                         },
                         index -> getItemStack(index, OFFSET),
