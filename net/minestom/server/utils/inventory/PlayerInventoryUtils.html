@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9};
+var data = {"i0":9,"i1":9,"i2":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -227,13 +227,19 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#convertSlot(int,int)">convertSlot</a></span>&#8203;(int&nbsp;slot,
-           int&nbsp;offset)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#convertPlayerInventorySlot(int,int)">convertPlayerInventorySlot</a></span>&#8203;(int&nbsp;slot,
+                          int&nbsp;offset)</code></th>
 <td class="colLast">
 <div class="block">Converts a packet slot to an internal one.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#convertSlot(int,int)">convertSlot</a></span>&#8203;(int&nbsp;slot,
+           int&nbsp;offset)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#convertToPacketSlot(int)">convertToPacketSlot</a></span>&#8203;(int&nbsp;slot)</code></th>
 <td class="colLast">
@@ -417,14 +423,14 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="convertSlot(int,int)">
+<a id="convertPlayerInventorySlot(int,int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>convertSlot</h4>
-<pre class="methodSignature">public static&nbsp;int&nbsp;convertSlot&#8203;(int&nbsp;slot,
-                              int&nbsp;offset)</pre>
+<h4>convertPlayerInventorySlot</h4>
+<pre class="methodSignature">public static&nbsp;int&nbsp;convertPlayerInventorySlot&#8203;(int&nbsp;slot,
+                                             int&nbsp;offset)</pre>
 <div class="block">Converts a packet slot to an internal one.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -434,6 +440,16 @@ extends java.lang.Object</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a packet which can be use internally with Minestom</dd>
 </dl>
+</li>
+</ul>
+<a id="convertSlot(int,int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>convertSlot</h4>
+<pre class="methodSignature">public static&nbsp;int&nbsp;convertSlot&#8203;(int&nbsp;slot,
+                              int&nbsp;offset)</pre>
 </li>
 </ul>
 <a id="convertToPacketSlot(int)">
