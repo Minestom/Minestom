@@ -176,7 +176,7 @@ public final class PacketProcessor {
             LOGGER.warn("Connection {} ({}) sent an unexpected packet.",
                     connection.getRemoteAddress(),
                     username);
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
     }
 }

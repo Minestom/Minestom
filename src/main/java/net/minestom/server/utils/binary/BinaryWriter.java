@@ -2,6 +2,7 @@ package net.minestom.server.utils.binary;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.NBTUtils;
@@ -248,7 +249,7 @@ public class BinaryWriter extends OutputStream {
             nbtWriter.writeNamed(name, tag);
         } catch (IOException e) {
             // should not throw, as nbtWriter points to this PacketWriter
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
     }
 

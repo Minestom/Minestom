@@ -219,7 +219,7 @@ public final class NettyServer {
 
             this.serverChannel = (ServerSocketChannel) cf.channel();
         } catch (InterruptedException ex) {
-            ex.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(ex);
         }
     }
 
@@ -263,7 +263,7 @@ public final class NettyServer {
             this.worker.shutdownGracefully();
             this.boss.shutdownGracefully();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
 
         this.trafficScheduler.shutdown();

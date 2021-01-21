@@ -80,7 +80,7 @@ public final class UpdateManager {
                 doTickCallback(tickEndCallbacks, tickTime / 1000000L);
 
             } catch (Exception e) {
-                e.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(e);
             }
         }, 0, MinecraftServer.TICK_MS, TimeUnit.MILLISECONDS);
     }
@@ -103,7 +103,7 @@ public final class UpdateManager {
             try {
                 future.get();
             } catch (Throwable e) {
-                e.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(e);
             }
         }
     }

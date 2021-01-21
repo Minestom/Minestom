@@ -20,7 +20,7 @@ public class TagType implements LootTableEntryType {
         try {
             return new TagEntry(this, MinecraftServer.getTagManager().load(NamespaceID.from(name), "items"), expand, weight, quality, conditions);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             return null;
         }
     }

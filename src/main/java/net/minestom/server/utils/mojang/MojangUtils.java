@@ -2,6 +2,7 @@ package net.minestom.server.utils.mojang;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.url.URLUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +21,7 @@ public final class MojangUtils {
             final String response = URLUtils.getText(url);
             return JsonParser.parseString(response).getAsJsonObject();
         } catch (IOException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             return null;
         }
     }
@@ -33,7 +34,7 @@ public final class MojangUtils {
             final String response = URLUtils.getText(url);
             return JsonParser.parseString(response).getAsJsonObject();
         } catch (IOException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             return null;
         }
     }

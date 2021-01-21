@@ -1,5 +1,6 @@
 package net.minestom.server.storage.systems;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.storage.StorageOptions;
 import net.minestom.server.storage.StorageSystem;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +42,7 @@ public class FileStorageSystem implements StorageSystem {
         try {
             this.rocksDB = RocksDB.open(options, location);
         } catch (RocksDBException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
     }
 
@@ -50,7 +51,7 @@ public class FileStorageSystem implements StorageSystem {
         try {
             return rocksDB.get(getKey(key));
         } catch (RocksDBException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             return null;
         }
     }
@@ -60,7 +61,7 @@ public class FileStorageSystem implements StorageSystem {
         try {
             this.rocksDB.put(getKey(key), data);
         } catch (RocksDBException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
     }
 
@@ -69,7 +70,7 @@ public class FileStorageSystem implements StorageSystem {
         try {
             this.rocksDB.delete(getKey(key));
         } catch (RocksDBException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
     }
 
@@ -78,7 +79,7 @@ public class FileStorageSystem implements StorageSystem {
         try {
             this.rocksDB.closeE();
         } catch (RocksDBException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
     }
 

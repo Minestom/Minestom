@@ -57,7 +57,7 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
                     CONNECTION_MANAGER.startPlayState(connection, gameProfile.getId(), gameProfile.getName(), true);
                 }
             } catch (AuthenticationUnavailableException e) {
-                e.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(e);
             }
         });
     }
