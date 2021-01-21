@@ -31,14 +31,14 @@ public class BlockAlternative {
         return map;
     }
     
-    public String withProperties(String key) {
+    public String getProperty(String key) {
         for (String p : properties) {
             String[] parts = p.split("=");
             if (parts.length > 1)
                 if (parts[0].equals(key))
                     return parts[1];
         }
-        return "";
+        return null;
     }
 
     @Override
