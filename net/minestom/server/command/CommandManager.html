@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -272,12 +272,19 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#startConsoleThread()">startConsoleThread</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Starts the thread responsible for executing commands from the console.</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stopConsoleThread()">stopConsoleThread</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Stops the console responsible for the console commands processing.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unregister(net.minestom.server.command.builder.Command)">unregister</a></span>&#8203;(<a href="builder/Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</code></th>
 <td class="colLast">
@@ -529,6 +536,16 @@ public&nbsp;<a href="ConsoleSender.html" title="class in net.minestom.server.com
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the <a href="ConsoleSender.html" title="class in net.minestom.server.command"><code>ConsoleSender</code></a></dd>
 </dl>
+</li>
+</ul>
+<a id="startConsoleThread()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>startConsoleThread</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;startConsoleThread()</pre>
+<div class="block">Starts the thread responsible for executing commands from the console.</div>
 </li>
 </ul>
 <a id="createDeclareCommandsPacket(net.minestom.server.entity.Player)">
