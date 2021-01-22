@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":9,"i2":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -210,7 +210,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -224,6 +224,14 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>static <a href="EntityRotationPacket.html" title="class in net.minestom.server.network.packet.server.play">EntityRotationPacket</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPacket(int,float,float,boolean)">getPacket</a></span>&#8203;(int&nbsp;entityId,
+         float&nbsp;yaw,
+         float&nbsp;pitch,
+         boolean&nbsp;onGround)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(<a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
 <td class="colLast">
@@ -342,7 +350,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <a id="getId()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getId</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;getId()</pre>
@@ -356,6 +364,19 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the id of this packet</dd>
 </dl>
+</li>
+</ul>
+<a id="getPacket(int,float,float,boolean)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getPacket</h4>
+<pre class="methodSignature">@NotNull
+public static&nbsp;<a href="EntityRotationPacket.html" title="class in net.minestom.server.network.packet.server.play">EntityRotationPacket</a>&nbsp;getPacket&#8203;(int&nbsp;entityId,
+                                             float&nbsp;yaw,
+                                             float&nbsp;pitch,
+                                             boolean&nbsp;onGround)</pre>
 </li>
 </ul>
 </li>
