@@ -26,6 +26,7 @@ public class EntityPositionPacket implements ServerPacket {
         return ServerPacketIdentifier.ENTITY_POSITION;
     }
 
+    @NotNull
     public static EntityPositionPacket getPacket(int entityId,
                                                  @NotNull Position newPosition, @NotNull Position oldPosition,
                                                  boolean onGround) {

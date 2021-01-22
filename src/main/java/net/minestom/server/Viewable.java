@@ -75,7 +75,7 @@ public interface Viewable {
     /**
      * Sends a packet to all viewers and the viewable element if it is a player.
      * <p>
-     * If 'this' isn't a player, then {only @link #sendPacketToViewers(ServerPacket)} is called.
+     * If 'this' isn't a player, then only {@link #sendPacketToViewers(ServerPacket)} is called.
      *
      * @param packet the packet to send
      */

@@ -463,13 +463,8 @@ public class Player extends LivingEntity implements CommandSender {
                             position, new Position(lastPlayerSyncX, lastPlayerSyncY, lastPlayerSyncZ), onGround);
                 } else {
                     // View changed
-                    EntityRotationPacket entityRotationPacket = new EntityRotationPacket();
-                    entityRotationPacket.entityId = getEntityId();
-                    entityRotationPacket.yaw = position.getYaw();
-                    entityRotationPacket.pitch = position.getPitch();
-                    entityRotationPacket.onGround = onGround;
-
-                    updatePacket = entityRotationPacket;
+                    updatePacket = EntityRotationPacket.getPacket(getEntityId(),
+                            position.getYaw(), position.getPitch(), onGround);
                 }
 
                 if (viewChanged) {
@@ -552,7 +547,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Respawns the player by sending a {@link RespawnPacket} to the player and teleporting him
-     * to {@link #getRespawnPoint()}. It also resets fire and his health
+     * to {@link #getRespawnPoint()}. It also resets fire and health.
      */
     public void respawn() {
         if (!isDead())
