@@ -42,7 +42,7 @@ public class BlockAlternative {
     }
 
     public boolean hasProperty(String key) {
-        return Arrays.stream(properties).anyMatch(s -> s.equals(key));
+        return getProperty(key) != null;
     }
 
     @Override

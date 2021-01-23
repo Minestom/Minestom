@@ -158,9 +158,8 @@ public final class Arguments {
         });
     }
 
-    public boolean hasArgument(String str)
-    {
-        return args.containsKey(str);
+    public boolean hasArgument(String id) {
+        return args.containsKey(id);
     }
 
     protected void setArg(@NotNull String id, Object value) {
