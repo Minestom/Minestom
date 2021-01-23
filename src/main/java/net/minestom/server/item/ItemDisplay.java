@@ -1,6 +1,5 @@
 package net.minestom.server.item;
 
-import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
 
 public class ItemDisplay {

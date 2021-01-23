@@ -1,5 +1,6 @@
 package net.minestom.server.map;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.thread.MinestomThread;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -104,7 +105,7 @@ public enum MapColors {
                 reduction = Integer.parseInt(reductionStr);
             } catch (NumberFormatException e) {
                 System.err.println("Invalid integer in reduction argument: " + reductionStr);
-                e.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(e);
             }
 
             if (reduction < 0 || reduction >= 255) {
@@ -195,7 +196,7 @@ public enum MapColors {
             threads.shutdown();
             threads.awaitTermination(100, TimeUnit.MINUTES);
         } catch (Throwable t) {
-            t.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(t);
         }
     }
 

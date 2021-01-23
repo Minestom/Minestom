@@ -37,8 +37,6 @@ public interface EventHandler {
      * @return true if the callback collection changed as a result of the call
      */
     default <E extends Event> boolean addEventCallback(@NotNull Class<E> eventClass, @NotNull EventCallback<E> eventCallback) {
-        Check.notNull(eventClass, "Event class cannot be null");
-        Check.notNull(eventCallback, "Event callback cannot be null");
         Collection<EventCallback> callbacks = getEventCallbacks(eventClass);
         return callbacks.add(eventCallback);
     }
@@ -52,8 +50,6 @@ public interface EventHandler {
      * @return true if the callback was removed as a result of this call
      */
     default <E extends Event> boolean removeEventCallback(@NotNull Class<E> eventClass, @NotNull EventCallback<E> eventCallback) {
-        Check.notNull(eventClass, "Event class cannot be null");
-        Check.notNull(eventCallback, "Event callback cannot be null");
         Collection<EventCallback> callbacks = getEventCallbacks(eventClass);
         return callbacks.remove(eventCallback);
     }
@@ -67,7 +63,6 @@ public interface EventHandler {
      */
     @NotNull
     default <E extends Event> Collection<EventCallback> getEventCallbacks(@NotNull Class<E> eventClass) {
-        Check.notNull(eventClass, "Event class cannot be null");
         return getEventCallbacksMap().computeIfAbsent(eventClass, clazz -> new CopyOnWriteArraySet<>());
     }
 

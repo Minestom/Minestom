@@ -39,7 +39,7 @@ public interface CommandSender extends PermissionHandler {
      * */
     default void sendMessage(@NotNull JsonMessage text) {
         if (this instanceof Player) {
-            ((Player) this).sendMessage((JsonMessage) text);
+            this.sendMessage(text);
         } else {
             sendMessage(text.getRawMessage());
         }

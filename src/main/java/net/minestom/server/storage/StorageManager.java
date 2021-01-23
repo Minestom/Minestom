@@ -36,7 +36,6 @@ public final class StorageManager {
      * @return the specified {@link StorageLocation}
      */
     public StorageLocation getLocation(@NotNull String location, @NotNull StorageOptions storageOptions, @NotNull StorageSystem storageSystem) {
-        Check.notNull(storageOptions, "The storage option cannot be null");
         return locationMap.computeIfAbsent(location,
                 s -> new StorageLocation(storageSystem, location, storageOptions));
     }

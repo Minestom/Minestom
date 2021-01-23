@@ -2,6 +2,7 @@ package net.minestom.server.command;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandSyntax;
@@ -41,6 +42,7 @@ import java.util.function.Consumer;
 public final class CommandManager {
 
     public static final String COMMAND_PREFIX = "/";
+    private static final String CONSOLE_PREFIX = "> ";
 
     private volatile boolean running = true;
 
@@ -52,37 +54,6 @@ public final class CommandManager {
     private CommandCallback unknownCommandCallback;
 
     public CommandManager() {
-        // Setup console thread
-        Thread consoleThread = new Thread(() -> {
-            BufferedReader bi = new BufferedReader(new InputStreamReader(System.in));
-            while (running) {
-
-                try {
-                    if (bi.ready()) {
-                        final String command = bi.readLine();
-                        execute(consoleSender, command);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    continue;
-                }
-
-                // Prevent permanent looping
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            try {
-                bi.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }, "ConsoleCommand-Thread");
-        consoleThread.setDaemon(true);
-        consoleThread.start();
     }
 
     /**
@@ -185,8 +156,6 @@ public final class CommandManager {
      * @return true if the command hadn't been cancelled and has been successful
      */
     public boolean execute(@NotNull CommandSender sender, @NotNull String command) {
-        Check.notNull(sender, "Source cannot be null");
-        Check.notNull(command, "Command string cannot be null");
 
         // Command event
         if (sender instanceof Player) {
@@ -256,6 +225,46 @@ public final class CommandManager {
     @NotNull
     public ConsoleSender getConsoleSender() {
         return consoleSender;
+    }
+
+    /**
+     * Starts the thread responsible for executing commands from the console.
+     */
+    public void startConsoleThread() {
+        Thread consoleThread = new Thread(() -> {
+            BufferedReader bi = new BufferedReader(new InputStreamReader(System.in));
+            System.out.print(CONSOLE_PREFIX);
+            while (running) {
+
+                try {
+
+                    if (bi.ready()) {
+                        final String command = bi.readLine();
+                        execute(consoleSender, command);
+
+                        System.out.print(CONSOLE_PREFIX);
+                    }
+                } catch (IOException e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                    continue;
+                }
+
+                // Prevent permanent looping
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
+
+            }
+            try {
+                bi.close();
+            } catch (IOException e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+            }
+        }, "ConsoleCommand-Thread");
+        consoleThread.setDaemon(true);
+        consoleThread.start();
     }
 
     /**

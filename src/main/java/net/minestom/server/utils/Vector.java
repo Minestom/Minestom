@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
 
@@ -272,7 +273,7 @@ public class Vector implements PublicCloneable<Vector> {
         try {
             return (Vector) super.clone();
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             throw new IllegalStateException("Weird thing happened");
         }
     }

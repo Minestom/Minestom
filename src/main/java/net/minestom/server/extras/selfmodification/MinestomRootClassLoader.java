@@ -1,5 +1,6 @@
 package net.minestom.server.extras.selfmodification;
 
+import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -260,7 +261,7 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
                 }
             }
         } catch (MalformedURLException | ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
     }
 

@@ -36,8 +36,7 @@ public class DimensionCommand implements CommandProcessor {
         //    targetDimensionType = DimensionType.OVERWORLD;
         //}
 
-        DimensionType finalTargetDimensionType = targetDimensionType;
-        Optional<Instance> targetInstance = MinecraftServer.getInstanceManager().getInstances().stream().filter(in -> in.getDimensionType() == finalTargetDimensionType).findFirst();
+        Optional<Instance> targetInstance = MinecraftServer.getInstanceManager().getInstances().stream().filter(in -> in.getDimensionType() == targetDimensionType).findFirst();
         if (targetInstance.isPresent()) {
             player.sendMessage("You were in " + instance.getDimensionType());
             player.setInstance(targetInstance.get());

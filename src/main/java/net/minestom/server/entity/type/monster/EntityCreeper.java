@@ -26,6 +26,8 @@ public class EntityCreeper extends EntityCreature implements Monster {
         return packet -> {
             super.getMetadataConsumer().accept(packet);
             fillMetadataIndex(packet, 15);
+            fillMetadataIndex(packet, 16);
+            fillMetadataIndex(packet, 17);
         };
     }
 

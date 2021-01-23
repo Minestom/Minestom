@@ -23,4 +23,17 @@ public class EntityRotationPacket implements ServerPacket {
     public int getId() {
         return ServerPacketIdentifier.ENTITY_ROTATION;
     }
+
+    @NotNull
+    public static EntityRotationPacket getPacket(int entityId,
+                                                 float yaw, float pitch,
+                                                 boolean onGround) {
+        EntityRotationPacket entityRotationPacket = new EntityRotationPacket();
+        entityRotationPacket.entityId = entityId;
+        entityRotationPacket.yaw = yaw;
+        entityRotationPacket.pitch = pitch;
+        entityRotationPacket.onGround = onGround;
+
+        return entityRotationPacket;
+    }
 }

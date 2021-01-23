@@ -1,5 +1,8 @@
 package net.minestom.server.item;
 
+import it.unimi.dsi.fastutil.objects.Object2ShortMap;
+import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
@@ -18,7 +21,6 @@ import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.clone.PublicCloneable;
 import net.minestom.server.utils.ownership.OwnershipHandler;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -38,11 +40,11 @@ import java.util.*;
  */
 public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
 
-    public static final OwnershipHandler<Data> DATA_OWNERSHIP = new OwnershipHandler();
+    public static final OwnershipHandler<Data> DATA_OWNERSHIP = new OwnershipHandler<>();
     public static final String OWNERSHIP_DATA_KEY = "ownership_identifier";
     private static final StackingRule VANILLA_STACKING_RULE = new VanillaStackingRule(64);
 
-    private UUID identifier;
+    private final UUID identifier;
 
     private Material material;
 
@@ -56,7 +58,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
     private boolean unbreakable;
     private List<JsonMessage> lore;
 
-    private Map<Enchantment, Short> enchantmentMap;
+    private Object2ShortMap<Enchantment> enchantmentMap;
     private List<ItemAttribute> attributes;
 
     private int hideFlag;
@@ -78,7 +80,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
         this.damage = damage;
         this.lore = new ArrayList<>();
 
-        this.enchantmentMap = new HashMap<>();
+        this.enchantmentMap = new Object2ShortOpenHashMap<>();
         this.attributes = new ArrayList<>();
 
         this.itemMeta = findMeta();
@@ -117,7 +119,6 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      * @throws NullPointerException if {@code defaultStackingRule} is null
      */
     public static void setDefaultStackingRule(@NotNull StackingRule defaultStackingRule) {
-        Check.notNull(defaultStackingRule, "StackingRule cannot be null!");
         ItemStack.defaultStackingRule = defaultStackingRule;
     }
 
@@ -285,9 +286,9 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
     /**
      * Gets the item lore.
      *
-     * @return a modifiable list containing the item lore, can be null if not present
+     * @return a modifiable list containing the item lore, can be empty if not present
      */
-    @Nullable
+    @NotNull
     public List<JsonMessage> getLore() {
         return lore;
     }
@@ -295,9 +296,9 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
     /**
      * Sets the item lore.
      *
-     * @param lore the item lore, can be null to remove
+     * @param lore the item lore, can be empty to remove
      */
-    public void setLore(@Nullable List<JsonMessage> lore) {
+    public void setLore(@NotNull List<JsonMessage> lore) {
         this.lore = lore;
     }
 
@@ -341,7 +342,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      * @param enchantment the enchantment type
      */
     public void removeEnchantment(@NotNull Enchantment enchantment) {
-        this.enchantmentMap.remove(enchantment);
+        this.enchantmentMap.removeShort(enchantment);
     }
 
     /**
@@ -581,7 +582,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
                 itemStack.setStackingRule(stackingRule);
             }
 
-            itemStack.enchantmentMap = new HashMap<>(enchantmentMap);
+            itemStack.enchantmentMap = new Object2ShortOpenHashMap<>(enchantmentMap);
             itemStack.attributes = new ArrayList<>(attributes);
 
             itemStack.hideFlag = hideFlag;
@@ -596,7 +597,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
 
             return itemStack;
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             return null;
         }
     }
@@ -635,7 +636,6 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      * @throws NullPointerException if {@code stackingRule} is null
      */
     public void setStackingRule(@NotNull StackingRule stackingRule) {
-        Check.notNull(stackingRule, "The stacking rule cannot be null!");
         this.stackingRule = stackingRule;
     }
 
@@ -690,7 +690,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
         if (material == Material.WRITTEN_BOOK)
             return new WrittenBookMeta();
 
-        if(material == Material.FIREWORK_STAR)
+        if (material == Material.FIREWORK_STAR)
             return new FireworkEffectMeta();
 
         if (material == Material.FIREWORK_ROCKET)

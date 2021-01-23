@@ -1,5 +1,6 @@
 package net.minestom.server.utils.async;
 
+import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -11,7 +12,7 @@ public final class AsyncUtils {
             try {
                 runnable.run();
             } catch (Exception e) {
-                e.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(e);
             }
         });
     }

@@ -5,7 +5,7 @@ plugins {
     id 'java'
     id 'maven-publish'
     id 'net.ltgt.apt' version '0.10'
-    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.21'
     id 'checkstyle'
 }
 
@@ -106,11 +106,11 @@ dependencies {
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.2')
 
     // Netty
-    api 'io.netty:netty-handler:4.1.56.Final'
-    api 'io.netty:netty-codec:4.1.56.Final'
-    api 'io.netty:netty-transport-native-epoll:4.1.56.Final:linux-x86_64'
-    api 'io.netty:netty-transport-native-kqueue:4.1.56.Final:osx-x86_64'
-    api 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.2.Final:linux-x86_64'
+    api 'io.netty:netty-handler:4.1.58.Final'
+    api 'io.netty:netty-codec:4.1.58.Final'
+    api 'io.netty:netty-transport-native-epoll:4.1.58.Final:linux-x86_64'
+    api 'io.netty:netty-transport-native-kqueue:4.1.58.Final:osx-x86_64'
+    api 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.3.Final:linux-x86_64'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     compile group: 'org.apache.commons', name: 'commons-text', version: '1.9'
@@ -126,7 +126,7 @@ dependencies {
     api 'com.github.Articdive:Jnoise:1.0.0'
 
     // https://mvnrepository.com/artifact/org.rocksdb/rocksdbjni
-    api 'org.rocksdb:rocksdbjni:6.14.6'
+    api 'org.rocksdb:rocksdbjni:6.15.2'
 
     // Logging
     api 'org.apache.logging.log4j:log4j-core:2.14.0'
@@ -148,12 +148,13 @@ dependencies {
     // Path finding
     api 'com.github.MadMartian:hydrazine-path-finding:1.5.2'
 
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${project.kotlinVersion}"
+    api "org.jetbrains.kotlin:kotlin-reflect:${project.kotlinVersion}"
 
     // NBT parsing/manipulation/saving
-    api("com.github.jglrxavpok:Hephaistos:${project.hephaistos_version}")
-    api("com.github.jglrxavpok:Hephaistos:${project.hephaistos_version}:gson")
-    api("com.github.jglrxavpok:Hephaistos:${project.hephaistos_version}") {
+    api("com.github.jglrxavpok:Hephaistos:${project.hephaistosVersion}")
+    api("com.github.jglrxavpok:Hephaistos:${project.hephaistosVersion}:gson")
+    api("com.github.jglrxavpok:Hephaistos:${project.hephaistosVersion}") {
         capabilities {
             requireCapability("org.jglrxavpok.nbt:Hephaistos-gson")
         }

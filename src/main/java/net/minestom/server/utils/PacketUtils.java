@@ -165,7 +165,7 @@ public final class PacketUtils {
         try {
             packet.write(writer);
         } catch (Exception e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
 
         return writer.getBuffer();

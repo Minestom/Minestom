@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArraySet;
 import it.unimi.dsi.fastutil.longs.LongSet;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
@@ -150,7 +151,7 @@ public class PerGroupChunkProvider extends ThreadProvider {
                 try {
                     countDownLatch.await();
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    MinecraftServer.getExceptionManager().handleException(e);
                 }
 
                 // Tick all this chunk group

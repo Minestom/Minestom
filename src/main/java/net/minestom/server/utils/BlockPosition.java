@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
@@ -229,7 +230,7 @@ public class BlockPosition implements PublicCloneable<BlockPosition> {
         try {
             return (BlockPosition) super.clone();
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             return null;
         }
     }

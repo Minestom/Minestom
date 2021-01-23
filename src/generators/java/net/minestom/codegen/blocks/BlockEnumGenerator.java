@@ -35,7 +35,7 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
     private final String targetVersion;
     private final File targetFolder;
 
-    private CodeBlock.Builder staticBlock = CodeBlock.builder();
+    private final CodeBlock.Builder staticBlock = CodeBlock.builder();
 
 
     public static void main(String[] args) throws IOException {
@@ -161,8 +161,6 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
             }
 
             return blocks;
-        } catch (IOException e) {
-            throw e;
         }
     }
 
@@ -178,8 +176,6 @@ public class BlockEnumGenerator extends MinestomEnumGenerator<BlockContainer> {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(blockFile))) {
             PrismarineJSBlock[] blocks = gson.fromJson(bufferedReader, PrismarineJSBlock[].class);
             return Arrays.asList(blocks);
-        } catch (IOException e) {
-            throw e;
         }
     }
 

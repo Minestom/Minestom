@@ -1,5 +1,6 @@
 package net.minestom.server.potion;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
 
@@ -72,7 +73,7 @@ public class CustomPotionEffect implements PublicCloneable<CustomPotionEffect> {
         try {
             return (CustomPotionEffect) super.clone();
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             throw new IllegalStateException("Weird thing happened");
         }
     }

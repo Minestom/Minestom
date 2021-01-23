@@ -85,8 +85,6 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
                 items.add(item);
             }
             return items;
-        } catch (IOException e) {
-            throw e;
         }
     }
 

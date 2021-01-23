@@ -28,7 +28,7 @@ public final class PlayerInventoryUtils {
      *               the offset for the player inventory is {@link #OFFSET}
      * @return a packet which can be use internally with Minestom
      */
-    public static int convertSlot(int slot, int offset) {
+    public static int convertPlayerInventorySlot(int slot, int offset) {
         switch (slot) {
             case 0:
                 return CRAFT_RESULT;
@@ -49,6 +49,11 @@ public final class PlayerInventoryUtils {
             case 8:
                 return BOOTS_SLOT;
         }
+
+        return convertSlot(slot, offset);
+    }
+
+    public static int convertSlot(int slot, int offset) {
         final int rowSize = 9;
         slot -= offset;
         if (slot >= rowSize * 3 && slot < rowSize * 4) {
@@ -58,6 +63,7 @@ public final class PlayerInventoryUtils {
         }
         return slot;
     }
+
 
     /**
      * Used to convert internal slot to one used in packets

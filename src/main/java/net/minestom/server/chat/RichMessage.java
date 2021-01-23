@@ -37,7 +37,6 @@ public class RichMessage extends JsonMessage {
      * @return the created rich message object
      */
     public static RichMessage of(@NotNull ColoredText coloredText) {
-        Check.notNull(coloredText, "ColoredText cannot be null");
 
         RichMessage richMessage = new RichMessage();
         appendText(richMessage, coloredText);
@@ -58,7 +57,6 @@ public class RichMessage extends JsonMessage {
      * @return the rich message
      */
     public RichMessage append(@NotNull ColoredText coloredText) {
-        Check.notNull(coloredText, "ColoredText cannot be null");
 
         appendText(this, coloredText);
         return this;
