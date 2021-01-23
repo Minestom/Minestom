@@ -4,43 +4,35 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BlockAlternative
-{
+public class BlockAlternative {
 
     private final short id;
     private final String[] properties;
 
-    public BlockAlternative(short id, String... properties)
-    {
+    public BlockAlternative(short id, String... properties) {
         this.id = id;
         this.properties = properties;
     }
 
-    public short getId()
-    {
+    public short getId() {
         return id;
     }
 
-    public String[] getProperties()
-    {
+    public String[] getProperties() {
         return properties;
     }
 
-    public Map<String, String> createPropertiesMap()
-    {
+    public Map<String, String> createPropertiesMap() {
         Map<String, String> map = new HashMap<>();
-        for (String p : properties)
-        {
+        for (String p : properties) {
             String[] parts = p.split("=");
             map.put(parts[0], parts[1]);
         }
         return map;
     }
 
-    public String getProperty(String key)
-    {
-        for (String p : properties)
-        {
+    public String getProperty(String key) {
+        for (String p : properties) {
             String[] parts = p.split("=");
             if (parts.length > 1)
                 if (parts[0].equals(key))
@@ -49,14 +41,12 @@ public class BlockAlternative
         return null;
     }
 
-    public boolean hasProperty(String key)
-    {
-        return Arrays.asList(properties).contains(key);
+    public boolean hasProperty(String key) {
+        return Arrays.stream(properties).anyMatch(s -> s.equals(key));
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "BlockAlternative{" +
                 "id=" + id +
                 ", properties=" + Arrays.toString(properties) +
