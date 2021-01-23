@@ -5,7 +5,7 @@ plugins {
     id 'java'
     id 'maven-publish'
     id 'net.ltgt.apt' version '0.10'
-    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.21'
     id 'checkstyle'
 }
 
@@ -148,12 +148,13 @@ dependencies {
     // Path finding
     api 'com.github.MadMartian:hydrazine-path-finding:1.5.2'
 
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${project.kotlinVersion}"
+    api "org.jetbrains.kotlin:kotlin-reflect:${project.kotlinVersion}"
 
     // NBT parsing/manipulation/saving
-    api("com.github.jglrxavpok:Hephaistos:${project.hephaistos_version}")
-    api("com.github.jglrxavpok:Hephaistos:${project.hephaistos_version}:gson")
-    api("com.github.jglrxavpok:Hephaistos:${project.hephaistos_version}") {
+    api("com.github.jglrxavpok:Hephaistos:${project.hephaistosVersion}")
+    api("com.github.jglrxavpok:Hephaistos:${project.hephaistosVersion}:gson")
+    api("com.github.jglrxavpok:Hephaistos:${project.hephaistosVersion}") {
         capabilities {
             requireCapability("org.jglrxavpok.nbt:Hephaistos-gson")
         }
