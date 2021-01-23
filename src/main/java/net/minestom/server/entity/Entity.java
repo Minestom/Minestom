@@ -714,7 +714,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     public void setBoundingBox(float x, float y, float z) {
         this.boundingBox = new BoundingBox(this, x, y, z);
     }
-    
+
     /**
      * Changes the internal entity bounding box.
      * <p>
@@ -1480,7 +1480,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     protected void sendSynchronization() {
         EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
         entityTeleportPacket.entityId = getEntityId();
-        entityTeleportPacket.position = getPosition();
+        entityTeleportPacket.position = getPosition().clone();
         entityTeleportPacket.onGround = isOnGround();
         sendPacketToViewers(entityTeleportPacket);
     }
