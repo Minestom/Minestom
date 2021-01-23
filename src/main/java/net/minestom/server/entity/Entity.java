@@ -244,9 +244,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     public void teleport(@NotNull Position position, @Nullable long[] chunks, @Nullable Runnable callback) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
 
+        final Position teleportPosition = position.clone(); // Prevent synchronization issue
+
         final ChunkCallback endCallback = (chunk) -> {
-            refreshPosition(position.getX(), position.getY(), position.getZ());
-            refreshView(position.getYaw(), position.getPitch());
+            refreshPosition(teleportPosition);
+            refreshView(teleportPosition.getYaw(), teleportPosition.getPitch());
 
             sendSynchronization();
 
@@ -254,7 +256,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         };
 
         if (chunks == null || chunks.length == 0) {
-            instance.loadOptionalChunk(position, endCallback);
+            instance.loadOptionalChunk(teleportPosition, endCallback);
         } else {
             ChunkUtils.optionalLoadAll(instance, chunks, null, endCallback);
         }
