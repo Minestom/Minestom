@@ -151,6 +151,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         this.entityType = entityType;
         this.uuid = uuid;
         this.position = spawnPosition.clone();
+        this.lastX = spawnPosition.getX();
+        this.lastY = spawnPosition.getY();
+        this.lastZ = spawnPosition.getZ();
 
         setBoundingBox(0, 0, 0);
 
@@ -1100,9 +1103,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param z new position Z
      */
     public void refreshPosition(float x, float y, float z) {
-        this.lastX = position.getX();
-        this.lastY = position.getY();
-        this.lastZ = position.getZ();
         position.setX(x);
         position.setY(y);
         position.setZ(z);
@@ -1139,6 +1139,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                 }
             }
         }
+
+        this.lastX = position.getX();
+        this.lastY = position.getY();
+        this.lastZ = position.getZ();
     }
 
     /**
