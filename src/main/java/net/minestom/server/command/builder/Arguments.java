@@ -158,6 +158,11 @@ public final class Arguments {
         });
     }
 
+    public boolean hasArgument(String str)
+    {
+        return args.containsKey(str);
+    }
+
     protected void setArg(@NotNull String id, Object value) {
         this.args.put(id, value);
     }
