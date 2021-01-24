@@ -80,6 +80,14 @@ public class PlayerSkin {
         return signature;
     }
 
+    @Override
+    public String toString() {
+        return "PlayerSkin{" +
+                "textures='" + textures + '\'' +
+                ", signature='" + signature + '\'' +
+                '}';
+    }
+
     /**
      * {@inheritDoc}
      */
