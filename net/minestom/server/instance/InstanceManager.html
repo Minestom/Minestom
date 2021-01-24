@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -212,27 +212,34 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>java.util.Optional&lt;<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInstance(java.util.UUID)">getInstance</a></span>&#8203;(java.util.UUID&nbsp;uuid)</code></th>
+<td class="colLast">
+<div class="block">Gets instance by given UUID.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>java.util.Set&lt;<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInstances()">getInstances</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the registered instances.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#registerInstance(net.minestom.server.instance.Instance)">registerInstance</a></span>&#8203;(<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
 <td class="colLast">
 <div class="block">Registers an <a href="Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> internally.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="SharedInstance.html" title="class in net.minestom.server.instance">SharedInstance</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#registerSharedInstance(net.minestom.server.instance.SharedInstance)">registerSharedInstance</a></span>&#8203;(<a href="SharedInstance.html" title="class in net.minestom.server.instance">SharedInstance</a>&nbsp;sharedInstance)</code></th>
 <td class="colLast">
 <div class="block">Registers a <a href="SharedInstance.html" title="class in net.minestom.server.instance"><code>SharedInstance</code></a>.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unregisterInstance(net.minestom.server.instance.Instance)">unregisterInstance</a></span>&#8203;(<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
 <td class="colLast">
@@ -435,7 +442,7 @@ public&nbsp;<a href="SharedInstance.html" title="class in net.minestom.server.in
 <a id="getInstances()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getInstances</h4>
 <pre class="methodSignature">@NotNull
@@ -444,6 +451,23 @@ public&nbsp;java.util.Set&lt;<a href="Instance.html" title="class in net.minesto
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an unmodifiable <code>Set</code> containing all the registered instances</dd>
+</dl>
+</li>
+</ul>
+<a id="getInstance(java.util.UUID)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getInstance</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;java.util.Optional&lt;<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&gt;&nbsp;getInstance&#8203;(java.util.UUID&nbsp;uuid)</pre>
+<div class="block">Gets instance by given UUID.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>uuid</code> - UUID of the instance</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><code>Optional.empty()</code> if instance is not found</dd>
 </dl>
 </li>
 </ul>
