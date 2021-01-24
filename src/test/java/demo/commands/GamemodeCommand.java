@@ -5,6 +5,7 @@ import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 
@@ -66,8 +67,8 @@ public class GamemodeCommand extends Command {
         }
     }
 
-    private void gameModeCallback(CommandSender sender, String gamemode, int error) {
-        sender.sendMessage("'" + gamemode + "' is not a valid gamemode!");
+    private void gameModeCallback(CommandSender sender, ArgumentSyntaxException exception) {
+        sender.sendMessage("'" + exception.getInput() + "' is not a valid gamemode!");
     }
 
     private boolean isAllowed(CommandSender sender, String commandString) {

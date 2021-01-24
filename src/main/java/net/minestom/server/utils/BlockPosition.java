@@ -1,5 +1,7 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
 
@@ -228,7 +230,7 @@ public class BlockPosition implements PublicCloneable<BlockPosition> {
         try {
             return (BlockPosition) super.clone();
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             return null;
         }
     }
@@ -252,6 +254,31 @@ public class BlockPosition implements PublicCloneable<BlockPosition> {
     @NotNull
     public Position toPosition() {
         return new Position(x, y, z);
+    }
+
+    /**
+     * Gets BlockPosition relative to a {@link BlockFace}
+     *
+     * @param face The blockface touching the relative block
+     * @return The BlockPositon touching the provided blockface
+     */
+    @NotNull
+    public BlockPosition getRelative(BlockFace face) {
+        switch(face) {
+        case BOTTOM:
+            return new BlockPosition(getX(), getY() - 1, getZ());
+        case TOP:
+            return new BlockPosition(getX(), getY() + 1, getZ());
+        case NORTH:
+            return new BlockPosition(getX(), getY(), getZ() - 1);
+        case SOUTH:
+            return new BlockPosition(getX(), getY(), getZ() + 1);
+        case WEST:
+            return new BlockPosition(getX() - 1, getY(), getZ());
+        case EAST:
+            return new BlockPosition(getX() + 1, getY(), getZ());
+        }
+        return new BlockPosition(getX(), getY(), getZ()); // should never be called
     }
 
     @Override

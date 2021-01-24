@@ -1,24 +1,25 @@
 package net.minestom.server.command.builder;
 
 import net.minestom.server.chat.ChatColor;
-import net.minestom.server.entity.Entity;
+import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.utils.entity.EntityFinder;
 import net.minestom.server.utils.location.RelativeBlockPosition;
 import net.minestom.server.utils.location.RelativeVec;
 import net.minestom.server.utils.math.FloatRange;
 import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,6 +34,11 @@ import java.util.Map;
 public final class Arguments {
 
     private Map<String, Object> args = new HashMap<>();
+
+    @NotNull
+    public <T> T get(@NotNull Argument<T> argument) {
+        return (T) getObject(argument.getId());
+    }
 
     public boolean getBoolean(@NotNull String id) {
         return (boolean) getObject(id);
@@ -115,8 +121,8 @@ public final class Arguments {
     }
 
     @NotNull
-    public List<Entity> getEntities(@NotNull String id) {
-        return (List<Entity>) getObject(id);
+    public EntityFinder getEntities(@NotNull String id) {
+        return (EntityFinder) getObject(id);
     }
 
     @NotNull
@@ -164,4 +170,15 @@ public final class Arguments {
         this.args.clear();
     }
 
+    protected void retrieveDefaultValues(@Nullable Map<String, Object> defaultValuesMap) {
+        if (defaultValuesMap == null)
+            return;
+
+        for (Map.Entry<String, Object> entry : defaultValuesMap.entrySet()) {
+            final String key = entry.getKey();
+            if (!args.containsKey(key))
+                this.args.put(key, entry.getValue());
+        }
+
+    }
 }

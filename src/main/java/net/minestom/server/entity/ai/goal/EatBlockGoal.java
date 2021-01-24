@@ -1,18 +1,18 @@
 package net.minestom.server.entity.ai.goal;
 
+import it.unimi.dsi.fastutil.shorts.Short2ShortArrayMap;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
 import java.util.Random;
 
 public class EatBlockGoal extends GoalSelector {
     private static final Random RANDOM = new Random();
-    private final Map<Short, Short> eatBelowMap;
-    private final Map<Short, Short> eatInMap;
+    private final Short2ShortArrayMap eatBelowMap;
+    private final Short2ShortArrayMap eatInMap;
     private final int chancePerTick;
     private int eatAnimationTick;
 
@@ -24,8 +24,8 @@ public class EatBlockGoal extends GoalSelector {
      */
     public EatBlockGoal(
             @NotNull EntityCreature entityCreature,
-            @NotNull Map<Short, Short> eatInMap,
-            @NotNull Map<Short, Short> eatBelowMap,
+            @NotNull Short2ShortArrayMap eatInMap,
+            @NotNull Short2ShortArrayMap eatBelowMap,
             int chancePerTick) {
         super(entityCreature);
         this.eatInMap = eatInMap;
@@ -39,7 +39,14 @@ public class EatBlockGoal extends GoalSelector {
         if (RANDOM.nextInt(chancePerTick) != 0) {
             return false;
         }
+
         final Instance instance = entityCreature.getInstance();
+
+        // An entity shouldn't be eating blocks on null instances.
+        if (instance == null) {
+            return false;
+        }
+
         final BlockPosition blockPosition = entityCreature.getPosition().toBlockPosition();
         final short blockStateIdIn = instance.getBlockStateId(blockPosition.clone().subtract(0, 1, 0));
         final short blockStateIdBelow = instance.getBlockStateId(blockPosition.clone().subtract(0, 2, 0));

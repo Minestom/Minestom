@@ -7,6 +7,7 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.client.play.ClientTabCompletePacket;
 import net.minestom.server.network.packet.server.play.TabCompletePacket;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.regex.Pattern;
 
@@ -17,7 +18,7 @@ public class TabCompleteListener {
     public static void listener(ClientTabCompletePacket packet, Player player) {
         final String text = packet.text;
 
-        final String[] split = packet.text.split(Pattern.quote(" "));
+        final String[] split = packet.text.split(Pattern.quote(StringUtils.SPACE));
 
         final String commandName = split[0].replaceFirst(CommandManager.COMMAND_PREFIX, "");
 
@@ -25,7 +26,7 @@ public class TabCompleteListener {
         final CommandProcessor commandProcessor = COMMAND_MANAGER.getCommandProcessor(commandName);
         if (commandProcessor != null) {
             final int start = findStart(text, split);
-            final String[] matches = commandProcessor.onWrite(text);
+            final String[] matches = commandProcessor.onWrite(player, text);
             if (matches != null && matches.length > 0) {
                 sendTabCompletePacket(packet.transactionId, start, matches, player);
             }
@@ -34,7 +35,7 @@ public class TabCompleteListener {
             final Command command = COMMAND_MANAGER.getCommand(commandName);
             if (command != null) {
                 final int start = findStart(text, split);
-                final String[] matches = command.onDynamicWrite(text);
+                final String[] matches = command.onDynamicWrite(player, text);
                 if (matches != null && matches.length > 0) {
                     sendTabCompletePacket(packet.transactionId, start, matches, player);
                 }
@@ -45,7 +46,7 @@ public class TabCompleteListener {
     }
 
     private static int findStart(String text, String[] split) {
-        final boolean endSpace = text.endsWith(" ");
+        final boolean endSpace = text.endsWith(StringUtils.SPACE);
         int start;
         if (endSpace) {
             start = text.length();

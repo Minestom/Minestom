@@ -8,6 +8,9 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Consumer;
 
 public final class EntityUtils {
 
@@ -15,7 +18,22 @@ public final class EntityUtils {
 
     }
 
-    public static boolean areVisible(Entity ent1, Entity ent2) {
+    public static void forEachRange(@NotNull Instance instance, @NotNull Position position,
+                                    int viewDistance,
+                                    @NotNull Consumer<Entity> consumer) {
+        final long[] chunksInRange = ChunkUtils.getChunksInRange(position, viewDistance);
+
+        for (long chunkIndex : chunksInRange) {
+            final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+            final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+            final Chunk chunk = instance.getChunk(chunkX, chunkZ);
+            if (chunk == null)
+                continue;
+            instance.getChunkEntities(chunk).forEach(consumer::accept);
+        }
+    }
+
+    public static boolean areVisible(@NotNull Entity ent1, @NotNull Entity ent2) {
         if (ent1.getInstance() == null || ent2.getInstance() == null)
             return false;
         if (!ent1.getInstance().equals(ent2.getInstance()))
@@ -27,7 +45,6 @@ public final class EntityUtils {
         for (long visibleChunk : visibleChunksEntity) {
             final int chunkX = ChunkUtils.getChunkCoordX(visibleChunk);
             final int chunkZ = ChunkUtils.getChunkCoordZ(visibleChunk);
-
             if (chunk.getChunkX() == chunkX && chunk.getChunkZ() == chunkZ)
                 return true;
         }
@@ -35,7 +52,7 @@ public final class EntityUtils {
         return false;
     }
 
-    public static boolean isOnGround(Entity entity) {
+    public static boolean isOnGround(@NotNull Entity entity) {
         final Instance instance = entity.getInstance();
         if (instance == null)
             return false;

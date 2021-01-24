@@ -3,6 +3,7 @@ package net.minestom.server.command.builder.arguments;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,23 +12,19 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * You can create your own with your own special conditions.
  * <p>
- * Here in order, how is parsed an argument: {@link #getCorrectionResult(String)} to check
- * if the syntax is correct, {@link #parse(String)} to convert the correct argument
- * and {@link #getConditionResult(Object)} to verify that the parsed object validate the additional
- * conditions.
+ * Arguments are parsed using {@link #parse(String)}.
  *
  * @param <T> the type of this parsed argument
  */
 public abstract class Argument<T> {
-
-    public static final int SUCCESS = 0;
-    public static final int UNDEFINED_ERROR = -1;
 
     private final String id;
     private final boolean allowSpace;
     private final boolean useRemaining;
 
     private ArgumentCallback callback;
+
+    private T defaultValue;
 
     /**
      * Creates a new argument.
@@ -62,38 +59,15 @@ public abstract class Argument<T> {
     }
 
     /**
-     * First method called to check the validity of an input.
-     * <p>
-     * If {@link #allowSpace()} is enabled, the value will be incremented by the next word until it returns {@link #SUCCESS},
-     * meaning that you need to be sure to check the inexpensive operations first (eg the number of brackets, the first and last char, etc...).
+     * Parses the given input, and throw an {@link ArgumentSyntaxException}
+     * if the input cannot be convert to {@code T}
      *
-     * @param value The received argument
-     * @return the error code or {@link #SUCCESS}
-     */
-    public abstract int getCorrectionResult(@NotNull String value);
-
-    /**
-     * Called after {@link #getCorrectionResult(String)} returned {@link #SUCCESS}.
-     * <p>
-     * The correction being correct means that {@code value} shouldn't be verified again, you can assume that no exception will occur
-     * when converting it to the correct type.
-     *
-     * @param value The correct argument which does not need to be verified again
-     * @return The parsed argument
+     * @param input the argument to parse
+     * @return the parsed argument
+     * @throws ArgumentSyntaxException if {@code value} is not valid
      */
     @NotNull
-    public abstract T parse(@NotNull String value);
-
-    /**
-     * Called after {@link #parse(String)} meaning that {@code value} should already represent a valid representation of the input.
-     * <p>
-     * The condition result has for goal to check the optional conditions that are user configurable (eg min/max values for a number, a specific material
-     * for an item, etc...).
-     *
-     * @param value The parsed argument
-     * @return the error code or {@link #SUCCESS}
-     */
-    public abstract int getConditionResult(@NotNull T value);
+    public abstract T parse(@NotNull String input) throws ArgumentSyntaxException;
 
     /**
      * Gets the ID of the argument, showed in-game above the chat bar
@@ -144,6 +118,43 @@ public abstract class Argument<T> {
      */
     public void setCallback(@Nullable ArgumentCallback callback) {
         this.callback = callback;
+    }
+
+    /**
+     * Gets if this argument is 'optional'.
+     * <p>
+     * Optional means that this argument can be put at the end of a syntax
+     * and obtains a default value ({@link #getDefaultValue()}).
+     *
+     * @return true if this argument is considered optional
+     */
+    public boolean isOptional() {
+        return defaultValue != null;
+    }
+
+    /**
+     * Gets the default value of this argument.
+     *
+     * @return the argument default value, null if the argument is not optional
+     */
+    @Nullable
+    public T getDefaultValue() {
+        return defaultValue;
+    }
+
+    /**
+     * Sets the default value of the argument.
+     * <p>
+     * A non-null value means that the argument can be put at the end of a syntax
+     * to act as an optional one.
+     *
+     * @param defaultValue the default argument value, null to make the argument non-optional
+     * @return 'this' for chaining
+     */
+    @NotNull
+    public Argument<T> setDefaultValue(@Nullable T defaultValue) {
+        this.defaultValue = defaultValue;
+        return this;
     }
 
     /**

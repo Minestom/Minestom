@@ -77,7 +77,7 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
                     final UUID uuid = playerUuid != null ?
                             playerUuid : CONNECTION_MANAGER.getPlayerConnectionUuid(connection, username);
 
-                    Player player = CONNECTION_MANAGER.startPlayState(connection, uuid, username);
+                    Player player = CONNECTION_MANAGER.startPlayState(connection, uuid, username, true);
                     player.setSkin(playerSkin);
                 } else {
                     LoginDisconnectPacket disconnectPacket = new LoginDisconnectPacket(INVALID_PROXY_RESPONSE);

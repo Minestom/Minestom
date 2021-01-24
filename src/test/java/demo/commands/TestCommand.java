@@ -1,15 +1,15 @@
 package demo.commands;
 
+import net.minestom.server.chat.ChatColor;
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
-import net.minestom.server.utils.Position;
+import net.minestom.server.entity.Player;
+import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.batch.BlockBatch;
 
-import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class TestCommand extends Command {
 
@@ -17,25 +17,26 @@ public class TestCommand extends Command {
         super("testcmd");
         setDefaultExecutor(this::usage);
 
-        Argument test = ArgumentType.RelativeBlockPosition("test");
+        setDefaultExecutor((sender, args) -> {
+            if (!sender.isPlayer()) {
+                sender.sendMessage("This command may only be run by players.");
+                return;
+            }
+            Player player = sender.asPlayer();
 
-        setDefaultExecutor((source, args) -> {
-            System.gc();
-            source.sendMessage("Explicit GC executed!");
+            BlockBatch batch = new BlockBatch((InstanceContainer) player.getInstance());
+
+            int offset = 5;
+            for (int x = 0; x < 50; x += 1) {
+                for (int y = 0; y < 50; y += 1) {
+                    for (int z = 0; z < 50; z += 1) {
+                        batch.setBlockStateId(x + offset, y + offset+50, z + offset, (short) ThreadLocalRandom.current().nextInt(500));
+                    }
+                }
+            }
+
+            batch.flush(() -> sender.sendMessage(ColoredText.of(ChatColor.BRIGHT_GREEN, "Created cube.")));
         });
-
-        addSyntax((source, args) -> {
-            System.out.println("hey");
-
-            SpawnEntityPacket spawnEntityPacket = new SpawnEntityPacket();
-            spawnEntityPacket.entityId = Entity.generateId();
-            spawnEntityPacket.uuid = UUID.randomUUID();
-            spawnEntityPacket.type = 41;
-            spawnEntityPacket.position = new Position(0, 40, 0);
-
-            source.asPlayer().getPlayerConnection().sendPacket(spawnEntityPacket);
-
-        }, test);
     }
 
     private void usage(CommandSender sender, Arguments arguments) {

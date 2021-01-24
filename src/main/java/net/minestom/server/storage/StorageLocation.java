@@ -114,7 +114,7 @@ public class StorageLocation {
      */
     public <T> T get(@NotNull String key, @NotNull Class<T> type) {
         final DataType<T> dataType = DATA_MANAGER.getDataType(type);
-        Check.notNull(dataType, "You can only get registered DataType type!");
+        Check.notNull(dataType, "'" + type + "' is not a registered data type.");
 
         final byte[] data = get(key);
         // No key

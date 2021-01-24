@@ -7,20 +7,29 @@ import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
+import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
+import net.minestom.server.event.player.PlayerLoginEvent;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.listener.manager.ClientPacketConsumer;
 import net.minestom.server.listener.manager.ServerPacketConsumer;
 import net.minestom.server.network.packet.client.login.LoginStartPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.ChatMessagePacket;
 import net.minestom.server.network.packet.server.play.DisconnectPacket;
+import net.minestom.server.network.packet.server.play.KeepAlivePacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
+import net.minestom.server.utils.validate.Check;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
@@ -30,8 +39,13 @@ import java.util.function.Consumer;
  */
 public final class ConnectionManager {
 
+    private static final long KEEP_ALIVE_DELAY = 10_000;
+    private static final long KEEP_ALIVE_KICK = 30_000;
+    private static final ColoredText TIMEOUT_TEXT = ColoredText.of(ChatColor.RED + "Timeout");
+
+    private final Queue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
     private final Set<Player> players = new CopyOnWriteArraySet<>();
-    private final Map<PlayerConnection, Player> connectionPlayerMap = Collections.synchronizedMap(new HashMap<>());
+    private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
 
     // All the consumers to call once a packet is received
     private final List<ClientPacketConsumer> receiveClientPacketConsumers = new CopyOnWriteArrayList<>();
@@ -44,7 +58,7 @@ public final class ConnectionManager {
     // The consumers to call once a player connect, mostly used to init events
     private final List<Consumer<Player>> playerInitializations = new CopyOnWriteArrayList<>();
 
-    private ColoredText shutdownText = ColoredText.of(ChatColor.RED, "The server is shutting down.");
+    private JsonMessage shutdownText = ColoredText.of(ChatColor.RED, "The server is shutting down.");
 
     /**
      * Gets the {@link Player} linked to a {@link PlayerConnection}.
@@ -64,6 +78,30 @@ public final class ConnectionManager {
     @NotNull
     public Collection<Player> getOnlinePlayers() {
         return Collections.unmodifiableCollection(players);
+    }
+
+    /**
+     * Finds the closest player matching a given username.
+     * <p>
+     *
+     * @param username the player username (can be partial)
+     * @return the closest match, null if no players are online
+     */
+    @Nullable
+    public Player findPlayer(@NotNull String username) {
+        Player exact = getPlayer(username);
+        if (exact != null) return exact;
+
+        String lowercase = username.toLowerCase();
+        double currentDistance = 0;
+        for (Player player : getOnlinePlayers()) {
+            double distance = StringUtils.getJaroWinklerDistance(lowercase, player.getUsername().toLowerCase());
+            if (distance > currentDistance) {
+                currentDistance = distance;
+                exact = player;
+            }
+        }
+        return exact;
     }
 
     /**
@@ -175,7 +213,7 @@ public final class ConnectionManager {
      */
     @NotNull
     public List<ServerPacketConsumer> getSendPacketConsumers() {
-        return Collections.unmodifiableList(sendClientPacketConsumers);
+        return sendClientPacketConsumers;
     }
 
     /**
@@ -255,7 +293,7 @@ public final class ConnectionManager {
      * This callback should be exclusively used to add event listeners since it is called directly after a
      * player join (before any chunk is sent) and the client behavior can therefore be unpredictable.
      * You can add your "init" code in {@link net.minestom.server.event.player.PlayerLoginEvent}
-     * or even {@link net.minestom.server.event.player.PlayerPreLoginEvent}.
+     * or even {@link AsyncPlayerPreLoginEvent}.
      *
      * @param playerInitialization the {@link Player} initialization consumer
      */
@@ -269,7 +307,7 @@ public final class ConnectionManager {
      * @return the kick reason in case on a shutdown
      */
     @NotNull
-    public ColoredText getShutdownText() {
+    public JsonMessage getShutdownText() {
         return shutdownText;
     }
 
@@ -279,7 +317,7 @@ public final class ConnectionManager {
      * @param shutdownText the new shutdown kick reason
      * @see #getShutdownText()
      */
-    public void setShutdownText(@NotNull ColoredText shutdownText) {
+    public void setShutdownText(@NotNull JsonMessage shutdownText) {
         this.shutdownText = shutdownText;
     }
 
@@ -291,24 +329,9 @@ public final class ConnectionManager {
      *
      * @param player the player to add
      */
-    public synchronized void createPlayer(@NotNull Player player) {
+    public synchronized void registerPlayer(@NotNull Player player) {
         this.players.add(player);
         this.connectionPlayerMap.put(player.getPlayerConnection(), player);
-    }
-
-    /**
-     * Creates a {@link Player} object and register it.
-     *
-     * @param uuid       the new player uuid
-     * @param username   the new player username
-     * @param connection the new player connection
-     * @return the newly created player object
-     */
-    @NotNull
-    public Player createPlayer(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection connection) {
-        final Player player = getPlayerProvider().createPlayer(uuid, username, connection);
-        createPlayer(player);
-        return player;
     }
 
     /**
@@ -319,7 +342,7 @@ public final class ConnectionManager {
      * @param connection the player connection
      * @see PlayerConnection#disconnect() to properly disconnect a player
      */
-    public synchronized void removePlayer(@NotNull PlayerConnection connection) {
+    public void removePlayer(@NotNull PlayerConnection connection) {
         final Player player = this.connectionPlayerMap.get(connection);
         if (player == null)
             return;
@@ -329,28 +352,103 @@ public final class ConnectionManager {
     }
 
     /**
-     * Sends a {@link LoginSuccessPacket} and change the connection state to {@link ConnectionState#PLAY}.
+     * Calls the player initialization callbacks and the event {@link AsyncPlayerPreLoginEvent}.
+     * <p>
+     * Sends a {@link LoginSuccessPacket} if successful (not kicked)
+     * and change the connection state to {@link ConnectionState#PLAY}.
      *
-     * @param connection the player connection
-     * @param uuid       the uuid of the player
-     * @param username   the username of the player
-     * @return the newly created player object
+     * @param player   the player
+     * @param register true to register the newly created player in {@link ConnectionManager} lists
      */
-    @NotNull
-    public Player startPlayState(@NotNull PlayerConnection connection, @NotNull UUID uuid, @NotNull String username) {
-        LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(uuid, username);
-        connection.sendPacket(loginSuccessPacket);
+    public void startPlayState(@NotNull Player player, boolean register) {
+        // Init player (register events)
+        for (Consumer<Player> playerInitialization : getPlayerInitializations()) {
+            playerInitialization.accept(player);
+        }
 
-        connection.setConnectionState(ConnectionState.PLAY);
-        return createPlayer(uuid, username, connection);
+        AsyncUtils.runAsync(() -> {
+            String username = player.getUsername();
+            UUID uuid = player.getUuid();
+
+            // Call pre login event
+            AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(player, username, uuid);
+            player.callEvent(AsyncPlayerPreLoginEvent.class, asyncPlayerPreLoginEvent);
+
+            // Close the player channel if he has been disconnected (kick)
+            final boolean online = player.isOnline();
+            if (!online) {
+                final PlayerConnection playerConnection = player.getPlayerConnection();
+
+                if (playerConnection instanceof NettyPlayerConnection) {
+                    ((NettyPlayerConnection) playerConnection).getChannel().flush();
+                }
+
+                //playerConnection.disconnect();
+                return;
+            }
+
+            // Change UUID/Username based on the event
+            {
+                final String eventUsername = asyncPlayerPreLoginEvent.getUsername();
+                final UUID eventUuid = asyncPlayerPreLoginEvent.getPlayerUuid();
+
+                if (!player.getUsername().equals(eventUsername)) {
+                    player.setUsernameField(eventUsername);
+                    username = eventUsername;
+                }
+
+                if (!player.getUuid().equals(eventUuid)) {
+                    player.setUuid(eventUuid);
+                    uuid = eventUuid;
+                }
+            }
+
+            // Send login success packet
+            {
+                final PlayerConnection connection = player.getPlayerConnection();
+
+                LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(uuid, username);
+                if (connection instanceof NettyPlayerConnection) {
+                    ((NettyPlayerConnection) connection).writeAndFlush(loginSuccessPacket);
+                } else {
+                    connection.sendPacket(loginSuccessPacket);
+                }
+
+                connection.setConnectionState(ConnectionState.PLAY);
+            }
+
+            // Add the player to the waiting list
+            addWaitingPlayer(player);
+
+            if (register) {
+                registerPlayer(player);
+            }
+        });
     }
 
     /**
-     * Shutdowns the connection manager by kicking all the currently connected players
+     * Creates a {@link Player} using the defined {@link PlayerProvider}
+     * and execute {@link #startPlayState(Player, boolean)}.
+     *
+     * @return the newly created player object
+     * @see #startPlayState(Player, boolean)
+     */
+    @NotNull
+    public Player startPlayState(@NotNull PlayerConnection connection,
+                                 @NotNull UUID uuid, @NotNull String username,
+                                 boolean register) {
+        final Player player = getPlayerProvider().createPlayer(uuid, username, connection);
+
+        startPlayState(player, register);
+
+        return player;
+    }
+
+    /**
+     * Shutdowns the connection manager by kicking all the currently connected players.
      */
     public void shutdown() {
-        DisconnectPacket disconnectPacket = new DisconnectPacket();
-        disconnectPacket.message = getShutdownText();
+        DisconnectPacket disconnectPacket = new DisconnectPacket(getShutdownText());
         for (Player player : getOnlinePlayers()) {
             final PlayerConnection playerConnection = player.getPlayerConnection();
             if (playerConnection instanceof NettyPlayerConnection) {
@@ -362,5 +460,61 @@ public final class ConnectionManager {
         }
         this.players.clear();
         this.connectionPlayerMap.clear();
+    }
+
+    /**
+     * Connects waiting players.
+     */
+    public void updateWaitingPlayers() {
+        // Connect waiting players
+        waitingPlayersTick();
+    }
+
+    /**
+     * Updates keep alive by checking the last keep alive packet and send a new one if needed.
+     *
+     * @param tickStart the time of the update in milliseconds, forwarded to the packet
+     */
+    public void handleKeepAlive(long tickStart) {
+        final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(tickStart);
+        for (Player player : getOnlinePlayers()) {
+            final long lastKeepAlive = tickStart - player.getLastKeepAlive();
+            if (lastKeepAlive > KEEP_ALIVE_DELAY && player.didAnswerKeepAlive()) {
+                final PlayerConnection playerConnection = player.getPlayerConnection();
+                player.refreshKeepAlive(tickStart);
+                playerConnection.sendPacket(keepAlivePacket);
+            } else if (lastKeepAlive >= KEEP_ALIVE_KICK) {
+                player.kick(TIMEOUT_TEXT);
+            }
+        }
+    }
+
+    /**
+     * Adds connected clients after the handshake (used to free the networking threads).
+     */
+    private void waitingPlayersTick() {
+        Player waitingPlayer;
+        while ((waitingPlayer = waitingPlayers.poll()) != null) {
+
+            PlayerLoginEvent loginEvent = new PlayerLoginEvent(waitingPlayer);
+            waitingPlayer.callEvent(PlayerLoginEvent.class, loginEvent);
+            final Instance spawningInstance = loginEvent.getSpawningInstance();
+
+            Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
+
+            waitingPlayer.UNSAFE_init(spawningInstance);
+
+            // Spawn the player at Player#getRespawnPoint during the next instance tick
+            spawningInstance.scheduleNextTick(waitingPlayer::setInstance);
+        }
+    }
+
+    /**
+     * Adds a player into the waiting list, to be handled during the next server tick.
+     *
+     * @param player the {@link Player player} to add into the waiting list
+     */
+    public void addWaitingPlayer(@NotNull Player player) {
+        this.waitingPlayers.add(player);
     }
 }

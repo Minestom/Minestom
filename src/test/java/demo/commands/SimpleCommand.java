@@ -40,7 +40,7 @@ public class SimpleCommand implements CommandProcessor {
     }
 
     @Override
-    public String[] onWrite(@NotNull String text) {
+    public String[] onWrite(@NotNull CommandSender sender, @NotNull String text) {
         return new String[]{"Complete1", "Complete2"};
     }
 }

@@ -8,7 +8,6 @@ import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,9 +60,8 @@ public interface EquipmentHandler {
                 return getItemInMainHand();
             case OFF:
                 return getItemInOffHand();
-            default:
-                return null;
         }
+        throw new IllegalStateException("Something weird happened");
     }
 
     /**
@@ -165,9 +163,8 @@ public interface EquipmentHandler {
                 return getLeggings();
             case BOOTS:
                 return getBoots();
-            default:
-                return null;
         }
+        throw new IllegalStateException("Something weird happened");
     }
 
     /**
@@ -176,26 +173,17 @@ public interface EquipmentHandler {
      * @param connection the connection to send the equipments to
      */
     default void syncEquipments(@NotNull PlayerConnection connection) {
-        final EntityEquipmentPacket entityEquipmentPacket = getEquipmentsPacket();
-        if (entityEquipmentPacket == null)
-            return;
-        connection.sendPacket(entityEquipmentPacket);
+        connection.sendPacket(getEquipmentsPacket());
     }
 
     /**
      * Sends all the equipments to all viewers.
      */
     default void syncEquipments() {
-        if (!(this instanceof Viewable))
-            throw new IllegalStateException("Only accessible for Entity");
+        Check.stateCondition(!(this instanceof Viewable), "Only accessible for Entity");
 
         Viewable viewable = (Viewable) this;
-
-        final EntityEquipmentPacket entityEquipmentPacket = getEquipmentsPacket();
-        if (entityEquipmentPacket == null)
-            return;
-
-        viewable.sendPacketToViewersAndSelf(entityEquipmentPacket);
+        viewable.sendPacketToViewersAndSelf(getEquipmentsPacket());
     }
 
     /**
@@ -204,11 +192,9 @@ public interface EquipmentHandler {
      * @param slot the slot of the equipment
      */
     default void syncEquipment(@NotNull EntityEquipmentPacket.Slot slot) {
-        if (!(this instanceof Entity))
-            throw new IllegalStateException("Only accessible for Entity");
+        Check.stateCondition(!(this instanceof Entity), "Only accessible for Entity");
 
         Entity entity = (Entity) this;
-        Viewable viewable = (Viewable) this;
 
         final ItemStack itemStack = getEquipment(slot);
 
@@ -217,40 +203,35 @@ public interface EquipmentHandler {
         entityEquipmentPacket.slots = new EntityEquipmentPacket.Slot[]{slot};
         entityEquipmentPacket.itemStacks = new ItemStack[]{itemStack};
 
-        viewable.sendPacketToViewers(entityEquipmentPacket);
+        entity.sendPacketToViewers(entityEquipmentPacket);
     }
 
     /**
      * Gets the packet with all the equipments.
      *
-     * @return the packet with the equipments, null if all equipments are air
+     * @return the packet with the equipments
      * @throws IllegalStateException if 'this' is not an {@link Entity}
      */
-    @Nullable
+    @NotNull
     default EntityEquipmentPacket getEquipmentsPacket() {
         Check.stateCondition(!(this instanceof Entity), "Only accessible for Entity");
 
-        Entity entity = (Entity) this;
+        final Entity entity = (Entity) this;
 
+        final EntityEquipmentPacket.Slot[] slots = EntityEquipmentPacket.Slot.values();
+
+        List<ItemStack> itemStacks = new ArrayList<>(slots.length);
+
+        // Fill items
+        for (EntityEquipmentPacket.Slot slot : slots) {
+            final ItemStack equipment = getEquipment(slot);
+            itemStacks.add(equipment);
+        }
+
+        // Create equipment packet
         EntityEquipmentPacket equipmentPacket = new EntityEquipmentPacket();
         equipmentPacket.entityId = entity.getEntityId();
-
-        List<EntityEquipmentPacket.Slot> slots = new ArrayList<>();
-        List<ItemStack> itemStacks = new ArrayList<>();
-
-        for (EntityEquipmentPacket.Slot slot : EntityEquipmentPacket.Slot.values()) {
-            final ItemStack itemStack = getEquipment(slot);
-            if (!itemStack.isAir()) {
-                slots.add(slot);
-                itemStacks.add(itemStack);
-            }
-        }
-
-        if (slots.isEmpty()) {
-            return null;
-        }
-
-        equipmentPacket.slots = slots.toArray(new EntityEquipmentPacket.Slot[0]);
+        equipmentPacket.slots = slots;
         equipmentPacket.itemStacks = itemStacks.toArray(new ItemStack[0]);
         return equipmentPacket;
     }

@@ -1,5 +1,7 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import org.apache.commons.text.StringEscapeUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,45 +17,35 @@ public class ArgumentString extends Argument<String> {
         super(id, true);
     }
 
+    @NotNull
     @Override
-    public int getCorrectionResult(@NotNull String value) {
+    public String parse(@NotNull String input) throws ArgumentSyntaxException {
+        return staticParse(input);
+    }
+
+    @NotNull
+    public static String staticParse(@NotNull String input) throws ArgumentSyntaxException {
         // Check if value start and end with quote
-        final char first = value.charAt(0);
-        final char last = value.charAt(value.length() - 1);
+        final char first = input.charAt(0);
+        final char last = input.charAt(input.length() - 1);
         final boolean quote = first == '\"' && last == '\"';
         if (!quote)
-            return QUOTE_ERROR;
+            throw new ArgumentSyntaxException("String argument needs to start and end with quotes", input, QUOTE_ERROR);
 
-        for (int i = 1; i < value.length(); i++) {
-            final char c = value.charAt(i);
+        // Remove first and last characters (quotes)
+        input = input.substring(1, input.length() - 1);
+
+        // Verify backslashes
+        for (int i = 1; i < input.length(); i++) {
+            final char c = input.charAt(i);
             if (c == '\"') {
-                final char lastChar = value.charAt(i - 1);
-                if (lastChar == '\\') {
-                    continue;
-                } else if (i == value.length() - 1) {
-                    return SUCCESS;
+                final char lastChar = input.charAt(i - 1);
+                if (lastChar != '\\') {
+                    throw new ArgumentSyntaxException("Non-escaped quote", input, QUOTE_ERROR);
                 }
             }
         }
 
-        // Last quote is written like \"
-        return QUOTE_ERROR;
-    }
-
-    @NotNull
-    @Override
-    public String parse(@NotNull String value) {
-        // Remove first and last characters (quote)
-        value = value.substring(1, value.length() - 1);
-
-        // Remove all backslashes
-        value = value.replace("\\", "");
-
-        return value;
-    }
-
-    @Override
-    public int getConditionResult(@NotNull String value) {
-        return SUCCESS;
+        return StringEscapeUtils.unescapeJava(input);
     }
 }

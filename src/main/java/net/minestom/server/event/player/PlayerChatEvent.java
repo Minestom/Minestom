@@ -1,6 +1,6 @@
 package net.minestom.server.event.player;
 
-import net.minestom.server.chat.RichMessage;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.PlayerEvent;
@@ -19,7 +19,7 @@ public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
 
     private final Collection<Player> recipients;
     private String message;
-    private Function<PlayerChatEvent, RichMessage> chatFormat;
+    private Function<PlayerChatEvent, JsonMessage> chatFormat;
 
     private boolean cancelled;
 
@@ -34,7 +34,7 @@ public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
      *
      * @param chatFormat the custom chat format, null to use the default one
      */
-    public void setChatFormat(@Nullable Function<PlayerChatEvent, RichMessage> chatFormat) {
+    public void setChatFormat(@Nullable Function<PlayerChatEvent, JsonMessage> chatFormat) {
         this.chatFormat = chatFormat;
     }
 
@@ -77,7 +77,7 @@ public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
      * @return the chat format which will be used, null if this is the default one
      */
     @Nullable
-    public Function<PlayerChatEvent, RichMessage> getChatFormatFunction() {
+    public Function<PlayerChatEvent, JsonMessage> getChatFormatFunction() {
         return chatFormat;
     }
 

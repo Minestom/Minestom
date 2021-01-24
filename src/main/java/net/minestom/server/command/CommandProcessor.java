@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
  * start by {@link #getCommandName()} or any of the aliases in {@link #getAliases()}.
  * <p>
  * Tab-completion can be activated by overriding {@link #enableWritingTracking()} and return true, you should then listen to
- * {@link #onWrite(String)} and return the possible completions to suggest.
+ * {@link #onWrite(CommandSender, String)} and return the possible completions to suggest.
  * <p>
  * Please be sure to check {@link net.minestom.server.command.builder.Command} as it is likely to be better for your use case.
  */
@@ -36,7 +36,7 @@ public interface CommandProcessor {
     String[] getAliases();
 
     /**
-     * Called when the command is executed by a {@link CommandSender}
+     * Called when the command is executed by a {@link CommandSender}.
      *
      * @param sender  the sender which executed the command
      * @param command the command name used
@@ -48,7 +48,7 @@ public interface CommandProcessor {
     /**
      * Called to know if a player has access to the command.
      * <p>
-     * Right now it is only used to know if the player should see the command in auto-completion
+     * Right now it is only used to know if the player should see the command in auto-completion.
      * Conditions still need to be checked in {@link #process(CommandSender, String, String[])}.
      *
      * @param player the player to check the access
@@ -57,12 +57,12 @@ public interface CommandProcessor {
     boolean hasAccess(@NotNull Player player);
 
     /**
-     * Needed to enable {@link #onWrite(String)} callback.
+     * Needed to enable {@link #onWrite(CommandSender, String)} callback.
      * <p>
      * Be aware that enabling it can cost some performance because of how often it will be called.
      *
      * @return true to enable writing tracking (and server auto completion)
-     * @see #onWrite(String)
+     * @see #onWrite(CommandSender, String)
      */
     default boolean enableWritingTracking() {
         return false;
@@ -73,12 +73,13 @@ public interface CommandProcessor {
      * <p>
      * WARNING: {@link #enableWritingTracking()} needs to return true, you need to override it by default.
      *
-     * @param text the whole player text
-     * @return the array containing all the suggestion for the current arg (split " "), can be null
+     * @param sender the command sender
+     * @param text   the whole player text
+     * @return the array containing all the suggestions for the current arg (split SPACE), can be null
      * @see #enableWritingTracking()
      */
     @Nullable
-    default String[] onWrite(@NotNull String text) {
+    default String[] onWrite(@NotNull CommandSender sender, String text) {
         return null;
     }
 }

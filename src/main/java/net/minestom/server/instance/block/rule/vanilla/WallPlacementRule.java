@@ -18,15 +18,10 @@ public class WallPlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public boolean canPlace(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
-        return true;
-    }
-
-    @Override
-    public short blockRefresh(@NotNull Instance instance, @NotNull BlockPosition blockPosition, short currentId) {
-        int x = blockPosition.getX();
-        int y = blockPosition.getY();
-        int z = blockPosition.getZ();
+    public short blockUpdate(@NotNull Instance instance, @NotNull BlockPosition blockPosition, short currentId) {
+        final int x = blockPosition.getX();
+        final int y = blockPosition.getY();
+        final int z = blockPosition.getZ();
 
         String east = "none";
         String north = "none";
@@ -57,7 +52,9 @@ public class WallPlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public short blockPlace(@NotNull Instance instance, @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Player pl) {
+    public short blockPlace(@NotNull Instance instance,
+                            @NotNull Block block, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition,
+                            @NotNull Player pl) {
         return getBlockId();
     }
 

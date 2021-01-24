@@ -183,7 +183,7 @@ public class SerializableDataImpl extends SerializableData {
                     try {
                         return Class.forName(className);
                     } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
+                        MinecraftServer.getExceptionManager().handleException(e);
                         return null;
                     }
                 });

@@ -6,6 +6,7 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.Player;
 
 public class HealthCommand extends Command {
@@ -40,17 +41,19 @@ public class HealthCommand extends Command {
         sender.sendMessage("Correct usage: health [set/add] [number]");
     }
 
-    private void onModeError(CommandSender sender, String value, int error) {
-        sender.sendMessage("SYNTAX ERROR: '" + value + "' should be replaced by 'set' or 'add'");
+    private void onModeError(CommandSender sender, ArgumentSyntaxException exception) {
+        sender.sendMessage("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by 'set' or 'add'");
     }
 
-    private void onValueError(CommandSender sender, String value, int error) {
+    private void onValueError(CommandSender sender, ArgumentSyntaxException exception) {
+        final int error = exception.getErrorCode();
+        final String input = exception.getInput();
         switch (error) {
             case ArgumentNumber.NOT_NUMBER_ERROR:
-                sender.sendMessage("SYNTAX ERROR: '" + value + "' isn't a number!");
+                sender.sendMessage("SYNTAX ERROR: '" + input + "' isn't a number!");
                 break;
             case ArgumentNumber.RANGE_ERROR:
-                sender.sendMessage("SYNTAX ERROR: " + value + " is not between 0 and 100");
+                sender.sendMessage("SYNTAX ERROR: " + input + " is not between 0 and 100");
                 break;
         }
     }

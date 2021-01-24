@@ -1,7 +1,7 @@
 package net.minestom.server.advancements.notifications;
 
 import net.minestom.server.advancements.FrameType;
-import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
@@ -11,17 +11,17 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Notification {
 
-    private final ColoredText title;
+    private final JsonMessage title;
     private final FrameType frameType;
     private final ItemStack icon;
 
-    public Notification(@NotNull ColoredText title, @NotNull FrameType frameType, @NotNull ItemStack icon) {
+    public Notification(@NotNull JsonMessage title, @NotNull FrameType frameType, @NotNull ItemStack icon) {
         this.title = title;
         this.frameType = frameType;
         this.icon = icon;
     }
 
-    public Notification(@NotNull ColoredText title, @NotNull FrameType frameType, @NotNull Material icon) {
+    public Notification(@NotNull JsonMessage title, @NotNull FrameType frameType, @NotNull Material icon) {
         this.title = title;
         this.frameType = frameType;
         this.icon = new ItemStack(icon, (byte) 1);
@@ -33,7 +33,7 @@ public class Notification {
      * @return the notification title
      */
     @NotNull
-    public ColoredText getTitle() {
+    public JsonMessage getTitle() {
         return title;
     }
 

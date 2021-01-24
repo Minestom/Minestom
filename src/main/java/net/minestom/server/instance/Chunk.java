@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
 import net.minestom.server.data.Data;
@@ -39,7 +40,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 /**
  * A chunk is a part of an {@link Instance}, limited by a size of 16x256x16 blocks and subdivided in 16 sections of 16 blocks height.
  * Should contains all the blocks located at those positions and manage their tick updates.
- * Be aware that implementations do not need to be thread-safe.
+ * Be aware that implementations do not need to be thread-safe, all chunks are guarded by their own instance ('this').
  * <p>
  * Chunks can be serialized using {@link #getSerializedData()} and deserialized back with {@link #readChunk(BinaryReader, ChunkCallback)},
  * allowing you to implement your own storage solution if needed.
@@ -266,6 +267,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param z the block Z
      * @return the {@link CustomBlock} at the position
      */
+    @Nullable
     public CustomBlock getCustomBlock(int x, int y, int z) {
         final short customBlockId = getCustomBlockId(x, y, z);
         return customBlockId != 0 ? BLOCK_MANAGER.getCustomBlock(customBlockId) : null;
@@ -277,6 +279,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param index the block index
      * @return the {@link CustomBlock} at the block index
      */
+    @Nullable
     protected CustomBlock getCustomBlock(int index) {
         final int x = ChunkUtils.blockIndexToChunkPositionX(index);
         final int y = ChunkUtils.blockIndexToChunkPositionY(index);
@@ -454,10 +457,10 @@ public abstract class Chunk implements Viewable, DataContainer {
         // Add to the viewable chunks set
         player.getViewableChunks().add(this);
 
-        if (result) {
-            // Send the chunk data & light packets to the player
-            sendChunk(player);
+        // Send the chunk data & light packets to the player
+        sendChunk(player);
 
+        if (result) {
             PlayerChunkLoadEvent playerChunkLoadEvent = new PlayerChunkLoadEvent(player, chunkX, chunkZ);
             player.callEvent(PlayerChunkLoadEvent.class, playerChunkLoadEvent);
         }

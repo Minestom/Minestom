@@ -30,6 +30,8 @@ import java.util.zip.Inflater;
 
 public class PacketCompressor extends ByteToMessageCodec<ByteBuf> {
 
+    private final static int MAX_SIZE = 2097152;
+
     private final int threshold;
 
     private final byte[] buffer = new byte[8192];
@@ -43,7 +45,7 @@ public class PacketCompressor extends ByteToMessageCodec<ByteBuf> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf from, ByteBuf to) {
-        PacketUtils.compressBuffer(deflater, buffer, from, to);
+        PacketUtils.compressBuffer(deflater, buffer, from, to, false);
     }
 
     @Override
@@ -58,8 +60,8 @@ public class PacketCompressor extends ByteToMessageCodec<ByteBuf> {
                     throw new DecoderException("Badly compressed packet - size of " + i + " is below server threshold of " + this.threshold);
                 }
 
-                if (i > 2097152) {
-                    throw new DecoderException("Badly compressed packet - size of " + i + " is larger than protocol maximum of 2097152");
+                if (i > MAX_SIZE) {
+                    throw new DecoderException("Badly compressed packet - size of " + i + " is larger than protocol maximum of " + MAX_SIZE);
                 }
 
                 // TODO optimize to do not initialize arrays each time
@@ -68,13 +70,11 @@ public class PacketCompressor extends ByteToMessageCodec<ByteBuf> {
                 buf.readBytes(input);
 
                 inflater.setInput(input);
-
                 byte[] output = new byte[i];
-
                 inflater.inflate(output);
-                out.add(Unpooled.wrappedBuffer(output));
-
                 inflater.reset();
+
+                out.add(Unpooled.wrappedBuffer(output));
             }
         }
     }

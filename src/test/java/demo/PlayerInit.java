@@ -5,9 +5,11 @@ import demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.chat.ColoredText;
-import net.minestom.server.entity.*;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.GameMode;
+import net.minestom.server.entity.ItemEntity;
+import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.type.monster.EntityZombie;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
@@ -52,14 +54,6 @@ public class PlayerInit {
         instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
         instanceContainer.setChunkGenerator(chunkGeneratorDemo);
-
-        // Load some chunks beforehand
-        final int loopStart = -10;
-        final int loopEnd = 10;
-        for (int x = loopStart; x < loopEnd; x++)
-            for (int z = loopStart; z < loopEnd; z++) {
-                //instanceContainer.loadChunk(x, z);
-            }
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");
         /*inventory.addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
@@ -116,23 +110,25 @@ public class PlayerInit {
         globalEventHandler.addEventCallback(EntityAttackEvent.class, event -> {
             final Entity source = event.getEntity();
             final Entity entity = event.getTarget();
-            if (entity instanceof EntityCreature) {
-                EntityCreature creature = (EntityCreature) entity;
-                creature.damage(DamageType.fromEntity(source), 0);
-                Vector velocity = source.getPosition().clone().getDirection().multiply(3);
-                velocity.setY(3f);
-                entity.setVelocity(velocity);
-            } else if (entity instanceof Player) {
+            if (entity instanceof Player) {
                 Player target = (Player) entity;
                 Vector velocity = source.getPosition().clone().getDirection().multiply(4);
                 velocity.setY(3.5f);
                 target.setVelocity(velocity);
                 target.damage(DamageType.fromEntity(source), 5);
+            } else {
+                Vector velocity = source.getPosition().clone().getDirection().multiply(3);
+                velocity.setY(3f);
+                entity.setVelocity(velocity);
             }
 
             if (source instanceof Player) {
                 ((Player) source).sendMessage("You attacked something!");
             }
+        });
+
+        globalEventHandler.addEventCallback(PlayerDeathEvent.class, event -> {
+            event.setChatMessage(ColoredText.of("custom death message"));
         });
 
         globalEventHandler.addEventCallback(PlayerBlockPlaceEvent.class, event -> {
@@ -181,10 +177,6 @@ public class PlayerInit {
             itemEntity.setInstance(player.getInstance());
             Vector velocity = player.getPosition().clone().getDirection().multiply(6);
             itemEntity.setVelocity(velocity);
-
-            EntityZombie entityZombie = new EntityZombie(new Position(0, 41, 0));
-            entityZombie.setInstance(player.getInstance());
-            entityZombie.setPathTo(player.getPosition());
         });
 
         globalEventHandler.addEventCallback(PlayerDisconnectEvent.class, event -> {
@@ -210,7 +202,9 @@ public class PlayerInit {
 
         globalEventHandler.addEventCallback(PlayerSpawnEvent.class, event -> {
             final Player player = event.getPlayer();
-            player.setGameMode(GameMode.SURVIVAL);
+            player.setGameMode(GameMode.CREATIVE);
+
+            player.setPermissionLevel(4);
 
             PlayerInventory inventory = player.getInventory();
             ItemStack itemStack = new ItemStack(Material.STONE, (byte) 64);

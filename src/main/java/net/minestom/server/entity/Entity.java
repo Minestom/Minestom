@@ -3,17 +3,14 @@ package net.minestom.server.entity;
 import com.google.common.collect.Queues;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
-import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
-import net.minestom.server.event.entity.EntityDeathEvent;
-import net.minestom.server.event.entity.EntitySpawnEvent;
-import net.minestom.server.event.entity.EntityTickEvent;
-import net.minestom.server.event.entity.EntityVelocityEvent;
+import net.minestom.server.event.entity.*;
 import net.minestom.server.event.handler.EventHandler;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -22,6 +19,9 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.permission.PermissionHandler;
+import net.minestom.server.potion.Potion;
+import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
@@ -41,6 +41,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -53,6 +54,7 @@ import java.util.function.Consumer;
 public abstract class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler {
 
     private static final Map<Integer, Entity> entityById = new ConcurrentHashMap<>();
+    private static final Map<UUID, Entity> entityByUuid = new ConcurrentHashMap<>();
     private static final AtomicInteger lastEntityId = new AtomicInteger();
 
     // Metadata
@@ -66,7 +68,14 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     protected static final byte METADATA_BOOLEAN = 7;
     protected static final byte METADATA_ROTATION = 8;
     protected static final byte METADATA_POSITION = 9;
+    protected static final byte METADATA_OPTPOSITION = 10;
+    protected static final byte METADATA_DIRECTION = 11;
+    protected static final byte METADATA_OPTUUID = 12;
+    protected static final byte METADATA_OPTBLOCKID = 13;
+    protected static final byte METADATA_NBT = 14;
     protected static final byte METADATA_PARTICLE = 15;
+    protected static final byte METADATA_VILLAGERDATA = 16;
+    protected static final byte METADATA_OPTVARINT = 17;
     protected static final byte METADATA_POSE = 18;
 
     protected Instance instance;
@@ -88,7 +97,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     protected float gravityAcceleration;
     protected float gravityTerminalVelocity;
     protected int gravityTickCount; // Number of tick where gravity tick was applied
-    protected float eyeHeight;
 
     private boolean autoViewable;
     private final int id;
@@ -123,11 +131,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     protected boolean glowing;
     protected boolean usingElytra;
     protected int air = 300;
-    protected ColoredText customName;
+    protected JsonMessage customName;
     protected boolean customNameVisible;
     protected boolean silent;
     protected boolean noGravity;
     protected Pose pose = Pose.STANDING;
+
+    private final List<TimedPotion> effects = new CopyOnWriteArrayList<>();
 
     // list of scheduled tasks to be executed during the next entity tick
     protected final Queue<Consumer<Entity>> nextTick = Queues.newConcurrentLinkedQueue();
@@ -136,17 +146,25 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     private long ticks;
     private final EntityTickEvent tickEvent = new EntityTickEvent(this);
 
-    public Entity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
+    public Entity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
         this.id = generateId();
         this.entityType = entityType;
-        this.uuid = UUID.randomUUID();
+        this.uuid = uuid;
         this.position = spawnPosition.clone();
+        this.lastX = spawnPosition.getX();
+        this.lastY = spawnPosition.getY();
+        this.lastZ = spawnPosition.getZ();
 
         setBoundingBox(0, 0, 0);
 
         setAutoViewable(true);
 
-        entityById.put(id, this);
+        Entity.entityById.put(id, this);
+        Entity.entityByUuid.put(uuid, this);
+    }
+
+    public Entity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
+        this(entityType, UUID.randomUUID(), spawnPosition);
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -173,8 +191,20 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      */
     @Nullable
     public static Entity getEntity(int id) {
-        return entityById.getOrDefault(id, null);
+        return Entity.entityById.getOrDefault(id, null);
     }
+
+    /**
+     * Gets an entity based on its UUID (from {@link #getUuid()}).
+     *
+     * @param uuid the entity UUID
+     * @return the entity having the specified uuid, null if not found
+     */
+    @Nullable
+    public static Entity getEntity(@NotNull UUID uuid) {
+        return Entity.entityByUuid.getOrDefault(uuid, null);
+    }
+
 
     /**
      * Generate and return a new unique entity id.
@@ -215,12 +245,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @throws IllegalStateException if you try to teleport an entity before settings its instance
      */
     public void teleport(@NotNull Position position, @Nullable long[] chunks, @Nullable Runnable callback) {
-        Check.notNull(position, "Teleport position cannot be null");
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
 
+        final Position teleportPosition = position.clone(); // Prevent synchronization issue
+
         final ChunkCallback endCallback = (chunk) -> {
-            refreshPosition(position.getX(), position.getY(), position.getZ());
-            refreshView(position.getYaw(), position.getPitch());
+            refreshPosition(teleportPosition);
+            refreshView(teleportPosition.getYaw(), teleportPosition.getPitch());
 
             sendSynchronization();
 
@@ -228,7 +259,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         };
 
         if (chunks == null || chunks.length == 0) {
-            instance.loadOptionalChunk(position, endCallback);
+            instance.loadOptionalChunk(teleportPosition, endCallback);
         } else {
             ChunkUtils.optionalLoadAll(instance, chunks, null, endCallback);
         }
@@ -302,7 +333,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
     @Override
     public boolean addViewer(@NotNull Player player) {
-        Check.notNull(player, "Viewer cannot be null");
         boolean result = this.viewers.add(player);
         if (!result)
             return false;
@@ -312,7 +342,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
     @Override
     public boolean removeViewer(@NotNull Player player) {
-        Check.notNull(player, "Viewer cannot be null");
         if (!viewers.remove(player))
             return false;
 
@@ -432,6 +461,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         // Entity tick
         {
 
+            // Cache the number of "gravity tick"
+            if (!onGround) {
+                gravityTickCount++;
+            } else {
+                gravityTickCount = 0;
+            }
+
             // Velocity
             boolean applyVelocity;
             // Non-player entities with either velocity or gravity enabled
@@ -446,45 +482,32 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                 final float newZ = position.getZ() + velocity.getZ() / tps;
                 Position newPosition = new Position(newX, newY, newZ);
 
-                // Gravity
-                {
-                    // Cache the number of "gravity tick"
-                    if (!onGround) {
-                        gravityTickCount++;
-                    } else {
-                        gravityTickCount = 0;
-                    }
-
-                    // Compute the gravity change (drag per tick + acceleration)
-                    final float gravityY = Math.min(
-                            gravityDragPerTick + (gravityAcceleration * (float) gravityTickCount),
-                            gravityTerminalVelocity);
-
-                    // Change velocity to apply gravity
-                    if (!noGravity) {
-                        velocity.setY(velocity.getY() - gravityY);
-                    }
-                }
-
                 Vector newVelocityOut = new Vector();
+
+                // Gravity force
+                final float gravityY = !noGravity ? Math.min(
+                        gravityDragPerTick + (gravityAcceleration * (float) gravityTickCount),
+                        gravityTerminalVelocity) : 0f;
+
                 final Vector deltaPos = new Vector(
                         getVelocity().getX() / tps,
-                        getVelocity().getY() / tps,
+                        (getVelocity().getY() - gravityY) / tps,
                         getVelocity().getZ() / tps
                 );
+
                 this.onGround = CollisionUtils.handlePhysics(this, deltaPos, newPosition, newVelocityOut);
 
-                // Stop here if the position is the same
-                final boolean updatePosition = !newPosition.isSimilar(position);
+                // World border collision
+                final Position finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
+                final Chunk finalChunk = instance.getChunkAt(finalVelocityPosition);
 
-                // Check chunk
-                if (!ChunkUtils.isLoaded(instance, newPosition.getX(), newPosition.getZ())) {
+                // Entity shouldn't be updated when moving in an unloaded chunk
+                if (!ChunkUtils.isLoaded(finalChunk)) {
                     return;
                 }
 
-                // World border and apply the position
-                final Position finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
-                if (finalVelocityPosition != null && updatePosition) {
+                // Apply the position if changed
+                if (!newPosition.isSimilar(position)) {
                     refreshPosition(finalVelocityPosition);
                 }
 
@@ -497,7 +520,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                     float drag;
                     if (onGround) {
                         final BlockPosition blockPosition = position.toBlockPosition();
-                        final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
+                        final CustomBlock customBlock = finalChunk.getCustomBlock(
+                                blockPosition.getX(),
+                                blockPosition.getY(),
+                                blockPosition.getZ());
                         if (customBlock != null) {
                             // Custom drag
                             drag = customBlock.getDrag(instance, blockPosition);
@@ -508,7 +534,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
                         // Stop player velocity
                         if (PlayerUtils.isNettyClient(this)) {
-                            velocity.zero();
+                            this.velocity.zero();
                         }
                     } else {
                         drag = 0.98f; // air drag
@@ -522,7 +548,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                 sendSynchronization();
                 // Verify if velocity packet has to be sent
                 if (hasVelocity() || gravityTickCount > 0) {
-                    sendVelocityPacket();
+                    sendPacketsToViewers(getVelocityPacket());
                 }
             }
 
@@ -564,6 +590,24 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
             ticks++;
             callEvent(EntityTickEvent.class, tickEvent); // reuse tickEvent to avoid recreating it each tick
+
+            // remove expired effects
+            {
+                this.effects.removeIf(timedPotion -> {
+                    final long potionTime = (long) timedPotion.getPotion().getDuration() * MinecraftServer.TICK_MS;
+                    // Remove if the potion should be expired
+                    if (time >= timedPotion.getStartingTime() + potionTime) {
+                        // Send the packet that the potion should no longer be applied
+                        timedPotion.getPotion().sendRemovePacket(this);
+                        callEvent(EntityPotionRemoveEvent.class, new EntityPotionRemoveEvent(
+                                this,
+                                timedPotion.getPotion()
+                        ));
+                        return true;
+                    }
+                    return false;
+                });
+            }
         }
 
         // Scheduled synchronization
@@ -575,13 +619,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         if (shouldRemove() && !MinecraftServer.isStopping()) {
             remove();
         }
-    }
-
-    /**
-     * Equivalent to <code>sendPacketsToViewers(getVelocityPacket());</code>.
-     */
-    public void sendVelocityPacket() {
-        sendPacketsToViewers(getVelocityPacket());
     }
 
     /**
@@ -643,7 +680,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      *
      * @param uuid the new entity uuid
      */
-    protected void setUuid(@NotNull UUID uuid) {
+    public void setUuid(@NotNull UUID uuid) {
+        // Refresh internal map
+        Entity.entityByUuid.remove(this.uuid);
+        Entity.entityByUuid.put(uuid, this);
+
         this.uuid = uuid;
     }
 
@@ -680,6 +721,17 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     }
 
     /**
+     * Changes the internal entity bounding box.
+     * <p>
+     * WARNING: this does not change the entity hit-box which is client-side.
+     *
+     * @param boundingBox the new bounding box
+     */
+    public void setBoundingBox(BoundingBox boundingBox) {
+        this.boundingBox = boundingBox;
+    }
+
+    /**
      * Convenient method to get the entity current chunk.
      *
      * @return the entity chunk, can be null even if unlikely
@@ -707,7 +759,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
      */
     public void setInstance(@NotNull Instance instance) {
-        Check.notNull(instance, "instance cannot be null!");
         Check.stateCondition(!instance.isRegistered(),
                 "Instances need to be registered, please use InstanceManager#registerInstance or InstanceManager#registerSharedInstance");
 
@@ -816,7 +867,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @return the distance between this and {@code entity}
      */
     public float getDistance(@NotNull Entity entity) {
-        Check.notNull(entity, "Entity cannot be null");
         return getPosition().getDistance(entity.getPosition());
     }
 
@@ -838,7 +888,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @throws IllegalStateException if {@link #getInstance()} returns null
      */
     public void addPassenger(@NotNull Entity entity) {
-        Check.notNull(entity, "Passenger cannot be null");
         Check.stateCondition(instance == null, "You need to set an instance using Entity#setInstance");
 
         if (entity.getVehicle() != null) {
@@ -859,7 +908,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @throws IllegalStateException if {@link #getInstance()} returns null
      */
     public void removePassenger(@NotNull Entity entity) {
-        Check.notNull(entity, "Passenger cannot be null");
         Check.stateCondition(instance == null, "You need to set an instance using Entity#setInstance");
 
         if (!passengers.remove(entity))
@@ -980,7 +1028,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      *
      * @return the custom name of the entity, null if there is not
      */
-    public ColoredText getCustomName() {
+    public JsonMessage getCustomName() {
         return customName;
     }
 
@@ -989,7 +1037,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      *
      * @param customName the custom name of the entity, null to remove it
      */
-    public void setCustomName(ColoredText customName) {
+    public void setCustomName(JsonMessage customName) {
         this.customName = customName;
         sendMetadataIndex(2);
     }
@@ -1055,9 +1103,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param z new position Z
      */
     public void refreshPosition(float x, float y, float z) {
-        this.lastX = position.getX();
-        this.lastY = position.getY();
-        this.lastZ = position.getZ();
         position.setX(x);
         position.setY(y);
         position.setZ(z);
@@ -1094,6 +1139,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                 }
             }
         }
+
+        this.lastX = position.getX();
+        this.lastY = position.getY();
+        this.lastZ = position.getZ();
     }
 
     /**
@@ -1129,9 +1178,33 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param sneaking true to make the entity sneak
      */
     public void setSneaking(boolean sneaking) {
-        this.crouched = sneaking;
-        this.pose = sneaking ? Pose.SNEAKING : Pose.STANDING;
-        sendMetadataIndex(0);
+        setPose(sneaking ? Pose.SNEAKING : Pose.STANDING);
+        sendMetadataIndex(0); // update the crouched metadata
+    }
+
+    /**
+     * Gets the current entity pose.
+     *
+     * @return the entity pose
+     */
+    @NotNull
+    public Pose getPose() {
+        return pose;
+    }
+
+    /**
+     * Changes the entity pose.
+     * <p>
+     * The internal {@code crouched} and {@code swimming} field will be
+     * updated accordingly.
+     *
+     * @param pose the new entity pose
+     */
+    @NotNull
+    public void setPose(@NotNull Pose pose) {
+        this.crouched = pose == Pose.SNEAKING;
+        this.swimming = pose == Pose.SWIMMING;
+        this.pose = pose;
         sendMetadataIndex(6);
     }
 
@@ -1152,37 +1225,73 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      *
      * @return the current position of the entity
      */
+    @NotNull
     public Position getPosition() {
         return position;
     }
 
     /**
      * Gets the entity eye height.
+     * <p>
+     * Default to {@link BoundingBox#getHeight()}x0.85
      *
      * @return the entity eye height
      */
     public float getEyeHeight() {
-        return eyeHeight;
+        return boundingBox.getHeight() * 0.85f;
     }
 
     /**
-     * Changes the entity eye height.
+     * Gets all the potion effect of this entity.
      *
-     * @param eyeHeight the entity eye height
+     * @return an unmodifiable list of all this entity effects
      */
-    public void setEyeHeight(float eyeHeight) {
-        this.eyeHeight = eyeHeight;
+    @NotNull
+    public List<TimedPotion> getActiveEffects() {
+        return Collections.unmodifiableList(effects);
+    }
+
+    /**
+     * Removes effect from entity, if it has it.
+     *
+     * @param effect The effect to remove
+     */
+    public void removeEffect(@NotNull PotionEffect effect) {
+        this.effects.removeIf(timedPotion -> {
+            if (timedPotion.getPotion().getEffect() == effect) {
+                timedPotion.getPotion().sendRemovePacket(this);
+                callEvent(EntityPotionRemoveEvent.class, new EntityPotionRemoveEvent(
+                        this,
+                        timedPotion.getPotion()
+                ));
+                return true;
+            }
+            return false;
+        });
+    }
+
+    /**
+     * Adds an effect to an entity.
+     *
+     * @param potion The potion to add
+     */
+    public void addEffect(@NotNull Potion potion) {
+        removeEffect(potion.getEffect());
+        this.effects.add(new TimedPotion(potion, System.currentTimeMillis()));
+        potion.sendAddPacket(this);
+        callEvent(EntityPotionAddEvent.class, new EntityPotionAddEvent(this, potion));
     }
 
     /**
      * Removes the entity from the server immediately.
      * <p>
-     * WARNING: this do not trigger the {@link EntityDeathEvent} event.
+     * WARNING: this does not trigger {@link EntityDeathEvent}.
      */
     public void remove() {
         this.removed = true;
         this.shouldRemove = true;
-        entityById.remove(id);
+        Entity.entityById.remove(id);
+        Entity.entityByUuid.remove(uuid);
         if (instance != null)
             instance.UNSAFE_removeEntity(this);
     }
@@ -1377,7 +1486,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     protected void sendSynchronization() {
         EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
         entityTeleportPacket.entityId = getEntityId();
-        entityTeleportPacket.position = getPosition();
+        entityTeleportPacket.position = getPosition().clone();
         entityTeleportPacket.onGround = isOnGround();
         sendPacketToViewers(entityTeleportPacket);
     }
@@ -1389,7 +1498,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         this.lastAbsoluteSynchronizationTime = 0;
     }
 
-    private enum Pose {
+    public enum Pose {
         STANDING,
         FALL_FLYING,
         SLEEPING,

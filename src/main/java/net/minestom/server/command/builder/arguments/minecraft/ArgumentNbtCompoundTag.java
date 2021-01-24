@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -22,29 +23,18 @@ public class ArgumentNbtCompoundTag extends Argument<NBTCompound> {
         super(id, true);
     }
 
-    @Override
-    public int getCorrectionResult(@NotNull String value) {
-        try {
-            NBT nbt = new SNBTParser(new StringReader(value)).parse();
-            return nbt instanceof NBTCompound ? SUCCESS : INVALID_NBT;
-        } catch (NBTException e) {
-            return INVALID_NBT;
-        }
-    }
-
     @NotNull
     @Override
-    public NBTCompound parse(@NotNull String value) {
+    public NBTCompound parse(@NotNull String input) throws ArgumentSyntaxException {
         try {
-            NBT nbt = new SNBTParser(new StringReader(value)).parse();
+            NBT nbt = new SNBTParser(new StringReader(input)).parse();
+
+            if (!(nbt instanceof NBTCompound))
+                throw new ArgumentSyntaxException("NBTCompound is invalid", input, INVALID_NBT);
+
             return (NBTCompound) nbt;
         } catch (NBTException e) {
-            return null;
+            throw new ArgumentSyntaxException("NBTCompound is invalid", input, INVALID_NBT);
         }
-    }
-
-    @Override
-    public int getConditionResult(@NotNull NBTCompound value) {
-        return SUCCESS;
     }
 }

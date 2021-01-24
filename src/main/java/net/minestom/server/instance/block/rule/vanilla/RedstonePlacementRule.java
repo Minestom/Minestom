@@ -6,6 +6,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class RedstonePlacementRule extends BlockPlacementRule {
@@ -15,21 +16,8 @@ public class RedstonePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public boolean canPlace(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
-        // TODO check solid block
-        return true;
-    }
-
-    @Override
-    public short blockRefresh(@NotNull Instance instance, @NotNull BlockPosition blockPosition, short currentId) {
-        int x = blockPosition.getX();
-        int y = blockPosition.getY();
-        int z = blockPosition.getZ();
-
-        if (isAir(instance, x, y - 1, z)) {
-            return Block.AIR.getBlockId();
-        }
-
+    public short blockUpdate(@NotNull Instance instance, @NotNull BlockPosition blockPosition, short currentId) {
+        BlockUtils block = new BlockUtils(instance, blockPosition);
 
         String east = "none";
         String north = "none";
@@ -37,36 +25,64 @@ public class RedstonePlacementRule extends BlockPlacementRule {
         String south = "none";
         String west = "none";
 
-        if (isRedstone(instance, x + 1, y + 1, z)) {
-            east = "up";
-        } else if (isRedstone(instance, x + 1, y, z)) {
-            east = "side";
-        } else if (isRedstone(instance, x + 1, y - 1, z)) {
-            east = "side";
-        }
+        // TODO Block should have method isRedstone, as redstone connects to more than itself.
 
-        if (isRedstone(instance, x - 1, y + 1, z)) {
-            west = "up";
-        } else if (isRedstone(instance, x - 1, y, z)) {
-            west = "side";
-        } else if (isRedstone(instance, x - 1, y - 1, z)) {
-            west = "side";
-        }
+        final BlockUtils blockNorth = block.north();
+        final BlockUtils blockSouth = block.south();
+        final BlockUtils blockEast = block.east();
+        final BlockUtils blockWest = block.west();
+        int connected = 0;
 
-        if (isRedstone(instance, x, y + 1, z + 1)) {
-            south = "up";
-        } else if (isRedstone(instance, x, y, z + 1)) {
-            south = "side";
-        } else if (isRedstone(instance, x, y - 1, z + 1)) {
+        if (blockNorth.equals(Block.REDSTONE_WIRE) || blockNorth.below().equals(Block.REDSTONE_WIRE)) {
+            connected++;
+            north = "side";
+        }
+        if (blockSouth.equals(Block.REDSTONE_WIRE) || blockSouth.below().equals(Block.REDSTONE_WIRE)) {
+            connected++;
             south = "side";
         }
-
-        if (isRedstone(instance, x, y + 1, z - 1)) {
+        if (blockEast.equals(Block.REDSTONE_WIRE) || blockEast.below().equals(Block.REDSTONE_WIRE)) {
+            connected++;
+            east = "side";
+        }
+        if (blockWest.equals(Block.REDSTONE_WIRE) || blockWest.below().equals(Block.REDSTONE_WIRE)) {
+            connected++;
+            west = "side";
+        }
+        if (blockNorth.above().equals(Block.REDSTONE_WIRE)) {
+            connected++;
             north = "up";
-        } else if (isRedstone(instance, x, y, z - 1)) {
+        }
+        if (blockSouth.above().equals(Block.REDSTONE_WIRE)) {
+            connected++;
+            south = "up";
+        }
+        if (blockEast.above().equals(Block.REDSTONE_WIRE)) {
+            connected++;
+            east = "up";
+        }
+        if (blockWest.above().equals(Block.REDSTONE_WIRE)) {
+            connected++;
+            west = "up";
+        }
+        if (connected == 0) {
             north = "side";
-        } else if (isRedstone(instance, x, y - 1, z - 1)) {
-            north = "side";
+            south = "side";
+            east = "side";
+            west = "side";
+        } else if (connected == 1) {
+            if (!north.equals("none")) {
+                south = "side";
+            }
+            if (!south.equals("none")) {
+                north = "side";
+            }
+            if (!east.equals("none")) {
+                west = "side";
+            }
+            if (!west.equals("none")) {
+                east = "side";
+            }
         }
 
         // TODO power
@@ -82,18 +98,15 @@ public class RedstonePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public short blockPlace(@NotNull Instance instance, @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Player pl) {
+    public short blockPlace(@NotNull Instance instance,
+                            @NotNull Block block, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition,
+                            @NotNull Player pl) {
+        final short belowBlockId = instance.getBlockStateId(blockPosition.getX(), blockPosition.getY() - 1, blockPosition.getZ());
+        if (!Block.fromStateId(belowBlockId).isSolid()) {
+            return CANCEL_CODE;
+        }
+
         return getBlockId();
-    }
-
-    private boolean isRedstone(Instance instance, int x, int y, int z) {
-        final short blockStateId = instance.getBlockStateId(x, y, z);
-        return Block.fromStateId(blockStateId) == Block.REDSTONE_WIRE;
-    }
-
-    private boolean isAir(Instance instance, int x, int y, int z) {
-        final short blockStateId = instance.getBlockStateId(x, y, z);
-        return Block.fromStateId(blockStateId) == Block.AIR;
     }
 
 }

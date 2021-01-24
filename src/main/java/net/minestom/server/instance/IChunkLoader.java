@@ -59,7 +59,7 @@ public interface IChunkLoader {
                 parallelSavingThreadPool.awaitTermination(1L, java.util.concurrent.TimeUnit.DAYS);
                 OptionalCallback.execute(callback);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(e);
             }
         } else {
             AtomicInteger counter = new AtomicInteger();

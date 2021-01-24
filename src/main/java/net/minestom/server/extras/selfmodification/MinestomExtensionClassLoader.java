@@ -58,8 +58,7 @@ public class MinestomExtensionClassLoader extends HierarchyClassLoader {
         } catch (ClassNotFoundException e) {
             for(MinestomExtensionClassLoader child : children) {
                 try {
-                    Class<?> loaded = child.loadClassAsChild(name, resolve);
-                    return loaded;
+                    return child.loadClassAsChild(name, resolve);
                 } catch (ClassNotFoundException e1) {
                     // move on to next child
                 }

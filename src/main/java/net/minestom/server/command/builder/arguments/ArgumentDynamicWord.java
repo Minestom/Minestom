@@ -1,13 +1,16 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.callback.validator.StringValidator;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Same as {@link ArgumentWord} with the exception
- * that this argument can trigger {@link net.minestom.server.command.builder.Command#onDynamicWrite(String)}
+ * that this argument can trigger {@link net.minestom.server.command.builder.Command#onDynamicWrite(CommandSender, String)}
  * when the suggestion type is {@link SuggestionType#ASK_SERVER}, or any other suggestions available in the enum.
  */
 public class ArgumentDynamicWord extends Argument<String> {
@@ -24,31 +27,20 @@ public class ArgumentDynamicWord extends Argument<String> {
         this.suggestionType = suggestionType;
     }
 
-    @Override
-    public int getCorrectionResult(@NotNull String value) {
-        if (value.contains(" "))
-            return SPACE_ERROR;
-
-        return SUCCESS;
-    }
-
     @NotNull
     @Override
-    public String parse(@NotNull String value) {
-        return value;
-    }
-
-    @Override
-    public int getConditionResult(@NotNull String value) {
+    public String parse(@NotNull String input) throws ArgumentSyntaxException {
+        if (input.contains(StringUtils.SPACE))
+            throw new ArgumentSyntaxException("Word cannot contain space characters", input, SPACE_ERROR);
 
         // true if 'value' is valid based on the dynamic restriction
-        final boolean restrictionCheck = dynamicRestriction == null || dynamicRestriction.isValid(value);
+        final boolean restrictionCheck = dynamicRestriction == null || dynamicRestriction.isValid(input);
 
         if (!restrictionCheck) {
-            return RESTRICTION_ERROR;
+            throw new ArgumentSyntaxException("Word does not respect the dynamic restriction", input, RESTRICTION_ERROR);
         }
 
-        return SUCCESS;
+        return input;
     }
 
     /**

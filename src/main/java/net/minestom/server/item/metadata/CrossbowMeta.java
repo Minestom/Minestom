@@ -103,7 +103,7 @@ public class CrossbowMeta extends ItemMeta {
 
     @Override
     public boolean hasNbt() {
-        return !projectile1.isAir();
+        return projectile1 != null && !projectile1.isAir();
     }
 
     @Override

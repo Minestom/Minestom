@@ -30,8 +30,8 @@ public class UseEntityListener {
             player.callEvent(PlayerEntityInteractEvent.class, playerEntityInteractEvent);
         } else {
             // TODO find difference with INTERACT
-            PlayerEntityInteractEvent playerEntityInteractEvent = new PlayerEntityInteractEvent(player, entity, packet.hand);
-            player.callEvent(PlayerEntityInteractEvent.class, playerEntityInteractEvent);
+            //PlayerEntityInteractEvent playerEntityInteractEvent = new PlayerEntityInteractEvent(player, entity, packet.hand);
+            //player.callEvent(PlayerEntityInteractEvent.class, playerEntityInteractEvent);
         }
     }
 

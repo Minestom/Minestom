@@ -1,8 +1,11 @@
 package net.minestom.server.command.builder;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,15 +59,15 @@ public class CommandDispatcher {
      * @param commandString the command (containing the command name and the args if any)
      * @return the result of the parsing, null if the command doesn't exist
      */
+    @Nullable
     public CommandResult parse(@NotNull String commandString) {
         commandString = commandString.trim();
 
         // Split space
-        final String spaceRegex = " ";
-        final String[] parts = commandString.split(spaceRegex);
+        final String[] parts = commandString.split(StringUtils.SPACE);
         final String commandName = parts[0];
 
-        final String[] args = commandString.replaceFirst(Pattern.quote(commandName), "").trim().split(spaceRegex);
+        final String[] args = commandString.replaceFirst(Pattern.quote(commandName), "").trim().split(StringUtils.SPACE);
 
         final Command command = findCommand(commandName);
         // Check if the command exists
@@ -107,6 +110,7 @@ public class CommandDispatcher {
         return commandMap.getOrDefault(commandName, null);
     }
 
+    @NotNull
     private CommandResult findCommandResult(@NotNull Command command, @NotNull String[] args) {
         CommandResult result = new CommandResult();
         result.command = command;
@@ -125,75 +129,89 @@ public class CommandDispatcher {
         // All the registered syntaxes of the command
         final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
         // Contains all the fully validated syntaxes (we later find the one with the most amount of arguments)
-        List<CommandSyntax> validSyntaxes = new ArrayList<>();
-        // Contains the raw string value of each argument that has been validated
-        // CommandSyntax - (Argument index/Raw string value)
-        Map<CommandSyntax, String[]> syntaxesValues = new HashMap<>();
+        List<ValidSyntaxHolder> validSyntaxes = new ArrayList<>();
 
         // Contains all the syntaxes that are not fully correct, used to later, retrieve the "most correct syntax"
         // Number of correct argument - The data about the failing argument
-        TreeMap<Integer, CommandSuggestionHolder> syntaxesSuggestions = new TreeMap<>(Collections.reverseOrder());
+        Int2ObjectRBTreeMap<CommandSuggestionHolder> syntaxesSuggestions = new Int2ObjectRBTreeMap<>(Collections.reverseOrder());
 
         for (CommandSyntax syntax : syntaxes) {
             final Argument<?>[] arguments = syntax.getArguments();
-            final String[] argsValues = new String[Byte.MAX_VALUE];
+            final List<Object> argsValues = new ArrayList<>(arguments.length);
 
             boolean syntaxCorrect = true;
             // The current index in the raw command string arguments
-            int argIndex = 0;
+            int splitIndex = 0;
 
             boolean useRemaining = false;
             // Check the validity of the arguments...
-            for (int argCount = 0; argCount < syntax.getArguments().length; argCount++) {
-                final Argument<?> argument = syntax.getArguments()[argCount];
+            for (int argCount = 0; argCount < arguments.length; argCount++) {
+                final boolean lastArgumentIteration = argCount + 1 == arguments.length;
+                final Argument<?> argument = arguments[argCount];
                 useRemaining = argument.useRemaining();
 
-                // the correction result of the argument
-                int correctionResult = Argument.SUCCESS;
+                // the parsed argument value, null if incorrect
+                Object parsedValue;
+                // the argument exception, null if the input is correct
+                ArgumentSyntaxException argumentSyntaxException = null;
                 // true if the arg is valid, false otherwise
                 boolean correct = false;
                 // the raw string representing the correct argument syntax
                 StringBuilder argValue = new StringBuilder();
 
                 if (useRemaining) {
-                    final boolean hasArgs = args.length > argIndex;
+                    final boolean hasArgs = args.length > splitIndex;
                     // Verify if there is any string part available
                     if (hasArgs) {
                         // Argument is supposed to take the rest of the command input
-                        for (int i = argIndex; i < args.length; i++) {
+                        for (int i = splitIndex; i < args.length; i++) {
                             final String arg = args[i];
                             if (argValue.length() > 0)
-                                argValue.append(" ");
+                                argValue.append(StringUtils.SPACE);
                             argValue.append(arg);
                         }
 
                         final String argValueString = argValue.toString();
 
-                        correctionResult = argument.getCorrectionResult(argValueString);
-                        if (correctionResult == Argument.SUCCESS) {
+                        try {
+                            parsedValue = argument.parse(argValueString);
                             correct = true;
-                            argsValues[argCount] = argValueString;
+                            argsValues.add(parsedValue);
+                        } catch (ArgumentSyntaxException exception) {
+                            argumentSyntaxException = exception;
                         }
                     }
                 } else {
                     // Argument is either single-word or can accept optional delimited space(s)
-                    for (int i = argIndex; i < args.length; i++) {
+                    for (int i = splitIndex; i < args.length; i++) {
                         final String rawArg = args[i];
 
                         argValue.append(rawArg);
 
                         final String argValueString = argValue.toString();
 
-                        correctionResult = argument.getCorrectionResult(argValueString);
-                        if (correctionResult == Argument.SUCCESS) {
+                        try {
+                            parsedValue = argument.parse(argValueString);
+
+                            // Prevent quitting the parsing too soon if the argument
+                            // does not allow space
+                            if (lastArgumentIteration && i + 1 < args.length) {
+                                if (!argument.allowSpace())
+                                    break;
+                                argValue.append(StringUtils.SPACE);
+                                continue;
+                            }
+
                             correct = true;
-                            argsValues[argCount] = argValueString;
-                            argIndex = i + 1;
+                            argsValues.add(parsedValue);
+                            splitIndex = i + 1;
                             break;
-                        } else {
+                        } catch (ArgumentSyntaxException exception) {
+                            argumentSyntaxException = exception;
+
                             if (!argument.allowSpace())
                                 break;
-                            argValue.append(" ");
+                            argValue.append(StringUtils.SPACE);
                         }
                     }
                 }
@@ -204,8 +222,7 @@ public class CommandDispatcher {
                     syntaxCorrect = false;
                     CommandSuggestionHolder suggestionHolder = new CommandSuggestionHolder();
                     suggestionHolder.syntax = syntax;
-                    suggestionHolder.argValue = argValue.toString();
-                    suggestionHolder.correctionResult = correctionResult;
+                    suggestionHolder.argumentSyntaxException = argumentSyntaxException;
                     suggestionHolder.argIndex = argCount;
                     syntaxesSuggestions.put(argCount, suggestionHolder);
                     break;
@@ -214,9 +231,12 @@ public class CommandDispatcher {
 
             // Add the syntax to the list of valid syntaxes if correct
             if (syntaxCorrect) {
-                if (args.length == argIndex || useRemaining) {
-                    validSyntaxes.add(syntax);
-                    syntaxesValues.put(syntax, argsValues);
+                if (arguments.length == argsValues.size() || useRemaining) {
+                    ValidSyntaxHolder validSyntaxHolder = new ValidSyntaxHolder();
+                    validSyntaxHolder.syntax = syntax;
+                    validSyntaxHolder.argumentsValue = argsValues;
+
+                    validSyntaxes.add(validSyntaxHolder);
                 }
             }
         }
@@ -224,7 +244,7 @@ public class CommandDispatcher {
         // Check if there is at least one correct syntax
         if (!validSyntaxes.isEmpty()) {
             // Search the syntax with all perfect args
-            final CommandSyntax finalSyntax = findMostCorrectSyntax(validSyntaxes, syntaxesValues, executorArgs);
+            final CommandSyntax finalSyntax = findMostCorrectSyntax(validSyntaxes, executorArgs);
             if (finalSyntax != null) {
                 // A fully correct syntax has been found, use it
                 result.syntax = finalSyntax;
@@ -233,54 +253,25 @@ public class CommandDispatcher {
                 return result;
             }
 
-            // Otherwise, search for the first syntax with an incorrect argument
-            for (CommandSyntax syntax : validSyntaxes) {
-                final Argument[] arguments = syntax.getArguments();
-                final String[] argsValues = syntaxesValues.get(syntax);
-                for (int i = 0; i < arguments.length; i++) {
-                    final Argument argument = arguments[i];
-                    final String argValue = argsValues[i];
-                    // Finally parse it
-                    final Object parsedValue = argument.parse(argValue);
-                    final int conditionResult = argument.getConditionResult(parsedValue);
-                    if (conditionResult != Argument.SUCCESS) {
-                        // Condition of an argument not correct, use the argument callback if any
-                        if (argument.hasErrorCallback()) {
-                            result.callback = argument.getCallback();
-                            result.value = argValue;
-                            result.error = conditionResult;
-
-                            return result;
-                        }
-                    }
-                }
-            }
-
         }
 
         // No all-correct syntax, find the closest one to use the argument callback
         {
             // Get closest valid syntax
             if (!syntaxesSuggestions.isEmpty()) {
-                final int max = syntaxesSuggestions.firstKey(); // number of correct arguments
-                // Check if at least 1 argument of the syntax is correct
-                if (max > 0) {
-                    // Get the data of the closest syntax
-                    final CommandSuggestionHolder suggestionHolder = syntaxesSuggestions.get(max);
-                    final CommandSyntax syntax = suggestionHolder.syntax;
-                    final String argValue = suggestionHolder.argValue;
-                    final int correctionResult = suggestionHolder.correctionResult;
-                    final int argIndex = suggestionHolder.argIndex;
+                final int max = syntaxesSuggestions.firstIntKey(); // number of correct arguments in the most correct syntax
+                final CommandSuggestionHolder suggestionHolder = syntaxesSuggestions.get(max);
+                final CommandSyntax syntax = suggestionHolder.syntax;
+                final ArgumentSyntaxException argumentSyntaxException = suggestionHolder.argumentSyntaxException;
+                final int argIndex = suggestionHolder.argIndex;
 
-                    // Found the closest syntax with at least 1 correct argument
-                    final Argument<?> argument = syntax.getArguments()[argIndex];
-                    if (argument.hasErrorCallback()) {
-                        result.callback = argument.getCallback();
-                        result.value = argValue;
-                        result.error = correctionResult;
+                // Found the closest syntax with at least 1 correct argument
+                final Argument<?> argument = syntax.getArguments()[argIndex];
+                if (argument.hasErrorCallback()) {
+                    result.callback = argument.getCallback();
+                    result.argumentSyntaxException = argumentSyntaxException;
 
-                        return result;
-                    }
+                    return result;
                 }
             }
         }
@@ -296,60 +287,67 @@ public class CommandDispatcher {
      * Retrieves from the valid syntax map the arguments condition result and get the one with the most
      * valid arguments.
      *
-     * @param validSyntaxes  the list containing all the valid syntaxes
-     * @param syntaxesValues the map containing the argument raw string values
-     * @param executorArgs   the recipient of the argument parsed values
+     * @param validSyntaxes the list containing all the valid syntaxes
+     * @param executorArgs  the recipient of the argument parsed values
      * @return the command syntax with all of its arguments correct and with the most arguments count, null if not any
      */
     @Nullable
-    private CommandSyntax findMostCorrectSyntax(@NotNull List<CommandSyntax> validSyntaxes,
-                                                @NotNull Map<CommandSyntax, String[]> syntaxesValues,
+    private CommandSyntax findMostCorrectSyntax(@NotNull List<ValidSyntaxHolder> validSyntaxes,
                                                 @NotNull Arguments executorArgs) {
-        Map<CommandSyntax, Arguments> argumentsValueMap = new HashMap<>();
-
         CommandSyntax finalSyntax = null;
         int maxArguments = 0;
-        for (CommandSyntax syntax : validSyntaxes) {
-            Arguments syntaxValues = new Arguments();
-            boolean fullyCorrect = true;
+        Arguments finalArguments = null;
+
+        for (ValidSyntaxHolder validSyntaxHolder : validSyntaxes) {
+            final CommandSyntax syntax = validSyntaxHolder.syntax;
 
             final Argument<?>[] arguments = syntax.getArguments();
-            final String[] argsValues = syntaxesValues.get(syntax);
-            for (int i = 0; i < arguments.length; i++) {
-                final Argument argument = arguments[i];
-                final String argValue = argsValues[i];
-                // Finally parse it
-                final Object parsedValue = argument.parse(argValue);
-                final int conditionResult = argument.getConditionResult(parsedValue);
-                if (conditionResult == Argument.SUCCESS) {
-                    syntaxValues.setArg(argument.getId(), parsedValue);
-                } else {
-                    // One argument is incorrect, stop the whole syntax check
-                    fullyCorrect = false;
-                    break;
-                }
-            }
+            final int argumentsCount = arguments.length;
+            final List<Object> argsValues = validSyntaxHolder.argumentsValue;
 
-            final int argumentLength = arguments.length;
-            if (fullyCorrect && argumentLength > maxArguments) {
+            final int argsSize = argsValues.size();
+
+            if (argsSize > maxArguments) {
                 finalSyntax = syntax;
-                maxArguments = argumentLength;
-                argumentsValueMap.put(syntax, syntaxValues);
+                maxArguments = argsSize;
+
+                // Fill arguments map
+                Arguments syntaxValues = new Arguments();
+                for (int i = 0; i < argumentsCount; i++) {
+                    final Argument<?> argument = arguments[i];
+                    final Object argumentValue = argsValues.get(i);
+
+                    syntaxValues.setArg(argument.getId(), argumentValue);
+                }
+                finalArguments = syntaxValues;
             }
         }
 
         // Get the arguments values
         if (finalSyntax != null) {
-            executorArgs.copy(argumentsValueMap.get(finalSyntax));
+            executorArgs.copy(finalArguments);
         }
 
         return finalSyntax;
     }
 
+    /**
+     * Holds the data of a validated syntax.
+     */
+    private static class ValidSyntaxHolder {
+        private CommandSyntax syntax;
+        /**
+         * (Argument index/Argument parsed object)
+         */
+        private List<Object> argumentsValue;
+    }
+
+    /**
+     * Holds the data of an invalidated syntax.
+     */
     private static class CommandSuggestionHolder {
         private CommandSyntax syntax;
-        private String argValue;
-        private int correctionResult;
+        private ArgumentSyntaxException argumentSyntaxException;
         private int argIndex;
     }
 
@@ -369,8 +367,7 @@ public class CommandDispatcher {
 
         // Argument Callback
         private ArgumentCallback callback;
-        private String value;
-        private int error;
+        private ArgumentSyntaxException argumentSyntaxException;
 
         /**
          * Executes the command for the given source.
@@ -399,16 +396,17 @@ public class CommandDispatcher {
                     // The executor is from a syntax
                     final CommandCondition commandCondition = syntax.getCommandCondition();
                     if (commandCondition == null || commandCondition.canUse(source, commandString)) {
+                        arguments.retrieveDefaultValues(syntax.getDefaultValuesMap());
                         executor.apply(source, arguments);
                     }
                 } else {
                     // The executor is probably the default one
                     executor.apply(source, arguments);
                 }
-            } else if (callback != null) {
+            } else if (callback != null && argumentSyntaxException != null) {
                 // No syntax has been validated but the faulty argument with a callback has been found
                 // Execute the faulty argument callback
-                callback.apply(source, value, error);
+                callback.apply(source, argumentSyntaxException);
             }
         }
 

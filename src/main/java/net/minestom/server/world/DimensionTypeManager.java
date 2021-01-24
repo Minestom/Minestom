@@ -28,7 +28,8 @@ public final class DimensionTypeManager {
      * @param dimensionType the dimension to add
      */
     public void addDimension(@NotNull DimensionType dimensionType) {
-        dimensionTypes.add(dimensionType);
+        dimensionType.registered = true;
+        this.dimensionTypes.add(dimensionType);
     }
 
     /**
@@ -38,6 +39,7 @@ public final class DimensionTypeManager {
      * @return if the dimension type was removed, false if it was not present before
      */
     public boolean removeDimension(@NotNull DimensionType dimensionType) {
+        dimensionType.registered = false;
         return dimensionTypes.remove(dimensionType);
     }
 
@@ -51,6 +53,14 @@ public final class DimensionTypeManager {
         return Collections.unmodifiableList(dimensionTypes);
     }
 
+    /**
+     * Creates the {@link NBTCompound} containing all the registered dimensions.
+     * <p>
+     * Used when a player connects.
+     *
+     * @return an nbt compound containing the registered dimensions
+     */
+    @NotNull
     public NBTCompound toNBT() {
         NBTCompound dimensions = new NBTCompound();
         dimensions.setString("type", "minecraft:dimension_type");

@@ -1,12 +1,11 @@
 package net.minestom.server;
 
 import com.google.common.collect.Queues;
-import net.minestom.server.entity.EntityManager;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.thread.PerInstanceThreadProvider;
 import net.minestom.server.thread.ThreadProvider;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -50,35 +49,39 @@ public final class UpdateManager {
      * Starts the server loop in the update thread.
      */
     protected void start() {
-        final EntityManager entityManager = MinecraftServer.getEntityManager();
+        final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
 
         updateExecutionService.scheduleAtFixedRate(() -> {
-            if (stopRequested) {
-                updateExecutionService.shutdown();
-                return;
+            try {
+                if (stopRequested) {
+                    updateExecutionService.shutdown();
+                    return;
+                }
+
+                long currentTime = System.nanoTime();
+                final long tickStart = System.currentTimeMillis();
+
+                // Tick start callbacks
+                doTickCallback(tickStartCallbacks, tickStart);
+
+                // Waiting players update (newly connected clients waiting to get into the server)
+                connectionManager.updateWaitingPlayers();
+
+                // Keep Alive Handling
+                connectionManager.handleKeepAlive(tickStart);
+
+                // Server tick (chunks/entities)
+                serverTick(tickStart);
+
+                // the time that the tick took in nanoseconds
+                final long tickTime = System.nanoTime() - currentTime;
+
+                // Tick end callbacks
+                doTickCallback(tickEndCallbacks, tickTime / 1000000L);
+
+            } catch (Exception e) {
+                MinecraftServer.getExceptionManager().handleException(e);
             }
-
-            long currentTime = System.nanoTime();
-            final long tickStart = System.currentTimeMillis();
-
-            // Tick start callbacks
-            doTickCallback(tickStartCallbacks, tickStart);
-
-            // Waiting players update (newly connected clients waiting to get into the server)
-            entityManager.updateWaitingPlayers();
-
-            // Keep Alive Handling
-            entityManager.handleKeepAlive(tickStart);
-
-            // Server tick (chunks/entities)
-            serverTick(tickStart);
-
-            // the time that the tick took in nanoseconds
-            final long tickTime = System.nanoTime() - currentTime;
-
-            // Tick end callbacks
-            doTickCallback(tickEndCallbacks, tickTime / 1000000L);
-
         }, 0, MinecraftServer.TICK_MS, TimeUnit.MILLISECONDS);
     }
 
@@ -100,7 +103,7 @@ public final class UpdateManager {
             try {
                 future.get();
             } catch (Throwable e) {
-                e.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(e);
             }
         }
     }
@@ -136,7 +139,6 @@ public final class UpdateManager {
      * @throws NullPointerException if <code>threadProvider</code> is null
      */
     public synchronized void setThreadProvider(ThreadProvider threadProvider) {
-        Check.notNull(threadProvider, "The thread provider cannot be null");
         this.threadProvider = threadProvider;
     }
 

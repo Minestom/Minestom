@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.number;
 
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 
 public class ArgumentInteger extends ArgumentNumber<Integer> {
@@ -10,33 +11,24 @@ public class ArgumentInteger extends ArgumentNumber<Integer> {
         this.max = Integer.MAX_VALUE;
     }
 
-    @Override
-    public int getCorrectionResult(@NotNull String value) {
-        try {
-            Integer.parseInt(parseValue(value), getRadix(value));
-            return SUCCESS;
-        } catch (NumberFormatException | NullPointerException e) {
-            return NOT_NUMBER_ERROR;
-        }
-    }
-
     @NotNull
     @Override
-    public Integer parse(@NotNull String value) {
-        return Integer.parseInt(parseValue(value), getRadix(value));
-    }
+    public Integer parse(@NotNull String input) throws ArgumentSyntaxException {
+        try {
+            final int value = Integer.parseInt(parseValue(input), getRadix(input));
 
-    @Override
-    public int getConditionResult(@NotNull Integer value) {
-        // Check range
-        if (hasMin && value < min) {
-            return RANGE_ERROR;
-        }
-        if (hasMax && value > max) {
-            return RANGE_ERROR;
-        }
+            // Check range
+            if (hasMin && value < min) {
+                throw new ArgumentSyntaxException("Input is lower than the minimum required value", input, RANGE_ERROR);
+            }
+            if (hasMax && value > max) {
+                throw new ArgumentSyntaxException("Input is higher than the minimum required value", input, RANGE_ERROR);
+            }
 
-        return SUCCESS;
+            return value;
+        } catch (NumberFormatException | NullPointerException e) {
+            throw new ArgumentSyntaxException("Input is not a number/long", input, NOT_NUMBER_ERROR);
+        }
     }
 
 }

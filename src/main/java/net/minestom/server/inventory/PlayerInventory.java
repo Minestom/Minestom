@@ -34,8 +34,8 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     public static final int INVENTORY_SIZE = 46;
 
-    private final Player player;
-    private final ItemStack[] items = new ItemStack[INVENTORY_SIZE];
+    protected final Player player;
+    protected final ItemStack[] items = new ItemStack[INVENTORY_SIZE];
     private ItemStack cursorItem = ItemStack.getAirItem();
 
     private final List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
@@ -43,7 +43,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     private Data data;
 
-    public PlayerInventory(Player player) {
+    public PlayerInventory(@NotNull Player player) {
         this.player = player;
 
         ArrayUtils.fill(items, ItemStack::getAirItem);
@@ -70,8 +70,8 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     @Override
     public void addInventoryCondition(@NotNull InventoryCondition inventoryCondition) {
         InventoryCondition condition = (p, slot, clickType, inventoryConditionResult) -> {
-            slot = convertSlot(slot, OFFSET);
-            inventoryCondition.accept(p, slot, clickType, inventoryConditionResult);
+            final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
+            inventoryCondition.accept(p, convertedSlot, clickType, inventoryConditionResult);
         };
 
         this.inventoryConditions.add(condition);
@@ -134,6 +134,9 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         }
         // Send the cleared inventory to the inventory's owner
         update();
+
+        // Update equipments for viewers
+        this.player.syncEquipments();
     }
 
     @Override
@@ -258,7 +261,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
      * @throws IllegalArgumentException if the slot {@code slot} does not exist
      * @throws NullPointerException     if {@code itemStack} is null
      */
-    private synchronized void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
+    protected synchronized void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
         Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
                 "The slot " + slot + " does not exist for player");
         Check.notNull(itemStack, "The ItemStack cannot be null, you can set air instead");
@@ -317,8 +320,8 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
      * @param itemStack the item stack to set
      */
     protected void setItemStack(int slot, int offset, ItemStack itemStack) {
-        slot = convertSlot(slot, offset);
-        setItemStack(slot, itemStack);
+        final int convertedSlot = convertPlayerInventorySlot(slot, offset);
+        setItemStack(convertedSlot, itemStack);
     }
 
     /**
@@ -329,8 +332,8 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
      * @return the item in the specified slot
      */
     protected ItemStack getItemStack(int slot, int offset) {
-        slot = convertSlot(slot, offset);
-        return this.items[slot];
+        final int convertedSlot = convertPlayerInventorySlot(slot, offset);
+        return this.items[convertedSlot];
     }
 
     /**
@@ -370,7 +373,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     @Override
     public boolean leftClick(@NotNull Player player, int slot) {
         final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = getItemStack(convertSlot(slot, OFFSET));
+        final ItemStack clicked = getItemStack(convertPlayerInventorySlot(slot, OFFSET));
 
         final InventoryClickResult clickResult = clickProcessor.leftClick(null, player, slot, clicked, cursor);
 
@@ -414,7 +417,8 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     @Override
     public boolean drop(@NotNull Player player, int mode, int slot, int button) {
         final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = slot == -999 ? null : getItemStack(slot, OFFSET);
+        final boolean outsideDrop = slot == -999;
+        final ItemStack clicked = outsideDrop ? ItemStack.getAirItem() : getItemStack(slot, OFFSET);
 
         final InventoryClickResult clickResult = clickProcessor.drop(null, player,
                 mode, slot, button, clicked, cursor);
@@ -422,8 +426,8 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         if (clickResult.doRefresh())
             sendSlotRefresh((short) slot, clicked);
 
-        ItemStack resultClicked = clickResult.getClicked();
-        if (resultClicked != null)
+        final ItemStack resultClicked = clickResult.getClicked();
+        if (resultClicked != null && !outsideDrop)
             setItemStack(slot, OFFSET, resultClicked);
         setCursorItem(clickResult.getCursor());
 
@@ -442,7 +446,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
                             if (hotBarClick) {
                                 return i < 9 ? i + 9 : i - 9;
                             } else {
-                                return convertSlot(i, OFFSET);
+                                return convertPlayerInventorySlot(i, OFFSET);
                             }
                         },
                         index -> getItemStack(index, OFFSET),
@@ -488,9 +492,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     @Override
     public boolean dragging(@NotNull Player player, int slot, int button) {
         final ItemStack cursor = getCursorItem();
-        ItemStack clicked = null;
-        if (slot != -999)
-            clicked = getItemStack(slot, OFFSET);
+        final ItemStack clicked = slot != -999 ? getItemStack(slot, OFFSET) : ItemStack.getAirItem();
 
         final InventoryClickResult clickResult = clickProcessor.dragging(null, player,
                 slot, button,

@@ -71,13 +71,10 @@ public interface BlockModifier {
     }
 
     default void setBlock(@NotNull BlockPosition blockPosition, @NotNull Block block) {
-        Check.notNull(blockPosition, "The block position cannot be null");
-        Check.notNull(block, "The block cannot be null");
         setBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), block);
     }
 
     default void setBlockStateId(@NotNull BlockPosition blockPosition, short blockStateId) {
-        Check.notNull(blockPosition, "The block position cannot be null");
         setBlockStateId(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), blockStateId);
     }
 
@@ -97,7 +94,6 @@ public interface BlockModifier {
     }
 
     default void setCustomBlock(@NotNull BlockPosition blockPosition, @NotNull String customBlockId) {
-        Check.notNull(blockPosition, "The block position cannot be null");
         setCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), customBlockId);
     }
 
@@ -106,7 +102,6 @@ public interface BlockModifier {
     }
 
     default void setSeparateBlocks(@NotNull BlockPosition blockPosition, short blockStateId, short customBlockId) {
-        Check.notNull(blockPosition, "The block position cannot be null");
         setSeparateBlocks(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), blockStateId, customBlockId, null);
     }
 

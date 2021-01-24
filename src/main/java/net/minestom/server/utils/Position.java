@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
@@ -203,7 +204,7 @@ public class Position implements PublicCloneable<Position> {
         try {
             return (Position) super.clone();
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             return null;
         }
     }
@@ -264,11 +265,11 @@ public class Position implements PublicCloneable<Position> {
      * @return true if 'this' is in the same chunk as {@code position}
      */
     public boolean inSameChunk(@NotNull Position position) {
-        final int chunkX1 = ChunkUtils.getChunkCoordinate((int) Math.floor(getX()));
-        final int chunkZ1 = ChunkUtils.getChunkCoordinate((int) Math.floor(getZ()));
+        final int chunkX1 = ChunkUtils.getChunkCoordinate((int) getX());
+        final int chunkZ1 = ChunkUtils.getChunkCoordinate((int) getZ());
 
-        final int chunkX2 = ChunkUtils.getChunkCoordinate((int) Math.floor(position.getX()));
-        final int chunkZ2 = ChunkUtils.getChunkCoordinate((int) Math.floor(position.getZ()));
+        final int chunkX2 = ChunkUtils.getChunkCoordinate((int) position.getX());
+        final int chunkZ2 = ChunkUtils.getChunkCoordinate((int) position.getZ());
 
         return chunkX1 == chunkX2 && chunkZ1 == chunkZ2;
     }

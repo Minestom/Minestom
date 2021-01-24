@@ -3,6 +3,7 @@ package net.minestom.server.entity.fakeplayer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerSpawnEvent;
+import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.player.FakePlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.time.TimeUnit;
@@ -22,23 +23,41 @@ import java.util.function.Consumer;
  */
 public class FakePlayer extends Player {
 
+    private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
+
     private final FakePlayerOption option;
     private final FakePlayerController fakePlayerController;
 
-    private FakePlayer(@NotNull UUID uuid, @NotNull String username, @NotNull FakePlayerOption option) {
+    /**
+     * Initializes a new {@link FakePlayer} with the given {@code uuid}, {@code username} and {@code option}'s.
+     *
+     * @param uuid     The unique identifier for the fake player.
+     * @param username The username for the fake player.
+     * @param option   Any option for the fake player.
+     */
+    private FakePlayer(@NotNull UUID uuid, @NotNull String username,
+                       @NotNull FakePlayerOption option,
+                       @Nullable Consumer<FakePlayer> spawnCallback) {
         super(uuid, username, new FakePlayerConnection());
 
         this.option = option;
 
         this.fakePlayerController = new FakePlayerController(this);
 
-        if (option.isRegistered()) {
-            MinecraftServer.getConnectionManager().createPlayer(this);
+        if (spawnCallback != null) {
+            addEventCallback(PlayerSpawnEvent.class,
+                    event -> {
+                        if (event.isFirstSpawn()) {
+                            spawnCallback.accept(this);
+                        }
+                    });
         }
+
+        CONNECTION_MANAGER.startPlayState(this, option.isRegistered());
     }
 
     /**
-     * Inits a new {@link FakePlayer}.
+     * Initializes a new {@link FakePlayer}.
      *
      * @param uuid          the FakePlayer uuid
      * @param username      the FakePlayer username
@@ -46,20 +65,11 @@ public class FakePlayer extends Player {
      */
     public static void initPlayer(@NotNull UUID uuid, @NotNull String username,
                                   @NotNull FakePlayerOption option, @Nullable Consumer<FakePlayer> spawnCallback) {
-        final FakePlayer fakePlayer = new FakePlayer(uuid, username, option);
-
-        if (spawnCallback != null) {
-            fakePlayer.addEventCallback(PlayerSpawnEvent.class,
-                    event -> {
-                        if (event.isFirstSpawn()) {
-                            spawnCallback.accept(fakePlayer);
-                        }
-                    });
-        }
+        new FakePlayer(uuid, username, option, spawnCallback);
     }
 
     /**
-     * Inits a new {@link FakePlayer} without adding it in cache.
+     * Initializes a new {@link FakePlayer} without adding it in cache.
      * <p>
      * If you want the fake player to be obtainable with the {@link net.minestom.server.network.ConnectionManager}
      * you need to specify it in a {@link FakePlayerOption} and use {@link #initPlayer(UUID, String, FakePlayerOption, Consumer)}.
@@ -82,11 +92,19 @@ public class FakePlayer extends Player {
         return option;
     }
 
+    /**
+     * Retrieves the controller for the fake player.
+     *
+     * @return The fake player's controller.
+     */
     @NotNull
     public FakePlayerController getController() {
         return fakePlayerController;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void showPlayer(@NotNull PlayerConnection connection) {
         super.showPlayer(connection);

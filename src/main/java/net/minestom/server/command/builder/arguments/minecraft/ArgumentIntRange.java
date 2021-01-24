@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.math.IntRange;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,63 +17,44 @@ public class ArgumentIntRange extends ArgumentRange<IntRange> {
         super(id);
     }
 
+    @NotNull
     @Override
-    public int getCorrectionResult(@NotNull String value) {
-        try {
-            Integer.valueOf(value);
-            return SUCCESS; // Is a single number
-        } catch (NumberFormatException e) {
-            String[] split = value.split(Pattern.quote(".."));
-            if (split.length == 1) {
-                try {
-                    Integer.valueOf(split[0]);
-                    return SUCCESS;
-                } catch (NumberFormatException e2) {
-                    return FORMAT_ERROR;
-                }
-            } else if (split.length == 2) {
-                try {
-                    Integer.valueOf(split[0]); // min
-                    Integer.valueOf(split[1]); // max
-                    return SUCCESS;
-                } catch (NumberFormatException e2) {
-                    return FORMAT_ERROR;
-                }
-            } else {
-                return FORMAT_ERROR;
-            }
-        }
+    public IntRange parse(@NotNull String input) throws ArgumentSyntaxException {
+        return staticParse(input);
     }
 
     @NotNull
-    @Override
-    public IntRange parse(@NotNull String value) {
-        if (value.contains("..")) {
-            final int index = value.indexOf('.');
-            final String[] split = value.split(Pattern.quote(".."));
+    public static IntRange staticParse(@NotNull String input) throws ArgumentSyntaxException {
+        try {
+            if (input.contains("..")) {
+                final int index = input.indexOf('.');
+                final String[] split = input.split(Pattern.quote(".."));
 
-            final int min;
-            final int max;
-            if (index == 0) {
-                // Format ..NUMBER
-                min = Integer.MIN_VALUE;
-                max = Integer.parseInt(split[0]);
-            } else {
-                if (split.length == 2) {
-                    // Format NUMBER..NUMBER
-                    min = Integer.parseInt(split[0]);
-                    max = Integer.parseInt(split[1]);
+                final int min;
+                final int max;
+                if (index == 0) {
+                    // Format ..NUMBER
+                    min = Integer.MIN_VALUE;
+                    max = Integer.parseInt(split[0]);
                 } else {
-                    // Format NUMBER..
-                    min = Integer.parseInt(split[0]);
-                    max = Integer.MAX_VALUE;
+                    if (split.length == 2) {
+                        // Format NUMBER..NUMBER
+                        min = Integer.parseInt(split[0]);
+                        max = Integer.parseInt(split[1]);
+                    } else {
+                        // Format NUMBER..
+                        min = Integer.parseInt(split[0]);
+                        max = Integer.MAX_VALUE;
+                    }
                 }
-            }
 
-            return new IntRange(min, max);
-        } else {
-            final int number = Integer.parseInt(value);
-            return new IntRange(number);
+                return new IntRange(min, max);
+            } else {
+                final int number = Integer.parseInt(input);
+                return new IntRange(number);
+            }
+        } catch (NumberFormatException e2) {
+            throw new ArgumentSyntaxException("Invalid number", input, FORMAT_ERROR);
         }
     }
 }

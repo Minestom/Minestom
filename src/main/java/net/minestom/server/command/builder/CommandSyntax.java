@@ -6,6 +6,8 @@ import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+
 /**
  * Represents a syntax in {@link Command}
  * which is initialized with {@link Command#addSyntax(CommandExecutor, Argument[])}.
@@ -14,14 +16,25 @@ public class CommandSyntax {
 
     private CommandCondition commandCondition;
     private CommandExecutor executor;
+
+    private final Map<String, Object> defaultValuesMap;
     private final Argument<?>[] args;
 
     protected CommandSyntax(@Nullable CommandCondition commandCondition,
                             @NotNull CommandExecutor commandExecutor,
+                            @Nullable Map<String, Object> defaultValuesMap,
                             @NotNull Argument<?>... args) {
         this.commandCondition = commandCondition;
         this.executor = commandExecutor;
+
+        this.defaultValuesMap = defaultValuesMap;
         this.args = args;
+    }
+
+    protected CommandSyntax(@Nullable CommandCondition commandCondition,
+                            @NotNull CommandExecutor commandExecutor,
+                            @NotNull Argument<?>... args) {
+        this(commandCondition, commandExecutor, null, args);
     }
 
     /**
@@ -64,6 +77,11 @@ public class CommandSyntax {
      */
     public void setExecutor(@NotNull CommandExecutor executor) {
         this.executor = executor;
+    }
+
+    @Nullable
+    protected Map<String, Object> getDefaultValuesMap() {
+        return defaultValuesMap;
     }
 
     /**

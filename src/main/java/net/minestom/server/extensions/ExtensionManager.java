@@ -3,8 +3,10 @@ package net.minestom.server.extensions;
 import com.google.gson.Gson;
 import net.minestom.dependencies.DependencyGetter;
 import net.minestom.dependencies.maven.MavenRepository;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
+import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,7 +42,32 @@ public class ExtensionManager {
     private final List<Extension> extensionList = new CopyOnWriteArrayList<>();
     private final List<Extension> immutableExtensionListView = Collections.unmodifiableList(extensionList);
 
+    // Option
+    private boolean loadOnStartup = true;
+
     public ExtensionManager() {
+    }
+
+    /**
+     * Gets if the extensions should be loaded during startup.
+     * <p>
+     * Default value is 'true'.
+     *
+     * @return true if extensions are loaded in {@link net.minestom.server.MinecraftServer#start(String, int, ResponseDataConsumer)}
+     */
+    public boolean shouldLoadOnStartup() {
+        return loadOnStartup;
+    }
+
+    /**
+     * Used to specify if you want extensions to be loaded and initialized during startup.
+     * <p>
+     * Only useful before the server start.
+     *
+     * @param loadOnStartup true to load extensions on startup, false to do nothing
+     */
+    public void setLoadOnStartup(boolean loadOnStartup) {
+        this.loadOnStartup = loadOnStartup;
     }
 
     public void loadExtensions() {
@@ -72,7 +99,7 @@ public class ExtensionManager {
                 setupClassLoader(discoveredExtension);
             } catch (Exception e) {
                 discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.FAILED_TO_SETUP_CLASSLOADER;
-                e.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(e);
                 LOGGER.error("Failed to load extension {}", discoveredExtension.getName());
                 LOGGER.error("Failed to load extension", e);
             }
@@ -87,24 +114,25 @@ public class ExtensionManager {
                 attemptSingleLoad(discoveredExtension);
             } catch (Exception e) {
                 discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.LOAD_FAILED;
-                e.printStackTrace();
                 LOGGER.error("Failed to load extension {}", discoveredExtension.getName());
-                LOGGER.error("Failed to load extension", e);
+                MinecraftServer.getExceptionManager().handleException(e);
             }
         }
     }
 
-    private void setupClassLoader(DiscoveredExtension discoveredExtension) {
-        String extensionName = discoveredExtension.getName();
-        MinestomExtensionClassLoader loader;
-        URL[] urls = discoveredExtension.files.toArray(new URL[0]);
-        loader = newClassLoader(discoveredExtension, urls);
+    private void setupClassLoader(@NotNull DiscoveredExtension discoveredExtension) {
+        final String extensionName = discoveredExtension.getName();
+
+        final URL[] urls = discoveredExtension.files.toArray(new URL[0]);
+        final MinestomExtensionClassLoader loader = newClassLoader(discoveredExtension, urls);
+
         extensionLoaders.put(extensionName.toLowerCase(), loader);
     }
 
-    private Extension attemptSingleLoad(DiscoveredExtension discoveredExtension) {
+    @Nullable
+    private Extension attemptSingleLoad(@NotNull DiscoveredExtension discoveredExtension) {
         // Create ExtensionDescription (authors, version etc.)
-        String extensionName = discoveredExtension.getName();
+        final String extensionName = discoveredExtension.getName();
         String mainClass = discoveredExtension.getEntrypoint();
         Extension.ExtensionDescription extensionDescription = new Extension.ExtensionDescription(
                 extensionName,
@@ -165,7 +193,7 @@ public class ExtensionManager {
 
         // Set extension description
         try {
-            Field descriptionField = extensionClass.getSuperclass().getDeclaredField("description");
+            Field descriptionField = Extension.class.getDeclaredField("description");
             descriptionField.setAccessible(true);
             descriptionField.set(extension, extensionDescription);
         } catch (IllegalAccessException e) {
@@ -177,12 +205,12 @@ public class ExtensionManager {
 
         // Set logger
         try {
-            Field loggerField = extensionClass.getSuperclass().getDeclaredField("logger");
+            Field loggerField = Extension.class.getDeclaredField("logger");
             loggerField.setAccessible(true);
             loggerField.set(extension, LoggerFactory.getLogger(extensionClass));
         } catch (IllegalAccessException e) {
             // We made it accessible, should not occur
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         } catch (NoSuchFieldException e) {
             // This should also not occur (unless someone changed the logger in Extension superclass).
             LOGGER.error("Main class '{}' in '{}' has no logger field.", mainClass, extensionName, e);
@@ -237,7 +265,7 @@ public class ExtensionManager {
                     extensions.add(extension);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(e);
             }
         }
         return extensions;
@@ -256,12 +284,13 @@ public class ExtensionManager {
 
             return extension;
         } catch (IOException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             return null;
         }
     }
 
-    private List<DiscoveredExtension> generateLoadOrder(List<DiscoveredExtension> discoveredExtensions) {
+    @Nullable
+    private List<DiscoveredExtension> generateLoadOrder(@NotNull List<DiscoveredExtension> discoveredExtensions) {
         // Do some mapping so we can map strings to extensions.
         Map<String, DiscoveredExtension> extensionMap = new HashMap<>();
         Map<DiscoveredExtension, List<DiscoveredExtension>> dependencyMap = new HashMap<>();
@@ -335,7 +364,7 @@ public class ExtensionManager {
         return sortedList;
     }
 
-    private boolean areAllDependenciesLoaded(List<DiscoveredExtension> dependencies) {
+    private boolean areAllDependenciesLoaded(@NotNull List<DiscoveredExtension> dependencies) {
         return dependencies.isEmpty() || dependencies.stream().allMatch(ext -> extensions.containsKey(ext.getName().toLowerCase()));
     }
 
@@ -450,7 +479,9 @@ public class ExtensionManager {
     private void setupCodeModifiers(@NotNull List<DiscoveredExtension> extensions) {
         final ClassLoader cl = getClass().getClassLoader();
         if (!(cl instanceof MinestomRootClassLoader)) {
-            LOGGER.warn("Current class loader is not a MinestomOverwriteClassLoader, but {}. This disables code modifiers (Mixin support is therefore disabled)", cl);
+            LOGGER.warn("Current class loader is not a MinestomOverwriteClassLoader, but {}. " +
+                    "This disables code modifiers (Mixin support is therefore disabled). " +
+                    "This can be fixed by starting your server using Bootstrap#bootstrap (optional).", cl);
             return;
         }
         MinestomRootClassLoader modifiableClassLoader = (MinestomRootClassLoader) cl;
@@ -466,7 +497,7 @@ public class ExtensionManager {
                     LOGGER.info("Found mixin in extension {}: {}", extension.getName(), mixinConfigFile);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(e);
                 LOGGER.error("Failed to load code modifier for extension in files: " +
                         extension.files
                                 .stream()
@@ -500,7 +531,7 @@ public class ExtensionManager {
             // close resources
             classloader.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
         MinestomRootClassLoader.getInstance().removeChildInHierarchy(classloader);
     }

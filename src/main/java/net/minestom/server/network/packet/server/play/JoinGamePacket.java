@@ -12,8 +12,8 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 public class JoinGamePacket implements ServerPacket {
 
     public int entityId;
-    public GameMode gameMode = GameMode.SURVIVAL;
-    public DimensionType dimensionType = DimensionType.OVERWORLD;
+    public GameMode gameMode;
+    public DimensionType dimensionType;
     public long hashedSeed;
     public int maxPlayers = 0; // Unused
     public int viewDistance;

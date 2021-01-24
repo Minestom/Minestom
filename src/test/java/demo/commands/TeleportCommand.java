@@ -25,11 +25,13 @@ public class TeleportCommand extends Command {
     }
 
     private void onPlayerTeleport(CommandSender sender, Arguments args) {
-        Player pl = MinecraftServer.getConnectionManager().getPlayer(args.getWord("player"));
+        final String playerName = args.getWord("player");
+        Player pl = MinecraftServer.getConnectionManager().getPlayer(playerName);
         if (pl != null && sender.isPlayer()) {
             Player player = (Player) sender;
             player.teleport(pl.getPosition());
         }
+        sender.sendMessage("Teleported to player "+playerName);
     }
 
     private void onPositionTeleport(CommandSender sender, Arguments args) {

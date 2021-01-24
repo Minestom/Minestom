@@ -52,7 +52,6 @@ public class PlayerPositionListener {
 
     private static void processMovement(@NotNull Player player, float x, float y, float z,
                                         float yaw, float pitch, boolean onGround) {
-
         final Instance instance = player.getInstance();
 
         // Prevent moving before the player spawned, probably a modified client (or high latency?)

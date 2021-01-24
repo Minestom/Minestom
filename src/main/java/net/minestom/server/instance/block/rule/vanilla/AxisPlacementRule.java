@@ -18,17 +18,14 @@ public class AxisPlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public boolean canPlace(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
-        return true;
-    }
-
-    @Override
-    public short blockRefresh(@NotNull Instance instance, @NotNull BlockPosition blockPosition, short currentId) {
+    public short blockUpdate(@NotNull Instance instance, @NotNull BlockPosition blockPosition, short currentId) {
         return currentId;
     }
 
     @Override
-    public short blockPlace(@NotNull Instance instance, @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Player pl) {
+    public short blockPlace(@NotNull Instance instance,
+                            @NotNull Block block, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition,
+                            @NotNull Player pl) {
         String axis = "y";
         if (blockFace == BlockFace.WEST || blockFace == BlockFace.EAST) {
             axis = "x";

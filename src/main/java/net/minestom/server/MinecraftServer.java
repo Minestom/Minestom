@@ -6,10 +6,10 @@ import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.data.DataType;
 import net.minestom.server.data.SerializableData;
-import net.minestom.server.entity.EntityManager;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
+import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.fluids.Fluid;
@@ -56,7 +56,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Collection;
 
 /**
  * The main server class used to start the server and retrieve all the managers.
@@ -68,7 +67,7 @@ public final class MinecraftServer {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
-    public static final String VERSION_NAME = "1.16.4";
+    public static final String VERSION_NAME = "1.16.5";
     public static final int PROTOCOL_VERSION = 754;
 
     // Threads
@@ -101,11 +100,12 @@ public final class MinecraftServer {
     private static int nettyThreadCount = Runtime.getRuntime().availableProcessors();
     private static boolean processNettyErrors = false;
 
+    private static ExceptionManager exceptionManager;
+
     // In-Game Manager
     private static ConnectionManager connectionManager;
     private static InstanceManager instanceManager;
     private static BlockManager blockManager;
-    private static EntityManager entityManager;
     private static CommandManager commandManager;
     private static RecipeManager recipeManager;
     private static StorageManager storageManager;
@@ -133,6 +133,7 @@ public final class MinecraftServer {
     private static int entityViewDistance = 5;
     private static int compressionThreshold = 256;
     private static boolean packetCaching = true;
+    private static boolean groupedPacket = true;
     private static ResponseDataConsumer responseDataConsumer;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
@@ -142,8 +143,11 @@ public final class MinecraftServer {
     public static MinecraftServer init() {
         if (minecraftServer != null) // don't init twice
             return minecraftServer;
+
+        // Initialize the ExceptionManager at first
+        exceptionManager = new ExceptionManager();
+
         extensionManager = new ExtensionManager();
-        extensionManager.loadExtensions();
 
         // warmup/force-init registries
         // without this line, registry types that are not loaded explicitly will have an internal empty registry in Registries
@@ -167,7 +171,6 @@ public final class MinecraftServer {
 
         instanceManager = new InstanceManager();
         blockManager = new BlockManager();
-        entityManager = new EntityManager();
         commandManager = new CommandManager();
         recipeManager = new RecipeManager();
         storageManager = new StorageManager();
@@ -217,7 +220,6 @@ public final class MinecraftServer {
      * @throws NullPointerException if {@code brandName} is null
      */
     public static void setBrandName(@NotNull String brandName) {
-        Check.notNull(brandName, "The brand name cannot be null");
         MinecraftServer.brandName = brandName;
 
         PacketUtils.sendGroupedPacket(connectionManager.getOnlinePlayers(), PluginMessagePacket.getBrandPacket());
@@ -275,7 +277,6 @@ public final class MinecraftServer {
      * @param difficulty the new server difficulty
      */
     public static void setDifficulty(@NotNull Difficulty difficulty) {
-        Check.notNull(difficulty, "The server difficulty cannot be null.");
         MinecraftServer.difficulty = difficulty;
 
         // Send the packet to all online players
@@ -335,16 +336,6 @@ public final class MinecraftServer {
     public static BlockManager getBlockManager() {
         checkInitStatus(blockManager);
         return blockManager;
-    }
-
-    /**
-     * Gets the manager handling waiting players.
-     *
-     * @return the entity manager
-     */
-    public static EntityManager getEntityManager() {
-        checkInitStatus(entityManager);
-        return entityManager;
     }
 
     /**
@@ -418,6 +409,16 @@ public final class MinecraftServer {
     }
 
     /**
+     * Gets the exception manager for exception handling.
+     *
+     * @return the exception manager
+     */
+    public static ExceptionManager getExceptionManager() {
+        checkInitStatus(exceptionManager);
+        return exceptionManager;
+    }
+
+    /**
      * Gets the manager handling server connections.
      *
      * @return the connection manager
@@ -478,9 +479,7 @@ public final class MinecraftServer {
         MinecraftServer.chunkViewDistance = chunkViewDistance;
         if (started) {
 
-            final Collection<Player> players = connectionManager.getOnlinePlayers();
-
-            players.forEach(player -> {
+            for (final Player player : connectionManager.getOnlinePlayers()) {
                 final Chunk playerChunk = player.getChunk();
                 if (playerChunk != null) {
 
@@ -490,7 +489,7 @@ public final class MinecraftServer {
 
                     player.refreshVisibleChunks(playerChunk);
                 }
-            });
+            }
         }
     }
 
@@ -514,12 +513,12 @@ public final class MinecraftServer {
                 "The entity view distance must be between 0 and 32");
         MinecraftServer.entityViewDistance = entityViewDistance;
         if (started) {
-            connectionManager.getOnlinePlayers().forEach(player -> {
+            for (final Player player : connectionManager.getOnlinePlayers()) {
                 final Chunk playerChunk = player.getChunk();
                 if (playerChunk != null) {
                     player.refreshVisibleEntities(playerChunk);
                 }
-            });
+            }
         }
     }
 
@@ -551,7 +550,8 @@ public final class MinecraftServer {
      * This feature allows some packets (implementing the {@link net.minestom.server.utils.cache.CacheablePacket} to be cached
      * in order to do not have to be written and compressed over and over again), this is especially useful for chunk and light packets.
      * <p>
-     * It is enabled by default and it is our recommendation, you should only disable it if you want to focus on low memory usage
+     * It is enabled by default and it is our recommendation,
+     * you should only disable it if you want to focus on low memory usage
      * at the cost of many packet writing and compression.
      *
      * @return true if the packet caching feature is enabled, false otherwise
@@ -570,6 +570,34 @@ public final class MinecraftServer {
     public static void setPacketCaching(boolean packetCaching) {
         Check.stateCondition(started, "You cannot change the packet caching value after the server has been started.");
         MinecraftServer.packetCaching = packetCaching;
+    }
+
+    /**
+     * Gets if the packet caching feature is enabled.
+     * <p>
+     * This features allow sending the exact same packet/buffer to multiple connections.
+     * It does provide a great performance benefit by allocating and writing/compressing only once.
+     * <p>
+     * It is enabled by default and it is our recommendation,
+     * you should only disable it if you want to modify packet per-players instead of sharing it.
+     * Disabling the feature would result in performance decrease.
+     *
+     * @return true if the grouped packet feature is enabled, false otherwise
+     */
+    public static boolean hasGroupedPacket() {
+        return groupedPacket;
+    }
+
+    /**
+     * Enables or disable grouped packet.
+     *
+     * @param groupedPacket true to enable grouped packet
+     * @throws IllegalStateException if this is called after the server started
+     * @see #hasGroupedPacket()
+     */
+    public static void setGroupedPacket(boolean groupedPacket) {
+        Check.stateCondition(started, "You cannot change the grouped packet value after the server has been started.");
+        MinecraftServer.groupedPacket = groupedPacket;
     }
 
     /**
@@ -675,7 +703,7 @@ public final class MinecraftServer {
     }
 
     /**
-     * Gets if the server should process netty errors and other unnecessary netty events
+     * Gets if the server should process netty errors and other unnecessary netty events.
      *
      * @return should process netty errors
      */
@@ -684,7 +712,7 @@ public final class MinecraftServer {
     }
 
     /**
-     * Sets if the server should process netty errors and other unnecessary netty events
+     * Sets if the server should process netty errors and other unnecessary netty events.
      * false is faster
      *
      * @param processNettyErrors should process netty errors
@@ -718,17 +746,25 @@ public final class MinecraftServer {
         nettyServer.init();
         nettyServer.start(address, port);
 
-        final long t1 = -System.nanoTime();
-        // Init extensions
-        // TODO: Extensions should handle depending on each other and have a load-order.
-        extensionManager.getExtensions().forEach(Extension::preInitialize);
-        extensionManager.getExtensions().forEach(Extension::initialize);
-        extensionManager.getExtensions().forEach(Extension::postInitialize);
+        if (extensionManager.shouldLoadOnStartup()) {
+            final long loadStartTime = System.nanoTime();
+            // Load extensions
+            extensionManager.loadExtensions();
+            // Init extensions
+            // TODO: Extensions should handle depending on each other and have a load-order.
+            extensionManager.getExtensions().forEach(Extension::preInitialize);
+            extensionManager.getExtensions().forEach(Extension::initialize);
+            extensionManager.getExtensions().forEach(Extension::postInitialize);
 
-        final double loadTime = MathUtils.round((t1 + System.nanoTime()) / 1_000_000D, 2);
-        LOGGER.info("Extensions loaded in {}ms", loadTime);
+            final double loadTime = MathUtils.round((System.nanoTime() - loadStartTime) / 1_000_000D, 2);
+            LOGGER.info("Extensions loaded in {}ms", loadTime);
+        } else {
+            LOGGER.warn("Extension loadOnStartup option is set to false, extensions are therefore neither loaded or initialized.");
+        }
 
         LOGGER.info("Minestom server started successfully.");
+
+        commandManager.startConsoleThread();
     }
 
     /**

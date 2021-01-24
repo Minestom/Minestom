@@ -10,6 +10,10 @@ public class DisconnectPacket implements ServerPacket {
 
     public JsonMessage message; // Only text
 
+    public DisconnectPacket(@NotNull JsonMessage message){
+        this.message = message;
+    }
+
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeSizedString(message.toString());

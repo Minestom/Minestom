@@ -10,6 +10,7 @@ import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.entity.EntityFireEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.CollectItemPacket;
@@ -19,8 +20,10 @@ import net.minestom.server.network.packet.server.play.SoundEffectPacket;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
+import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -28,8 +31,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -270,7 +272,6 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * @return true if damage has been applied, false if it didn't
      */
     public boolean damage(@NotNull DamageType type, float value) {
-        Check.notNull(type, "The damage type cannot be null!");
         if (isDead())
             return false;
         if (isInvulnerable() || isImmune(type)) {
@@ -501,12 +502,15 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      */
     @NotNull
     protected EntityPropertiesPacket getPropertiesPacket() {
+        // Get all the attributes which should be sent to the client
+        final AttributeInstance[] instances = attributeModifiers.values().stream()
+                .filter(i -> i.getAttribute().isShared())
+                .toArray(AttributeInstance[]::new);
+
+
         EntityPropertiesPacket propertiesPacket = new EntityPropertiesPacket();
         propertiesPacket.entityId = getEntityId();
 
-        AttributeInstance[] instances = attributeModifiers.values().stream()
-                .filter(i -> i.getAttribute().isShared())
-                .toArray(AttributeInstance[]::new);
         EntityPropertiesPacket.Property[] properties = new EntityPropertiesPacket.Property[instances.length];
         for (int i = 0; i < properties.length; ++i) {
             EntityPropertiesPacket.Property property = new EntityPropertiesPacket.Property();
@@ -529,7 +533,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      */
     private void setupAttributes() {
         for (Attribute attribute : Attribute.values()) {
-            attributeModifiers.put(attribute.getKey(), new AttributeInstance(attribute, this::onAttributeChanged));
+            final AttributeInstance attributeInstance = new AttributeInstance(attribute, this::onAttributeChanged);
+            this.attributeModifiers.put(attribute.getKey(), attributeInstance);
         }
     }
 
@@ -597,4 +602,36 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     public Team getTeam() {
         return team;
     }
+
+    /**
+     * Gets the line of sight in {@link BlockPosition} of the entity.
+     *
+     * @param maxDistance The max distance to scan
+     * @return A list of {@link BlockPosition} in this entities line of sight
+     */
+    public List<BlockPosition> getLineOfSight(int maxDistance) {
+        List<BlockPosition> blocks = new ArrayList<>();
+        Iterator<BlockPosition> it = new BlockIterator(this, maxDistance);
+        while (it.hasNext()) {
+            BlockPosition position = it.next();
+            if (Block.fromStateId(getInstance().getBlockStateId(position)) != Block.AIR) blocks.add(position);
+        }
+        return blocks;
+    }
+
+    /**
+     * Gets the target (not-air) {@link BlockPosition} of the entity.
+     *
+     * @param maxDistance The max distance to scan before returning null
+     * @return The {@link BlockPosition} targeted by this entity, null if non are found
+     */
+    public BlockPosition getTargetBlockPosition(int maxDistance) {
+        Iterator<BlockPosition> it = new BlockIterator(this, maxDistance);
+        while (it.hasNext()) {
+            BlockPosition position = it.next();
+            if (Block.fromStateId(getInstance().getBlockStateId(position)) != Block.AIR) return position;
+        }
+        return null;
+    }
+
 }

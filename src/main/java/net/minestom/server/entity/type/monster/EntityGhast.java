@@ -16,7 +16,6 @@ public class EntityGhast extends EntityCreature implements Monster {
     public EntityGhast(Position spawnPosition) {
         super(EntityType.GHAST, spawnPosition);
         setBoundingBox(4, 4, 4);
-        setEyeHeight(2.6f);
     }
 
     @NotNull

@@ -1,13 +1,17 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.data.Data;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.PlayerEvent;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Called when a player tries placing a block.
@@ -18,6 +22,7 @@ public class PlayerBlockPlaceEvent extends PlayerEvent implements CancellableEve
 
     private short blockStateId;
     private short customBlockId;
+    private Data blockData;
     private final BlockPosition blockPosition;
     private final Player.Hand hand;
 
@@ -25,11 +30,10 @@ public class PlayerBlockPlaceEvent extends PlayerEvent implements CancellableEve
 
     private boolean cancelled;
 
-    public PlayerBlockPlaceEvent(@NotNull Player player, short blockStateId, short customBlockId,
+    public PlayerBlockPlaceEvent(@NotNull Player player, @NotNull Block block,
                                  @NotNull BlockPosition blockPosition, @NotNull Player.Hand hand) {
         super(player);
-        this.blockStateId = blockStateId;
-        this.customBlockId = customBlockId;
+        this.blockStateId = block.getBlockId();
         this.blockPosition = blockPosition;
         this.hand = hand;
         this.consumeBlock = true;
@@ -52,6 +56,7 @@ public class PlayerBlockPlaceEvent extends PlayerEvent implements CancellableEve
      */
     public void setCustomBlock(short customBlockId) {
         final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+        Check.notNull(customBlock, "The custom block with the id '" + customBlockId + "' does not exist");
         setCustomBlock(customBlock);
     }
 
@@ -62,6 +67,7 @@ public class PlayerBlockPlaceEvent extends PlayerEvent implements CancellableEve
      */
     public void setCustomBlock(@NotNull String customBlockId) {
         final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+        Check.notNull(customBlock, "The custom block with the identifier '" + customBlockId + "' does not exist");
         setCustomBlock(customBlock);
     }
 
@@ -102,6 +108,25 @@ public class PlayerBlockPlaceEvent extends PlayerEvent implements CancellableEve
      */
     public void setBlockStateId(short blockStateId) {
         this.blockStateId = blockStateId;
+    }
+
+    /**
+     * Gets the data that the (not placed yet) block should have
+     *
+     * @return the block data, null if not any
+     */
+    @Nullable
+    public Data getBlockData() {
+        return blockData;
+    }
+
+    /**
+     * Sets the data of the block to place.
+     *
+     * @param blockData the block data, null if not any
+     */
+    public void setBlockData(@Nullable Data blockData) {
+        this.blockData = blockData;
     }
 
     /**

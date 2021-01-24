@@ -1,5 +1,6 @@
 package net.minestom.server.item.metadata;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
@@ -44,13 +45,16 @@ public abstract class ItemMeta implements PublicCloneable<ItemMeta> {
      */
     public abstract void write(@NotNull NBTCompound compound);
 
+    /**
+     * {@inheritDoc}
+     */
     @NotNull
     @Override
     public ItemMeta clone() {
         try {
             return (ItemMeta) super.clone();
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             throw new IllegalStateException("Weird thing happened");
         }
     }

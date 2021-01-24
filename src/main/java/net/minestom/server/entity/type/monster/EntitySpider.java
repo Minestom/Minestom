@@ -16,7 +16,6 @@ public class EntitySpider extends EntityCreature implements Monster {
     public EntitySpider(Position spawnPosition) {
         super(EntityType.SPIDER, spawnPosition);
         setBoundingBox(1.4f, 0.9f, 1.4f);
-        setEyeHeight(0.65f);
     }
 
     @NotNull

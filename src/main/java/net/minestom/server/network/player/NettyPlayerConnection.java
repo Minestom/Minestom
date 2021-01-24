@@ -98,7 +98,7 @@ public class NettyPlayerConnection extends PlayerConnection {
         Check.stateCondition(threshold == 0, "Compression cannot be enabled because the threshold is equal to 0");
 
         this.compressed = true;
-        sendPacket(new SetCompressionPacket(threshold));
+        writeAndFlush(new SetCompressionPacket(threshold));
         channel.pipeline().addAfter(NettyServer.FRAMER_HANDLER_NAME, NettyServer.COMPRESSOR_HANDLER_NAME,
                 new PacketCompressor(threshold));
     }
@@ -150,7 +150,7 @@ public class NettyPlayerConnection extends PlayerConnection {
         if (MinecraftServer.shouldProcessNettyErrors()) {
             return channelFuture.addListener(future -> {
                 if (!future.isSuccess()) {
-                    future.cause().printStackTrace();
+                    MinecraftServer.getExceptionManager().handleException(future.cause());
                 }
             });
         } else {
@@ -165,7 +165,7 @@ public class NettyPlayerConnection extends PlayerConnection {
         if (MinecraftServer.shouldProcessNettyErrors()) {
             return channelFuture.addListener(future -> {
                 if (!future.isSuccess()) {
-                    future.cause().printStackTrace();
+                    MinecraftServer.getExceptionManager().handleException(future.cause());
                 }
             });
         } else {

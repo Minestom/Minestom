@@ -2,6 +2,7 @@ package net.minestom.server.gamedata.tags;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.packet.server.play.TagsPacket;
 import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.utils.NamespaceID;
@@ -288,7 +289,7 @@ public class TagManager {
         try {
             return load(name, type);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             return Tag.EMPTY;
         }
     }

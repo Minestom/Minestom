@@ -6,6 +6,7 @@ import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
 import org.jetbrains.annotations.NotNull;
@@ -24,11 +25,10 @@ public class ReloadExtensionCommand extends Command {
     private static String[] extensionsName;
 
     static {
-        List<String> extensionsName = MinecraftServer.getExtensionManager().getExtensions()
+        ReloadExtensionCommand.extensionsName = MinecraftServer.getExtensionManager().getExtensions()
                 .stream()
                 .map(extension -> extension.getDescription().getName())
-                .collect(Collectors.toList());
-        ReloadExtensionCommand.extensionsName = extensionsName.toArray(new String[0]);
+                .toArray(String[]::new);
     }
 
     public ReloadExtensionCommand() {
@@ -74,13 +74,13 @@ public class ReloadExtensionCommand extends Command {
         }
     }
 
-    private void gameModeCallback(CommandSender sender, String extension, int error) {
-        sender.sendMessage("'" + extension + "' is not a valid extension name!");
+    private void gameModeCallback(CommandSender sender, ArgumentSyntaxException argumentSyntaxException) {
+        sender.sendMessage("'" + argumentSyntaxException.getInput() + "' is not a valid extension name!");
     }
 
     @Nullable
     @Override
-    public String[] onDynamicWrite(@NotNull String text) {
+    public String[] onDynamicWrite(@NotNull CommandSender sender, @NotNull String text) {
         return extensionsName;
     }
 

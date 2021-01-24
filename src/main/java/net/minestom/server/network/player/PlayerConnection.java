@@ -9,8 +9,6 @@ import net.minestom.server.listener.manager.ServerPacketConsumer;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
-import net.minestom.server.network.packet.server.play.DisconnectPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +25,7 @@ public abstract class PlayerConnection {
     protected static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
 
     private Player player;
-    private ConnectionState connectionState;
+    private volatile ConnectionState connectionState;
     private boolean online;
 
     // Text used to kick client sending too many packets
@@ -58,20 +56,14 @@ public abstract class PlayerConnection {
                 this.packetCounter.set(0);
                 if (count > MinecraftServer.getRateLimit()) {
                     // Sent too many packets
-                    if (connectionState == ConnectionState.LOGIN) {
-                        sendPacket(new LoginDisconnectPacket("Too Many Packets"));
-                    } else {
-                        DisconnectPacket disconnectPacket = new DisconnectPacket();
-                        disconnectPacket.message = rateLimitKickMessage;
-                        sendPacket(disconnectPacket);
-                    }
+                    player.kick(rateLimitKickMessage);
                     disconnect();
-                    refreshOnline(false);
                 }
             }
         }
     }
 
+    @NotNull
     public AtomicInteger getPacketCounter() {
         return packetCounter;
     }

@@ -1,7 +1,9 @@
 package net.minestom.server.command.builder.arguments.relative;
 
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.location.RelativeBlockPosition;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,44 +17,15 @@ public class ArgumentRelativeBlockPosition extends ArgumentRelative<RelativeBloc
         super(id, 3);
     }
 
+    @NotNull
     @Override
-    public int getCorrectionResult(@NotNull String value) {
-        final String[] split = value.split(" ");
+    public RelativeBlockPosition parse(@NotNull String input) throws ArgumentSyntaxException {
+        final String[] split = input.split(StringUtils.SPACE);
 
         // Check if the value has enough element to be correct
         if (split.length != getNumberCount()) {
-            return INVALID_NUMBER_COUNT_ERROR;
+            throw new ArgumentSyntaxException("Invalid number of values", input, INVALID_NUMBER_COUNT_ERROR);
         }
-
-        // Check if each element is correct
-        for (String element : split) {
-            if (!element.startsWith(RELATIVE_CHAR)) {
-                try {
-                    // Will throw the exception if not an integer
-                    Integer.parseInt(element);
-                } catch (NumberFormatException e) {
-                    return INVALID_NUMBER_ERROR;
-                }
-            } else {
-                if (element.length() > RELATIVE_CHAR.length()) {
-                    try {
-                        final String potentialNumber = element.substring(1);
-                        // Will throw the exception if not an integer
-                        Integer.parseInt(potentialNumber);
-                    } catch (NumberFormatException | IndexOutOfBoundsException e) {
-                        return INVALID_NUMBER_ERROR;
-                    }
-                }
-            }
-        }
-
-        return SUCCESS;
-    }
-
-    @NotNull
-    @Override
-    public RelativeBlockPosition parse(@NotNull String value) {
-        final String[] split = value.split(" ");
 
         BlockPosition blockPosition = new BlockPosition(0, 0, 0);
         boolean relativeX = false;
@@ -72,8 +45,24 @@ public class ArgumentRelativeBlockPosition extends ArgumentRelative<RelativeBloc
                 }
 
                 if (element.length() != RELATIVE_CHAR.length()) {
-                    final String potentialNumber = element.substring(1);
-                    final int number = Integer.parseInt(potentialNumber);
+                    try {
+                        final String potentialNumber = element.substring(1);
+                        final int number = Integer.parseInt(potentialNumber);
+                        if (i == 0) {
+                            blockPosition.setX(number);
+                        } else if (i == 1) {
+                            blockPosition.setY(number);
+                        } else if (i == 2) {
+                            blockPosition.setZ(number);
+                        }
+                    } catch (NumberFormatException e) {
+                        throw new ArgumentSyntaxException("Invalid number", input, INVALID_NUMBER_ERROR);
+                    }
+                }
+
+            } else {
+                try {
+                    final int number = Integer.parseInt(element);
                     if (i == 0) {
                         blockPosition.setX(number);
                     } else if (i == 1) {
@@ -81,25 +70,12 @@ public class ArgumentRelativeBlockPosition extends ArgumentRelative<RelativeBloc
                     } else if (i == 2) {
                         blockPosition.setZ(number);
                     }
-                }
-
-            } else {
-                final int number = Integer.parseInt(element);
-                if (i == 0) {
-                    blockPosition.setX(number);
-                } else if (i == 1) {
-                    blockPosition.setY(number);
-                } else if (i == 2) {
-                    blockPosition.setZ(number);
+                } catch (NumberFormatException e) {
+                    throw new ArgumentSyntaxException("Invalid number", input, INVALID_NUMBER_ERROR);
                 }
             }
         }
 
         return new RelativeBlockPosition(blockPosition, relativeX, relativeY, relativeZ);
-    }
-
-    @Override
-    public int getConditionResult(@NotNull RelativeBlockPosition value) {
-        return SUCCESS;
     }
 }

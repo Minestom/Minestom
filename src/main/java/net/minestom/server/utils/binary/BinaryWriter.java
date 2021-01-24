@@ -2,6 +2,7 @@ package net.minestom.server.utils.binary;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.NBTUtils;
@@ -164,19 +165,6 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Writes a string to the buffer.
-     * <p>
-     * The size is a short type.
-     *
-     * @param string the string to write
-     */
-    public void writeShortSizedString(@NotNull String string) {
-        final byte[] bytes = string.getBytes(StandardCharsets.UTF_8);
-        writeShort((short) bytes.length);
-        writeBytes(bytes);
-    }
-
-    /**
      * Writes a var-int array to the buffer.
      * <p>
      * It is sized by another var-int at the beginning.
@@ -261,7 +249,7 @@ public class BinaryWriter extends OutputStream {
             nbtWriter.writeNamed(name, tag);
         } catch (IOException e) {
             // should not throw, as nbtWriter points to this PacketWriter
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
     }
 

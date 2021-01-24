@@ -5,6 +5,7 @@ import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataType;
 import net.minestom.server.inventory.Inventory;
@@ -117,7 +118,7 @@ public final class NBTUtils {
                 loadDataIntoItem(item, nbt);
             }
         } catch (IOException | NBTException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
 
         return item;
@@ -136,7 +137,7 @@ public final class NBTUtils {
             }
             if (display.containsKey("Lore")) {
                 NBTList<NBTString> loreList = display.getList("Lore");
-                ArrayList<ColoredText> lore = new ArrayList<>();
+                List<JsonMessage> lore = new ArrayList<>();
                 for (NBTString s : loreList) {
                     lore.add(ChatParser.toColoredText(s.getValue()));
                 }
@@ -144,10 +145,12 @@ public final class NBTUtils {
             }
         }
 
+        // Enchantments
         if (nbt.containsKey("Enchantments")) {
             loadEnchantments(nbt.getList("Enchantments"), item::setEnchantment);
         }
 
+        // Attributes
         if (nbt.containsKey("AttributeModifiers")) {
             NBTList<NBTCompound> attributes = nbt.getList("AttributeModifiers");
             for (NBTCompound attributeNBT : attributes) {
@@ -181,6 +184,20 @@ public final class NBTUtils {
                 final ItemAttribute itemAttribute =
                         new ItemAttribute(uuid, name, attribute, attributeOperation, value, attributeSlot);
                 item.addAttribute(itemAttribute);
+            }
+        }
+
+        // Hide flags
+        {
+            if (nbt.containsKey("HideFlags")) {
+                item.setHideFlag(nbt.getInt("HideFlags"));
+            }
+        }
+
+        // Custom model data
+        {
+            if (nbt.containsKey("CustomModelData")) {
+                item.setCustomModelData(nbt.getInt("CustomModelData"));
             }
         }
 
@@ -266,10 +283,10 @@ public final class NBTUtils {
             }
 
             if (hasLore) {
-                final ArrayList<ColoredText> lore = itemStack.getLore();
+                final List<JsonMessage> lore = itemStack.getLore();
 
                 final NBTList<NBTString> loreNBT = new NBTList<>(NBTTypes.TAG_String);
-                for (ColoredText line : lore) {
+                for (JsonMessage line : lore) {
                     loreNBT.add(new NBTString(line.toString()));
                 }
                 displayNBT.set("Lore", loreNBT);

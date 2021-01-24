@@ -2,6 +2,7 @@ package net.minestom.server.command.builder;
 
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -13,9 +14,8 @@ public interface ArgumentCallback {
     /**
      * Executed when an error is found.
      *
-     * @param source the sender which executed the command
-     * @param value  the raw string argument which is responsible for the error
-     * @param error  the error id (you can check its meaning in the specific argument class or ask the developer about it)
+     * @param sender    the sender which executed the command
+     * @param exception the exception containing the message, input and error code related to the issue
      */
-    void apply(@NotNull CommandSender source, @NotNull String value, int error);
+    void apply(@NotNull CommandSender sender, @NotNull ArgumentSyntaxException exception);
 }

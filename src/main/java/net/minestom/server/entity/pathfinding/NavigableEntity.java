@@ -30,7 +30,6 @@ public interface NavigableEntity {
      * @param speed     define how far the entity will move
      */
     default void moveTowards(@NotNull Position direction, float speed) {
-        Check.notNull(direction, "The direction cannot be null");
 
         final Position position = getNavigableEntity().getPosition();
 
@@ -86,10 +85,12 @@ public interface NavigableEntity {
      * The position is cloned, if you want the entity to continually follow this position object
      * you need to call this when you want the path to update.
      *
-     * @param position the position to find the path to, null to reset the pathfinder
+     * @param position   the position to find the path to, null to reset the pathfinder
+     * @param bestEffort whether to use the best-effort algorithm to the destination,
+     *                   if false then this method is more likely to return immediately
      * @return true if a path has been found
      */
-    default boolean setPathTo(@Nullable Position position) {
+    default boolean setPathTo(@Nullable Position position, boolean bestEffort) {
         if (position != null && getPathPosition() != null && position.isSimilar(getPathPosition())) {
             // Tried to set path to the same target position
             return false;
@@ -108,6 +109,11 @@ public interface NavigableEntity {
             return false;
         }
 
+        // Can't path with a null instance.
+        if (instance == null) {
+            return false;
+        }
+
         // Can't path outside of the world border
         final WorldBorder worldBorder = instance.getWorldBorder();
         if (!worldBorder.isInside(position)) {
@@ -122,13 +128,24 @@ public interface NavigableEntity {
 
         final Position targetPosition = position.clone();
 
-        final IPath path = pathFinder.initiatePathTo(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ());
+        final IPath path = pathFinder.initiatePathTo(
+                targetPosition.getX(),
+                targetPosition.getY(),
+                targetPosition.getZ(),
+                bestEffort);
         setPath(path);
 
         final boolean success = path != null;
         setPathPosition(success ? targetPosition : null);
 
         return success;
+    }
+
+    /**
+     * @see #setPathTo(Position, boolean) with {@code bestEffort} sets to {@code true}.
+     */
+    default boolean setPathTo(@Nullable Position position) {
+        return setPathTo(position, true);
     }
 
     default void pathFindingTick(float speed) {

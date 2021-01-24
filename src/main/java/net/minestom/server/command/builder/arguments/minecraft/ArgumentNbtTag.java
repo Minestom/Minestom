@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
@@ -23,28 +24,13 @@ public class ArgumentNbtTag extends Argument<NBT> {
         super(id, true);
     }
 
-    @Override
-    public int getCorrectionResult(@NotNull String value) {
-        try {
-            NBT nbt = new SNBTParser(new StringReader(value)).parse();
-            return nbt != null ? SUCCESS : INVALID_NBT;
-        } catch (NBTException e) {
-            return INVALID_NBT;
-        }
-    }
-
     @NotNull
     @Override
-    public NBT parse(@NotNull String value) {
+    public NBT parse(@NotNull String input) throws ArgumentSyntaxException {
         try {
-            return new SNBTParser(new StringReader(value)).parse();
+            return new SNBTParser(new StringReader(input)).parse();
         } catch (NBTException e) {
-            return null;
+            throw new ArgumentSyntaxException("Invalid NBT", input, INVALID_NBT);
         }
-    }
-
-    @Override
-    public int getConditionResult(@NotNull NBT value) {
-        return SUCCESS;
     }
 }

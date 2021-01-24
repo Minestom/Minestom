@@ -9,6 +9,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface PublicCloneable<T> extends Cloneable {
 
+    /**
+     * Creates and returns a copy of this object.
+     *
+     * @return A clone of this instance.
+     */
     @NotNull
     T clone();
 }

@@ -100,9 +100,8 @@ public class ArgumentType {
         return new ArgumentFloatRange(id);
     }
 
-    @Deprecated
-    public static ArgumentEntities Entities(@NotNull String id) {
-        return new ArgumentEntities(id);
+    public static ArgumentEntity Entities(@NotNull String id) {
+        return new ArgumentEntity(id);
     }
 
     public static ArgumentItemStack ItemStack(@NotNull String id) {

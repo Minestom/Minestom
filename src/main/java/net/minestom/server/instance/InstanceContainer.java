@@ -58,7 +58,7 @@ public class InstanceContainer extends Instance {
     private ChunkGenerator chunkGenerator;
     // (chunk index -> chunk) map, contains all the chunks in the instance
     private final Long2ObjectMap<Chunk> chunks = Long2ObjectMaps.synchronize(new Long2ObjectOpenHashMap<>());
-    // contains all the chunks to remove during the next instance tick
+    // contains all the chunks to remove during the next instance tick, should be synchronized
     protected final Set<Chunk> scheduledChunksToRemove = new HashSet<>();
 
     private final ReadWriteLock changingBlockLock = new ReentrantReadWriteLock();
@@ -300,7 +300,7 @@ public class InstanceContainer extends Instance {
     private short executeBlockPlacementRule(short blockStateId, @NotNull BlockPosition blockPosition) {
         final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(blockStateId);
         if (blockPlacementRule != null) {
-            return blockPlacementRule.blockRefresh(this, blockPosition, blockStateId);
+            return blockPlacementRule.blockUpdate(this, blockPosition, blockStateId);
         }
         return blockStateId;
     }
@@ -331,7 +331,7 @@ public class InstanceContainer extends Instance {
                     final BlockPlacementRule neighborBlockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(neighborStateId);
                     if (neighborBlockPlacementRule != null) {
                         final BlockPosition neighborPosition = new BlockPosition(neighborX, neighborY, neighborZ);
-                        final short newNeighborId = neighborBlockPlacementRule.blockRefresh(this,
+                        final short newNeighborId = neighborBlockPlacementRule.blockUpdate(this,
                                 neighborPosition, neighborStateId);
                         if (neighborStateId != newNeighborId) {
                             refreshBlockStateId(neighborPosition, newNeighborId);
@@ -508,7 +508,6 @@ public class InstanceContainer extends Instance {
 
     @Override
     public ChunkBatch createChunkBatch(@NotNull Chunk chunk) {
-        Check.notNull(chunk, "The chunk of a ChunkBatch cannot be null");
         return new ChunkBatch(this, chunk, false);
     }
 
@@ -587,7 +586,6 @@ public class InstanceContainer extends Instance {
      * @throws NullPointerException if {@code chunkSupplier} is null
      */
     public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
-        Check.notNull(chunkSupplier, "The chunk supplier cannot be null!");
         this.chunkSupplier = chunkSupplier;
     }
 
@@ -804,7 +802,7 @@ public class InstanceContainer extends Instance {
      * Unsafe because it has to be done on the same thread as the instance/chunks tick update.
      */
     protected void UNSAFE_unloadChunks() {
-        synchronized (this.scheduledChunksToRemove) {
+        synchronized (scheduledChunksToRemove) {
             for (Chunk chunk : scheduledChunksToRemove) {
                 final int chunkX = chunk.getChunkX();
                 final int chunkZ = chunk.getChunkZ();

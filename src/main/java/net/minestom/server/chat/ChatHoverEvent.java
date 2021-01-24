@@ -51,13 +51,13 @@ public class ChatHoverEvent {
     }
 
     /**
-     * Shows a {@link ColoredText} when hovered.
+     * Shows a {@link JsonMessage} when hovered.
      *
      * @param text the text to show
      * @return the chat hover event
      */
     @NotNull
-    public static ChatHoverEvent showText(@NotNull ColoredText text) {
+    public static ChatHoverEvent showText(@NotNull JsonMessage text) {
         return new ChatHoverEvent("show_text", text.getJsonObject());
     }
 

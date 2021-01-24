@@ -12,7 +12,6 @@ public class SettingsListener {
 
         PlayerSettingsChangeEvent playerSettingsChangeEvent = new PlayerSettingsChangeEvent(player);
         player.callEvent(PlayerSettingsChangeEvent.class, playerSettingsChangeEvent);
-
     }
 
 }

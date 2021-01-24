@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,13 +22,15 @@ public class Vector implements PublicCloneable<Vector> {
         this.z = z;
     }
 
-    public Vector add(Vector vec) {
+    @NotNull
+    public Vector add(@NotNull Vector vec) {
         x += vec.x;
         y += vec.y;
         z += vec.z;
         return this;
     }
 
+    @NotNull
     public Vector add(float x, float y, float z) {
         this.x += x;
         this.y += y;
@@ -41,13 +44,15 @@ public class Vector implements PublicCloneable<Vector> {
      * @param vec The other vector
      * @return the same vector
      */
-    public Vector subtract(Vector vec) {
+    @NotNull
+    public Vector subtract(@NotNull Vector vec) {
         x -= vec.x;
         y -= vec.y;
         z -= vec.z;
         return this;
     }
 
+    @NotNull
     public Vector subtract(float x, float y, float z) {
         this.x -= x;
         this.y -= y;
@@ -61,7 +66,8 @@ public class Vector implements PublicCloneable<Vector> {
      * @param vec The other vector
      * @return the same vector
      */
-    public Vector multiply(Vector vec) {
+    @NotNull
+    public Vector multiply(@NotNull Vector vec) {
         x *= vec.x;
         y *= vec.y;
         z *= vec.z;
@@ -74,7 +80,8 @@ public class Vector implements PublicCloneable<Vector> {
      * @param vec The other vector
      * @return the same vector
      */
-    public Vector divide(Vector vec) {
+    @NotNull
+    public Vector divide(@NotNull Vector vec) {
         x /= vec.x;
         y /= vec.y;
         z /= vec.z;
@@ -87,7 +94,8 @@ public class Vector implements PublicCloneable<Vector> {
      * @param vec The other vector
      * @return the same vector
      */
-    public Vector copy(Vector vec) {
+    @NotNull
+    public Vector copy(@NotNull Vector vec) {
         x = vec.x;
         y = vec.y;
         z = vec.z;
@@ -128,7 +136,7 @@ public class Vector implements PublicCloneable<Vector> {
      * @param o The other vector
      * @return the distance
      */
-    public double distance(Vector o) {
+    public double distance(@NotNull Vector o) {
         return Math.sqrt(MathUtils.square(x - o.x) + MathUtils.square(y - o.y) + MathUtils.square(z - o.z));
     }
 
@@ -138,7 +146,7 @@ public class Vector implements PublicCloneable<Vector> {
      * @param o The other vector
      * @return the squared distance
      */
-    public double distanceSquared(Vector o) {
+    public double distanceSquared(@NotNull Vector o) {
         return MathUtils.square(x - o.x) + MathUtils.square(y - o.y) + MathUtils.square(z - o.z);
     }
 
@@ -149,6 +157,7 @@ public class Vector implements PublicCloneable<Vector> {
      * @param m The factor
      * @return the same vector
      */
+    @NotNull
     public Vector multiply(int m) {
         x *= m;
         y *= m;
@@ -163,6 +172,7 @@ public class Vector implements PublicCloneable<Vector> {
      * @param m The factor
      * @return the same vector
      */
+    @NotNull
     public Vector multiply(double m) {
         x *= m;
         y *= m;
@@ -177,6 +187,7 @@ public class Vector implements PublicCloneable<Vector> {
      * @param m The factor
      * @return the same vector
      */
+    @NotNull
     public Vector multiply(float m) {
         x *= m;
         y *= m;
@@ -204,6 +215,7 @@ public class Vector implements PublicCloneable<Vector> {
      *
      * @return the same vector
      */
+    @NotNull
     public Vector zero() {
         x = 0;
         y = 0;
@@ -261,7 +273,7 @@ public class Vector implements PublicCloneable<Vector> {
         try {
             return (Vector) super.clone();
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
             throw new IllegalStateException("Weird thing happened");
         }
     }
@@ -295,7 +307,17 @@ public class Vector implements PublicCloneable<Vector> {
      *
      * @return this vector as a position
      */
+    @NotNull
     public Position toPosition() {
         return new Position(x, y, z);
+    }
+
+    /**
+     * Get the threshold used for equals().
+     *
+     * @return The epsilon.
+     */
+    public static double getEpsilon() {
+        return epsilon;
     }
 }
