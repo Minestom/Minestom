@@ -42,7 +42,6 @@ import java.util.function.Consumer;
 public final class CommandManager {
 
     public static final String COMMAND_PREFIX = "/";
-    private static final String CONSOLE_PREFIX = "> ";
 
     private volatile boolean running = true;
 
@@ -233,7 +232,6 @@ public final class CommandManager {
     public void startConsoleThread() {
         Thread consoleThread = new Thread(() -> {
             BufferedReader bi = new BufferedReader(new InputStreamReader(System.in));
-            System.out.print(CONSOLE_PREFIX);
             while (running) {
 
                 try {
@@ -241,8 +239,6 @@ public final class CommandManager {
                     if (bi.ready()) {
                         final String command = bi.readLine();
                         execute(consoleSender, command);
-
-                        System.out.print(CONSOLE_PREFIX);
                     }
                 } catch (IOException e) {
                     MinecraftServer.getExceptionManager().handleException(e);
