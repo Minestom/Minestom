@@ -231,7 +231,9 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ScoreboardLine</h4>
-<pre>public&nbsp;ScoreboardLine&#8203;(java.lang.String&nbsp;id,
+<pre>public&nbsp;ScoreboardLine&#8203;(@NotNull
+                      java.lang.String&nbsp;id,
+                      @NotNull
                       <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;content,
                       int&nbsp;line)</pre>
 </li>
@@ -252,7 +254,8 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getId</h4>
-<pre class="methodSignature">public&nbsp;java.lang.String&nbsp;getId()</pre>
+<pre class="methodSignature">@NotNull
+public&nbsp;java.lang.String&nbsp;getId()</pre>
 <div class="block">Gets the identifier of the line</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -266,7 +269,8 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getContent</h4>
-<pre class="methodSignature">public&nbsp;<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getContent()</pre>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getContent()</pre>
 <div class="block">Gets the content of the line</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

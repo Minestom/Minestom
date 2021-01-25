@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -235,41 +235,48 @@ implements <a href="Scoreboard.html" title="interface in net.minestom.server.sco
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>java.util.Set&lt;<a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard">Sidebar.ScoreboardLine</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLines()">getLines</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets a <code>Set</code> containing all the registered lines.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getObjectiveName()">getObjectiveName</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the objective name of the scoreboard</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>java.util.Set&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getViewers()">getViewers</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the viewers of this viewable element.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeLine(java.lang.String)">removeLine</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
 <div class="block">Removes a <a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard"><code>Sidebar.ScoreboardLine</code></a> through the given identifier</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeViewer(net.minestom.server.entity.Player)">removeViewer</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">Removes a viewer.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTitle(java.lang.String)">setTitle</a></span>&#8203;(java.lang.String&nbsp;title)</code></th>
 <td class="colLast">
 <div class="block">Changes the <a href="Sidebar.html" title="class in net.minestom.server.scoreboard"><code>Sidebar</code></a> title</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateLineContent(java.lang.String,net.minestom.server.chat.JsonMessage)">updateLineContent</a></span>&#8203;(java.lang.String&nbsp;id,
                  <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;content)</code></th>
@@ -277,7 +284,7 @@ implements <a href="Scoreboard.html" title="interface in net.minestom.server.sco
 <div class="block">Updates a <a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard"><code>Sidebar.ScoreboardLine</code></a> content through the given identifier.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateLineScore(java.lang.String,int)">updateLineScore</a></span>&#8203;(java.lang.String&nbsp;id,
                int&nbsp;score)</code></th>
@@ -432,6 +439,21 @@ public&nbsp;<a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.s
 <dd><code>id</code> - The identifier of the line</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a <a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard"><code>Sidebar.ScoreboardLine</code></a> or <code>null</code></dd>
+</dl>
+</li>
+</ul>
+<a id="getLines()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLines</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;java.util.Set&lt;<a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard">Sidebar.ScoreboardLine</a>&gt;&nbsp;getLines()</pre>
+<div class="block">Gets a <code>Set</code> containing all the registered lines.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an unmodifiable set containing the sidebar's lines</dd>
 </dl>
 </li>
 </ul>
