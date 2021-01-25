@@ -215,7 +215,7 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code><a href="Instance.html" title="class in net.minestom.server.instance">Instance</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInstance(java.util.UUID)">getInstance</a></span>&#8203;(java.util.UUID&nbsp;uuid)</code></th>
 <td class="colLast">
-<div class="block">Gets instance by given UUID.</div>
+<div class="block">Gets an instance by the given UUID.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -460,15 +460,15 @@ public&nbsp;java.util.Set&lt;<a href="Instance.html" title="class in net.minesto
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getInstance</h4>
-<pre class="methodSignature">@NotNull
-@Nullable
-public&nbsp;<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;getInstance&#8203;(java.util.UUID&nbsp;uuid)</pre>
-<div class="block">Gets instance by given UUID.</div>
+<pre class="methodSignature">@Nullable
+public&nbsp;<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;getInstance&#8203;(@NotNull
+                            java.util.UUID&nbsp;uuid)</pre>
+<div class="block">Gets an instance by the given UUID.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>uuid</code> - UUID of the instance</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd><code>Optional.empty()</code> if instance is not found</dd>
+<dd>the instance with the given UUID, null if not found</dd>
 </dl>
 </li>
 </ul>
