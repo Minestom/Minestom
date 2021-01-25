@@ -242,13 +242,9 @@ public class Vector implements PublicCloneable<Vector> {
      */
     @NotNull
     public Vector crossProduct(@NotNull Vector o) {
-        float newX = y * o.z - o.y * z;
-        float newY = z * o.x - o.z * x;
-        float newZ = x * o.y - o.x * y;
-
-        x = newX;
-        y = newY;
-        z = newZ;
+        this.x = y * o.z - o.y * z;
+        this.y = z * o.x - o.z * x;
+        this.z = x * o.y - o.x * y;
         return this;
     }
 
@@ -266,9 +262,9 @@ public class Vector implements PublicCloneable<Vector> {
      */
     @NotNull
     public Vector getCrossProduct(@NotNull Vector o) {
-        float x = this.y * o.z - o.y * this.z;
-        float y = this.z * o.x - o.z * this.x;
-        float z = this.x * o.y - o.x * this.y;
+        final double x = this.y * o.z - o.y * this.z;
+        final double y = this.z * o.x - o.z * this.x;
+        final double z = this.x * o.y - o.x * this.y;
         return new Vector(x, y, z);
     }
 
@@ -326,8 +322,8 @@ public class Vector implements PublicCloneable<Vector> {
         double angleCos = Math.cos(angle);
         double angleSin = Math.sin(angle);
 
-        this.y = (float) (angleCos * getY() - angleSin * getZ());
-        this.z = (float) (angleSin * getY() + angleCos * getZ());
+        this.y = angleCos * getY() - angleSin * getZ();
+        this.z = angleSin * getY() + angleCos * getZ();
         return this;
     }
 
@@ -348,8 +344,8 @@ public class Vector implements PublicCloneable<Vector> {
         double angleCos = Math.cos(angle);
         double angleSin = Math.sin(angle);
 
-        this.x = (float) (angleCos * getX() + angleSin * getZ());
-        this.z = (float) (-angleSin * getX() + angleCos * getZ());
+        this.x = angleCos * getX() + angleSin * getZ();
+        this.z = -angleSin * getX() + angleCos * getZ();
         return this;
     }
 
@@ -370,8 +366,8 @@ public class Vector implements PublicCloneable<Vector> {
         double angleCos = Math.cos(angle);
         double angleSin = Math.sin(angle);
 
-        this.x = (float) (angleCos * getX() - angleSin * getY());
-        this.y = (float) (angleSin * getX() + angleCos * getY());
+        this.x = angleCos * getX() - angleSin * getY();
+        this.y = angleSin * getX() + angleCos * getY();
         return this;
     }
 
