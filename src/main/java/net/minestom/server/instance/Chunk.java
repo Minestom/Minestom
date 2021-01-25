@@ -113,7 +113,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param z             the block Z
      * @param blockStateId  the block state id
      * @param customBlockId the custom block id, 0 if not
-     * @param data          the {@link Data} of the block, can be ull
+     * @param data          the {@link Data} of the block, can be null
      * @param updatable     true if the block has an update method
      *                      Warning: <code>customBlockId</code> cannot be 0 in this case and needs to be valid since the update delay and method
      *                      will be retrieved from the associated {@link CustomBlock} object
