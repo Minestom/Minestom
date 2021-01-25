@@ -854,7 +854,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param gravityTerminalVelocity the gravity terminal velocity (maximum) in block
      * @see <a href="https://minecraft.gamepedia.com/Entity#Motion_of_entities">Entities motion</a>
      */
-    public void setGravity(float gravityDragPerTick, float gravityAcceleration, float gravityTerminalVelocity) {
+    public void setGravity(double gravityDragPerTick, double gravityAcceleration, double gravityTerminalVelocity) {
         this.gravityDragPerTick = gravityDragPerTick;
         this.gravityAcceleration = gravityAcceleration;
         this.gravityTerminalVelocity = gravityTerminalVelocity;
