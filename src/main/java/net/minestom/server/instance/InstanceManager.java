@@ -155,17 +155,17 @@ public final class InstanceManager {
     }
 
     /**
-     * Gets instance by given UUID.
+     * Gets an instance by the given UUID.
      *
      * @param uuid UUID of the instance
-     * @return {@link Optional#empty()} if instance is not found
+     * @return the instance with the given UUID, null if not found
      */
-    @NotNull
-    public @Nullable Instance getInstance(UUID uuid) {
+    @Nullable
+    public Instance getInstance(@NotNull UUID uuid) {
         Optional<Instance> instance = getInstances()
-            .stream()
-            .filter(someInstance -> someInstance.getUniqueId().equals(uuid))
-            .findFirst();
+                .stream()
+                .filter(someInstance -> someInstance.getUniqueId().equals(uuid))
+                .findFirst();
         return instance.orElse(null);
     }
 
