@@ -151,6 +151,18 @@ public class Vector implements PublicCloneable<Vector> {
     }
 
     /**
+     * Gets the angle between this vector and another in radians.
+     *
+     * @param other The other vector
+     * @return angle in radians
+     */
+    public float angle(Vector other) {
+        double dot = dot(other) / (length() * other.length());
+
+        return (float) Math.acos(dot);
+    }
+
+    /**
      * Performs scalar multiplication, multiplying all components with a
      * scalar.
      *
@@ -192,6 +204,40 @@ public class Vector implements PublicCloneable<Vector> {
         x *= m;
         y *= m;
         z *= m;
+        return this;
+    }
+
+    /**
+     * Calculates the dot product of this vector with another. The dot product
+     * is defined as x1*x2+y1*y2+z1*z2. The returned value is a scalar.
+     *
+     * @param other The other vector
+     * @return dot product
+     */
+    public double dot(Vector other) {
+        return x * other.x + y * other.y + z * other.z;
+    }
+
+    /**
+     * Calculates the cross product of this vector with another. The cross
+     * product is defined as:
+     * <ul>
+     * <li>x = y1 * z2 - y2 * z1
+     * <li>y = z1 * x2 - z2 * x1
+     * <li>z = x1 * y2 - x2 * y1
+     * </ul>
+     *
+     * @param o The other vector
+     * @return the same vector
+     */
+    public Vector crossProduct(Vector o) {
+        float newX = y * o.z - o.y * z;
+        float newY = z * o.x - o.z * x;
+        float newZ = x * o.y - o.x * y;
+
+        x = newX;
+        y = newY;
+        z = newZ;
         return this;
     }
 
