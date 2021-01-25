@@ -422,15 +422,15 @@ public class Vector implements PublicCloneable<Vector> {
         double sinTheta = Math.sin(angle);
         double dotProduct = this.dot(axis);
 
-        this.x = (float) (x2 * dotProduct * (1d - cosTheta)
+        this.x = x2 * dotProduct * (1d - cosTheta)
                 + x * cosTheta
-                + (-z2 * y + y2 * z) * sinTheta);
-        this.y = (float) (y2 * dotProduct * (1d - cosTheta)
+                + (-z2 * y + y2 * z) * sinTheta;
+        this.y = y2 * dotProduct * (1d - cosTheta)
                 + y * cosTheta
-                + (z2 * x - x2 * z) * sinTheta);
-        this.z = (float) (z2 * dotProduct * (1d - cosTheta)
+                + (z2 * x - x2 * z) * sinTheta;
+        this.z = z2 * dotProduct * (1d - cosTheta)
                 + z * cosTheta
-                + (-y2 * x + x2 * y) * sinTheta);
+                + (-y2 * x + x2 * y) * sinTheta;
 
         return this;
     }

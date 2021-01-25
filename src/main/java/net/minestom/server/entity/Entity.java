@@ -93,9 +93,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     // Velocity
     protected Vector velocity = new Vector(); // Movement in block per second
 
-    protected float gravityDragPerTick;
-    protected float gravityAcceleration;
-    protected float gravityTerminalVelocity;
+    protected double gravityDragPerTick;
+    protected double gravityAcceleration;
+    protected double gravityTerminalVelocity;
     protected int gravityTickCount; // Number of tick where gravity tick was applied
 
     private boolean autoViewable;
@@ -485,8 +485,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                 Vector newVelocityOut = new Vector();
 
                 // Gravity force
-                final float gravityY = !noGravity ? Math.min(
-                        gravityDragPerTick + (gravityAcceleration * (float) gravityTickCount),
+                final double gravityY = !noGravity ? Math.min(
+                        gravityDragPerTick + (gravityAcceleration * (double) gravityTickCount),
                         gravityTerminalVelocity) : 0f;
 
                 final Vector deltaPos = new Vector(
@@ -711,7 +711,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * Changes the internal entity bounding box.
      * <p>
      * WARNING: this does not change the entity hit-box which is client-side.
-     *  @param x the bounding box X size
+     *
+     * @param x the bounding box X size
      * @param y the bounding box Y size
      * @param z the bounding box Z size
      */
@@ -814,7 +815,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      *
      * @return the gravity drag per tick in block
      */
-    public float getGravityDragPerTick() {
+    public double getGravityDragPerTick() {
         return gravityDragPerTick;
     }
 
@@ -823,7 +824,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      *
      * @return the gravity acceleration in block
      */
-    public float getGravityAcceleration() {
+    public double getGravityAcceleration() {
         return gravityAcceleration;
     }
 
@@ -832,7 +833,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      *
      * @return the maximum gravity velocity in block
      */
-    public float getGravityTerminalVelocity() {
+    public double getGravityTerminalVelocity() {
         return gravityTerminalVelocity;
     }
 
