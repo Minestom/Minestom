@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+import com.google.common.primitives.Doubles;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
@@ -127,6 +128,15 @@ public class Vector implements PublicCloneable<Vector> {
     }
 
     /**
+     * Gets the magnitude of the vector squared.
+     *
+     * @return the magnitude
+     */
+    public double lengthSquared() {
+        return MathUtils.square(x) + MathUtils.square(y) + MathUtils.square(z);
+    }
+
+    /**
      * Gets the distance between this vector and another. The value of this
      * method is not cached and uses a costly square-root function, so do not
      * repeatedly call this method to get the vector's magnitude. NaN will be
@@ -156,8 +166,8 @@ public class Vector implements PublicCloneable<Vector> {
      * @param other The other vector
      * @return angle in radians
      */
-    public float angle(Vector other) {
-        double dot = dot(other) / (length() * other.length());
+    public float angle(@NotNull Vector other) {
+        double dot = Doubles.constrainToRange(dot(other) / (length() * other.length()), -1.0, 1.0);
 
         return (float) Math.acos(dot);
     }
@@ -214,7 +224,7 @@ public class Vector implements PublicCloneable<Vector> {
      * @param other The other vector
      * @return dot product
      */
-    public double dot(Vector other) {
+    public double dot(@NotNull Vector other) {
         return x * other.x + y * other.y + z * other.z;
     }
 
@@ -230,7 +240,8 @@ public class Vector implements PublicCloneable<Vector> {
      * @param o The other vector
      * @return the same vector
      */
-    public Vector crossProduct(Vector o) {
+    @NotNull
+    public Vector crossProduct(@NotNull Vector o) {
         float newX = y * o.z - o.y * z;
         float newY = z * o.x - o.z * x;
         float newZ = x * o.y - o.x * y;
@@ -239,6 +250,26 @@ public class Vector implements PublicCloneable<Vector> {
         y = newY;
         z = newZ;
         return this;
+    }
+
+    /**
+     * Calculates the cross product of this vector with another without mutating
+     * the original. The cross product is defined as:
+     * <ul>
+     * <li>x = y1 * z2 - y2 * z1
+     * <li>y = z1 * x2 - z2 * x1
+     * <li>z = x1 * y2 - x2 * y1
+     * </ul>
+     *
+     * @param o The other vector
+     * @return a new vector
+     */
+    @NotNull
+    public Vector getCrossProduct(@NotNull Vector o) {
+        float x = this.y * o.z - o.y * this.z;
+        float y = this.z * o.x - o.z * this.x;
+        float z = this.x * o.y - o.x * this.y;
+        return new Vector(x, y, z);
     }
 
     /**
@@ -266,6 +297,145 @@ public class Vector implements PublicCloneable<Vector> {
         x = 0;
         y = 0;
         z = 0;
+        return this;
+    }
+
+    /**
+     * Returns if a vector is normalized
+     *
+     * @return whether the vector is normalised
+     */
+    public boolean isNormalized() {
+        return Math.abs(this.lengthSquared() - 1) < getEpsilon();
+    }
+
+    /**
+     * Rotates the vector around the x axis.
+     * <p>
+     * This piece of math is based on the standard rotation matrix for vectors
+     * in three dimensional space. This matrix can be found here:
+     * <a href="https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations">Rotation
+     * Matrix</a>.
+     *
+     * @param angle the angle to rotate the vector about. This angle is passed
+     *              in radians
+     * @return the same vector
+     */
+    @NotNull
+    public Vector rotateAroundX(double angle) {
+        double angleCos = Math.cos(angle);
+        double angleSin = Math.sin(angle);
+
+        this.y = (float) (angleCos * getY() - angleSin * getZ());
+        this.z = (float) (angleSin * getY() + angleCos * getZ());
+        return this;
+    }
+
+    /**
+     * Rotates the vector around the y axis.
+     * <p>
+     * This piece of math is based on the standard rotation matrix for vectors
+     * in three dimensional space. This matrix can be found here:
+     * <a href="https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations">Rotation
+     * Matrix</a>.
+     *
+     * @param angle the angle to rotate the vector about. This angle is passed
+     *              in radians
+     * @return the same vector
+     */
+    @NotNull
+    public Vector rotateAroundY(double angle) {
+        double angleCos = Math.cos(angle);
+        double angleSin = Math.sin(angle);
+
+        this.x = (float) (angleCos * getX() + angleSin * getZ());
+        this.z = (float) (-angleSin * getX() + angleCos * getZ());
+        return this;
+    }
+
+    /**
+     * Rotates the vector around the z axis
+     * <p>
+     * This piece of math is based on the standard rotation matrix for vectors
+     * in three dimensional space. This matrix can be found here:
+     * <a href="https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations">Rotation
+     * Matrix</a>.
+     *
+     * @param angle the angle to rotate the vector about. This angle is passed
+     *              in radians
+     * @return the same vector
+     */
+    @NotNull
+    public Vector rotateAroundZ(double angle) {
+        double angleCos = Math.cos(angle);
+        double angleSin = Math.sin(angle);
+
+        this.x = (float) (angleCos * getX() - angleSin * getY());
+        this.y = (float) (angleSin * getX() + angleCos * getY());
+        return this;
+    }
+
+    /**
+     * Rotates the vector around a given arbitrary axis in 3 dimensional space.
+     *
+     * <p>
+     * Rotation will follow the general Right-Hand-Rule, which means rotation
+     * will be counterclockwise when the axis is pointing towards the observer.
+     * <p>
+     * This method will always make sure the provided axis is a unit vector, to
+     * not modify the length of the vector when rotating. If you are experienced
+     * with the scaling of a non-unit axis vector, you can use
+     * {@link Vector#rotateAroundNonUnitAxis(Vector, double)}.
+     *
+     * @param axis  the axis to rotate the vector around. If the passed vector is
+     *              not of length 1, it gets copied and normalized before using it for the
+     *              rotation. Please use {@link Vector#normalize()} on the instance before
+     *              passing it to this method
+     * @param angle the angle to rotate the vector around the axis
+     * @return the same vector
+     */
+    @NotNull
+    public Vector rotateAroundAxis(@NotNull Vector axis, double angle) throws IllegalArgumentException {
+        return rotateAroundNonUnitAxis(axis.isNormalized() ? axis : axis.clone().normalize(), angle);
+    }
+
+    /**
+     * Rotates the vector around a given arbitrary axis in 3 dimensional space.
+     *
+     * <p>
+     * Rotation will follow the general Right-Hand-Rule, which means rotation
+     * will be counterclockwise when the axis is pointing towards the observer.
+     * <p>
+     * Note that the vector length will change accordingly to the axis vector
+     * length. If the provided axis is not a unit vector, the rotated vector
+     * will not have its previous length. The scaled length of the resulting
+     * vector will be related to the axis vector. If you are not perfectly sure
+     * about the scaling of the vector, use
+     * {@link Vector#rotateAroundAxis(Vector, double)}
+     *
+     * @param axis  the axis to rotate the vector around.
+     * @param angle the angle to rotate the vector around the axis
+     * @return the same vector
+     */
+    @NotNull
+    public Vector rotateAroundNonUnitAxis(@NotNull Vector axis, double angle) throws IllegalArgumentException {
+        double x = getX(), y = getY(), z = getZ();
+        double x2 = axis.getX(), y2 = axis.getY(), z2 = axis.getZ();
+
+        double cosTheta = Math.cos(angle);
+        double sinTheta = Math.sin(angle);
+        double dotProduct = this.dot(axis);
+
+        this.x = (float) (x2 * dotProduct * (1d - cosTheta)
+                + x * cosTheta
+                + (-z2 * y + y2 * z) * sinTheta);
+        this.y = (float) (y2 * dotProduct * (1d - cosTheta)
+                + y * cosTheta
+                + (z2 * x - x2 * z) * sinTheta);
+        this.z = (float) (z2 * dotProduct * (1d - cosTheta)
+                + z * cosTheta
+                + (-y2 * x + x2 * y) * sinTheta);
+
         return this;
     }
 
