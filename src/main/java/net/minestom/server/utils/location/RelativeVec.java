@@ -23,9 +23,9 @@ public class RelativeVec extends RelativeLocation<Vector> {
         }
         final Position entityPosition = entity.getPosition();
 
-        final float x = location.getX() + (relativeX ? entityPosition.getX() : 0);
-        final float y = location.getY() + (relativeY ? entityPosition.getY() : 0);
-        final float z = location.getZ() + (relativeZ ? entityPosition.getZ() : 0);
+        final double x = location.getX() + (relativeX ? entityPosition.getX() : 0);
+        final double y = location.getY() + (relativeY ? entityPosition.getY() : 0);
+        final double z = location.getZ() + (relativeZ ? entityPosition.getZ() : 0);
 
         return new Vector(x, y, z);
     }

@@ -13,10 +13,10 @@ import java.util.Objects;
  */
 public class Position implements PublicCloneable<Position> {
 
-    private float x, y, z;
+    private double x, y, z;
     private float yaw, pitch;
 
-    public Position(float x, float y, float z, float yaw, float pitch) {
+    public Position(double x, double y, double z, float yaw, float pitch) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -24,7 +24,7 @@ public class Position implements PublicCloneable<Position> {
         this.pitch = pitch;
     }
 
-    public Position(float x, float y, float z) {
+    public Position(double x, double y, double z) {
         this(x, y, z, 0, 0);
     }
 
@@ -40,7 +40,8 @@ public class Position implements PublicCloneable<Position> {
      * @param z the Z offset
      * @return the same object position
      */
-    public Position add(float x, float y, float z) {
+    @NotNull
+    public Position add(double x, double y, double z) {
         this.x += x;
         this.y += y;
         this.z += z;
@@ -53,7 +54,8 @@ public class Position implements PublicCloneable<Position> {
      * @param position the position to add to this
      * @return the same object position
      */
-    public Position add(Position position) {
+    @NotNull
+    public Position add(@NotNull Position position) {
         this.x += position.x;
         this.y += position.y;
         this.z += position.z;
@@ -68,15 +70,16 @@ public class Position implements PublicCloneable<Position> {
      * @param z the Z offset
      * @return the same object position
      */
-    public Position subtract(float x, float y, float z) {
+    @NotNull
+    public Position subtract(double x, double y, double z) {
         this.x -= x;
         this.y -= y;
         this.z -= z;
         return this;
     }
 
-    public float getDistance(float x, float y, float z) {
-        return (float) Math.sqrt(MathUtils.square(x - getX()) +
+    public double getDistance(double x, double y, double z) {
+        return Math.sqrt(MathUtils.square(x - getX()) +
                 MathUtils.square(y - getY()) +
                 MathUtils.square(z - getZ()));
     }
@@ -89,7 +92,7 @@ public class Position implements PublicCloneable<Position> {
      * @param position the second position
      * @return the distance between {@code this} and {@code position}
      */
-    public float getDistance(@NotNull Position position) {
+    public double getDistance(@NotNull Position position) {
         return getDistance(position.getX(), position.getY(), position.getZ());
     }
 
@@ -99,7 +102,7 @@ public class Position implements PublicCloneable<Position> {
      * @param position the second position
      * @return the squared distance between {@code this} and {@code position}
      */
-    public float getDistanceSquared(@NotNull Position position) {
+    public double getDistanceSquared(@NotNull Position position) {
         return MathUtils.square(getX() - position.getX()) +
                 MathUtils.square(getY() - position.getY()) +
                 MathUtils.square(getZ() - position.getZ());
@@ -123,8 +126,8 @@ public class Position implements PublicCloneable<Position> {
 
         final double xz = Math.cos(Math.toRadians(rotY));
 
-        vector.setX((float) (-xz * Math.sin(Math.toRadians(rotX))));
-        vector.setZ((float) (xz * Math.cos(Math.toRadians(rotX))));
+        vector.setX((-xz * Math.sin(Math.toRadians(rotX))));
+        vector.setZ((xz * Math.cos(Math.toRadians(rotX))));
 
         return vector;
     }
@@ -144,8 +147,8 @@ public class Position implements PublicCloneable<Position> {
          * z = Adj
          */
         final double _2PI = 2 * Math.PI;
-        final float x = vector.getX();
-        final float z = vector.getZ();
+        final double x = vector.getX();
+        final double z = vector.getZ();
 
         if (x == 0 && z == 0) {
             pitch = vector.getY() > 0 ? -90 : 90;
@@ -155,9 +158,9 @@ public class Position implements PublicCloneable<Position> {
         final double theta = Math.atan2(-x, z);
         yaw = (float) Math.toDegrees((theta + _2PI) % _2PI);
 
-        final float x2 = MathUtils.square(x);
-        final float z2 = MathUtils.square(z);
-        final float xz = (float) Math.sqrt(x2 + z2);
+        final double x2 = MathUtils.square(x);
+        final double z2 = MathUtils.square(z);
+        final double xz = Math.sqrt(x2 + z2);
         pitch = (float) Math.toDegrees(Math.atan(-vector.getY() / xz));
 
         return this;
@@ -228,11 +231,11 @@ public class Position implements PublicCloneable<Position> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Position position = (Position) o;
-        return Float.compare(position.x, x) == 0 &&
-                Float.compare(position.y, y) == 0 &&
-                Float.compare(position.z, z) == 0 &&
-                Float.compare(position.yaw, yaw) == 0 &&
-                Float.compare(position.pitch, pitch) == 0;
+        return Double.compare(position.x, x) == 0 &&
+                Double.compare(position.y, y) == 0 &&
+                Double.compare(position.z, z) == 0 &&
+                Double.compare(position.yaw, yaw) == 0 &&
+                Double.compare(position.pitch, pitch) == 0;
     }
 
     /**
@@ -242,9 +245,9 @@ public class Position implements PublicCloneable<Position> {
      * @return true if the two positions are similar
      */
     public boolean isSimilar(@NotNull Position position) {
-        return Float.compare(position.x, x) == 0 &&
-                Float.compare(position.y, y) == 0 &&
-                Float.compare(position.z, z) == 0;
+        return Double.compare(position.x, x) == 0 &&
+                Double.compare(position.y, y) == 0 &&
+                Double.compare(position.z, z) == 0;
     }
 
     /**
@@ -284,7 +287,7 @@ public class Position implements PublicCloneable<Position> {
      *
      * @return the position X
      */
-    public float getX() {
+    public double getX() {
         return x;
     }
 
@@ -293,7 +296,7 @@ public class Position implements PublicCloneable<Position> {
      *
      * @param x the new position X
      */
-    public void setX(float x) {
+    public void setX(double x) {
         this.x = x;
     }
 
@@ -302,7 +305,7 @@ public class Position implements PublicCloneable<Position> {
      *
      * @return the position Y
      */
-    public float getY() {
+    public double getY() {
         return y;
     }
 
@@ -311,7 +314,7 @@ public class Position implements PublicCloneable<Position> {
      *
      * @param y the new position Y
      */
-    public void setY(float y) {
+    public void setY(double y) {
         this.y = y;
     }
 
@@ -320,7 +323,7 @@ public class Position implements PublicCloneable<Position> {
      *
      * @return the position Z
      */
-    public float getZ() {
+    public double getZ() {
         return z;
     }
 
@@ -329,7 +332,7 @@ public class Position implements PublicCloneable<Position> {
      *
      * @param z the new position Z
      */
-    public void setZ(float z) {
+    public void setZ(double z) {
         this.z = z;
     }
 
@@ -374,6 +377,7 @@ public class Position implements PublicCloneable<Position> {
      *
      * @return the converted {@link BlockPosition}
      */
+    @NotNull
     public BlockPosition toBlockPosition() {
         return new BlockPosition(x, y, z);
     }
@@ -383,6 +387,7 @@ public class Position implements PublicCloneable<Position> {
      *
      * @return the converted {@link Vector}
      */
+    @NotNull
     public Vector toVector() {
         return new Vector(x, y, z);
     }

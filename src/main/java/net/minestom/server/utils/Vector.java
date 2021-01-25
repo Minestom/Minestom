@@ -8,7 +8,7 @@ public class Vector implements PublicCloneable<Vector> {
 
     private static final double epsilon = 0.000001;
 
-    protected float x, y, z;
+    protected double x, y, z;
 
     public Vector() {
         this.x = 0;
@@ -16,7 +16,7 @@ public class Vector implements PublicCloneable<Vector> {
         this.z = 0;
     }
 
-    public Vector(float x, float y, float z) {
+    public Vector(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -31,7 +31,7 @@ public class Vector implements PublicCloneable<Vector> {
     }
 
     @NotNull
-    public Vector add(float x, float y, float z) {
+    public Vector add(double x, double y, double z) {
         this.x += x;
         this.y += y;
         this.z += z;
@@ -53,7 +53,7 @@ public class Vector implements PublicCloneable<Vector> {
     }
 
     @NotNull
-    public Vector subtract(float x, float y, float z) {
+    public Vector subtract(double x, double y, double z) {
         this.x -= x;
         this.y -= y;
         this.z -= z;
@@ -278,27 +278,27 @@ public class Vector implements PublicCloneable<Vector> {
         }
     }
 
-    public float getX() {
+    public double getX() {
         return x;
     }
 
-    public void setX(float x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public float getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(float y) {
+    public void setY(double y) {
         this.y = y;
     }
 
-    public float getZ() {
+    public double getZ() {
         return z;
     }
 
-    public void setZ(float z) {
+    public void setZ(double z) {
         this.z = z;
     }
 

@@ -1,14 +1,14 @@
 package net.minestom.server.utils.block;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * This class performs ray tracing and iterates along blocks on a line
@@ -41,16 +41,15 @@ public class BlockIterator implements Iterator<BlockPosition> {
      * <p>
      * This considers all blocks as 1x1x1 in size.
      *
-     * @param start A Vector giving the initial position for the trace
-     * @param direction A Vector pointing in the direction for the trace
-     * @param yOffset The trace begins vertically offset from the start vector
-     *     by this value
+     * @param start       A Vector giving the initial position for the trace
+     * @param direction   A Vector pointing in the direction for the trace
+     * @param yOffset     The trace begins vertically offset from the start vector
+     *                    by this value
      * @param maxDistance This is the maximum distance in blocks for the
-     *     trace. Setting this value above 140 may lead to problems with
-     *     unloaded chunks. A value of 0 indicates no limit
-     *
+     *                    trace. Setting this value above 140 may lead to problems with
+     *                    unloaded chunks. A value of 0 indicates no limit
      */
-    public BlockIterator(@NotNull Vector start, @NotNull Vector direction, float yOffset, int maxDistance) {
+    public BlockIterator(@NotNull Vector start, @NotNull Vector direction, double yOffset, int maxDistance) {
         this.maxDistance = maxDistance;
 
         Vector startClone = start.clone();
@@ -112,15 +111,15 @@ public class BlockIterator implements Iterator<BlockPosition> {
         // trace line backwards to find intercept with plane perpendicular to the main axis
 
         double d = mainPosition / mainDirection; // how far to hit face behind
-        double secondd = secondPosition - secondDirection * d;
-        double thirdd = thirdPosition - thirdDirection * d;
+        double second = secondPosition - secondDirection * d;
+        double third = thirdPosition - thirdDirection * d;
 
         // Guarantee that the ray will pass though the start block.
         // It is possible that it would miss due to rounding
         // This should only move the ray by 1 grid position
-        secondError = floor(secondd * gridSize);
+        secondError = floor(second * gridSize);
         secondStep = round(secondDirection / mainDirection * gridSize);
-        thirdError = floor(thirdd * gridSize);
+        thirdError = floor(third * gridSize);
         thirdStep = round(thirdDirection / mainDirection * gridSize);
 
         if (secondError + secondStep <= 0) {
@@ -222,14 +221,14 @@ public class BlockIterator implements Iterator<BlockPosition> {
      * <p>
      * This considers all blocks as 1x1x1 in size.
      *
-     * @param pos The position for the start of the ray trace
-     * @param yOffset The trace begins vertically offset from the start vector
-     *     by this value
+     * @param pos         The position for the start of the ray trace
+     * @param yOffset     The trace begins vertically offset from the start vector
+     *                    by this value
      * @param maxDistance This is the maximum distance in blocks for the
-     *     trace. Setting this value above 140 may lead to problems with
-     *     unloaded chunks. A value of 0 indicates no limit
+     *                    trace. Setting this value above 140 may lead to problems with
+     *                    unloaded chunks. A value of 0 indicates no limit
      */
-    public BlockIterator(@NotNull Position pos, float yOffset, int maxDistance) {
+    public BlockIterator(@NotNull Position pos, double yOffset, int maxDistance) {
         this(pos.toVector(), pos.getDirection(), yOffset, maxDistance);
     }
 
@@ -238,12 +237,12 @@ public class BlockIterator implements Iterator<BlockPosition> {
      * <p>
      * This considers all blocks as 1x1x1 in size.
      *
-     * @param pos The position for the start of the ray trace
+     * @param pos     The position for the start of the ray trace
      * @param yOffset The trace begins vertically offset from the start vector
-     *     by this value
+     *                by this value
      */
 
-    public BlockIterator(@NotNull Position pos, float yOffset) {
+    public BlockIterator(@NotNull Position pos, double yOffset) {
         this(pos.toVector(), pos.getDirection(), yOffset, 0);
     }
 
@@ -264,10 +263,10 @@ public class BlockIterator implements Iterator<BlockPosition> {
      * <p>
      * This considers all blocks as 1x1x1 in size.
      *
-     * @param entity Information from the entity is used to set up the trace
+     * @param entity      Information from the entity is used to set up the trace
      * @param maxDistance This is the maximum distance in blocks for the
-     *     trace. Setting this value above 140 may lead to problems with
-     *     unloaded chunks. A value of 0 indicates no limit
+     *                    trace. Setting this value above 140 may lead to problems with
+     *                    unloaded chunks. A value of 0 indicates no limit
      */
 
     public BlockIterator(@NotNull LivingEntity entity, int maxDistance) {

@@ -80,8 +80,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
     protected Instance instance;
     protected final Position position;
-    protected float lastX, lastY, lastZ;
-    protected float cacheX, cacheY, cacheZ; // Used to synchronize with #getPosition
+    protected double lastX, lastY, lastZ;
+    protected double cacheX, cacheY, cacheZ; // Used to synchronize with #getPosition
     protected float lastYaw, lastPitch;
     protected float cacheYaw, cachePitch;
     protected boolean onGround;
@@ -422,7 +422,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                     cacheZ != position.getZ();
             final boolean viewChange = cacheYaw != position.getYaw() ||
                     cachePitch != position.getPitch();
-            final float distance = positionChange ? position.getDistance(cacheX, cacheY, cacheZ) : 0;
+            final double distance = positionChange ? position.getDistance(cacheX, cacheY, cacheZ) : 0;
 
             if (distance >= 8 || (positionChange && PlayerUtils.isNettyClient(this))) {
                 // Teleport has the priority over everything else
@@ -477,9 +477,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
             if (applyVelocity) {
                 final float tps = MinecraftServer.TICK_PER_SECOND;
-                final float newX = position.getX() + velocity.getX() / tps;
-                final float newY = position.getY() + velocity.getY() / tps;
-                final float newZ = position.getZ() + velocity.getZ() / tps;
+                final double newX = position.getX() + velocity.getX() / tps;
+                final double newY = position.getY() + velocity.getY() / tps;
+                final double newZ = position.getZ() + velocity.getZ() / tps;
                 Position newPosition = new Position(newX, newY, newZ);
 
                 Vector newVelocityOut = new Vector();
@@ -711,12 +711,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * Changes the internal entity bounding box.
      * <p>
      * WARNING: this does not change the entity hit-box which is client-side.
-     *
-     * @param x the bounding box X size
+     *  @param x the bounding box X size
      * @param y the bounding box Y size
      * @param z the bounding box Z size
      */
-    public void setBoundingBox(float x, float y, float z) {
+    public void setBoundingBox(double x, double y, double z) {
         this.boundingBox = new BoundingBox(this, x, y, z);
     }
 
@@ -866,7 +865,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param entity the entity to get the distance from
      * @return the distance between this and {@code entity}
      */
-    public float getDistance(@NotNull Entity entity) {
+    public double getDistance(@NotNull Entity entity) {
         return getPosition().getDistance(entity.getPosition());
     }
 
@@ -1102,7 +1101,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param y new position Y
      * @param z new position Z
      */
-    public void refreshPosition(float x, float y, float z) {
+    public void refreshPosition(double x, double y, double z) {
         position.setX(x);
         position.setY(y);
         position.setZ(z);
@@ -1147,7 +1146,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
     /**
      * @param position the new position
-     * @see #refreshPosition(float, float, float)
+     * @see #refreshPosition(double, double, double)
      */
     public void refreshPosition(@NotNull Position position) {
         refreshPosition(position.getX(), position.getY(), position.getZ());
@@ -1237,8 +1236,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      *
      * @return the entity eye height
      */
-    public float getEyeHeight() {
-        return boundingBox.getHeight() * 0.85f;
+    public double getEyeHeight() {
+        return boundingBox.getHeight() * 0.85;
     }
 
     /**

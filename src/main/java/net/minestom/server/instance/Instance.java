@@ -631,7 +631,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param z the Z position
      * @return the block state id at the position
      */
-    public short getBlockStateId(float x, float y, float z) {
+    public short getBlockStateId(double x, double y, double z) {
         return getBlockStateId(Math.round(x), Math.round(y), Math.round(z));
     }
 
@@ -759,7 +759,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @return the chunk at the given position, null if not loaded
      */
     @Nullable
-    public Chunk getChunkAt(float x, float z) {
+    public Chunk getChunkAt(double x, double z) {
         final int chunkX = ChunkUtils.getChunkCoordinate((int) Math.floor(x));
         final int chunkZ = ChunkUtils.getChunkCoordinate((int) Math.floor(z));
         return getChunk(chunkX, chunkZ);

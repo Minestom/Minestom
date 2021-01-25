@@ -39,7 +39,7 @@ public class ClosestEntityTarget extends TargetSelector {
         final List<Chunk> chunks = getNeighbours(instance, currentChunk.getChunkX(), currentChunk.getChunkZ());
 
         Entity entity = null;
-        float distance = Float.MAX_VALUE;
+        double distance = Double.MAX_VALUE;
 
         for (Chunk chunk : chunks) {
             final Set<Entity> entities = instance.getChunkEntities(chunk);
@@ -76,7 +76,7 @@ public class ClosestEntityTarget extends TargetSelector {
                 }
 
                 // Check distance
-                final float d = entityCreature.getDistance(ent);
+                final double d = entityCreature.getDistance(ent);
                 if ((entity == null || d < distance) && d < range) {
                     entity = ent;
                     distance = d;

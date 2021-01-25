@@ -14,6 +14,10 @@ public final class MathUtils {
         return num * num;
     }
 
+    public static double square(double num) {
+        return num * num;
+    }
+
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
@@ -55,8 +59,20 @@ public final class MathUtils {
         return number >= min && number <= max;
     }
 
+    public static boolean isBetween(double number, double min, double max) {
+        return number >= min && number <= max;
+    }
+
     public static boolean isBetween(float number, float min, float max) {
         return number >= min && number <= max;
+    }
+
+    public static boolean isBetweenUnordered(double number, double compare1, double compare2) {
+        if (compare1 > compare2) {
+            return isBetween(number, compare2, compare1);
+        } else {
+            return isBetween(number, compare1, compare2);
+        }
     }
 
     public static boolean isBetweenUnordered(float number, float compare1, float compare2) {

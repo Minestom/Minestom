@@ -76,7 +76,7 @@ public final class ChunkUtils {
      * @param z        instance Z coordinate
      * @return true if the chunk is loaded, false otherwise
      */
-    public static boolean isLoaded(@NotNull Instance instance, float x, float z) {
+    public static boolean isLoaded(@NotNull Instance instance, double x, double z) {
         final int chunkX = getChunkCoordinate((int) x);
         final int chunkZ = getChunkCoordinate((int) z);
 

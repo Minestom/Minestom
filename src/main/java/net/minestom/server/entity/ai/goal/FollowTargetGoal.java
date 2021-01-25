@@ -83,7 +83,7 @@ public class FollowTargetGoal extends GoalSelector {
         entityCreature.setPathTo(null);
     }
 
-    private float getDistance(@NotNull Position a, @NotNull Position b) {
+    private double getDistance(@NotNull Position a, @NotNull Position b) {
         return MathUtils.square(a.getX() - b.getX()) +
                 MathUtils.square(a.getZ() - b.getZ());
     }

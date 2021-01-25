@@ -72,7 +72,7 @@ public class EntityZombifiedPiglin extends EntityCreature implements Monster {
     }
 
     @Override
-    public float getEyeHeight() {
-        return isBaby() ? 0.93f : 1.74f;
+    public double getEyeHeight() {
+        return isBaby() ? 0.93 : 1.74;
     }
 }

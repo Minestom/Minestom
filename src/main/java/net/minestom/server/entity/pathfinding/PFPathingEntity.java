@@ -189,13 +189,10 @@ public class PFPathingEntity implements IPathingEntity {
 
     @Override
     public void moveTo(Vec3d position, Passibility passibility, Gravitation gravitation) {
-        final float x = (float) position.x;
-        final float y = (float) position.y;
-        final float z = (float) position.z;
-        this.targetPosition = new Position(x, y, z);
+        this.targetPosition = new Position(position.x, position.y, position.z);
 
-        final float entityY = entity.getPosition().getY();
-        if (entityY < y) {
+        final double entityY = entity.getPosition().getY();
+        if (entityY < targetPosition.getY()) {
             navigableEntity.jump(1);
         }
     }
@@ -208,12 +205,12 @@ public class PFPathingEntity implements IPathingEntity {
 
     @Override
     public float width() {
-        return entity.getBoundingBox().getWidth();
+        return (float) entity.getBoundingBox().getWidth();
     }
 
     @Override
     public float height() {
-        return entity.getBoundingBox().getHeight();
+        return (float) entity.getBoundingBox().getHeight();
     }
 
     private float getAttributeValue(@NotNull Attribute attribute) {
