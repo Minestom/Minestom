@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":42,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":9,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":42,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":9,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -307,42 +307,64 @@ implements <a href="clone/PublicCloneable.html" title="interface in net.minestom
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i13" class="rowColor">
+<td class="colFirst"><code><a href="Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCrossProduct(net.minestom.server.utils.Vector)">getCrossProduct</a></span>&#8203;(<a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;o)</code></th>
+<td class="colLast">
+<div class="block">Calculates the cross product of this vector with another without mutating
+ the original.</div>
+</td>
+</tr>
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEpsilon()">getEpsilon</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get the threshold used for equals().</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getX()">getX</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getY()">getY</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getZ()">getZ</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns a hash code for this vector</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isNormalized()">isNormalized</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns if a vector is normalized</div>
+</td>
+</tr>
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#length()">length</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the magnitude of the vector, defined as sqrt(x^2+y^2+z^2).</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i21" class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#lengthSquared()">lengthSquared</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the magnitude of the vector squared.</div>
+</td>
+</tr>
+<tr id="i22" class="altColor">
 <td class="colFirst"><code><a href="Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#multiply(double)">multiply</a></span>&#8203;(double&nbsp;m)</code></th>
 <td class="colLast">
@@ -350,7 +372,7 @@ implements <a href="clone/PublicCloneable.html" title="interface in net.minestom
  scalar.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code><a href="Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#multiply(float)">multiply</a></span>&#8203;(float&nbsp;m)</code></th>
 <td class="colLast">
@@ -358,7 +380,7 @@ implements <a href="clone/PublicCloneable.html" title="interface in net.minestom
  scalar.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code><a href="Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#multiply(int)">multiply</a></span>&#8203;(int&nbsp;m)</code></th>
 <td class="colLast">
@@ -366,62 +388,99 @@ implements <a href="clone/PublicCloneable.html" title="interface in net.minestom
  scalar.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code><a href="Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#multiply(net.minestom.server.utils.Vector)">multiply</a></span>&#8203;(<a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;vec)</code></th>
 <td class="colLast">
 <div class="block">Multiplies the vector by another.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code><a href="Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#normalize()">normalize</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Converts this vector to a unit vector (a vector with length of 1).</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i27" class="rowColor">
+<td class="colFirst"><code><a href="Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rotateAroundAxis(net.minestom.server.utils.Vector,double)">rotateAroundAxis</a></span>&#8203;(<a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;axis,
+                double&nbsp;angle)</code></th>
+<td class="colLast">
+<div class="block">Rotates the vector around a given arbitrary axis in 3 dimensional space.</div>
+</td>
+</tr>
+<tr id="i28" class="altColor">
+<td class="colFirst"><code><a href="Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rotateAroundNonUnitAxis(net.minestom.server.utils.Vector,double)">rotateAroundNonUnitAxis</a></span>&#8203;(<a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;axis,
+                       double&nbsp;angle)</code></th>
+<td class="colLast">
+<div class="block">Rotates the vector around a given arbitrary axis in 3 dimensional space.</div>
+</td>
+</tr>
+<tr id="i29" class="rowColor">
+<td class="colFirst"><code><a href="Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rotateAroundX(double)">rotateAroundX</a></span>&#8203;(double&nbsp;angle)</code></th>
+<td class="colLast">
+<div class="block">Rotates the vector around the x axis.</div>
+</td>
+</tr>
+<tr id="i30" class="altColor">
+<td class="colFirst"><code><a href="Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rotateAroundY(double)">rotateAroundY</a></span>&#8203;(double&nbsp;angle)</code></th>
+<td class="colLast">
+<div class="block">Rotates the vector around the y axis.</div>
+</td>
+</tr>
+<tr id="i31" class="rowColor">
+<td class="colFirst"><code><a href="Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rotateAroundZ(double)">rotateAroundZ</a></span>&#8203;(double&nbsp;angle)</code></th>
+<td class="colLast">
+<div class="block">Rotates the vector around the z axis</div>
+</td>
+</tr>
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setX(float)">setX</a></span>&#8203;(float&nbsp;x)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setY(float)">setY</a></span>&#8203;(float&nbsp;y)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setZ(float)">setZ</a></span>&#8203;(float&nbsp;z)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code><a href="Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#subtract(float,float,float)">subtract</a></span>&#8203;(float&nbsp;x,
         float&nbsp;y,
         float&nbsp;z)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code><a href="Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#subtract(net.minestom.server.utils.Vector)">subtract</a></span>&#8203;(<a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;vec)</code></th>
 <td class="colLast">
 <div class="block">Subtracts a vector from this one.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code><a href="Position.html" title="class in net.minestom.server.utils">Position</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toPosition()">toPosition</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets a new <a href="Position.html" title="class in net.minestom.server.utils"><code>Position</code></a> from this vector.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code><a href="Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#zero()">zero</a></span>()</code></th>
 <td class="colLast">
@@ -659,6 +718,20 @@ public&nbsp;<a href="Vector.html" title="class in net.minestom.server.utils">Vec
 </dl>
 </li>
 </ul>
+<a id="lengthSquared()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>lengthSquared</h4>
+<pre class="methodSignature">public&nbsp;double&nbsp;lengthSquared()</pre>
+<div class="block">Gets the magnitude of the vector squared.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the magnitude</dd>
+</dl>
+</li>
+</ul>
 <a id="distance(net.minestom.server.utils.Vector)">
 <!--   -->
 </a>
@@ -703,7 +776,8 @@ public&nbsp;<a href="Vector.html" title="class in net.minestom.server.utils">Vec
 <ul class="blockList">
 <li class="blockList">
 <h4>angle</h4>
-<pre class="methodSignature">public&nbsp;float&nbsp;angle&#8203;(<a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;other)</pre>
+<pre class="methodSignature">public&nbsp;float&nbsp;angle&#8203;(@NotNull
+                   <a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;other)</pre>
 <div class="block">Gets the angle between this vector and another in radians.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -773,7 +847,8 @@ public&nbsp;<a href="Vector.html" title="class in net.minestom.server.utils">Vec
 <ul class="blockList">
 <li class="blockList">
 <h4>dot</h4>
-<pre class="methodSignature">public&nbsp;double&nbsp;dot&#8203;(<a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;other)</pre>
+<pre class="methodSignature">public&nbsp;double&nbsp;dot&#8203;(@NotNull
+                  <a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;other)</pre>
 <div class="block">Calculates the dot product of this vector with another. The dot product
  is defined as x1*x2+y1*y2+z1*z2. The returned value is a scalar.</div>
 <dl>
@@ -790,7 +865,9 @@ public&nbsp;<a href="Vector.html" title="class in net.minestom.server.utils">Vec
 <ul class="blockList">
 <li class="blockList">
 <h4>crossProduct</h4>
-<pre class="methodSignature">public&nbsp;<a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;crossProduct&#8203;(<a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;o)</pre>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;crossProduct&#8203;(@NotNull
+                           <a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;o)</pre>
 <div class="block">Calculates the cross product of this vector with another. The cross
  product is defined as:
  <ul>
@@ -803,6 +880,30 @@ public&nbsp;<a href="Vector.html" title="class in net.minestom.server.utils">Vec
 <dd><code>o</code> - The other vector</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the same vector</dd>
+</dl>
+</li>
+</ul>
+<a id="getCrossProduct(net.minestom.server.utils.Vector)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCrossProduct</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;getCrossProduct&#8203;(@NotNull
+                              <a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;o)</pre>
+<div class="block">Calculates the cross product of this vector with another without mutating
+ the original. The cross product is defined as:
+ <ul>
+ <li>x = y1 * z2 - y2 * z1
+ <li>y = z1 * x2 - z2 * x1
+ <li>z = x1 * y2 - x2 * y1
+ </ul></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>o</code> - The other vector</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a new vector</dd>
 </dl>
 </li>
 </ul>
@@ -832,6 +933,158 @@ public&nbsp;<a href="Vector.html" title="class in net.minestom.server.utils">Vec
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the same vector</dd>
+</dl>
+</li>
+</ul>
+<a id="isNormalized()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isNormalized</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isNormalized()</pre>
+<div class="block">Returns if a vector is normalized</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>whether the vector is normalised</dd>
+</dl>
+</li>
+</ul>
+<a id="rotateAroundX(double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>rotateAroundX</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;rotateAroundX&#8203;(double&nbsp;angle)</pre>
+<div class="block">Rotates the vector around the x axis.
+ <p>
+ This piece of math is based on the standard rotation matrix for vectors
+ in three dimensional space. This matrix can be found here:
+ <a href="https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations">Rotation
+ Matrix</a>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>angle</code> - the angle to rotate the vector about. This angle is passed
+              in radians</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the same vector</dd>
+</dl>
+</li>
+</ul>
+<a id="rotateAroundY(double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>rotateAroundY</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;rotateAroundY&#8203;(double&nbsp;angle)</pre>
+<div class="block">Rotates the vector around the y axis.
+ <p>
+ This piece of math is based on the standard rotation matrix for vectors
+ in three dimensional space. This matrix can be found here:
+ <a href="https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations">Rotation
+ Matrix</a>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>angle</code> - the angle to rotate the vector about. This angle is passed
+              in radians</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the same vector</dd>
+</dl>
+</li>
+</ul>
+<a id="rotateAroundZ(double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>rotateAroundZ</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;rotateAroundZ&#8203;(double&nbsp;angle)</pre>
+<div class="block">Rotates the vector around the z axis
+ <p>
+ This piece of math is based on the standard rotation matrix for vectors
+ in three dimensional space. This matrix can be found here:
+ <a href="https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations">Rotation
+ Matrix</a>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>angle</code> - the angle to rotate the vector about. This angle is passed
+              in radians</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the same vector</dd>
+</dl>
+</li>
+</ul>
+<a id="rotateAroundAxis(net.minestom.server.utils.Vector,double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>rotateAroundAxis</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;rotateAroundAxis&#8203;(@NotNull
+                               <a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;axis,
+                               double&nbsp;angle)
+                        throws java.lang.IllegalArgumentException</pre>
+<div class="block">Rotates the vector around a given arbitrary axis in 3 dimensional space.
+
+ <p>
+ Rotation will follow the general Right-Hand-Rule, which means rotation
+ will be counterclockwise when the axis is pointing towards the observer.
+ <p>
+ This method will always make sure the provided axis is a unit vector, to
+ not modify the length of the vector when rotating. If you are experienced
+ with the scaling of a non-unit axis vector, you can use
+ <a href="#rotateAroundNonUnitAxis(net.minestom.server.utils.Vector,double)"><code>rotateAroundNonUnitAxis(Vector, double)</code></a>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>axis</code> - the axis to rotate the vector around. If the passed vector is
+              not of length 1, it gets copied and normalized before using it for the
+              rotation. Please use <a href="#normalize()"><code>normalize()</code></a> on the instance before
+              passing it to this method</dd>
+<dd><code>angle</code> - the angle to rotate the vector around the axis</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the same vector</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.IllegalArgumentException</code></dd>
+</dl>
+</li>
+</ul>
+<a id="rotateAroundNonUnitAxis(net.minestom.server.utils.Vector,double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>rotateAroundNonUnitAxis</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;rotateAroundNonUnitAxis&#8203;(@NotNull
+                                      <a href="Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;axis,
+                                      double&nbsp;angle)
+                               throws java.lang.IllegalArgumentException</pre>
+<div class="block">Rotates the vector around a given arbitrary axis in 3 dimensional space.
+
+ <p>
+ Rotation will follow the general Right-Hand-Rule, which means rotation
+ will be counterclockwise when the axis is pointing towards the observer.
+ <p>
+ Note that the vector length will change accordingly to the axis vector
+ length. If the provided axis is not a unit vector, the rotated vector
+ will not have its previous length. The scaled length of the resulting
+ vector will be related to the axis vector. If you are not perfectly sure
+ about the scaling of the vector, use
+ <a href="#rotateAroundAxis(net.minestom.server.utils.Vector,double)"><code>rotateAroundAxis(Vector, double)</code></a></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>axis</code> - the axis to rotate the vector around.</dd>
+<dd><code>angle</code> - the angle to rotate the vector around the axis</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the same vector</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.IllegalArgumentException</code></dd>
 </dl>
 </li>
 </ul>
