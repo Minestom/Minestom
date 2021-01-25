@@ -632,7 +632,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @return the block state id at the position
      */
     public short getBlockStateId(double x, double y, double z) {
-        return getBlockStateId(Math.round(x), Math.round(y), Math.round(z));
+        return getBlockStateId((int) Math.round(x), (int) Math.round(y), (int) Math.round(z));
     }
 
     /**
