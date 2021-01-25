@@ -608,6 +608,32 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     }
 
     /**
+     * Gets block from given position.
+     *
+     * @param position position to get from
+     * @return Block at given position.
+     */
+    public Block getBlock(BlockPosition position) {
+        return getBlock(position.getX(), position.getY(), position.getZ());
+    }
+
+    /**
+     * Gets Block type from given coordinates.
+     *
+     * @param x x coordinate
+     * @param y y coordinate
+     * @param z z coordinate
+     * @return Block at given position.
+     */
+    public Block getBlock(int x, int y, int z) {
+        final Chunk chunk = getChunkAt(x, z);
+        Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
+        synchronized (chunk) {
+            return chunk.getBlock(x, y, z);
+        }
+    }
+
+    /**
      * Gives the block state id at the given position.
      *
      * @param x the X position

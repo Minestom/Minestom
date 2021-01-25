@@ -9,6 +9,7 @@ import net.minestom.server.data.Data;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.data.SerializableDataImpl;
 import net.minestom.server.entity.pathfinding.PFBlockDescription;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.palette.PaletteStorage;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
@@ -153,6 +154,11 @@ public class DynamicChunk extends Chunk {
                 customBlock.update(instance, blockPosition, data);
             }
         }
+    }
+
+    @Override
+    public Block getBlock(int x, int y, int z) {
+        return Block.fromStateId(getBlockStateId(x, y, z));
     }
 
     @Override

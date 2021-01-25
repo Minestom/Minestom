@@ -18,6 +18,7 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
@@ -112,7 +113,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param z             the block Z
      * @param blockStateId  the block state id
      * @param customBlockId the custom block id, 0 if not
-     * @param data          the {@link Data} of the block, can be null
+     * @param data          the {@link Data} of the block, can be ull
      * @param updatable     true if the block has an update method
      *                      Warning: <code>customBlockId</code> cannot be 0 in this case and needs to be valid since the update delay and method
      *                      will be retrieved from the associated {@link CustomBlock} object
@@ -130,6 +131,16 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param instance the {@link Instance} linked to this chunk
      */
     public abstract void tick(long time, @NotNull Instance instance);
+
+    /**
+     * Gets Block type from given coordinates.
+     *
+     * @param x x coordinate
+     * @param y y coordinate
+     * @param z z coordinate
+     * @return Block at given position.
+     */
+    public abstract Block getBlock(int x, int y, int z);
 
     /**
      * Gets the block state id at a position.
