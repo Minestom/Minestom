@@ -177,24 +177,24 @@ implements java.util.Iterator&lt;<a href="../BlockPosition.html" title="class in
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Position,float)">BlockIterator</a></span>&#8203;(<a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos,
-             float&nbsp;yOffset)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Position,double)">BlockIterator</a></span>&#8203;(<a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos,
+             double&nbsp;yOffset)</code></th>
 <td class="colLast">
 <div class="block">Constructs the BlockIterator.</div>
 </td>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Position,float,int)">BlockIterator</a></span>&#8203;(<a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos,
-             float&nbsp;yOffset,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Position,double,int)">BlockIterator</a></span>&#8203;(<a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos,
+             double&nbsp;yOffset,
              int&nbsp;maxDistance)</code></th>
 <td class="colLast">
 <div class="block">Constructs the BlockIterator.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Vector,net.minestom.server.utils.Vector,float,int)">BlockIterator</a></span>&#8203;(<a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;start,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Vector,net.minestom.server.utils.Vector,double,int)">BlockIterator</a></span>&#8203;(<a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;start,
              <a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;direction,
-             float&nbsp;yOffset,
+             double&nbsp;yOffset,
              int&nbsp;maxDistance)</code></th>
 <td class="colLast">
 <div class="block">Constructs the BlockIterator.</div>
@@ -278,7 +278,7 @@ implements java.util.Iterator&lt;<a href="../BlockPosition.html" title="class in
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.utils.Vector,net.minestom.server.utils.Vector,float,int)">
+<a id="&lt;init&gt;(net.minestom.server.utils.Vector,net.minestom.server.utils.Vector,double,int)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -288,7 +288,7 @@ implements java.util.Iterator&lt;<a href="../BlockPosition.html" title="class in
                      <a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;start,
                      @NotNull
                      <a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;direction,
-                     float&nbsp;yOffset,
+                     double&nbsp;yOffset,
                      int&nbsp;maxDistance)</pre>
 <div class="block">Constructs the BlockIterator.
  <p>
@@ -298,14 +298,14 @@ implements java.util.Iterator&lt;<a href="../BlockPosition.html" title="class in
 <dd><code>start</code> - A Vector giving the initial position for the trace</dd>
 <dd><code>direction</code> - A Vector pointing in the direction for the trace</dd>
 <dd><code>yOffset</code> - The trace begins vertically offset from the start vector
-     by this value</dd>
+                    by this value</dd>
 <dd><code>maxDistance</code> - This is the maximum distance in blocks for the
-     trace. Setting this value above 140 may lead to problems with
-     unloaded chunks. A value of 0 indicates no limit</dd>
+                    trace. Setting this value above 140 may lead to problems with
+                    unloaded chunks. A value of 0 indicates no limit</dd>
 </dl>
 </li>
 </ul>
-<a id="&lt;init&gt;(net.minestom.server.utils.Position,float,int)">
+<a id="&lt;init&gt;(net.minestom.server.utils.Position,double,int)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -313,7 +313,7 @@ implements java.util.Iterator&lt;<a href="../BlockPosition.html" title="class in
 <h4>BlockIterator</h4>
 <pre>public&nbsp;BlockIterator&#8203;(@NotNull
                      <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos,
-                     float&nbsp;yOffset,
+                     double&nbsp;yOffset,
                      int&nbsp;maxDistance)</pre>
 <div class="block">Constructs the BlockIterator.
  <p>
@@ -322,14 +322,14 @@ implements java.util.Iterator&lt;<a href="../BlockPosition.html" title="class in
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>pos</code> - The position for the start of the ray trace</dd>
 <dd><code>yOffset</code> - The trace begins vertically offset from the start vector
-     by this value</dd>
+                    by this value</dd>
 <dd><code>maxDistance</code> - This is the maximum distance in blocks for the
-     trace. Setting this value above 140 may lead to problems with
-     unloaded chunks. A value of 0 indicates no limit</dd>
+                    trace. Setting this value above 140 may lead to problems with
+                    unloaded chunks. A value of 0 indicates no limit</dd>
 </dl>
 </li>
 </ul>
-<a id="&lt;init&gt;(net.minestom.server.utils.Position,float)">
+<a id="&lt;init&gt;(net.minestom.server.utils.Position,double)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -337,7 +337,7 @@ implements java.util.Iterator&lt;<a href="../BlockPosition.html" title="class in
 <h4>BlockIterator</h4>
 <pre>public&nbsp;BlockIterator&#8203;(@NotNull
                      <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos,
-                     float&nbsp;yOffset)</pre>
+                     double&nbsp;yOffset)</pre>
 <div class="block">Constructs the BlockIterator.
  <p>
  This considers all blocks as 1x1x1 in size.</div>
@@ -345,7 +345,7 @@ implements java.util.Iterator&lt;<a href="../BlockPosition.html" title="class in
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>pos</code> - The position for the start of the ray trace</dd>
 <dd><code>yOffset</code> - The trace begins vertically offset from the start vector
-     by this value</dd>
+                by this value</dd>
 </dl>
 </li>
 </ul>
@@ -382,8 +382,8 @@ implements java.util.Iterator&lt;<a href="../BlockPosition.html" title="class in
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>entity</code> - Information from the entity is used to set up the trace</dd>
 <dd><code>maxDistance</code> - This is the maximum distance in blocks for the
-     trace. Setting this value above 140 may lead to problems with
-     unloaded chunks. A value of 0 indicates no limit</dd>
+                    trace. Setting this value above 140 may lead to problems with
+                    unloaded chunks. A value of 0 indicates no limit</dd>
 </dl>
 </li>
 </ul>
