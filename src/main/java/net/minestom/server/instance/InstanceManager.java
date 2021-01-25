@@ -161,11 +161,12 @@ public final class InstanceManager {
      * @return {@link Optional#empty()} if instance is not found
      */
     @NotNull
-    public Optional<Instance> getInstance(UUID uuid) {
-        return getInstances()
-                .stream()
-                .filter(instance -> instance.getUniqueId().equals(uuid))
-                .findFirst();
+    public @Nullable Instance getInstance(UUID uuid) {
+        Optional<Instance> instance = getInstances()
+            .stream()
+            .filter(someInstance -> someInstance.getUniqueId().equals(uuid))
+            .findFirst();
+        return instance.orElse(null);
     }
 
     /**
