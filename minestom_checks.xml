@@ -78,7 +78,6 @@
             <property name="processJavadoc" value="true"/>
         </module>
         <module name="CustomImportOrder">
-            <property name="sortImportsInGroupAlphabetically" value="true"/>
             <property name="separateLineBetweenGroups" value="true"/>
             <property name="customImportOrderRules" value="STATIC###THIRD_PARTY_PACKAGE"/>
         </module>
@@ -269,7 +268,7 @@
              value="^@return the *|^This method returns |^A [{]@code [a-zA-Z0-9]+[}]( is a )"/>
         </module>
         <module name="JavadocParagraph">
-            <property name="allowNewlineParagraph" value="false" />
+            <property name="allowNewlineParagraph" value="true" />
         </module>
         <module name="AtclauseOrder">
             <property name="tagOrder" value="@param, @return, @throws, @deprecated"/>
