@@ -37,8 +37,8 @@ public class CubeBatchCommand extends Command {
         Player player = sender.asPlayer();
         InstanceContainer instance = (InstanceContainer) player.getInstance();
 
-//        applyChunkShape(instance);
-        applyBlockShape(instance);
+        applyChunkShape(instance);
+//        applyBlockShape(instance);
 
 //        AbsoluteBlockBatch batch = new AbsoluteBlockBatch();
 //

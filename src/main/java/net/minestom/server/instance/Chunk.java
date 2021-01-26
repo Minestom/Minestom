@@ -31,6 +31,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.stream.Collectors;
 
 // TODO light data & API
 
@@ -544,6 +545,23 @@ public abstract class Chunk implements Viewable, DataContainer {
      */
     public synchronized void sendChunkUpdate() {
         PacketUtils.sendGroupedPacket(getViewers(), getFreshFullDataPacket());
+    }
+
+    /**
+     * Sends a single section {@link ChunkDataPacket} to all chunk viewers.
+     *
+     * @param section The section to send.
+     */
+    public synchronized void sendChunkSectionUpdate(int section) {
+        Check.argCondition(!MathUtils.isBetween(section, 0, CHUNK_SECTION_COUNT),
+                "The chunk section " + section + " does not exist");
+        PacketUtils.sendGroupedPacket(
+                //todo An option to filter out non-netty clients in sendGroupedPacket would be nice.
+                getViewers()
+                        .stream()
+                        .filter(PlayerUtils::isNettyClient)
+                        .collect(Collectors.toUnmodifiableList()),
+                createChunkSectionUpdatePacket(section));
     }
 
     /**

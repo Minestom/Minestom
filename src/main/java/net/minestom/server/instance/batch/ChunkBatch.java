@@ -2,6 +2,8 @@ package net.minestom.server.instance.batch;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntArraySet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongList;
 import net.minestom.server.data.Data;
@@ -18,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.function.IntConsumer;
 
 /**
  * A Batch used when all of the block changed are contained inside a single chunk.
@@ -32,7 +35,9 @@ import java.util.concurrent.CountDownLatch;
  * @see Batch
  */
 public class ChunkBatch implements Batch<ChunkCallback> {
+    private static final int CHUNK_SECTION_THRESHOLD = Chunk.CHUNK_SECTION_COUNT / 2;
     private static final Logger LOGGER = LoggerFactory.getLogger(ChunkBatch.class);
+
 
     // Need to be synchronized manually
     // Format: blockIndex/blockStateId/customBlockId (32/16/16 bits)
@@ -199,14 +204,16 @@ public class ChunkBatch implements Batch<ChunkCallback> {
                 return;
             }
 
+            final IntSet sections = new IntArraySet();
             synchronized (blocks) {
                 for (long block : blocks) {
-                    apply(chunk, block, inverse);
+                    final int section = apply(chunk, block, inverse);
+                    sections.add(section);
                 }
             }
 
             if (inverse != null) inverse.readyLatch.countDown();
-            updateChunk(instance, chunk, callback, safeCallback);
+            updateChunk(instance, chunk, sections, callback, safeCallback);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -217,8 +224,9 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      *
      * @param chunk The chunk to apply the change
      * @param value block index|state id|custom block id (32|16|16 bits)
+     * @return The chunk section which the block was placed
      */
-    private void apply(@NotNull Chunk chunk, long value, @Nullable ChunkBatch inverse) {
+    private int apply(@NotNull Chunk chunk, long value, @Nullable ChunkBatch inverse) {
         final short customBlockId = (short) (value & 0xFFFF);
         final short blockId = (short) ((value >> 16) & 0xFFFF);
         final int index = (int) ((value >> 32) & 0xFFFFFFFFL);
@@ -238,18 +246,21 @@ public class ChunkBatch implements Batch<ChunkCallback> {
             inverse.setSeparateBlocks(x, y, z, chunk.getBlockStateId(x, y, z), chunk.getCustomBlockId(x, y, z), chunk.getBlockData(index));
 
         chunk.UNSAFE_setBlock(x, y, z, blockId, customBlockId, data, CustomBlockUtils.hasUpdate(customBlockId));
+        return ChunkUtils.getSectionAt(y);
     }
 
     /**
      * Updates the given chunk for all of its viewers, and executes the callback.
      */
-    private void updateChunk(@NotNull Instance instance, Chunk chunk, @Nullable ChunkCallback callback, boolean safeCallback) {
+    private void updateChunk(@NotNull Instance instance, Chunk chunk, IntSet sections, @Nullable ChunkCallback callback, boolean safeCallback) {
         // Refresh chunk for viewers
-
-        // Formerly this had an option to do a Chunk#sendChunkUpdate
-        // however Chunk#sendChunk does the same including a light update
-        chunk.sendChunkUpdate();
-        //chunk.sendChunk();
+        if (sections.size() <= CHUNK_SECTION_THRESHOLD) {
+            // Update only a few sections of the chunk
+            sections.forEach((IntConsumer) chunk::sendChunkSectionUpdate);
+        } else {
+            // Update the entire chunk
+            chunk.sendChunk();
+        }
 
         if (instance instanceof InstanceContainer) {
             // FIXME: put method in Instance instead
