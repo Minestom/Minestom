@@ -133,16 +133,6 @@ public abstract class Chunk implements Viewable, DataContainer {
     public abstract void tick(long time, @NotNull Instance instance);
 
     /**
-     * Gets Block type from given coordinates.
-     *
-     * @param x x coordinate
-     * @param y y coordinate
-     * @param z z coordinate
-     * @return Block at given position.
-     */
-    public abstract Block getBlock(int x, int y, int z);
-
-    /**
      * Gets the block state id at a position.
      *
      * @param x the block X

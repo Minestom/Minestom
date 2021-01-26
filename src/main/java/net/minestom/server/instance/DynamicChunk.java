@@ -157,11 +157,6 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public Block getBlock(int x, int y, int z) {
-        return Block.fromStateId(getBlockStateId(x, y, z));
-    }
-
-    @Override
     public short getBlockStateId(int x, int y, int z) {
         return getBlockAt(blockPalette, x, y, z);
     }
