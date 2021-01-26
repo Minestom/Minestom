@@ -53,21 +53,22 @@ public interface Batch<Callback> extends BlockModifier {
      *
      * @return true if the batch is ready to apply
      */
-    default boolean isReady() { return true; }
+    default boolean isReady() {
+        return true;
+    }
 
     /**
      * Blocks the current thread until the batch is ready to be applied.
      *
      * @see #isReady() for a non-blocking way to determine if the batch is ready
      */
-    default void awaitReady() {}
+    default void awaitReady() {
+    }
 
     /**
      * Removes all block data from this batch.
      */
     void clear();
-
-    // Batch rotate(? );
 
     /**
      * Called to apply the batch to the given instance.
