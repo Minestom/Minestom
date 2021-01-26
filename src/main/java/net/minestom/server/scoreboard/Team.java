@@ -25,43 +25,43 @@ public class Team {
     private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 
     /**
-     * A collection of all registered entities who are on the team
+     * A collection of all registered entities who are on the team.
      */
     private final Set<String> members;
 
     /**
-     * The registry name of the team
+     * The registry name of the team.
      */
     private final String teamName;
     /**
-     * The display name of the team
+     * The display name of the team.
      */
     private JsonMessage teamDisplayName;
     /**
-     * A BitMask
+     * A BitMask.
      */
     private byte friendlyFlags;
     /**
-     * The visibility of the team
+     * The visibility of the team.
      */
     private NameTagVisibility nameTagVisibility;
     /**
-     * The collision rule of the team
+     * The collision rule of the team.
      */
     private CollisionRule collisionRule;
 
     /**
      * Used to color the name of players on the team <br>
-     * The color of a team defines how the names of the team members are visualized
+     * The color of a team defines how the names of the team members are visualized.
      */
     private ChatColor teamColor;
 
     /**
-     * Shown before the names of the players who belong to this team
+     * Shown before the names of the players who belong to this team.
      */
     private JsonMessage prefix;
     /**
-     * Shown after the names of the player who belong to this team
+     * Shown after the names of the player who belong to this team.
      */
     private JsonMessage suffix;
 

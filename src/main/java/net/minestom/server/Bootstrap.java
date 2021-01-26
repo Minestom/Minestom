@@ -34,7 +34,7 @@ public final class Bootstrap {
             Class<?> mainClass = classLoader.loadClass(mainClassFullName);
             Method main = mainClass.getDeclaredMethod("main", String[].class);
             main.setAccessible(true);
-            main.invoke(null, new Object[] { args });
+            main.invoke(null, new Object[]{args});
         } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -44,7 +44,7 @@ public final class Bootstrap {
         // hacks required to pass custom arguments
         Method start = MixinBootstrap.class.getDeclaredMethod("start");
         start.setAccessible(true);
-        if (! ((boolean)start.invoke(null)) ) {
+        if (!((boolean) start.invoke(null))) {
             return;
         }
 

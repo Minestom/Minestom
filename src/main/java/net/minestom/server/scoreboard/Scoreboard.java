@@ -6,19 +6,21 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
 import net.minestom.server.network.packet.server.play.UpdateScorePacket;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * This interface represents all scoreboard of Minecraft
+ * This interface represents all scoreboard of Minecraft.
  */
 public interface Scoreboard extends Viewable {
 
     /**
-     * Creates a creation objective packet
+     * Creates a creation objective packet.
      *
      * @param value The value for the objective
      * @param type  The type for the objective
      * @return the creation objective packet
      */
+    @NotNull
     default ScoreboardObjectivePacket getCreationObjectivePacket(String value, ScoreboardObjectivePacket.Type type) {
         final ScoreboardObjectivePacket packet = new ScoreboardObjectivePacket();
         packet.objectiveName = this.getObjectiveName();
@@ -30,10 +32,11 @@ public interface Scoreboard extends Viewable {
     }
 
     /**
-     * Creates the destruction objective packet
+     * Creates the destruction objective packet.
      *
      * @return the destruction objective packet
      */
+    @NotNull
     default ScoreboardObjectivePacket getDestructionObjectivePacket() {
         final ScoreboardObjectivePacket packet = new ScoreboardObjectivePacket();
         packet.objectiveName = this.getObjectiveName();
@@ -43,11 +46,12 @@ public interface Scoreboard extends Viewable {
     }
 
     /**
-     * Creates the {@link DisplayScoreboardPacket}
+     * Creates the {@link DisplayScoreboardPacket}.
      *
      * @param position The position of the scoreboard
      * @return the created display scoreboard packet
      */
+    @NotNull
     default DisplayScoreboardPacket getDisplayScoreboardPacket(byte position) {
         final DisplayScoreboardPacket packet = new DisplayScoreboardPacket();
         packet.position = position;
@@ -57,7 +61,7 @@ public interface Scoreboard extends Viewable {
     }
 
     /**
-     * Updates the score of a {@link Player}
+     * Updates the score of a {@link Player}.
      *
      * @param player The player
      * @param score  The new score
@@ -73,10 +77,11 @@ public interface Scoreboard extends Viewable {
     }
 
     /**
-     * Gets the objective name of the scoreboard
+     * Gets the objective name of the scoreboard.
      *
      * @return the objective name
      */
+    @NotNull
     String getObjectiveName();
 
 }
