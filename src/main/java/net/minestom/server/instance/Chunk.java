@@ -8,7 +8,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.event.player.PlayerChunkLoadEvent;
 import net.minestom.server.event.player.PlayerChunkUnloadEvent;
-import net.minestom.server.instance.batch.BatchOption;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
@@ -31,7 +30,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.stream.Collectors;
 
 // TODO light data & API
 
@@ -548,23 +546,6 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Sends a single section {@link ChunkDataPacket} to all chunk viewers.
-     *
-     * @param section The section to send.
-     */
-    public synchronized void sendChunkSectionUpdate(int section) {
-        Check.argCondition(!MathUtils.isBetween(section, 0, CHUNK_SECTION_COUNT),
-                "The chunk section " + section + " does not exist");
-        PacketUtils.sendGroupedPacket(
-                //todo An option to filter out non-netty clients in sendGroupedPacket would be nice.
-                getViewers()
-                        .stream()
-                        .filter(PlayerUtils::isNettyClient)
-                        .collect(Collectors.toUnmodifiableList()),
-                createChunkSectionUpdatePacket(section));
-    }
-
-    /**
      * Sends a chunk section update packet to {@code player}.
      *
      * @param section the section to update
@@ -589,7 +570,6 @@ public abstract class Chunk implements Viewable, DataContainer {
     @NotNull
     protected ChunkDataPacket createChunkSectionUpdatePacket(int section) {
         ChunkDataPacket chunkDataPacket = getFreshPartialDataPacket();
-        chunkDataPacket.fullChunk = false;
         int[] sections = new int[CHUNK_SECTION_COUNT];
         sections[section] = 1;
         chunkDataPacket.sections = sections;

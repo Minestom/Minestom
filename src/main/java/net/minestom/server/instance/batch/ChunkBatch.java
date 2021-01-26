@@ -10,10 +10,13 @@ import net.minestom.server.data.Data;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.network.packet.server.play.ChunkDataPacket;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.player.PlayerUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -35,7 +38,6 @@ import java.util.function.IntConsumer;
  * @see Batch
  */
 public class ChunkBatch implements Batch<ChunkCallback> {
-    private static final int CHUNK_SECTION_THRESHOLD = Chunk.CHUNK_SECTION_COUNT / 2;
     private static final Logger LOGGER = LoggerFactory.getLogger(ChunkBatch.class);
 
 
@@ -252,15 +254,14 @@ public class ChunkBatch implements Batch<ChunkCallback> {
     /**
      * Updates the given chunk for all of its viewers, and executes the callback.
      */
-    private void updateChunk(@NotNull Instance instance, Chunk chunk, IntSet sections, @Nullable ChunkCallback callback, boolean safeCallback) {
+    private void updateChunk(@NotNull Instance instance, Chunk chunk, IntSet updatedSections, @Nullable ChunkCallback callback, boolean safeCallback) {
         // Refresh chunk for viewers
-        if (sections.size() <= CHUNK_SECTION_THRESHOLD) {
-            // Update only a few sections of the chunk
-            sections.forEach((IntConsumer) chunk::sendChunkSectionUpdate);
-        } else {
-            // Update the entire chunk
-            chunk.sendChunk();
-        }
+        ChunkDataPacket chunkDataPacket = chunk.getFreshPartialDataPacket();
+        int[] sections = new int[Chunk.CHUNK_SECTION_COUNT];
+        for (int section : updatedSections)
+            sections[section] = 1;
+        chunkDataPacket.sections = sections;
+        PacketUtils.sendGroupedPacket(chunk.getViewers(), chunkDataPacket, PlayerUtils::isNettyClient);
 
         if (instance instanceof InstanceContainer) {
             // FIXME: put method in Instance instead
