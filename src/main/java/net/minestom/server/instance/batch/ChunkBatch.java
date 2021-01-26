@@ -16,14 +16,12 @@ import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.player.PlayerUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.function.IntConsumer;
 
 /**
  * A Batch used when all of the block changed are contained inside a single chunk.
@@ -261,7 +259,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
         for (int section : updatedSections)
             sections[section] = 1;
         chunkDataPacket.sections = sections;
-        PacketUtils.sendGroupedPacket(chunk.getViewers(), chunkDataPacket, PlayerUtils::isNettyClient);
+        PacketUtils.sendGroupedPacket(chunk.getViewers(), chunkDataPacket);
 
         if (instance instanceof InstanceContainer) {
             // FIXME: put method in Instance instead
