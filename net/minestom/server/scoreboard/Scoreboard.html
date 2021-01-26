@@ -132,7 +132,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public interface <span class="typeNameLabel">Scoreboard</span>
 extends <a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></pre>
-<div class="block">This interface represents all scoreboard of Minecraft</div>
+<div class="block">This interface represents all scoreboard of Minecraft.</div>
 </li>
 </ul>
 </div>
@@ -158,28 +158,28 @@ extends <a href="../Viewable.html" title="interface in net.minestom.server">View
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCreationObjectivePacket(java.lang.String,net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket.Type)">getCreationObjectivePacket</a></span>&#8203;(java.lang.String&nbsp;value,
                           <a href="../network/packet/server/play/ScoreboardObjectivePacket.Type.html" title="enum in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket.Type</a>&nbsp;type)</code></th>
 <td class="colLast">
-<div class="block">Creates a creation objective packet</div>
+<div class="block">Creates a creation objective packet.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>default <a href="../network/packet/server/play/ScoreboardObjectivePacket.html" title="class in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDestructionObjectivePacket()">getDestructionObjectivePacket</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Creates the destruction objective packet</div>
+<div class="block">Creates the destruction objective packet.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>default <a href="../network/packet/server/play/DisplayScoreboardPacket.html" title="class in net.minestom.server.network.packet.server.play">DisplayScoreboardPacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDisplayScoreboardPacket(byte)">getDisplayScoreboardPacket</a></span>&#8203;(byte&nbsp;position)</code></th>
 <td class="colLast">
-<div class="block">Creates the <a href="../network/packet/server/play/DisplayScoreboardPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>DisplayScoreboardPacket</code></a></div>
+<div class="block">Creates the <a href="../network/packet/server/play/DisplayScoreboardPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>DisplayScoreboardPacket</code></a>.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getObjectiveName()">getObjectiveName</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets the objective name of the scoreboard</div>
+<div class="block">Gets the objective name of the scoreboard.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -187,7 +187,7 @@ extends <a href="../Viewable.html" title="interface in net.minestom.server">View
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateScore(net.minestom.server.entity.Player,int)">updateScore</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
            int&nbsp;score)</code></th>
 <td class="colLast">
-<div class="block">Updates the score of a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a></div>
+<div class="block">Updates the score of a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a>.</div>
 </td>
 </tr>
 </table>
@@ -220,9 +220,10 @@ extends <a href="../Viewable.html" title="interface in net.minestom.server">View
 <ul class="blockList">
 <li class="blockList">
 <h4>getCreationObjectivePacket</h4>
-<pre class="methodSignature">default&nbsp;<a href="../network/packet/server/play/ScoreboardObjectivePacket.html" title="class in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket</a>&nbsp;getCreationObjectivePacket&#8203;(java.lang.String&nbsp;value,
+<pre class="methodSignature">@NotNull
+default&nbsp;<a href="../network/packet/server/play/ScoreboardObjectivePacket.html" title="class in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket</a>&nbsp;getCreationObjectivePacket&#8203;(java.lang.String&nbsp;value,
                                                              <a href="../network/packet/server/play/ScoreboardObjectivePacket.Type.html" title="enum in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket.Type</a>&nbsp;type)</pre>
-<div class="block">Creates a creation objective packet</div>
+<div class="block">Creates a creation objective packet.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>value</code> - The value for the objective</dd>
@@ -238,8 +239,9 @@ extends <a href="../Viewable.html" title="interface in net.minestom.server">View
 <ul class="blockList">
 <li class="blockList">
 <h4>getDestructionObjectivePacket</h4>
-<pre class="methodSignature">default&nbsp;<a href="../network/packet/server/play/ScoreboardObjectivePacket.html" title="class in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket</a>&nbsp;getDestructionObjectivePacket()</pre>
-<div class="block">Creates the destruction objective packet</div>
+<pre class="methodSignature">@NotNull
+default&nbsp;<a href="../network/packet/server/play/ScoreboardObjectivePacket.html" title="class in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket</a>&nbsp;getDestructionObjectivePacket()</pre>
+<div class="block">Creates the destruction objective packet.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the destruction objective packet</dd>
@@ -252,8 +254,9 @@ extends <a href="../Viewable.html" title="interface in net.minestom.server">View
 <ul class="blockList">
 <li class="blockList">
 <h4>getDisplayScoreboardPacket</h4>
-<pre class="methodSignature">default&nbsp;<a href="../network/packet/server/play/DisplayScoreboardPacket.html" title="class in net.minestom.server.network.packet.server.play">DisplayScoreboardPacket</a>&nbsp;getDisplayScoreboardPacket&#8203;(byte&nbsp;position)</pre>
-<div class="block">Creates the <a href="../network/packet/server/play/DisplayScoreboardPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>DisplayScoreboardPacket</code></a></div>
+<pre class="methodSignature">@NotNull
+default&nbsp;<a href="../network/packet/server/play/DisplayScoreboardPacket.html" title="class in net.minestom.server.network.packet.server.play">DisplayScoreboardPacket</a>&nbsp;getDisplayScoreboardPacket&#8203;(byte&nbsp;position)</pre>
+<div class="block">Creates the <a href="../network/packet/server/play/DisplayScoreboardPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>DisplayScoreboardPacket</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>position</code> - The position of the scoreboard</dd>
@@ -270,7 +273,7 @@ extends <a href="../Viewable.html" title="interface in net.minestom.server">View
 <h4>updateScore</h4>
 <pre class="methodSignature">default&nbsp;void&nbsp;updateScore&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                          int&nbsp;score)</pre>
-<div class="block">Updates the score of a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a></div>
+<div class="block">Updates the score of a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>player</code> - The player</dd>
@@ -284,8 +287,9 @@ extends <a href="../Viewable.html" title="interface in net.minestom.server">View
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getObjectiveName</h4>
-<pre class="methodSignature">java.lang.String&nbsp;getObjectiveName()</pre>
-<div class="block">Gets the objective name of the scoreboard</div>
+<pre class="methodSignature">@NotNull
+java.lang.String&nbsp;getObjectiveName()</pre>
+<div class="block">Gets the objective name of the scoreboard.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the objective name</dd>
