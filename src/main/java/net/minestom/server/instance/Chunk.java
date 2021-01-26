@@ -570,6 +570,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     @NotNull
     protected ChunkDataPacket createChunkSectionUpdatePacket(int section) {
         ChunkDataPacket chunkDataPacket = getFreshPartialDataPacket();
+        chunkDataPacket.fullChunk = false;
         int[] sections = new int[CHUNK_SECTION_COUNT];
         sections[section] = 1;
         chunkDataPacket.sections = sections;

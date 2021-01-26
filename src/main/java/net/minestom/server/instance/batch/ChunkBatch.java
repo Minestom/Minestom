@@ -193,14 +193,17 @@ public class ChunkBatch implements Batch<ChunkCallback> {
     private void singleThreadFlush(Instance instance, Chunk chunk, @Nullable ChunkBatch inverse,
                                    @Nullable ChunkCallback callback, boolean safeCallback) {
         try {
-            if (blocks.isEmpty()) {
-                OptionalCallback.execute(callback, chunk);
-                return;
-            }
-
             if (!chunk.isLoaded()) {
                 LOGGER.warn("Unable to apply ChunkBatch to unloaded chunk ({}, {}) in {}.",
                         chunk.getChunkX(), chunk.getChunkZ(), instance.getUniqueId());
+                return;
+            }
+
+            if (this.options.isFullChunk())
+                chunk.reset();
+
+            if (blocks.isEmpty()) {
+                OptionalCallback.execute(callback, chunk);
                 return;
             }
 
