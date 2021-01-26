@@ -20,9 +20,9 @@ public class PlayerPositionListener {
 
     public static void playerLookListener(ClientPlayerRotationPacket packet, Player player) {
         final Position playerPosition = player.getPosition();
-        final float x = playerPosition.getX();
-        final float y = playerPosition.getY();
-        final float z = playerPosition.getZ();
+        final double x = playerPosition.getX();
+        final double y = playerPosition.getY();
+        final double z = playerPosition.getZ();
         final float yaw = packet.yaw;
         final float pitch = packet.pitch;
         final boolean onGround = packet.onGround;
@@ -31,26 +31,24 @@ public class PlayerPositionListener {
 
     public static void playerPositionListener(ClientPlayerPositionPacket packet, Player player) {
         final Position playerPosition = player.getPosition();
-        final float x = (float) packet.x;
-        final float y = (float) packet.y;
-        final float z = (float) packet.z;
         final float yaw = playerPosition.getYaw();
         final float pitch = playerPosition.getPitch();
         final boolean onGround = packet.onGround;
-        processMovement(player, x, y, z, yaw, pitch, onGround);
+        processMovement(player,
+                packet.x, packet.y, packet.z,
+                yaw, pitch, onGround);
     }
 
     public static void playerPositionAndLookListener(ClientPlayerPositionAndRotationPacket packet, Player player) {
-        final float x = (float) packet.x;
-        final float y = (float) packet.y;
-        final float z = (float) packet.z;
         final float yaw = packet.yaw;
         final float pitch = packet.pitch;
         final boolean onGround = packet.onGround;
-        processMovement(player, x, y, z, yaw, pitch, onGround);
+        processMovement(player,
+                packet.x, packet.y, packet.z,
+                yaw, pitch, onGround);
     }
 
-    private static void processMovement(@NotNull Player player, float x, float y, float z,
+    private static void processMovement(@NotNull Player player, double x, double y, double z,
                                         float yaw, float pitch, boolean onGround) {
         final Instance instance = player.getInstance();
 
@@ -60,7 +58,7 @@ public class PlayerPositionListener {
         }
 
         // Prevent the player from moving during a teleport
-        final float distance = player.getPosition().getDistance(x, y, z);
+        final double distance = player.getPosition().getDistance(x, y, z);
         final int chunkRange = player.getChunkRange() * Chunk.CHUNK_SECTION_SIZE;
         if (distance >= chunkRange) {
             return;

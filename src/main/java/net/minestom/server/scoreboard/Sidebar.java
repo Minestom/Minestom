@@ -1,6 +1,5 @@
 package net.minestom.server.scoreboard;
 
-import com.google.common.collect.Queues;
 import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
@@ -16,8 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
-import java.util.Iterator;
-import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -37,7 +34,7 @@ public class Sidebar implements Scoreboard {
     private static final AtomicInteger COUNTER = new AtomicInteger();
 
     /**
-     * <b>WARNING:</b> You shouldn't create scoreboards/teams with the same prefixes as those
+     * <b>WARNING:</b> You should NOT create any scoreboards/teams with the same prefixes as those
      */
     private static final String SCOREBOARD_PREFIX = "sb-";
     private static final String TEAM_PREFIX = "sbt-";
@@ -48,9 +45,8 @@ public class Sidebar implements Scoreboard {
     private static final int MAX_LINES_COUNT = 15;
 
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
-    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
 
-    private final Queue<ScoreboardLine> lines = Queues.newConcurrentLinkedQueue();
+    private final Set<ScoreboardLine> lines = new CopyOnWriteArraySet<>();
     private final IntLinkedOpenHashSet availableColors = new IntLinkedOpenHashSet();
 
     private final String objectiveName;
@@ -165,25 +161,32 @@ public class Sidebar implements Scoreboard {
     }
 
     /**
+     * Gets a {@link Set} containing all the registered lines.
+     *
+     * @return an unmodifiable set containing the sidebar's lines
+     */
+    @NotNull
+    public Set<ScoreboardLine> getLines() {
+        return Collections.unmodifiableSet(lines);
+    }
+
+    /**
      * Removes a {@link ScoreboardLine} through the given identifier
      *
      * @param id the identifier of the {@link ScoreboardLine}
      */
     public void removeLine(@NotNull String id) {
-        synchronized (lines) {
-            Iterator<ScoreboardLine> iterator = lines.iterator();
-            while (iterator.hasNext()) {
-                final ScoreboardLine line = iterator.next();
-                if (line.id.equals(id)) {
+        this.lines.removeIf(line -> {
+            if (line.id.equals(id)) {
 
-                    // Remove the line for current viewers
-                    sendPacketsToViewers(line.getScoreCreationPacket(objectiveName), line.sidebarTeam.getDestructionPacket());
+                // Remove the line for current viewers
+                sendPacketsToViewers(line.getScoreCreationPacket(objectiveName), line.sidebarTeam.getDestructionPacket());
 
-                    line.returnName(availableColors);
-                    iterator.remove();
-                }
+                line.returnName(availableColors);
+                return true;
             }
-        }
+            return false;
+        });
     }
 
     @Override
@@ -221,7 +224,7 @@ public class Sidebar implements Scoreboard {
     @NotNull
     @Override
     public Set<Player> getViewers() {
-        return unmodifiableViewers;
+        return Collections.unmodifiableSet(viewers);
     }
 
     @Override
@@ -258,7 +261,7 @@ public class Sidebar implements Scoreboard {
          */
         private SidebarTeam sidebarTeam;
 
-        public ScoreboardLine(String id, JsonMessage content, int line) {
+        public ScoreboardLine(@NotNull String id, @NotNull JsonMessage content, int line) {
             this.id = id;
             this.content = content;
             this.line = line;
@@ -271,6 +274,7 @@ public class Sidebar implements Scoreboard {
          *
          * @return the line identifier
          */
+        @NotNull
         public String getId() {
             return id;
         }
@@ -280,6 +284,7 @@ public class Sidebar implements Scoreboard {
          *
          * @return The line content
          */
+        @NotNull
         public JsonMessage getContent() {
             return sidebarTeam == null ? content : sidebarTeam.getPrefix();
         }
@@ -473,7 +478,7 @@ public class Sidebar implements Scoreboard {
          *
          * @param prefix The refreshed prefix
          */
-        private void refreshPrefix(JsonMessage prefix) {
+        private void refreshPrefix(@NotNull JsonMessage prefix) {
             this.prefix = prefix;
         }
     }

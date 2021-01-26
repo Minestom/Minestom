@@ -12,7 +12,6 @@ import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.position.PositionUtils;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,32 +28,32 @@ public interface NavigableEntity {
      * @param direction the targeted position
      * @param speed     define how far the entity will move
      */
-    default void moveTowards(@NotNull Position direction, float speed) {
+    default void moveTowards(@NotNull Position direction, double speed) {
 
         final Position position = getNavigableEntity().getPosition();
 
-        final float currentX = position.getX();
-        final float currentY = position.getY();
-        final float currentZ = position.getZ();
+        final double currentX = position.getX();
+        final double currentY = position.getY();
+        final double currentZ = position.getZ();
 
-        final float targetX = direction.getX();
-        final float targetY = direction.getY();
-        final float targetZ = direction.getZ();
+        final double targetX = direction.getX();
+        final double targetY = direction.getY();
+        final double targetZ = direction.getZ();
 
-        final float dx = targetX - currentX;
-        final float dy = targetY - currentY;
-        final float dz = targetZ - currentZ;
+        final double dx = targetX - currentX;
+        final double dy = targetY - currentY;
+        final double dz = targetZ - currentZ;
 
         // the purpose of these few lines is to slow down entities when they reach their destination
-        final float distSquared = dx * dx + dy * dy + dz * dz;
+        final double distSquared = dx * dx + dy * dy + dz * dz;
         if (speed > distSquared) {
             speed = distSquared;
         }
 
-        final float radians = (float) Math.atan2(dz, dx);
-        final float speedX = (float) (Math.cos(radians) * speed);
-        final float speedY = dy * speed;
-        final float speedZ = (float) (Math.sin(radians) * speed);
+        final double radians = Math.atan2(dz, dx);
+        final double speedX = Math.cos(radians) * speed;
+        final double speedY = dy * speed;
+        final double speedZ = Math.sin(radians) * speed;
 
         // Update 'position' view
         PositionUtils.lookAlong(position, dx, direction.getY(), dz);

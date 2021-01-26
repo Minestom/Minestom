@@ -3,11 +3,12 @@ package net.minestom.server.entity;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.server.play.SpawnExperienceOrbPacket;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Comparator;
 
 public class ExperienceOrb extends Entity {
 
@@ -132,7 +133,7 @@ public class ExperienceOrb extends Entity {
         Player closest = entity.getInstance()
                 .getPlayers()
                 .stream()
-                .min((a, b) -> Float.compare(a.getDistance(entity), b.getDistance(entity)))
+                .min(Comparator.comparingDouble(a -> a.getDistance(entity)))
                 .orElse(null);
         if (closest == null) return null;
         if (closest.getDistance(entity) > maxDistance) return null;

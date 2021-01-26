@@ -169,7 +169,8 @@ public class Player extends LivingEntity implements CommandSender {
 
     // Position synchronization with viewers
     private long lastPlayerSynchronizationTime;
-    private float lastPlayerSyncX, lastPlayerSyncY, lastPlayerSyncZ, lastPlayerSyncYaw, lastPlayerSyncPitch;
+    private double lastPlayerSyncX, lastPlayerSyncY, lastPlayerSyncZ;
+    private float lastPlayerSyncYaw, lastPlayerSyncPitch;
 
     // Experience orb pickup
     protected UpdateOption experiencePickupCooldown = new UpdateOption(10, TimeUnit.TICK);
@@ -1615,7 +1616,7 @@ public class Player extends LivingEntity implements CommandSender {
 
         // Manage already viewable entities
         this.viewableEntities.forEach(entity -> {
-            final float distance = entity.getDistance(this);
+            final double distance = entity.getDistance(this);
             if (distance > maximalDistance) {
                 // Entity shouldn't be viewable anymore
                 if (isAutoViewable()) {

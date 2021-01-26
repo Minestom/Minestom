@@ -80,7 +80,7 @@ public class CollisionUtils {
      * @param corners       the corners to check against
      * @return true if a collision has been found
      */
-    private static boolean stepAxis(Instance instance, Vector startPosition, Vector axis, float stepAmount, Vector positionOut, Vector... corners) {
+    private static boolean stepAxis(Instance instance, Vector startPosition, Vector axis, double stepAmount, Vector positionOut, Vector... corners) {
         positionOut.copy(startPosition);
         if (corners.length == 0)
             return false; // avoid degeneracy in following computations
@@ -93,9 +93,9 @@ public class CollisionUtils {
             cornerPositions[i] = new BlockPosition(corners[i]);
         }
 
-        float sign = Math.signum(stepAmount);
+        final double sign = Math.signum(stepAmount);
         final int blockLength = (int) stepAmount;
-        final float remainingLength = stepAmount - blockLength;
+        final double remainingLength = stepAmount - blockLength;
         // used to determine if 'remainingLength' should be used
         boolean collisionFound = false;
         for (int i = 0; i < Math.abs(blockLength); i++) {
@@ -115,9 +115,9 @@ public class CollisionUtils {
         }
 
         // find the corner which moved the least
-        float smallestDisplacement = Float.POSITIVE_INFINITY;
+        double smallestDisplacement = Double.POSITIVE_INFINITY;
         for (int i = 0; i < corners.length; i++) {
-            final float displacement = (float) corners[i].distance(cornersCopy[i]);
+            final double displacement = corners[i].distance(cornersCopy[i]);
             if (displacement < smallestDisplacement) {
                 smallestDisplacement = displacement;
             }
@@ -133,12 +133,13 @@ public class CollisionUtils {
      *
      * @param instance        instance to get blocks from
      * @param axis            the axis to move along
+     * @param amount
      * @param cornersCopy     the corners of the bounding box to consider (mutable)
      * @param cornerPositions the corners, converted to BlockPosition (mutable)
      * @return false if this method encountered a collision
      */
-    private static boolean stepOnce(Instance instance, Vector axis, float amount, Vector[] cornersCopy, BlockPosition[] cornerPositions) {
-        final float sign = Math.signum(amount);
+    private static boolean stepOnce(Instance instance, Vector axis, double amount, Vector[] cornersCopy, BlockPosition[] cornerPositions) {
+        final double sign = Math.signum(amount);
         for (int cornerIndex = 0; cornerIndex < cornersCopy.length; cornerIndex++) {
             Vector corner = cornersCopy[cornerIndex];
             BlockPosition blockPos = cornerPositions[cornerIndex];

@@ -311,15 +311,15 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
     }
 
     private float getRotationX(Vector vector) {
-        return vector != null ? vector.getX() : 0;
+        return vector != null ? (float) vector.getX() : 0;
     }
 
     private float getRotationY(Vector vector) {
-        return vector != null ? vector.getY() : 0;
+        return vector != null ? (float) vector.getY() : 0;
     }
 
     private float getRotationZ(Vector vector) {
-        return vector != null ? vector.getZ() : 0;
+        return vector != null ? (float) vector.getZ() : 0;
     }
 
     // Equipments

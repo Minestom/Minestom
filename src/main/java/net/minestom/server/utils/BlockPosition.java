@@ -38,7 +38,7 @@ public class BlockPosition implements PublicCloneable<BlockPosition> {
      * @param y the block Y
      * @param z the block Z
      */
-    public BlockPosition(float x, float y, float z) {
+    public BlockPosition(double x, double y, double z) {
         final int castedY = (int) y;
 
         this.x = (int) Math.floor(x);
@@ -50,7 +50,7 @@ public class BlockPosition implements PublicCloneable<BlockPosition> {
      * Creates a new {@link BlockPosition} from a {@link Vector}.
      *
      * @param position the position vector
-     * @see #BlockPosition(float, float, float)
+     * @see #BlockPosition(double, double, double)
      */
     public BlockPosition(@NotNull Vector position) {
         this(position.getX(), position.getY(), position.getZ());

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class BoundingBox {
 
     private final Entity entity;
-    private final float x, y, z;
+    private final double x, y, z;
 
     /**
      * Creates a {@link BoundingBox} linked to an {@link Entity} and with a specific size.
@@ -22,7 +22,7 @@ public class BoundingBox {
      * @param y      the height size
      * @param z      the depth size
      */
-    public BoundingBox(@NotNull Entity entity, float x, float y, float z) {
+    public BoundingBox(@NotNull Entity entity, double x, double y, double z) {
         this.entity = entity;
         this.x = x;
         this.y = y;
@@ -59,30 +59,30 @@ public class BoundingBox {
      */
     public boolean intersect(@NotNull BlockPosition blockPosition) {
 
-        final float offsetX = 1;
-        final float x = blockPosition.getX();
-        final float maxX = x + offsetX;
+        final double offsetX = 1;
+        final double x = blockPosition.getX();
+        final double maxX = x + offsetX;
 
         final boolean checkX = getMinX() < maxX && getMaxX() > x;
         if (!checkX)
             return false;
 
-        final float y = blockPosition.getY();
-        final float maxY = y + 0.99999f;
+        final double y = blockPosition.getY();
+        final double maxY = y + 0.99999;
 
         final boolean checkY = getMinY() < maxY && getMaxY() > y;
         if (!checkY)
             return false;
 
-        final float offsetZ = 1;
-        final float z = blockPosition.getZ();
-        final float maxZ = z + offsetZ;
+        final double offsetZ = 1;
+        final double z = blockPosition.getZ();
+        final double maxZ = z + offsetZ;
 
         // Z check
         return getMinZ() < maxZ && getMaxZ() > z;
     }
 
-    public boolean intersect(float x, float y, float z) {
+    public boolean intersect(double x, double y, double z) {
         return (x >= getMinX() && x <= getMaxX()) &&
                 (y >= getMinY() && y <= getMaxY()) &&
                 (z >= getMinZ() && z <= getMaxZ());
@@ -101,7 +101,7 @@ public class BoundingBox {
      * @return a new {@link BoundingBox} expanded
      */
     @NotNull
-    public BoundingBox expand(float x, float y, float z) {
+    public BoundingBox expand(double x, double y, double z) {
         return new BoundingBox(entity, this.x + x, this.y + y, this.z + z);
     }
 
@@ -114,7 +114,7 @@ public class BoundingBox {
      * @return a new bounding box contracted
      */
     @NotNull
-    public BoundingBox contract(float x, float y, float z) {
+    public BoundingBox contract(double x, double y, double z) {
         return new BoundingBox(entity, this.x - x, this.y - y, this.z - z);
     }
 
@@ -123,7 +123,7 @@ public class BoundingBox {
      *
      * @return the width
      */
-    public float getWidth() {
+    public double getWidth() {
         return x;
     }
 
@@ -132,7 +132,7 @@ public class BoundingBox {
      *
      * @return the height
      */
-    public float getHeight() {
+    public double getHeight() {
         return y;
     }
 
@@ -141,7 +141,7 @@ public class BoundingBox {
      *
      * @return the depth
      */
-    public float getDepth() {
+    public double getDepth() {
         return z;
     }
 
@@ -150,7 +150,7 @@ public class BoundingBox {
      *
      * @return the min X
      */
-    public float getMinX() {
+    public double getMinX() {
         return entity.getPosition().getX() - (x / 2);
     }
 
@@ -159,7 +159,7 @@ public class BoundingBox {
      *
      * @return the max X
      */
-    public float getMaxX() {
+    public double getMaxX() {
         return entity.getPosition().getX() + (x / 2);
     }
 
@@ -168,7 +168,7 @@ public class BoundingBox {
      *
      * @return the min Y
      */
-    public float getMinY() {
+    public double getMinY() {
         return entity.getPosition().getY();
     }
 
@@ -177,7 +177,7 @@ public class BoundingBox {
      *
      * @return the max Y
      */
-    public float getMaxY() {
+    public double getMaxY() {
         return entity.getPosition().getY() + y;
     }
 
@@ -186,7 +186,7 @@ public class BoundingBox {
      *
      * @return the min Z
      */
-    public float getMinZ() {
+    public double getMinZ() {
         return entity.getPosition().getZ() - (z / 2);
     }
 
@@ -195,7 +195,7 @@ public class BoundingBox {
      *
      * @return the max Z
      */
-    public float getMaxZ() {
+    public double getMaxZ() {
         return entity.getPosition().getZ() + (z / 2);
     }
 
