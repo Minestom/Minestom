@@ -41,7 +41,6 @@ public class Main {
         commandManager.register(new PlayersCommand());
         commandManager.register(new PotionCommand());
         commandManager.register(new TitleCommand());
-        commandManager.register(new CubeBatchCommand());
         commandManager.register(new BookCommand());
         commandManager.register(new ShootCommand());
         commandManager.register(new HorseCommand());
