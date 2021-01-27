@@ -25,13 +25,17 @@ import java.util.concurrent.ExecutorService;
  * operation will return a new batch with the blocks set to whatever they were before the batch was
  * applied.
  *
+ * @param <C> The callback function type.
+ *
  * @see ChunkBatch
  * @see AbsoluteBlockBatch
  * @see RelativeBlockBatch
  */
-public interface Batch<Callback> extends BlockModifier {
+public interface Batch<C> extends BlockModifier {
 
-    ExecutorService BLOCK_BATCH_POOL = new MinestomThread(MinecraftServer.THREAD_COUNT_BLOCK_BATCH, MinecraftServer.THREAD_NAME_BLOCK_BATCH);
+    ExecutorService BLOCK_BATCH_POOL = new MinestomThread(
+            MinecraftServer.THREAD_COUNT_BLOCK_BATCH,
+            MinecraftServer.THREAD_NAME_BLOCK_BATCH);
 
     @Override
     default void setBlockStateId(int x, int y, int z, short blockStateId, @Nullable Data data) {
@@ -86,5 +90,5 @@ public interface Batch<Callback> extends BlockModifier {
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     @Nullable
-    Batch<Callback> apply(@NotNull Instance instance, @Nullable Callback callback);
+    Batch<C> apply(@NotNull Instance instance, @Nullable C callback);
 }
