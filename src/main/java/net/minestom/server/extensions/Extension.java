@@ -80,11 +80,12 @@ public abstract class Extension {
      */
     @Nullable
     public InputStream getResource(@NotNull String fileName) {
-        Path targetFile = getDataDirectory().resolve(fileName);
+        final Path targetFile = getDataDirectory().resolve(fileName);
         try {
             // Copy from jar if the file does not exist in extension directory
-            if (!Files.exists(targetFile))
+            if (!Files.exists(targetFile)) {
                 savePackagedResource(fileName);
+            }
 
             return Files.newInputStream(targetFile);
         } catch (IOException ex) {
@@ -102,7 +103,7 @@ public abstract class Extension {
     @Nullable
     public InputStream getPackagedResource(@NotNull String fileName) {
         try {
-            URL url = getClass().getClassLoader().getResource(fileName);
+            final URL url = getClass().getClassLoader().getResource(fileName);
             if (url == null) {
                 getLogger().debug("Resource not found: {}", fileName);
                 return null;
@@ -122,12 +123,13 @@ public abstract class Extension {
      * @return True if the resource was saved successfully, null otherwise
      */
     public boolean savePackagedResource(@NotNull String fileName) {
-        Path targetFile = getDataDirectory().resolve(fileName);
+        final Path targetFile = getDataDirectory().resolve(fileName);
         try (InputStream is = getPackagedResource(fileName)) {
             Files.createDirectories(targetFile.getParent());
 
-            if (is == null)
+            if (is == null) {
                 return false;
+            }
 
             Files.copy(is, targetFile, StandardCopyOption.REPLACE_EXISTING);
             return true;
