@@ -489,7 +489,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                 // Gravity force
                 final double gravityY = !noGravity ? Math.min(
                         gravityDragPerTick + (gravityAcceleration * (double) gravityTickCount),
-                        gravityTerminalVelocity) : 0f;
+                        gravityTerminalVelocity) : 0;
 
                 final Vector deltaPos = new Vector(
                         getVelocity().getX() / tps,
@@ -515,7 +515,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
 
                 // Update velocity
-                {
+                if (hasVelocity() || !newVelocityOut.isZero()) {
                     this.velocity.copy(newVelocityOut);
                     this.velocity.multiply(tps);
 
@@ -544,6 +544,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
                     this.velocity.setX(velocity.getX() * drag);
                     this.velocity.setZ(velocity.getZ() * drag);
+
+                    if (velocity.equals(new Vector())) {
+                        this.velocity.zero();
+                    }
                 }
 
                 // Synchronization and packets...
@@ -809,9 +813,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @return true if velocity is not set to 0
      */
     public boolean hasVelocity() {
-        return velocity.getX() != 0 ||
-                velocity.getY() != 0 ||
-                velocity.getZ() != 0;
+        return !velocity.isZero();
     }
 
     /**

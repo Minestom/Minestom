@@ -296,6 +296,12 @@ public class Vector implements PublicCloneable<Vector> {
         return this;
     }
 
+    public boolean isZero() {
+        return getX() == 0 &&
+                getY() == 0 &&
+                getZ() == 0;
+    }
+
     /**
      * Returns if a vector is normalized
      *
