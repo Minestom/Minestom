@@ -216,6 +216,18 @@ public class ExtensionManager {
             LOGGER.error("Main class '{}' in '{}' has no logger field.", mainClass, extensionName, e);
         }
 
+        // Set dataDirectory
+        try {
+            Field dataDirectoryField = Extension.class.getDeclaredField("dataDirectory");
+            dataDirectoryField.setAccessible(true);
+            dataDirectoryField.set(extension, getExtensionFolder().toPath().resolve(extensionName));
+        } catch (IllegalAccessException e) {
+            // We made it accessible, should not occur
+            MinecraftServer.getExceptionManager().handleException(e);
+        } catch (NoSuchFieldException e) {
+            LOGGER.error("Main class '{}' in '{}' has no dataDirectory field.", mainClass, extensionName, e);
+        }
+
         // add dependents to pre-existing extensions, so that they can easily be found during reloading
         for (String dependency : discoveredExtension.getDependencies()) {
             Extension dep = extensions.get(dependency.toLowerCase());
