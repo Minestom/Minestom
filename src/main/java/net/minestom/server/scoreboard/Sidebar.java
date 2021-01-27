@@ -180,7 +180,7 @@ public class Sidebar implements Scoreboard {
             if (line.id.equals(id)) {
 
                 // Remove the line for current viewers
-                sendPacketsToViewers(line.getScoreCreationPacket(objectiveName), line.sidebarTeam.getDestructionPacket());
+                sendPacketsToViewers(line.getScoreDestructionPacket(objectiveName), line.sidebarTeam.getDestructionPacket());
 
                 line.returnName(availableColors);
                 return true;
