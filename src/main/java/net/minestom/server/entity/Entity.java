@@ -415,6 +415,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
             }
         }
 
+        final boolean isNettyClient = PlayerUtils.isNettyClient(this);
+
         // Synchronization with updated fields in #getPosition()
         {
             final boolean positionChange = cacheX != position.getX() ||
@@ -424,7 +426,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                     cachePitch != position.getPitch();
             final double distance = positionChange ? position.getDistance(cacheX, cacheY, cacheZ) : 0;
 
-            if (distance >= 8 || (positionChange && PlayerUtils.isNettyClient(this))) {
+            if (distance >= 8 || (positionChange && isNettyClient)) {
                 // Teleport has the priority over everything else
                 teleport(position);
             } else if (positionChange && viewChange) {
@@ -471,9 +473,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
             // Velocity
             boolean applyVelocity;
             // Non-player entities with either velocity or gravity enabled
-            applyVelocity = !PlayerUtils.isNettyClient(this) && (hasVelocity() || !hasNoGravity());
+            applyVelocity = !isNettyClient && (hasVelocity() || !hasNoGravity());
             // Players with a velocity applied (client is responsible for gravity)
-            applyVelocity |= PlayerUtils.isNettyClient(this) && hasVelocity();
+            applyVelocity |= isNettyClient && hasVelocity();
 
             if (applyVelocity) {
                 final float tps = MinecraftServer.TICK_PER_SECOND;
@@ -533,7 +535,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                         }
 
                         // Stop player velocity
-                        if (PlayerUtils.isNettyClient(this)) {
+                        if (isNettyClient) {
                             this.velocity.zero();
                         }
                     } else {
@@ -545,10 +547,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                 }
 
                 // Synchronization and packets...
-                sendSynchronization();
+                if (!isNettyClient) {
+                    sendSynchronization();
+                }
                 // Verify if velocity packet has to be sent
-                if (hasVelocity() || gravityTickCount > 0) {
-                    sendPacketsToViewers(getVelocityPacket());
+                if (hasVelocity() || (!isNettyClient && gravityTickCount > 0)) {
+                    sendPacketToViewersAndSelf(getVelocityPacket());
                 }
             }
 
