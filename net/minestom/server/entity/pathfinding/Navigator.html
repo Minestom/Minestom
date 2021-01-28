@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":42,"i11":10,"i12":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":42,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -222,20 +222,15 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pathFindingTick(float)">pathFindingTick</a></span>&#8203;(float&nbsp;speed)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPath(com.extollit.gaming.ai.path.model.IPath)">setPath</a></span>&#8203;(com.extollit.gaming.ai.path.model.IPath&nbsp;path)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPath(com.extollit.gaming.ai.path.model.IPath)">setPath</a></span>&#8203;(com.extollit.gaming.ai.path.model.IPath&nbsp;path)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathFinder(com.extollit.gaming.ai.path.HydrazinePathFinder)">setPathFinder</a></span>&#8203;(com.extollit.gaming.ai.path.HydrazinePathFinder&nbsp;pathFinder)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathPosition(net.minestom.server.utils.Position)">setPathPosition</a></span>&#8203;(<a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pathPosition)</code></th>
 <td class="colLast">
@@ -244,18 +239,23 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathTo(net.minestom.server.utils.Position)">setPathTo</a></span>&#8203;(<a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathTo(net.minestom.server.utils.Position,boolean)">setPathTo</a></span>&#8203;(<a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
          boolean&nbsp;bestEffort)</code></th>
 <td class="colLast">
 <div class="block">Retrieves the path to <code>position</code> and ask the entity to follow the path.</div>
 </td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#tick(float)">tick</a></span>&#8203;(float&nbsp;speed)</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -368,13 +368,13 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="pathFindingTick(float)">
+<a id="tick(float)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>pathFindingTick</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;pathFindingTick&#8203;(float&nbsp;speed)</pre>
+<h4>tick</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;tick&#8203;(float&nbsp;speed)</pre>
 </li>
 </ul>
 <a id="getPathingEntity()">
