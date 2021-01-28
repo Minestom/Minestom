@@ -9,6 +9,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.clone.PublicCloneable;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.instance.Chunk.CHUNK_SECTION_COUNT;
 import static net.minestom.server.instance.Chunk.CHUNK_SECTION_SIZE;
@@ -103,6 +104,7 @@ public class PaletteStorage implements PublicCloneable<PaletteStorage> {
      * @param section the chunk section to get the palette from
      * @return the palette
      */
+    @Nullable
     public short[] getPalette(int section) {
         Short2ShortLinkedOpenHashMap paletteBlockMap = paletteBlockMaps[section];
         return paletteBlockMap != null ? paletteBlockMap.values().toShortArray() : null;

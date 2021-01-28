@@ -166,7 +166,6 @@ public class Navigator {
             return;
 
         if (pathPosition != null) {
-
             IPath path = pathFinder.updatePathFor(pathingEntity);
             this.path = path;
 
