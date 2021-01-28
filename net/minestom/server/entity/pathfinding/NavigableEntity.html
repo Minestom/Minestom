@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":18,"i6":18,"i7":18,"i8":6,"i9":18,"i10":38,"i11":18,"i12":18};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"],32:["t6","Deprecated Methods"]};
+var data = {"i0":6};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -127,7 +127,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <hr>
 <pre>public interface <span class="typeNameLabel">NavigableEntity</span></pre>
-<div class="block">Represents an entity which can use the pathfinder.</div>
+<div class="block">Represents an entity which can use the pathfinder.
+ <p>
+ All pathfinder methods are available with <a href="#getNavigator()"><code>getNavigator()</code></a>.</div>
 </li>
 </ul>
 </div>
@@ -142,98 +144,16 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t5" class="tableTab"><span><a href="javascript:show(16);">Default Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNavigableEntity()">getNavigableEntity</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the entity concerned by this navigable implementation.</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>com.extollit.gaming.ai.path.model.IPath</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPath()">getPath</a></span>()</code></th>
+<td class="colFirst"><code><a href="Navigator.html" title="class in net.minestom.server.entity.pathfinding">Navigator</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNavigator()">getNavigator</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>com.extollit.gaming.ai.path.HydrazinePathFinder</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPathFinder()">getPathFinder</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the assigned pathfinder.</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="PFPathingEntity.html" title="class in net.minestom.server.entity.pathfinding">PFPathingEntity</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPathingEntity()">getPathingEntity</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the pathing entity.</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPathPosition()">getPathPosition</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the target pathfinder position.</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#jump(float)">jump</a></span>&#8203;(float&nbsp;height)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#moveTowards(net.minestom.server.utils.Position,double)">moveTowards</a></span>&#8203;(<a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;direction,
-           double&nbsp;speed)</code></th>
-<td class="colLast">
-<div class="block">Used to move the entity toward <code>direction</code> in the X and Z axis
- Gravity is still applied but the entity will not attempt to jump
- Also update the yaw/pitch of the entity to look along 'direction'</div>
-</td>
-</tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pathFindingTick(float)">pathFindingTick</a></span>&#8203;(float&nbsp;speed)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPath(com.extollit.gaming.ai.path.model.IPath)">setPath</a></span>&#8203;(com.extollit.gaming.ai.path.model.IPath&nbsp;path)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathfindingPriority(com.extollit.gaming.ai.path.SchedulingPriority)">setPathfindingPriority</a></span>&#8203;(com.extollit.gaming.ai.path.SchedulingPriority&nbsp;schedulingPriority)</code></th>
-<td class="colLast">
-<div class="block">Changes the pathfinding priority for this entity.</div>
-</td>
-</tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathPosition(net.minestom.server.utils.Position)">setPathPosition</a></span>&#8203;(<a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;path)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Please use <a href="#setPathTo(net.minestom.server.utils.Position)"><code>setPathTo(Position)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i11" class="rowColor">
-<td class="colFirst"><code>default boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathTo(net.minestom.server.utils.Position)">setPathTo</a></span>&#8203;(<a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i12" class="altColor">
-<td class="colFirst"><code>default boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathTo(net.minestom.server.utils.Position,boolean)">setPathTo</a></span>&#8203;(<a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
-         boolean&nbsp;bestEffort)</code></th>
-<td class="colLast">
-<div class="block">Retrieves the path to <code>position</code> and ask the entity to follow the path.</div>
-</td>
 </tr>
 </table>
 </li>
@@ -252,200 +172,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="moveTowards(net.minestom.server.utils.Position,double)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>moveTowards</h4>
-<pre class="methodSignature">default&nbsp;void&nbsp;moveTowards&#8203;(@NotNull
-                         <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;direction,
-                         double&nbsp;speed)</pre>
-<div class="block">Used to move the entity toward <code>direction</code> in the X and Z axis
- Gravity is still applied but the entity will not attempt to jump
- Also update the yaw/pitch of the entity to look along 'direction'</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>direction</code> - the targeted position</dd>
-<dd><code>speed</code> - define how far the entity will move</dd>
-</dl>
-</li>
-</ul>
-<a id="jump(float)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>jump</h4>
-<pre class="methodSignature">default&nbsp;void&nbsp;jump&#8203;(float&nbsp;height)</pre>
-</li>
-</ul>
-<a id="setPathTo(net.minestom.server.utils.Position,boolean)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setPathTo</h4>
-<pre class="methodSignature">default&nbsp;boolean&nbsp;setPathTo&#8203;(@Nullable
-                          <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
-                          boolean&nbsp;bestEffort)</pre>
-<div class="block">Retrieves the path to <code>position</code> and ask the entity to follow the path.
- <p>
- Can be set to null to reset the pathfinder.
- <p>
- The position is cloned, if you want the entity to continually follow this position object
- you need to call this when you want the path to update.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>position</code> - the position to find the path to, null to reset the pathfinder</dd>
-<dd><code>bestEffort</code> - whether to use the best-effort algorithm to the destination,
-                   if false then this method is more likely to return immediately</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if a path has been found</dd>
-</dl>
-</li>
-</ul>
-<a id="setPathTo(net.minestom.server.utils.Position)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setPathTo</h4>
-<pre class="methodSignature">default&nbsp;boolean&nbsp;setPathTo&#8203;(@Nullable
-                          <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="#setPathTo(net.minestom.server.utils.Position,boolean)"><code>with  sets to .</code></a></dd>
-</dl>
-</li>
-</ul>
-<a id="pathFindingTick(float)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>pathFindingTick</h4>
-<pre class="methodSignature">default&nbsp;void&nbsp;pathFindingTick&#8203;(float&nbsp;speed)</pre>
-</li>
-</ul>
-<a id="setPathfindingPriority(com.extollit.gaming.ai.path.SchedulingPriority)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setPathfindingPriority</h4>
-<pre class="methodSignature">default&nbsp;void&nbsp;setPathfindingPriority&#8203;(@NotNull
-                                    com.extollit.gaming.ai.path.SchedulingPriority&nbsp;schedulingPriority)</pre>
-<div class="block">Changes the pathfinding priority for this entity.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>schedulingPriority</code> - the new scheduling priority</dd>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="https://github.com/MadMartian/hydrazine-path-finding#path-finding-scheduling">Scheduling Priority</a></dd>
-</dl>
-</li>
-</ul>
-<a id="getPathPosition()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getPathPosition</h4>
-<pre class="methodSignature">@Nullable
-<a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;getPathPosition()</pre>
-<div class="block">Gets the target pathfinder position.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the target pathfinder position, null if there is no one</dd>
-</dl>
-</li>
-</ul>
-<a id="setPathPosition(net.minestom.server.utils.Position)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setPathPosition</h4>
-<pre class="methodSignature">@Deprecated
-void&nbsp;setPathPosition&#8203;(@Nullable
-                     <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;path)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Please use <a href="#setPathTo(net.minestom.server.utils.Position)"><code>setPathTo(Position)</code></a></div>
-</div>
-<div class="block">Changes the position this element is trying to reach.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>path</code> - the new current path position</dd>
-</dl>
-</li>
-</ul>
-<a id="getPath()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getPath</h4>
-<pre class="methodSignature">@Nullable
-com.extollit.gaming.ai.path.model.IPath&nbsp;getPath()</pre>
-</li>
-</ul>
-<a id="setPath(com.extollit.gaming.ai.path.model.IPath)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setPath</h4>
-<pre class="methodSignature">void&nbsp;setPath&#8203;(@Nullable
-             com.extollit.gaming.ai.path.model.IPath&nbsp;path)</pre>
-</li>
-</ul>
-<a id="getPathingEntity()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getPathingEntity</h4>
-<pre class="methodSignature">@NotNull
-<a href="PFPathingEntity.html" title="class in net.minestom.server.entity.pathfinding">PFPathingEntity</a>&nbsp;getPathingEntity()</pre>
-<div class="block">Gets the pathing entity.
- <p>
- Used by the pathfinder.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the pathing entity</dd>
-</dl>
-</li>
-</ul>
-<a id="getPathFinder()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getPathFinder</h4>
-<pre class="methodSignature">@Nullable
-com.extollit.gaming.ai.path.HydrazinePathFinder&nbsp;getPathFinder()</pre>
-<div class="block">Gets the assigned pathfinder.
- <p>
- Can be null if the navigable element hasn't been assigned to an <a href="../../instance/Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> yet.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the current pathfinder, null if none</dd>
-</dl>
-</li>
-</ul>
-<a id="getNavigableEntity()">
+<a id="getNavigator()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>getNavigableEntity</h4>
+<h4>getNavigator</h4>
 <pre class="methodSignature">@NotNull
-<a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;getNavigableEntity()</pre>
-<div class="block">Gets the entity concerned by this navigable implementation.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the navigable entity</dd>
-</dl>
+<a href="Navigator.html" title="class in net.minestom.server.entity.pathfinding">Navigator</a>&nbsp;getNavigator()</pre>
 </li>
 </ul>
 </li>
