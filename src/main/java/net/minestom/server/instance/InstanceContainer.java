@@ -152,9 +152,9 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Set a block at the position
+     * Sets a block at the specified position.
      * <p>
-     * Unsafe because the method is not synchronized and it does not verify if the chunk is loaded or not
+     * Unsafe because the method is not synchronized and it does not verify if the chunk is loaded or not.
      *
      * @param chunk        the {@link Chunk} which should be loaded
      * @param x            the block X
@@ -187,15 +187,12 @@ public class InstanceContainer extends Instance {
                 return;
             }
             setAlreadyChanged(blockPosition, blockStateId);
+
             final int index = ChunkUtils.getBlockIndex(x, y, z);
 
             final CustomBlock previousBlock = chunk.getCustomBlock(index);
+            final Data previousBlockData = previousBlock != null ? chunk.getBlockData(index) : null;
             if (previousBlock != null) {
-                // Previous block was a custom block
-
-                // Call the destroy listener
-                callBlockDestroy(chunk, index, previousBlock, blockPosition);
-
                 // Remove digging information for the previous custom block
                 previousBlock.removeDiggingInformation(this, blockPosition);
             }
@@ -221,9 +218,15 @@ public class InstanceContainer extends Instance {
             // Refresh player chunk block
             sendBlockChange(chunk, blockPosition, blockStateId);
 
-            // Call the place listener for custom block
-            if (isCustomBlock)
+            // Call the destroy listener for the previously destroyed block
+            if (previousBlock != null) {
+                callBlockDestroy(previousBlock, previousBlockData, blockPosition);
+            }
+
+            // Call the place listener for newly placed custom block
+            if (isCustomBlock) {
                 callBlockPlace(chunk, index, blockPosition);
+            }
         }
     }
 
@@ -263,14 +266,13 @@ public class InstanceContainer extends Instance {
      * <p>
      * WARNING {@code chunk} needs to be synchronized.
      *
-     * @param chunk         the chunk where the block is
-     * @param index         the index of the block
-     * @param previousBlock the block which has been destroyed
-     * @param blockPosition the block position
+     * @param previousBlock     the block which has been destroyed
+     * @param previousBlockData the data of the destroyed block
+     * @param blockPosition     the block position
      */
-    private void callBlockDestroy(@NotNull Chunk chunk, int index, @NotNull CustomBlock previousBlock, @NotNull BlockPosition blockPosition) {
-        final Data previousData = chunk.getBlockData(index);
-        previousBlock.onDestroy(this, blockPosition, previousData);
+    private void callBlockDestroy(@NotNull CustomBlock previousBlock, @Nullable Data previousBlockData,
+                                  @NotNull BlockPosition blockPosition) {
+        previousBlock.onDestroy(this, blockPosition, previousBlockData);
     }
 
     /**

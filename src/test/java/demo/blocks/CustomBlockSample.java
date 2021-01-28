@@ -34,12 +34,15 @@ public class CustomBlockSample extends CustomBlock {
             instance.setBlock(above, Block.AIR);
             instance.setBlock(blockPosition, Block.AIR); // this should NOT create a stack overflow simply because we are trying to remove this same block
         }
+
+        System.out.println("position "+blockPosition);
+        instance.setBlock(blockPosition, Block.DIAMOND_BLOCK);
     }
 
     @Override
     public void update(@NotNull Instance instance, @NotNull BlockPosition blockPosition, @Nullable Data data) {
         final short blockId = instance.getBlockStateId(blockPosition);
-        instance.refreshBlockStateId(blockPosition, (short) (blockId+1));
+        //instance.refreshBlockStateId(blockPosition, (short) (blockId+1));
     }
 
     @Nullable
