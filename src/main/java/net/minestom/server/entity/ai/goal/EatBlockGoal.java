@@ -59,7 +59,7 @@ public class EatBlockGoal extends GoalSelector {
         this.eatAnimationTick = 40;
         // TODO: EatBlockEvent call here.
         // Stop moving
-        entityCreature.setPathTo(null);
+        entityCreature.getNavigator().setPathTo(null);
     }
 
     @Override

@@ -36,7 +36,7 @@ public class RandomStrollGoal extends GoalSelector {
 
         for (Position position : closePositions) {
             final Position target = position.clone().add(entityCreature.getPosition());
-            final boolean result = entityCreature.setPathTo(target);
+            final boolean result = entityCreature.getNavigator().setPathTo(target);
             if (result) {
                 break;
             }

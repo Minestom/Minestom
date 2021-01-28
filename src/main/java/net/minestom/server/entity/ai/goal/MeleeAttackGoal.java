@@ -4,6 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.ai.TargetSelector;
+import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
@@ -47,7 +48,7 @@ public class MeleeAttackGoal extends GoalSelector {
         final Entity target = getTarget();
         Check.notNull(target, "The target is not expected to be null!");
         final Position targetPosition = target.getPosition();
-        entityCreature.setPathTo(targetPosition);
+        entityCreature.getNavigator().setPathTo(targetPosition);
     }
 
     @Override
@@ -68,10 +69,11 @@ public class MeleeAttackGoal extends GoalSelector {
             }
 
             // Move toward the target entity
-            final Position pathPosition = entityCreature.getPathPosition();
+            Navigator navigator = entityCreature.getNavigator();
+            final Position pathPosition = navigator.getPathPosition();
             final Position targetPosition = target.getPosition();
             if (pathPosition == null || !pathPosition.isSimilar(targetPosition)) {
-                entityCreature.setPathTo(targetPosition);
+                navigator.setPathTo(targetPosition);
             }
         }
     }
@@ -84,7 +86,7 @@ public class MeleeAttackGoal extends GoalSelector {
     @Override
     public void end() {
         // Stop following the target
-        entityCreature.setPathTo(null);
+        entityCreature.getNavigator().setPathTo(null);
     }
 
     /**

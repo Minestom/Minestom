@@ -1,13 +1,12 @@
 package net.minestom.server.entity;
 
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
-import com.extollit.gaming.ai.path.model.IPath;
 import net.minestom.server.attribute.Attributes;
 import net.minestom.server.entity.ai.EntityAI;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.pathfinding.NavigableEntity;
-import net.minestom.server.entity.pathfinding.PFPathingEntity;
+import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.instance.Instance;
@@ -29,17 +28,11 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
 
     private int removalAnimationDelay = 1000;
 
-    // TODO all pathfinding requests should be process in another thread
-    private final Object pathLock = new Object();
-
-    private final PFPathingEntity pathingEntity = new PFPathingEntity(this);
-    private HydrazinePathFinder pathFinder;
-    private IPath path;
-    private Position pathPosition;
-
     protected final List<GoalSelector> goalSelectors = new ArrayList<>();
     protected final List<TargetSelector> targetSelectors = new ArrayList<>();
     private GoalSelector currentGoalSelector;
+
+    private final Navigator navigator = new Navigator(this);
 
     private Entity target;
 
@@ -85,7 +78,7 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
         aiTick(time);
 
         // Path finding
-        pathFindingTick(getAttributeValue(Attributes.MOVEMENT_SPEED));
+        this.navigator.pathFindingTick(getAttributeValue(Attributes.MOVEMENT_SPEED));
 
         // Fire, item pickup, ...
         super.update(time);
@@ -94,7 +87,8 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
     @Override
     public void setInstance(@NotNull Instance instance) {
         super.setInstance(instance);
-        this.pathFinder = new HydrazinePathFinder(pathingEntity, instance.getInstanceSpace());
+
+        this.navigator.setPathFinder(new HydrazinePathFinder(navigator.getPathingEntity(), instance.getInstanceSpace()));
     }
 
     @Override
@@ -307,6 +301,12 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
         syncEquipment(EntityEquipmentPacket.Slot.BOOTS);
     }
 
+    @NotNull
+    @Override
+    public Navigator getNavigator() {
+        return navigator;
+    }
+
     /**
      * Calls a {@link EntityAttackEvent} with this entity as the source and {@code target} as the target.
      *
@@ -329,60 +329,6 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
      */
     public void attack(@NotNull Entity target) {
         attack(target, false);
-    }
-
-    @Override
-    public void pathFindingTick(float speed) {
-        synchronized (pathLock) {
-            NavigableEntity.super.pathFindingTick(speed);
-        }
-    }
-
-    @Override
-    public boolean setPathTo(@Nullable Position position) {
-        synchronized (pathLock) {
-            return NavigableEntity.super.setPathTo(position);
-        }
-    }
-
-    @Nullable
-    @Override
-    public Position getPathPosition() {
-        return pathPosition;
-    }
-
-    @Override
-    public void setPathPosition(Position pathPosition) {
-        this.pathPosition = pathPosition;
-    }
-
-    @Nullable
-    @Override
-    public IPath getPath() {
-        return path;
-    }
-
-    @Override
-    public void setPath(IPath path) {
-        this.path = path;
-    }
-
-    @NotNull
-    @Override
-    public PFPathingEntity getPathingEntity() {
-        return pathingEntity;
-    }
-
-    @Nullable
-    @Override
-    public HydrazinePathFinder getPathFinder() {
-        return pathFinder;
-    }
-
-    @NotNull
-    @Override
-    public Entity getNavigableEntity() {
-        return this;
     }
 
     private ItemStack getEquipmentItem(@NotNull ItemStack itemStack, @NotNull ArmorEquipEvent.ArmorSlot armorSlot) {

@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class PFPathingEntity implements IPathingEntity {
 
-    private final NavigableEntity navigableEntity;
+    private final Navigator navigator;
     private final Entity entity;
 
     private float searchRange;
@@ -30,9 +30,9 @@ public class PFPathingEntity implements IPathingEntity {
     private boolean avoidsDoorways;
     private boolean opensDoors;
 
-    public PFPathingEntity(NavigableEntity navigableEntity) {
-        this.navigableEntity = navigableEntity;
-        this.entity = navigableEntity.getNavigableEntity();
+    public PFPathingEntity(Navigator navigator) {
+        this.navigator = navigator;
+        this.entity = navigator.getEntity();
 
         this.searchRange = getAttributeValue(Attributes.FOLLOW_RANGE);
     }
@@ -193,7 +193,7 @@ public class PFPathingEntity implements IPathingEntity {
 
         final double entityY = entity.getPosition().getY();
         if (entityY < targetPosition.getY()) {
-            navigableEntity.jump(1);
+            this.navigator.jump(1);
         }
     }
 
