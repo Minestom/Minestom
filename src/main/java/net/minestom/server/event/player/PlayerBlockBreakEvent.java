@@ -102,7 +102,7 @@ public class PlayerBlockBreakEvent extends PlayerEvent implements CancellableEve
     }
 
     /**
-     * Changes the custom block id result, which will be placed after the event;
+     * Changes the custom block id result, which will be placed after the event.
      *
      * @param resultCustomBlockId the custom block id result
      */

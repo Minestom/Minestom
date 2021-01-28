@@ -112,23 +112,23 @@ public class Team {
      * @param member The member to be removed
      */
     public void removeMember(@NotNull String member) {
-        // Removes the member from the team
-        this.members.remove(member);
-
         // Initializes remove player packet
         final TeamsPacket removePlayerPacket = new TeamsPacket();
         removePlayerPacket.teamName = this.teamName;
         removePlayerPacket.action = TeamsPacket.Action.REMOVE_PLAYERS_TEAM;
-        removePlayerPacket.entities = members.toArray(new String[0]);
+        removePlayerPacket.entities = new String[]{member};
 
         // Sends to all online player teh remove player packet
         PacketUtils.sendGroupedPacket(CONNECTION_MANAGER.getOnlinePlayers(), removePlayerPacket);
+
+        // Removes the member from the team
+        this.members.remove(member);
     }
 
     /**
      * Changes the display name of the team.
      * <br><br>
-     * <b>Warning:</b> This is only changed on the <b>server side</b>.
+     * <b>Warning:</b> This is only changed <b>server side</b>.
      *
      * @param teamDisplayName The new display name
      */
