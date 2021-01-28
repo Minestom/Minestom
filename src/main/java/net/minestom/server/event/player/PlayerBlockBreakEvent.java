@@ -1,14 +1,19 @@
 package net.minestom.server.event.player;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.PlayerEvent;
+import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class PlayerBlockBreakEvent extends PlayerEvent implements CancellableEvent {
+
+    private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
     private final BlockPosition blockPosition;
 
@@ -103,6 +108,38 @@ public class PlayerBlockBreakEvent extends PlayerEvent implements CancellableEve
      */
     public void setResultCustomBlockId(short resultCustomBlockId) {
         this.resultCustomBlockId = resultCustomBlockId;
+    }
+
+    /**
+     * Sets both the blockId and customBlockId.
+     *
+     * @param customBlock the result custom block
+     */
+    public void setResultCustomBlock(@NotNull CustomBlock customBlock) {
+        setResultBlockId(customBlock.getDefaultBlockStateId());
+        setResultCustomBlockId(customBlock.getCustomBlockId());
+    }
+
+    /**
+     * Sets both the blockStateId and customBlockId.
+     *
+     * @param customBlockId the result custom block
+     */
+    public void setResultCustomBlock(short customBlockId) {
+        final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+        Check.notNull(customBlock, "The custom block with the id '" + customBlockId + "' does not exist");
+        setResultCustomBlock(customBlock);
+    }
+
+    /**
+     * Sets both the blockId and customBlockId.
+     *
+     * @param customBlockId the result custom block id
+     */
+    public void setResultCustomBlock(@NotNull String customBlockId) {
+        final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+        Check.notNull(customBlock, "The custom block with the identifier '" + customBlockId + "' does not exist");
+        setResultCustomBlock(customBlock);
     }
 
     @Override
