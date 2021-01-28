@@ -35,7 +35,7 @@ public class FakePlayer extends Player {
      * @param username The username for the fake player.
      * @param option   Any option for the fake player.
      */
-    private FakePlayer(@NotNull UUID uuid, @NotNull String username,
+    protected FakePlayer(@NotNull UUID uuid, @NotNull String username,
                        @NotNull FakePlayerOption option,
                        @Nullable Consumer<FakePlayer> spawnCallback) {
         super(uuid, username, new FakePlayerConnection());
