@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -268,6 +268,27 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResultCustomBlock(short)">setResultCustomBlock</a></span>&#8203;(short&nbsp;customBlockId)</code></th>
+<td class="colLast">
+<div class="block">Sets both the blockStateId and customBlockId.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResultCustomBlock(java.lang.String)">setResultCustomBlock</a></span>&#8203;(java.lang.String&nbsp;customBlockId)</code></th>
+<td class="colLast">
+<div class="block">Sets both the blockId and customBlockId.</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResultCustomBlock(net.minestom.server.instance.block.CustomBlock)">setResultCustomBlock</a></span>&#8203;(<a href="../../instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&nbsp;customBlock)</code></th>
+<td class="colLast">
+<div class="block">Sets both the blockId and customBlockId.</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResultCustomBlockId(short)">setResultCustomBlockId</a></span>&#8203;(short&nbsp;resultCustomBlockId)</code></th>
 <td class="colLast">
 <div class="block">Changes the custom block id result, which will be placed after the event;</div>
@@ -434,6 +455,50 @@ public&nbsp;<a href="../../instance/block/CustomBlock.html" title="class in net.
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>resultCustomBlockId</code> - the custom block id result</dd>
+</dl>
+</li>
+</ul>
+<a id="setResultCustomBlock(net.minestom.server.instance.block.CustomBlock)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setResultCustomBlock</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setResultCustomBlock&#8203;(@NotNull
+                                 <a href="../../instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&nbsp;customBlock)</pre>
+<div class="block">Sets both the blockId and customBlockId.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>customBlock</code> - the result custom block</dd>
+</dl>
+</li>
+</ul>
+<a id="setResultCustomBlock(short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setResultCustomBlock</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setResultCustomBlock&#8203;(short&nbsp;customBlockId)</pre>
+<div class="block">Sets both the blockStateId and customBlockId.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>customBlockId</code> - the result custom block</dd>
+</dl>
+</li>
+</ul>
+<a id="setResultCustomBlock(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setResultCustomBlock</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setResultCustomBlock&#8203;(@NotNull
+                                 java.lang.String&nbsp;customBlockId)</pre>
+<div class="block">Sets both the blockId and customBlockId.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>customBlockId</code> - the result custom block id</dd>
 </dl>
 </li>
 </ul>
