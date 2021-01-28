@@ -4,6 +4,7 @@ import com.extollit.gaming.ai.path.HydrazinePathFinder;
 import com.extollit.gaming.ai.path.model.IPath;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
@@ -159,7 +160,11 @@ public class Navigator {
         return setPathTo(position, true);
     }
 
-    public synchronized void pathFindingTick(float speed) {
+    public synchronized void tick(float speed) {
+        // No pathfinding tick for dead entities
+        if (entity instanceof LivingEntity && ((LivingEntity) entity).isDead())
+            return;
+
         if (pathPosition != null) {
 
             IPath path = pathFinder.updatePathFor(pathingEntity);
