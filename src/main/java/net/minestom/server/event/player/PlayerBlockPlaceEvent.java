@@ -25,18 +25,21 @@ public class PlayerBlockPlaceEvent extends PlayerEvent implements CancellableEve
     private Data blockData;
     private final BlockPosition blockPosition;
     private final Player.Hand hand;
+    private final short originalBlockStateId;
 
     private boolean consumeBlock;
 
     private boolean cancelled;
 
     public PlayerBlockPlaceEvent(@NotNull Player player, @NotNull Block block,
-                                 @NotNull BlockPosition blockPosition, @NotNull Player.Hand hand) {
+                                 @NotNull BlockPosition blockPosition, @NotNull Player.Hand hand,
+                                 short originalBlockStateId) {
         super(player);
         this.blockStateId = block.getBlockId();
         this.blockPosition = blockPosition;
         this.hand = hand;
         this.consumeBlock = true;
+        this.originalBlockStateId = originalBlockStateId;
     }
 
     /**
@@ -147,6 +150,16 @@ public class PlayerBlockPlaceEvent extends PlayerEvent implements CancellableEve
     @NotNull
     public Player.Hand getHand() {
         return hand;
+    }
+
+    /**
+     * Original block on the {@link BlockPosition} which the player is trying to replace.
+     * Mostly {@link Block#AIR}, but can be different.
+     *
+     * @return an ID of block on the location
+     */
+    public short getOriginalBlockStateId() {
+        return originalBlockStateId;
     }
 
     /**

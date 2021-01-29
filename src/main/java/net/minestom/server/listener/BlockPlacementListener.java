@@ -120,7 +120,8 @@ public class BlockPlacementListener {
                 if (!intersect) {
 
                     // BlockPlaceEvent check
-                    PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, block, blockPosition, packet.hand);
+                    PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, block, blockPosition, packet.hand,
+                            instance.getBlockStateId(blockPosition));
                     playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
 
                     player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
