@@ -1,14 +1,16 @@
 package net.minestom.server.utils;
 
+import org.jetbrains.annotations.NotNull;
+
 public enum Direction {
+    DOWN(0, -1, 0),
+    UP(0, 1, 0),
     NORTH(0, 0, -1),
-    EAST(1, 0, 0),
     SOUTH(0, 0, 1),
     WEST(-1, 0, 0),
-    UP(0, 1, 0),
-    DOWN(0, -1, 0);
+    EAST(1, 0, 0);
 
-    public static final Direction[] HORIZONTAL = { SOUTH, WEST, NORTH, EAST };
+    public static final Direction[] HORIZONTAL = {SOUTH, WEST, NORTH, EAST};
 
     private final int normalX;
     private final int normalY;
@@ -32,6 +34,7 @@ public enum Direction {
         return normalZ;
     }
 
+    @NotNull
     public Direction opposite() {
         switch (this) {
             case UP:
