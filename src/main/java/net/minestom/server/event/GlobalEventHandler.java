@@ -1,6 +1,7 @@
 package net.minestom.server.event;
 
 import net.minestom.server.event.handler.EventHandler;
+import net.minestom.server.extensions.Extension;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -13,11 +14,17 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class GlobalEventHandler implements EventHandler {
 
     // Events
-    private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
+    private final Map<Class<? extends Extension>, Map<Class<? extends Event>, Collection<EventCallback>>> eventCallbacks = new ConcurrentHashMap<>();
 
     @NotNull
     @Override
-    public Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap() {
-        return eventCallbacks;
+    public <V extends Extension> Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap(Class<V> extensionClass) {
+        eventCallbacks.putIfAbsent(extensionClass, new ConcurrentHashMap<>());
+        return eventCallbacks.get(extensionClass);
+    }
+
+    @Override
+    public <V extends Extension> void clearExtension(Class<V> extensionClass) {
+        eventCallbacks.remove(extensionClass);
     }
 }

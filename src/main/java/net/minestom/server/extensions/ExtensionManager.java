@@ -6,6 +6,7 @@ import net.minestom.dependencies.maven.MavenRepository;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -513,6 +514,15 @@ public class ExtensionManager {
         ext.terminate();
         ext.postTerminate();
         ext.unload();
+
+        // remove the extension from all known event handlers.
+        MinecraftServer.getGlobalEventHandler().clearExtension(ext.getClass());
+        for (Instance instance : MinecraftServer.getInstanceManager().getInstances()) {
+            instance.clearExtension(ext.getClass());
+        }
+
+        // call GC to try to get rid of extension in event handlers.
+        System.gc();
 
         // remove as dependent of other extensions
         // this avoids issues where a dependent extension fails to reload, and prevents the base extension to reload too

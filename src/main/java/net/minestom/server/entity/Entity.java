@@ -12,6 +12,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.entity.*;
 import net.minestom.server.event.handler.EventHandler;
+import net.minestom.server.extensions.Extension;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
@@ -119,7 +120,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     private long lastAbsoluteSynchronizationTime;
 
     // Events
-    private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
+    private final Map<Class<? extends Extension>, Map<Class<? extends Event>, Collection<EventCallback>>> eventCallbacks = new ConcurrentHashMap<>();
 
     // Metadata
     protected boolean onFire;
@@ -650,8 +651,14 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
     @NotNull
     @Override
-    public Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap() {
-        return eventCallbacks;
+    public <V extends Extension> Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap(Class<V> extensionClass) {
+        eventCallbacks.putIfAbsent(extensionClass, new ConcurrentHashMap<>());
+        return eventCallbacks.get(extensionClass);
+    }
+
+    @Override
+    public <V extends Extension> void clearExtension(Class<V> extensionClass) {
+        eventCallbacks.remove(extensionClass);
     }
 
     /**

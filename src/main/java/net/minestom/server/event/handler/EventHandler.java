@@ -6,10 +6,11 @@ import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.GlobalEventHandler;
+import net.minestom.server.extensions.Extension;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -21,12 +22,30 @@ import java.util.stream.Stream;
 public interface EventHandler {
 
     /**
+     * Gets a {@link Map} containing all the listeners assigned to a specific {@link Event} type specified to {@code extensionClass}.
+     *
+     * @param extensionClass    the extension class
+     * @return a {@link Map} with all the listeners
+     */
+    @NotNull
+    <V extends Extension> Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap(Class<V> extensionClass);
+
+    /**
      * Gets a {@link Map} containing all the listeners assigned to a specific {@link Event} type.
      *
      * @return a {@link Map} with all the listeners
      */
     @NotNull
-    Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap();
+    default Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap() {
+        return getEventCallbacksMap(Default.class);
+    }
+
+    /**
+     * Clears all callbacks for the specified extension {@code extensionClass}
+     *
+     * @param extensionClass the extension class
+     */
+    <V extends Extension> void clearExtension(Class<V> extensionClass);
 
     /**
      * Adds a new event callback for the specified type {@code eventClass}.
@@ -37,7 +56,20 @@ public interface EventHandler {
      * @return true if the callback collection changed as a result of the call
      */
     default <E extends Event> boolean addEventCallback(@NotNull Class<E> eventClass, @NotNull EventCallback<E> eventCallback) {
-        Collection<EventCallback> callbacks = getEventCallbacks(eventClass);
+        return getEventCallbacks(Default.class, eventClass).add(eventCallback);
+    }
+
+    /**
+     * Adds a new event callback for the specified type {@code eventClass} and extension {@code extensionClass}.
+     *
+     * @param extensionClass the extension class
+     * @param eventClass     the event class
+     * @param eventCallback  the event callback
+     * @param <E>            the event type
+     * @return true if the callback collection changed as a result of the call
+     */
+    default <E extends Event, V extends Extension> boolean addEventCallback(@NotNull Class<V> extensionClass, @NotNull Class<E> eventClass, @NotNull EventCallback<E> eventCallback) {
+        Collection<EventCallback> callbacks = getEventCallbacks(extensionClass, eventClass);
         return callbacks.add(eventCallback);
     }
 
@@ -50,8 +82,32 @@ public interface EventHandler {
      * @return true if the callback was removed as a result of this call
      */
     default <E extends Event> boolean removeEventCallback(@NotNull Class<E> eventClass, @NotNull EventCallback<E> eventCallback) {
-        Collection<EventCallback> callbacks = getEventCallbacks(eventClass);
-        return callbacks.remove(eventCallback);
+        return getEventCallbacks(Default.class, eventClass).remove(eventCallback);
+    }
+
+    /**
+     * Removes an event callback.
+     *
+     * @param eventClass    the event class
+     * @param eventCallback the event callback
+     * @param <E>           the event type
+     * @return true if the callback was removed as a result of this call
+     */
+    default <E extends Event, V extends Extension> boolean removeEventCallback(@NotNull Class<V> extensionClass, @NotNull Class<E> eventClass, @NotNull EventCallback<E> eventCallback) {
+        return getEventCallbacks(extensionClass, eventClass).remove(eventCallback);
+    }
+
+    /**
+     * Gets the event callbacks of a specific event type.
+     *
+     * @param extension  the extension instance.
+     * @param eventClass the event class
+     * @param <E>        the event type
+     * @return all event callbacks for the specified type {@code eventClass}
+     */
+    @NotNull
+    default <E extends Event, V extends Extension> Collection<EventCallback> getEventCallbacks(Class<V> extension, @NotNull Class<E> eventClass) {
+        return getEventCallbacksMap(extension).computeIfAbsent(eventClass, clazz -> new CopyOnWriteArraySet<>());
     }
 
     /**
@@ -63,7 +119,11 @@ public interface EventHandler {
      */
     @NotNull
     default <E extends Event> Collection<EventCallback> getEventCallbacks(@NotNull Class<E> eventClass) {
-        return getEventCallbacksMap().computeIfAbsent(eventClass, clazz -> new CopyOnWriteArraySet<>());
+        Collection<EventCallback> collection = new ArrayList<>(getEventCallbacksMap().computeIfAbsent(eventClass, clazz -> new CopyOnWriteArraySet<>()));
+        for (Extension extension : MinecraftServer.getExtensionManager().getExtensions()) {
+            collection.addAll(getEventCallbacks(extension.getClass(), eventClass));
+        }
+        return collection;
     }
 
     /**
@@ -73,7 +133,11 @@ public interface EventHandler {
      */
     @NotNull
     default Stream<EventCallback> getEventCallbacks() {
-        return getEventCallbacksMap().values().stream().flatMap(Collection::stream);
+        ArrayList<Collection<EventCallback>> callbacks = new ArrayList<>(getEventCallbacksMap().values());
+        for (Extension extension : MinecraftServer.getExtensionManager().getExtensions()) {
+            callbacks.addAll(getEventCallbacksMap(extension.getClass()).values());
+        }
+        return callbacks.stream().flatMap(Collection::stream);
     }
 
     /**
@@ -90,8 +154,15 @@ public interface EventHandler {
         // Global listeners
         if (!(this instanceof GlobalEventHandler)) {
             final GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
-            runEvent(globalEventHandler.getEventCallbacks(eventClass), event);
+            Collection<EventCallback> eventCallbacks = new ArrayList<>(globalEventHandler.getEventCallbacks(Default.class, eventClass));
+
+            for (Extension extension : MinecraftServer.getExtensionManager().getExtensions()) {
+                eventCallbacks.addAll(globalEventHandler.getEventCallbacks(extension.getClass(), eventClass));
+            }
+
+            runEvent(eventCallbacks, event);
         }
+
 
         // Local listeners
         final Collection<EventCallback> eventCallbacks = getEventCallbacks(eventClass);
@@ -132,4 +203,13 @@ public interface EventHandler {
         }
     }
 
+    final class Default extends Extension {
+        @Override
+        public void initialize() {
+        }
+
+        @Override
+        public void terminate() {
+        }
+    }
 }

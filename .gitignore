@@ -56,3 +56,6 @@ gradle-app.setting
 
 # When compiling we get a docs folder
 /docs
+
+# Mac
+.DS_STORE

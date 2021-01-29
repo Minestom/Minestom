@@ -16,6 +16,7 @@ import net.minestom.server.event.handler.EventHandler;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
+import net.minestom.server.extensions.Extension;
 import net.minestom.server.instance.batch.BlockBatch;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
@@ -78,7 +79,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     // Field for tick events
     private long lastTickAge = System.currentTimeMillis();
 
-    private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
+    private final Map<Class<? extends Extension>, Map<Class<? extends Event>, Collection<EventCallback>>> eventCallbacks = new ConcurrentHashMap<>();
 
     // Entities present in this instance
     protected final Set<Entity> entities = new CopyOnWriteArraySet<>();
@@ -858,8 +859,17 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     @NotNull
     @Override
-    public Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap() {
-        return eventCallbacks;
+    public <V extends Extension> Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap(Class<V> extension) {
+        eventCallbacks.putIfAbsent(extension, new ConcurrentHashMap<>());
+        return eventCallbacks.get(extension);
+    }
+
+    @Override
+    public <V extends Extension> void clearExtension(Class<V> extension) {
+        eventCallbacks.remove(extension);
+
+        // Clears extension from all entities.
+        getEntities().forEach(entity -> clearExtension(extension));
     }
 
     // UNSAFE METHODS (need most of time to be synchronized)
