@@ -5,7 +5,6 @@ import net.minestom.server.entity.ObjectEntity;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryWriter;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -27,7 +26,7 @@ public class EntityAreaEffectCloud extends ObjectEntity {
         });
     }
 
-    @NotNull
+    /*@NotNull
     @Override
     public Consumer<BinaryWriter> getMetadataConsumer() {
         return packet -> {
@@ -37,9 +36,9 @@ public class EntityAreaEffectCloud extends ObjectEntity {
             fillMetadataIndex(packet, 9);
             fillMetadataIndex(packet, 10);
         };
-    }
+    }*/
 
-    @Override
+    /*@Override
     protected void fillMetadataIndex(@NotNull BinaryWriter packet, int index) {
         super.fillMetadataIndex(packet, index);
         if (index == 7) {
@@ -60,7 +59,7 @@ public class EntityAreaEffectCloud extends ObjectEntity {
             packet.writeVarInt(particle.getId());
             particleDataConsumer.accept(packet);
         }
-    }
+    }*/
 
     @Override
     public int getObjectData() {
@@ -74,7 +73,7 @@ public class EntityAreaEffectCloud extends ObjectEntity {
     public void setRadius(float radius) {
         this.radius = radius;
         setBoundingBox(2 * radius, 0.5f, 2 * radius);
-        sendMetadataIndex(7);
+        //sendMetadataIndex(7);
     }
 
     public int getColor() {
@@ -83,7 +82,7 @@ public class EntityAreaEffectCloud extends ObjectEntity {
 
     public void setColor(int color) {
         this.color = color;
-        sendMetadataIndex(8);
+        //sendMetadataIndex(8);
     }
 
     public boolean isIgnoreRadius() {
@@ -92,7 +91,7 @@ public class EntityAreaEffectCloud extends ObjectEntity {
 
     public void setIgnoreRadius(boolean ignoreRadius) {
         this.ignoreRadius = ignoreRadius;
-        sendMetadataIndex(9);
+        //sendMetadataIndex(9);
     }
 
     public Particle getParticle() {
@@ -101,7 +100,7 @@ public class EntityAreaEffectCloud extends ObjectEntity {
 
     public void setParticle(Particle particle) {
         this.particle = particle;
-        sendMetadataIndex(10);
+        //sendMetadataIndex(10);
     }
 
     public Consumer<BinaryWriter> getParticleDataConsumer() {

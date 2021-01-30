@@ -50,7 +50,6 @@ import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.stat.PlayerStatistic;
 import net.minestom.server.utils.*;
-import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -68,7 +67,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 
 /**
  * Those are the major actors of the server,
@@ -148,7 +146,6 @@ public class Player extends LivingEntity implements CommandSender {
 
     private Position respawnPoint;
 
-    private float additionalHearts;
     private int food;
     private float foodSaturation;
     private long startEatingTime;
@@ -766,30 +763,6 @@ public class Player extends LivingEntity implements CommandSender {
         callEvent(PlayerSpawnEvent.class, spawnEvent);
     }
 
-    @NotNull
-    @Override
-    public Consumer<BinaryWriter> getMetadataConsumer() {
-        return packet -> {
-            super.getMetadataConsumer().accept(packet);
-            fillMetadataIndex(packet, 14);
-            fillMetadataIndex(packet, 16);
-        };
-    }
-
-    @Override
-    protected void fillMetadataIndex(@NotNull BinaryWriter packet, int index) {
-        super.fillMetadataIndex(packet, index);
-        if (index == 14) {
-            packet.writeByte((byte) 14);
-            packet.writeByte(METADATA_FLOAT);
-            packet.writeFloat(additionalHearts);
-        } else if (index == 16) {
-            packet.writeByte((byte) 16);
-            packet.writeByte(METADATA_BYTE);
-            packet.writeByte(getSettings().getDisplayedSkinParts());
-        }
-    }
-
     /**
      * Sends a plugin message to the player.
      *
@@ -1134,17 +1107,16 @@ public class Player extends LivingEntity implements CommandSender {
      * @return the player additional hearts
      */
     public float getAdditionalHearts() {
-        return additionalHearts;
+        return metadata.getIndex((byte) 14, 0f);
     }
 
     /**
-     * Updates the internal field and send the appropriate {@link EntityMetaDataPacket}.
+     * Changes the amount of additional hearts shown.
      *
      * @param additionalHearts the count of additional hearts
      */
     public void setAdditionalHearts(float additionalHearts) {
-        this.additionalHearts = additionalHearts;
-        sendMetadataIndex(14);
+        this.metadata.setIndex((byte) 14, Metadata.Float(additionalHearts));
     }
 
     /**
@@ -1842,28 +1814,6 @@ public class Player extends LivingEntity implements CommandSender {
         }
 
         this.belowNameTag = belowNameTag;
-    }
-
-    /**
-     * Gets if the player is sneaking.
-     * <p>
-     * WARNING: this can be bypassed by hacked client, this is only what the client told the server.
-     *
-     * @return true if the player is sneaking
-     */
-    public boolean isSneaking() {
-        return crouched;
-    }
-
-    /**
-     * Gets if the player is sprinting.
-     * <p>
-     * WARNING: this can be bypassed by hacked client, this is only what the client told the server.
-     *
-     * @return true if the player is sprinting
-     */
-    public boolean isSprinting() {
-        return sprinting;
     }
 
     /**
@@ -2663,7 +2613,8 @@ public class Player extends LivingEntity implements CommandSender {
             this.chatColors = chatColors;
             this.displayedSkinParts = displayedSkinParts;
             this.mainHand = mainHand;
-            sendMetadataIndex(16);
+
+            metadata.setIndex((byte) 16, Metadata.Byte(displayedSkinParts));
 
             this.firstRefresh = false;
 

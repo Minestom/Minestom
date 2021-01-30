@@ -2,45 +2,15 @@ package net.minestom.server.entity.type.monster;
 
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.type.Monster;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.binary.BinaryWriter;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Consumer;
 
 public class EntityZombifiedPiglin extends EntityCreature implements Monster {
-
-    private boolean baby;
-    private boolean becomingDrowned;
 
     public EntityZombifiedPiglin(Position spawnPosition) {
         super(EntityType.ZOMBIFIED_PIGLIN, spawnPosition);
         setBoundingBox(0.6f, 1.95f, 0.6f);
-    }
-
-    @NotNull
-    @Override
-    public Consumer<BinaryWriter> getMetadataConsumer() {
-        return packet -> {
-            super.getMetadataConsumer().accept(packet);
-            fillMetadataIndex(packet, 15);
-            fillMetadataIndex(packet, 17);
-        };
-    }
-
-    @Override
-    protected void fillMetadataIndex(@NotNull BinaryWriter packet, int index) {
-        super.fillMetadataIndex(packet, index);
-        if (index == 15) {
-            packet.writeByte((byte) 15);
-            packet.writeByte(METADATA_BOOLEAN);
-            packet.writeBoolean(baby);
-        } else if (index == 17) {
-            packet.writeByte((byte) 17);
-            packet.writeByte(METADATA_BOOLEAN);
-            packet.writeBoolean(becomingDrowned);
-        }
     }
 
     /**
@@ -49,7 +19,7 @@ public class EntityZombifiedPiglin extends EntityCreature implements Monster {
      * @return true if it is a baby, false otherwise
      */
     public boolean isBaby() {
-        return baby;
+        return metadata.getIndex((byte) 15, false);
     }
 
     /**
@@ -58,17 +28,15 @@ public class EntityZombifiedPiglin extends EntityCreature implements Monster {
      * @param baby true to make it a baby, false otherwise
      */
     public void setBaby(boolean baby) {
-        this.baby = baby;
-        sendMetadataIndex(15);
+        this.metadata.setIndex((byte) 15, Metadata.Boolean(baby));
     }
 
     public boolean isBecomingDrowned() {
-        return becomingDrowned;
+        return metadata.getIndex((byte) 17, false);
     }
 
     public void setBecomingDrowned(boolean becomingDrowned) {
-        this.becomingDrowned = becomingDrowned;
-        sendMetadataIndex(17);
+        this.metadata.setIndex((byte) 17, Metadata.Boolean(becomingDrowned));
     }
 
     @Override

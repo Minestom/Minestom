@@ -22,7 +22,6 @@ import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
@@ -32,7 +31,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 
 //TODO: Default attributes registration (and limitation ?)
 public abstract class LivingEntity extends Entity implements EquipmentHandler {
@@ -44,19 +42,12 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
 
     protected boolean isDead;
 
-    private float health;
     protected DamageType lastDamageSource;
 
     // Bounding box used for items' pickup (see LivingEntity#setBoundingBox)
     protected BoundingBox expandedBoundingBox;
 
     private final Map<String, AttributeInstance> attributeModifiers = new ConcurrentHashMap<>(Attribute.values().length);
-
-    private boolean isHandActive;
-    private boolean offHand;
-    private boolean riptideSpinAttack;
-    // The number of arrows in entity
-    private int arrowCount;
 
     // Abilities
     protected boolean invulnerable;
@@ -138,50 +129,13 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         }
     }
 
-    @NotNull
-    @Override
-    public Consumer<BinaryWriter> getMetadataConsumer() {
-        return packet -> {
-            super.getMetadataConsumer().accept(packet);
-            fillMetadataIndex(packet, 7);
-            fillMetadataIndex(packet, 8);
-            fillMetadataIndex(packet, 11);
-        };
-    }
-
-    @Override
-    protected void fillMetadataIndex(@NotNull BinaryWriter packet, int index) {
-        super.fillMetadataIndex(packet, index);
-        if (index == 7) {
-            packet.writeByte((byte) 7);
-            packet.writeByte(METADATA_BYTE);
-            byte activeHandValue = 0;
-            if (isHandActive) {
-                activeHandValue += 1;
-                if (offHand)
-                    activeHandValue += 2;
-                if (riptideSpinAttack)
-                    activeHandValue += 4;
-            }
-            packet.writeByte(activeHandValue);
-        } else if (index == 8) {
-            packet.writeByte((byte) 8);
-            packet.writeByte(METADATA_FLOAT);
-            packet.writeFloat(health);
-        } else if (index == 11) {
-            packet.writeByte((byte) 11);
-            packet.writeByte(METADATA_VARINT);
-            packet.writeVarInt(arrowCount);
-        }
-    }
-
     /**
      * Gets the amount of arrows in the entity.
      *
      * @return the arrow count
      */
     public int getArrowCount() {
-        return arrowCount;
+        return metadata.getIndex((byte) 11, 0);
     }
 
     /**
@@ -190,8 +144,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * @param arrowCount the arrow count
      */
     public void setArrowCount(int arrowCount) {
-        this.arrowCount = arrowCount;
-        sendMetadataIndex(11);
+        this.metadata.setIndex((byte) 11, Metadata.VarInt(arrowCount));
     }
 
     /**
@@ -345,7 +298,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * @return the entity health
      */
     public float getHealth() {
-        return health;
+        return metadata.getIndex((byte) 8, 1f);
     }
 
     /**
@@ -355,12 +308,11 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      */
     public void setHealth(float health) {
         health = Math.min(health, getMaxHealth());
-
-        this.health = health;
-        if (this.health <= 0 && !isDead) {
+        if (health <= 0 && !isDead) {
             kill();
         }
-        sendMetadataIndex(8); // Health metadata index
+
+        this.metadata.setIndex((byte) 8, Metadata.Float(health));
     }
 
     /**
@@ -478,11 +430,15 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     public void refreshActiveHand(boolean isHandActive, boolean offHand, boolean riptideSpinAttack) {
-        this.isHandActive = isHandActive;
-        this.offHand = offHand;
-        this.riptideSpinAttack = riptideSpinAttack;
+        byte handState = 0;
+        if (isHandActive)
+            handState |= 0x01;
+        if (offHand)
+            handState |= 0x02;
+        if (riptideSpinAttack)
+            handState |= 0x04;
 
-        sendPacketToViewers(getMetadataPacket());
+        this.metadata.setIndex((byte) 7, Metadata.Byte(handState));
     }
 
     /**

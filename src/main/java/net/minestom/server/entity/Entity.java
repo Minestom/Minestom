@@ -26,7 +26,7 @@ import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
-import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.BitmaskUtil;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -121,21 +121,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     // Events
     private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
 
-    // Metadata
-    protected boolean onFire;
-    protected boolean crouched;
-    protected boolean UNUSED_METADATA;
-    protected boolean sprinting;
-    protected boolean swimming;
-    protected boolean invisible;
-    protected boolean glowing;
-    protected boolean usingElytra;
-    protected int air = 300;
-    protected JsonMessage customName;
-    protected boolean customNameVisible;
-    protected boolean silent;
-    protected boolean noGravity;
-    protected Pose pose = Pose.STANDING;
+    protected Metadata metadata = new Metadata(this);
 
     private final List<TimedPotion> effects = new CopyOnWriteArrayList<>();
 
@@ -487,7 +473,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                 Vector newVelocityOut = new Vector();
 
                 // Gravity force
-                final double gravityY = !noGravity ? Math.min(
+                final double gravityY = !hasNoGravity() ? Math.min(
                         gravityDragPerTick + (gravityAcceleration * (double) gravityTickCount),
                         gravityTerminalVelocity) : 0;
 
@@ -974,7 +960,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @return true if the entity is in fire, false otherwise
      */
     public boolean isOnFire() {
-        return onFire;
+        return (getStateMeta() & 0x01) != 0;
     }
 
     /**
@@ -986,8 +972,56 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param fire should the entity be set in fire
      */
     public void setOnFire(boolean fire) {
-        this.onFire = fire;
-        sendMetadataIndex(0);
+        final byte state = BitmaskUtil.changeBit(getStateMeta(), (byte) 0x01, (byte) (fire ? 1 : 0), (byte) 0);
+        this.metadata.setIndex((byte) 0, Metadata.Byte(state));
+    }
+
+    /**
+     * Gets if the entity is sneaking.
+     * <p>
+     * WARNING: this can be bypassed by hacked client, this is only what the client told the server.
+     *
+     * @return true if the player is sneaking
+     */
+    public boolean isSneaking() {
+        return (getStateMeta() & 0x02) != 0;
+    }
+
+    /**
+     * Makes the entity sneak.
+     * <p>
+     * WARNING: this will not work for the client itself.
+     *
+     * @param sneaking true to make the entity sneak
+     */
+    public void setSneaking(boolean sneaking) {
+        setPose(sneaking ? Pose.SNEAKING : Pose.STANDING);
+        // update the crouched metadata
+        final byte state = BitmaskUtil.changeBit(getStateMeta(), (byte) 0x02, (byte) (sneaking ? 1 : 0), (byte) 1);
+        this.metadata.setIndex((byte) 0, Metadata.Byte(state));
+    }
+
+    /**
+     * Gets if the player is sprinting.
+     * <p>
+     * WARNING: this can be bypassed by hacked client, this is only what the client told the server.
+     *
+     * @return true if the player is sprinting
+     */
+    public boolean isSprinting() {
+        return (getStateMeta() & 0x08) != 0;
+    }
+
+    /**
+     * Makes the entity sprint.
+     * <p>
+     * WARNING: this will not work on the client itself.
+     *
+     * @param sprinting true to make the entity sprint
+     */
+    public void setSprinting(boolean sprinting) {
+        final byte state = BitmaskUtil.changeBit(getStateMeta(), (byte) 0x08, (byte) (sprinting ? 1 : 0), (byte) 3);
+        this.metadata.setIndex((byte) 0, Metadata.Byte(state));
     }
 
     /**
@@ -996,7 +1030,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @return true if the entity is invisible, false otherwise
      */
     public boolean isInvisible() {
-        return invisible;
+        return (getStateMeta() & 0x20) != 0;
     }
 
     /**
@@ -1006,8 +1040,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param invisible true to set the entity invisible, false otherwise
      */
     public void setInvisible(boolean invisible) {
-        this.invisible = invisible;
-        sendMetadataIndex(0);
+        final byte state = BitmaskUtil.changeBit(getStateMeta(), (byte) 0x20, (byte) (invisible ? 1 : 0), (byte) 5);
+        this.metadata.setIndex((byte) 0, Metadata.Byte(state));
     }
 
     /**
@@ -1016,7 +1050,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @return true if the entity is glowing, false otherwise
      */
     public boolean isGlowing() {
-        return glowing;
+        return (getStateMeta() & 0x40) != 0;
     }
 
     /**
@@ -1025,8 +1059,31 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param glowing true to make the entity glows, false otherwise
      */
     public void setGlowing(boolean glowing) {
-        this.glowing = glowing;
-        sendMetadataIndex(0);
+        final byte state = BitmaskUtil.changeBit(getStateMeta(), (byte) 0x40, (byte) (glowing ? 1 : 0), (byte) 6);
+        this.metadata.setIndex((byte) 0, Metadata.Byte(state));
+    }
+
+    /**
+     * Gets the current entity pose.
+     *
+     * @return the entity pose
+     */
+    @NotNull
+    public Pose getPose() {
+        return metadata.getIndex((byte) 6, Pose.STANDING);
+    }
+
+    /**
+     * Changes the entity pose.
+     * <p>
+     * The internal {@code crouched} and {@code swimming} field will be
+     * updated accordingly.
+     *
+     * @param pose the new entity pose
+     */
+    @NotNull
+    public void setPose(@NotNull Pose pose) {
+        this.metadata.setIndex((byte) 6, Metadata.Pose(pose));
     }
 
     /**
@@ -1034,8 +1091,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      *
      * @return the custom name of the entity, null if there is not
      */
+    @Nullable
     public JsonMessage getCustomName() {
-        return customName;
+        return metadata.getIndex((byte) 2, null);
     }
 
     /**
@@ -1043,9 +1101,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      *
      * @param customName the custom name of the entity, null to remove it
      */
-    public void setCustomName(JsonMessage customName) {
-        this.customName = customName;
-        sendMetadataIndex(2);
+    public void setCustomName(@Nullable JsonMessage customName) {
+        this.metadata.setIndex((byte) 2, Metadata.OptChat(customName));
     }
 
     /**
@@ -1054,7 +1111,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @return true if the custom name is visible, false otherwise
      */
     public boolean isCustomNameVisible() {
-        return customNameVisible;
+        return metadata.getIndex((byte) 3, false);
     }
 
     /**
@@ -1064,27 +1121,15 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param customNameVisible true to make the custom name visible, false otherwise
      */
     public void setCustomNameVisible(boolean customNameVisible) {
-        this.customNameVisible = customNameVisible;
-        sendMetadataIndex(3);
+        this.metadata.setIndex((byte) 3, Metadata.Boolean(customNameVisible));
     }
 
     public boolean isSilent() {
-        return silent;
+        return metadata.getIndex((byte) 4, false);
     }
 
     public void setSilent(boolean silent) {
-        this.silent = silent;
-        sendMetadataIndex(4);
-    }
-
-    /**
-     * Changes the noGravity metadata field and change the gravity behaviour accordingly.
-     *
-     * @param noGravity should the entity ignore gravity
-     */
-    public void setNoGravity(boolean noGravity) {
-        this.noGravity = noGravity;
-        sendMetadataIndex(5);
+        this.metadata.setIndex((byte) 4, Metadata.Boolean(silent));
     }
 
     /**
@@ -1093,7 +1138,16 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @return true if the entity ignore gravity, false otherwise
      */
     public boolean hasNoGravity() {
-        return noGravity;
+        return metadata.getIndex((byte) 5, false);
+    }
+
+    /**
+     * Changes the noGravity metadata field and change the gravity behaviour accordingly.
+     *
+     * @param noGravity should the entity ignore gravity
+     */
+    public void setNoGravity(boolean noGravity) {
+        this.metadata.setIndex((byte) 5, Metadata.Boolean(noGravity));
     }
 
     /**
@@ -1174,56 +1228,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         position.setPitch(pitch);
         this.cacheYaw = yaw;
         this.cachePitch = pitch;
-    }
-
-    /**
-     * Makes the entity sneak.
-     * <p>
-     * WARNING: this will not work for the client itself.
-     *
-     * @param sneaking true to make the entity sneak
-     */
-    public void setSneaking(boolean sneaking) {
-        setPose(sneaking ? Pose.SNEAKING : Pose.STANDING);
-        sendMetadataIndex(0); // update the crouched metadata
-    }
-
-    /**
-     * Gets the current entity pose.
-     *
-     * @return the entity pose
-     */
-    @NotNull
-    public Pose getPose() {
-        return pose;
-    }
-
-    /**
-     * Changes the entity pose.
-     * <p>
-     * The internal {@code crouched} and {@code swimming} field will be
-     * updated accordingly.
-     *
-     * @param pose the new entity pose
-     */
-    @NotNull
-    public void setPose(@NotNull Pose pose) {
-        this.crouched = pose == Pose.SNEAKING;
-        this.swimming = pose == Pose.SWIMMING;
-        this.pose = pose;
-        sendMetadataIndex(6);
-    }
-
-    /**
-     * Makes the entity sprint.
-     * <p>
-     * WARNING: this will not work on the client itself.
-     *
-     * @param sprinting true to make the entity sprint
-     */
-    public void setSprinting(boolean sprinting) {
-        this.sprinting = sprinting;
-        sendMetadataIndex(0);
     }
 
     /**
@@ -1355,138 +1359,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     public EntityMetaDataPacket getMetadataPacket() {
         EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
         metaDataPacket.entityId = getEntityId();
-        metaDataPacket.consumer = getMetadataConsumer();
+        metaDataPacket.entries = metadata.getEntries();
         return metaDataPacket;
     }
 
-    /**
-     * Should be override when wanting to add a new metadata index
-     *
-     * @return The consumer used to write {@link EntityMetaDataPacket} in {@link #getMetadataPacket()}
-     */
-    @NotNull
-    public Consumer<BinaryWriter> getMetadataConsumer() {
-        return packet -> {
-            fillMetadataIndex(packet, 0);
-            fillMetadataIndex(packet, 1);
-            fillMetadataIndex(packet, 2);
-            fillMetadataIndex(packet, 3);
-            fillMetadataIndex(packet, 4);
-            fillMetadataIndex(packet, 5);
-            fillMetadataIndex(packet, 6);
-        };
-    }
-
-    /**
-     * Sends a {@link EntityMetaDataPacket} containing only the specified index
-     * The index is wrote using {@link #fillMetadataIndex(BinaryWriter, int)}.
-     *
-     * @param index the metadata index
-     */
-    protected void sendMetadataIndex(int index) {
-        EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
-        metaDataPacket.entityId = getEntityId();
-        metaDataPacket.consumer = packet -> fillMetadataIndex(packet, index);
-
-        sendPacketToViewersAndSelf(metaDataPacket);
-    }
-
-    /**
-     * Used to fill/write a specific metadata index.
-     * The proper use to add a new metadata index is to override this and add your case.
-     * Then you can also override {@link #getMetadataConsumer()} and fill your newly added index.
-     *
-     * @param packet the packet writer
-     * @param index  the index to fill/write
-     */
-    protected void fillMetadataIndex(@NotNull BinaryWriter packet, int index) {
-        switch (index) {
-            case 0:
-                fillStateMetadata(packet);
-                break;
-            case 1:
-                fillAirTickMetaData(packet);
-                break;
-            case 2:
-                fillCustomNameMetaData(packet);
-                break;
-            case 3:
-                fillCustomNameVisibleMetaData(packet);
-                break;
-            case 4:
-                fillSilentMetaData(packet);
-                break;
-            case 5:
-                fillNoGravityMetaData(packet);
-                break;
-            case 6:
-                fillPoseMetaData(packet);
-                break;
-        }
-    }
-
-    private void fillStateMetadata(@NotNull BinaryWriter packet) {
-        packet.writeByte((byte) 0);
-        packet.writeByte(METADATA_BYTE);
-        byte index0 = 0;
-        if (onFire)
-            index0 += 1;
-        if (crouched)
-            index0 += 2;
-        if (UNUSED_METADATA)
-            index0 += 4;
-        if (sprinting)
-            index0 += 8;
-        if (swimming)
-            index0 += 16;
-        if (invisible)
-            index0 += 32;
-        if (glowing)
-            index0 += 64;
-        if (usingElytra)
-            index0 += 128;
-        packet.writeByte(index0);
-    }
-
-    private void fillAirTickMetaData(@NotNull BinaryWriter packet) {
-        packet.writeByte((byte) 1);
-        packet.writeByte(METADATA_VARINT);
-        packet.writeVarInt(air);
-    }
-
-    private void fillCustomNameMetaData(@NotNull BinaryWriter packet) {
-        boolean hasCustomName = customName != null;
-
-        packet.writeByte((byte) 2);
-        packet.writeByte(METADATA_OPTCHAT);
-        packet.writeBoolean(hasCustomName);
-        if (hasCustomName) {
-            packet.writeSizedString(customName.toString());
-        }
-    }
-
-    private void fillCustomNameVisibleMetaData(@NotNull BinaryWriter packet) {
-        packet.writeByte((byte) 3);
-        packet.writeByte(METADATA_BOOLEAN);
-        packet.writeBoolean(customNameVisible);
-    }
-
-    private void fillSilentMetaData(@NotNull BinaryWriter packet) {
-        packet.writeByte((byte) 4);
-        packet.writeByte(METADATA_BOOLEAN);
-        packet.writeBoolean(silent);
-    }
-
-    private void fillNoGravityMetaData(@NotNull BinaryWriter packet) {
-        packet.writeByte((byte) 5);
-        packet.writeByte(METADATA_BOOLEAN);
-        packet.writeBoolean(noGravity);
-    }
-
-    private void fillPoseMetaData(@NotNull BinaryWriter packet) {
-        packet.writeByte((byte) 6);
-        packet.writeByte(METADATA_POSE);
-        packet.writeVarInt(pose.ordinal());
+    private byte getStateMeta() {
+        return metadata.getIndex((byte) 0, (byte) 0);
     }
 
     protected void sendSynchronization() {

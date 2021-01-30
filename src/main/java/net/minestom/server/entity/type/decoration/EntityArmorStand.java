@@ -1,6 +1,7 @@
 package net.minestom.server.entity.type.decoration;
 
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.ObjectEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.item.ArmorEquipEvent;
@@ -9,24 +10,10 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
-import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.BitmaskUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Consumer;
-
 public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
-
-    private boolean small;
-    private boolean hasArms;
-    private boolean noBasePlate;
-    private boolean setMarker;
-
-    private Vector headRotation;
-    private Vector bodyRotation;
-    private Vector leftArmRotation;
-    private Vector rightArmRotation;
-    private Vector leftLegRotation;
-    private Vector rightLegRotation;
 
     // Equipments
     private ItemStack mainHandItem;
@@ -70,76 +57,6 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
     @Override
     public int getObjectData() {
         return 0;
-    }
-
-    @NotNull
-    @Override
-    public Consumer<BinaryWriter> getMetadataConsumer() {
-        return packet -> {
-            super.getMetadataConsumer().accept(packet);
-            fillMetadataIndex(packet, 14);
-            fillMetadataIndex(packet, 15);
-            fillMetadataIndex(packet, 16);
-            fillMetadataIndex(packet, 17);
-            fillMetadataIndex(packet, 18);
-            fillMetadataIndex(packet, 19);
-            fillMetadataIndex(packet, 20);
-        };
-    }
-
-    @Override
-    protected void fillMetadataIndex(@NotNull BinaryWriter packet, int index) {
-        super.fillMetadataIndex(packet, index);
-        if (index == 14) {
-            packet.writeByte((byte) 14);
-            packet.writeByte(METADATA_BYTE);
-            byte dataValue = 0;
-            if (isSmall())
-                dataValue |= 0x01;
-            if (hasArms)
-                dataValue |= 0x04;
-            if (hasNoBasePlate())
-                dataValue |= 0x08;
-            if (hasMarker())
-                dataValue |= 0x10;
-            packet.writeByte(dataValue);
-        } else if (index == 15) {
-            packet.writeByte((byte) 15);
-            packet.writeByte(METADATA_ROTATION);
-            packet.writeFloat(getRotationX(headRotation));
-            packet.writeFloat(getRotationY(headRotation));
-            packet.writeFloat(getRotationZ(headRotation));
-        } else if (index == 16) {
-            packet.writeByte((byte) 16);
-            packet.writeByte(METADATA_ROTATION);
-            packet.writeFloat(getRotationX(bodyRotation));
-            packet.writeFloat(getRotationY(bodyRotation));
-            packet.writeFloat(getRotationZ(bodyRotation));
-        } else if (index == 17) {
-            packet.writeByte((byte) 17);
-            packet.writeByte(METADATA_ROTATION);
-            packet.writeFloat(getRotationX(leftArmRotation));
-            packet.writeFloat(getRotationY(leftArmRotation));
-            packet.writeFloat(getRotationZ(leftArmRotation));
-        } else if (index == 18) {
-            packet.writeByte((byte) 18);
-            packet.writeByte(METADATA_ROTATION);
-            packet.writeFloat(getRotationX(rightArmRotation));
-            packet.writeFloat(getRotationY(rightArmRotation));
-            packet.writeFloat(getRotationZ(rightArmRotation));
-        } else if (index == 19) {
-            packet.writeByte((byte) 19);
-            packet.writeByte(METADATA_ROTATION);
-            packet.writeFloat(getRotationX(leftLegRotation));
-            packet.writeFloat(getRotationY(leftLegRotation));
-            packet.writeFloat(getRotationZ(leftLegRotation));
-        } else if (index == 20) {
-            packet.writeByte((byte) 20);
-            packet.writeByte(METADATA_ROTATION);
-            packet.writeFloat(getRotationX(rightLegRotation));
-            packet.writeFloat(getRotationY(rightLegRotation));
-            packet.writeFloat(getRotationZ(rightLegRotation));
-        }
     }
 
     @NotNull
@@ -215,12 +132,12 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
     }
 
     public boolean isSmall() {
-        return small;
+        return (getStateMeta() & 0x01) != 0;
     }
 
     public void setSmall(boolean small) {
-        this.small = small;
-        sendMetadataIndex(14);
+        final byte state = BitmaskUtil.changeBit(getStateMeta(), (byte) 0x01, (byte) (small ? 1 : 0), (byte) 0);
+        this.metadata.setIndex((byte) 14, Metadata.Byte(state));
 
         if (small) {
             setBoundingBox(0.25f, 0.9875f, 0.25f);
@@ -230,96 +147,88 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
     }
 
     public boolean hasArms() {
-        return hasArms;
+        return (getStateMeta() & 0x04) != 0;
     }
 
     public void setHasArms(boolean hasArms) {
-        this.hasArms = hasArms;
-        sendMetadataIndex(14);
+        final byte state = BitmaskUtil.changeBit(getStateMeta(), (byte) 0x08, (byte) (hasArms ? 1 : 0), (byte) 2);
+        this.metadata.setIndex((byte) 14, Metadata.Byte(state));
     }
 
     public boolean hasNoBasePlate() {
-        return noBasePlate;
+        return (getStateMeta() & 0x08) != 0;
     }
 
     public void setNoBasePlate(boolean noBasePlate) {
-        this.noBasePlate = noBasePlate;
-        sendMetadataIndex(14);
+        final byte state = BitmaskUtil.changeBit(getStateMeta(), (byte) 0x10, (byte) (noBasePlate ? 1 : 0), (byte) 3);
+        this.metadata.setIndex((byte) 14, Metadata.Byte(state));
     }
 
     public boolean hasMarker() {
-        return setMarker;
+        return (getStateMeta() & 0x10) != 0;
     }
 
     public void setMarker(boolean setMarker) {
-        this.setMarker = setMarker;
-        sendMetadataIndex(14);
+        final byte state = BitmaskUtil.changeBit(getStateMeta(), (byte) 0x20, (byte) (setMarker ? 1 : 0), (byte) 4);
+        this.metadata.setIndex((byte) 14, Metadata.Byte(state));
     }
 
+    @NotNull
     public Vector getHeadRotation() {
-        return headRotation;
+        return metadata.getIndex((byte) 15, new Vector(0, 0, 0));
     }
 
-    public void setHeadRotation(Vector headRotation) {
-        this.headRotation = headRotation;
-        sendMetadataIndex(15);
+    public void setHeadRotation(@NotNull Vector headRotation) {
+        this.metadata.setIndex((byte) 15, Metadata.Rotation(headRotation));
     }
 
+    @NotNull
     public Vector getBodyRotation() {
-        return bodyRotation;
+        return metadata.getIndex((byte) 16, new Vector(0, 0, 0));
     }
 
-    public void setBodyRotation(Vector bodyRotation) {
-        this.bodyRotation = bodyRotation;
-        sendMetadataIndex(16);
+    public void setBodyRotation(@NotNull Vector bodyRotation) {
+        this.metadata.setIndex((byte) 16, Metadata.Rotation(bodyRotation));
     }
 
+    @NotNull
     public Vector getLeftArmRotation() {
-        return leftArmRotation;
+        return metadata.getIndex((byte) 17, new Vector(-10, 0, -10));
     }
 
-    public void setLeftArmRotation(Vector leftArmRotation) {
-        this.leftArmRotation = leftArmRotation;
-        sendMetadataIndex(17);
+    public void setLeftArmRotation(@NotNull Vector leftArmRotation) {
+        this.metadata.setIndex((byte) 17, Metadata.Rotation(leftArmRotation));
     }
 
+    @NotNull
     public Vector getRightArmRotation() {
-        return rightArmRotation;
+        return metadata.getIndex((byte) 18, new Vector(-15, 0, 10));
     }
 
-    public void setRightArmRotation(Vector rightArmRotation) {
-        this.rightArmRotation = rightArmRotation;
-        sendMetadataIndex(18);
+    public void setRightArmRotation(@NotNull Vector rightArmRotation) {
+        this.metadata.setIndex((byte) 18, Metadata.Rotation(rightArmRotation));
     }
 
+    @NotNull
     public Vector getLeftLegRotation() {
-        return leftLegRotation;
+        return metadata.getIndex((byte) 19, new Vector(-1, 0, -1));
     }
 
-    public void setLeftLegRotation(Vector leftLegRotation) {
-        this.leftLegRotation = leftLegRotation;
-        sendMetadataIndex(19);
+    public void setLeftLegRotation(@NotNull Vector leftLegRotation) {
+        this.metadata.setIndex((byte) 19, Metadata.Rotation(leftLegRotation));
     }
 
+    @NotNull
     public Vector getRightLegRotation() {
-        return rightLegRotation;
+        return metadata.getIndex((byte) 20, new Vector(1, 0, 1));
     }
 
-    public void setRightLegRotation(Vector rightLegRotation) {
-        this.rightLegRotation = rightLegRotation;
-        sendMetadataIndex(20);
+    public void setRightLegRotation(@NotNull Vector rightLegRotation) {
+        this.metadata.setIndex((byte) 20, Metadata.Rotation(rightLegRotation));
     }
 
-    private float getRotationX(Vector vector) {
-        return vector != null ? (float) vector.getX() : 0;
-    }
-
-    private float getRotationY(Vector vector) {
-        return vector != null ? (float) vector.getY() : 0;
-    }
-
-    private float getRotationZ(Vector vector) {
-        return vector != null ? (float) vector.getZ() : 0;
+    private byte getStateMeta() {
+        return metadata.getIndex((byte) 14, (byte) 0);
     }
 
     // Equipments

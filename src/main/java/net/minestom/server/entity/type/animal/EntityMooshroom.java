@@ -2,49 +2,25 @@ package net.minestom.server.entity.type.animal;
 
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.type.Animal;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Consumer;
-
 public class EntityMooshroom extends EntityCreature implements Animal {
-
-    private MooshroomType mooshroomType;
 
     public EntityMooshroom(Position spawnPosition) {
         super(EntityType.MOOSHROOM, spawnPosition);
         setBoundingBox(0.9f, 1.4f, 0.9f);
-        setMooshroomType(MooshroomType.RED);
-    }
-
-    @NotNull
-    @Override
-    public Consumer<BinaryWriter> getMetadataConsumer() {
-        return packet -> {
-            super.getMetadataConsumer().accept(packet);
-            fillMetadataIndex(packet, 16);
-        };
-    }
-
-    @Override
-    protected void fillMetadataIndex(@NotNull BinaryWriter packet, int index) {
-        super.fillMetadataIndex(packet, index);
-        if (index == 16) {
-            packet.writeByte((byte) 16);
-            packet.writeByte(METADATA_STRING);
-            packet.writeSizedString(mooshroomType.getIdentifier());
-        }
     }
 
     public MooshroomType getMooshroomType() {
-        return mooshroomType;
+        final String identifier = metadata.getIndex((byte) 16, "red");
+        return MooshroomType.fromIdentifier(identifier);
     }
 
-    public void setMooshroomType(MooshroomType mooshroomType) {
-        this.mooshroomType = mooshroomType;
-        sendMetadataIndex(16);
+    public void setMooshroomType(@NotNull MooshroomType mooshroomType) {
+        this.metadata.setIndex((byte) 16, Metadata.String(mooshroomType.getIdentifier()));
     }
 
     public enum MooshroomType {
@@ -60,6 +36,15 @@ public class EntityMooshroom extends EntityCreature implements Animal {
         @NotNull
         private String getIdentifier() {
             return identifier;
+        }
+
+        public static MooshroomType fromIdentifier(String identifier) {
+            if (identifier.equals("red")) {
+                return RED;
+            } else if (identifier.equals("brown")) {
+                return BROWN;
+            }
+            throw new IllegalArgumentException("Weird thing happened");
         }
     }
 }

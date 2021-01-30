@@ -2,18 +2,12 @@ package net.minestom.server.entity.type.monster;
 
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.type.Monster;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Consumer;
-
 public class EntityCreeper extends EntityCreature implements Monster {
-
-    private CreeperState creeperState = CreeperState.IDLE;
-    private boolean charged;
-    private boolean ignited;
 
     public EntityCreeper(Position spawnPosition) {
         super(EntityType.CREEPER, spawnPosition);
@@ -21,60 +15,29 @@ public class EntityCreeper extends EntityCreature implements Monster {
     }
 
     @NotNull
-    @Override
-    public Consumer<BinaryWriter> getMetadataConsumer() {
-        return packet -> {
-            super.getMetadataConsumer().accept(packet);
-            fillMetadataIndex(packet, 15);
-            fillMetadataIndex(packet, 16);
-            fillMetadataIndex(packet, 17);
-        };
-    }
-
-    @Override
-    protected void fillMetadataIndex(@NotNull BinaryWriter packet, int index) {
-        super.fillMetadataIndex(packet, index);
-        if (index == 15) {
-            packet.writeByte((byte) 15);
-            packet.writeByte(METADATA_VARINT);
-            packet.writeVarInt(creeperState.getState());
-        } else if (index == 16) {
-            packet.writeByte((byte) 16);
-            packet.writeByte(METADATA_BOOLEAN);
-            packet.writeBoolean(charged);
-        } else if (index == 17) {
-            packet.writeByte((byte) 17);
-            packet.writeByte(METADATA_BOOLEAN);
-            packet.writeBoolean(ignited);
-        }
-    }
-
-    @NotNull
     public CreeperState getCreeperState() {
-        return creeperState;
+        final int state = metadata.getIndex((byte) 15, -1);
+        return CreeperState.fromState(state);
     }
 
     public void setCreeperState(@NotNull CreeperState creeperState) {
-        this.creeperState = creeperState;
-        sendMetadataIndex(15);
+        this.metadata.setIndex((byte) 15, Metadata.VarInt(creeperState.getState()));
     }
 
     public boolean isCharged() {
-        return charged;
+        return metadata.getIndex((byte) 16, false);
     }
 
     public void setCharged(boolean charged) {
-        this.charged = charged;
-        sendMetadataIndex(16);
+        this.metadata.setIndex((byte) 16, Metadata.Boolean(charged));
     }
 
     public boolean isIgnited() {
-        return ignited;
+        return metadata.getIndex((byte) 17, false);
     }
 
     public void setIgnited(boolean ignited) {
-        this.ignited = ignited;
-        sendMetadataIndex(17);
+        this.metadata.setIndex((byte) 17, Metadata.Boolean(ignited));
     }
 
     public enum CreeperState {
@@ -89,6 +52,15 @@ public class EntityCreeper extends EntityCreature implements Monster {
 
         private int getState() {
             return state;
+        }
+
+        private static CreeperState fromState(int state) {
+            if (state == -1) {
+                return IDLE;
+            } else if (state == 1) {
+                return FUSE;
+            }
+            throw new IllegalArgumentException("Weird thing happened");
         }
     }
 }
