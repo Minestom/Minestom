@@ -1,41 +1,17 @@
 package net.minestom.server.entity.type.projectile;
 
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.ObjectEntity;
 import net.minestom.server.entity.type.Projectile;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.binary.BinaryWriter;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Consumer;
 
 public class EntityEyeOfEnder extends ObjectEntity implements Projectile {
 
-    private ItemStack itemStack;
-
     public EntityEyeOfEnder(Position spawnPosition) {
         super(EntityType.EYE_OF_ENDER, spawnPosition);
-    }
-
-    @NotNull
-    @Override
-    public Consumer<BinaryWriter> getMetadataConsumer() {
-        return packet -> {
-            super.getMetadataConsumer().accept(packet);
-            fillMetadataIndex(packet, 7);
-        };
-    }
-
-    @Override
-    protected void fillMetadataIndex(@NotNull BinaryWriter packet, int index) {
-        super.fillMetadataIndex(packet, index);
-        if (index == 7) {
-            packet.writeByte((byte) 7);
-            packet.writeByte(METADATA_SLOT);
-            packet.writeItemStack(itemStack);
-        }
     }
 
 
@@ -45,7 +21,7 @@ public class EntityEyeOfEnder extends ObjectEntity implements Projectile {
      * @return the item
      */
     public ItemStack getItemStack() {
-        return itemStack;
+        return metadata.getIndex((byte) 7, ItemStack.getAirItem());
     }
 
     /**
@@ -56,8 +32,7 @@ public class EntityEyeOfEnder extends ObjectEntity implements Projectile {
      * @param itemStack the new item stack
      */
     public void setItemStack(ItemStack itemStack) {
-        this.itemStack = itemStack;
-        sendMetadataIndex(7);
+        this.metadata.setIndex((byte) 7, Metadata.Slot(itemStack));
     }
 
     @Override

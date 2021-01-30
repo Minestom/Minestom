@@ -2,39 +2,15 @@ package net.minestom.server.entity.type.ambient;
 
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.type.Animal;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.binary.BinaryWriter;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Consumer;
 
 public class EntityBat extends EntityCreature implements Animal {
-
-    private boolean hanging;
 
     public EntityBat(Position spawnPosition) {
         super(EntityType.BAT, spawnPosition);
         setBoundingBox(0.5f, 0.9f, 0.5f);
-    }
-
-    @NotNull
-    @Override
-    public Consumer<BinaryWriter> getMetadataConsumer() {
-        return packet -> {
-            super.getMetadataConsumer().accept(packet);
-            fillMetadataIndex(packet, 15);
-        };
-    }
-
-    @Override
-    protected void fillMetadataIndex(@NotNull BinaryWriter packet, int index) {
-        super.fillMetadataIndex(packet, index);
-        if (index == 15) {
-            packet.writeByte((byte) 15);
-            packet.writeByte(METADATA_BYTE);
-            packet.writeByte((byte) (hanging ? 1 : 0));
-        }
     }
 
     /**
@@ -43,7 +19,7 @@ public class EntityBat extends EntityCreature implements Animal {
      * @return true if the bat is hanging, false otherwise
      */
     public boolean isHanging() {
-        return hanging;
+        return metadata.getIndex((byte) 15, 0) == 1;
     }
 
     /**
@@ -52,6 +28,6 @@ public class EntityBat extends EntityCreature implements Animal {
      * @param hanging true to make the bat hanging, false otherwise
      */
     public void setHanging(boolean hanging) {
-        this.hanging = hanging;
+        this.metadata.setIndex((byte) 15, Metadata.Byte((byte) (hanging ? 1 : 0)));
     }
 }

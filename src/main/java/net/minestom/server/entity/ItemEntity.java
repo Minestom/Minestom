@@ -6,7 +6,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -14,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
-import java.util.function.Consumer;
 
 /**
  * Represents an item on the ground.
@@ -42,7 +40,7 @@ public class ItemEntity extends ObjectEntity {
 
     public ItemEntity(@NotNull ItemStack itemStack, @NotNull Position spawnPosition) {
         super(EntityType.ITEM, spawnPosition);
-        this.itemStack = itemStack;
+        setItemStack(itemStack);
         setBoundingBox(0.25f, 0.25f, 0.25f);
     }
 
@@ -129,26 +127,6 @@ public class ItemEntity extends ObjectEntity {
         this.spawnTime = System.currentTimeMillis();
     }
 
-    @NotNull
-    @Override
-    public Consumer<BinaryWriter> getMetadataConsumer() {
-        return packet -> {
-            super.getMetadataConsumer().accept(packet);
-            fillMetadataIndex(packet, 7);
-        };
-    }
-
-    @Override
-    protected void fillMetadataIndex(@NotNull BinaryWriter packet, int index) {
-        super.fillMetadataIndex(packet, index);
-        if (index == 7) {
-            packet.writeByte((byte) 7);
-            packet.writeByte(METADATA_SLOT);
-            packet.writeItemStack(itemStack);
-        }
-
-    }
-
     @Override
     public int getObjectData() {
         return 1;
@@ -159,6 +137,7 @@ public class ItemEntity extends ObjectEntity {
      *
      * @return the item stack
      */
+    @NotNull
     public ItemStack getItemStack() {
         return itemStack;
     }
@@ -168,9 +147,9 @@ public class ItemEntity extends ObjectEntity {
      *
      * @param itemStack the item stack
      */
-    public void setItemStack(ItemStack itemStack) {
+    public void setItemStack(@NotNull ItemStack itemStack) {
         this.itemStack = itemStack;
-        sendMetadataIndex(7); // Refresh the ItemStack for viewers
+        this.metadata.setIndex((byte) 7, Metadata.Slot(itemStack));
     }
 
     /**

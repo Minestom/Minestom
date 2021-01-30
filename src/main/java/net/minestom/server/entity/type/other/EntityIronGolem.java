@@ -2,47 +2,22 @@ package net.minestom.server.entity.type.other;
 
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.type.Constructable;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.binary.BinaryWriter;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Consumer;
 
 public class EntityIronGolem extends EntityCreature implements Constructable {
-
-    private boolean playerCreated;
 
     public EntityIronGolem(Position spawnPosition) {
         super(EntityType.IRON_GOLEM, spawnPosition);
         setBoundingBox(1.4f, 2.7f, 1.4f);
     }
 
-    @NotNull
-    @Override
-    public Consumer<BinaryWriter> getMetadataConsumer() {
-        return packet -> {
-            super.getMetadataConsumer().accept(packet);
-            fillMetadataIndex(packet, 15);
-        };
-    }
-
-    @Override
-    protected void fillMetadataIndex(@NotNull BinaryWriter packet, int index) {
-        super.fillMetadataIndex(packet, index);
-        if (index == 15) {
-            packet.writeByte((byte) 15);
-            packet.writeByte(METADATA_BYTE);
-            packet.writeByte((byte) (playerCreated ? 1 : 0));
-        }
-    }
-
     public boolean isPlayerCreated() {
-        return playerCreated;
+        return metadata.getIndex((byte) 15, 0) == 0x01;
     }
 
     public void setPlayerCreated(boolean playerCreated) {
-        this.playerCreated = playerCreated;
-        sendMetadataIndex(15);
+        this.metadata.setIndex((byte) 15, Metadata.Byte((byte) (playerCreated ? 0x01 : 0x00)));
     }
 }
