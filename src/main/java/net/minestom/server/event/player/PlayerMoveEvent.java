@@ -11,13 +11,25 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PlayerMoveEvent extends PlayerEvent implements CancellableEvent {
 
+    private final Position currentPosition;
     private Position newPosition;
 
     private boolean cancelled;
 
     public PlayerMoveEvent(@NotNull Player player, @NotNull Position newPosition) {
         super(player);
+        this.currentPosition = player.getPosition();
         this.newPosition = newPosition;
+    }
+
+    /**
+     * Gets current position of the player.
+     *
+     * @return the current position
+     */
+    @NotNull
+    public Position getCurrentPosition() {
+        return currentPosition;
     }
 
     /**
