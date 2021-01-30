@@ -22,15 +22,15 @@ public class ChangeGameStatePacket implements ServerPacket {
     }
 
     public enum Reason {
-        INVALID_BED,
+        NO_RESPAWN_BLOCK,
         END_RAINING,
         BEGIN_RAINING,
         CHANGE_GAMEMODE,
-        EXIT_END,
-        DEMO_MESSAGE,
-        ARROW_HITTING_PLAYER,
-        FADE_VALUE,
-        FADE_TIME,
+        WIN_GAME,
+        DEMO_EVENT,
+        ARROW_HIT_PLAYER,
+        RAIN_LEVEL_CHANGE,
+        THUNDER_LEVEL_CHANGE,
         PLAY_PUFFERFISH_STING_SOUND,
         PLAYER_ELDER_GUARDIAN_MOB_APPEARANCE,
         ENABLE_RESPAWN_SCREEN
