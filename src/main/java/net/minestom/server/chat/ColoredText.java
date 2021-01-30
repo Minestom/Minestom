@@ -69,7 +69,7 @@ public class ColoredText extends JsonMessage {
      */
     @NotNull
     public static ColoredText ofLegacy(@NotNull String message, char colorChar) {
-        final String legacy = toFormat(message, colorChar);
+        final String legacy = legacyToFormat(message, colorChar);
         return of(legacy);
     }
 
@@ -107,7 +107,7 @@ public class ColoredText extends JsonMessage {
      */
     @NotNull
     public ColoredText appendLegacy(@NotNull String message, char colorChar) {
-        final String legacy = toFormat(message, colorChar);
+        final String legacy = legacyToFormat(message, colorChar);
         return of(legacy);
     }
 
@@ -327,7 +327,7 @@ public class ColoredText extends JsonMessage {
      * @return the converted legacy text
      */
     @NotNull
-    private static String toFormat(@NotNull String message, char colorChar) {
+    private static String legacyToFormat(@NotNull String message, char colorChar) {
         StringBuilder result = new StringBuilder();
 
         for (int i = 0; i < message.length(); i++) {
