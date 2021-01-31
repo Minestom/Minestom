@@ -203,10 +203,12 @@ public class Metadata {
 
         @Override
         public void write(@NotNull BinaryWriter writer) {
+            writer.writeVarInt(type);
+
             final boolean present = value != null;
             writer.writeBoolean(present);
             if (present) {
-                super.write(writer);
+                this.valueWriter.accept(writer);
             }
         }
     }
