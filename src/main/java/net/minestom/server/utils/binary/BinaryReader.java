@@ -18,6 +18,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTReader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 /**
@@ -94,7 +95,7 @@ public class BinaryReader extends InputStream {
                 "String length (" + length + ") was higher than the max length of " + maxLength);
 
         final byte[] bytes = readBytes(length);
-        return new String(bytes);
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 
     public byte[] readBytes(int length) {
