@@ -87,6 +87,16 @@ public class Metadata {
         });
     }
 
+    public static Value<int[]> VillagerData(int villagerType,
+                                            int villagerProfession,
+                                            int level) {
+        return new Value<>(TYPE_VILLAGERDATA, new int[]{villagerType, villagerProfession, level}, writer -> {
+            writer.writeVarInt(villagerType);
+            writer.writeVarInt(villagerProfession);
+            writer.writeVarInt(level);
+        });
+    }
+
     public static Value<Entity.Pose> Pose(@NotNull Entity.Pose value) {
         return new Value<>(TYPE_POSE, value, writer -> writer.writeVarInt(value.ordinal()));
     }
