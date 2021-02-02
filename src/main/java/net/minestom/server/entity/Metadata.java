@@ -10,6 +10,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -43,9 +44,12 @@ public class Metadata {
     }
 
     public static Value<JsonMessage> OptChat(@Nullable JsonMessage value) {
-        return new OptionalValue<>(TYPE_OPTCHAT, value, writer -> {
-            assert value != null;
-            writer.writeSizedString(value.toString());
+        return new Value<>(TYPE_OPTCHAT, value, writer -> {
+            final boolean present = value != null;
+            writer.writeBoolean(present);
+            if (present) {
+                writer.writeSizedString(value.toString());
+            }
         });
     }
 
@@ -70,9 +74,12 @@ public class Metadata {
     }
 
     public static Value<BlockPosition> OptPosition(@Nullable BlockPosition value) {
-        return new OptionalValue<>(TYPE_OPTPOSITION, value, writer -> {
-            assert value != null;
-            writer.writeBlockPosition(value);
+        return new Value<>(TYPE_OPTPOSITION, value, writer -> {
+            final boolean present = value != null;
+            writer.writeBoolean(present);
+            if (present) {
+                writer.writeBlockPosition(value);
+            }
         });
     }
 
@@ -81,9 +88,25 @@ public class Metadata {
     }
 
     public static Value<UUID> OptUUID(@Nullable UUID value) {
-        return new OptionalValue<>(TYPE_OPTUUID, value, writer -> {
-            assert value != null;
-            writer.writeUuid(value);
+        return new Value<>(TYPE_OPTUUID, value, writer -> {
+            final boolean present = value != null;
+            writer.writeBoolean(present);
+            if (present) {
+                writer.writeUuid(value);
+            }
+        });
+    }
+
+    public static Value<Integer> OptBlockID(@Nullable Integer value) {
+        return new Value<>(TYPE_OPTBLOCKID, value, writer -> {
+            final boolean present = value != null;
+            writer.writeVarInt(present ? value : 0);
+        });
+    }
+
+    public static Value<NBT> NBT(@NotNull NBT nbt) {
+        return new Value<>(TYPE_NBT, nbt, writer -> {
+            writer.writeNBT("", nbt);
         });
     }
 
@@ -94,6 +117,13 @@ public class Metadata {
             writer.writeVarInt(villagerType);
             writer.writeVarInt(villagerProfession);
             writer.writeVarInt(level);
+        });
+    }
+
+    public static Value<Integer> OptVarInt(@Nullable Integer value) {
+        return new Value<>(TYPE_OPTVARINT, value, writer -> {
+            final boolean present = value != null;
+            writer.writeVarInt(present ? value + 1 : 0);
         });
     }
 
@@ -206,7 +236,7 @@ public class Metadata {
         }
     }
 
-    private static class OptionalValue<T> extends Value<T> {
+    /*private static class OptionalValue<T> extends Value<T> {
         private OptionalValue(int type, T value, @NotNull Consumer<BinaryWriter> valueWriter) {
             super(type, value, valueWriter);
         }
@@ -221,6 +251,6 @@ public class Metadata {
                 this.valueWriter.accept(writer);
             }
         }
-    }
+    }*/
 
 }
