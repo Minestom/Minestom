@@ -236,21 +236,4 @@ public class Metadata {
         }
     }
 
-    /*private static class OptionalValue<T> extends Value<T> {
-        private OptionalValue(int type, T value, @NotNull Consumer<BinaryWriter> valueWriter) {
-            super(type, value, valueWriter);
-        }
-
-        @Override
-        public void write(@NotNull BinaryWriter writer) {
-            writer.writeVarInt(type);
-
-            final boolean present = value != null;
-            writer.writeBoolean(present);
-            if (present) {
-                this.valueWriter.accept(writer);
-            }
-        }
-    }*/
-
 }
