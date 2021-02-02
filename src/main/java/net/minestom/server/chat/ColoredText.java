@@ -178,7 +178,7 @@ public class ColoredText extends JsonMessage {
             final Character p = i == 0 ? null : message.charAt(i - 1);
             // Current char
             final char c = message.charAt(i);
-            if ((p == null || (p != '/')) && c == '{' && !inFormat) {
+            if (c == '{' && !inFormat) {
 
                 formatEnd = formatEnd > 0 ? formatEnd + 1 : formatEnd;
                 final String rawMessage = message.substring(formatEnd, i);
@@ -189,7 +189,7 @@ public class ColoredText extends JsonMessage {
                 inFormat = true;
                 formatStart = i;
                 continue;
-            } else if ((p == null || (p != '/')) && c == '}' && inFormat) {
+            } else if (c == '}' && inFormat) {
                 // Represent the custom format between the brackets
                 final String formatString = message.substring(formatStart + 1, i);
                 if (formatString.isEmpty())
