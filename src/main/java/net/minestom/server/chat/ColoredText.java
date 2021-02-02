@@ -19,9 +19,15 @@ import java.util.regex.Pattern;
  */
 public class ColoredText extends JsonMessage {
 
+    private static final char SEPARATOR_START = '{';
+    private static final char SEPARATOR_END = '}';
+    private static final String COLOR_PREFIX = "#";
+    private static final String TRANSLATABLE_PREFIX = "@";
+    private static final String KEYBIND_PREFIX = "&";
+
     /**
-     * The raw text StringBuilder
-     * Its a single StringBuilder instance for easier and faster concenation
+     * The raw text StringBuilder.
+     * Its a single StringBuilder instance for easier and faster concatenation.
      */
     private final StringBuilder message = new StringBuilder();
 
@@ -178,7 +184,7 @@ public class ColoredText extends JsonMessage {
             final Character p = i == 0 ? null : message.charAt(i - 1);
             // Current char
             final char c = message.charAt(i);
-            if (c == '{' && !inFormat) {
+            if (c == SEPARATOR_START && !inFormat) {
 
                 formatEnd = formatEnd > 0 ? formatEnd + 1 : formatEnd;
                 final String rawMessage = message.substring(formatEnd, i);
@@ -189,7 +195,7 @@ public class ColoredText extends JsonMessage {
                 inFormat = true;
                 formatStart = i;
                 continue;
-            } else if (c == '}' && inFormat) {
+            } else if (c == SEPARATOR_END && inFormat) {
                 // Represent the custom format between the brackets
                 final String formatString = message.substring(formatStart + 1, i);
                 if (formatString.isEmpty())
@@ -200,13 +206,13 @@ public class ColoredText extends JsonMessage {
                 formatEnd = i;
 
                 // Color component
-                if (formatString.startsWith("#")) {
+                if (formatString.startsWith(COLOR_PREFIX)) {
                     // Remove the first # character to get code
                     final String colorCode = formatString.substring(1);
                     final ChatColor color = ChatColor.fromName(colorCode);
                     if (color == ChatColor.NO_COLOR) {
                         // Use rgb formatting (#ffffff)
-                        currentColor = "#" + colorCode;
+                        currentColor = COLOR_PREFIX + colorCode;
                     } else if (color.isSpecial()) {
                         // Check for special color (reset/bold/etc...)
                         if (color == ChatColor.RESET) {
@@ -231,7 +237,7 @@ public class ColoredText extends JsonMessage {
                     continue;
                 }
                 // Translatable component
-                if (formatString.startsWith("@")) {
+                if (formatString.startsWith(TRANSLATABLE_PREFIX)) {
                     final String translatableCode = formatString.substring(1);
                     final boolean hasArgs = translatableCode.contains(",");
                     if (!hasArgs) {
@@ -258,7 +264,7 @@ public class ColoredText extends JsonMessage {
                     continue;
                 }
                 // Keybind component
-                if (formatString.startsWith("&")) {
+                if (formatString.startsWith(KEYBIND_PREFIX)) {
                     // ex: {&key.drop}
                     final String keybindCode = formatString.substring(1);
                     objects.add(getMessagePart(MessageType.KEYBIND, keybindCode, currentColor, specialComponentContainer));
