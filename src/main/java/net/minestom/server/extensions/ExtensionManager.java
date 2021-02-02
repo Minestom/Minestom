@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixins;
+import org.spongepowered.asm.service.ServiceNotAvailableError;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -499,8 +500,13 @@ public class ExtensionManager {
                 }
                 if (!extension.getMixinConfig().isEmpty()) {
                     final String mixinConfigFile = extension.getMixinConfig();
-                    Mixins.addConfiguration(mixinConfigFile);
-                    LOGGER.info("Found mixin in extension {}: {}", extension.getName(), mixinConfigFile);
+                    try {
+                        Mixins.addConfiguration(mixinConfigFile);
+                        LOGGER.info("Found mixin in extension {}: {}", extension.getName(), mixinConfigFile);
+                    } catch (ServiceNotAvailableError e) {
+                        MinecraftServer.getExceptionManager().handleException(e);
+                        LOGGER.error("Could not load Mixin configuration: "+mixinConfigFile);
+                    }
                 }
             } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(e);
