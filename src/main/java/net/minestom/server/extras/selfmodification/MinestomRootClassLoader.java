@@ -65,6 +65,11 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
     // TODO: priorities?
     private final List<CodeModifier> modifiers = new LinkedList<>();
 
+    /**
+     * List of already loaded code modifier class names. This prevents loading the same class twice.
+     */
+    private final Set<String> alreadyLoadedCodeModifiers = new HashSet<>();
+
     private MinestomRootClassLoader(ClassLoader parent) {
         super("Minestom Root ClassLoader", extractURLsFromClasspath(), parent);
         asmClassLoader = newChild(new URL[0]);
@@ -246,6 +251,9 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
     }
 
     public void loadModifier(File[] originFiles, String codeModifierClass) {
+        if(alreadyLoadedCodeModifiers.contains(codeModifierClass)) {
+            return;
+        }
         URL[] urls = new URL[originFiles.length];
         try {
             for (int i = 0; i < originFiles.length; i++) {
@@ -258,6 +266,7 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
                 synchronized (modifiers) {
                     LOGGER.warn("Added Code modifier: {}", modifier);
                     addCodeModifier(modifier);
+                    alreadyLoadedCodeModifiers.add(codeModifierClass);
                 }
             }
         } catch (MalformedURLException | ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {

@@ -1,5 +1,6 @@
 package net.minestom.server;
 
+import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import net.minestom.server.extras.selfmodification.mixins.MixinCodeModifier;
 import net.minestom.server.extras.selfmodification.mixins.MixinServiceMinestom;
@@ -21,6 +22,8 @@ public final class Bootstrap {
             ClassLoader classLoader = MinestomRootClassLoader.getInstance();
             startMixin(args);
             MinestomRootClassLoader.getInstance().addCodeModifier(new MixinCodeModifier());
+
+            ExtensionManager.loadCodeModifiersEarly();
 
             MixinServiceMinestom.gotoPreinitPhase();
             // ensure extensions are loaded when starting the server

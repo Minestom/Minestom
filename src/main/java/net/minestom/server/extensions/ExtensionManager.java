@@ -27,6 +27,8 @@ import java.util.zip.ZipFile;
 
 public class ExtensionManager {
 
+    public final static String DISABLE_EARLY_LOAD_SYSTEM_KEY = "minestom.extension.disable_early_load";
+
     public final static Logger LOGGER = LoggerFactory.getLogger(ExtensionManager.class);
 
     private final static String INDEV_CLASSES_FOLDER = "minestom.extension.indevfolder.classes";
@@ -469,7 +471,7 @@ public class ExtensionManager {
     }
 
     @NotNull
-    public Map<String, URLClassLoader> getExtensionLoaders() {
+    public Map<String, MinestomExtensionClassLoader> getExtensionLoaders() {
         return new HashMap<>(extensionLoaders);
     }
 
@@ -485,6 +487,10 @@ public class ExtensionManager {
             return;
         }
         MinestomRootClassLoader modifiableClassLoader = (MinestomRootClassLoader) cl;
+        setupCodeModifiers(extensions, modifiableClassLoader);
+    }
+
+    private void setupCodeModifiers(@NotNull List<DiscoveredExtension> extensions, MinestomRootClassLoader modifiableClassLoader) {
         LOGGER.info("Start loading code modifiers...");
         for (DiscoveredExtension extension : extensions) {
             try {
@@ -663,5 +669,34 @@ public class ExtensionManager {
      */
     public void shutdown() {
         this.extensionList.forEach(this::unload);
+    }
+
+    /**
+     * Loads code modifiers early, that is before <code>MinecraftServer.init()</code> is called.
+     */
+    public static void loadCodeModifiersEarly() {
+        // allow users to disable early code modifier load
+        if("true".equalsIgnoreCase(System.getProperty(DISABLE_EARLY_LOAD_SYSTEM_KEY))) {
+            return;
+        }
+        LOGGER.info("Early load of code modifiers from extensions.");
+        ExtensionManager manager = new ExtensionManager();
+
+        // discover extensions that are present
+        List<DiscoveredExtension> discovered = manager.discoverExtensions();
+
+        // setup extension class loaders, so that Mixin can load the json configuration file correctly
+        for(DiscoveredExtension e : discovered) {
+            manager.setupClassLoader(e);
+        }
+
+        // setup code modifiers and mixins
+        manager.setupCodeModifiers(discovered, MinestomRootClassLoader.getInstance());
+
+        // setup is done, remove all extension classloaders
+        for(MinestomExtensionClassLoader extensionLoader : manager.getExtensionLoaders().values()) {
+            MinestomRootClassLoader.getInstance().removeChildInHierarchy(extensionLoader);
+        }
+        LOGGER.info("Early load of code modifiers from extensions done!");
     }
 }
