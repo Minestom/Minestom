@@ -32,8 +32,8 @@ public class ExtensionManager {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(ExtensionManager.class);
 
-    private final static String INDEV_CLASSES_FOLDER = "minestom.extension.indevfolder.classes";
-    private final static String INDEV_RESOURCES_FOLDER = "minestom.extension.indevfolder.resources";
+    public final static String INDEV_CLASSES_FOLDER = "minestom.extension.indevfolder.classes";
+    public final static String INDEV_RESOURCES_FOLDER = "minestom.extension.indevfolder.resources";
     private final static Gson GSON = new Gson();
 
     private final Map<String, MinestomExtensionClassLoader> extensionLoaders = new HashMap<>();
@@ -432,7 +432,7 @@ public class ExtensionManager {
     @NotNull
     public MinestomExtensionClassLoader newClassLoader(@NotNull DiscoveredExtension extension, @NotNull URL[] urls) {
         MinestomRootClassLoader root = MinestomRootClassLoader.getInstance();
-        MinestomExtensionClassLoader loader = new MinestomExtensionClassLoader(extension.getName(), urls, root);
+        MinestomExtensionClassLoader loader = new MinestomExtensionClassLoader(extension.getName(), extension.getEntrypoint(), urls, root);
         if (extension.getDependencies().length == 0) {
             // orphaned extension, we can insert it directly
             root.addChild(loader);
@@ -523,6 +523,10 @@ public class ExtensionManager {
     private void unload(Extension ext) {
         ext.preTerminate();
         ext.terminate();
+        // remove callbacks for this extension
+        MinecraftServer.getGlobalEventHandler().removeCallbacksOwnedByExtension(ext.getDescription().getName());
+        // TODO: more callback types
+
         ext.postTerminate();
         ext.unload();
 

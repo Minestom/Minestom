@@ -1,6 +1,7 @@
 package net.minestom.server.extras.selfmodification;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.extensions.ExtensionManager;
 import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashSet;
@@ -66,6 +68,12 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
     private final List<CodeModifier> modifiers = new LinkedList<>();
 
     /**
+     * Whether Minestom detected that it is running in a dev environment.
+     * Determined by the existence of the system property {@link ExtensionManager#INDEV_CLASSES_FOLDER}
+     */
+    private boolean inDevEnvironment = false;
+
+    /**
      * List of already loaded code modifier class names. This prevents loading the same class twice.
      */
     private final Set<String> alreadyLoadedCodeModifiers = new HashSet<>();
@@ -73,6 +81,7 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
     private MinestomRootClassLoader(ClassLoader parent) {
         super("Minestom Root ClassLoader", extractURLsFromClasspath(), parent);
         asmClassLoader = newChild(new URL[0]);
+        inDevEnvironment = System.getProperty(ExtensionManager.INDEV_CLASSES_FOLDER) != null;
     }
 
     public static MinestomRootClassLoader getInstance() {
@@ -184,6 +193,22 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
         if (name == null)
             throw new ClassNotFoundException();
         String path = name.replace(".", "/") + ".class";
+
+        if(inDevEnvironment) {
+            // check if the class to load is the entry point of the extension
+            boolean isMainExtensionClass = false;
+            for(MinestomExtensionClassLoader c : children) {
+                if(c.isMainExtensionClass(name)) {
+                    isMainExtensionClass = true;
+                    break;
+                }
+            }
+            if(isMainExtensionClass) { // entry point of the extension, force load through extension classloader
+                throw new ClassNotFoundException("The class "+name+" is the entry point of an extension. " +
+                        "Because we are in a dev environment, we force its load through its extension classloader, " +
+                        "even though the root classloader has access.");
+            }
+        }
         InputStream input = getResourceAsStream(path);
         if (input == null) {
             throw new ClassNotFoundException("Could not find resource " + path);
