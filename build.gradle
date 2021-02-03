@@ -160,7 +160,7 @@ dependencies {
         }
     }
 
-    implementation "com.github.Minestom:DependencyGetter:v1.0.1"
+    api "com.github.Minestom:DependencyGetter:v1.0.1"
 
     // LWJGL, for map rendering
     lwjglApi platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
