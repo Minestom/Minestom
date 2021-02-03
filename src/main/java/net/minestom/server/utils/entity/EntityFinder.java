@@ -247,6 +247,16 @@ public class EntityFinder {
         return null;
     }
 
+    @Nullable
+    public Player findFirstPlayer(@NotNull CommandSender sender) {
+        if (sender.isPlayer()) {
+            Player player = sender.asPlayer();
+            return findFirstPlayer(player.getInstance(), player);
+        } else {
+            return findFirstPlayer(null, null);
+        }
+    }
+
     public enum TargetSelector {
         NEAREST_PLAYER, RANDOM_PLAYER, ALL_PLAYERS, ALL_ENTITIES, SELF
     }
