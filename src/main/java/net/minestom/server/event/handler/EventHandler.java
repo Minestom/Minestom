@@ -6,11 +6,8 @@ import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.GlobalEventHandler;
-import net.minestom.server.extensions.ExtensionManager;
-import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -42,19 +39,6 @@ public interface EventHandler {
     Collection<EventCallback<?>> getExtensionCallbacks(String extension);
 
     /**
-     * Tries to know which extension created this callback, based on the classloader of the callback
-     * @param callback the callback to get the extension of
-     * @return <code>Optional.empty()</code> if no extension has been found, <code>Optional.of(&lt;name&gt;)</code> with 'name' being the extension name
-     */
-    static Optional<String> getExtensionOwningCallback(@NotNull EventCallback<?> callback) {
-        ClassLoader cl = callback.getClass().getClassLoader();
-        if(cl instanceof MinestomExtensionClassLoader) {
-            return Optional.of(((MinestomExtensionClassLoader) cl).getExtensionName());
-        }
-        return Optional.empty();
-    }
-
-    /**
      * Adds a new event callback for the specified type {@code eventClass}.
      *
      * @param eventClass    the event class
@@ -63,7 +47,7 @@ public interface EventHandler {
      * @return true if the callback collection changed as a result of the call
      */
     default <E extends Event> boolean addEventCallback(@NotNull Class<E> eventClass, @NotNull EventCallback<E> eventCallback) {
-        Optional<String> extensionSource = getExtensionOwningCallback(eventCallback);
+        Optional<String> extensionSource = MinestomRootClassLoader.findExtensionObjectOwner(eventCallback);
         extensionSource.ifPresent(s -> getExtensionCallbacks(s).add(eventCallback));
 
         Collection<EventCallback> callbacks = getEventCallbacks(eventClass);
@@ -80,7 +64,7 @@ public interface EventHandler {
      */
     default <E extends Event> boolean removeEventCallback(@NotNull Class<E> eventClass, @NotNull EventCallback<E> eventCallback) {
         Collection<EventCallback> callbacks = getEventCallbacks(eventClass);
-        Optional<String> extensionSource = getExtensionOwningCallback(eventCallback);
+        Optional<String> extensionSource = MinestomRootClassLoader.findExtensionObjectOwner(eventCallback);
         extensionSource.ifPresent(s -> getExtensionCallbacks(s).remove(eventCallback));
 
         return callbacks.remove(eventCallback);

@@ -1,6 +1,7 @@
 package net.minestom.server.extras.selfmodification;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.EventCallback;
 import net.minestom.server.extensions.ExtensionManager;
 import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.ClassReader;
@@ -17,10 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Class Loader that can modify class bytecode when they are loaded
@@ -312,5 +310,24 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
 
     public List<CodeModifier> getModifiers() {
         return modifiers;
+    }
+
+    /**
+     * Tries to know which extension created this object, based on the classloader of the object. This can only check that the class of the object has been loaded
+     * by an extension.
+     *
+     * While not perfect, this should detect any callback created extension code.
+     * It is possible this current version of the implementation might struggle with callbacks created through external
+     * libraries, but as libraries are loaded separately for each extension, this *should not*(tm) be a problem.
+     *
+     * @param obj the object to get the extension of
+     * @return <code>Optional.empty()</code> if no extension has been found, <code>Optional.of(&lt;name&gt;)</code> with 'name' being the extension name
+     */
+    public static Optional<String> findExtensionObjectOwner(@NotNull Object obj) {
+        ClassLoader cl = obj.getClass().getClassLoader();
+        if(cl instanceof MinestomExtensionClassLoader) {
+            return Optional.of(((MinestomExtensionClassLoader) cl).getExtensionName());
+        }
+        return Optional.empty();
     }
 }

@@ -524,7 +524,9 @@ public class ExtensionManager {
         ext.preTerminate();
         ext.terminate();
         // remove callbacks for this extension
-        MinecraftServer.getGlobalEventHandler().removeCallbacksOwnedByExtension(ext.getDescription().getName());
+        String extensionName = ext.getDescription().getName();
+        MinecraftServer.getGlobalEventHandler().removeCallbacksOwnedByExtension(extensionName);
+        MinecraftServer.getSchedulerManager().removeExtensionTasksOnUnload(extensionName);
         // TODO: more callback types
 
         ext.postTerminate();
