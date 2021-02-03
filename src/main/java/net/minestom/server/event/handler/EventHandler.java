@@ -6,6 +6,7 @@ import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.GlobalEventHandler;
+import net.minestom.server.extensions.IExtensionObserver;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +20,7 @@ import java.util.stream.Stream;
 /**
  * Represents an element which can have {@link Event} listeners assigned to it.
  */
-public interface EventHandler {
+public interface EventHandler extends IExtensionObserver {
 
     /**
      * Gets a {@link Map} containing all the listeners assigned to a specific {@link Event} type.
@@ -48,7 +49,10 @@ public interface EventHandler {
      */
     default <E extends Event> boolean addEventCallback(@NotNull Class<E> eventClass, @NotNull EventCallback<E> eventCallback) {
         Optional<String> extensionSource = MinestomRootClassLoader.findExtensionObjectOwner(eventCallback);
-        extensionSource.ifPresent(s -> getExtensionCallbacks(s).add(eventCallback));
+        extensionSource.ifPresent(name -> {
+            MinecraftServer.getExtensionManager().getExtension(name).observe(this);
+            getExtensionCallbacks(name).add(eventCallback);
+        });
 
         Collection<EventCallback> callbacks = getEventCallbacks(eventClass);
         return callbacks.add(eventCallback);
@@ -164,6 +168,11 @@ public interface EventHandler {
         for (EventCallback<E> eventCallback : eventCallbacks) {
             eventCallback.run(event);
         }
+    }
+
+    @Override
+    default void onExtensionUnload(String extensionName) {
+        removeCallbacksOwnedByExtension(extensionName);
     }
 
 }

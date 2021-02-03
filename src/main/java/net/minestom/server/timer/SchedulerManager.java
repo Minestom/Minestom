@@ -4,6 +4,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectCollection;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.extensions.Extension;
+import net.minestom.server.extensions.IExtensionObserver;
 import net.minestom.server.utils.thread.MinestomThread;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +26,7 @@ import java.util.stream.Collectors;
  * <p>
  * Shutdown tasks are built with {@link #buildShutdownTask(Runnable)} and are executed, as the name implies, when the server stops.
  */
-public final class SchedulerManager {
+public final class SchedulerManager implements IExtensionObserver {
 
     private static boolean instanced;
     // A counter for all normal tasks
@@ -188,6 +190,9 @@ public final class SchedulerManager {
     void onScheduleFromExtension(String owningExtension, Task task) {
         List<Task> scheduledForThisExtension = extensionTasks.computeIfAbsent(owningExtension, s -> new CopyOnWriteArrayList<>());
         scheduledForThisExtension.add(task);
+
+        Extension ext = MinecraftServer.getExtensionManager().getExtension(owningExtension);
+        ext.observe(this);
     }
 
     /**
@@ -198,6 +203,9 @@ public final class SchedulerManager {
     void onScheduleShutdownFromExtension(String owningExtension, Task task) {
         List<Task> scheduledForThisExtension = extensionShutdownTasks.computeIfAbsent(owningExtension, s -> new CopyOnWriteArrayList<>());
         scheduledForThisExtension.add(task);
+
+        Extension ext = MinecraftServer.getExtensionManager().getExtension(owningExtension);
+        ext.observe(this);
     }
 
     /**
@@ -225,5 +233,10 @@ public final class SchedulerManager {
             shutdownScheduledForThisExtension.removeAll(toCancel);
             shutdownTasks.values().removeAll(toCancel);
         }
+    }
+
+    @Override
+    public void onExtensionUnload(String extensionName) {
+        removeExtensionTasksOnUnload(extensionName);
     }
 }

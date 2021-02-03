@@ -1,11 +1,15 @@
 package improveextensions.unloadcallbacks;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.type.monster.EntityZombie;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.GlobalEventHandler;
+import net.minestom.server.event.entity.EntityTickEvent;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
+import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.TimeUnit;
 import org.junit.jupiter.api.Assertions;
 import org.opentest4j.AssertionFailedError;
@@ -18,6 +22,8 @@ public class UnloadCallbacksExtension extends Extension {
     private boolean ticked2 = false;
     private boolean tickedScheduledNonTransient = false;
     private boolean tickedScheduledTransient = false;
+    private boolean zombieTicked = false;
+    private boolean instanceTicked = false;
     private final EventCallback<InstanceTickEvent> callback = this::onTick;
 
     private void onTick(InstanceTickEvent e) {
@@ -31,6 +37,19 @@ public class UnloadCallbacksExtension extends Extension {
         globalEvents.addEventCallback(InstanceTickEvent.class, callback);
         // this one too
         globalEvents.addEventCallback(InstanceTickEvent.class, e -> ticked2 = true);
+
+        Instance instance = MinecraftServer.getInstanceManager().getInstances().stream().findFirst().orElseThrow();
+
+        // add an event callback on an instance
+        instance.addEventCallback(InstanceTickEvent.class, e -> instanceTicked = true);
+        instance.loadChunk(0,0);
+
+        // add an event callback on an entity
+        EntityZombie zombie = new EntityZombie(new Position(8,64,8) /* middle of chunk */);
+        zombie.addEventCallback(EntityTickEvent.class, e -> {
+            zombieTicked = true;
+        });
+        zombie.setInstance(instance);
 
         // this callback will be cancelled
         MinecraftServer.getSchedulerManager().buildTask(() -> {
@@ -58,10 +77,20 @@ public class UnloadCallbacksExtension extends Extension {
 
     @Override
     public void terminate() {
-        ticked1 = false;
-        ticked2 = false;
-        tickedScheduledNonTransient = false;
-        tickedScheduledTransient = false;
+        new Thread(() -> {
+            try {
+                // wait for complete termination of this extension
+                Thread.sleep(10);
+                ticked1 = false;
+                ticked2 = false;
+                tickedScheduledNonTransient = false;
+                tickedScheduledTransient = false;
+                instanceTicked = false;
+                zombieTicked = false;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
 
         AtomicBoolean executedDelayTaskAfterTerminate = new AtomicBoolean(false);
         // because terminate is called just before unscheduling and removing event callbacks,
@@ -79,6 +108,8 @@ public class UnloadCallbacksExtension extends Extension {
                 Assertions.assertFalse(ticked1, "ticked1 should be false because the callback has been unloaded");
                 Assertions.assertFalse(ticked2, "ticked2 should be false because the callback has been unloaded");
                 Assertions.assertFalse(tickedScheduledNonTransient, "tickedScheduledNonTransient should be false because the callback has been unloaded");
+                Assertions.assertFalse(zombieTicked, "zombieTicked should be false because the callback has been unloaded");
+                Assertions.assertFalse(instanceTicked, "instanceTicked should be false because the callback has been unloaded");
                 Assertions.assertTrue(tickedScheduledTransient, "tickedScheduledNonTransient should be true because the callback has NOT been unloaded");
                 Assertions.assertFalse(executedDelayTaskAfterTerminate.get(), "executedDelayTaskAfterTerminate should be false because the callback has been unloaded before executing");
                 System.out.println("All tests passed.");
