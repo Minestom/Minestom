@@ -1,0 +1,4 @@
+{
+  "entrypoint": "improveextensions.unloadextensiononstop.UnloadExtensionOnStop",
+  "name": "UnloadExtensionOnStop"
+}

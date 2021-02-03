@@ -24,7 +24,7 @@ public abstract class Extension {
 
     /**
      * Observers that will be notified of events related to this extension.
-     * Kept as WeakReference because entities can be observer, but could become candidate to be garbage-collected while
+     * Kept as WeakReference because entities can be observers, but could become candidate to be garbage-collected while
      * this extension holds a reference to it. A WeakReference makes sure this extension does not prevent the memory
      * from being cleaned up.
      */

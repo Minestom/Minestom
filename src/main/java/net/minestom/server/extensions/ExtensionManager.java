@@ -710,4 +710,17 @@ public class ExtensionManager {
         }
         LOGGER.info("Early load of code modifiers from extensions done!");
     }
+
+    /**
+     * Unloads all extensions
+     */
+    public void unloadAllExtensions() {
+        // copy names, as the extensions map will be modified via the calls to unload
+        Set<String> extensionNames = new HashSet<>(extensions.keySet());
+        for(String ext : extensionNames) {
+            if(extensions.containsKey(ext)) { // is still loaded? Because extensions can depend on one another, it might have already been unloaded
+                unloadExtension(ext);
+            }
+        }
+    }
 }
