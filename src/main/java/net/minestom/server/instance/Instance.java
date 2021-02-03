@@ -368,6 +368,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     /**
      * Changes the current time in the instance, from 0 to 24000.
      * <p>
+     * If the time is negative, the vanilla client will not move the sun.
+     * <p>
      * 0 = sunrise
      * 6000 = noon
      * 12000 = sunset
