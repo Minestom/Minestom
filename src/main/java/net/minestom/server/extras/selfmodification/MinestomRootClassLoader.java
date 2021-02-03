@@ -316,7 +316,7 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
      * Tries to know which extension created this object, based on the classloader of the object. This can only check that the class of the object has been loaded
      * by an extension.
      *
-     * While not perfect, this should detect any callback created extension code.
+     * While not perfect, this should detect any callback created via extension code.
      * It is possible this current version of the implementation might struggle with callbacks created through external
      * libraries, but as libraries are loaded separately for each extension, this *should not*(tm) be a problem.
      *
