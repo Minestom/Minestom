@@ -50,16 +50,6 @@ public interface EventHandler {
         ClassLoader cl = callback.getClass().getClassLoader();
         if(cl instanceof MinestomExtensionClassLoader) {
             return Optional.of(((MinestomExtensionClassLoader) cl).getExtensionName());
-        } else if(System.getProperty(ExtensionManager.INDEV_CLASSES_FOLDER) != null) { // in a dev environment, the extension will always be loaded with the root classloader
-            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-            // 0 -> getStackTrace
-            // 1 -> getExtensionOwningCallback
-            // 2 -> add/remove EventCallback
-            // 3 -> Potentially the extension
-            if(stackTrace.length >= 4) {
-                StackTraceElement potentialExtensionCall = stackTrace[3];
-                System.out.println(potentialExtensionCall.getClassLoaderName());
-            }
         }
         return Optional.empty();
     }
