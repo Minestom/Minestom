@@ -2,6 +2,8 @@ package net.minestom.server.utils.entity;
 
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
@@ -215,6 +217,16 @@ public class EntityFinder {
 
 
         return result;
+    }
+
+    @NotNull
+    public List<Entity> find(@NotNull CommandSender sender) {
+        if (sender.isPlayer()) {
+            Player player = sender.asPlayer();
+            return find(player.getInstance(), player);
+        } else {
+            return find(null, null);
+        }
     }
 
     /**
