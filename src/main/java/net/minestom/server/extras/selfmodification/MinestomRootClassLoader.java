@@ -275,15 +275,17 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
         return URLClassLoader.newInstance(urls, this);
     }
 
-    public void loadModifier(File[] originFiles, String codeModifierClass) {
+    /**
+     * Loads a code modifier.
+     * @param urls
+     * @param codeModifierClass
+     * @return whether the modifier has been loaded. Returns 'true' even if the code modifier is already loaded before calling this method
+     */
+    public boolean loadModifier(URL[] urls, String codeModifierClass) {
         if(alreadyLoadedCodeModifiers.contains(codeModifierClass)) {
-            return;
+            return true;
         }
-        URL[] urls = new URL[originFiles.length];
         try {
-            for (int i = 0; i < originFiles.length; i++) {
-                urls[i] = originFiles[i].toURI().toURL();
-            }
             URLClassLoader loader = newChild(urls);
             Class<?> modifierClass = loader.loadClass(codeModifierClass);
             if (CodeModifier.class.isAssignableFrom(modifierClass)) {
@@ -294,9 +296,15 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
                     alreadyLoadedCodeModifiers.add(codeModifierClass);
                 }
             }
-        } catch (MalformedURLException | ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
+            return true;
+        } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+            if(MinecraftServer.getExceptionManager() != null) {
+                MinecraftServer.getExceptionManager().handleException(e);
+            } else {
+                e.printStackTrace();
+            }
         }
+        return false;
     }
 
     public void addCodeModifier(CodeModifier modifier) {

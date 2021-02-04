@@ -5,10 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -93,11 +90,20 @@ public abstract class Extension {
         }
     }
 
+    /**
+     * If this extension registers code modifiers and/or mixins, are they loaded correctly?
+     */
+    public boolean areCodeModifiersAllLoadedCorrectly() {
+        return !getDescription().failedToLoadMixin && getDescription().getMissingCodeModifiers().isEmpty();
+    }
+
     public static class ExtensionDescription {
         private final String name;
         private final String version;
         private final List<String> authors;
         private final List<String> dependents = new ArrayList<>();
+        private final List<String> missingCodeModifiers = new LinkedList<>();
+        private final boolean failedToLoadMixin;
         private final DiscoveredExtension origin;
 
         ExtensionDescription(@NotNull String name, @NotNull String version, @NotNull List<String> authors, @NotNull DiscoveredExtension origin) {
@@ -105,6 +111,8 @@ public abstract class Extension {
             this.version = version;
             this.authors = authors;
             this.origin = origin;
+            failedToLoadMixin = origin.hasFailedToLoadMixin();
+            missingCodeModifiers.addAll(origin.getMissingCodeModifiers());
         }
 
         @NotNull
@@ -130,6 +138,16 @@ public abstract class Extension {
         @NotNull
         DiscoveredExtension getOrigin() {
             return origin;
+        }
+
+        @NotNull
+        public List<String> getMissingCodeModifiers() {
+            return missingCodeModifiers;
+        }
+
+        @NotNull
+        public boolean hasFailedToLoadMixin() {
+            return failedToLoadMixin;
         }
     }
 }

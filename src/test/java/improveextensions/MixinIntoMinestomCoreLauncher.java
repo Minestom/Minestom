@@ -11,6 +11,9 @@ import net.minestom.server.Bootstrap;
 
 // To test extension termination when the server quits:
 // -Dminestom.extension.indevfolder.classes=build/classes/java/test/ -Dminestom.extension.indevfolder.resources=build/resources/test/improveextensions/unloadonstop
+
+// To test report of failure when a mixin configuration cannot be loaded, or code modifiers are missing
+// -Dminestom.extension.indevfolder.classes=build/classes/java/test/ -Dminestom.extension.indevfolder.resources=build/resources/test/improveextensions/missingmodifiers
 public class MixinIntoMinestomCoreLauncher {
      public static void main(String[] args) {
             Bootstrap.bootstrap("demo.MainDemo", args);

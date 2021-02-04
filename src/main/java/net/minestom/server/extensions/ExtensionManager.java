@@ -13,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixins;
+import org.spongepowered.asm.mixin.throwables.MixinError;
+import org.spongepowered.asm.mixin.throwables.MixinException;
 import org.spongepowered.asm.service.ServiceNotAvailableError;
 
 import java.io.*;
@@ -496,20 +498,32 @@ public class ExtensionManager {
         for (DiscoveredExtension extension : extensions) {
             try {
                 for (String codeModifierClass : extension.getCodeModifiers()) {
-                    modifiableClassLoader.loadModifier(extension.files.toArray(new File[0]), codeModifierClass);
+                    boolean loaded = modifiableClassLoader.loadModifier(extension.files.toArray(new URL[0]), codeModifierClass);
+                    if(!loaded) {
+                        extension.addMissingCodeModifier(codeModifierClass);
+                    }
                 }
                 if (!extension.getMixinConfig().isEmpty()) {
                     final String mixinConfigFile = extension.getMixinConfig();
                     try {
                         Mixins.addConfiguration(mixinConfigFile);
                         LOGGER.info("Found mixin in extension {}: {}", extension.getName(), mixinConfigFile);
-                    } catch (ServiceNotAvailableError e) {
-                        MinecraftServer.getExceptionManager().handleException(e);
+                    } catch (ServiceNotAvailableError | MixinError | MixinException e) {
+                        if(MinecraftServer.getExceptionManager() != null) {
+                            MinecraftServer.getExceptionManager().handleException(e);
+                        } else {
+                            e.printStackTrace();
+                        }
                         LOGGER.error("Could not load Mixin configuration: "+mixinConfigFile);
+                        extension.setFailedToLoadMixinFlag();
                     }
                 }
             } catch (Exception e) {
-                MinecraftServer.getExceptionManager().handleException(e);
+                if(MinecraftServer.getExceptionManager() != null) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                } else {
+                    e.printStackTrace();
+                }
                 LOGGER.error("Failed to load code modifier for extension in files: " +
                         extension.files
                                 .stream()
