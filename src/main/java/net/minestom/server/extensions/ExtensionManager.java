@@ -2,6 +2,7 @@ package net.minestom.server.extensions;
 
 import com.google.gson.Gson;
 import net.minestom.dependencies.DependencyGetter;
+import net.minestom.dependencies.ResolvedDependency;
 import net.minestom.dependencies.maven.MavenRepository;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
@@ -402,13 +403,13 @@ public class ExtensionManager {
 
                 for (var artifact : externalDependencies.artifacts) {
                     var resolved = getter.get(artifact, dependenciesFolder);
-                    addDependencyFile(resolved.getContentsLocation(), ext);
+                    addDependencyFile(resolved, ext);
                     LOGGER.trace("Dependency of extension {}: {}", ext.getName(), resolved);
                 }
 
                 for (var dependencyName : ext.getDependencies()) {
                     var resolved = getter.get(dependencyName, dependenciesFolder);
-                    addDependencyFile(resolved.getContentsLocation(), ext);
+                    addDependencyFile(resolved, ext);
                     LOGGER.trace("Dependency of extension {}: {}", ext.getName(), resolved);
                 }
             } catch (Exception e) {
@@ -420,9 +421,19 @@ public class ExtensionManager {
         }
     }
 
-    private void addDependencyFile(URL dependency, DiscoveredExtension extension) {
-        extension.files.add(dependency);
-        LOGGER.trace("Added dependency {} to extension {} classpath", dependency.toExternalForm(), extension.getName());
+    private void addDependencyFile(ResolvedDependency dependency, DiscoveredExtension extension) {
+        URL location = dependency.getContentsLocation();
+        extension.files.add(location);
+        LOGGER.trace("Added dependency {} to extension {} classpath", location.toExternalForm(), extension.getName());
+
+        // recurse to add full dependency tree
+        if(!dependency.getSubdependencies().isEmpty()) {
+            LOGGER.trace("Dependency {} has subdependencies, adding...", location.toExternalForm());
+            for(ResolvedDependency sub : dependency.getSubdependencies()) {
+                addDependencyFile(sub, extension);
+            }
+            LOGGER.trace("Dependency {} has had its subdependencies added.", location.toExternalForm());
+        }
     }
 
     /**

@@ -105,6 +105,9 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.2')
 
+    // Only here to ensure J9 module support for extensions and our classloaders
+    testCompileOnly "org.mockito:mockito-core:2.28.2"
+
     // Netty
     api 'io.netty:netty-handler:4.1.58.Final'
     api 'io.netty:netty-codec:4.1.58.Final'
