@@ -62,8 +62,8 @@ public class UnloadCallbacksExtension extends Extension {
         }).repeat(100L, TimeUnit.MILLISECOND).makeTransient().schedule();
 
         try {
-            Assertions.assertTrue(MinestomRootClassLoader.findExtensionObjectOwner(callback).isPresent());
-            Assertions.assertEquals("UnloadCallbacksExtension", MinestomRootClassLoader.findExtensionObjectOwner(callback).get());
+            Assertions.assertNotNull(MinestomRootClassLoader.findExtensionObjectOwner(callback));
+            Assertions.assertEquals("UnloadCallbacksExtension", MinestomRootClassLoader.findExtensionObjectOwner(callback));
         } catch (AssertionFailedError e) {
             e.printStackTrace();
             System.exit(-1);

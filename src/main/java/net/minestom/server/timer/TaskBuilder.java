@@ -56,7 +56,7 @@ public class TaskBuilder {
         this.runnable = runnable;
         this.shutdown = shutdown;
         this.isTransient = false;
-        this.owningExtension = MinestomRootClassLoader.findExtensionObjectOwner(runnable).orElse(null);
+        this.owningExtension = MinestomRootClassLoader.findExtensionObjectOwner(runnable);
     }
 
     /**

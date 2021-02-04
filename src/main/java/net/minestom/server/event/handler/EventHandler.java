@@ -48,11 +48,11 @@ public interface EventHandler extends IExtensionObserver {
      * @return true if the callback collection changed as a result of the call
      */
     default <E extends Event> boolean addEventCallback(@NotNull Class<E> eventClass, @NotNull EventCallback<E> eventCallback) {
-        Optional<String> extensionSource = MinestomRootClassLoader.findExtensionObjectOwner(eventCallback);
-        extensionSource.ifPresent(name -> {
-            MinecraftServer.getExtensionManager().getExtension(name).observe(this);
-            getExtensionCallbacks(name).add(eventCallback);
-        });
+        String extensionSource = MinestomRootClassLoader.findExtensionObjectOwner(eventCallback);
+        if(extensionSource != null) {
+            MinecraftServer.getExtensionManager().getExtension(extensionSource).observe(this);
+            getExtensionCallbacks(extensionSource).add(eventCallback);
+        };
 
         Collection<EventCallback> callbacks = getEventCallbacks(eventClass);
         return callbacks.add(eventCallback);
@@ -68,8 +68,10 @@ public interface EventHandler extends IExtensionObserver {
      */
     default <E extends Event> boolean removeEventCallback(@NotNull Class<E> eventClass, @NotNull EventCallback<E> eventCallback) {
         Collection<EventCallback> callbacks = getEventCallbacks(eventClass);
-        Optional<String> extensionSource = MinestomRootClassLoader.findExtensionObjectOwner(eventCallback);
-        extensionSource.ifPresent(s -> getExtensionCallbacks(s).remove(eventCallback));
+        String extensionSource = MinestomRootClassLoader.findExtensionObjectOwner(eventCallback);
+        if(extensionSource != null) {
+            getExtensionCallbacks(extensionSource).remove(eventCallback);
+        };
 
         return callbacks.remove(eventCallback);
     }

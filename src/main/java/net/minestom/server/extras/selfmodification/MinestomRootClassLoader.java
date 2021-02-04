@@ -1,9 +1,9 @@
 package net.minestom.server.extras.selfmodification;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.event.EventCallback;
 import net.minestom.server.extensions.ExtensionManager;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
@@ -15,10 +15,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Class Loader that can modify class bytecode when they are loaded
@@ -321,13 +323,14 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
      * libraries, but as libraries are loaded separately for each extension, this *should not*(tm) be a problem.
      *
      * @param obj the object to get the extension of
-     * @return <code>Optional.empty()</code> if no extension has been found, <code>Optional.of(&lt;name&gt;)</code> with 'name' being the extension name
+     * @return <code>null</code> if no extension has been found, otherwise the extension name
      */
-    public static Optional<String> findExtensionObjectOwner(@NotNull Object obj) {
+    @Nullable
+    public static String findExtensionObjectOwner(@NotNull Object obj) {
         ClassLoader cl = obj.getClass().getClassLoader();
         if(cl instanceof MinestomExtensionClassLoader) {
-            return Optional.of(((MinestomExtensionClassLoader) cl).getExtensionName());
+            return ((MinestomExtensionClassLoader) cl).getExtensionName();
         }
-        return Optional.empty();
+        return null;
     }
 }
