@@ -118,7 +118,7 @@ public abstract class EntityCreature extends LivingEntity implements NavigableEn
 
             SpawnLivingEntityPacket spawnLivingEntityPacket = new SpawnLivingEntityPacket();
             spawnLivingEntityPacket.entityId = getEntityId();
-            spawnLivingEntityPacket.entityUuid = generateUuid();
+            spawnLivingEntityPacket.entityUuid = getUuid();
             spawnLivingEntityPacket.entityType = getEntityType().getId();
             spawnLivingEntityPacket.position = getPosition();
             spawnLivingEntityPacket.headPitch = getPosition().getYaw();

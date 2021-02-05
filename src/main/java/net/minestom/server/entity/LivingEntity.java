@@ -536,7 +536,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
             Player player = (Player) this;
             member = player.getUsername();
         } else {
-            member = this.generateUuid().toString();
+            member = this.getUuid().toString();
         }
 
         if (this.team != null) {

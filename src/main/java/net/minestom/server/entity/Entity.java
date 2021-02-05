@@ -126,12 +126,15 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     // list of scheduled tasks to be executed during the next entity tick
     protected final Queue<Consumer<Entity>> nextTick = Queues.newConcurrentLinkedQueue();
 
+    protected UUID uuid;
+
     // Tick related
     private long ticks;
     private final EntityTickEvent tickEvent = new EntityTickEvent(this);
 
     public Entity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
         this.id = generateId();
+        this.uuid = generateUuid();
         this.entityType = entityType;
         this.position = spawnPosition.clone();
         this.lastX = spawnPosition.getX();
@@ -200,8 +203,17 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      *
      * @return The UUID generated on the spot.
      */
-    public UUID generateUuid() {
+    protected UUID generateUuid() {
         return new UUID(getEntityId(), getEntityId());
+    }
+
+    /**
+     * Generates a UUID from the entity ID. May be CPU expensive in large operations.
+     *
+     * @return The UUID generated on the spot.
+     */
+    public UUID getUuid() {
+        return uuid;
     }
 
     public boolean isOnGround() {
