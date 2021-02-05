@@ -1,5 +1,6 @@
 package net.minestom.server.inventory.click;
 
+import com.extollit.num.FastMath;
 import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import it.unimi.dsi.fastutil.ints.Int2ObjectFunction;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
@@ -100,7 +101,7 @@ public class InventoryClickProcessor {
             }
         } else {
             if (cursor.isAir()) {
-                final int amount = (int) Math.ceil((double) clicked.getAmount() / 2d);
+                final int amount = FastMath.ceil((double) clicked.getAmount() / 2d);
                 resultCursor = clicked.clone();
                 resultCursor = cursorRule.apply(resultCursor, amount);
 

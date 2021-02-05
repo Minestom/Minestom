@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import com.extollit.num.FastMath;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.ExplosionPacket;
 import net.minestom.server.utils.BlockPosition;
@@ -70,9 +71,9 @@ public abstract class Explosion {
         for (int i = 0; i < blocks.size(); i++) {
             final BlockPosition pos = blocks.get(i);
             instance.setBlock(pos, Block.AIR);
-            final byte x = (byte) (pos.getX() - Math.floor(getCenterX()));
-            final byte y = (byte) (pos.getY() - Math.floor(getCenterY()));
-            final byte z = (byte) (pos.getZ() - Math.floor(getCenterZ()));
+            final byte x = (byte) (pos.getX() - FastMath.floor(getCenterX()));
+            final byte y = (byte) (pos.getY() - FastMath.floor(getCenterY()));
+            final byte z = (byte) (pos.getZ() - FastMath.floor(getCenterZ()));
             packet.records[i * 3 + 0] = x;
             packet.records[i * 3 + 1] = y;
             packet.records[i * 3 + 2] = z;

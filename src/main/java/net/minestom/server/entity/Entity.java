@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import com.extollit.num.FastMath;
 import com.google.common.collect.Queues;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
@@ -548,12 +549,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
             // handle block contacts
             // TODO do not call every tick (it is pretty expensive)
-            final int minX = (int) Math.floor(boundingBox.getMinX());
-            final int maxX = (int) Math.ceil(boundingBox.getMaxX());
-            final int minY = (int) Math.floor(boundingBox.getMinY());
-            final int maxY = (int) Math.ceil(boundingBox.getMaxY());
-            final int minZ = (int) Math.floor(boundingBox.getMinZ());
-            final int maxZ = (int) Math.ceil(boundingBox.getMaxZ());
+            final int minX = FastMath.floor(boundingBox.getMinX());
+            final int maxX = FastMath.ceil(boundingBox.getMaxX());
+            final int minY = FastMath.floor(boundingBox.getMinY());
+            final int maxY = FastMath.ceil(boundingBox.getMaxY());
+            final int minZ = FastMath.floor(boundingBox.getMinZ());
+            final int maxZ = FastMath.ceil(boundingBox.getMaxZ());
             final BlockPosition tmpPosition = new BlockPosition(0, 0, 0); // allow reuse
             for (int y = minY; y <= maxY; y++) {
                 for (int x = minX; x <= maxX; x++) {

@@ -1,5 +1,6 @@
 package net.minestom.server.collision;
 
+import com.extollit.num.FastMath;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -144,9 +145,9 @@ public class CollisionUtils {
             Vector corner = cornersCopy[cornerIndex];
             BlockPosition blockPos = cornerPositions[cornerIndex];
             corner.add(axis.getX() * amount, axis.getY() * amount, axis.getZ() * amount);
-            blockPos.setX((int) Math.floor(corner.getX()));
-            blockPos.setY((int) Math.floor(corner.getY()));
-            blockPos.setZ((int) Math.floor(corner.getZ()));
+            blockPos.setX(FastMath.floor(corner.getX()));
+            blockPos.setY(FastMath.floor(corner.getY()));
+            blockPos.setZ(FastMath.floor(corner.getZ()));
 
             final Chunk chunk = instance.getChunkAt(blockPos);
             if (!ChunkUtils.isLoaded(chunk)) {

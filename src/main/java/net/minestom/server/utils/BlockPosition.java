@@ -1,5 +1,6 @@
 package net.minestom.server.utils;
 
+import com.extollit.num.FastMath;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.clone.PublicCloneable;
@@ -41,9 +42,9 @@ public class BlockPosition implements PublicCloneable<BlockPosition> {
     public BlockPosition(double x, double y, double z) {
         final int castedY = (int) y;
 
-        this.x = (int) Math.floor(x);
+        this.x = FastMath.floor(x);
         this.y = (y == castedY) ? castedY : castedY + 1;
-        this.z = (int) Math.floor(z);
+        this.z = FastMath.floor(z);
     }
 
     /**
