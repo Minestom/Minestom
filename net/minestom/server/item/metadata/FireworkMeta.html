@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -226,55 +226,62 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 </td>
 </tr>
 <tr id="i6" class="altColor">
+<td class="colFirst"><code>byte</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFlightDuration()">getFlightDuration</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the flight duration of this firework</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasEffects()">hasEffects</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Whether this firework has any effects.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasNbt()">hasNbt</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if this meta object contains any useful data to send to the client.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSimilar(net.minestom.server.item.metadata.ItemMeta)">isSimilar</a></span>&#8203;(<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</code></th>
 <td class="colLast">
 <div class="block">Gets if the two ItemMeta are similar.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">read</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
 <div class="block">Reads nbt data from a compound.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeFireworkEffect(int)">removeFireworkEffect</a></span>&#8203;(int&nbsp;index)</code></th>
 <td class="colLast">
 <div class="block">Removes a firework effect from this firework.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeFireworkEffect(net.minestom.server.item.firework.FireworkEffect)">removeFireworkEffect</a></span>&#8203;(<a href="../firework/FireworkEffect.html" title="class in net.minestom.server.item.firework">FireworkEffect</a>&nbsp;effect)</code></th>
 <td class="colLast">
 <div class="block">Removes a firework effects from this firework.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFlightDuration(byte)">setFlightDuration</a></span>&#8203;(byte&nbsp;flightDuration)</code></th>
 <td class="colLast">
 <div class="block">Changes the flight duration of this firework.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">write</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
@@ -446,6 +453,20 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>flightDuration</code> - The new flight duration for this firework.</dd>
+</dl>
+</li>
+</ul>
+<a id="getFlightDuration()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFlightDuration</h4>
+<pre class="methodSignature">public&nbsp;byte&nbsp;getFlightDuration()</pre>
+<div class="block">Returns the flight duration of this firework</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the flight duration of this firework</dd>
 </dl>
 </li>
 </ul>
