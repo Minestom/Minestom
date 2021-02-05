@@ -111,7 +111,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
 
                     final BoundingBox itemBoundingBox = itemEntity.getBoundingBox();
                     if (expandedBoundingBox.intersect(itemBoundingBox)) {
-                        if (itemEntity.shouldRemove() || itemEntity.isRemoveScheduled())
+                        if (itemEntity.isRemoved() || itemEntity.isRemoveScheduled())
                             continue;
                         final ItemStack item = itemEntity.getItemStack();
                         PickupItemEvent pickupItemEvent = new PickupItemEvent(this, item);

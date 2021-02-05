@@ -408,7 +408,7 @@ public class Player extends LivingEntity implements CommandSender {
                     final ExperienceOrb experienceOrb = (ExperienceOrb) entity;
                     final BoundingBox itemBoundingBox = experienceOrb.getBoundingBox();
                     if (expandedBoundingBox.intersect(itemBoundingBox)) {
-                        if (experienceOrb.shouldRemove() || experienceOrb.isRemoveScheduled())
+                        if (experienceOrb.isRemoved() || experienceOrb.isRemoveScheduled())
                             continue;
                         PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(experienceOrb);
                         callCancellableEvent(PickupExperienceEvent.class, pickupExperienceEvent, () -> {

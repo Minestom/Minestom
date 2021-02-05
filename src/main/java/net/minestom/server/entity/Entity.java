@@ -84,7 +84,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
     private boolean isActive; // False if entity has only been instanced without being added somewhere
     private boolean removed;
-    private boolean shouldRemove;
     private long scheduledRemoveTime;
 
     private final Set<Entity> passengers = new CopyOnWriteArraySet<>();
@@ -360,12 +359,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
             }
         }
 
-        // Instant remove
-        if (shouldRemove()) {
-            remove();
-            return;
-        }
-
         // Check if the entity chunk is loaded
         final Chunk currentChunk = getChunk();
         if (!ChunkUtils.isLoaded(currentChunk)) {
@@ -590,7 +583,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
             sendSynchronization();
         }
 
-        if (shouldRemove() && !MinecraftServer.isStopping()) {
+        if (isRemoved() && !MinecraftServer.isStopping()) {
             remove();
         }
     }
@@ -1253,7 +1246,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      */
     public void remove() {
         this.removed = true;
-        this.shouldRemove = true;
         Entity.entityById.remove(id);
         if (instance != null)
             instance.UNSAFE_removeEntity(this);
@@ -1343,9 +1335,5 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         SPIN_ATTACK,
         SNEAKING,
         DYING
-    }
-
-    protected boolean shouldRemove() {
-        return shouldRemove;
     }
 }
