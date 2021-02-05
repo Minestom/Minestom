@@ -99,6 +99,14 @@ public class FireworkMeta extends ItemMeta {
     }
 
     /**
+     * Returns the flight duration of this firework
+     * @return the flight duration of this firework
+     */
+    public byte getFlightDuration() {
+        return flightDuration;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
