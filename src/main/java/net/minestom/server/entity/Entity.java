@@ -410,7 +410,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
                 sendPacketToViewersAndSelf(positionAndRotationPacket);
 
-                refreshPosition(position.clone());
+                refreshPosition(position);
 
                 // Fix head rotation
                 EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
@@ -425,7 +425,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
                 sendPacketToViewersAndSelf(entityPositionPacket);
 
-                refreshPosition(position.clone());
+                refreshPosition(position);
 
             } else if (viewChange) {
                 // Yaw/Pitch
@@ -841,7 +841,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * Adds a new passenger to this entity.
      *
      * @param entity the new passenger
-     * @throws NullPointerException  if {@code entity} is null
      * @throws IllegalStateException if {@link #getInstance()} returns null
      */
     public void addPassenger(@NotNull Entity entity) {
@@ -861,7 +860,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * Removes a passenger to this entity.
      *
      * @param entity the passenger to remove
-     * @throws NullPointerException  if {@code entity} is null
      * @throws IllegalStateException if {@link #getInstance()} returns null
      */
     public void removePassenger(@NotNull Entity entity) {
