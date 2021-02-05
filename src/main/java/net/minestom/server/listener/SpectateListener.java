@@ -10,7 +10,9 @@ public class SpectateListener {
 
     public static void listener(ClientSpectatePacket packet, Player player) {
         final UUID targetUuid = packet.targetUuid;
-        final Entity target = Entity.getEntity(targetUuid);
+
+        // TODO no check is set to make sure that this doesn't actually break.
+        final Entity target = Entity.getEntity((int) targetUuid.getLeastSignificantBits());
 
         // Check if the target is valid
         if (target == null || target == player)

@@ -40,7 +40,7 @@ public abstract class ObjectEntity extends Entity {
 
         SpawnEntityPacket spawnEntityPacket = new SpawnEntityPacket();
         spawnEntityPacket.entityId = getEntityId();
-        spawnEntityPacket.uuid = getUuid();
+        spawnEntityPacket.uuid = generateUuid();
         spawnEntityPacket.type = getEntityType().getId();
         spawnEntityPacket.position = getPosition();
         spawnEntityPacket.data = getObjectData();

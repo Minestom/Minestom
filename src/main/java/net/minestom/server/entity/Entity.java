@@ -54,7 +54,6 @@ import java.util.function.Consumer;
 public abstract class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler {
 
     private static final Map<Integer, Entity> entityById = new ConcurrentHashMap<>();
-    private static final Map<UUID, Entity> entityByUuid = new ConcurrentHashMap<>();
     private static final AtomicInteger lastEntityId = new AtomicInteger();
 
     // Metadata
@@ -105,7 +104,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     private Data data;
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
-    protected UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
     private boolean removed;
     private boolean shouldRemove;
@@ -132,10 +130,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     private long ticks;
     private final EntityTickEvent tickEvent = new EntityTickEvent(this);
 
-    public Entity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
+    public Entity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
         this.id = generateId();
         this.entityType = entityType;
-        this.uuid = uuid;
         this.position = spawnPosition.clone();
         this.lastX = spawnPosition.getX();
         this.lastY = spawnPosition.getY();
@@ -146,11 +143,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         setAutoViewable(true);
 
         Entity.entityById.put(id, this);
-        Entity.entityByUuid.put(uuid, this);
-    }
-
-    public Entity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
-        this(entityType, UUID.randomUUID(), spawnPosition);
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -181,18 +173,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     }
 
     /**
-     * Gets an entity based on its UUID (from {@link #getUuid()}).
-     *
-     * @param uuid the entity UUID
-     * @return the entity having the specified uuid, null if not found
-     */
-    @Nullable
-    public static Entity getEntity(@NotNull UUID uuid) {
-        return Entity.entityByUuid.getOrDefault(uuid, null);
-    }
-
-
-    /**
      * Generate and return a new unique entity id.
      * <p>
      * Useful if you want to spawn entities using packet but don't risk to have duplicated id.
@@ -214,6 +194,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * Called when a new instance is set.
      */
     public abstract void spawn();
+
+    /**
+     * Generates a UUID from the entity ID. May be CPU expensive in large operations.
+     */
+    public UUID generateUuid() {
+        return new UUID(getEntityId(), getEntityId());
+    }
 
     public boolean isOnGround() {
         return onGround || EntityUtils.isOnGround(this) /* backup for levitating entities */;
@@ -657,29 +644,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      */
     public EntityType getEntityType() {
         return entityType;
-    }
-
-    /**
-     * Gets the entity {@link UUID}.
-     *
-     * @return the entity unique id
-     */
-    @NotNull
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    /**
-     * Changes the internal entity UUID, mostly unsafe.
-     *
-     * @param uuid the new entity uuid
-     */
-    public void setUuid(@NotNull UUID uuid) {
-        // Refresh internal map
-        Entity.entityByUuid.remove(this.uuid);
-        Entity.entityByUuid.put(uuid, this);
-
-        this.uuid = uuid;
     }
 
     /**
@@ -1301,7 +1265,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         this.removed = true;
         this.shouldRemove = true;
         Entity.entityById.remove(id);
-        Entity.entityByUuid.remove(uuid);
         if (instance != null)
             instance.UNSAFE_removeEntity(this);
     }

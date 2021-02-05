@@ -75,24 +75,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         setGravity(0.02f, 0.08f, 3.92f);
     }
 
-    /**
-     * Constructor which allows to specify an UUID. Only use if you know what you are doing!
-     */
-    public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
-        super(entityType, uuid, spawnPosition);
-        setupAttributes();
-        setGravity(0.02f, 0.08f, 3.92f);
-    }
-
     public LivingEntity(@NotNull EntityType entityType) {
         this(entityType, new Position());
-    }
-
-    /**
-     * Constructor which allows to specify an UUID. Only use if you know what you are doing!
-     */
-    public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid) {
-        this(entityType, uuid, new Position());
     }
 
     @Override
@@ -552,7 +536,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
             Player player = (Player) this;
             member = player.getUsername();
         } else {
-            member = this.uuid.toString();
+            member = this.generateUuid().toString();
         }
 
         if (this.team != null) {

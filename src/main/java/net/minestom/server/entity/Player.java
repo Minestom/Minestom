@@ -195,8 +195,10 @@ public class Player extends LivingEntity implements CommandSender {
     // Tick related
     private final PlayerTickEvent playerTickEvent = new PlayerTickEvent(this);
 
+    protected UUID uuid;
+
     public Player(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
-        super(EntityType.PLAYER, uuid);
+        super(EntityType.PLAYER);
         this.username = username;
         this.playerConnection = playerConnection;
 
@@ -220,6 +222,15 @@ public class Player extends LivingEntity implements CommandSender {
         // FakePlayer init its connection there
         playerConnectionInit();
     }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
 
     /**
      * Used when the player is created.
