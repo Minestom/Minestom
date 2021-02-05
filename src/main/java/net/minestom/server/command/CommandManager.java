@@ -41,7 +41,7 @@ import java.util.function.Consumer;
  */
 public final class CommandManager {
 
-    public static final String COMMAND_PREFIX = "/";
+    public static final char COMMAND_PREFIX = '/';
 
     private volatile boolean running = true;
 

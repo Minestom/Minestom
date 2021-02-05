@@ -20,7 +20,7 @@ public class TabCompleteListener {
 
         final String[] split = packet.text.split(Pattern.quote(StringUtils.SPACE));
 
-        final String commandName = split[0].replaceFirst(CommandManager.COMMAND_PREFIX, "");
+        final String commandName = split[0].substring(1);
 
         // Tab complete for CommandProcessor
         final CommandProcessor commandProcessor = COMMAND_MANAGER.getCommandProcessor(commandName);

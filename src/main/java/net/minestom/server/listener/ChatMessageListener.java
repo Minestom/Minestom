@@ -22,10 +22,10 @@ public class ChatMessageListener {
     public static void listener(ClientChatMessagePacket packet, Player player) {
         String message = packet.message;
 
-        final String cmdPrefix = CommandManager.COMMAND_PREFIX;
-        if (message.startsWith(cmdPrefix)) {
+        final char cmdPrefix = CommandManager.COMMAND_PREFIX;
+        if (message.charAt(0) == cmdPrefix) {
             // The message is a command
-            message = message.replaceFirst(cmdPrefix, "");
+            message = message.substring(1);
 
             COMMAND_MANAGER.execute(player, message);
 

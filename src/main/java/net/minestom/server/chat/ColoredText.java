@@ -21,9 +21,9 @@ public class ColoredText extends JsonMessage {
 
     private static final char SEPARATOR_START = '{';
     private static final char SEPARATOR_END = '}';
-    private static final String COLOR_PREFIX = "#";
-    private static final String TRANSLATABLE_PREFIX = "@";
-    private static final String KEYBIND_PREFIX = "&";
+    private static final char COLOR_PREFIX = '#';
+    private static final char TRANSLATABLE_PREFIX = '@';
+    private static final char KEYBIND_PREFIX = '&';
 
     /**
      * The raw text StringBuilder.
@@ -180,8 +180,6 @@ public class ColoredText extends JsonMessage {
         SpecialComponentContainer specialComponentContainer = new SpecialComponentContainer();
 
         for (int i = 0; i < message.length(); i++) {
-            // Last char or null
-            final Character p = i == 0 ? null : message.charAt(i - 1);
             // Current char
             final char c = message.charAt(i);
             if (c == SEPARATOR_START && !inFormat) {
@@ -206,7 +204,7 @@ public class ColoredText extends JsonMessage {
                 formatEnd = i;
 
                 // Color component
-                if (formatString.startsWith(COLOR_PREFIX)) {
+                if (formatString.charAt(0) == COLOR_PREFIX) {
                     // Remove the first # character to get code
                     final String colorCode = formatString.substring(1);
                     final ChatColor color = ChatColor.fromName(colorCode);
@@ -237,7 +235,7 @@ public class ColoredText extends JsonMessage {
                     continue;
                 }
                 // Translatable component
-                if (formatString.startsWith(TRANSLATABLE_PREFIX)) {
+                if (formatString.charAt(0) == TRANSLATABLE_PREFIX) {
                     final String translatableCode = formatString.substring(1);
                     final boolean hasArgs = translatableCode.contains(",");
                     if (!hasArgs) {
@@ -264,7 +262,7 @@ public class ColoredText extends JsonMessage {
                     continue;
                 }
                 // Keybind component
-                if (formatString.startsWith(KEYBIND_PREFIX)) {
+                if (formatString.charAt(0) == KEYBIND_PREFIX) {
                     // ex: {&key.drop}
                     final String keybindCode = formatString.substring(1);
                     objects.add(getMessagePart(MessageType.KEYBIND, keybindCode, currentColor, specialComponentContainer));
