@@ -53,9 +53,11 @@ import java.util.function.Consumer;
  */
 public abstract class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler {
 
+    // Generation for entity IDs
     private static final Map<Integer, Entity> entityById = new ConcurrentHashMap<>();
     private static final AtomicInteger lastEntityId = new AtomicInteger();
 
+    // Position
     protected Instance instance;
     protected final Position position;
     protected double lastX, lastZ;
@@ -68,8 +70,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     protected Entity vehicle;
 
     // Velocity
-    protected Vector velocity = new Vector(); // Movement in block per second
+    protected final Vector velocity = new Vector(); // Movement in block per second
 
+    // Gravity
     protected double gravityDragPerTick;
     protected double gravityAcceleration;
     protected double gravityTerminalVelocity;
@@ -96,7 +99,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     // Events
     private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
 
-    protected Metadata metadata = new Metadata(this);
+    protected final Metadata metadata = new Metadata(this);
 
     private final List<TimedPotion> effects = new CopyOnWriteArrayList<>();
 
@@ -614,7 +617,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      */
     protected void handleVoid() {
         // Kill if in void
-        if (getInstance().isInVoid(this.position)) {
+        if (isActive() && getInstance().isInVoid(this.position)) {
             remove();
         }
     }
