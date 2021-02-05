@@ -154,6 +154,19 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     }
 
     /**
+     * Gets an entity based on its uuidid (from {@link #getUuid()} ()}).
+     * <p>
+     * Entity id are unique server-wide.
+     *
+     * @param uuid the entity unique universal id
+     * @return the entity having the specified id, null if not found
+     */
+    @Nullable
+    public static Entity getEntity(UUID uuid) {
+        return Entity.entityById.getOrDefault((int) uuid.getLeastSignificantBits(), null);
+    }
+
+    /**
      * Generate and return a new unique entity id.
      * <p>
      * Useful if you want to spawn entities using packet but don't risk to have duplicated id.
