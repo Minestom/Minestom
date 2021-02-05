@@ -199,6 +199,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     public Player(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
         super(EntityType.PLAYER);
+        this.uuid = uuid;
         this.username = username;
         this.playerConnection = playerConnection;
 
