@@ -597,10 +597,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
             this.lastAbsoluteSynchronizationTime = time;
             sendSynchronization();
         }
-
-        if (isRemoved() && !MinecraftServer.isStopping()) {
-            remove();
-        }
     }
 
     /**
