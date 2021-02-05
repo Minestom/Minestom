@@ -1,7 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
-import it.unimi.dsi.fastutil.chars.CharArrayList;
-import it.unimi.dsi.fastutil.chars.CharList;
+import com.google.common.primitives.Chars;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.time.TimeUnit;
@@ -18,7 +17,7 @@ public class ArgumentTime extends Argument<UpdateOption> {
     public static final int INVALID_TIME_FORMAT = -2;
     public static final int NO_NUMBER = -3;
 
-    private static final CharList SUFFIXES = new CharArrayList(new char[]{'d', 's', 't'});
+    private static final char[] SUFFIXES = {'d', 's', 't'};
 
     public ArgumentTime(String id) {
         super(id);
@@ -28,7 +27,7 @@ public class ArgumentTime extends Argument<UpdateOption> {
     @Override
     public UpdateOption parse(@NotNull String input) throws ArgumentSyntaxException {
         final char lastChar = input.charAt(input.length() - 1);
-        if (!SUFFIXES.contains(lastChar))
+        if (!Chars.contains(SUFFIXES, lastChar))
             throw new ArgumentSyntaxException("Time format is invalid", input, INVALID_TIME_FORMAT);
 
         // Remove last char
