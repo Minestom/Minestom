@@ -1,7 +1,6 @@
 package net.minestom.server.entity;
 
 import com.google.common.collect.Queues;
-import io.netty.util.internal.MathUtil;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
 import net.minestom.server.chat.JsonMessage;
@@ -25,7 +24,6 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.binary.BitmaskUtil;
@@ -538,12 +536,12 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
             // handle block contacts
             // TODO do not call every tick (it is pretty expensive)
-            final int minX = MathUtils.floor(boundingBox.getMinX());
-            final int maxX = MathUtils.ceil(boundingBox.getMaxX());
-            final int minY = MathUtils.floor(boundingBox.getMinY());
-            final int maxY = MathUtils.ceil(boundingBox.getMaxY());
-            final int minZ = MathUtils.floor(boundingBox.getMinZ());
-            final int maxZ = MathUtils.ceil(boundingBox.getMaxZ());
+            final int minX = (int) Math.floor(boundingBox.getMinX());
+            final int maxX = (int) Math.ceil(boundingBox.getMaxX());
+            final int minY = (int) Math.floor(boundingBox.getMinY());
+            final int maxY = (int) Math.ceil(boundingBox.getMaxY());
+            final int minZ = (int) Math.floor(boundingBox.getMinZ());
+            final int maxZ = (int) Math.ceil(boundingBox.getMaxZ());
             final BlockPosition tmpPosition = new BlockPosition(0, 0, 0); // allow reuse
             for (int y = minY; y <= maxY; y++) {
                 for (int x = minX; x <= maxX; x++) {
