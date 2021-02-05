@@ -14,7 +14,7 @@ public class ClientEditBookPacket extends ClientPlayPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        this.book = reader.readSlot();
+        this.book = reader.readItemStack();
         this.isSigning = reader.readBoolean();
         this.hand = Player.Hand.values()[reader.readVarInt()];
     }

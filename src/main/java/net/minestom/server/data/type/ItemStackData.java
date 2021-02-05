@@ -15,6 +15,6 @@ public class ItemStackData extends DataType<ItemStack> {
     @NotNull
     @Override
     public ItemStack decode(@NotNull BinaryReader reader) {
-        return reader.readSlot();
+        return reader.readItemStack();
     }
 }

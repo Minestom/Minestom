@@ -21,6 +21,6 @@ public class ClientClickWindowPacket extends ClientPlayPacket {
         this.button = reader.readByte();
         this.actionNumber = reader.readShort();
         this.mode = reader.readVarInt();
-        this.item = reader.readSlot();
+        this.item = reader.readItemStack();
     }
 }

@@ -13,6 +13,6 @@ public class ClientCreativeInventoryActionPacket extends ClientPlayPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.slot = reader.readShort();
-        this.item = reader.readSlot();
+        this.item = reader.readItemStack();
     }
 }

@@ -10,6 +10,16 @@ public class WorldBorderPacket implements ServerPacket {
     public Action action;
     public WBAction wbAction;
 
+    private static final WBAction DEFAULT_ACTION = new WBSetSize(0.0);
+
+    /**
+     * Default constructor, required for reflection operations.
+     */
+    public WorldBorderPacket() {
+        action = Action.SET_SIZE;
+        wbAction = DEFAULT_ACTION;
+    }
+
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(action.ordinal());

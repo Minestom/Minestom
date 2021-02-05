@@ -6,6 +6,7 @@ import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.TickUtils;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
@@ -67,6 +68,10 @@ public class TitlePacket implements ComponentHoldingServerPacket {
         this.fadeOut = fadeOut;
     }
 
+    public TitlePacket() {
+        this(SET_TITLE, Component.empty());
+    }
+
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(action.ordinal());
@@ -82,6 +87,27 @@ public class TitlePacket implements ComponentHoldingServerPacket {
                 writer.writeInt(stay);
                 writer.writeInt(fadeOut);
                 break;
+            case HIDE:
+            case RESET:
+                break;
+        }
+    }
+
+    @Override
+    public void read(@NotNull BinaryReader reader) {
+        action = Action.values()[reader.readVarInt()];
+        switch (action) {
+            case SET_TITLE:
+            case SET_SUBTITLE:
+            case SET_ACTION_BAR:
+                payload = reader.readComponent(Integer.MAX_VALUE);
+                break;
+
+            case SET_TIMES_AND_DISPLAY:
+                fadeIn = reader.readInt();
+                stay = reader.readInt();
+                fadeOut = reader.readInt();
+
             case HIDE:
             case RESET:
                 break;
