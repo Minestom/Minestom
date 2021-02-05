@@ -197,6 +197,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
     /**
      * Generates a UUID from the entity ID. May be CPU expensive in large operations.
+     *
+     * @return The UUID generated on the spot.
      */
     public UUID generateUuid() {
         return new UUID(getEntityId(), getEntityId());
