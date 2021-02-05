@@ -196,8 +196,7 @@ public class Player extends LivingEntity implements CommandSender {
     private final PlayerTickEvent playerTickEvent = new PlayerTickEvent(this);
 
     public Player(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
-        super(EntityType.PLAYER);
-        this.uuid = uuid; // Override Entity#uuid defined in the constructor
+        super(EntityType.PLAYER, uuid);
         this.username = username;
         this.playerConnection = playerConnection;
 
