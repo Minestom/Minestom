@@ -800,9 +800,9 @@ public final class MinecraftServer {
     }
 
     private static void checkInitStatus(@Nullable Object object) {
-        /*Check.stateCondition(Objects.isNull(object),
+        Check.notNull(object,
                 "You cannot access the manager before MinecraftServer#init, " +
-                        "if you are developing an extension be sure to retrieve them at least after Extension#preInitialize");*/
+                        "if you are developing an extension be sure to retrieve them at least after Extension#preInitialize");
     }
 
 }
