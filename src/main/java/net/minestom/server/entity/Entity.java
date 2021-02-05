@@ -58,7 +58,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
     protected Instance instance;
     protected final Position position;
-    protected double lastX, lastY, lastZ;
+    protected double lastX, lastZ;
     protected double cacheX, cacheY, cacheZ; // Used to synchronize with #getPosition
     protected float cacheYaw, cachePitch;
     protected boolean onGround;
@@ -104,7 +104,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     protected final Queue<Consumer<Entity>> nextTick = Queues.newConcurrentLinkedQueue();
 
     // Cache for generated UUID. Based on the Entity's ID.
-    protected UUID uuid;
+    protected final UUID uuid;
 
     // Tick related
     private long ticks;
@@ -116,7 +116,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         this.entityType = entityType;
         this.position = spawnPosition.clone();
         this.lastX = spawnPosition.getX();
-        this.lastY = spawnPosition.getY();
         this.lastZ = spawnPosition.getZ();
 
         setBoundingBox(0, 0, 0);
@@ -154,7 +153,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     }
 
     /**
-     * Gets an entity based on its uuidid (from {@link #getUuid()} ()}).
+     * Gets an entity based on its uuid (from {@link #getUuid()} ()}).
      * <p>
      * Entity id are unique server-wide.
      *
@@ -1163,7 +1162,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         }
 
         this.lastX = position.getX();
-        this.lastY = position.getY();
         this.lastZ = position.getZ();
     }
 
