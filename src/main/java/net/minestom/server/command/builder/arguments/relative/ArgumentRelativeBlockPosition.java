@@ -34,7 +34,7 @@ public class ArgumentRelativeBlockPosition extends ArgumentRelative<RelativeBloc
 
         for (int i = 0; i < split.length; i++) {
             final String element = split[i];
-            if (element.startsWith(RELATIVE_CHAR)) {
+            if (element.charAt(0) == RELATIVE_CHAR) {
 
                 if (i == 0) {
                     relativeX = true;
@@ -44,7 +44,7 @@ public class ArgumentRelativeBlockPosition extends ArgumentRelative<RelativeBloc
                     relativeZ = true;
                 }
 
-                if (element.length() != RELATIVE_CHAR.length()) {
+                if (element.length() != 1) {
                     try {
                         final String potentialNumber = element.substring(1);
                         final int number = Integer.parseInt(potentialNumber);

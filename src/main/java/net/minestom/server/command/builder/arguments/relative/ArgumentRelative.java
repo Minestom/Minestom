@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class ArgumentRelative<T> extends Argument<T> {
 
-    public static final String RELATIVE_CHAR = "~";
+    public static final char RELATIVE_CHAR = '~';
 
     public static final int INVALID_NUMBER_COUNT_ERROR = 1;
     public static final int INVALID_NUMBER_ERROR = 2;

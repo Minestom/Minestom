@@ -35,7 +35,7 @@ public class ArgumentRelativeVec3 extends ArgumentRelative<RelativeVec> {
         for (int i = 0; i < split.length; i++) {
             final String element = split[i];
             try {
-                if (element.startsWith(RELATIVE_CHAR)) {
+                if (element.charAt(0) == RELATIVE_CHAR) {
                     if (i == 0) {
                         relativeX = true;
                     } else if (i == 1) {
@@ -44,7 +44,7 @@ public class ArgumentRelativeVec3 extends ArgumentRelative<RelativeVec> {
                         relativeZ = true;
                     }
 
-                    if (element.length() != RELATIVE_CHAR.length()) {
+                    if (element.length() != 1) {
                         final String potentialNumber = element.substring(1);
                         final float number = Float.parseFloat(potentialNumber);
                         if (i == 0) {
