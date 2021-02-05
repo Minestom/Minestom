@@ -94,4 +94,24 @@ public final class MathUtils {
     public static double mod(final double a, final double b) {
         return (a % b + b) % b;
     }
+
+    public static int floor(double f) {
+        final int i = (int) f;
+        return f < i ? i - 1 : i;
+    }
+
+    public static int floor(float f) {
+        final int i = (int) f;
+        return f < i ? i - 1 : i;
+    }
+
+    public static int ceil(double f) {
+        final int i = (int) f;
+        return f > i ? i + 1 : i;
+    }
+
+    public static int ceil(float f) {
+        final int i = (int) f;
+        return f > i ? i + 1 : i;
+    }
 }
