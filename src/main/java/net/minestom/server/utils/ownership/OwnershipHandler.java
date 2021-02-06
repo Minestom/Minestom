@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class OwnershipHandler<T> {
 
     // identifier = the object having an ownership
-    private ConcurrentHashMap<UUID, T> ownershipDataMap = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<UUID, T> ownershipDataMap = new ConcurrentHashMap<>();
 
     /**
      * Generates a new unique identifier.

@@ -519,7 +519,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                     this.velocity.setX(velocity.getX() * drag);
                     this.velocity.setZ(velocity.getZ() * drag);
 
-                    if (velocity.equals(new Vector())) {
+                    if (velocity.isZero()) {
                         this.velocity.zero();
                     }
                 }
