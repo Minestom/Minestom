@@ -263,6 +263,7 @@ public class Player extends LivingEntity implements CommandSender {
         PlayerSkinInitEvent skinInitEvent = new PlayerSkinInitEvent(this, skin);
         callEvent(PlayerSkinInitEvent.class, skinInitEvent);
         this.skin = skinInitEvent.getSkin();
+        // FIXME: when using Geyser, this line remove the skin of the client
         playerConnection.sendPacket(getAddPlayerToList());
 
         // Commands start
