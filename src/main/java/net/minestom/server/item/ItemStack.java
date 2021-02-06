@@ -90,6 +90,10 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
         this(material, amount, (short) 0);
     }
 
+    public ItemStack(@NotNull Material material) {
+        this(material, (byte) 1, (short) 0);
+    }
+
     /**
      * Gets a new {@link ItemStack} with the material sets to {@link Material#AIR}.
      * <p>
