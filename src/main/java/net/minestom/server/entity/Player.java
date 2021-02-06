@@ -806,16 +806,6 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Sends a message to the player.
-     *
-     * @param message the message to send,
-     *                you can use {@link ColoredText} and/or {@link RichMessage} to create it easily
-     */
-    public void sendMessage(@NotNull JsonMessage message) {
-        sendJsonMessage(message.toString());
-    }
-
-    /**
      * Sends a legacy message with the specified color char.
      *
      * @param text      the text with the legacy color formatting
@@ -839,6 +829,21 @@ public class Player extends LivingEntity implements CommandSender {
     public void sendJsonMessage(@NotNull String json) {
         ChatMessagePacket chatMessagePacket =
                 new ChatMessagePacket(json, ChatMessagePacket.Position.CHAT);
+        playerConnection.sendPacket(chatMessagePacket);
+    }
+
+    /**
+     * Sends a message to the player, with the capability of stripping colors depending on the client.
+     *
+     * @param message the message to send,
+     *                you can use {@link ColoredText} and/or {@link RichMessage} to create it easily
+     */
+    public void sendMessage(@NotNull JsonMessage message) {
+        ChatMessagePacket chatMessagePacket =
+                new ChatMessagePacket(
+                        this.settings.chatColors ?
+                                message.toString() : JsonMessage.getTextMessage(message.getJsonObject()).toString(),
+                        ChatMessagePacket.Position.CHAT);
         playerConnection.sendPacket(chatMessagePacket);
     }
 
