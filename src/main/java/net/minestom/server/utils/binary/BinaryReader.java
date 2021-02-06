@@ -43,6 +43,10 @@ public class BinaryReader extends InputStream {
         return Utils.readVarInt(buffer);
     }
 
+    public long readVarLong() {
+        return Utils.readVarLong(buffer);
+    }
+
     public boolean readBoolean() {
         return buffer.readBoolean();
     }

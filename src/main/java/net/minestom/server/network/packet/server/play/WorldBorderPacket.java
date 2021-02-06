@@ -2,8 +2,13 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.Readable;
+import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Supplier;
 
 public class WorldBorderPacket implements ServerPacket {
 
@@ -27,26 +32,41 @@ public class WorldBorderPacket implements ServerPacket {
     }
 
     @Override
+    public void read(@NotNull BinaryReader reader) {
+        action = Action.values()[reader.readVarInt()];
+        wbAction = action.generateNewInstance();
+        wbAction.read(reader);
+    }
+
+    @Override
     public int getId() {
         return ServerPacketIdentifier.WORLD_BORDER;
     }
 
     public enum Action {
-        SET_SIZE,
-        LERP_SIZE,
-        SET_CENTER,
-        INITIALIZE,
-        SET_WARNING_TIME,
-        SET_WARNING_BLOCKS
+        SET_SIZE(() -> new WBSetSize(0.0)),
+        LERP_SIZE(() -> new WBLerpSize(0.0, 0.0, 0)),
+        SET_CENTER(() -> new WBSetCenter(0.0, 0.0)),
+        INITIALIZE(() -> new WBInitialize(0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0)),
+        SET_WARNING_TIME(() -> new WBSetWarningTime(0)),
+        SET_WARNING_BLOCKS(() -> new WBSetWarningBlocks(0));
+
+        private Supplier<WBAction> generator;
+
+        Action(Supplier<WBAction> generator) {
+            this.generator = generator;
+        }
+
+        public WBAction generateNewInstance() {
+            return generator.get();
+        }
     }
 
-    public static abstract class WBAction {
-        public abstract void write(BinaryWriter writer);
-    }
+    public static abstract class WBAction implements Writeable, Readable {}
 
     public static class WBSetSize extends WBAction {
 
-        public final double diameter;
+        public double diameter;
 
         public WBSetSize(double diameter) {
             this.diameter = diameter;
@@ -56,13 +76,18 @@ public class WorldBorderPacket implements ServerPacket {
         public void write(BinaryWriter writer) {
             writer.writeDouble(diameter);
         }
+
+        @Override
+        public void read(@NotNull BinaryReader reader) {
+            diameter = reader.readDouble();
+        }
     }
 
     public static class WBLerpSize extends WBAction {
 
-        public final double oldDiameter;
-        public final double newDiameter;
-        public final long speed;
+        public double oldDiameter;
+        public double newDiameter;
+        public long speed;
 
         public WBLerpSize(double oldDiameter, double newDiameter, long speed) {
             this.oldDiameter = oldDiameter;
@@ -76,11 +101,18 @@ public class WorldBorderPacket implements ServerPacket {
             writer.writeDouble(newDiameter);
             writer.writeVarLong(speed);
         }
+
+        @Override
+        public void read(@NotNull BinaryReader reader) {
+            oldDiameter = reader.readDouble();
+            newDiameter = reader.readDouble();
+            speed = reader.readVarLong();
+        }
     }
 
     public static class WBSetCenter extends WBAction {
 
-        public final double x, z;
+        public double x, z;
 
         public WBSetCenter(double x, double z) {
             this.x = x;
@@ -92,17 +124,23 @@ public class WorldBorderPacket implements ServerPacket {
             writer.writeDouble(x);
             writer.writeDouble(z);
         }
+
+        @Override
+        public void read(@NotNull BinaryReader reader) {
+            x = reader.readDouble();
+            z = reader.readDouble();
+        }
     }
 
     public static class WBInitialize extends WBAction {
 
-        public final double x, z;
-        public final double oldDiameter;
-        public final double newDiameter;
-        public final long speed;
-        public final int portalTeleportBoundary;
-        public final int warningTime;
-        public final int warningBlocks;
+        public double x, z;
+        public double oldDiameter;
+        public double newDiameter;
+        public long speed;
+        public int portalTeleportBoundary;
+        public int warningTime;
+        public int warningBlocks;
 
         public WBInitialize(double x, double z, double oldDiameter, double newDiameter, long speed,
                             int portalTeleportBoundary, int warningTime, int warningBlocks) {
@@ -127,11 +165,23 @@ public class WorldBorderPacket implements ServerPacket {
             writer.writeVarInt(warningTime);
             writer.writeVarInt(warningBlocks);
         }
+
+        @Override
+        public void read(@NotNull BinaryReader reader) {
+            x = reader.readDouble();
+            z = reader.readDouble();
+            oldDiameter = reader.readDouble();
+            newDiameter = reader.readDouble();
+            speed = reader.readVarLong();
+            portalTeleportBoundary = reader.readVarInt();
+            warningTime = reader.readVarInt();
+            warningBlocks = reader.readVarInt();
+        }
     }
 
     public static class WBSetWarningTime extends WBAction {
 
-        public final int warningTime;
+        public int warningTime;
 
         public WBSetWarningTime(int warningTime) {
             this.warningTime = warningTime;
@@ -141,11 +191,16 @@ public class WorldBorderPacket implements ServerPacket {
         public void write(BinaryWriter writer) {
             writer.writeVarInt(warningTime);
         }
+
+        @Override
+        public void read(@NotNull BinaryReader reader) {
+            warningTime = reader.readVarInt();
+        }
     }
 
     public static class WBSetWarningBlocks extends WBAction {
 
-        public final int warningBlocks;
+        public int warningBlocks;
 
         public WBSetWarningBlocks(int warningBlocks) {
             this.warningBlocks = warningBlocks;
@@ -154,6 +209,11 @@ public class WorldBorderPacket implements ServerPacket {
         @Override
         public void write(BinaryWriter writer) {
             writer.writeVarInt(warningBlocks);
+        }
+
+        @Override
+        public void read(@NotNull BinaryReader reader) {
+            warningBlocks = reader.readVarInt();
         }
     }
 

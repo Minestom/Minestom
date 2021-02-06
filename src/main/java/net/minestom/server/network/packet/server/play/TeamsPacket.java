@@ -6,8 +6,11 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -61,6 +64,11 @@ public class TeamsPacket implements ComponentHoldingServerPacket {
      */
     public String[] entities;
 
+    public TeamsPacket() {
+        teamName = "";
+        action = Action.REMOVE_TEAM;
+    }
+
     /**
      * Writes data into the {@link BinaryWriter}
      *
@@ -95,6 +103,32 @@ public class TeamsPacket implements ComponentHoldingServerPacket {
             }
         }
 
+    }
+
+    @Override
+    public void read(@NotNull BinaryReader reader) {
+        teamName = reader.readSizedString(Integer.MAX_VALUE);
+        action = Action.values()[reader.readByte()];
+
+        switch (action) {
+            case CREATE_TEAM:
+            case UPDATE_TEAM_INFO:
+                this.teamDisplayName = reader.readJsonMessage(Integer.MAX_VALUE);
+                this.friendlyFlags = reader.readByte();
+                nameTagVisibility = NameTagVisibility.fromIdentifier(reader.readSizedString(Integer.MAX_VALUE));
+                collisionRule = CollisionRule.fromIdentifier(reader.readSizedString(Integer.MAX_VALUE));
+                this.teamColor = reader.readVarInt();
+                this.teamPrefix = reader.readJsonMessage(Integer.MAX_VALUE);
+                this.teamSuffix = reader.readJsonMessage(Integer.MAX_VALUE);
+                break;
+            case REMOVE_TEAM:
+
+                break;
+        }
+
+        if (action == Action.CREATE_TEAM || action == Action.ADD_PLAYERS_TEAM || action == Action.REMOVE_PLAYERS_TEAM) {
+            entities = reader.readSizedStringArray(Integer.MAX_VALUE);
+        }
     }
 
     /**
@@ -197,6 +231,16 @@ public class TeamsPacket implements ComponentHoldingServerPacket {
             this.identifier = identifier;
         }
 
+        @NotNull
+        public static NameTagVisibility fromIdentifier(String identifier) {
+            for(NameTagVisibility v : values()) {
+                if(v.getIdentifier().equals(identifier))
+                    return v;
+            }
+            Check.fail("Identifier for NameTagVisibility is invalid: "+identifier);
+            return null;
+        }
+
         /**
          * Gets the client identifier
          *
@@ -241,6 +285,16 @@ public class TeamsPacket implements ComponentHoldingServerPacket {
          */
         CollisionRule(String identifier) {
             this.identifier = identifier;
+        }
+
+        @NotNull
+        public static CollisionRule fromIdentifier(String identifier) {
+            for(CollisionRule v : values()) {
+                if(v.getIdentifier().equals(identifier))
+                    return v;
+            }
+            Check.fail("Identifier for CollisionRule is invalid: "+identifier);
+            return null;
         }
 
         /**

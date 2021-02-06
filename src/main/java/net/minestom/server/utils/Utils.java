@@ -88,6 +88,24 @@ public final class Utils {
         return result;
     }
 
+    public static long readVarLong(ByteBuf buffer) {
+        int numRead = 0;
+        long result = 0;
+        byte read;
+        do {
+            read = buffer.readByte();
+            long value = (read & 0b01111111);
+            result |= (value << (7 * numRead));
+
+            numRead++;
+            if (numRead > 10) {
+                throw new RuntimeException("VarLong is too big");
+            }
+        } while ((read & 0b10000000) != 0);
+
+        return result;
+    }
+
     public static void writeVarLong(BinaryWriter writer, long value) {
         do {
             byte temp = (byte) (value & 0b01111111);

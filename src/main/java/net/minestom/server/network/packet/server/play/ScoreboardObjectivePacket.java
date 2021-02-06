@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,6 +33,12 @@ public class ScoreboardObjectivePacket implements ComponentHoldingServerPacket {
      */
     public Type type;
 
+    public ScoreboardObjectivePacket() {
+        objectiveName = "";
+        objectiveValue = Component.empty();
+        type = Type.INTEGER;
+    }
+
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeSizedString(objectiveName);
@@ -40,6 +47,17 @@ public class ScoreboardObjectivePacket implements ComponentHoldingServerPacket {
         if (mode == 0 || mode == 2) {
             writer.writeComponent(objectiveValue);
             writer.writeVarInt(type.ordinal());
+        }
+    }
+
+    @Override
+    public void read(@NotNull BinaryReader reader) {
+        objectiveName = reader.readSizedString(Integer.MAX_VALUE);
+        mode = reader.readByte();
+
+        if(mode == 0 || mode == 2) {
+            objectiveValue = reader.readComponent(Integer.MAX_VALUE);
+            type = Type.values()[reader.readVarInt()];
         }
     }
 
