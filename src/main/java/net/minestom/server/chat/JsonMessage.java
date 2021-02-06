@@ -89,7 +89,7 @@ public abstract class JsonMessage {
      * @return The text content of the object and its 'extra's
      */
     @NotNull
-    public static StringBuilder getTextMessage(@NotNull JsonObject obj) {
+    private static StringBuilder getTextMessage(@NotNull JsonObject obj) {
         StringBuilder message = new StringBuilder(obj.get("text").getAsString());
         JsonElement extra = obj.get("extra");
         if (extra != null && extra.isJsonArray()) {
