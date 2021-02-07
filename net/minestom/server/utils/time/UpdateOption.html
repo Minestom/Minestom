@@ -152,7 +152,7 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(int,net.minestom.server.utils.time.TimeUnit)">UpdateOption</a></span>&#8203;(int&nbsp;value,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(long,net.minestom.server.utils.time.TimeUnit)">UpdateOption</a></span>&#8203;(long&nbsp;value,
             <a href="TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;timeUnit)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -180,7 +180,7 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>int</code></td>
+<td class="colFirst"><code>long</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getValue()">getValue</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -208,13 +208,14 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(int,net.minestom.server.utils.time.TimeUnit)">
+<a id="&lt;init&gt;(long,net.minestom.server.utils.time.TimeUnit)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>UpdateOption</h4>
-<pre>public&nbsp;UpdateOption&#8203;(int&nbsp;value,
+<pre>public&nbsp;UpdateOption&#8203;(long&nbsp;value,
+                    @NotNull
                     <a href="TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;timeUnit)</pre>
 </li>
 </ul>
@@ -234,7 +235,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getValue</h4>
-<pre class="methodSignature">public&nbsp;int&nbsp;getValue()</pre>
+<pre class="methodSignature">public&nbsp;long&nbsp;getValue()</pre>
 </li>
 </ul>
 <a id="getTimeUnit()">
@@ -243,7 +244,8 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getTimeUnit</h4>
-<pre class="methodSignature">public&nbsp;<a href="TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;getTimeUnit()</pre>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;getTimeUnit()</pre>
 </li>
 </ul>
 </li>
