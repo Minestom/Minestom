@@ -189,6 +189,12 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof ItemStack &&
+                isSimilar((ItemStack) o) && ((ItemStack) o).getAmount() == getAmount();
+    }
+
     /**
      * Gets the item damage (durability).
      *
