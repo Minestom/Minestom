@@ -112,6 +112,9 @@ public class NettyPlayerConnection extends PlayerConnection {
      */
     @Override
     public void sendPacket(@NotNull ServerPacket serverPacket) {
+        if (!isOnline())
+            return;
+
         if (shouldSendPacket(serverPacket)) {
             if (getPlayer() != null) {
                 // Flush happen during #update()
