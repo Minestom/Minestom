@@ -1,19 +1,22 @@
 package net.minestom.server.utils.time;
 
+import org.jetbrains.annotations.NotNull;
+
 public class UpdateOption {
 
-    private final int value;
+    private final long value;
     private final TimeUnit timeUnit;
 
-    public UpdateOption(int value, TimeUnit timeUnit) {
+    public UpdateOption(long value, @NotNull TimeUnit timeUnit) {
         this.value = value;
         this.timeUnit = timeUnit;
     }
 
-    public int getValue() {
+    public long getValue() {
         return value;
     }
 
+    @NotNull
     public TimeUnit getTimeUnit() {
         return timeUnit;
     }

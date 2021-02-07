@@ -17,7 +17,7 @@ public final class CooldownUtils {
      * @param cooldown    the value of the cooldown
      * @return true if the cooldown is in progress, false otherwise
      */
-    public static boolean hasCooldown(long currentTime, long lastUpdate, @NotNull TimeUnit timeUnit, int cooldown) {
+    public static boolean hasCooldown(long currentTime, long lastUpdate, @NotNull TimeUnit timeUnit, long cooldown) {
         final long cooldownMs = timeUnit.toMilliseconds(cooldown);
         return currentTime - lastUpdate < cooldownMs;
     }
