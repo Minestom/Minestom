@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -214,7 +214,7 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
+<td class="colFirst"><code>org.jglrxavpok.hephaistos.nbt.NBTCompound</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#execute(net.minestom.server.command.CommandSender,java.lang.String)">execute</a></span>&#8203;(<a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
        java.lang.String&nbsp;command)</code></th>
 <td class="colLast">
@@ -222,69 +222,77 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>org.jglrxavpok.hephaistos.nbt.NBTCompound</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#executeServerCommand(java.lang.String)">executeServerCommand</a></span>&#8203;(java.lang.String&nbsp;command)</code></th>
+<td class="colLast">
+<div class="block">Executes the command using a <a href="ServerSender.html" title="class in net.minestom.server.command"><code>ServerSender</code></a> to do not
+ print the command messages, and rely instead on the command return data.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="builder/Command.html" title="class in net.minestom.server.command.builder">Command</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCommand(java.lang.String)">getCommand</a></span>&#8203;(java.lang.String&nbsp;commandName)</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="builder/Command.html" title="class in net.minestom.server.command.builder"><code>Command</code></a> registered by <a href="#register(net.minestom.server.command.builder.Command)"><code>register(Command)</code></a>.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="CommandProcessor.html" title="interface in net.minestom.server.command">CommandProcessor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCommandProcessor(java.lang.String)">getCommandProcessor</a></span>&#8203;(java.lang.String&nbsp;commandName)</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="CommandProcessor.html" title="interface in net.minestom.server.command"><code>CommandProcessor</code></a> registered by <a href="#register(net.minestom.server.command.CommandProcessor)"><code>register(CommandProcessor)</code></a>.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="ConsoleSender.html" title="class in net.minestom.server.command">ConsoleSender</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getConsoleSender()">getConsoleSender</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="ConsoleSender.html" title="class in net.minestom.server.command"><code>ConsoleSender</code></a> (which is used as a <a href="CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a>).</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../utils/callback/CommandCallback.html" title="interface in net.minestom.server.utils.callback">CommandCallback</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getUnknownCommandCallback()">getUnknownCommandCallback</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the callback executed once an unknown command is run.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#register(net.minestom.server.command.builder.Command)">register</a></span>&#8203;(<a href="builder/Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</code></th>
 <td class="colLast">
 <div class="block">Registers a <a href="builder/Command.html" title="class in net.minestom.server.command.builder"><code>Command</code></a>.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#register(net.minestom.server.command.CommandProcessor)">register</a></span>&#8203;(<a href="CommandProcessor.html" title="interface in net.minestom.server.command">CommandProcessor</a>&nbsp;commandProcessor)</code></th>
 <td class="colLast">
 <div class="block">Registers a <a href="CommandProcessor.html" title="interface in net.minestom.server.command"><code>CommandProcessor</code></a>.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUnknownCommandCallback(net.minestom.server.utils.callback.CommandCallback)">setUnknownCommandCallback</a></span>&#8203;(<a href="../utils/callback/CommandCallback.html" title="interface in net.minestom.server.utils.callback">CommandCallback</a>&nbsp;unknownCommandCallback)</code></th>
 <td class="colLast">
 <div class="block">Sets the callback executed once an unknown command is run.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#startConsoleThread()">startConsoleThread</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Starts the thread responsible for executing commands from the console.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stopConsoleThread()">stopConsoleThread</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Stops the console responsible for the console commands processing.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unregister(net.minestom.server.command.builder.Command)">unregister</a></span>&#8203;(<a href="builder/Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</code></th>
 <td class="colLast">
@@ -478,10 +486,11 @@ public&nbsp;<a href="CommandProcessor.html" title="interface in net.minestom.ser
 <ul class="blockList">
 <li class="blockList">
 <h4>execute</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;execute&#8203;(@NotNull
-                       <a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
-                       @NotNull
-                       java.lang.String&nbsp;command)</pre>
+<pre class="methodSignature">@Nullable
+public&nbsp;org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;execute&#8203;(@NotNull
+                                                         <a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
+                                                         @NotNull
+                                                         java.lang.String&nbsp;command)</pre>
 <div class="block">Executes a command for a <a href="ConsoleSender.html" title="class in net.minestom.server.command"><code>ConsoleSender</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -489,6 +498,23 @@ public&nbsp;<a href="CommandProcessor.html" title="interface in net.minestom.ser
 <dd><code>command</code> - the raw command string (without the command prefix)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the command hadn't been cancelled and has been successful</dd>
+</dl>
+</li>
+</ul>
+<a id="executeServerCommand(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>executeServerCommand</h4>
+<pre class="methodSignature">@Nullable
+public&nbsp;org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;executeServerCommand&#8203;(@NotNull
+                                                                      java.lang.String&nbsp;command)</pre>
+<div class="block">Executes the command using a <a href="ServerSender.html" title="class in net.minestom.server.command"><code>ServerSender</code></a> to do not
+ print the command messages, and rely instead on the command return data.</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#execute(net.minestom.server.command.CommandSender,java.lang.String)"><code>execute(CommandSender, String)</code></a></dd>
 </dl>
 </li>
 </ul>
