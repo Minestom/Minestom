@@ -106,7 +106,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     // list of scheduled tasks to be executed during the next entity tick
     protected final Queue<Consumer<Entity>> nextTick = Queues.newConcurrentLinkedQueue();
 
-    // Cache for generated UUID. Based on the Entity's ID.
+    // Cache for generated UUID. Based on the Entity's ID. Specifically meant to please the client.
     protected final UUID uuid;
 
     // Tick related
@@ -145,7 +145,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     /**
      * Gets an entity based on its id (from {@link #getEntityId()}).
      * <p>
-     * Entity id are unique server-wide.
+     * An Entity's ID (EID) is unique server-wide.
      *
      * @param id the entity unique id
      * @return the entity having the specified id, null if not found
@@ -158,7 +158,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     /**
      * Gets an entity based on its uuid (from {@link #getUuid()} ()}).
      * <p>
-     * Entity id are unique server-wide.
+     * UUIDs are based on an Entity's ID (EID), preventing duplicates.
      *
      * @param uuid the entity unique universal id
      * @return the entity having the specified id, null if not found
@@ -192,7 +192,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     public abstract void spawn();
 
     /**
-     * Generates a UUID from the entity ID. May be CPU expensive in large operations.
+     * Generates a UUID from the Entity ID (EID). May be CPU expensive in large operations.
      *
      * @return The UUID generated on the spot.
      */
