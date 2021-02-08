@@ -8,7 +8,6 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -87,7 +86,7 @@ public class CommandDispatcher {
      * @return the command data, null if none
      */
     @Nullable
-    public NBTCompound execute(@NotNull CommandSender source, @NotNull String commandString) {
+    public CommandData execute(@NotNull CommandSender source, @NotNull String commandString) {
         CommandResult result = parse(commandString);
         if (result != null) {
             return result.execute(source, commandString);
@@ -382,7 +381,7 @@ public class CommandDispatcher {
          * @return the command data, null if none
          */
         @Nullable
-        public NBTCompound execute(@NotNull CommandSender source, @NotNull String commandString) {
+        public CommandData execute(@NotNull CommandSender source, @NotNull String commandString) {
             // Global listener
             command.globalListener(source, arguments, commandString);
             // Command condition check
@@ -413,7 +412,7 @@ public class CommandDispatcher {
                 callback.apply(source, argumentSyntaxException);
             }
 
-            return arguments.getCommandReturn();
+            return arguments.getReturnData();
         }
 
     }

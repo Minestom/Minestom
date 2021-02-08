@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandData;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.*;
@@ -157,7 +158,7 @@ public final class CommandManager {
      * @return true if the command hadn't been cancelled and has been successful
      */
     @Nullable
-    public NBTCompound execute(@NotNull CommandSender sender, @NotNull String command) {
+    public CommandData execute(@NotNull CommandSender sender, @NotNull String command) {
 
         // Command event
         if (sender instanceof Player) {
@@ -176,7 +177,7 @@ public final class CommandManager {
 
         {
             // Check for rich-command
-            final NBTCompound commandData = this.dispatcher.execute(sender, command);
+            final CommandData commandData = this.dispatcher.execute(sender, command);
             if (commandData != null) {
                 return commandData;
             } else {
@@ -202,11 +203,11 @@ public final class CommandManager {
     /**
      * Executes the command using a {@link ServerSender} to do not
      * print the command messages, and rely instead on the command return data.
-     * 
-     * @see #execute(CommandSender, String) 
+     *
+     * @see #execute(CommandSender, String)
      */
     @Nullable
-    public NBTCompound executeServerCommand(@NotNull String command) {
+    public CommandData executeServerCommand(@NotNull String command) {
         return execute(serverSender, command);
     }
 

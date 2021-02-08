@@ -35,7 +35,7 @@ public final class Arguments {
 
     private Map<String, Object> args = new HashMap<>();
 
-    private NBTCompound commandReturn;
+    private CommandData returnData;
 
     @NotNull
     public <T> T get(@NotNull Argument<T> argument) {
@@ -253,12 +253,12 @@ public final class Arguments {
     }
 
     @Nullable
-    public NBTCompound getCommandReturn() {
-        return commandReturn;
+    public CommandData getReturnData() {
+        return returnData;
     }
 
-    public void setCommandReturn(@Nullable NBTCompound commandReturn) {
-        this.commandReturn = commandReturn;
+    public void setReturnData(@Nullable CommandData returnData) {
+        this.returnData = returnData;
     }
 
     protected void setArg(@NotNull String id, Object value) {
