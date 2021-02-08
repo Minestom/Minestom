@@ -400,7 +400,7 @@ public final class CommandManager {
         // Contains the arguments of the already-parsed syntaxes
         List<Argument<?>[]> syntaxesArguments = new ArrayList<>();
         // Contains the nodes of an argument
-        Map<Argument<?>, List<DeclareCommandsPacket.Node>> storedArgumentsNodes = new HashMap<>();
+        Map<Argument<?>, DeclareCommandsPacket.Node[]> storedArgumentsNodes = new HashMap<>();
 
         for (CommandSyntax syntax : syntaxes) {
             final CommandCondition commandCondition = syntax.getCommandCondition();
@@ -411,7 +411,7 @@ public final class CommandManager {
 
 
             // Represent the last nodes computed in the last iteration
-            List<DeclareCommandsPacket.Node> lastNodes = null;
+            DeclareCommandsPacket.Node[] lastNodes = null;
 
             // Represent the children of the last node
             IntList argChildren = null;
@@ -439,7 +439,7 @@ public final class CommandManager {
 
 
                 final DeclareCommandsPacket.Node[] argumentNodes = toNodes(argument, isLast);
-                storedArgumentsNodes.put(argument, Arrays.asList(argumentNodes));
+                storedArgumentsNodes.put(argument, argumentNodes);
                 for (DeclareCommandsPacket.Node node : argumentNodes) {
                     final int childId = nodes.size();
 
@@ -453,9 +453,12 @@ public final class CommandManager {
 
                     if (lastNodes != null) {
                         final int[] children = ArrayUtils.toArray(argChildren);
-                        lastNodes.forEach(n -> n.children = n.children == null ?
-                                children :
-                                ArrayUtils.concatenateIntArrays(n.children, children));
+
+                        for (DeclareCommandsPacket.Node lastNode : lastNodes) {
+                            lastNode.children = lastNode.children == null ?
+                                    children :
+                                    ArrayUtils.concatenateIntArrays(lastNode.children, children);
+                        }
                     }
 
                     nodes.add(node);
@@ -468,7 +471,10 @@ public final class CommandManager {
                 if (isLast) {
                     // Last argument doesn't have children
                     final int[] children = new int[0];
-                    argumentNodes.forEach(node -> node.children = children);
+
+                    for (DeclareCommandsPacket.Node node : argumentNodes) {
+                        node.children = children;
+                    }
                 } else {
                     // Create children list which will be filled during next iteration
                     argChildren = new IntArrayList();
