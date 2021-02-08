@@ -1,6 +1,5 @@
 package net.minestom.server.command.builder.arguments;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
@@ -41,7 +40,7 @@ public class ArgumentDynamicStringArray extends Argument<String[]> {
     @NotNull
     @Override
     public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = MinecraftServer.getCommandManager().simpleArgumentNode(this, executable, true);
+        DeclareCommandsPacket.Node argumentNode = COMMAND_MANAGER.simpleArgumentNode(this, executable, true);
 
         argumentNode.parser = "brigadier:string";
         argumentNode.properties = packetWriter -> {

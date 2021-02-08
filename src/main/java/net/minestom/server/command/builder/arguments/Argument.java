@@ -1,5 +1,7 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
@@ -20,6 +22,8 @@ import java.util.List;
  * @param <T> the type of this parsed argument
  */
 public abstract class Argument<T> {
+
+    protected final static CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();
 
     private final String id;
     private final boolean allowSpace;

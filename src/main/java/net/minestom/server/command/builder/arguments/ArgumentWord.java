@@ -94,7 +94,7 @@ public class ArgumentWord extends Argument<String> {
             for (int i = 0; i < nodes.length; i++) {
                 DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
 
-                argumentNode.flags = MinecraftServer.getCommandManager().getFlag(CommandManager.NodeType.LITERAL, executable, false, false);
+                argumentNode.flags = COMMAND_MANAGER.getFlag(CommandManager.NodeType.LITERAL, executable, false, false);
                 argumentNode.name = this.getRestrictions()[i];
                 wordConsumer.accept(argumentNode);
                 nodes[i] = argumentNode;

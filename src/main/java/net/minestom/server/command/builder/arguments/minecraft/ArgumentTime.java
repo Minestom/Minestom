@@ -2,7 +2,6 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import it.unimi.dsi.fastutil.chars.CharArrayList;
 import it.unimi.dsi.fastutil.chars.CharList;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
@@ -29,6 +28,7 @@ public class ArgumentTime extends Argument<UpdateOption> {
     @NotNull
     @Override
     public UpdateOption parse(@NotNull String input) throws ArgumentSyntaxException {
+        // TODO time unit is omittable
         final char lastChar = input.charAt(input.length() - 1);
         if (!SUFFIXES.contains(lastChar))
             throw new ArgumentSyntaxException("Time format is invalid", input, INVALID_TIME_FORMAT);
@@ -39,13 +39,15 @@ public class ArgumentTime extends Argument<UpdateOption> {
             // Check if value is a number
             final int time = Integer.parseInt(input);
 
-            TimeUnit timeUnit = null;
+            TimeUnit timeUnit;
             if (lastChar == 'd') {
                 timeUnit = TimeUnit.DAY;
             } else if (lastChar == 's') {
                 timeUnit = TimeUnit.SECOND;
             } else if (lastChar == 't') {
                 timeUnit = TimeUnit.TICK;
+            } else {
+                throw new ArgumentSyntaxException("Time needs to have a unit", input, NO_NUMBER);
             }
 
             return new UpdateOption(time, timeUnit);
@@ -57,7 +59,7 @@ public class ArgumentTime extends Argument<UpdateOption> {
     @NotNull
     @Override
     public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = MinecraftServer.getCommandManager().simpleArgumentNode(this, executable, false);
+        DeclareCommandsPacket.Node argumentNode = COMMAND_MANAGER.simpleArgumentNode(this, executable, false);
         argumentNode.parser = "minecraft:time";
         return new DeclareCommandsPacket.Node[]{argumentNode};
     }

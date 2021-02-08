@@ -1,6 +1,5 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
@@ -39,7 +38,7 @@ public class ArgumentNbtTag extends Argument<NBT> {
     @NotNull
     @Override
     public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = MinecraftServer.getCommandManager().simpleArgumentNode(this, executable, false);
+        DeclareCommandsPacket.Node argumentNode = COMMAND_MANAGER.simpleArgumentNode(this, executable, false);
         argumentNode.parser = "minecraft:nbt_tag";
         return new DeclareCommandsPacket.Node[]{argumentNode};
     }

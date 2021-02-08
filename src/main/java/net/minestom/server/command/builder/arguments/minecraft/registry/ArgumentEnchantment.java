@@ -1,6 +1,5 @@
 package net.minestom.server.command.builder.arguments.minecraft.registry;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.registry.Registries;
@@ -23,7 +22,7 @@ public class ArgumentEnchantment extends ArgumentRegistry<Enchantment> {
     @NotNull
     @Override
     public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = MinecraftServer.getCommandManager().simpleArgumentNode(this, executable, false);
+        DeclareCommandsPacket.Node argumentNode = COMMAND_MANAGER.simpleArgumentNode(this, executable, false);
         argumentNode.parser = "minecraft:item_enchantment";
         return new DeclareCommandsPacket.Node[]{argumentNode};
     }

@@ -36,7 +36,7 @@ public class ArgumentInteger extends ArgumentNumber<Integer> {
     @NotNull
     @Override
     public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = MinecraftServer.getCommandManager().simpleArgumentNode(this, executable, false);
+        DeclareCommandsPacket.Node argumentNode = COMMAND_MANAGER.simpleArgumentNode(this, executable, false);
 
         argumentNode.parser = "brigadier:integer";
         argumentNode.properties = packetWriter -> {

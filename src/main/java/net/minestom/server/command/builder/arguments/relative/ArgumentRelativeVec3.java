@@ -1,6 +1,5 @@
 package net.minestom.server.command.builder.arguments.relative;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.Vector;
@@ -79,7 +78,7 @@ public class ArgumentRelativeVec3 extends ArgumentRelative<RelativeVec> {
     @NotNull
     @Override
     public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = MinecraftServer.getCommandManager().simpleArgumentNode(this, executable, false);
+        DeclareCommandsPacket.Node argumentNode = COMMAND_MANAGER.simpleArgumentNode(this, executable, false);
         argumentNode.parser = "minecraft:vec3";
         return new DeclareCommandsPacket.Node[]{argumentNode};
     }
