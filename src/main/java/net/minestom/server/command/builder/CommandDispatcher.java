@@ -8,6 +8,7 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -79,18 +80,19 @@ public class CommandDispatcher {
     }
 
     /**
-     * Check if the command exists, and execute it.
+     * Checks if the command exists, and execute it.
      *
      * @param source        the command source
      * @param commandString the command with the argument(s)
-     * @return true if the command executed successfully, false if the command doesn't exist
+     * @return the command data, null if none
      */
-    public boolean execute(@NotNull CommandSender source, @NotNull String commandString) {
+    @Nullable
+    public NBTCompound execute(@NotNull CommandSender source, @NotNull String commandString) {
         CommandResult result = parse(commandString);
         if (result != null) {
-            result.execute(source, commandString);
+            return result.execute(source, commandString);
         }
-        return result != null;
+        return null;
     }
 
     @NotNull
@@ -377,8 +379,10 @@ public class CommandDispatcher {
          *
          * @param source        the command source
          * @param commandString the command string
+         * @return the command data, null if none
          */
-        public void execute(@NotNull CommandSender source, @NotNull String commandString) {
+        @Nullable
+        public NBTCompound execute(@NotNull CommandSender source, @NotNull String commandString) {
             // Global listener
             command.globalListener(source, arguments, commandString);
             // Command condition check
@@ -386,7 +390,7 @@ public class CommandDispatcher {
             if (condition != null) {
                 final boolean result = condition.canUse(source, commandString);
                 if (!result)
-                    return;
+                    return null;
             }
             // Condition is respected
             if (executor != null) {
@@ -408,6 +412,8 @@ public class CommandDispatcher {
                 // Execute the faulty argument callback
                 callback.apply(source, argumentSyntaxException);
             }
+
+            return arguments.getCommandReturn();
         }
 
     }

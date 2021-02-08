@@ -27,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -45,6 +46,7 @@ public final class CommandManager {
 
     private volatile boolean running = true;
 
+    private final ServerSender serverSender = new ServerSender();
     private final ConsoleSender consoleSender = new ConsoleSender();
 
     private final CommandDispatcher dispatcher = new CommandDispatcher();
@@ -154,7 +156,8 @@ public final class CommandManager {
      * @param command the raw command string (without the command prefix)
      * @return true if the command hadn't been cancelled and has been successful
      */
-    public boolean execute(@NotNull CommandSender sender, @NotNull String command) {
+    @Nullable
+    public NBTCompound execute(@NotNull CommandSender sender, @NotNull String command) {
 
         // Command event
         if (sender instanceof Player) {
@@ -164,7 +167,7 @@ public final class CommandManager {
             player.callEvent(PlayerCommandEvent.class, playerCommandEvent);
 
             if (playerCommandEvent.isCancelled())
-                return false;
+                return null;
 
             command = playerCommandEvent.getCommand();
         }
@@ -173,9 +176,9 @@ public final class CommandManager {
 
         {
             // Check for rich-command
-            final boolean result = this.dispatcher.execute(sender, command);
-            if (result) {
-                return true;
+            final NBTCompound commandData = this.dispatcher.execute(sender, command);
+            if (commandData != null) {
+                return commandData;
             } else {
                 // Check for legacy-command
                 final String[] splitCommand = command.split(StringUtils.SPACE);
@@ -185,15 +188,26 @@ public final class CommandManager {
                     if (unknownCommandCallback != null) {
                         this.unknownCommandCallback.apply(sender, command);
                     }
-                    return false;
+                    return null;
                 }
 
                 // Execute the legacy-command
                 final String[] args = command.substring(command.indexOf(StringUtils.SPACE) + 1).split(StringUtils.SPACE);
-
-                return commandProcessor.process(sender, commandName, args);
+                commandProcessor.process(sender, commandName, args);
+                return null;
             }
         }
+    }
+
+    /**
+     * Executes the command using a {@link ServerSender} to do not
+     * print the command messages, and rely instead on the command return data.
+     * 
+     * @see #execute(CommandSender, String) 
+     */
+    @Nullable
+    public NBTCompound executeServerCommand(@NotNull String command) {
+        return execute(serverSender, command);
     }
 
     /**

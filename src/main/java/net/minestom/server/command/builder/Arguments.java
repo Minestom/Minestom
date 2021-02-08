@@ -35,6 +35,8 @@ public final class Arguments {
 
     private Map<String, Object> args = new HashMap<>();
 
+    private NBTCompound commandReturn;
+
     @NotNull
     public <T> T get(@NotNull Argument<T> argument) {
         return (T) getObject(argument.getId());
@@ -248,6 +250,15 @@ public final class Arguments {
             throw new NullPointerException(
                     "The argument with the id '" + id + "' has no value assigned, be sure to check your arguments id, your syntax, and that you do not change the argument id dynamically.");
         });
+    }
+
+    @Nullable
+    public NBTCompound getCommandReturn() {
+        return commandReturn;
+    }
+
+    public void setCommandReturn(@Nullable NBTCompound commandReturn) {
+        this.commandReturn = commandReturn;
     }
 
     protected void setArg(@NotNull String id, Object value) {
