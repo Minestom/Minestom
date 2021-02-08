@@ -66,6 +66,9 @@ public final class PacketUtils {
                 // Send packet to all players
                 for (Player player : players) {
 
+                    if (!player.isOnline())
+                        continue;
+
                     // Verify if the player should receive the packet
                     if (playerValidator != null && !playerValidator.isValid(player))
                         continue;
