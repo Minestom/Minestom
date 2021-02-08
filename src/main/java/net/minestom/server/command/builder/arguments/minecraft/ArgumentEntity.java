@@ -6,6 +6,7 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.entity.EntityFinder;
 import net.minestom.server.utils.math.IntRange;
@@ -65,6 +66,25 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     @Override
     public EntityFinder parse(@NotNull String input) throws ArgumentSyntaxException {
         return staticParse(input, onlySingleEntity, onlyPlayers);
+    }
+
+    @NotNull
+    @Override
+    public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
+        DeclareCommandsPacket.Node argumentNode = MinecraftServer.getCommandManager().simpleArgumentNode(this, executable, false);
+        argumentNode.parser = "minecraft:entity";
+        argumentNode.properties = packetWriter -> {
+            byte mask = 0;
+            if (this.isOnlySingleEntity()) {
+                mask += 1;
+            }
+            if (this.isOnlyPlayers()) {
+                mask += 2;
+            }
+            packetWriter.writeByte(mask);
+        };
+
+        return new DeclareCommandsPacket.Node[]{argumentNode};
     }
 
     @NotNull

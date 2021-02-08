@@ -4,8 +4,11 @@ import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 /**
  * An argument is meant to be parsed when added into a {@link Command}'s syntax with {@link Command#addSyntax(CommandExecutor, Argument[])}.
@@ -68,6 +71,14 @@ public abstract class Argument<T> {
      */
     @NotNull
     public abstract T parse(@NotNull String input) throws ArgumentSyntaxException;
+
+    /**
+     * Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.
+     *
+     * @return the argument as a list of command packet nodes
+     */
+    @NotNull
+    public abstract DeclareCommandsPacket.Node[] toNodes(boolean executable);
 
     /**
      * Gets the ID of the argument, showed in-game above the chat bar

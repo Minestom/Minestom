@@ -1,5 +1,7 @@
 package net.minestom.server.command.builder.arguments.minecraft.registry;
 
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.registry.Registries;
 import org.jetbrains.annotations.NotNull;
@@ -16,5 +18,13 @@ public class ArgumentParticle extends ArgumentRegistry<Particle> {
     @Override
     public Particle getRegistry(@NotNull String value) {
         return Registries.getParticle(value);
+    }
+
+    @NotNull
+    @Override
+    public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
+        DeclareCommandsPacket.Node argumentNode = MinecraftServer.getCommandManager().simpleArgumentNode(this, executable, false);
+        argumentNode.parser = "minecraft:particle";
+        return new DeclareCommandsPacket.Node[]{argumentNode};
     }
 }

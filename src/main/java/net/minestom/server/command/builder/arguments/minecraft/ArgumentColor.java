@@ -1,8 +1,10 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -26,5 +28,13 @@ public class ArgumentColor extends Argument<ChatColor> {
             throw new ArgumentSyntaxException("Undefined color", input, UNDEFINED_COLOR);
 
         return color;
+    }
+
+    @NotNull
+    @Override
+    public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
+        DeclareCommandsPacket.Node argumentNode = MinecraftServer.getCommandManager().simpleArgumentNode(this, executable, false);
+        argumentNode.parser = "minecraft:color";
+        return new DeclareCommandsPacket.Node[]{argumentNode};
     }
 }

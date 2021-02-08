@@ -1,8 +1,10 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.callback.validator.StringValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +43,21 @@ public class ArgumentDynamicWord extends Argument<String> {
         }
 
         return input;
+    }
+
+    @NotNull
+    @Override
+    public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
+        DeclareCommandsPacket.Node argumentNode = MinecraftServer.getCommandManager().simpleArgumentNode(this, executable, true);
+
+        final SuggestionType suggestionType = this.getSuggestionType();
+
+        argumentNode.parser = "brigadier:string";
+        argumentNode.properties = packetWriter -> {
+            packetWriter.writeVarInt(0); // Single word
+        };
+        argumentNode.suggestionsType = suggestionType.getIdentifier();
+        return new DeclareCommandsPacket.Node[]{argumentNode};
     }
 
     /**

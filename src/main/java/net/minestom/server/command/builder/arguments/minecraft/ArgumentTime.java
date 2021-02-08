@@ -2,8 +2,10 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import it.unimi.dsi.fastutil.chars.CharArrayList;
 import it.unimi.dsi.fastutil.chars.CharList;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
@@ -50,5 +52,13 @@ public class ArgumentTime extends Argument<UpdateOption> {
         } catch (NumberFormatException e) {
             throw new ArgumentSyntaxException("Time needs to be a number", input, NO_NUMBER);
         }
+    }
+
+    @NotNull
+    @Override
+    public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
+        DeclareCommandsPacket.Node argumentNode = MinecraftServer.getCommandManager().simpleArgumentNode(this, executable, false);
+        argumentNode.parser = "minecraft:time";
+        return new DeclareCommandsPacket.Node[]{argumentNode};
     }
 }

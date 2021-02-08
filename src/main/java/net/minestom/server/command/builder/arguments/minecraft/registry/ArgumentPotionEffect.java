@@ -1,5 +1,7 @@
 package net.minestom.server.command.builder.arguments.minecraft.registry;
 
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.registry.Registries;
 import org.jetbrains.annotations.NotNull;
@@ -16,5 +18,13 @@ public class ArgumentPotionEffect extends ArgumentRegistry<PotionEffect> {
     @Override
     public PotionEffect getRegistry(@NotNull String value) {
         return Registries.getPotionEffect(value);
+    }
+
+    @NotNull
+    @Override
+    public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
+        DeclareCommandsPacket.Node argumentNode = MinecraftServer.getCommandManager().simpleArgumentNode(this, executable, false);
+        argumentNode.parser = "minecraft:mob_effect";
+        return new DeclareCommandsPacket.Node[]{argumentNode};
     }
 }

@@ -1,9 +1,11 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NBTUtils;
 import org.jetbrains.annotations.NotNull;
@@ -60,5 +62,13 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
             return itemStack;
         }
+    }
+
+    @NotNull
+    @Override
+    public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
+        DeclareCommandsPacket.Node argumentNode = MinecraftServer.getCommandManager().simpleArgumentNode(this, executable, false);
+        argumentNode.parser = "minecraft:item_stack";
+        return new DeclareCommandsPacket.Node[]{argumentNode};
     }
 }

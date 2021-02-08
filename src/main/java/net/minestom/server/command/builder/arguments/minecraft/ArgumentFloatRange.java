@@ -1,6 +1,8 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.math.FloatRange;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,5 +53,13 @@ public class ArgumentFloatRange extends ArgumentRange<FloatRange> {
         } catch (NumberFormatException e2) {
             throw new ArgumentSyntaxException("Invalid number", input, FORMAT_ERROR);
         }
+    }
+
+    @NotNull
+    @Override
+    public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
+        DeclareCommandsPacket.Node argumentNode = MinecraftServer.getCommandManager().simpleArgumentNode(this, executable, false);
+        argumentNode.parser = "minecraft:float_range";
+        return new DeclareCommandsPacket.Node[]{argumentNode};
     }
 }

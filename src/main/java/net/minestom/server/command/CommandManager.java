@@ -8,15 +8,7 @@ import net.minestom.server.command.builder.CommandData;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.*;
-import net.minestom.server.command.builder.arguments.minecraft.*;
-import net.minestom.server.command.builder.arguments.minecraft.registry.*;
-import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
-import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
-import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
-import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeBlockPosition;
-import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec2;
-import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerCommandEvent;
@@ -33,7 +25,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * Manager used to register {@link Command} and {@link CommandProcessor}.
@@ -447,8 +438,8 @@ public final class CommandManager {
                 }
 
 
-                final List<DeclareCommandsPacket.Node> argumentNodes = toNodes(argument, isLast);
-                storedArgumentsNodes.put(argument, argumentNodes);
+                final DeclareCommandsPacket.Node[] argumentNodes = toNodes(argument, isLast);
+                storedArgumentsNodes.put(argument, Arrays.asList(argumentNodes));
                 for (DeclareCommandsPacket.Node node : argumentNodes) {
                     final int childId = nodes.size();
 
@@ -513,183 +504,20 @@ public final class CommandManager {
      * @return the list of nodes that the argument require
      */
     @NotNull
-    private List<DeclareCommandsPacket.Node> toNodes(@NotNull Argument<?> argument, boolean executable) {
-        List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
+    private DeclareCommandsPacket.Node[] toNodes(@NotNull Argument<?> argument, boolean executable) {
 
         // You can uncomment this to test any brigadier parser on the client
-        /*DeclareCommandsPacket.Node testNode = simpleArgumentNode(nodes, argument, executable, false);
+
+        /*
+        DeclareCommandsPacket.Node testNode = simpleArgumentNode(nodes, argument, executable, false);
         testNode.parser = "minecraft:block_state";
-
-        if (true) {
-            return nodes;
-        }*/
-
-        if (argument instanceof ArgumentBoolean) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-
-            argumentNode.parser = "brigadier:bool";
-        } else if (argument instanceof ArgumentDouble) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-
-            ArgumentDouble argumentDouble = (ArgumentDouble) argument;
-            argumentNode.parser = "brigadier:double";
-            argumentNode.properties = packetWriter -> {
-                packetWriter.writeByte(getNumberProperties(argumentDouble));
-                if (argumentDouble.hasMin())
-                    packetWriter.writeDouble(argumentDouble.getMin());
-                if (argumentDouble.hasMax())
-                    packetWriter.writeDouble(argumentDouble.getMax());
-            };
-        } else if (argument instanceof ArgumentFloat) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-
-            ArgumentFloat argumentFloat = (ArgumentFloat) argument;
-            argumentNode.parser = "brigadier:float";
-            argumentNode.properties = packetWriter -> {
-                packetWriter.writeByte(getNumberProperties(argumentFloat));
-                if (argumentFloat.hasMin())
-                    packetWriter.writeFloat(argumentFloat.getMin());
-                if (argumentFloat.hasMax())
-                    packetWriter.writeFloat(argumentFloat.getMax());
-            };
-        } else if (argument instanceof ArgumentInteger) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-
-            ArgumentInteger argumentInteger = (ArgumentInteger) argument;
-            argumentNode.parser = "brigadier:integer";
-            argumentNode.properties = packetWriter -> {
-                packetWriter.writeByte(getNumberProperties(argumentInteger));
-                if (argumentInteger.hasMin())
-                    packetWriter.writeInt(argumentInteger.getMin());
-                if (argumentInteger.hasMax())
-                    packetWriter.writeInt(argumentInteger.getMax());
-            };
-        } else if (argument instanceof ArgumentWord) {
-
-            ArgumentWord argumentWord = (ArgumentWord) argument;
-
-            // Add the single word properties + parser
-            final Consumer<DeclareCommandsPacket.Node> wordConsumer = node -> {
-                node.parser = "brigadier:string";
-                node.properties = packetWriter -> {
-                    packetWriter.writeVarInt(0); // Single word
-                };
-            };
-
-            final boolean hasRestriction = argumentWord.hasRestrictions();
-            if (hasRestriction) {
-                // Create a node for each restrictions as literal
-                for (String restrictionWord : argumentWord.getRestrictions()) {
-                    DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
-                    nodes.add(argumentNode);
-
-                    argumentNode.flags = getFlag(NodeType.LITERAL, executable, false, false);
-                    argumentNode.name = restrictionWord;
-                    wordConsumer.accept(argumentNode);
-                }
-            } else {
-                // Can be any word, add only one argument node
-                DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-                wordConsumer.accept(argumentNode);
-            }
-        } else if (argument instanceof ArgumentDynamicWord) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, true);
-
-            final SuggestionType suggestionType = ((ArgumentDynamicWord) argument).getSuggestionType();
-
-            argumentNode.parser = "brigadier:string";
-            argumentNode.properties = packetWriter -> {
-                packetWriter.writeVarInt(0); // Single word
-            };
-            argumentNode.suggestionsType = suggestionType.getIdentifier();
-
-        } else if (argument instanceof ArgumentString) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-
-            argumentNode.parser = "brigadier:string";
-            argumentNode.properties = packetWriter -> {
-                packetWriter.writeVarInt(1); // Quotable phrase
-            };
-        } else if (argument instanceof ArgumentStringArray) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-
-            argumentNode.parser = "brigadier:string";
-            argumentNode.properties = packetWriter -> {
-                packetWriter.writeVarInt(2); // Greedy phrase
-            };
-        } else if (argument instanceof ArgumentDynamicStringArray) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, true);
-
-            argumentNode.parser = "brigadier:string";
-            argumentNode.properties = packetWriter -> {
-                packetWriter.writeVarInt(2); // Greedy phrase
-            };
-            argumentNode.suggestionsType = "minecraft:ask_server";
-        } else if (argument instanceof ArgumentColor) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:color";
-        } else if (argument instanceof ArgumentTime) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:time";
-        } else if (argument instanceof ArgumentEnchantment) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:item_enchantment";
-        } else if (argument instanceof ArgumentParticle) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:particle";
-        } else if (argument instanceof ArgumentPotionEffect) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:mob_effect";
-        } else if (argument instanceof ArgumentEntityType) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:entity_summon";
-        } else if (argument instanceof ArgumentBlockState) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:block_state";
-        } else if (argument instanceof ArgumentIntRange) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:int_range";
-        } else if (argument instanceof ArgumentFloatRange) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:float_range";
-        } else if (argument instanceof ArgumentEntity) {
-            ArgumentEntity argumentEntity = (ArgumentEntity) argument;
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:entity";
-            argumentNode.properties = packetWriter -> {
-                byte mask = 0;
-                if (argumentEntity.isOnlySingleEntity()) {
-                    mask += 1;
-                }
-                if (argumentEntity.isOnlyPlayers()) {
-                    mask += 2;
-                }
-                packetWriter.writeByte(mask);
-            };
-        } else if (argument instanceof ArgumentItemStack) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:item_stack";
-        } else if (argument instanceof ArgumentNbtCompoundTag) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:nbt_compound_tag";
-        } else if (argument instanceof ArgumentNbtTag) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:nbt_tag";
-        } else if (argument instanceof ArgumentRelativeBlockPosition) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:block_pos";
-        } else if (argument instanceof ArgumentRelativeVec3) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:vec3";
-        } else if (argument instanceof ArgumentRelativeVec2) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:vec2";
-        }
-
         return nodes;
+        */
+
+        return argument.toNodes(executable);
     }
 
-    private byte getNumberProperties(@NotNull ArgumentNumber<? extends Number> argumentNumber) {
+    public byte getNumberProperties(@NotNull ArgumentNumber<? extends Number> argumentNumber) {
         byte result = 0;
         if (argumentNumber.hasMin())
             result += 1;
@@ -699,18 +527,16 @@ public final class CommandManager {
     }
 
     /**
-     * Builds an argument nod and add it to the nodes list.
+     * Builds an argument node.
      *
-     * @param nodes      the current nodes list
      * @param argument   the argument
      * @param executable true if this will be the last argument, false otherwise
      * @return the created {@link DeclareCommandsPacket.Node}
      */
     @NotNull
-    private DeclareCommandsPacket.Node simpleArgumentNode(@NotNull List<DeclareCommandsPacket.Node> nodes,
-                                                          @NotNull Argument<?> argument, boolean executable, boolean suggestion) {
+    public DeclareCommandsPacket.Node simpleArgumentNode(@NotNull Argument<?> argument,
+                                                          boolean executable, boolean suggestion) {
         DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
-        nodes.add(argumentNode);
 
         argumentNode.flags = getFlag(NodeType.ARGUMENT, executable, false, suggestion);
         argumentNode.name = argument.getId();
@@ -718,7 +544,7 @@ public final class CommandManager {
         return argumentNode;
     }
 
-    private byte getFlag(@NotNull NodeType type, boolean executable, boolean redirect, boolean suggestionType) {
+    public byte getFlag(@NotNull NodeType type, boolean executable, boolean redirect, boolean suggestionType) {
         byte result = (byte) type.mask;
 
         if (executable) {
@@ -735,7 +561,7 @@ public final class CommandManager {
         return result;
     }
 
-    private enum NodeType {
+    public enum NodeType {
         ROOT(0), LITERAL(0b1), ARGUMENT(0b10), NONE(0x11);
 
         private final int mask;
