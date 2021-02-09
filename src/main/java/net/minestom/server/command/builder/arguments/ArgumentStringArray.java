@@ -20,7 +20,7 @@ public class ArgumentStringArray extends Argument<String[]> {
 
     @NotNull
     @Override
-    public String[] parse(@NotNull String input) throws ArgumentSyntaxException {
+    public String[] parse(@NotNull String input) {
         return input.split(Pattern.quote(StringUtils.SPACE));
     }
 

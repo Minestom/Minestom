@@ -31,7 +31,7 @@ public class CommandDispatcher {
         // Register aliases
         final String[] aliases = command.getAliases();
         if (aliases != null) {
-            for (String alias : command.getAliases()) {
+            for (String alias : aliases) {
                 this.commandMap.put(alias.toLowerCase(), command);
             }
         }
@@ -62,12 +62,13 @@ public class CommandDispatcher {
         final String[] parts = commandString.split(StringUtils.SPACE);
         final String commandName = parts[0];
 
-        final String[] args = commandString.replaceFirst(Pattern.quote(commandName), "").trim().split(StringUtils.SPACE);
-
         final Command command = findCommand(commandName);
         // Check if the command exists
         if (command == null)
             return null;
+
+        // Removes the command's name + the space after
+        final String[] args = commandString.replaceFirst(Pattern.quote(commandName), "").trim().split(StringUtils.SPACE);
 
         // Find the used syntax, or check which argument is wrong
         return findCommandResult(command, args);
