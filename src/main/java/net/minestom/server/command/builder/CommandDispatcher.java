@@ -96,8 +96,8 @@ public class CommandDispatcher {
     }
 
     @NotNull
-    public Collection<Command> getCommands() {
-        return Collections.unmodifiableCollection(commands);
+    public Set<Command> getCommands() {
+        return Collections.unmodifiableSet(commands);
     }
 
     /**
