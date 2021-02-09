@@ -71,7 +71,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     @NotNull
     @Override
     public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = MinecraftServer.getCommandManager().simpleArgumentNode(this, executable, false);
+        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false);
         argumentNode.parser = "minecraft:entity";
         argumentNode.properties = packetWriter -> {
             byte mask = 0;

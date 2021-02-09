@@ -103,7 +103,7 @@ public class ArgumentWord extends Argument<String> {
             return nodes;
         } else {
             // Can be any word, add only one argument node
-            DeclareCommandsPacket.Node argumentNode = MinecraftServer.getCommandManager().simpleArgumentNode(this, executable, false);
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false);
             wordConsumer.accept(argumentNode);
             return new DeclareCommandsPacket.Node[]{argumentNode};
         }
