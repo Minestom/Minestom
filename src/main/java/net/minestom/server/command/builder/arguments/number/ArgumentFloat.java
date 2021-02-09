@@ -49,7 +49,7 @@ public class ArgumentFloat extends ArgumentNumber<Float> {
 
         argumentNode.parser = "brigadier:float";
         argumentNode.properties = packetWriter -> {
-            packetWriter.writeByte(MinecraftServer.getCommandManager().getNumberProperties(this));
+            packetWriter.writeByte(getNumberProperties());
             if (this.hasMin())
                 packetWriter.writeFloat(this.getMin());
             if (this.hasMax())

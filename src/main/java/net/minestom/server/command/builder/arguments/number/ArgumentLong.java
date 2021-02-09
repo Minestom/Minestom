@@ -42,7 +42,7 @@ public class ArgumentLong extends ArgumentNumber<Long> {
 
         argumentNode.parser = "brigadier:int";
         argumentNode.properties = packetWriter -> {
-            packetWriter.writeByte(MinecraftServer.getCommandManager().getNumberProperties(this));
+            packetWriter.writeByte(getNumberProperties());
             if (this.hasMin())
                 packetWriter.writeInt(this.getMin().intValue());
             if (this.hasMax())

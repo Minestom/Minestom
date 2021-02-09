@@ -10,7 +10,6 @@ import net.minestom.server.command.builder.CommandData;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.*;
-import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerCommandEvent;
@@ -518,6 +517,7 @@ public final class CommandManager {
         return literalNode;
     }
 
+    // TODO should we even have this function?
     /**
      * Converts an argument to a node with the correct brigadier parser.
      *
@@ -537,15 +537,6 @@ public final class CommandManager {
         */
 
         return argument.toNodes(executable);
-    }
-
-    public byte getNumberProperties(@NotNull ArgumentNumber<? extends Number> argumentNumber) {
-        byte result = 0;
-        if (argumentNumber.hasMin())
-            result += 1;
-        if (argumentNumber.hasMax())
-            result += 2;
-        return result;
     }
 
     public byte getFlag(@NotNull NodeType type, boolean executable, boolean redirect, boolean suggestionType) {

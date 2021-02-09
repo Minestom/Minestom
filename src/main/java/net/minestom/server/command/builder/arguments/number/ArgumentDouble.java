@@ -49,7 +49,7 @@ public class ArgumentDouble extends ArgumentNumber<Double> {
 
         argumentNode.parser = "brigadier:double";
         argumentNode.properties = packetWriter -> {
-            packetWriter.writeByte(MinecraftServer.getCommandManager().getNumberProperties(this));
+            packetWriter.writeByte(getNumberProperties());
             if (this.hasMin())
                 packetWriter.writeDouble(this.getMin());
             if (this.hasMax())

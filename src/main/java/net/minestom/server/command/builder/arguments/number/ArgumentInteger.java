@@ -40,7 +40,7 @@ public class ArgumentInteger extends ArgumentNumber<Integer> {
 
         argumentNode.parser = "brigadier:integer";
         argumentNode.properties = packetWriter -> {
-            packetWriter.writeByte(MinecraftServer.getCommandManager().getNumberProperties(this));
+            packetWriter.writeByte(getNumberProperties());
             if (this.hasMin())
                 packetWriter.writeInt(this.getMin());
             if (this.hasMax())
