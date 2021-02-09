@@ -45,7 +45,7 @@ public class ArgumentDouble extends ArgumentNumber<Double> {
     @NotNull
     @Override
     public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = COMMAND_MANAGER.simpleArgumentNode(this, executable, false);
+        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false);
 
         argumentNode.parser = "brigadier:double";
         argumentNode.properties = packetWriter -> {

@@ -47,7 +47,7 @@ public class ArgumentDynamicWord extends Argument<String> {
     @NotNull
     @Override
     public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = COMMAND_MANAGER.simpleArgumentNode(this, executable, true);
+        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, true);
 
         final SuggestionType suggestionType = this.getSuggestionType();
 

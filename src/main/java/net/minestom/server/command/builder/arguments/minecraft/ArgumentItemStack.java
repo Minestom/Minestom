@@ -66,7 +66,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     @NotNull
     @Override
     public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = COMMAND_MANAGER.simpleArgumentNode(this, executable, false);
+        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false);
         argumentNode.parser = "minecraft:item_stack";
         return new DeclareCommandsPacket.Node[]{argumentNode};
     }

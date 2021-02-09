@@ -57,7 +57,7 @@ public class ArgumentFloatRange extends ArgumentRange<FloatRange> {
     @NotNull
     @Override
     public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = COMMAND_MANAGER.simpleArgumentNode(this, executable, false);
+        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false);
         argumentNode.parser = "minecraft:float_range";
         return new DeclareCommandsPacket.Node[]{argumentNode};
     }

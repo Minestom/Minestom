@@ -534,24 +534,6 @@ public final class CommandManager {
         return result;
     }
 
-    /**
-     * Builds an argument node.
-     *
-     * @param argument   the argument
-     * @param executable true if this will be the last argument, false otherwise
-     * @return the created {@link DeclareCommandsPacket.Node}
-     */
-    @NotNull
-    public DeclareCommandsPacket.Node simpleArgumentNode(@NotNull Argument<?> argument,
-                                                          boolean executable, boolean suggestion) {
-        DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
-
-        argumentNode.flags = getFlag(NodeType.ARGUMENT, executable, false, suggestion);
-        argumentNode.name = argument.getId();
-
-        return argumentNode;
-    }
-
     public byte getFlag(@NotNull NodeType type, boolean executable, boolean redirect, boolean suggestionType) {
         byte result = (byte) type.mask;
 

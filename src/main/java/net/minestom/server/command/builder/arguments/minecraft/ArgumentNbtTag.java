@@ -38,7 +38,7 @@ public class ArgumentNbtTag extends Argument<NBT> {
     @NotNull
     @Override
     public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = COMMAND_MANAGER.simpleArgumentNode(this, executable, false);
+        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false);
         argumentNode.parser = "minecraft:nbt_tag";
         return new DeclareCommandsPacket.Node[]{argumentNode};
     }

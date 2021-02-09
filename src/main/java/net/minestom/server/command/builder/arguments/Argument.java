@@ -85,6 +85,24 @@ public abstract class Argument<T> {
     public abstract DeclareCommandsPacket.Node[] toNodes(boolean executable);
 
     /**
+     * Builds an argument node.
+     *
+     * @param argument   the argument
+     * @param executable true if this will be the last argument, false otherwise
+     * @return the created {@link DeclareCommandsPacket.Node}
+     */
+    @NotNull
+    protected static DeclareCommandsPacket.Node simpleArgumentNode(@NotNull Argument<?> argument,
+                                                         boolean executable, boolean suggestion) {
+        DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
+
+        argumentNode.flags = COMMAND_MANAGER.getFlag(CommandManager.NodeType.ARGUMENT, executable, false, suggestion);
+        argumentNode.name = argument.getId();
+
+        return argumentNode;
+    }
+
+    /**
      * Gets the ID of the argument, showed in-game above the chat bar
      * and used to retrieve the data when the command is parsed in {@link net.minestom.server.command.builder.Arguments}.
      *

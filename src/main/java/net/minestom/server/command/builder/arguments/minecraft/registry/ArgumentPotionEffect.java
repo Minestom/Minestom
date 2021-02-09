@@ -22,7 +22,7 @@ public class ArgumentPotionEffect extends ArgumentRegistry<PotionEffect> {
     @NotNull
     @Override
     public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = COMMAND_MANAGER.simpleArgumentNode(this, executable, false);
+        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false);
         argumentNode.parser = "minecraft:mob_effect";
         return new DeclareCommandsPacket.Node[]{argumentNode};
     }
