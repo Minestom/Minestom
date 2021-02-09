@@ -18,7 +18,6 @@ import java.util.regex.Pattern;
 public class CommandDispatcher {
 
     private final Map<String, Command> commandMap = new HashMap<>();
-    private final Set<Command> commands = new HashSet<>();
 
     /**
      * Registers a command,
@@ -36,8 +35,6 @@ public class CommandDispatcher {
                 this.commandMap.put(alias.toLowerCase(), command);
             }
         }
-
-        this.commands.add(command);
     }
 
     public void unregister(@NotNull Command command) {
@@ -49,8 +46,6 @@ public class CommandDispatcher {
                 this.commandMap.remove(alias.toLowerCase());
             }
         }
-
-        this.commands.remove(command);
     }
 
     /**
@@ -95,8 +90,8 @@ public class CommandDispatcher {
     }
 
     @NotNull
-    public Set<Command> getCommands() {
-        return Collections.unmodifiableSet(commands);
+    public Collection<Command> getCommands() {
+        return Collections.unmodifiableCollection(commandMap.values());
     }
 
     /**
