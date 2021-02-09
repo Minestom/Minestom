@@ -56,3 +56,4 @@ gradle-app.setting
 
 # When compiling we get a docs folder
 /docs
+.mixin.out/

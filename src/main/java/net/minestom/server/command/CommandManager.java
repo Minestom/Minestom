@@ -312,11 +312,15 @@ public final class CommandManager {
             final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
 
             // Create command for main name
-            createCommand(player, nodes, cmdChildren, command.getName(), syntaxes, rootChildren);
+            int mainNodeIndex = createCommand(player, nodes, cmdChildren, command.getName(), syntaxes, rootChildren);
 
-            // Repeat that for all aliases.
+            // Use redirection to hook aliases with the command
             for (String alias : command.getAliases()) {
-                createCommand(player, nodes, cmdChildren, alias, syntaxes, rootChildren);
+                DeclareCommandsPacket.Node node = new DeclareCommandsPacket.Node();
+                node.flags = getFlag(NodeType.LITERAL, false, true, false);
+                node.name = alias;
+                node.redirectedNode = mainNodeIndex;
+                nodes.add(node);
             }
 
         }
@@ -386,8 +390,10 @@ public final class CommandManager {
      * @param name         the name of the command (or the alias)
      * @param syntaxes     the syntaxes of the command
      * @param rootChildren the children of the main node (all commands name)
+     *
+     * @return The index of the main node for alias redirection
      */
-    private void createCommand(@NotNull CommandSender sender,
+    private int createCommand(@NotNull CommandSender sender,
                                @NotNull List<DeclareCommandsPacket.Node> nodes,
                                @NotNull IntList cmdChildren,
                                @NotNull String name,
@@ -493,6 +499,9 @@ public final class CommandManager {
         if (children.length > 0) {
             literalNode.redirectedNode = children[0];
         }
+
+        return nodes.indexOf(literalNode);
+
     }
 
     @NotNull
