@@ -97,7 +97,7 @@ public class CommandDispatcher {
 
     @NotNull
     public Collection<Command> getCommands() {
-        return Collections.unmodifiableCollection(commandMap.values());
+        return Collections.unmodifiableCollection(commands);
     }
 
     /**
