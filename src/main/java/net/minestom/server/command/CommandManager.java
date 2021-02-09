@@ -450,7 +450,7 @@ public final class CommandManager {
                 }
 
 
-                final DeclareCommandsPacket.Node[] argumentNodes = toNodes(argument, isLast);
+                final DeclareCommandsPacket.Node[] argumentNodes = argument.toNodes(isLast);
                 storedArgumentsNodes.put(argument, argumentNodes);
                 for (DeclareCommandsPacket.Node node : argumentNodes) {
                     final int childId = nodes.size();
@@ -515,28 +515,6 @@ public final class CommandManager {
         literalNode.name = name;
 
         return literalNode;
-    }
-
-    // TODO should we even have this function?
-    /**
-     * Converts an argument to a node with the correct brigadier parser.
-     *
-     * @param argument   the argument to convert
-     * @param executable true if this is the last argument, false otherwise
-     * @return the list of nodes that the argument require
-     */
-    @NotNull
-    private DeclareCommandsPacket.Node[] toNodes(@NotNull Argument<?> argument, boolean executable) {
-
-        // You can uncomment this to test any brigadier parser on the client
-
-        /*
-        DeclareCommandsPacket.Node testNode = simpleArgumentNode(nodes, argument, executable, false);
-        testNode.parser = "minecraft:block_state";
-        return nodes;
-        */
-
-        return argument.toNodes(executable);
     }
 
     public byte getFlag(@NotNull NodeType type, boolean executable, boolean redirect, boolean suggestionType) {
