@@ -67,9 +67,11 @@ public final class CommandManager {
     public synchronized void register(@NotNull Command command) {
         Check.stateCondition(commandExists(command.getName()),
                 "A command with the name " + command.getName() + " is already registered!");
-        for (String alias : command.getAliases()) {
-            Check.stateCondition(commandExists(alias),
-                    "A command with the name " + alias + " is already registered!");
+        if (command.getAliases() != null) {
+            for (String alias : command.getAliases()) {
+                Check.stateCondition(commandExists(alias),
+                        "A command with the name " + alias + " is already registered!");
+            }
         }
         this.dispatcher.register(command);
     }
@@ -315,6 +317,9 @@ public final class CommandManager {
             int mainNodeIndex = createCommand(player, nodes, cmdChildren, command.getName(), syntaxes, rootChildren);
 
             // Use redirection to hook aliases with the command
+            if (command.getAliases() == null)
+                continue;
+
             for (String alias : command.getAliases()) {
                 DeclareCommandsPacket.Node node = new DeclareCommandsPacket.Node();
                 node.flags = getFlag(NodeType.LITERAL, false, true, false);
