@@ -2,6 +2,8 @@ package net.minestom.server.command;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
+import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandData;
@@ -17,7 +19,6 @@ import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.callback.CommandCallback;
 import net.minestom.server.utils.validate.Check;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -310,35 +311,36 @@ public final class CommandManager {
             IntList cmdChildren = new IntArrayList();
             final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
 
-            List<String> names = new ArrayList<>();
-            names.add(command.getName());
-            names.addAll(Arrays.asList(command.getAliases()));
-            for (String name : names) {
-                createCommand(player, nodes, cmdChildren, name, syntaxes, rootChildren);
+            // Create command for main name
+            createCommand(player, nodes, cmdChildren, command.getName(), syntaxes, rootChildren);
+
+            // Repeat that for all aliases.
+            for (String alias : command.getAliases()) {
+                createCommand(player, nodes, cmdChildren, alias, syntaxes, rootChildren);
             }
 
         }
 
         // Pair<CommandName,EnabledTracking>
-        final List<Pair<String, Boolean>> commandsPair = new ArrayList<>();
+        final Object2BooleanMap<String> commandsPair = new Object2BooleanOpenHashMap<>();
         for (CommandProcessor commandProcessor : commandProcessorMap.values()) {
             final boolean enableTracking = commandProcessor.enableWritingTracking();
             // Do not show command if return false
             if (!commandProcessor.hasAccess(player))
                 continue;
 
-            commandsPair.add(Pair.of(commandProcessor.getCommandName(), enableTracking));
+            commandsPair.put(commandProcessor.getCommandName(), enableTracking);
             final String[] aliases = commandProcessor.getAliases();
             if (aliases == null || aliases.length == 0)
                 continue;
             for (String alias : aliases) {
-                commandsPair.add(Pair.of(alias, enableTracking));
+                commandsPair.put(alias, enableTracking);
             }
         }
 
-        for (Pair<String, Boolean> pair : commandsPair) {
-            final String name = pair.getLeft();
-            final boolean tracking = pair.getRight();
+        for (Object2BooleanMap.Entry<String> entry : commandsPair.object2BooleanEntrySet()) {
+            final String name = entry.getKey();
+            final boolean tracking = entry.getBooleanValue();
             // Server suggestion (ask_server)
             {
                 DeclareCommandsPacket.Node tabNode = new DeclareCommandsPacket.Node();
