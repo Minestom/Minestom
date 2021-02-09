@@ -28,18 +28,14 @@ public class ArgumentTime extends Argument<UpdateOption> {
     @NotNull
     @Override
     public UpdateOption parse(@NotNull String input) throws ArgumentSyntaxException {
-        // TODO time unit is omittable
         final char lastChar = input.charAt(input.length() - 1);
-        if (!SUFFIXES.contains(lastChar))
-            throw new ArgumentSyntaxException("Time format is invalid", input, INVALID_TIME_FORMAT);
 
-        // Remove last char
-        input = input.substring(0, input.length() - 1);
-        try {
-            // Check if value is a number
-            final int time = Integer.parseInt(input);
+        TimeUnit timeUnit;
+        if (Character.isDigit(lastChar))
+            timeUnit = TimeUnit.TICK;
+        else if (SUFFIXES.contains(lastChar)) {
+            input = input.substring(0, input.length() - 1);
 
-            TimeUnit timeUnit;
             if (lastChar == 'd') {
                 timeUnit = TimeUnit.DAY;
             } else if (lastChar == 's') {
@@ -47,13 +43,19 @@ public class ArgumentTime extends Argument<UpdateOption> {
             } else if (lastChar == 't') {
                 timeUnit = TimeUnit.TICK;
             } else {
-                throw new ArgumentSyntaxException("Time needs to have a unit", input, NO_NUMBER);
+                throw new ArgumentSyntaxException("Time needs to have the unit d, s, t, or none", input, NO_NUMBER);
             }
+        } else
+            throw new ArgumentSyntaxException("Time needs to have a unit", input, NO_NUMBER);
 
+        try {
+            // Check if value is a number
+            final int time = Integer.parseInt(input);
             return new UpdateOption(time, timeUnit);
         } catch (NumberFormatException e) {
             throw new ArgumentSyntaxException("Time needs to be a number", input, NO_NUMBER);
         }
+
     }
 
     @NotNull
