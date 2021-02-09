@@ -140,13 +140,13 @@ public class CommandDispatcher {
             // List of all arguments in the current syntax
             final Argument<?>[] arguments = syntax.getArguments();
             // Empty object containing the maximum amount of argument results of the syntax.
-            final Object[] argsValues = new Object[arguments.length];
+            final List<Object> argsValues = new ArrayList<>(arguments.length);
 
             boolean syntaxCorrect = true;
             // The current index in the raw command string arguments
             int splitIndex = 0;
 
-            boolean useRemaining;
+            boolean useRemaining = false;
             // Check the validity of the arguments...
             for (int argCount = 0; argCount < arguments.length; argCount++) {
                 final boolean lastArgumentIteration = argCount + 1 == arguments.length;
@@ -179,7 +179,7 @@ public class CommandDispatcher {
                         try {
                             parsedValue = argument.parse(argValueString);
                             correct = true;
-                            argsValues[argCount] = parsedValue;
+                            argsValues.add(parsedValue);
                         } catch (ArgumentSyntaxException exception) {
                             argumentSyntaxException = exception;
                         }
@@ -206,7 +206,7 @@ public class CommandDispatcher {
                             }
 
                             correct = true;
-                            argsValues[argCount] = parsedValue;
+                            argsValues.add(parsedValue);
                             splitIndex = i + 1;
                             break;
                         } catch (ArgumentSyntaxException exception) {
@@ -234,11 +234,13 @@ public class CommandDispatcher {
 
             // Add the syntax to the list of valid syntaxes if correct
             if (syntaxCorrect) {
-                ValidSyntaxHolder validSyntaxHolder = new ValidSyntaxHolder();
-                validSyntaxHolder.syntax = syntax;
-                validSyntaxHolder.argumentsValue = argsValues;
+                if (arguments.length == argsValues.size() || useRemaining) {
+                    ValidSyntaxHolder validSyntaxHolder = new ValidSyntaxHolder();
+                    validSyntaxHolder.syntax = syntax;
+                    validSyntaxHolder.argumentsValue = argsValues;
 
-                validSyntaxes.add(validSyntaxHolder);
+                    validSyntaxes.add(validSyntaxHolder);
+                }
             }
         }
 
@@ -304,9 +306,9 @@ public class CommandDispatcher {
 
             final Argument<?>[] arguments = syntax.getArguments();
             final int argumentsCount = arguments.length;
-            final Object[] argsValues = validSyntaxHolder.argumentsValue;
+            final List<Object> argsValues = validSyntaxHolder.argumentsValue;
 
-            final int argsSize = argsValues.length;
+            final int argsSize = argsValues.size();
 
             if (argsSize > maxArguments) {
                 finalSyntax = syntax;
@@ -316,7 +318,7 @@ public class CommandDispatcher {
                 Arguments syntaxValues = new Arguments();
                 for (int i = 0; i < argumentsCount; i++) {
                     final Argument<?> argument = arguments[i];
-                    final Object argumentValue = argsValues[i];
+                    final Object argumentValue = argsValues.get(i);
 
                     syntaxValues.setArg(argument.getId(), argumentValue);
                 }
@@ -340,7 +342,7 @@ public class CommandDispatcher {
         /**
          * (Argument index/Argument parsed object)
          */
-        private Object[] argumentsValue;
+        private List<Object> argumentsValue;
     }
 
     /**
