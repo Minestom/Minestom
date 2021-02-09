@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 public class CommandDispatcher {
 
     private final Map<String, Command> commandMap = new HashMap<>();
+    private final Set<Command> commands = new HashSet<>();
 
     /**
      * Registers a command,
@@ -35,6 +36,8 @@ public class CommandDispatcher {
                 this.commandMap.put(alias.toLowerCase(), command);
             }
         }
+
+        this.commands.add(command);
     }
 
     public void unregister(@NotNull Command command) {
@@ -46,6 +49,8 @@ public class CommandDispatcher {
                 this.commandMap.remove(alias.toLowerCase());
             }
         }
+
+        this.commands.remove(command);
     }
 
     /**
@@ -126,7 +131,7 @@ public class CommandDispatcher {
         // All the registered syntaxes of the command
         final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
         // Contains all the fully validated syntaxes (we later find the one with the most amount of arguments)
-        List<ValidSyntaxHolder> validSyntaxes = new ArrayList<>();
+        List<ValidSyntaxHolder> validSyntaxes = new ArrayList<>(syntaxes.size());
 
         // Contains all the syntaxes that are not fully correct, used to later, retrieve the "most correct syntax"
         // Number of correct argument - The data about the failing argument
