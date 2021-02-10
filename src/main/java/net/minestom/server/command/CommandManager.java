@@ -297,6 +297,11 @@ public final class CommandManager {
         // Contains the children of the main node (all commands name)
         IntList rootChildren = new IntArrayList();
 
+        // Root node
+        DeclareCommandsPacket.Node rootNode = new DeclareCommandsPacket.Node();
+        rootNode.flags = 0;
+        nodes.add(rootNode);
+
         // Brigadier-like commands
         for (Command command : dispatcher.getCommands()) {
             // Check if player should see this command
@@ -373,14 +378,11 @@ public final class CommandManager {
             nodes.add(literalNode);
         }
 
-        DeclareCommandsPacket.Node rootNode = new DeclareCommandsPacket.Node();
-        rootNode.flags = 0;
+        // Add root node children
         rootNode.children = ArrayUtils.toArray(rootChildren);
 
-        nodes.add(rootNode);
-
         declareCommandsPacket.nodes = nodes.toArray(new DeclareCommandsPacket.Node[0]);
-        declareCommandsPacket.rootIndex = nodes.size() - 1;
+        declareCommandsPacket.rootIndex = 0;
 
         return declareCommandsPacket;
     }
