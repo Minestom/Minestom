@@ -42,6 +42,13 @@ public final class Arguments {
         return (T) getObject(argument.getId());
     }
 
+    public <T> T get(@NotNull String identifier) {
+        return (T) args.computeIfAbsent(identifier, s -> {
+            throw new NullPointerException(
+                    "The argument with the id '" + identifier + "' has no value assigned, be sure to check your arguments id, your syntax, and that you do not change the argument id dynamically.");
+        });
+    }
+
     /**
      * @deprecated use {@link #get(Argument)}.
      */
@@ -244,6 +251,10 @@ public final class Arguments {
         return (RelativeVec) getObject(id);
     }
 
+    /**
+     * @deprecated use {@link #get(String)}.
+     */
+    @Deprecated
     @NotNull
     public Object getObject(@NotNull String id) {
         return args.computeIfAbsent(id, s -> {
