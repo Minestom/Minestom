@@ -94,7 +94,7 @@ public class CommandDispatcher {
 
         // Find the used syntax
         CommandResult result = new CommandResult();
-        ParsedCommand parsedCommand = findCommandResult(command, args);
+        ParsedCommand parsedCommand = findParsedCommand(command, args);
         if (parsedCommand != null) {
             // Syntax found
             result.type = CommandResult.Type.SUCCESS;
@@ -125,18 +125,16 @@ public class CommandDispatcher {
     }
 
     @Nullable
-    private ParsedCommand findCommandResult(@NotNull Command command, @NotNull String[] args) {
+    private ParsedCommand findParsedCommand(@NotNull Command command, @NotNull String[] args) {
         ParsedCommand parsedCommand = new ParsedCommand();
         parsedCommand.command = command;
-
-        Arguments executorArgs = new Arguments();
 
         // The default executor should be used if no argument is provided
         {
             final CommandExecutor defaultExecutor = command.getDefaultExecutor();
             if (defaultExecutor != null && args[0].length() == 0) {
                 parsedCommand.executor = defaultExecutor;
-                parsedCommand.arguments = executorArgs;
+                parsedCommand.arguments = new Arguments();
                 return parsedCommand;
             }
         }
@@ -262,6 +260,7 @@ public class CommandDispatcher {
 
         // Check if there is at least one correct syntax
         if (!validSyntaxes.isEmpty()) {
+            Arguments executorArgs = new Arguments();
             // Search the syntax with all perfect args
             final CommandSyntax finalSyntax = findMostCorrectSyntax(validSyntaxes, executorArgs);
             if (finalSyntax != null) {
@@ -295,11 +294,8 @@ public class CommandDispatcher {
             }
         }
 
-        // Use the default executor at last resort
-        parsedCommand.executor = command.getDefaultExecutor();
-        parsedCommand.arguments = executorArgs;
-
-        return parsedCommand;
+        // No syntax found
+        return null;
     }
 
     /**
