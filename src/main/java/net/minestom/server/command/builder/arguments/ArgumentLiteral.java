@@ -21,7 +21,6 @@ public class ArgumentLiteral extends Argument<String> {
         if (input.contains(StringUtils.SPACE))
             throw new ArgumentSyntaxException("Literals cannot contain space character", input, SPACE_ERROR);
 
-        // Check restrictions (acting as literal)
         if (!input.equals(getId()))
             throw new ArgumentSyntaxException("Invalid literal value", input, INVALID_VALUE_ERROR);
 

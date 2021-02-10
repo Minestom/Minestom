@@ -1,11 +1,9 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
-import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.entity.EntityFinder;
@@ -28,7 +26,8 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     public static final int ONLY_PLAYERS_ERROR = -4;
     public static final int INVALID_ARGUMENT_NAME = -5;
     public static final int INVALID_ARGUMENT_VALUE = -6;
-    private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
+
+    private static final String SELECTOR_PREFIX = "@";
     private static final List<String> selectorVariables = Arrays.asList("@p", "@r", "@a", "@e", "@s");
     private static final List<String> playersOnlySelector = Arrays.asList("@p", "@r", "@a", "@s");
     private static final List<String> singleOnlySelector = Arrays.asList("@p", "@r", "@s");
@@ -91,12 +90,10 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     public static EntityFinder staticParse(@NotNull String input,
                                            boolean onlySingleEntity, boolean onlyPlayers) throws ArgumentSyntaxException {
         // Check for raw player name
-        if (input.length() <= 16) {
-            if (CONNECTION_MANAGER.getPlayer(input) != null) {
-                return new EntityFinder()
-                        .setTargetSelector(EntityFinder.TargetSelector.ALL_PLAYERS)
-                        .setName(input, EntityFinder.ToggleableType.INCLUDE);
-            }
+        if (input.length() <= 16 && !input.contains(SELECTOR_PREFIX)) {
+            return new EntityFinder()
+                    .setTargetSelector(EntityFinder.TargetSelector.ALL_PLAYERS)
+                    .setName(input, EntityFinder.ToggleableType.INCLUDE);
         }
 
         // The minimum size is always 0 (for the selector variable, ex: @p)
@@ -104,7 +101,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
             throw new ArgumentSyntaxException("Length needs to be > 1", input, INVALID_SYNTAX);
 
         // The target selector variable always start by '@'
-        if (!input.startsWith("@"))
+        if (!input.startsWith(SELECTOR_PREFIX))
             throw new ArgumentSyntaxException("Target selector needs to start with @", input, INVALID_SYNTAX);
 
         final String selectorVariable = input.substring(0, 2);

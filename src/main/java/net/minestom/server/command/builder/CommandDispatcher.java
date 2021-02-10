@@ -113,7 +113,7 @@ public class CommandDispatcher {
     }
 
     /**
-     * GetS the command class associated with the name;
+     * Gets the command class associated with the name.
      *
      * @param commandName the command name
      * @return the {@link Command} associated with the name, null if not any
