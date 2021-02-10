@@ -6,10 +6,10 @@ import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.CommandData;
 import net.minestom.server.command.builder.CommandDispatcher;
+import net.minestom.server.command.builder.CommandResult;
 import net.minestom.server.command.builder.CommandSyntax;
-import net.minestom.server.command.builder.arguments.*;
+import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerCommandEvent;
@@ -147,10 +147,10 @@ public final class CommandManager {
      *
      * @param sender  the sender of the command
      * @param command the raw command string (without the command prefix)
-     * @return true if the command hadn't been cancelled and has been successful
+     * @return the execution result
      */
-    @Nullable
-    public CommandData execute(@NotNull CommandSender sender, @NotNull String command) {
+    @NotNull
+    public CommandResult execute(@NotNull CommandSender sender, @NotNull String command) {
 
         // Command event
         if (sender instanceof Player) {
@@ -160,7 +160,7 @@ public final class CommandManager {
             player.callEvent(PlayerCommandEvent.class, playerCommandEvent);
 
             if (playerCommandEvent.isCancelled())
-                return null;
+                return CommandResult.withType(CommandResult.Type.CANCELLED);
 
             command = playerCommandEvent.getCommand();
         }
@@ -169,9 +169,9 @@ public final class CommandManager {
 
         {
             // Check for rich-command
-            final CommandData commandData = this.dispatcher.execute(sender, command);
-            if (commandData != null) {
-                return commandData;
+            final CommandResult result = this.dispatcher.execute(sender, command);
+            if (result.getType() != CommandResult.Type.UNKNOWN) {
+                return result;
             } else {
                 // Check for legacy-command
                 final String[] splitCommand = command.split(StringUtils.SPACE);
@@ -181,13 +181,13 @@ public final class CommandManager {
                     if (unknownCommandCallback != null) {
                         this.unknownCommandCallback.apply(sender, command);
                     }
-                    return null;
+                    return CommandResult.withType(CommandResult.Type.CANCELLED);
                 }
 
                 // Execute the legacy-command
                 final String[] args = command.substring(command.indexOf(StringUtils.SPACE) + 1).split(StringUtils.SPACE);
                 commandProcessor.process(sender, commandName, args);
-                return null;
+                return CommandResult.withType(CommandResult.Type.SUCCESS);
             }
         }
     }
@@ -199,7 +199,7 @@ public final class CommandManager {
      * @see #execute(CommandSender, String)
      */
     @Nullable
-    public CommandData executeServerCommand(@NotNull String command) {
+    public CommandResult executeServerCommand(@NotNull String command) {
         return execute(serverSender, command);
     }
 
@@ -394,15 +394,14 @@ public final class CommandManager {
      * @param name         the name of the command (or the alias)
      * @param syntaxes     the syntaxes of the command
      * @param rootChildren the children of the main node (all commands name)
-     *
      * @return The index of the main node for alias redirection
      */
     private int createCommand(@NotNull CommandSender sender,
-                               @NotNull List<DeclareCommandsPacket.Node> nodes,
-                               @NotNull IntList cmdChildren,
-                               @NotNull String name,
-                               @NotNull Collection<CommandSyntax> syntaxes,
-                               @NotNull IntList rootChildren) {
+                              @NotNull List<DeclareCommandsPacket.Node> nodes,
+                              @NotNull IntList cmdChildren,
+                              @NotNull String name,
+                              @NotNull Collection<CommandSyntax> syntaxes,
+                              @NotNull IntList rootChildren) {
 
         DeclareCommandsPacket.Node literalNode = createMainNode(name, syntaxes.isEmpty());
 

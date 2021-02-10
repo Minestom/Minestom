@@ -3,7 +3,6 @@ package net.minestom.server.command.builder;
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -54,12 +53,29 @@ public class CommandDispatcher {
     }
 
     /**
+     * Checks if the command exists, and execute it.
+     *
+     * @param source        the command source
+     * @param commandString the command with the argument(s)
+     * @return the command result
+     */
+    @NotNull
+    public CommandResult execute(@NotNull CommandSender source, @NotNull String commandString) {
+        CommandResult commandResult = parse(commandString);
+        ParsedCommand parsedCommand = commandResult.parsedCommand;
+        if (parsedCommand != null) {
+            commandResult.commandData = parsedCommand.execute(source, commandString);
+        }
+        return commandResult;
+    }
+
+    /**
      * Parses the given command.
      *
      * @param commandString the command (containing the command name and the args if any)
-     * @return the result of the parsing, null if the command doesn't exist
+     * @return the parsing result
      */
-    @Nullable
+    @NotNull
     public CommandResult parse(@NotNull String commandString) {
         commandString = commandString.trim();
 
@@ -69,30 +85,26 @@ public class CommandDispatcher {
 
         final Command command = findCommand(commandName);
         // Check if the command exists
-        if (command == null)
-            return null;
+        if (command == null) {
+            return CommandResult.withType(CommandResult.Type.UNKNOWN);
+        }
 
         // Removes the command's name + the space after
         final String[] args = commandString.replaceFirst(Pattern.quote(commandName), "").trim().split(StringUtils.SPACE);
 
-        // Find the used syntax, or check which argument is wrong
-        return findCommandResult(command, args);
-    }
-
-    /**
-     * Checks if the command exists, and execute it.
-     *
-     * @param source        the command source
-     * @param commandString the command with the argument(s)
-     * @return the command data, null if none
-     */
-    @Nullable
-    public CommandData execute(@NotNull CommandSender source, @NotNull String commandString) {
-        CommandResult result = parse(commandString);
-        if (result != null) {
-            return result.execute(source, commandString);
+        // Find the used syntax
+        CommandResult result = new CommandResult();
+        ParsedCommand parsedCommand = findCommandResult(command, args);
+        if (parsedCommand != null) {
+            // Syntax found
+            result.type = CommandResult.Type.SUCCESS;
+            result.parsedCommand = parsedCommand;
+        } else {
+            // Syntax not found, use the default executor
+            result.type = CommandResult.Type.INVALID_SYNTAX;
+            result.parsedCommand = ParsedCommand.withDefaultExecutor(command);
         }
-        return null;
+        return result;
     }
 
     @NotNull
@@ -112,18 +124,21 @@ public class CommandDispatcher {
         return commandMap.getOrDefault(commandName, null);
     }
 
-    @NotNull
-    private CommandResult findCommandResult(@NotNull Command command, @NotNull String[] args) {
-        CommandResult result = new CommandResult();
-        result.command = command;
+    @Nullable
+    private ParsedCommand findCommandResult(@NotNull Command command, @NotNull String[] args) {
+        ParsedCommand parsedCommand = new ParsedCommand();
+        parsedCommand.command = command;
 
         Arguments executorArgs = new Arguments();
 
         // The default executor should be used if no argument is provided
-        if (args[0].length() == 0) {
-            result.executor = command.getDefaultExecutor();
-            result.arguments = executorArgs;
-            return result;
+        {
+            final CommandExecutor defaultExecutor = command.getDefaultExecutor();
+            if (defaultExecutor != null && args[0].length() == 0) {
+                parsedCommand.executor = defaultExecutor;
+                parsedCommand.arguments = executorArgs;
+                return parsedCommand;
+            }
         }
 
         // SYNTAXES PARSING
@@ -251,10 +266,10 @@ public class CommandDispatcher {
             final CommandSyntax finalSyntax = findMostCorrectSyntax(validSyntaxes, executorArgs);
             if (finalSyntax != null) {
                 // A fully correct syntax has been found, use it
-                result.syntax = finalSyntax;
-                result.executor = finalSyntax.getExecutor();
-                result.arguments = executorArgs;
-                return result;
+                parsedCommand.syntax = finalSyntax;
+                parsedCommand.executor = finalSyntax.getExecutor();
+                parsedCommand.arguments = executorArgs;
+                return parsedCommand;
             }
 
         }
@@ -272,19 +287,19 @@ public class CommandDispatcher {
                 // Found the closest syntax with at least 1 correct argument
                 final Argument<?> argument = syntax.getArguments()[argIndex];
                 if (argument.hasErrorCallback()) {
-                    result.callback = argument.getCallback();
-                    result.argumentSyntaxException = argumentSyntaxException;
+                    parsedCommand.callback = argument.getCallback();
+                    parsedCommand.argumentSyntaxException = argumentSyntaxException;
 
-                    return result;
+                    return parsedCommand;
                 }
             }
         }
 
         // Use the default executor at last resort
-        result.executor = command.getDefaultExecutor();
-        result.arguments = executorArgs;
+        parsedCommand.executor = command.getDefaultExecutor();
+        parsedCommand.arguments = executorArgs;
 
-        return result;
+        return parsedCommand;
     }
 
     /**
@@ -353,70 +368,5 @@ public class CommandDispatcher {
         private CommandSyntax syntax;
         private ArgumentSyntaxException argumentSyntaxException;
         private int argIndex;
-    }
-
-    /**
-     * Represents a {@link Command} ready to be executed (already parsed).
-     */
-    private static class CommandResult {
-
-        // Command
-        private Command command;
-
-        // Command Executor
-        private CommandSyntax syntax;
-
-        private CommandExecutor executor;
-        private Arguments arguments;
-
-        // Argument Callback
-        private ArgumentCallback callback;
-        private ArgumentSyntaxException argumentSyntaxException;
-
-        /**
-         * Executes the command for the given source.
-         * <p>
-         * The command will not be executed if {@link Command#getCondition()}
-         * is not validated.
-         *
-         * @param source        the command source
-         * @param commandString the command string
-         * @return the command data, null if none
-         */
-        @Nullable
-        public CommandData execute(@NotNull CommandSender source, @NotNull String commandString) {
-            // Global listener
-            command.globalListener(source, arguments, commandString);
-            // Command condition check
-            final CommandCondition condition = command.getCondition();
-            if (condition != null) {
-                final boolean result = condition.canUse(source, commandString);
-                if (!result)
-                    return null;
-            }
-            // Condition is respected
-            if (executor != null) {
-                // An executor has been found
-
-                if (syntax != null) {
-                    // The executor is from a syntax
-                    final CommandCondition commandCondition = syntax.getCommandCondition();
-                    if (commandCondition == null || commandCondition.canUse(source, commandString)) {
-                        arguments.retrieveDefaultValues(syntax.getDefaultValuesMap());
-                        executor.apply(source, arguments);
-                    }
-                } else {
-                    // The executor is probably the default one
-                    executor.apply(source, arguments);
-                }
-            } else if (callback != null && argumentSyntaxException != null) {
-                // No syntax has been validated but the faulty argument with a callback has been found
-                // Execute the faulty argument callback
-                callback.apply(source, argumentSyntaxException);
-            }
-
-            return arguments.getReturnData();
-        }
-
     }
 }
