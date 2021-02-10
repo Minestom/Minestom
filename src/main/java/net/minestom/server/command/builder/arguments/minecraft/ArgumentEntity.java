@@ -13,8 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
-// TODO
-
 /**
  * Represents the target selector argument.
  * https://minecraft.gamepedia.com/Commands#Target_selectors
@@ -28,22 +26,23 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     public static final int INVALID_ARGUMENT_VALUE = -6;
 
     private static final String SELECTOR_PREFIX = "@";
-    private static final List<String> selectorVariables = Arrays.asList("@p", "@r", "@a", "@e", "@s");
-    private static final List<String> playersOnlySelector = Arrays.asList("@p", "@r", "@a", "@s");
-    private static final List<String> singleOnlySelector = Arrays.asList("@p", "@r", "@s");
+    private static final List<String> SELECTOR_VARIABLES = Arrays.asList("@p", "@r", "@a", "@e", "@s");
+    private static final List<String> PLAYERS_ONLY_SELECTOR = Arrays.asList("@p", "@r", "@a", "@s");
+    private static final List<String> SINGLE_ONLY_SELECTOR = Arrays.asList("@p", "@r", "@s");
     // List with all the valid arguments
-    private static final List<String> validArguments = Arrays.asList(
+    private static final List<String> VALID_ARGUMENTS = Arrays.asList(
             "x", "y", "z",
             "distance", "dx", "dy", "dz",
             "scores", "tag", "team", "limit", "sort", "level", "gamemode", "name",
             "x_rotation", "y_rotation", "type", "nbt", "advancements", "predicate");
 
     // List with all the easily parsable arguments which only require reading until a specific character (comma)
-    private static final List<String> simpleArguments = Arrays.asList(
+    private static final List<String> SIMPLE_ARGUMENTS = Arrays.asList(
             "x", "y", "z",
             "distance", "dx", "dy", "dz",
             "scores", "tag", "team", "limit", "sort", "level", "gamemode",
             "x_rotation", "y_rotation", "type", "advancements", "predicate");
+
     private boolean onlySingleEntity;
     private boolean onlyPlayers;
 
@@ -96,7 +95,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                     .setName(input, EntityFinder.ToggleableType.INCLUDE);
         }
 
-        // The minimum size is always 0 (for the selector variable, ex: @p)
+        // The minimum size is always 2 (for the selector variable, ex: @p)
         if (input.length() < 2)
             throw new ArgumentSyntaxException("Length needs to be > 1", input, INVALID_SYNTAX);
 
@@ -107,15 +106,15 @@ public class ArgumentEntity extends Argument<EntityFinder> {
         final String selectorVariable = input.substring(0, 2);
 
         // Check if the selector variable used exists
-        if (!selectorVariables.contains(selectorVariable))
+        if (!SELECTOR_VARIABLES.contains(selectorVariable))
             throw new ArgumentSyntaxException("Invalid selector variable", input, INVALID_SYNTAX);
 
         // Check if it should only select single entity and if the selector variable valid the condition
-        if (onlySingleEntity && !singleOnlySelector.contains(selectorVariable))
+        if (onlySingleEntity && !SINGLE_ONLY_SELECTOR.contains(selectorVariable))
             throw new ArgumentSyntaxException("Argument requires only a single entity", input, ONLY_SINGLE_ENTITY_ERROR);
 
         // Check if it should only select players and if the selector variable valid the condition
-        if (onlyPlayers && !playersOnlySelector.contains(selectorVariable))
+        if (onlyPlayers && !PLAYERS_ONLY_SELECTOR.contains(selectorVariable))
             throw new ArgumentSyntaxException("Argument requires only players", input, ONLY_PLAYERS_ERROR);
 
         // Create the EntityFinder which will be used for the rest of the parsing
@@ -151,7 +150,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 // Replace all unnecessary spaces
                 currentArgument = currentArgument.trim();
 
-                if (!validArguments.contains(currentArgument))
+                if (!VALID_ARGUMENTS.contains(currentArgument))
                     throw new ArgumentSyntaxException("Argument name '" + currentArgument + "' does not exist", input, INVALID_ARGUMENT_NAME);
 
                 i = parseArgument(entityFinder, currentArgument, input, structureData, i);
@@ -169,7 +168,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                                      @NotNull String input,
                                      @NotNull String structureData, int beginIndex) throws ArgumentSyntaxException {
         final char comma = ',';
-        final boolean isSimple = simpleArguments.contains(argumentName);
+        final boolean isSimple = SIMPLE_ARGUMENTS.contains(argumentName);
 
         int finalIndex = beginIndex + 1;
         StringBuilder valueBuilder = new StringBuilder();
