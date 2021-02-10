@@ -26,6 +26,7 @@ public abstract class Argument<T> {
     private final String id;
     private final boolean allowSpace;
     private final boolean useRemaining;
+    private Argument<?> redirect;
 
     private ArgumentCallback callback;
 
@@ -186,6 +187,38 @@ public abstract class Argument<T> {
     public Argument<T> setDefaultValue(@Nullable T defaultValue) {
         this.defaultValue = defaultValue;
         return this;
+    }
+
+    /**
+     * Gets the argument this argument will redirect to.
+     * <p>
+     * A non-null value means that this will redirect to that argument.
+     *
+     * @return The argument this argument will redirect to
+     */
+    @Nullable
+    public Argument<?> getRedirect() {
+        return redirect;
+    }
+
+    /**
+     * Checks if an argument has a redirect.
+     * <p>
+     * Mostly used to make sure there isnt an argument after.
+     *
+     * @return If this argument will redirect to an argument.
+     */
+    public boolean hasRedirect() {
+        return redirect != null;
+    }
+
+    /**
+     * Sets the redirect of this argument.
+     *
+     * @param argument The argument to set the redirect to
+     */
+    public void setRedirect(Argument<?> argument) {
+        this.redirect = argument;
     }
 
     /**
