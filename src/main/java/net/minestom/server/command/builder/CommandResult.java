@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CommandResult {
 
@@ -11,6 +12,16 @@ public class CommandResult {
     @NotNull
     public Type getType() {
         return type;
+    }
+
+    @Nullable
+    public ParsedCommand getParsedCommand() {
+        return parsedCommand;
+    }
+
+    @Nullable
+    public CommandData getCommandData() {
+        return commandData;
     }
 
     public enum Type {
