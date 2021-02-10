@@ -62,7 +62,7 @@ public class ArgumentIntRange extends ArgumentRange<IntRange> {
     @NotNull
     @Override
     public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false);
+        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
         argumentNode.parser = "minecraft:int_range";
         return new DeclareCommandsPacket.Node[]{argumentNode};
     }

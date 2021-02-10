@@ -32,7 +32,7 @@ public class ArgumentColor extends Argument<ChatColor> {
     @NotNull
     @Override
     public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false);
+        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
         argumentNode.parser = "minecraft:color";
         return new DeclareCommandsPacket.Node[]{argumentNode};
     }

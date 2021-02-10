@@ -22,7 +22,7 @@ public class ArgumentParticle extends ArgumentRegistry<Particle> {
     @NotNull
     @Override
     public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false);
+        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
         argumentNode.parser = "minecraft:particle";
         return new DeclareCommandsPacket.Node[]{argumentNode};
     }

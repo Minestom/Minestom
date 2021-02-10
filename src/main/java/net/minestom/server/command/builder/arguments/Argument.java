@@ -92,10 +92,10 @@ public abstract class Argument<T> {
      */
     @NotNull
     protected static DeclareCommandsPacket.Node simpleArgumentNode(@NotNull Argument<?> argument,
-                                                         boolean executable, boolean suggestion) {
+                                                                   boolean executable, boolean redirect, boolean suggestion) {
         DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
 
-        argumentNode.flags = COMMAND_MANAGER.getFlag(CommandManager.NodeType.ARGUMENT, executable, false, suggestion);
+        argumentNode.flags = COMMAND_MANAGER.getFlag(CommandManager.NodeType.ARGUMENT, executable, redirect, suggestion);
         argumentNode.name = argument.getId();
 
         return argumentNode;

@@ -61,7 +61,7 @@ public class ArgumentTime extends Argument<UpdateOption> {
     @NotNull
     @Override
     public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false);
+        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
         argumentNode.parser = "minecraft:time";
         return new DeclareCommandsPacket.Node[]{argumentNode};
     }
