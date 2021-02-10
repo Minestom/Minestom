@@ -18,6 +18,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ArgumentType {
 
+    public static ArgumentLiteral Literal(@NotNull String id) {
+        return new ArgumentLiteral(id);
+    }
+
     public static ArgumentBoolean Boolean(@NotNull String id) {
         return new ArgumentBoolean(id);
     }
