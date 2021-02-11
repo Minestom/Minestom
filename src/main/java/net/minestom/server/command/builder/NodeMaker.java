@@ -2,32 +2,26 @@ package net.minestom.server.command.builder;
 
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NodeMaker {
 
-    private DeclareCommandsPacket.Node[] lastNodes;
-    private DeclareCommandsPacket.Node[] currentNodes;
+    private final List<DeclareCommandsPacket.Node[]> nodes = new ArrayList<>(2);
 
-    public DeclareCommandsPacket.Node[] getCurrentNodes() {
-        return currentNodes;
+    public DeclareCommandsPacket.Node[] getLatestNodes() {
+        if (nodes.isEmpty())
+            return null;
+        return nodes.get(nodes.size() - 1);
     }
 
     public void addNodes(@NotNull DeclareCommandsPacket.Node[] nodes) {
-        this.currentNodes = nodes;
+        this.nodes.add(nodes);
     }
 
-    /**
-     * Represents the nodes computed in the last iteration.
-     *
-     * @return the previous nodes, null if none
-     */
-    @Nullable
-    public DeclareCommandsPacket.Node[] getLastNodes() {
-        return lastNodes;
-    }
-
-    public void setLastNodes(DeclareCommandsPacket.Node[] lastNodes) {
-        this.lastNodes = lastNodes;
+    @NotNull
+    public List<DeclareCommandsPacket.Node[]> getNodes() {
+        return nodes;
     }
 }

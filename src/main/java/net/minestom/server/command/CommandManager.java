@@ -418,7 +418,7 @@ public final class CommandManager {
         // Contains the arguments of the already-parsed syntaxes
         List<Argument<?>[]> syntaxesArguments = new ArrayList<>();
         // Contains the nodes of an argument
-        Map<Argument<?>, DeclareCommandsPacket.Node[]> storedArgumentsNodes = new HashMap<>();
+        Map<Argument<?>, List<DeclareCommandsPacket.Node[]>> storedArgumentsNodes = new HashMap<>();
 
         for (CommandSyntax syntax : syntaxes) {
             final CommandCondition commandCondition = syntax.getCommandCondition();
@@ -430,77 +430,70 @@ public final class CommandManager {
             NodeMaker nodeMaker = new NodeMaker();
 
             // Represent the last nodes computed in the last iteration
-            //DeclareCommandsPacket.Node[] lastNodes = null;
+            DeclareCommandsPacket.Node[] lastNodes = new DeclareCommandsPacket.Node[]{literalNode};
 
             // Represent the children of the last node
-            IntList argChildren = null;
+            IntList argChildren = cmdChildren;
+
+            int lastArgumentNodeIndex = 0;
 
             final Argument<?>[] arguments = syntax.getArguments();
             for (int i = 0; i < arguments.length; i++) {
                 final Argument<?> argument = arguments[i];
-                final boolean isFirst = i == 0;
                 final boolean isLast = i == arguments.length - 1;
 
-                // Find shared part
-                boolean foundSharedPart = false;
-                for (Argument<?>[] parsedArguments : syntaxesArguments) {
-                    if (ArrayUtils.sameStart(arguments, parsedArguments, i + 1)) {
-                        final Argument<?> sharedArgument = parsedArguments[i];
+                // Search previously parsed syntaxes to find identical part in order to create a node between those
+                {
+                    // Find shared part
+                    boolean foundSharedPart = false;
+                    for (Argument<?>[] parsedArguments : syntaxesArguments) {
+                        if (ArrayUtils.sameStart(arguments, parsedArguments, i + 1)) {
+                            final Argument<?> sharedArgument = parsedArguments[i];
+                            final List<DeclareCommandsPacket.Node[]> storedNodes = storedArgumentsNodes.get(sharedArgument);
 
-                        argChildren = new IntArrayList();
-                        nodeMaker.setLastNodes(storedArgumentsNodes.get(sharedArgument));
-                        foundSharedPart = true;
-                    }
-                }
-                if (foundSharedPart) {
-                    continue;
-                }
-
-
-                argument.processNodes(nodeMaker, isLast);
-                final DeclareCommandsPacket.Node[] argumentNodes = nodeMaker.getCurrentNodes();
-                storedArgumentsNodes.put(argument, argumentNodes);
-                for (DeclareCommandsPacket.Node node : argumentNodes) {
-                    final int childId = nodes.size();
-
-                    if (isFirst) {
-                        // Add to main command child
-                        cmdChildren.add(childId);
-                    } else {
-                        // Add to previous argument children
-                        argChildren.add(childId);
-                    }
-
-                    final DeclareCommandsPacket.Node[] lastNodes = nodeMaker.getLastNodes();
-                    if (lastNodes != null) {
-                        final int[] children = ArrayUtils.toArray(argChildren);
-
-                        for (DeclareCommandsPacket.Node lastNode : lastNodes) {
-                            lastNode.children = lastNode.children == null ?
-                                    children :
-                                    ArrayUtils.concatenateIntArrays(lastNode.children, children);
+                            argChildren = new IntArrayList();
+                            lastNodes = storedNodes.get(storedNodes.size() - Math.max(arguments.length, parsedArguments.length));
+                            foundSharedPart = true;
                         }
                     }
-
-                    // Always add to the main node list
-                    nodes.add(node);
+                    if (foundSharedPart) {
+                        continue;
+                    }
                 }
 
-                //System.out.println("debug: " + argument.getId() + " : " + isFirst + " : " + isLast);
-                //System.out.println("debug2: " + i);
-                //System.out.println("size: " + (argChildren != null ? argChildren.size() : "NULL"));
+                // Process the nodes for the argument
+                {
+                    argument.processNodes(nodeMaker, isLast);
 
-                if (isLast) {
-                    // Last argument doesn't have children
-                    final int[] children = new int[0];
+                    // Each node array represent a layer
+                    final List<DeclareCommandsPacket.Node[]> nodesLayer = nodeMaker.getNodes();
+                    storedArgumentsNodes.put(argument, nodesLayer);
+                    for (int nodeIndex = lastArgumentNodeIndex; nodeIndex < nodesLayer.size(); nodeIndex++) {
+                        final DeclareCommandsPacket.Node[] argumentNodes = nodesLayer.get(nodeIndex);
 
-                    for (DeclareCommandsPacket.Node node : argumentNodes) {
-                        node.children = children;
+                        for (DeclareCommandsPacket.Node argumentNode : argumentNodes) {
+                            final int childId = nodes.size();
+                            argChildren.add(childId);
+
+                            // Append to the last node
+                            {
+                                final int[] children = ArrayUtils.toArray(argChildren);
+                                for (DeclareCommandsPacket.Node lastNode : lastNodes) {
+                                    lastNode.children = lastNode.children == null ?
+                                            children :
+                                            ArrayUtils.concatenateIntArrays(lastNode.children, children);
+                                }
+                            }
+
+                            nodes.add(argumentNode);
+                        }
+
+                        lastNodes = argumentNodes;
+                        argChildren = new IntArrayList();
                     }
-                } else {
-                    // Create children list which will be filled during next iteration
-                    argChildren = new IntArrayList();
-                    nodeMaker.setLastNodes(argumentNodes);
+
+                    // Used to do not re-compute the previous arguments
+                    lastArgumentNodeIndex = nodesLayer.size();
                 }
             }
 

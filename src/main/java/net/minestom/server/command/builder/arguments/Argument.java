@@ -23,7 +23,6 @@ public abstract class Argument<T> {
     private final String id;
     private final boolean allowSpace;
     private final boolean useRemaining;
-    private Argument<?> redirect;
 
     private ArgumentCallback callback;
 
@@ -195,4 +194,18 @@ public abstract class Argument<T> {
         return callback != null;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Argument<?> argument = (Argument<?>) o;
+
+        return id.equals(argument.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

@@ -30,7 +30,7 @@ public class ArgumentCommand extends Argument<CommandResult> {
 
     @Override
     public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
-        final DeclareCommandsPacket.Node[] lastNodes = nodeMaker.getLastNodes();
+        final DeclareCommandsPacket.Node[] lastNodes = nodeMaker.getLatestNodes();
 
         // FIXME check if lastNodes is null
         for (DeclareCommandsPacket.Node node : lastNodes) {

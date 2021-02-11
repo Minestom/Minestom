@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.function.Consumer;
 
 /**
@@ -125,18 +124,5 @@ public class ArgumentWord extends Argument<String> {
     @Nullable
     public String[] getRestrictions() {
         return restrictions;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ArgumentWord that = (ArgumentWord) o;
-        return Arrays.equals(restrictions, that.restrictions);
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(restrictions);
     }
 }
