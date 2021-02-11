@@ -320,19 +320,22 @@ public final class CommandManager {
             final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
 
             // Create command for main name
-            int mainNodeIndex = createCommand(player, nodes, cmdChildren, command.getName(), syntaxes, rootChildren);
+            final int mainNodeIndex = createCommand(player, nodes, cmdChildren,
+                    command.getName(), syntaxes, rootChildren);
 
             // Use redirection to hook aliases with the command
-            if (command.getAliases() == null)
+            final String[] aliases = command.getAliases();
+            if (aliases == null)
                 continue;
 
-            for (String alias : command.getAliases()) {
-                DeclareCommandsPacket.Node node = new DeclareCommandsPacket.Node();
-                node.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
+            for (String alias : aliases) {
+                DeclareCommandsPacket.Node aliasNode = new DeclareCommandsPacket.Node();
+                aliasNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
                         false, true, false);
-                node.name = alias;
-                node.redirectedNode = mainNodeIndex;
-                nodes.add(node);
+                aliasNode.name = alias;
+                aliasNode.redirectedNode = mainNodeIndex;
+
+                addCommandNameNode(aliasNode, rootChildren, nodes);
             }
 
         }
@@ -379,8 +382,7 @@ public final class CommandManager {
             literalNode.name = name;
             literalNode.children = new int[]{nodes.size() - 1};
 
-            rootChildren.add(nodes.size());
-            nodes.add(literalNode);
+            addCommandNameNode(literalNode, rootChildren, nodes);
         }
 
         // Add root node children
@@ -412,8 +414,7 @@ public final class CommandManager {
 
         DeclareCommandsPacket.Node literalNode = createMainNode(name, syntaxes.isEmpty());
 
-        rootChildren.add(nodes.size());
-        nodes.add(literalNode);
+        addCommandNameNode(literalNode, rootChildren, nodes);
 
         // Contains the arguments of the already-parsed syntaxes
         List<Argument<?>[]> syntaxesArguments = new ArrayList<>();
@@ -427,15 +428,14 @@ public final class CommandManager {
                 continue;
             }
 
-            NodeMaker nodeMaker = new NodeMaker();
-
             // Represent the last nodes computed in the last iteration
             DeclareCommandsPacket.Node[] lastNodes = new DeclareCommandsPacket.Node[]{literalNode};
 
             // Represent the children of the last node
             IntList argChildren = cmdChildren;
 
-            int lastArgumentNodeIndex = 0;
+            NodeMaker nodeMaker = new NodeMaker(lastNodes);
+            int lastArgumentNodeIndex = nodeMaker.getNodesCount();
 
             final Argument<?>[] arguments = syntax.getArguments();
             for (int i = 0; i < arguments.length; i++) {
@@ -508,12 +508,8 @@ public final class CommandManager {
             syntaxesArguments.add(arguments);
 
         }
-        final int[] children = ArrayUtils.toArray(cmdChildren);
-        //System.out.println("test " + children.length + " : " + children[0]);
-        literalNode.children = children;
-        if (children.length > 0) {
-            literalNode.redirectedNode = children[0];
-        }
+
+        literalNode.children = ArrayUtils.toArray(cmdChildren);
 
         return nodes.indexOf(literalNode);
 
@@ -526,5 +522,12 @@ public final class CommandManager {
         literalNode.name = name;
 
         return literalNode;
+    }
+
+    private void addCommandNameNode(@NotNull DeclareCommandsPacket.Node commandNode,
+                                    @NotNull IntList rootChildren,
+                                    @NotNull List<DeclareCommandsPacket.Node> nodes) {
+        rootChildren.add(nodes.size());
+        nodes.add(commandNode);
     }
 }

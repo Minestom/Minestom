@@ -18,6 +18,10 @@ public class NodeMaker {
     private Rule rule;
     private int ruleCount;
 
+    public NodeMaker(@NotNull DeclareCommandsPacket.Node[] commandNodes){
+        addNodes(commandNodes);
+    }
+
     public ConfiguredNodes getLatestConfiguredNodes() {
         if (configuredNodes.isEmpty())
             return null;
@@ -27,6 +31,10 @@ public class NodeMaker {
     public DeclareCommandsPacket.Node[] getLatestNodes() {
         ConfiguredNodes configuredNodes = getLatestConfiguredNodes();
         return configuredNodes != null ? configuredNodes.nodes : null;
+    }
+
+    public int getNodesCount() {
+        return nodes.size();
     }
 
     public void addNodes(@NotNull DeclareCommandsPacket.Node[] nodes) {
