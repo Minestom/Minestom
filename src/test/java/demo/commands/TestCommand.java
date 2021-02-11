@@ -1,15 +1,14 @@
 package demo.commands;
 
-import net.minestom.server.chat.ChatColor;
-import net.minestom.server.chat.ColoredText;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.entity.Player;
-import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.instance.batch.BlockBatch;
+import net.minestom.server.command.builder.CommandResult;
 
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.List;
+
+import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
+import static net.minestom.server.command.builder.arguments.ArgumentType.*;
 
 public class TestCommand extends Command {
 
@@ -17,26 +16,17 @@ public class TestCommand extends Command {
         super("testcmd");
         setDefaultExecutor(this::usage);
 
-        setDefaultExecutor((sender, args) -> {
-            if (!sender.isPlayer()) {
-                sender.sendMessage("This command may only be run by players.");
-                return;
-            }
-            Player player = sender.asPlayer();
+        addSyntax((sender, args) -> {
+            final CommandResult result = args.get("command");
+            System.out.println("test " + result.getType() + " " + result.getInput());
+        }, Literal("cmd"), Command("command"));
 
-            BlockBatch batch = new BlockBatch((InstanceContainer) player.getInstance());
-
-            int offset = 5;
-            for (int x = 0; x < 50; x += 1) {
-                for (int y = 0; y < 50; y += 1) {
-                    for (int z = 0; z < 50; z += 1) {
-                        batch.setBlockStateId(x + offset, y + offset+50, z + offset, (short) ThreadLocalRandom.current().nextInt(500));
-                    }
-                }
-            }
-
-            batch.flush(() -> sender.sendMessage(ColoredText.of(ChatColor.BRIGHT_GREEN, "Created cube.")));
-        });
+        addSyntax((sender, args) -> {
+            List<Arguments> groups = args.get("groups");
+            System.out.println("size " + groups.size());
+        }, Literal("loop"), Loop("groups",
+                Group("group", Literal("name"), Word("word1")),
+                Group("group2", Literal("delay"), Integer("number2"))));
     }
 
     private void usage(CommandSender sender, Arguments arguments) {
