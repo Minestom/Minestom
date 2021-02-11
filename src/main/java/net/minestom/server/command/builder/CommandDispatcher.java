@@ -86,7 +86,7 @@ public class CommandDispatcher {
         final Command command = findCommand(commandName);
         // Check if the command exists
         if (command == null) {
-            return CommandResult.withType(CommandResult.Type.UNKNOWN);
+            return CommandResult.of(CommandResult.Type.UNKNOWN, commandName);
         }
 
         // Removes the command's name + the space after
@@ -94,6 +94,7 @@ public class CommandDispatcher {
 
         // Find the used syntax
         CommandResult result = new CommandResult();
+        result.input = commandString;
         ParsedCommand parsedCommand = findParsedCommand(command, args);
         if (parsedCommand != null && parsedCommand.executor != null) {
             // Syntax found

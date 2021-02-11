@@ -13,7 +13,7 @@ public class ArgumentCommand extends Argument<CommandResult> {
     public static final int INVALID_COMMAND_ERROR = 1;
 
     public ArgumentCommand(@NotNull String id) {
-        super(id, true, true); // TODO don't use remaining?
+        super(id, true, true);
     }
 
     @NotNull

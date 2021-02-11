@@ -6,12 +6,18 @@ import org.jetbrains.annotations.Nullable;
 public class CommandResult {
 
     protected Type type = Type.UNKNOWN;
+    protected String input;
     protected ParsedCommand parsedCommand;
     protected CommandData commandData;
 
     @NotNull
     public Type getType() {
         return type;
+    }
+
+    @NotNull
+    public String getInput() {
+        return input;
     }
 
     @Nullable
@@ -48,9 +54,10 @@ public class CommandResult {
     }
 
     @NotNull
-    public static CommandResult withType(@NotNull Type type) {
+    public static CommandResult of(@NotNull Type type, @NotNull String input) {
         CommandResult result = new CommandResult();
         result.type = type;
+        result.input = input;
         return result;
     }
 

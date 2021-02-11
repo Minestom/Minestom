@@ -1,6 +1,5 @@
 package net.minestom.server.command.builder.arguments;
 
-import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
@@ -93,7 +92,8 @@ public class ArgumentWord extends Argument<String> {
             for (int i = 0; i < nodes.length; i++) {
                 DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
 
-                argumentNode.flags = COMMAND_MANAGER.getFlag(CommandManager.NodeType.LITERAL, executable, false, false);
+                argumentNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
+                        executable, false, false);
                 argumentNode.name = this.getRestrictions()[i];
                 wordConsumer.accept(argumentNode);
                 nodes[i] = argumentNode;

@@ -1,7 +1,5 @@
 package net.minestom.server.command.builder.arguments;
 
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
@@ -21,8 +19,6 @@ import org.jetbrains.annotations.Nullable;
  * @param <T> the type of this parsed argument
  */
 public abstract class Argument<T> {
-
-    protected final static CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();
 
     private final String id;
     private final boolean allowSpace;
@@ -96,7 +92,7 @@ public abstract class Argument<T> {
                                                                    boolean executable, boolean redirect, boolean suggestion) {
         DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
 
-        argumentNode.flags = COMMAND_MANAGER.getFlag(CommandManager.NodeType.ARGUMENT, executable, redirect, suggestion);
+        argumentNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.ARGUMENT, executable, redirect, suggestion);
         argumentNode.name = argument.getId();
 
         return argumentNode;

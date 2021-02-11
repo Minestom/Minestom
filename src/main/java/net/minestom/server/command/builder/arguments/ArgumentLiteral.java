@@ -1,6 +1,5 @@
 package net.minestom.server.command.builder.arguments;
 
-import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
@@ -26,7 +25,8 @@ public class ArgumentLiteral extends Argument<String> {
     @Override
     public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
         DeclareCommandsPacket.Node literalNode = new DeclareCommandsPacket.Node();
-        literalNode.flags = COMMAND_MANAGER.getFlag(CommandManager.NodeType.LITERAL, executable, false, false);
+        literalNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
+                executable, false, false);
         literalNode.name = getId();
 
         nodeMaker.setCurrentNodes(new DeclareCommandsPacket.Node[]{literalNode});

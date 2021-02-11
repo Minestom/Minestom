@@ -157,7 +157,7 @@ public final class CommandManager {
             player.callEvent(PlayerCommandEvent.class, playerCommandEvent);
 
             if (playerCommandEvent.isCancelled())
-                return CommandResult.withType(CommandResult.Type.CANCELLED);
+                return CommandResult.of(CommandResult.Type.CANCELLED, command);
 
             command = playerCommandEvent.getCommand();
         }
@@ -178,13 +178,13 @@ public final class CommandManager {
                     if (unknownCommandCallback != null) {
                         this.unknownCommandCallback.apply(sender, command);
                     }
-                    return CommandResult.withType(CommandResult.Type.CANCELLED);
+                    return CommandResult.of(CommandResult.Type.CANCELLED, command);
                 }
 
                 // Execute the legacy-command
                 final String[] args = command.substring(command.indexOf(StringUtils.SPACE) + 1).split(StringUtils.SPACE);
                 commandProcessor.process(sender, commandName, args);
-                return CommandResult.withType(CommandResult.Type.SUCCESS);
+                return CommandResult.of(CommandResult.Type.SUCCESS, command);
             }
         }
     }
@@ -328,7 +328,8 @@ public final class CommandManager {
 
             for (String alias : command.getAliases()) {
                 DeclareCommandsPacket.Node node = new DeclareCommandsPacket.Node();
-                node.flags = getFlag(NodeType.LITERAL, false, true, false);
+                node.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
+                        false, true, false);
                 node.name = alias;
                 node.redirectedNode = mainNodeIndex;
                 nodes.add(node);
@@ -359,7 +360,8 @@ public final class CommandManager {
             // Server suggestion (ask_server)
             {
                 DeclareCommandsPacket.Node tabNode = new DeclareCommandsPacket.Node();
-                tabNode.flags = getFlag(NodeType.ARGUMENT, true, false, tracking);
+                tabNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.ARGUMENT,
+                        true, false, tracking);
                 tabNode.name = tracking ? "tab_completion" : "args";
                 tabNode.parser = "brigadier:string";
                 tabNode.properties = packetWriter -> packetWriter.writeVarInt(2); // Greedy phrase
@@ -372,7 +374,8 @@ public final class CommandManager {
             }
 
             DeclareCommandsPacket.Node literalNode = new DeclareCommandsPacket.Node();
-            literalNode.flags = getFlag(NodeType.LITERAL, true, false, false);
+            literalNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
+                    true, false, false);
             literalNode.name = name;
             literalNode.children = new int[]{nodes.size() - 1};
 
@@ -517,37 +520,9 @@ public final class CommandManager {
     @NotNull
     private DeclareCommandsPacket.Node createMainNode(@NotNull String name, boolean executable) {
         DeclareCommandsPacket.Node literalNode = new DeclareCommandsPacket.Node();
-        literalNode.flags = getFlag(NodeType.LITERAL, executable, false, false);
+        literalNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL, executable, false, false);
         literalNode.name = name;
 
         return literalNode;
-    }
-
-    public byte getFlag(@NotNull NodeType type, boolean executable, boolean redirect, boolean suggestionType) {
-        byte result = (byte) type.mask;
-
-        if (executable) {
-            result |= 0x04;
-        }
-
-        if (redirect) {
-            result |= 0x08;
-        }
-
-        if (suggestionType) {
-            result |= 0x10;
-        }
-        return result;
-    }
-
-    public enum NodeType {
-        ROOT(0), LITERAL(0b1), ARGUMENT(0b10), NONE(0x11);
-
-        private final int mask;
-
-        NodeType(int mask) {
-            this.mask = mask;
-        }
-
     }
 }
