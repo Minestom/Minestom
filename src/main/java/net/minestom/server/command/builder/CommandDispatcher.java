@@ -95,7 +95,7 @@ public class CommandDispatcher {
         // Find the used syntax
         CommandResult result = new CommandResult();
         ParsedCommand parsedCommand = findParsedCommand(command, args);
-        if (parsedCommand != null) {
+        if (parsedCommand != null && parsedCommand.executor != null) {
             // Syntax found
             result.type = CommandResult.Type.SUCCESS;
             result.parsedCommand = parsedCommand;
