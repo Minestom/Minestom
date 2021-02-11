@@ -22,6 +22,10 @@ public class ArgumentType {
         return new ArgumentLiteral(id);
     }
 
+    public static ArgumentGroup Group(@NotNull String id, @NotNull Argument<?>... arguments) {
+        return new ArgumentGroup(id, arguments);
+    }
+
     public static ArgumentBoolean Boolean(@NotNull String id) {
         return new ArgumentBoolean(id);
     }

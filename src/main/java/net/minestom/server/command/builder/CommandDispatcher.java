@@ -4,6 +4,9 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.parser.CommandParser;
+import net.minestom.server.command.builder.parser.CommandSuggestionHolder;
+import net.minestom.server.command.builder.parser.ValidSyntaxHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -152,111 +155,7 @@ public class CommandDispatcher {
         Int2ObjectRBTreeMap<CommandSuggestionHolder> syntaxesSuggestions = new Int2ObjectRBTreeMap<>(Collections.reverseOrder());
 
         for (CommandSyntax syntax : syntaxes) {
-            // List of all arguments in the current syntax
-            final Argument<?>[] arguments = syntax.getArguments();
-            // Empty object containing the maximum amount of argument results of the syntax.
-            final List<Object> argsValues = new ArrayList<>(arguments.length);
-
-            boolean syntaxCorrect = true;
-            // The current index in the raw command string arguments
-            int splitIndex = 0;
-
-            boolean useRemaining = false;
-            // Check the validity of the arguments...
-            for (int argCount = 0; argCount < arguments.length; argCount++) {
-                final boolean lastArgumentIteration = argCount + 1 == arguments.length;
-                final Argument<?> argument = arguments[argCount];
-                useRemaining = argument.useRemaining();
-
-                // the parsed argument value, null if incorrect
-                Object parsedValue;
-                // the argument exception, null if the input is correct
-                ArgumentSyntaxException argumentSyntaxException = null;
-                // true if the arg is valid, false otherwise
-                boolean correct = false;
-                // the raw string representing the correct argument syntax
-                StringBuilder argValue = new StringBuilder();
-
-                if (useRemaining) {
-                    final boolean hasArgs = args.length > splitIndex;
-                    // Verify if there is any string part available
-                    if (hasArgs) {
-                        // Argument is supposed to take the rest of the command input
-                        for (int i = splitIndex; i < args.length; i++) {
-                            final String arg = args[i];
-                            if (argValue.length() > 0)
-                                argValue.append(StringUtils.SPACE);
-                            argValue.append(arg);
-                        }
-
-                        final String argValueString = argValue.toString();
-
-                        try {
-                            parsedValue = argument.parse(argValueString);
-                            correct = true;
-                            argsValues.add(parsedValue);
-                        } catch (ArgumentSyntaxException exception) {
-                            argumentSyntaxException = exception;
-                        }
-                    }
-                } else {
-                    // Argument is either single-word or can accept optional delimited space(s)
-                    for (int i = splitIndex; i < args.length; i++) {
-                        final String rawArg = args[i];
-
-                        argValue.append(rawArg);
-
-                        final String argValueString = argValue.toString();
-
-                        try {
-                            parsedValue = argument.parse(argValueString);
-
-                            // Prevent quitting the parsing too soon if the argument
-                            // does not allow space
-                            if (lastArgumentIteration && i + 1 < args.length) {
-                                if (!argument.allowSpace())
-                                    break;
-                                argValue.append(StringUtils.SPACE);
-                                continue;
-                            }
-
-                            correct = true;
-                            argsValues.add(parsedValue);
-                            splitIndex = i + 1;
-                            break;
-                        } catch (ArgumentSyntaxException exception) {
-                            argumentSyntaxException = exception;
-
-                            if (!argument.allowSpace())
-                                break;
-                            argValue.append(StringUtils.SPACE);
-                        }
-                    }
-                }
-
-                if (!correct) {
-                    // Argument is not correct, add it to the syntax suggestion with the number
-                    // of correct argument(s) and do not check the next syntax argument
-                    syntaxCorrect = false;
-                    CommandSuggestionHolder suggestionHolder = new CommandSuggestionHolder();
-                    suggestionHolder.syntax = syntax;
-                    suggestionHolder.argumentSyntaxException = argumentSyntaxException;
-                    suggestionHolder.argIndex = argCount;
-                    syntaxesSuggestions.put(argCount, suggestionHolder);
-                    break;
-                }
-            }
-
-            // Add the syntax to the list of valid syntaxes if correct
-            if (syntaxCorrect) {
-                if (arguments.length == argsValues.size() || useRemaining) {
-                    ValidSyntaxHolder validSyntaxHolder = new ValidSyntaxHolder();
-                    validSyntaxHolder.syntax = syntax;
-                    validSyntaxHolder.argumentsValue = argsValues;
-
-                    validSyntaxes.add(validSyntaxHolder);
-                }
-            }
+            CommandParser.parse(syntax, syntax.getArguments(), args, validSyntaxes, syntaxesSuggestions);
         }
 
         // Check if there is at least one correct syntax
@@ -319,7 +218,7 @@ public class CommandDispatcher {
 
             final Argument<?>[] arguments = syntax.getArguments();
             final int argumentsCount = arguments.length;
-            final List<Object> argsValues = validSyntaxHolder.argumentsValue;
+            final Map<Argument<?>, Object> argsValues = validSyntaxHolder.argumentsValue;
 
             final int argsSize = argsValues.size();
 
@@ -329,9 +228,9 @@ public class CommandDispatcher {
 
                 // Fill arguments map
                 Arguments syntaxValues = new Arguments();
-                for (int i = 0; i < argumentsCount; i++) {
-                    final Argument<?> argument = arguments[i];
-                    final Object argumentValue = argsValues.get(i);
+                for (Map.Entry<Argument<?>, Object> entry : argsValues.entrySet()) {
+                    final Argument<?> argument = entry.getKey();
+                    final Object argumentValue = entry.getValue();
 
                     syntaxValues.setArg(argument.getId(), argumentValue);
                 }
@@ -345,25 +244,5 @@ public class CommandDispatcher {
         }
 
         return finalSyntax;
-    }
-
-    /**
-     * Holds the data of a validated syntax.
-     */
-    private static class ValidSyntaxHolder {
-        private CommandSyntax syntax;
-        /**
-         * (Argument index/Argument parsed object)
-         */
-        private List<Object> argumentsValue;
-    }
-
-    /**
-     * Holds the data of an invalidated syntax.
-     */
-    private static class CommandSuggestionHolder {
-        private CommandSyntax syntax;
-        private ArgumentSyntaxException argumentSyntaxException;
-        private int argIndex;
     }
 }
