@@ -272,11 +272,16 @@ public final class Arguments {
         this.returnData = returnData;
     }
 
-    protected void setArg(@NotNull String id, Object value) {
+    @NotNull
+    public Map<String, Object> getMap() {
+        return args;
+    }
+
+    public void setArg(@NotNull String id, Object value) {
         this.args.put(id, value);
     }
 
-    protected void copy(@NotNull Arguments arguments) {
+    public void copy(@NotNull Arguments arguments) {
         this.args = arguments.args;
     }
 

@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder.parser;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
+import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 public class CommandParser {
 
-    public static void parse(@NotNull CommandSyntax syntax, @NotNull Argument<?>[] commandArguments, @NotNull String[] inputArguments,
+    public static void parse(@Nullable CommandSyntax syntax, @NotNull Argument<?>[] commandArguments, @NotNull String[] inputArguments,
                              @Nullable List<ValidSyntaxHolder> validSyntaxes,
                              @Nullable Int2ObjectRBTreeMap<CommandSuggestionHolder> syntaxesSuggestions) {
         final Map<Argument<?>, Object> argsValues = new HashMap<>();
@@ -123,6 +124,55 @@ public class CommandParser {
                 }
             }
         }
+    }
+
+    /**
+     * Retrieves from the valid syntax map the arguments condition result and get the one with the most
+     * valid arguments.
+     *
+     * @param validSyntaxes the list containing all the valid syntaxes
+     * @param executorArgs  the recipient of the argument parsed values
+     * @return the command syntax with all of its arguments correct and with the most arguments count, null if not any
+     */
+    @Nullable
+    public static ValidSyntaxHolder findMostCorrectSyntax(@NotNull List<ValidSyntaxHolder> validSyntaxes,
+                                                          @NotNull Arguments executorArgs) {
+        if (validSyntaxes.isEmpty()) {
+            return null;
+        }
+
+        ValidSyntaxHolder finalSyntax = null;
+        int maxArguments = 0;
+        Arguments finalArguments = null;
+
+        for (ValidSyntaxHolder validSyntaxHolder : validSyntaxes) {
+            final Map<Argument<?>, Object> argsValues = validSyntaxHolder.argumentsValue;
+
+            final int argsSize = argsValues.size();
+
+            // Check if the syntax has more valid arguments
+            if (argsSize > maxArguments) {
+                finalSyntax = validSyntaxHolder;
+                maxArguments = argsSize;
+
+                // Fill arguments map
+                Arguments syntaxValues = new Arguments();
+                for (Map.Entry<Argument<?>, Object> entry : argsValues.entrySet()) {
+                    final Argument<?> argument = entry.getKey();
+                    final Object argumentValue = entry.getValue();
+
+                    syntaxValues.setArg(argument.getId(), argumentValue);
+                }
+                finalArguments = syntaxValues;
+            }
+        }
+
+        // Get the arguments values
+        if (finalSyntax != null) {
+            executorArgs.copy(finalArguments);
+        }
+
+        return finalSyntax;
     }
 
 }

@@ -162,11 +162,13 @@ public class CommandDispatcher {
         if (!validSyntaxes.isEmpty()) {
             Arguments executorArgs = new Arguments();
             // Search the syntax with all perfect args
-            final CommandSyntax finalSyntax = findMostCorrectSyntax(validSyntaxes, executorArgs);
-            if (finalSyntax != null) {
+            final ValidSyntaxHolder finalValidSyntax = CommandParser.findMostCorrectSyntax(validSyntaxes, executorArgs);
+            if (finalValidSyntax != null) {
                 // A fully correct syntax has been found, use it
-                parsedCommand.syntax = finalSyntax;
-                parsedCommand.executor = finalSyntax.getExecutor();
+                final CommandSyntax syntax = finalValidSyntax.syntax;
+
+                parsedCommand.syntax = syntax;
+                parsedCommand.executor = syntax.getExecutor();
                 parsedCommand.arguments = executorArgs;
                 return parsedCommand;
             }
@@ -196,53 +198,5 @@ public class CommandDispatcher {
 
         // No syntax found
         return null;
-    }
-
-    /**
-     * Retrieves from the valid syntax map the arguments condition result and get the one with the most
-     * valid arguments.
-     *
-     * @param validSyntaxes the list containing all the valid syntaxes
-     * @param executorArgs  the recipient of the argument parsed values
-     * @return the command syntax with all of its arguments correct and with the most arguments count, null if not any
-     */
-    @Nullable
-    private CommandSyntax findMostCorrectSyntax(@NotNull List<ValidSyntaxHolder> validSyntaxes,
-                                                @NotNull Arguments executorArgs) {
-        CommandSyntax finalSyntax = null;
-        int maxArguments = 0;
-        Arguments finalArguments = null;
-
-        for (ValidSyntaxHolder validSyntaxHolder : validSyntaxes) {
-            final CommandSyntax syntax = validSyntaxHolder.syntax;
-
-            final Argument<?>[] arguments = syntax.getArguments();
-            final int argumentsCount = arguments.length;
-            final Map<Argument<?>, Object> argsValues = validSyntaxHolder.argumentsValue;
-
-            final int argsSize = argsValues.size();
-
-            if (argsSize > maxArguments) {
-                finalSyntax = syntax;
-                maxArguments = argsSize;
-
-                // Fill arguments map
-                Arguments syntaxValues = new Arguments();
-                for (Map.Entry<Argument<?>, Object> entry : argsValues.entrySet()) {
-                    final Argument<?> argument = entry.getKey();
-                    final Object argumentValue = entry.getValue();
-
-                    syntaxValues.setArg(argument.getId(), argumentValue);
-                }
-                finalArguments = syntaxValues;
-            }
-        }
-
-        // Get the arguments values
-        if (finalSyntax != null) {
-            executorArgs.copy(finalArguments);
-        }
-
-        return finalSyntax;
     }
 }
