@@ -187,38 +187,6 @@ public abstract class Argument<T> {
     }
 
     /**
-     * Gets the argument this argument will redirect to.
-     * <p>
-     * A non-null value means that this will redirect to that argument.
-     *
-     * @return The argument this argument will redirect to
-     */
-    @Nullable
-    public Argument<?> getRedirect() {
-        return redirect;
-    }
-
-    /**
-     * Checks if an argument has a redirect.
-     * <p>
-     * Mostly used to make sure there isnt an argument after.
-     *
-     * @return If this argument will redirect to an argument.
-     */
-    public boolean hasRedirect() {
-        return redirect != null;
-    }
-
-    /**
-     * Sets the redirect of this argument.
-     *
-     * @param argument The argument to set the redirect to
-     */
-    public void setRedirect(Argument<?> argument) {
-        this.redirect = argument;
-    }
-
-    /**
      * Gets if the argument has any error callback.
      *
      * @return true if the argument has an error callback, false otherwise
