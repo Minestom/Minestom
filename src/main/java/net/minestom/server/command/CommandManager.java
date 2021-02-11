@@ -5,10 +5,7 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.CommandDispatcher;
-import net.minestom.server.command.builder.CommandResult;
-import net.minestom.server.command.builder.CommandSyntax;
+import net.minestom.server.command.builder.*;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.Player;
@@ -201,6 +198,11 @@ public final class CommandManager {
     @Nullable
     public CommandResult executeServerCommand(@NotNull String command) {
         return execute(serverSender, command);
+    }
+
+    @NotNull
+    public CommandDispatcher getDispatcher() {
+        return dispatcher;
     }
 
     /**
@@ -422,9 +424,10 @@ public final class CommandManager {
                 continue;
             }
 
+            NodeMaker nodeMaker = new NodeMaker();
 
             // Represent the last nodes computed in the last iteration
-            DeclareCommandsPacket.Node[] lastNodes = null;
+            //DeclareCommandsPacket.Node[] lastNodes = null;
 
             // Represent the children of the last node
             IntList argChildren = null;
@@ -442,7 +445,7 @@ public final class CommandManager {
                         final Argument<?> sharedArgument = parsedArguments[i];
 
                         argChildren = new IntArrayList();
-                        lastNodes = storedArgumentsNodes.get(sharedArgument);
+                        nodeMaker.setLastNodes(storedArgumentsNodes.get(sharedArgument));
                         foundSharedPart = true;
                     }
                 }
@@ -451,7 +454,8 @@ public final class CommandManager {
                 }
 
 
-                final DeclareCommandsPacket.Node[] argumentNodes = argument.toNodes(isLast);
+                argument.processNodes(nodeMaker, isLast);
+                final DeclareCommandsPacket.Node[] argumentNodes = nodeMaker.getCurrentNodes();
                 storedArgumentsNodes.put(argument, argumentNodes);
                 for (DeclareCommandsPacket.Node node : argumentNodes) {
                     final int childId = nodes.size();
@@ -464,6 +468,7 @@ public final class CommandManager {
                         argChildren.add(childId);
                     }
 
+                    final DeclareCommandsPacket.Node[] lastNodes = nodeMaker.getLastNodes();
                     if (lastNodes != null) {
                         final int[] children = ArrayUtils.toArray(argChildren);
 
@@ -491,7 +496,7 @@ public final class CommandManager {
                 } else {
                     // Create children list which will be filled during next iteration
                     argChildren = new IntArrayList();
-                    lastNodes = argumentNodes;
+                    nodeMaker.setLastNodes(argumentNodes);
                 }
             }
 

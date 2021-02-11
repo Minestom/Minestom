@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.math.IntRange;
@@ -59,11 +60,11 @@ public class ArgumentIntRange extends ArgumentRange<IntRange> {
         }
     }
 
-    @NotNull
     @Override
-    public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
+    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
         argumentNode.parser = "minecraft:int_range";
-        return new DeclareCommandsPacket.Node[]{argumentNode};
+
+        nodeMaker.setCurrentNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 }

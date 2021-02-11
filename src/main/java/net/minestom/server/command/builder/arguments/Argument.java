@@ -5,6 +5,7 @@ import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
+import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
@@ -78,10 +79,10 @@ public abstract class Argument<T> {
     /**
      * Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.
      *
-     * @return the argument as a list of command packet nodes
+     * @param nodeMaker  helper object used to create and modify nodes
+     * @param executable true if this will be the last argument, false otherwise
      */
-    @NotNull
-    public abstract DeclareCommandsPacket.Node[] toNodes(boolean executable);
+    public abstract void processNodes(@NotNull NodeMaker nodeMaker, boolean executable);
 
     /**
      * Builds an argument node.

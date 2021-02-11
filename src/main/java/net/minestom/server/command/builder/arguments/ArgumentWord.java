@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.validate.Check;
@@ -71,9 +72,8 @@ public class ArgumentWord extends Argument<String> {
         return input;
     }
 
-    @NotNull
     @Override
-    public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
+    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
 
         // Add the single word properties + parser
         final Consumer<DeclareCommandsPacket.Node> wordConsumer = node -> {
@@ -99,12 +99,12 @@ public class ArgumentWord extends Argument<String> {
                 nodes[i] = argumentNode;
 
             }
-            return nodes;
+            nodeMaker.setCurrentNodes(nodes);
         } else {
             // Can be any word, add only one argument node
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
             wordConsumer.accept(argumentNode);
-            return new DeclareCommandsPacket.Node[]{argumentNode};
+            nodeMaker.setCurrentNodes(new DeclareCommandsPacket.Node[]{argumentNode});
         }
     }
 

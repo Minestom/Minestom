@@ -100,7 +100,7 @@ public class CommandDispatcher {
             result.type = CommandResult.Type.SUCCESS;
             result.parsedCommand = parsedCommand;
         } else {
-            // Syntax not found, use the default executor
+            // Syntax not found, use the default executor (if any)
             result.type = CommandResult.Type.INVALID_SYNTAX;
             result.parsedCommand = ParsedCommand.withDefaultExecutor(command);
         }

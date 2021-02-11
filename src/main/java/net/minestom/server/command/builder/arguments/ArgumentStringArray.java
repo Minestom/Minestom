@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -23,15 +24,15 @@ public class ArgumentStringArray extends Argument<String[]> {
         return input.split(Pattern.quote(StringUtils.SPACE));
     }
 
-    @NotNull
     @Override
-    public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
+    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
 
         argumentNode.parser = "brigadier:string";
         argumentNode.properties = packetWriter -> {
             packetWriter.writeVarInt(2); // Greedy phrase
         };
-        return new DeclareCommandsPacket.Node[]{argumentNode};
+
+        nodeMaker.setCurrentNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 }

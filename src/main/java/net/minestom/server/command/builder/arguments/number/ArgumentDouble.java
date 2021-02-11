@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.number;
 
+import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
@@ -41,9 +42,8 @@ public class ArgumentDouble extends ArgumentNumber<Double> {
         }
     }
 
-    @NotNull
     @Override
-    public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
+    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
 
         argumentNode.parser = "brigadier:double";
@@ -55,7 +55,7 @@ public class ArgumentDouble extends ArgumentNumber<Double> {
                 packetWriter.writeDouble(this.getMax());
         };
 
-        return new DeclareCommandsPacket.Node[]{argumentNode};
+        nodeMaker.setCurrentNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
 }

@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.callback.validator.StringArrayValidator;
@@ -37,9 +38,8 @@ public class ArgumentDynamicStringArray extends Argument<String[]> {
         return value;
     }
 
-    @NotNull
     @Override
-    public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
+    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, true);
 
         argumentNode.parser = "brigadier:string";
@@ -48,7 +48,7 @@ public class ArgumentDynamicStringArray extends Argument<String[]> {
         };
         argumentNode.suggestionsType = "minecraft:ask_server";
 
-        return new DeclareCommandsPacket.Node[]{argumentNode};
+        nodeMaker.setCurrentNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
     /**

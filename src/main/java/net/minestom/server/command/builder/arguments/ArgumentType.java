@@ -66,6 +66,10 @@ public class ArgumentType {
         return new ArgumentDynamicStringArray(id);
     }
 
+    public static ArgumentCommand Command(@NotNull String id) {
+        return new ArgumentCommand(id);
+    }
+
     // Minecraft specific arguments
 
     public static ArgumentColor Color(@NotNull String id) {

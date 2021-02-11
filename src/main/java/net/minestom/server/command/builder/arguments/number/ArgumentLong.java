@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.number;
 
+import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
@@ -32,9 +33,8 @@ public class ArgumentLong extends ArgumentNumber<Long> {
         }
     }
 
-    @NotNull
     @Override
-    public DeclareCommandsPacket.Node[] toNodes(boolean executable) {
+    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
 
         // TODO maybe use ArgumentLiteral/ArgumentWord and impose long restriction server side?
@@ -48,7 +48,7 @@ public class ArgumentLong extends ArgumentNumber<Long> {
                 packetWriter.writeInt(this.getMax().intValue());
         };
 
-        return new DeclareCommandsPacket.Node[]{argumentNode};
+        nodeMaker.setCurrentNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
 }
