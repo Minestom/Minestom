@@ -55,7 +55,7 @@ public class ArgumentFloat extends ArgumentNumber<Float> {
                 packetWriter.writeFloat(this.getMax());
         };
 
-        nodeMaker.setCurrentNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
 }

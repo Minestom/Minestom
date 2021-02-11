@@ -13,7 +13,7 @@ public class NodeMaker {
         return currentNodes;
     }
 
-    public void setCurrentNodes(@NotNull DeclareCommandsPacket.Node[] nodes) {
+    public void addNodes(@NotNull DeclareCommandsPacket.Node[] nodes) {
         this.currentNodes = nodes;
     }
 

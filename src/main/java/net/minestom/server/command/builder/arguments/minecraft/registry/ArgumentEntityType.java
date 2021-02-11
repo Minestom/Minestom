@@ -25,6 +25,6 @@ public class ArgumentEntityType extends ArgumentRegistry<EntityType> {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
         argumentNode.parser = "minecraft:entity_summon";
 
-        nodeMaker.setCurrentNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 }

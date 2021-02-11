@@ -86,6 +86,6 @@ public class ArgumentRelativeBlockPosition extends ArgumentRelative<RelativeBloc
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
         argumentNode.parser = "minecraft:block_pos";
 
-        nodeMaker.setCurrentNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 }

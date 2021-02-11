@@ -46,7 +46,7 @@ public class ArgumentInteger extends ArgumentNumber<Integer> {
                 packetWriter.writeInt(this.getMax());
         };
 
-        nodeMaker.setCurrentNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
 }

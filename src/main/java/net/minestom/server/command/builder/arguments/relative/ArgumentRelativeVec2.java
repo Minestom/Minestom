@@ -74,7 +74,7 @@ public class ArgumentRelativeVec2 extends ArgumentRelative<RelativeVec> {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
         argumentNode.parser = "minecraft:vec2";
 
-        nodeMaker.setCurrentNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
 }

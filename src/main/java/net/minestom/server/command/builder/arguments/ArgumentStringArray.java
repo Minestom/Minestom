@@ -33,6 +33,6 @@ public class ArgumentStringArray extends Argument<String[]> {
             packetWriter.writeVarInt(2); // Greedy phrase
         };
 
-        nodeMaker.setCurrentNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 }

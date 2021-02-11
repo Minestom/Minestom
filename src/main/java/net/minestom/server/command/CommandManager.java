@@ -482,6 +482,7 @@ public final class CommandManager {
                         }
                     }
 
+                    // Always add to the main node list
                     nodes.add(node);
                 }
 

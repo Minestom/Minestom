@@ -82,7 +82,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
             packetWriter.writeByte(mask);
         };
 
-        nodeMaker.setCurrentNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
     @NotNull

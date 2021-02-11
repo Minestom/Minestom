@@ -48,7 +48,7 @@ public class ArgumentDynamicStringArray extends Argument<String[]> {
         };
         argumentNode.suggestionsType = "minecraft:ask_server";
 
-        nodeMaker.setCurrentNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
     /**

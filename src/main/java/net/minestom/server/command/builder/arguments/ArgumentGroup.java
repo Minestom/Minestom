@@ -39,6 +39,9 @@ public class ArgumentGroup extends Argument<Arguments> {
 
     @Override
     public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
-        // TODO
+        for (int i = 0; i < group.length; i++) {
+            final boolean isLast = i == group.length - 1;
+            group[i].processNodes(nodeMaker, executable && isLast);
+        }
     }
 }

@@ -48,7 +48,7 @@ public class ArgumentLong extends ArgumentNumber<Long> {
                 packetWriter.writeInt(this.getMax().intValue());
         };
 
-        nodeMaker.setCurrentNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
 }

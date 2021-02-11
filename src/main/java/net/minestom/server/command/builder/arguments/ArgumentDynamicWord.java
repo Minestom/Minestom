@@ -57,7 +57,7 @@ public class ArgumentDynamicWord extends Argument<String> {
         };
         argumentNode.suggestionsType = suggestionType.getIdentifier();
 
-        nodeMaker.setCurrentNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
     /**

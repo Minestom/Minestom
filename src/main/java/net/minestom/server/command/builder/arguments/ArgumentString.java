@@ -34,7 +34,7 @@ public class ArgumentString extends Argument<String> {
             packetWriter.writeVarInt(1); // Quotable phrase
         };
 
-        nodeMaker.setCurrentNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
     @NotNull

@@ -99,12 +99,12 @@ public class ArgumentWord extends Argument<String> {
                 nodes[i] = argumentNode;
 
             }
-            nodeMaker.setCurrentNodes(nodes);
+            nodeMaker.addNodes(nodes);
         } else {
             // Can be any word, add only one argument node
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
             wordConsumer.accept(argumentNode);
-            nodeMaker.setCurrentNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+            nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
         }
     }
 
