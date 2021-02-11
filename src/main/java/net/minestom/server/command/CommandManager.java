@@ -195,7 +195,7 @@ public final class CommandManager {
      *
      * @see #execute(CommandSender, String)
      */
-    @Nullable
+    @NotNull
     public CommandResult executeServerCommand(@NotNull String command) {
         return execute(serverSender, command);
     }
@@ -469,10 +469,13 @@ public final class CommandManager {
                     final List<DeclareCommandsPacket.Node[]> nodesLayer = nodeMaker.getNodes();
                     storedArgumentsNodes.put(argument, nodesLayer);
                     for (int nodeIndex = lastArgumentNodeIndex; nodeIndex < nodesLayer.size(); nodeIndex++) {
+                        final NodeMaker.ConfiguredNodes configuredNodes = nodeMaker.getConfiguredNodes().get(nodeIndex);
+                        final NodeMaker.Options options = configuredNodes.getOptions();
                         final DeclareCommandsPacket.Node[] argumentNodes = nodesLayer.get(nodeIndex);
 
                         for (DeclareCommandsPacket.Node argumentNode : argumentNodes) {
                             final int childId = nodes.size();
+                            nodeMaker.getNodeIdsMap().put(argumentNode, childId);
                             argChildren.add(childId);
 
                             // Append to the last node
@@ -488,8 +491,13 @@ public final class CommandManager {
                             nodes.add(argumentNode);
                         }
 
-                        lastNodes = argumentNodes;
-                        argChildren = new IntArrayList();
+                        if (options.shouldUpdateLastNode()) {
+                            // 'previousNodes' used if the nodes options require to overwrite the parent
+                            final DeclareCommandsPacket.Node[] previousNodes = options.getPreviousNodes();
+
+                            lastNodes = previousNodes != null ? previousNodes : argumentNodes;
+                            argChildren = new IntArrayList();
+                        }
                     }
 
                     // Used to do not re-compute the previous arguments
