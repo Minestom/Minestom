@@ -1,5 +1,14 @@
 package net.minestom.server.instance.batch;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minestom.server.data.Data;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -7,16 +16,6 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Used when the blocks you want to place need to be divided in multiple chunks,
@@ -91,13 +90,13 @@ public class BlockBatch implements InstanceBatch {
             	Chunk[] chunks = data.keySet().toArray(new Chunk[data.size()]);
             	
             	// Get chunk indexs
-            	Long[] indexs = new Long[chunks.length];
+            	long[] indexs = new long[chunks.length];
             	for (int i = 0; i < chunks.length; i++) {
             		indexs[i] = ChunkUtils.getChunkIndex(chunks[i].getChunkX(), chunks[i].getChunkZ());
             	}
             	
             	// Load all chunks + flush block data
-        		ChunkUtils.optionalLoadAll(instance, null, null, (chunk) -> {
+        		ChunkUtils.optionalLoadAll(instance, indexs, null, (chunk) -> {
         			flushBlockData(callback);
         		});
         	} else {
