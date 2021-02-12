@@ -55,6 +55,23 @@ public class CommandDispatcher {
         this.commands.remove(command);
     }
 
+    @NotNull
+    public Set<Command> getCommands() {
+        return Collections.unmodifiableSet(commands);
+    }
+
+    /**
+     * Gets the command class associated with the name.
+     *
+     * @param commandName the command name
+     * @return the {@link Command} associated with the name, null if not any
+     */
+    @Nullable
+    public Command findCommand(@NotNull String commandName) {
+        commandName = commandName.toLowerCase();
+        return commandMap.getOrDefault(commandName, null);
+    }
+
     /**
      * Checks if the command exists, and execute it.
      *
@@ -112,23 +129,6 @@ public class CommandDispatcher {
             }
         }
         return result;
-    }
-
-    @NotNull
-    public Set<Command> getCommands() {
-        return Collections.unmodifiableSet(commands);
-    }
-
-    /**
-     * Gets the command class associated with the name.
-     *
-     * @param commandName the command name
-     * @return the {@link Command} associated with the name, null if not any
-     */
-    @Nullable
-    public Command findCommand(@NotNull String commandName) {
-        commandName = commandName.toLowerCase();
-        return commandMap.getOrDefault(commandName, null);
     }
 
     @Nullable
