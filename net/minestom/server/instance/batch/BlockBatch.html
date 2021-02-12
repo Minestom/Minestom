@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -221,6 +221,12 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flush(java.lang.Runnable,boolean)">flush</a></span>&#8203;(java.lang.Runnable&nbsp;callback,
+     boolean&nbsp;shouldLoadChunks)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlockStateId(int,int,int,short,net.minestom.server.data.Data)">setBlockStateId</a></span>&#8203;(int&nbsp;x,
                int&nbsp;y,
                int&nbsp;z,
@@ -230,7 +236,7 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <div class="block">Sets a block at a position.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCustomBlock(int,int,int,short,net.minestom.server.data.Data)">setCustomBlock</a></span>&#8203;(int&nbsp;x,
               int&nbsp;y,
@@ -241,7 +247,7 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <div class="block">Sets a <a href="../block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> at a position.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSeparateBlocks(int,int,int,short,short,net.minestom.server.data.Data)">setSeparateBlocks</a></span>&#8203;(int&nbsp;x,
                  int&nbsp;y,
@@ -406,11 +412,22 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <a id="flush(java.lang.Runnable)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>flush</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;flush&#8203;(@Nullable
                   java.lang.Runnable&nbsp;callback)</pre>
+</li>
+</ul>
+<a id="flush(java.lang.Runnable,boolean)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>flush</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;flush&#8203;(@Nullable
+                  java.lang.Runnable&nbsp;callback,
+                  boolean&nbsp;shouldLoadChunks)</pre>
 </li>
 </ul>
 </li>
