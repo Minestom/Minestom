@@ -96,17 +96,20 @@ public class CommandDispatcher {
         final String[] args = commandString.replaceFirst(Pattern.quote(commandName), "").trim().split(StringUtils.SPACE);
 
         // Find the used syntax
+        ParsedCommand parsedCommand = findParsedCommand(command, args);
+
         CommandResult result = new CommandResult();
         result.input = commandString;
-        ParsedCommand parsedCommand = findParsedCommand(command, args);
+        result.parsedCommand = parsedCommand;
         if (parsedCommand != null && parsedCommand.executor != null) {
             // Syntax found
             result.type = CommandResult.Type.SUCCESS;
-            result.parsedCommand = parsedCommand;
         } else {
             // Syntax not found, use the default executor (if any)
             result.type = CommandResult.Type.INVALID_SYNTAX;
-            result.parsedCommand = ParsedCommand.withDefaultExecutor(command);
+            if (parsedCommand == null) { // Prevent overriding argument callback
+                result.parsedCommand = ParsedCommand.withDefaultExecutor(command);
+            }
         }
         return result;
     }

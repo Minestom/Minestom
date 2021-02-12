@@ -66,6 +66,11 @@ public class ParsedCommand {
             callback.apply(source, argumentSyntaxException);
         }
 
+        if (arguments == null) {
+            // Argument callbacks cannot return data
+            return null;
+        }
+
         return arguments.getReturnData();
     }
 
