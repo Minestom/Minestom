@@ -3,7 +3,6 @@ package demo.commands;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -12,15 +11,15 @@ import net.minestom.server.entity.Player;
 public class HealthCommand extends Command {
 
     public HealthCommand() {
-        super("health", "h", "healthbar");
+        super("health");
 
         setCondition(this::condition);
 
         setDefaultExecutor(this::defaultExecutor);
 
-        Argument modeArg = ArgumentType.Word("mode").from("set", "add");
+        var modeArg = ArgumentType.Word("mode").from("set", "add");
 
-        Argument valueArg = ArgumentType.Integer("value").between(0, 100);
+        var valueArg = ArgumentType.Integer("value").between(0, 100);
 
         setArgumentCallback(this::onModeError, modeArg);
         setArgumentCallback(this::onValueError, valueArg);

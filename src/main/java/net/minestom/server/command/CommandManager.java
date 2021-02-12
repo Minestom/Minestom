@@ -447,12 +447,13 @@ public final class CommandManager {
                     // Find shared part
                     boolean foundSharedPart = false;
                     for (Argument<?>[] parsedArguments : syntaxesArguments) {
-                        if (ArrayUtils.sameStart(arguments, parsedArguments, i + 1)) {
+                        final int index = i + 1;
+                        if (ArrayUtils.sameStart(arguments, parsedArguments, index)) {
                             final Argument<?> sharedArgument = parsedArguments[i];
                             final List<DeclareCommandsPacket.Node[]> storedNodes = storedArgumentsNodes.get(sharedArgument);
 
                             argChildren = new IntArrayList();
-                            lastNodes = storedNodes.get(storedNodes.size() - Math.max(arguments.length, parsedArguments.length));
+                            lastNodes = storedNodes.get(index);
                             foundSharedPart = true;
                         }
                     }
