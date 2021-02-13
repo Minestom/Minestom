@@ -49,6 +49,10 @@ public final class Arguments {
         });
     }
 
+    public boolean has(@NotNull String identifier) {
+        return args.containsKey(identifier);
+    }
+
     /**
      * @deprecated use {@link #get(Argument)}.
      */
