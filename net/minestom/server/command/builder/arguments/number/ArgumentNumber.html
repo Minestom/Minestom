@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -251,40 +251,47 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>byte</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNumberProperties()">getNumberProperties</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Creates the byteflag based on the number's min/max existance.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>protected int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRadix(java.lang.String)">getRadix</a></span>&#8203;(java.lang.String&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasMax()">hasMax</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the argument has a maximum.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasMin()">hasMin</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the argument has a minimum.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="ArgumentNumber.html" title="class in net.minestom.server.command.builder.arguments.number">ArgumentNumber</a>&lt;<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#max(T)">max</a></span>&#8203;(<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="ArgumentNumber.html" title="class in net.minestom.server.command.builder.arguments.number">ArgumentNumber</a>&lt;<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#min(T)">min</a></span>&#8203;(<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>protected java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parseValue(java.lang.String)">parseValue</a></span>&#8203;(java.lang.String&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>protected java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeScientificNotation(java.lang.String)">removeScientificNotation</a></span>&#8203;(java.lang.String&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -295,14 +302,14 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.command.builder.arguments.<a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a></h3>
-<code><a href="../Argument.html#allowSpace()">allowSpace</a>, <a href="../Argument.html#getCallback()">getCallback</a>, <a href="../Argument.html#getDefaultValue()">getDefaultValue</a>, <a href="../Argument.html#getId()">getId</a>, <a href="../Argument.html#hasErrorCallback()">hasErrorCallback</a>, <a href="../Argument.html#isOptional()">isOptional</a>, <a href="../Argument.html#parse(java.lang.String)">parse</a>, <a href="../Argument.html#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a>, <a href="../Argument.html#setDefaultValue(T)">setDefaultValue</a>, <a href="../Argument.html#useRemaining()">useRemaining</a></code></li>
+<code><a href="../Argument.html#allowSpace()">allowSpace</a>, <a href="../Argument.html#equals(java.lang.Object)">equals</a>, <a href="../Argument.html#getCallback()">getCallback</a>, <a href="../Argument.html#getDefaultValue()">getDefaultValue</a>, <a href="../Argument.html#getId()">getId</a>, <a href="../Argument.html#hasErrorCallback()">hasErrorCallback</a>, <a href="../Argument.html#hashCode()">hashCode</a>, <a href="../Argument.html#isOptional()">isOptional</a>, <a href="../Argument.html#parse(java.lang.String)">parse</a>, <a href="../Argument.html#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a>, <a href="../Argument.html#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a>, <a href="../Argument.html#setDefaultValue(T)">setDefaultValue</a>, <a href="../Argument.html#simpleArgumentNode(net.minestom.server.command.builder.arguments.Argument,boolean,boolean,boolean)">simpleArgumentNode</a>, <a href="../Argument.html#useRemaining()">useRemaining</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+<code>clone, finalize, getClass, notify, notifyAll, toString, wait, wait, wait</code></li>
 </ul>
 </li>
 </ul>
@@ -450,6 +457,20 @@ public&nbsp;<a href="ArgumentNumber.html" title="class in net.minestom.server.co
                                  <a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&nbsp;min,
                                  @NotNull
                                  <a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&nbsp;max)</pre>
+</li>
+</ul>
+<a id="getNumberProperties()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNumberProperties</h4>
+<pre class="methodSignature">public&nbsp;byte&nbsp;getNumberProperties()</pre>
+<div class="block">Creates the byteflag based on the number's min/max existance.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>A byteflag for argument specification.</dd>
+</dl>
 </li>
 </ul>
 <a id="hasMin()">

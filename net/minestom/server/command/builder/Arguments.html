@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":42,"i4":42,"i5":42,"i6":42,"i7":42,"i8":42,"i9":42,"i10":42,"i11":42,"i12":42,"i13":42,"i14":42,"i15":42,"i16":42,"i17":42,"i18":10,"i19":42,"i20":42,"i21":42,"i22":42,"i23":10,"i24":42,"i25":42,"i26":42,"i27":42,"i28":10,"i29":10,"i30":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":42,"i5":42,"i6":42,"i7":42,"i8":42,"i9":42,"i10":42,"i11":42,"i12":42,"i13":42,"i14":42,"i15":42,"i16":42,"i17":10,"i18":42,"i19":42,"i20":42,"i21":42,"i22":42,"i23":42,"i24":42,"i25":10,"i26":42,"i27":42,"i28":42,"i29":42,"i30":10,"i31":10,"i32":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -186,16 +186,21 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copy(net.minestom.server.command.builder.Arguments)">copy</a></span>&#8203;(<a href="Arguments.html" title="class in net.minestom.server.command.builder">Arguments</a>&nbsp;arguments)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#get(net.minestom.server.command.builder.arguments.Argument)">get</a></span>&#8203;(<a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;T&gt;&nbsp;argument)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#get(java.lang.String)">get</a></span>&#8203;(java.lang.String&nbsp;identifier)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#get(net.minestom.server.command.builder.arguments.Argument)">get</a></span>&#8203;(<a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;T&gt;&nbsp;argument)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../instance/block/Block.html" title="enum in net.minestom.server.instance.block">Block</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlockState(java.lang.String)">getBlockState</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -204,7 +209,7 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBoolean(java.lang.String)">getBoolean</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -213,7 +218,7 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getColor(java.lang.String)">getColor</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -222,7 +227,7 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDouble(java.lang.String)">getDouble</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -231,7 +236,7 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../item/Enchantment.html" title="enum in net.minestom.server.item">Enchantment</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEnchantment(java.lang.String)">getEnchantment</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -240,7 +245,7 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../utils/entity/EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntities(java.lang.String)">getEntities</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -249,7 +254,7 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../entity/EntityType.html" title="enum in net.minestom.server.entity">EntityType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntityType(java.lang.String)">getEntityType</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -258,7 +263,7 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFloat(java.lang.String)">getFloat</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -267,7 +272,7 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="../../utils/math/FloatRange.html" title="class in net.minestom.server.utils.math">FloatRange</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFloatRange(java.lang.String)">getFloatRange</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -276,7 +281,7 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInteger(java.lang.String)">getInteger</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -285,7 +290,7 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="../../utils/math/IntRange.html" title="class in net.minestom.server.utils.math">IntRange</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getIntRange(java.lang.String)">getIntRange</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -294,7 +299,7 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getItemStack(java.lang.String)">getItemStack</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -303,7 +308,7 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLong(java.lang.String)">getLong</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -312,7 +317,12 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
+<td class="colFirst"><code>java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMap()">getMap</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>org.jglrxavpok.hephaistos.nbt.NBT</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNBT(java.lang.String)">getNBT</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -321,7 +331,7 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>org.jglrxavpok.hephaistos.nbt.NBTCompound</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNbtCompound(java.lang.String)">getNbtCompound</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -330,12 +340,16 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>java.lang.Object</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getObject(java.lang.String)">getObject</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">use <a href="#get(java.lang.String)"><code>get(String)</code></a>.</div>
+</div>
+</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code><a href="../../particle/Particle.html" title="enum in net.minestom.server.particle">Particle</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getParticle(java.lang.String)">getParticle</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -344,7 +358,7 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code><a href="../../potion/PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPotionEffect(java.lang.String)">getPotionEffect</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -353,7 +367,7 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code><a href="../../utils/location/RelativeBlockPosition.html" title="class in net.minestom.server.utils.location">RelativeBlockPosition</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRelativeBlockPosition(java.lang.String)">getRelativeBlockPosition</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -362,7 +376,7 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code><a href="../../utils/location/RelativeVec.html" title="class in net.minestom.server.utils.location">RelativeVec</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRelativeVector(java.lang.String)">getRelativeVector</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -371,12 +385,12 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code><a href="CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getReturnData()">getReturnData</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getString(java.lang.String)">getString</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -385,7 +399,7 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>java.lang.String[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStringArray(java.lang.String)">getStringArray</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -394,7 +408,7 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code><a href="../../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTime(java.lang.String)">getTime</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -403,7 +417,7 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getWord(java.lang.String)">getWord</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
@@ -412,18 +426,18 @@ extends java.lang.Object</pre>
 </div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retrieveDefaultValues(java.util.Map)">retrieveDefaultValues</a></span>&#8203;(java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;defaultValuesMap)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i29" class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
+<tr id="i31" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setArg(java.lang.String,java.lang.Object)">setArg</a></span>&#8203;(java.lang.String&nbsp;id,
       java.lang.Object&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setReturnData(net.minestom.server.command.builder.CommandData)">setReturnData</a></span>&#8203;(<a href="CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a>&nbsp;returnData)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -480,6 +494,16 @@ extends java.lang.Object</pre>
 <pre class="methodSignature">@NotNull
 public&nbsp;&lt;T&gt;&nbsp;T&nbsp;get&#8203;(@NotNull
                  <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;T&gt;&nbsp;argument)</pre>
+</li>
+</ul>
+<a id="get(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get</h4>
+<pre class="methodSignature">public&nbsp;&lt;T&gt;&nbsp;T&nbsp;get&#8203;(@NotNull
+                 java.lang.String&nbsp;identifier)</pre>
 </li>
 </ul>
 <a id="getBoolean(java.lang.String)">
@@ -828,9 +852,13 @@ public&nbsp;<a href="../../utils/location/RelativeVec.html" title="class in net.
 <ul class="blockList">
 <li class="blockList">
 <h4>getObject</h4>
-<pre class="methodSignature">@NotNull
+<pre class="methodSignature">@Deprecated
+@NotNull
 public&nbsp;java.lang.Object&nbsp;getObject&#8203;(@NotNull
                                   java.lang.String&nbsp;id)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">use <a href="#get(java.lang.String)"><code>get(String)</code></a>.</div>
+</div>
 </li>
 </ul>
 <a id="getReturnData()">
@@ -853,15 +881,25 @@ public&nbsp;<a href="CommandData.html" title="class in net.minestom.server.comma
                           <a href="CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a>&nbsp;returnData)</pre>
 </li>
 </ul>
+<a id="getMap()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMap</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;getMap()</pre>
+</li>
+</ul>
 <a id="setArg(java.lang.String,java.lang.Object)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setArg</h4>
-<pre class="methodSignature">protected&nbsp;void&nbsp;setArg&#8203;(@NotNull
-                      java.lang.String&nbsp;id,
-                      java.lang.Object&nbsp;value)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;setArg&#8203;(@NotNull
+                   java.lang.String&nbsp;id,
+                   java.lang.Object&nbsp;value)</pre>
 </li>
 </ul>
 <a id="copy(net.minestom.server.command.builder.Arguments)">
@@ -870,8 +908,8 @@ public&nbsp;<a href="CommandData.html" title="class in net.minestom.server.comma
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre class="methodSignature">protected&nbsp;void&nbsp;copy&#8203;(@NotNull
-                    <a href="Arguments.html" title="class in net.minestom.server.command.builder">Arguments</a>&nbsp;arguments)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;copy&#8203;(@NotNull
+                 <a href="Arguments.html" title="class in net.minestom.server.command.builder">Arguments</a>&nbsp;arguments)</pre>
 </li>
 </ul>
 <a id="clear()">

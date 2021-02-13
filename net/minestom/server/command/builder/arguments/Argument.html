@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":6,"i7":10,"i8":10,"i9":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":6,"i9":6,"i10":10,"i11":10,"i12":9,"i13":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -135,7 +135,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><code><a href="ArgumentBoolean.html" title="class in net.minestom.server.command.builder.arguments">ArgumentBoolean</a></code>, <code><a href="minecraft/ArgumentColor.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentColor</a></code>, <code><a href="ArgumentDynamicStringArray.html" title="class in net.minestom.server.command.builder.arguments">ArgumentDynamicStringArray</a></code>, <code><a href="ArgumentDynamicWord.html" title="class in net.minestom.server.command.builder.arguments">ArgumentDynamicWord</a></code>, <code><a href="minecraft/ArgumentEntity.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentEntity</a></code>, <code><a href="minecraft/ArgumentItemStack.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentItemStack</a></code>, <code><a href="minecraft/ArgumentNbtCompoundTag.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentNbtCompoundTag</a></code>, <code><a href="minecraft/ArgumentNbtTag.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentNbtTag</a></code>, <code><a href="number/ArgumentNumber.html" title="class in net.minestom.server.command.builder.arguments.number">ArgumentNumber</a></code>, <code><a href="minecraft/ArgumentRange.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentRange</a></code>, <code><a href="minecraft/registry/ArgumentRegistry.html" title="class in net.minestom.server.command.builder.arguments.minecraft.registry">ArgumentRegistry</a></code>, <code><a href="relative/ArgumentRelative.html" title="class in net.minestom.server.command.builder.arguments.relative">ArgumentRelative</a></code>, <code><a href="ArgumentString.html" title="class in net.minestom.server.command.builder.arguments">ArgumentString</a></code>, <code><a href="ArgumentStringArray.html" title="class in net.minestom.server.command.builder.arguments">ArgumentStringArray</a></code>, <code><a href="minecraft/ArgumentTime.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentTime</a></code>, <code><a href="ArgumentWord.html" title="class in net.minestom.server.command.builder.arguments">ArgumentWord</a></code></dd>
+<dd><code><a href="ArgumentBoolean.html" title="class in net.minestom.server.command.builder.arguments">ArgumentBoolean</a></code>, <code><a href="minecraft/ArgumentColor.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentColor</a></code>, <code><a href="ArgumentCommand.html" title="class in net.minestom.server.command.builder.arguments">ArgumentCommand</a></code>, <code><a href="ArgumentDynamicStringArray.html" title="class in net.minestom.server.command.builder.arguments">ArgumentDynamicStringArray</a></code>, <code><a href="ArgumentDynamicWord.html" title="class in net.minestom.server.command.builder.arguments">ArgumentDynamicWord</a></code>, <code><a href="minecraft/ArgumentEntity.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentEntity</a></code>, <code><a href="ArgumentGroup.html" title="class in net.minestom.server.command.builder.arguments">ArgumentGroup</a></code>, <code><a href="minecraft/ArgumentItemStack.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentItemStack</a></code>, <code><a href="ArgumentLiteral.html" title="class in net.minestom.server.command.builder.arguments">ArgumentLiteral</a></code>, <code><a href="ArgumentLoop.html" title="class in net.minestom.server.command.builder.arguments">ArgumentLoop</a></code>, <code><a href="minecraft/ArgumentNbtCompoundTag.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentNbtCompoundTag</a></code>, <code><a href="minecraft/ArgumentNbtTag.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentNbtTag</a></code>, <code><a href="number/ArgumentNumber.html" title="class in net.minestom.server.command.builder.arguments.number">ArgumentNumber</a></code>, <code><a href="minecraft/ArgumentRange.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentRange</a></code>, <code><a href="minecraft/registry/ArgumentRegistry.html" title="class in net.minestom.server.command.builder.arguments.minecraft.registry">ArgumentRegistry</a></code>, <code><a href="relative/ArgumentRelative.html" title="class in net.minestom.server.command.builder.arguments.relative">ArgumentRelative</a></code>, <code><a href="ArgumentString.html" title="class in net.minestom.server.command.builder.arguments">ArgumentString</a></code>, <code><a href="ArgumentStringArray.html" title="class in net.minestom.server.command.builder.arguments">ArgumentStringArray</a></code>, <code><a href="minecraft/ArgumentTime.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentTime</a></code>, <code><a href="ArgumentWord.html" title="class in net.minestom.server.command.builder.arguments">ArgumentWord</a></code></dd>
 </dl>
 <hr>
 <pre>public abstract class <span class="typeNameLabel">Argument&lt;T&gt;</span>
@@ -197,7 +197,7 @@ extends java.lang.Object</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -211,20 +211,25 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(java.lang.Object&nbsp;o)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder">ArgumentCallback</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCallback()">getCallback</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder"><code>ArgumentCallback</code></a> to check if the argument-specific conditions are validated or not.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="Argument.html" title="type parameter in Argument">T</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDefaultValue()">getDefaultValue</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the default value of this argument.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getId()">getId</a></span>()</code></th>
 <td class="colLast">
@@ -232,21 +237,26 @@ extends java.lang.Object</pre>
  and used to retrieve the data when the command is parsed in <a href="../Arguments.html" title="class in net.minestom.server.command.builder"><code>Arguments</code></a>.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasErrorCallback()">hasErrorCallback</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the argument has any error callback.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isOptional()">isOptional</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if this argument is 'optional'.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>abstract <a href="Argument.html" title="type parameter in Argument">T</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(java.lang.String&nbsp;input)</code></th>
 <td class="colLast">
@@ -254,21 +264,39 @@ extends java.lang.Object</pre>
  if the input cannot be convert to <code>T</code></div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>abstract void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></span>&#8203;(<a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
+            boolean&nbsp;executable)</code></th>
+<td class="colLast">
+<div class="block">Turns the argument into a list of nodes for command dispatching.</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a></span>&#8203;(<a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder">ArgumentCallback</a>&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Sets the <a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder"><code>ArgumentCallback</code></a>.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDefaultValue(T)">setDefaultValue</a></span>&#8203;(<a href="Argument.html" title="type parameter in Argument">T</a>&nbsp;defaultValue)</code></th>
 <td class="colLast">
 <div class="block">Sets the default value of the argument.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>protected static <a href="../../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#simpleArgumentNode(net.minestom.server.command.builder.arguments.Argument,boolean,boolean,boolean)">simpleArgumentNode</a></span>&#8203;(<a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&nbsp;argument,
+                  boolean&nbsp;executable,
+                  boolean&nbsp;redirect,
+                  boolean&nbsp;suggestion)</code></th>
+<td class="colLast">
+<div class="block">Builds an argument node.</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#useRemaining()">useRemaining</a></span>()</code></th>
 <td class="colLast">
@@ -281,7 +309,7 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+<code>clone, finalize, getClass, notify, notifyAll, toString, wait, wait, wait</code></li>
 </ul>
 </li>
 </ul>
@@ -379,6 +407,45 @@ public abstract&nbsp;<a href="Argument.html" title="type parameter in Argument">
 <dd>the parsed argument</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></code> - if <code>value</code> is not valid</dd>
+</dl>
+</li>
+</ul>
+<a id="processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>processNodes</h4>
+<pre class="methodSignature">public abstract&nbsp;void&nbsp;processNodes&#8203;(@NotNull
+                                  <a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
+                                  boolean&nbsp;executable)</pre>
+<div class="block">Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>nodeMaker</code> - helper object used to create and modify nodes</dd>
+<dd><code>executable</code> - true if this will be the last argument, false otherwise</dd>
+</dl>
+</li>
+</ul>
+<a id="simpleArgumentNode(net.minestom.server.command.builder.arguments.Argument,boolean,boolean,boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>simpleArgumentNode</h4>
+<pre class="methodSignature">@NotNull
+protected static&nbsp;<a href="../../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a>&nbsp;simpleArgumentNode&#8203;(@NotNull
+                                                               <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&nbsp;argument,
+                                                               boolean&nbsp;executable,
+                                                               boolean&nbsp;redirect,
+                                                               boolean&nbsp;suggestion)</pre>
+<div class="block">Builds an argument node.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>argument</code> - the argument</dd>
+<dd><code>executable</code> - true if this will be the last argument, false otherwise</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the created <a href="../../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play"><code>DeclareCommandsPacket.Node</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -517,7 +584,7 @@ public&nbsp;<a href="Argument.html" title="class in net.minestom.server.command.
 <a id="hasErrorCallback()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>hasErrorCallback</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;hasErrorCallback()</pre>
@@ -525,6 +592,32 @@ public&nbsp;<a href="Argument.html" title="class in net.minestom.server.command.
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the argument has an error callback, false otherwise</dd>
+</dl>
+</li>
+</ul>
+<a id="equals(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>equals</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;equals&#8203;(java.lang.Object&nbsp;o)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>equals</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+</dl>
+</li>
+</ul>
+<a id="hashCode()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>hashCode</h4>
+<pre class="methodSignature">public&nbsp;int&nbsp;hashCode()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code>hashCode</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
 </dl>
 </li>
 </ul>

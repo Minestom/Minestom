@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -247,11 +247,19 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></span>&#8203;(<a href="../../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
+            boolean&nbsp;executable)</code></th>
+<td class="colLast">
+<div class="block">Turns the argument into a list of nodes for command dispatching.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="ArgumentEntity.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentEntity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#singleEntity(boolean)">singleEntity</a></span>&#8203;(boolean&nbsp;singleEntity)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../utils/entity/EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#staticParse(java.lang.String,boolean,boolean)">staticParse</a></span>&#8203;(java.lang.String&nbsp;input,
            boolean&nbsp;onlySingleEntity,
@@ -264,14 +272,14 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.command.builder.arguments.<a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a></h3>
-<code><a href="../Argument.html#allowSpace()">allowSpace</a>, <a href="../Argument.html#getCallback()">getCallback</a>, <a href="../Argument.html#getDefaultValue()">getDefaultValue</a>, <a href="../Argument.html#getId()">getId</a>, <a href="../Argument.html#hasErrorCallback()">hasErrorCallback</a>, <a href="../Argument.html#isOptional()">isOptional</a>, <a href="../Argument.html#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a>, <a href="../Argument.html#setDefaultValue(T)">setDefaultValue</a>, <a href="../Argument.html#useRemaining()">useRemaining</a></code></li>
+<code><a href="../Argument.html#allowSpace()">allowSpace</a>, <a href="../Argument.html#equals(java.lang.Object)">equals</a>, <a href="../Argument.html#getCallback()">getCallback</a>, <a href="../Argument.html#getDefaultValue()">getDefaultValue</a>, <a href="../Argument.html#getId()">getId</a>, <a href="../Argument.html#hasErrorCallback()">hasErrorCallback</a>, <a href="../Argument.html#hashCode()">hashCode</a>, <a href="../Argument.html#isOptional()">isOptional</a>, <a href="../Argument.html#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a>, <a href="../Argument.html#setDefaultValue(T)">setDefaultValue</a>, <a href="../Argument.html#simpleArgumentNode(net.minestom.server.command.builder.arguments.Argument,boolean,boolean,boolean)">simpleArgumentNode</a>, <a href="../Argument.html#useRemaining()">useRemaining</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+<code>clone, finalize, getClass, notify, notifyAll, toString, wait, wait, wait</code></li>
 </ul>
 </li>
 </ul>
@@ -423,6 +431,26 @@ public&nbsp;<a href="../../../../utils/entity/EntityFinder.html" title="class in
 <dd>the parsed argument</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></code> - if <code>value</code> is not valid</dd>
+</dl>
+</li>
+</ul>
+<a id="processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>processNodes</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;processNodes&#8203;(@NotNull
+                         <a href="../../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
+                         boolean&nbsp;executable)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../Argument.html#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">Argument</a></code></span></div>
+<div class="block">Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../Argument.html#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../utils/entity/EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>nodeMaker</code> - helper object used to create and modify nodes</dd>
+<dd><code>executable</code> - true if this will be the last argument, false otherwise</dd>
 </dl>
 </li>
 </ul>

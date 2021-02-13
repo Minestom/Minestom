@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -217,42 +217,40 @@ extends <a href="Argument.html" title="class in net.minestom.server.command.buil
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(java.lang.Object&nbsp;o)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="ArgumentWord.html" title="class in net.minestom.server.command.builder.arguments">ArgumentWord</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#from(java.lang.String...)">from</a></span>&#8203;(java.lang.String...&nbsp;restrictions)</code></th>
 <td class="colLast">
 <div class="block">Used to force the use of a few precise words instead of complete freedom.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>java.lang.String[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRestrictions()">getRestrictions</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the word restrictions.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasRestrictions()">hasRestrictions</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if this argument allow complete freedom in the word choice or if a list has been defined.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(java.lang.String&nbsp;input)</code></th>
 <td class="colLast">
 <div class="block">Parses the given input, and throw an <a href="../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
  if the input cannot be convert to <code>T</code></div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></span>&#8203;(<a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
+            boolean&nbsp;executable)</code></th>
+<td class="colLast">
+<div class="block">Turns the argument into a list of nodes for command dispatching.</div>
 </td>
 </tr>
 </table>
@@ -261,7 +259,7 @@ extends <a href="Argument.html" title="class in net.minestom.server.command.buil
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.command.builder.arguments.<a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a></h3>
-<code><a href="Argument.html#allowSpace()">allowSpace</a>, <a href="Argument.html#getCallback()">getCallback</a>, <a href="Argument.html#getDefaultValue()">getDefaultValue</a>, <a href="Argument.html#getId()">getId</a>, <a href="Argument.html#hasErrorCallback()">hasErrorCallback</a>, <a href="Argument.html#isOptional()">isOptional</a>, <a href="Argument.html#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a>, <a href="Argument.html#setDefaultValue(T)">setDefaultValue</a>, <a href="Argument.html#useRemaining()">useRemaining</a></code></li>
+<code><a href="Argument.html#allowSpace()">allowSpace</a>, <a href="Argument.html#equals(java.lang.Object)">equals</a>, <a href="Argument.html#getCallback()">getCallback</a>, <a href="Argument.html#getDefaultValue()">getDefaultValue</a>, <a href="Argument.html#getId()">getId</a>, <a href="Argument.html#hasErrorCallback()">hasErrorCallback</a>, <a href="Argument.html#hashCode()">hashCode</a>, <a href="Argument.html#isOptional()">isOptional</a>, <a href="Argument.html#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a>, <a href="Argument.html#setDefaultValue(T)">setDefaultValue</a>, <a href="Argument.html#simpleArgumentNode(net.minestom.server.command.builder.arguments.Argument,boolean,boolean,boolean)">simpleArgumentNode</a>, <a href="Argument.html#useRemaining()">useRemaining</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -399,6 +397,26 @@ public&nbsp;java.lang.String&nbsp;parse&#8203;(@NotNull
 </dl>
 </li>
 </ul>
+<a id="processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>processNodes</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;processNodes&#8203;(@NotNull
+                         <a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
+                         boolean&nbsp;executable)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Argument.html#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">Argument</a></code></span></div>
+<div class="block">Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Argument.html#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></code>&nbsp;in class&nbsp;<code><a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;java.lang.String&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>nodeMaker</code> - helper object used to create and modify nodes</dd>
+<dd><code>executable</code> - true if this will be the last argument, false otherwise</dd>
+</dl>
+</li>
+</ul>
 <a id="hasRestrictions()">
 <!--   -->
 </a>
@@ -416,7 +434,7 @@ public&nbsp;java.lang.String&nbsp;parse&#8203;(@NotNull
 <a id="getRestrictions()">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getRestrictions</h4>
 <pre class="methodSignature">@Nullable
@@ -425,32 +443,6 @@ public&nbsp;java.lang.String[]&nbsp;getRestrictions()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the word restrictions, can be null</dd>
-</dl>
-</li>
-</ul>
-<a id="equals(java.lang.Object)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>equals</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;equals&#8203;(java.lang.Object&nbsp;o)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code>equals</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
-</dl>
-</li>
-</ul>
-<a id="hashCode()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>hashCode</h4>
-<pre class="methodSignature">public&nbsp;int&nbsp;hashCode()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code>hashCode</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
 </dl>
 </li>
 </ul>

@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":9,"i1":10,"i2":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -162,6 +162,11 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="DeclareCommandsPacket.NodeType.html" title="enum in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.NodeType</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -223,20 +228,28 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>static byte</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFlag(net.minestom.server.network.packet.server.play.DeclareCommandsPacket.NodeType,boolean,boolean,boolean)">getFlag</a></span>&#8203;(<a href="DeclareCommandsPacket.NodeType.html" title="enum in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.NodeType</a>&nbsp;type,
+       boolean&nbsp;executable,
+       boolean&nbsp;redirect,
+       boolean&nbsp;suggestionType)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getId()">getId</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the id of this packet.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(<a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
 <td class="colLast">
@@ -337,7 +350,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <a id="getId()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getId</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;getId()</pre>
@@ -351,6 +364,19 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the id of this packet</dd>
 </dl>
+</li>
+</ul>
+<a id="getFlag(net.minestom.server.network.packet.server.play.DeclareCommandsPacket.NodeType,boolean,boolean,boolean)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getFlag</h4>
+<pre class="methodSignature">public static&nbsp;byte&nbsp;getFlag&#8203;(@NotNull
+                           <a href="DeclareCommandsPacket.NodeType.html" title="enum in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.NodeType</a>&nbsp;type,
+                           boolean&nbsp;executable,
+                           boolean&nbsp;redirect,
+                           boolean&nbsp;suggestionType)</pre>
 </li>
 </ul>
 </li>

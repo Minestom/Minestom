@@ -175,7 +175,7 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a></code></td>
+<td class="colFirst"><code><a href="CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#execute(net.minestom.server.command.CommandSender,java.lang.String)">execute</a></span>&#8203;(<a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
        java.lang.String&nbsp;commandString)</code></th>
 <td class="colLast">
@@ -186,7 +186,7 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code><a href="Command.html" title="class in net.minestom.server.command.builder">Command</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findCommand(java.lang.String)">findCommand</a></span>&#8203;(java.lang.String&nbsp;commandName)</code></th>
 <td class="colLast">
-<div class="block">GetS the command class associated with the name;</div>
+<div class="block">Gets the command class associated with the name.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -195,7 +195,7 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>net.minestom.server.command.builder.CommandDispatcher.CommandResult</code></td>
+<td class="colFirst"><code><a href="CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(java.lang.String&nbsp;commandString)</code></th>
 <td class="colLast">
 <div class="block">Parses the given command.</div>
@@ -283,45 +283,6 @@ extends java.lang.Object</pre>
                        <a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</pre>
 </li>
 </ul>
-<a id="parse(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>parse</h4>
-<pre class="methodSignature">@Nullable
-public&nbsp;net.minestom.server.command.builder.CommandDispatcher.CommandResult&nbsp;parse&#8203;(@NotNull
-                                                                                 java.lang.String&nbsp;commandString)</pre>
-<div class="block">Parses the given command.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>commandString</code> - the command (containing the command name and the args if any)</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the result of the parsing, null if the command doesn't exist</dd>
-</dl>
-</li>
-</ul>
-<a id="execute(net.minestom.server.command.CommandSender,java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>execute</h4>
-<pre class="methodSignature">@Nullable
-public&nbsp;<a href="CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a>&nbsp;execute&#8203;(@NotNull
-                           <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
-                           @NotNull
-                           java.lang.String&nbsp;commandString)</pre>
-<div class="block">Checks if the command exists, and execute it.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>source</code> - the command source</dd>
-<dd><code>commandString</code> - the command with the argument(s)</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the command data, null if none</dd>
-</dl>
-</li>
-</ul>
 <a id="getCommands()">
 <!--   -->
 </a>
@@ -335,18 +296,57 @@ public&nbsp;java.util.Set&lt;<a href="Command.html" title="class in net.minestom
 <a id="findCommand(java.lang.String)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>findCommand</h4>
 <pre class="methodSignature">@Nullable
 public&nbsp;<a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;findCommand&#8203;(@NotNull
                            java.lang.String&nbsp;commandName)</pre>
-<div class="block">GetS the command class associated with the name;</div>
+<div class="block">Gets the command class associated with the name.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>commandName</code> - the command name</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the <a href="Command.html" title="class in net.minestom.server.command.builder"><code>Command</code></a> associated with the name, null if not any</dd>
+</dl>
+</li>
+</ul>
+<a id="execute(net.minestom.server.command.CommandSender,java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>execute</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a>&nbsp;execute&#8203;(@NotNull
+                             <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
+                             @NotNull
+                             java.lang.String&nbsp;commandString)</pre>
+<div class="block">Checks if the command exists, and execute it.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>source</code> - the command source</dd>
+<dd><code>commandString</code> - the command with the argument(s)</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the command result</dd>
+</dl>
+</li>
+</ul>
+<a id="parse(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>parse</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a>&nbsp;parse&#8203;(@NotNull
+                           java.lang.String&nbsp;commandString)</pre>
+<div class="block">Parses the given command.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>commandString</code> - the command (containing the command name and the args if any)</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the parsing result</dd>
 </dl>
 </li>
 </ul>
