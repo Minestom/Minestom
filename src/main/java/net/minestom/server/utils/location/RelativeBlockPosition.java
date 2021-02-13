@@ -3,6 +3,7 @@ package net.minestom.server.utils.location;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a relative {@link BlockPosition}.
@@ -16,11 +17,11 @@ public class RelativeBlockPosition extends RelativeLocation<BlockPosition> {
     }
 
     @Override
-    public BlockPosition fromRelativePosition(Entity entity) {
+    public BlockPosition from(@Nullable Entity entity) {
         if (!relativeX && !relativeY && !relativeZ) {
             return location.clone();
         }
-        final Position entityPosition = entity.getPosition();
+        final Position entityPosition = entity != null ? entity.getPosition() : new Position();
 
         final int x = location.getX() + (relativeX ? (int) entityPosition.getX() : 0);
         final int y = location.getY() + (relativeY ? (int) entityPosition.getY() : 0);

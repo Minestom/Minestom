@@ -17,11 +17,11 @@ public class RelativeVec extends RelativeLocation<Vector> {
     }
 
     @Override
-    public Vector fromRelativePosition(@Nullable Entity entity) {
+    public Vector from(@Nullable Entity entity) {
         if (!relativeX && !relativeY && !relativeZ) {
             return location.clone();
         }
-        final Position entityPosition = entity.getPosition();
+        final Position entityPosition = entity != null ? entity.getPosition() : new Position();
 
         final double x = location.getX() + (relativeX ? entityPosition.getX() : 0);
         final double y = location.getY() + (relativeY ? entityPosition.getY() : 0);
