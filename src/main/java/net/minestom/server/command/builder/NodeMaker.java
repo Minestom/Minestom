@@ -18,8 +18,11 @@ public class NodeMaker {
     private Rule rule;
     private int ruleCount;
 
-    public NodeMaker(@NotNull DeclareCommandsPacket.Node[] commandNodes){
+    public NodeMaker(@NotNull DeclareCommandsPacket.Node[] commandNodes, int id) {
         addNodes(commandNodes);
+        for (DeclareCommandsPacket.Node node : commandNodes) {
+            this.nodeIdsMap.put(node, id);
+        }
     }
 
     public ConfiguredNodes getLatestConfiguredNodes() {

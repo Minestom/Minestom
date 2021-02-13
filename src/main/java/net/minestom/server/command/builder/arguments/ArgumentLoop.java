@@ -66,12 +66,11 @@ public class ArgumentLoop<T> extends Argument<List<T>> {
             final int id = nodeMaker.getNodeIdsMap().getInt(latestNode);
 
             for (Argument<T> argument : arguments) {
-                DeclareCommandsPacket.Node[] latestCache = nodeMaker.getLatestNodes();
                 argument.processNodes(nodeMaker, executable);
 
                 NodeMaker.ConfiguredNodes configuredNodes = nodeMaker.getLatestConfiguredNodes();
                 // For the next loop argument to start at the same place
-                configuredNodes.getOptions().setPreviousNodes(latestCache);
+                configuredNodes.getOptions().setPreviousNodes(latestNodes);
                 for (DeclareCommandsPacket.Node lastArgumentNode : configuredNodes.getNodes()) {
                     lastArgumentNode.flags |= 0x08;
                     lastArgumentNode.redirectedNode = id;

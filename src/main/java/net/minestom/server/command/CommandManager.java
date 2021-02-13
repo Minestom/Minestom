@@ -414,7 +414,7 @@ public final class CommandManager {
 
         DeclareCommandsPacket.Node literalNode = createMainNode(name, syntaxes.isEmpty());
 
-        addCommandNameNode(literalNode, rootChildren, nodes);
+        final int literalNodeId = addCommandNameNode(literalNode, rootChildren, nodes);
 
         // Contains the arguments of the already-parsed syntaxes
         List<Argument<?>[]> syntaxesArguments = new ArrayList<>();
@@ -434,7 +434,7 @@ public final class CommandManager {
             // Represent the children of the last node
             IntList argChildren = cmdChildren;
 
-            NodeMaker nodeMaker = new NodeMaker(lastNodes);
+            NodeMaker nodeMaker = new NodeMaker(lastNodes, literalNodeId);
             int lastArgumentNodeIndex = nodeMaker.getNodesCount();
 
             final Argument<?>[] arguments = syntax.getArguments();
@@ -525,10 +525,12 @@ public final class CommandManager {
         return literalNode;
     }
 
-    private void addCommandNameNode(@NotNull DeclareCommandsPacket.Node commandNode,
-                                    @NotNull IntList rootChildren,
-                                    @NotNull List<DeclareCommandsPacket.Node> nodes) {
-        rootChildren.add(nodes.size());
+    private int addCommandNameNode(@NotNull DeclareCommandsPacket.Node commandNode,
+                                   @NotNull IntList rootChildren,
+                                   @NotNull List<DeclareCommandsPacket.Node> nodes) {
+        final int node = nodes.size();
+        rootChildren.add(node);
         nodes.add(commandNode);
+        return node;
     }
 }
