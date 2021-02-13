@@ -51,9 +51,9 @@ public abstract class ArgumentNumber<T extends Number> extends Argument<T> {
     public byte getNumberProperties() {
         byte result = 0;
         if (this.hasMin())
-            result += 1;
+            result |= 0x1;
         if (this.hasMax())
-            result += 2;
+            result |= 0x2;
         return result;
     }
 

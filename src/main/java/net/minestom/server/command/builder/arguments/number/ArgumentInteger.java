@@ -9,8 +9,6 @@ public class ArgumentInteger extends ArgumentNumber<Integer> {
 
     public ArgumentInteger(String id) {
         super(id);
-        this.min = Integer.MIN_VALUE;
-        this.max = Integer.MAX_VALUE;
     }
 
     @NotNull

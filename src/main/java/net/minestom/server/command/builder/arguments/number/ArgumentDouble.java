@@ -9,8 +9,6 @@ public class ArgumentDouble extends ArgumentNumber<Double> {
 
     public ArgumentDouble(String id) {
         super(id);
-        this.min = Double.MIN_VALUE;
-        this.max = Double.MAX_VALUE;
     }
 
     @NotNull

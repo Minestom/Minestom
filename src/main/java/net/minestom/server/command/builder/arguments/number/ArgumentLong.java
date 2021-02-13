@@ -9,8 +9,6 @@ public class ArgumentLong extends ArgumentNumber<Long> {
 
     public ArgumentLong(String id) {
         super(id);
-        this.min = Long.MIN_VALUE;
-        this.max = Long.MAX_VALUE;
     }
 
     @NotNull
@@ -39,7 +37,7 @@ public class ArgumentLong extends ArgumentNumber<Long> {
 
         // TODO maybe use ArgumentLiteral/ArgumentWord and impose long restriction server side?
 
-        argumentNode.parser = "brigadier:int";
+        argumentNode.parser = "brigadier:integer";
         argumentNode.properties = packetWriter -> {
             packetWriter.writeByte(getNumberProperties());
             if (this.hasMin())

@@ -9,8 +9,6 @@ public class ArgumentFloat extends ArgumentNumber<Float> {
 
     public ArgumentFloat(String id) {
         super(id);
-        this.min = Float.MIN_VALUE;
-        this.max = Float.MAX_VALUE;
     }
 
     @NotNull
