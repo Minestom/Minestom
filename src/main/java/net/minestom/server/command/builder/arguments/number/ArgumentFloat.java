@@ -1,6 +1,8 @@
 package net.minestom.server.command.builder.arguments.number;
 
+import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 
 public class ArgumentFloat extends ArgumentNumber<Float> {
@@ -38,6 +40,22 @@ public class ArgumentFloat extends ArgumentNumber<Float> {
         } catch (NumberFormatException | NullPointerException e) {
             throw new ArgumentSyntaxException("Input is not a number/long", input, NOT_NUMBER_ERROR);
         }
+    }
+
+    @Override
+    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
+        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
+
+        argumentNode.parser = "brigadier:float";
+        argumentNode.properties = packetWriter -> {
+            packetWriter.writeByte(getNumberProperties());
+            if (this.hasMin())
+                packetWriter.writeFloat(this.getMin());
+            if (this.hasMax())
+                packetWriter.writeFloat(this.getMax());
+        };
+
+        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
 }

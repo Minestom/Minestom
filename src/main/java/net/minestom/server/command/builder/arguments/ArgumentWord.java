@@ -1,12 +1,14 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.validate.Check;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
+import java.util.function.Consumer;
 
 /**
  * Represents a single word in the command.
@@ -68,6 +70,43 @@ public class ArgumentWord extends Argument<String> {
         return input;
     }
 
+    @Override
+    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
+
+        // Add the single word properties + parser
+        final Consumer<DeclareCommandsPacket.Node> wordConsumer = node -> {
+            node.parser = "brigadier:string";
+            node.properties = packetWriter -> {
+                packetWriter.writeVarInt(0); // Single word
+            };
+        };
+
+        final boolean hasRestriction = this.hasRestrictions();
+        if (hasRestriction) {
+
+            // Create a primitive array for mapping
+            DeclareCommandsPacket.Node[] nodes = new DeclareCommandsPacket.Node[this.getRestrictions().length];
+
+            // Create a node for each restrictions as literal
+            for (int i = 0; i < nodes.length; i++) {
+                DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
+
+                argumentNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
+                        executable, false, false);
+                argumentNode.name = this.getRestrictions()[i];
+                wordConsumer.accept(argumentNode);
+                nodes[i] = argumentNode;
+
+            }
+            nodeMaker.addNodes(nodes);
+        } else {
+            // Can be any word, add only one argument node
+            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
+            wordConsumer.accept(argumentNode);
+            nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+        }
+    }
+
     /**
      * Gets if this argument allow complete freedom in the word choice or if a list has been defined.
      *
@@ -85,18 +124,5 @@ public class ArgumentWord extends Argument<String> {
     @Nullable
     public String[] getRestrictions() {
         return restrictions;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ArgumentWord that = (ArgumentWord) o;
-        return Arrays.equals(restrictions, that.restrictions);
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(restrictions);
     }
 }

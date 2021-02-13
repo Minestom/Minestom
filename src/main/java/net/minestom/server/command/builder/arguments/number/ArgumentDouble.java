@@ -1,6 +1,8 @@
 package net.minestom.server.command.builder.arguments.number;
 
+import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 
 public class ArgumentDouble extends ArgumentNumber<Double> {
@@ -38,6 +40,22 @@ public class ArgumentDouble extends ArgumentNumber<Double> {
         } catch (NumberFormatException | NullPointerException e) {
             throw new ArgumentSyntaxException("Input is not a number/long", input, NOT_NUMBER_ERROR);
         }
+    }
+
+    @Override
+    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
+        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
+
+        argumentNode.parser = "brigadier:double";
+        argumentNode.properties = packetWriter -> {
+            packetWriter.writeByte(getNumberProperties());
+            if (this.hasMin())
+                packetWriter.writeDouble(this.getMin());
+            if (this.hasMax())
+                packetWriter.writeDouble(this.getMax());
+        };
+
+        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
 }

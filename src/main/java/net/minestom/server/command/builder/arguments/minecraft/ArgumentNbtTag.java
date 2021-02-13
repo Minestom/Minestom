@@ -1,7 +1,9 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
@@ -32,5 +34,13 @@ public class ArgumentNbtTag extends Argument<NBT> {
         } catch (NBTException e) {
             throw new ArgumentSyntaxException("Invalid NBT", input, INVALID_NBT);
         }
+    }
+
+    @Override
+    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
+        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
+        argumentNode.parser = "minecraft:nbt_tag";
+
+        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 }

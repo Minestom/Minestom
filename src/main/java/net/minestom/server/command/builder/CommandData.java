@@ -10,13 +10,18 @@ public class CommandData {
 
     private final Map<String, Object> dataMap = new ConcurrentHashMap<>();
 
-    public void set(@NotNull String key, Object value) {
+    public CommandData set(@NotNull String key, Object value) {
         this.dataMap.put(key, value);
+        return this;
     }
 
     @Nullable
     public <T> T get(@NotNull String key) {
         return (T) dataMap.get(key);
+    }
+
+    public boolean has(@NotNull String key) {
+        return dataMap.containsKey(key);
     }
 
     @NotNull

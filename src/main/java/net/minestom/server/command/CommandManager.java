@@ -2,21 +2,11 @@ package net.minestom.server.command;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
+import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.CommandData;
-import net.minestom.server.command.builder.CommandDispatcher;
-import net.minestom.server.command.builder.CommandSyntax;
-import net.minestom.server.command.builder.arguments.*;
-import net.minestom.server.command.builder.arguments.minecraft.*;
-import net.minestom.server.command.builder.arguments.minecraft.registry.*;
-import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
-import net.minestom.server.command.builder.arguments.number.ArgumentFloat;
-import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
-import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
-import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeBlockPosition;
-import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec2;
-import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3;
+import net.minestom.server.command.builder.*;
+import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerCommandEvent;
@@ -25,7 +15,6 @@ import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.callback.CommandCallback;
 import net.minestom.server.utils.validate.Check;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +22,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * Manager used to register {@link Command} and {@link CommandProcessor}.
@@ -75,9 +63,11 @@ public final class CommandManager {
     public synchronized void register(@NotNull Command command) {
         Check.stateCondition(commandExists(command.getName()),
                 "A command with the name " + command.getName() + " is already registered!");
-        for (String alias : command.getAliases()) {
-            Check.stateCondition(commandExists(alias),
-                    "A command with the name " + alias + " is already registered!");
+        if (command.getAliases() != null) {
+            for (String alias : command.getAliases()) {
+                Check.stateCondition(commandExists(alias),
+                        "A command with the name " + alias + " is already registered!");
+            }
         }
         this.dispatcher.register(command);
     }
@@ -154,10 +144,10 @@ public final class CommandManager {
      *
      * @param sender  the sender of the command
      * @param command the raw command string (without the command prefix)
-     * @return true if the command hadn't been cancelled and has been successful
+     * @return the execution result
      */
-    @Nullable
-    public CommandData execute(@NotNull CommandSender sender, @NotNull String command) {
+    @NotNull
+    public CommandResult execute(@NotNull CommandSender sender, @NotNull String command) {
 
         // Command event
         if (sender instanceof Player) {
@@ -167,7 +157,7 @@ public final class CommandManager {
             player.callEvent(PlayerCommandEvent.class, playerCommandEvent);
 
             if (playerCommandEvent.isCancelled())
-                return null;
+                return CommandResult.of(CommandResult.Type.CANCELLED, command);
 
             command = playerCommandEvent.getCommand();
         }
@@ -176,9 +166,9 @@ public final class CommandManager {
 
         {
             // Check for rich-command
-            final CommandData commandData = this.dispatcher.execute(sender, command);
-            if (commandData != null) {
-                return commandData;
+            final CommandResult result = this.dispatcher.execute(sender, command);
+            if (result.getType() != CommandResult.Type.UNKNOWN) {
+                return result;
             } else {
                 // Check for legacy-command
                 final String[] splitCommand = command.split(StringUtils.SPACE);
@@ -188,13 +178,13 @@ public final class CommandManager {
                     if (unknownCommandCallback != null) {
                         this.unknownCommandCallback.apply(sender, command);
                     }
-                    return null;
+                    return CommandResult.of(CommandResult.Type.CANCELLED, command);
                 }
 
                 // Execute the legacy-command
                 final String[] args = command.substring(command.indexOf(StringUtils.SPACE) + 1).split(StringUtils.SPACE);
                 commandProcessor.process(sender, commandName, args);
-                return null;
+                return CommandResult.of(CommandResult.Type.SUCCESS, command);
             }
         }
     }
@@ -205,9 +195,14 @@ public final class CommandManager {
      *
      * @see #execute(CommandSender, String)
      */
-    @Nullable
-    public CommandData executeServerCommand(@NotNull String command) {
+    @NotNull
+    public CommandResult executeServerCommand(@NotNull String command) {
         return execute(serverSender, command);
+    }
+
+    @NotNull
+    public CommandDispatcher getDispatcher() {
+        return dispatcher;
     }
 
     /**
@@ -304,6 +299,11 @@ public final class CommandManager {
         // Contains the children of the main node (all commands name)
         IntList rootChildren = new IntArrayList();
 
+        // Root node
+        DeclareCommandsPacket.Node rootNode = new DeclareCommandsPacket.Node();
+        rootNode.flags = 0;
+        nodes.add(rootNode);
+
         // Brigadier-like commands
         for (Command command : dispatcher.getCommands()) {
             // Check if player should see this command
@@ -319,39 +319,52 @@ public final class CommandManager {
             IntList cmdChildren = new IntArrayList();
             final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
 
-            List<String> names = new ArrayList<>();
-            names.add(command.getName());
-            names.addAll(Arrays.asList(command.getAliases()));
-            for (String name : names) {
-                createCommand(player, nodes, cmdChildren, name, syntaxes, rootChildren);
+            // Create command for main name
+            final int mainNodeIndex = createCommand(player, nodes, cmdChildren,
+                    command.getName(), syntaxes, rootChildren);
+
+            // Use redirection to hook aliases with the command
+            final String[] aliases = command.getAliases();
+            if (aliases == null)
+                continue;
+
+            for (String alias : aliases) {
+                DeclareCommandsPacket.Node aliasNode = new DeclareCommandsPacket.Node();
+                aliasNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
+                        false, true, false);
+                aliasNode.name = alias;
+                aliasNode.redirectedNode = mainNodeIndex;
+
+                addCommandNameNode(aliasNode, rootChildren, nodes);
             }
 
         }
 
         // Pair<CommandName,EnabledTracking>
-        final List<Pair<String, Boolean>> commandsPair = new ArrayList<>();
+        final Object2BooleanMap<String> commandsPair = new Object2BooleanOpenHashMap<>();
         for (CommandProcessor commandProcessor : commandProcessorMap.values()) {
             final boolean enableTracking = commandProcessor.enableWritingTracking();
             // Do not show command if return false
             if (!commandProcessor.hasAccess(player))
                 continue;
 
-            commandsPair.add(Pair.of(commandProcessor.getCommandName(), enableTracking));
+            commandsPair.put(commandProcessor.getCommandName(), enableTracking);
             final String[] aliases = commandProcessor.getAliases();
             if (aliases == null || aliases.length == 0)
                 continue;
             for (String alias : aliases) {
-                commandsPair.add(Pair.of(alias, enableTracking));
+                commandsPair.put(alias, enableTracking);
             }
         }
 
-        for (Pair<String, Boolean> pair : commandsPair) {
-            final String name = pair.getLeft();
-            final boolean tracking = pair.getRight();
+        for (Object2BooleanMap.Entry<String> entry : commandsPair.object2BooleanEntrySet()) {
+            final String name = entry.getKey();
+            final boolean tracking = entry.getBooleanValue();
             // Server suggestion (ask_server)
             {
                 DeclareCommandsPacket.Node tabNode = new DeclareCommandsPacket.Node();
-                tabNode.flags = getFlag(NodeType.ARGUMENT, true, false, tracking);
+                tabNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.ARGUMENT,
+                        true, false, tracking);
                 tabNode.name = tracking ? "tab_completion" : "args";
                 tabNode.parser = "brigadier:string";
                 tabNode.properties = packetWriter -> packetWriter.writeVarInt(2); // Greedy phrase
@@ -364,22 +377,19 @@ public final class CommandManager {
             }
 
             DeclareCommandsPacket.Node literalNode = new DeclareCommandsPacket.Node();
-            literalNode.flags = getFlag(NodeType.LITERAL, true, false, false);
+            literalNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
+                    true, false, false);
             literalNode.name = name;
             literalNode.children = new int[]{nodes.size() - 1};
 
-            rootChildren.add(nodes.size());
-            nodes.add(literalNode);
+            addCommandNameNode(literalNode, rootChildren, nodes);
         }
 
-        DeclareCommandsPacket.Node rootNode = new DeclareCommandsPacket.Node();
-        rootNode.flags = 0;
+        // Add root node children
         rootNode.children = ArrayUtils.toArray(rootChildren);
 
-        nodes.add(rootNode);
-
         declareCommandsPacket.nodes = nodes.toArray(new DeclareCommandsPacket.Node[0]);
-        declareCommandsPacket.rootIndex = nodes.size() - 1;
+        declareCommandsPacket.rootIndex = 0;
 
         return declareCommandsPacket;
     }
@@ -393,23 +403,23 @@ public final class CommandManager {
      * @param name         the name of the command (or the alias)
      * @param syntaxes     the syntaxes of the command
      * @param rootChildren the children of the main node (all commands name)
+     * @return The index of the main node for alias redirection
      */
-    private void createCommand(@NotNull CommandSender sender,
-                               @NotNull List<DeclareCommandsPacket.Node> nodes,
-                               @NotNull IntList cmdChildren,
-                               @NotNull String name,
-                               @NotNull Collection<CommandSyntax> syntaxes,
-                               @NotNull IntList rootChildren) {
+    private int createCommand(@NotNull CommandSender sender,
+                              @NotNull List<DeclareCommandsPacket.Node> nodes,
+                              @NotNull IntList cmdChildren,
+                              @NotNull String name,
+                              @NotNull Collection<CommandSyntax> syntaxes,
+                              @NotNull IntList rootChildren) {
 
         DeclareCommandsPacket.Node literalNode = createMainNode(name, syntaxes.isEmpty());
 
-        rootChildren.add(nodes.size());
-        nodes.add(literalNode);
+        addCommandNameNode(literalNode, rootChildren, nodes);
 
         // Contains the arguments of the already-parsed syntaxes
         List<Argument<?>[]> syntaxesArguments = new ArrayList<>();
         // Contains the nodes of an argument
-        Map<Argument<?>, List<DeclareCommandsPacket.Node>> storedArgumentsNodes = new HashMap<>();
+        Map<Argument<?>, List<DeclareCommandsPacket.Node[]>> storedArgumentsNodes = new HashMap<>();
 
         for (CommandSyntax syntax : syntaxes) {
             final CommandCondition commandCondition = syntax.getCommandCondition();
@@ -418,331 +428,107 @@ public final class CommandManager {
                 continue;
             }
 
-
             // Represent the last nodes computed in the last iteration
-            List<DeclareCommandsPacket.Node> lastNodes = null;
+            DeclareCommandsPacket.Node[] lastNodes = new DeclareCommandsPacket.Node[]{literalNode};
 
             // Represent the children of the last node
-            IntList argChildren = null;
+            IntList argChildren = cmdChildren;
+
+            NodeMaker nodeMaker = new NodeMaker(lastNodes);
+            int lastArgumentNodeIndex = nodeMaker.getNodesCount();
 
             final Argument<?>[] arguments = syntax.getArguments();
             for (int i = 0; i < arguments.length; i++) {
                 final Argument<?> argument = arguments[i];
-                final boolean isFirst = i == 0;
                 final boolean isLast = i == arguments.length - 1;
 
-                // Find shared part
-                boolean foundSharedPart = false;
-                for (Argument<?>[] parsedArguments : syntaxesArguments) {
-                    if (ArrayUtils.sameStart(arguments, parsedArguments, i + 1)) {
-                        final Argument<?> sharedArgument = parsedArguments[i];
+                // Search previously parsed syntaxes to find identical part in order to create a node between those
+                {
+                    // Find shared part
+                    boolean foundSharedPart = false;
+                    for (Argument<?>[] parsedArguments : syntaxesArguments) {
+                        final int index = i + 1;
+                        if (ArrayUtils.sameStart(arguments, parsedArguments, index)) {
+                            final Argument<?> sharedArgument = parsedArguments[i];
+                            final List<DeclareCommandsPacket.Node[]> storedNodes = storedArgumentsNodes.get(sharedArgument);
 
-                        argChildren = new IntArrayList();
-                        lastNodes = storedArgumentsNodes.get(sharedArgument);
-                        foundSharedPart = true;
+                            argChildren = new IntArrayList();
+                            lastNodes = storedNodes.get(index);
+                            foundSharedPart = true;
+                        }
+                    }
+                    if (foundSharedPart) {
+                        continue;
                     }
                 }
-                if (foundSharedPart) {
-                    continue;
-                }
 
+                // Process the nodes for the argument
+                {
+                    argument.processNodes(nodeMaker, isLast);
 
-                final List<DeclareCommandsPacket.Node> argumentNodes = toNodes(argument, isLast);
-                storedArgumentsNodes.put(argument, argumentNodes);
-                for (DeclareCommandsPacket.Node node : argumentNodes) {
-                    final int childId = nodes.size();
+                    // Each node array represent a layer
+                    final List<DeclareCommandsPacket.Node[]> nodesLayer = nodeMaker.getNodes();
+                    storedArgumentsNodes.put(argument, nodesLayer);
+                    for (int nodeIndex = lastArgumentNodeIndex; nodeIndex < nodesLayer.size(); nodeIndex++) {
+                        final NodeMaker.ConfiguredNodes configuredNodes = nodeMaker.getConfiguredNodes().get(nodeIndex);
+                        final NodeMaker.Options options = configuredNodes.getOptions();
+                        final DeclareCommandsPacket.Node[] argumentNodes = nodesLayer.get(nodeIndex);
 
-                    if (isFirst) {
-                        // Add to main command child
-                        cmdChildren.add(childId);
-                    } else {
-                        // Add to previous argument children
-                        argChildren.add(childId);
+                        for (DeclareCommandsPacket.Node argumentNode : argumentNodes) {
+                            final int childId = nodes.size();
+                            nodeMaker.getNodeIdsMap().put(argumentNode, childId);
+                            argChildren.add(childId);
+
+                            // Append to the last node
+                            {
+                                final int[] children = ArrayUtils.toArray(argChildren);
+                                for (DeclareCommandsPacket.Node lastNode : lastNodes) {
+                                    lastNode.children = lastNode.children == null ?
+                                            children :
+                                            ArrayUtils.concatenateIntArrays(lastNode.children, children);
+                                }
+                            }
+
+                            nodes.add(argumentNode);
+                        }
+
+                        if (options.shouldUpdateLastNode()) {
+                            // 'previousNodes' used if the nodes options require to overwrite the parent
+                            final DeclareCommandsPacket.Node[] previousNodes = options.getPreviousNodes();
+
+                            lastNodes = previousNodes != null ? previousNodes : argumentNodes;
+                            argChildren = new IntArrayList();
+                        }
                     }
 
-                    if (lastNodes != null) {
-                        final int[] children = ArrayUtils.toArray(argChildren);
-                        lastNodes.forEach(n -> n.children = n.children == null ?
-                                children :
-                                ArrayUtils.concatenateIntArrays(n.children, children));
-                    }
-
-                    nodes.add(node);
-                }
-
-                //System.out.println("debug: " + argument.getId() + " : " + isFirst + " : " + isLast);
-                //System.out.println("debug2: " + i);
-                //System.out.println("size: " + (argChildren != null ? argChildren.size() : "NULL"));
-
-                if (isLast) {
-                    // Last argument doesn't have children
-                    final int[] children = new int[0];
-                    argumentNodes.forEach(node -> node.children = children);
-                } else {
-                    // Create children list which will be filled during next iteration
-                    argChildren = new IntArrayList();
-                    lastNodes = argumentNodes;
+                    // Used to do not re-compute the previous arguments
+                    lastArgumentNodeIndex = nodesLayer.size();
                 }
             }
 
             syntaxesArguments.add(arguments);
 
         }
-        final int[] children = ArrayUtils.toArray(cmdChildren);
-        //System.out.println("test " + children.length + " : " + children[0]);
-        literalNode.children = children;
-        if (children.length > 0) {
-            literalNode.redirectedNode = children[0];
-        }
+
+        literalNode.children = ArrayUtils.toArray(cmdChildren);
+
+        return nodes.indexOf(literalNode);
+
     }
 
     @NotNull
     private DeclareCommandsPacket.Node createMainNode(@NotNull String name, boolean executable) {
         DeclareCommandsPacket.Node literalNode = new DeclareCommandsPacket.Node();
-        literalNode.flags = getFlag(NodeType.LITERAL, executable, false, false);
+        literalNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL, executable, false, false);
         literalNode.name = name;
 
         return literalNode;
     }
 
-    /**
-     * Converts an argument to a node with the correct brigadier parser.
-     *
-     * @param argument   the argument to convert
-     * @param executable true if this is the last argument, false otherwise
-     * @return the list of nodes that the argument require
-     */
-    @NotNull
-    private List<DeclareCommandsPacket.Node> toNodes(@NotNull Argument<?> argument, boolean executable) {
-        List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
-
-        // You can uncomment this to test any brigadier parser on the client
-        /*DeclareCommandsPacket.Node testNode = simpleArgumentNode(nodes, argument, executable, false);
-        testNode.parser = "minecraft:block_state";
-
-        if (true) {
-            return nodes;
-        }*/
-
-        if (argument instanceof ArgumentBoolean) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-
-            argumentNode.parser = "brigadier:bool";
-        } else if (argument instanceof ArgumentDouble) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-
-            ArgumentDouble argumentDouble = (ArgumentDouble) argument;
-            argumentNode.parser = "brigadier:double";
-            argumentNode.properties = packetWriter -> {
-                packetWriter.writeByte(getNumberProperties(argumentDouble));
-                if (argumentDouble.hasMin())
-                    packetWriter.writeDouble(argumentDouble.getMin());
-                if (argumentDouble.hasMax())
-                    packetWriter.writeDouble(argumentDouble.getMax());
-            };
-        } else if (argument instanceof ArgumentFloat) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-
-            ArgumentFloat argumentFloat = (ArgumentFloat) argument;
-            argumentNode.parser = "brigadier:float";
-            argumentNode.properties = packetWriter -> {
-                packetWriter.writeByte(getNumberProperties(argumentFloat));
-                if (argumentFloat.hasMin())
-                    packetWriter.writeFloat(argumentFloat.getMin());
-                if (argumentFloat.hasMax())
-                    packetWriter.writeFloat(argumentFloat.getMax());
-            };
-        } else if (argument instanceof ArgumentInteger) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-
-            ArgumentInteger argumentInteger = (ArgumentInteger) argument;
-            argumentNode.parser = "brigadier:integer";
-            argumentNode.properties = packetWriter -> {
-                packetWriter.writeByte(getNumberProperties(argumentInteger));
-                if (argumentInteger.hasMin())
-                    packetWriter.writeInt(argumentInteger.getMin());
-                if (argumentInteger.hasMax())
-                    packetWriter.writeInt(argumentInteger.getMax());
-            };
-        } else if (argument instanceof ArgumentWord) {
-
-            ArgumentWord argumentWord = (ArgumentWord) argument;
-
-            // Add the single word properties + parser
-            final Consumer<DeclareCommandsPacket.Node> wordConsumer = node -> {
-                node.parser = "brigadier:string";
-                node.properties = packetWriter -> {
-                    packetWriter.writeVarInt(0); // Single word
-                };
-            };
-
-            final boolean hasRestriction = argumentWord.hasRestrictions();
-            if (hasRestriction) {
-                // Create a node for each restrictions as literal
-                for (String restrictionWord : argumentWord.getRestrictions()) {
-                    DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
-                    nodes.add(argumentNode);
-
-                    argumentNode.flags = getFlag(NodeType.LITERAL, executable, false, false);
-                    argumentNode.name = restrictionWord;
-                    wordConsumer.accept(argumentNode);
-                }
-            } else {
-                // Can be any word, add only one argument node
-                DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-                wordConsumer.accept(argumentNode);
-            }
-        } else if (argument instanceof ArgumentDynamicWord) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, true);
-
-            final SuggestionType suggestionType = ((ArgumentDynamicWord) argument).getSuggestionType();
-
-            argumentNode.parser = "brigadier:string";
-            argumentNode.properties = packetWriter -> {
-                packetWriter.writeVarInt(0); // Single word
-            };
-            argumentNode.suggestionsType = suggestionType.getIdentifier();
-
-        } else if (argument instanceof ArgumentString) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-
-            argumentNode.parser = "brigadier:string";
-            argumentNode.properties = packetWriter -> {
-                packetWriter.writeVarInt(1); // Quotable phrase
-            };
-        } else if (argument instanceof ArgumentStringArray) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-
-            argumentNode.parser = "brigadier:string";
-            argumentNode.properties = packetWriter -> {
-                packetWriter.writeVarInt(2); // Greedy phrase
-            };
-        } else if (argument instanceof ArgumentDynamicStringArray) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, true);
-
-            argumentNode.parser = "brigadier:string";
-            argumentNode.properties = packetWriter -> {
-                packetWriter.writeVarInt(2); // Greedy phrase
-            };
-            argumentNode.suggestionsType = "minecraft:ask_server";
-        } else if (argument instanceof ArgumentColor) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:color";
-        } else if (argument instanceof ArgumentTime) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:time";
-        } else if (argument instanceof ArgumentEnchantment) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:item_enchantment";
-        } else if (argument instanceof ArgumentParticle) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:particle";
-        } else if (argument instanceof ArgumentPotionEffect) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:mob_effect";
-        } else if (argument instanceof ArgumentEntityType) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:entity_summon";
-        } else if (argument instanceof ArgumentBlockState) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:block_state";
-        } else if (argument instanceof ArgumentIntRange) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:int_range";
-        } else if (argument instanceof ArgumentFloatRange) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:float_range";
-        } else if (argument instanceof ArgumentEntity) {
-            ArgumentEntity argumentEntity = (ArgumentEntity) argument;
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:entity";
-            argumentNode.properties = packetWriter -> {
-                byte mask = 0;
-                if (argumentEntity.isOnlySingleEntity()) {
-                    mask += 1;
-                }
-                if (argumentEntity.isOnlyPlayers()) {
-                    mask += 2;
-                }
-                packetWriter.writeByte(mask);
-            };
-        } else if (argument instanceof ArgumentItemStack) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:item_stack";
-        } else if (argument instanceof ArgumentNbtCompoundTag) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:nbt_compound_tag";
-        } else if (argument instanceof ArgumentNbtTag) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:nbt_tag";
-        } else if (argument instanceof ArgumentRelativeBlockPosition) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:block_pos";
-        } else if (argument instanceof ArgumentRelativeVec3) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:vec3";
-        } else if (argument instanceof ArgumentRelativeVec2) {
-            DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(nodes, argument, executable, false);
-            argumentNode.parser = "minecraft:vec2";
-        }
-
-        return nodes;
-    }
-
-    private byte getNumberProperties(@NotNull ArgumentNumber<? extends Number> argumentNumber) {
-        byte result = 0;
-        if (argumentNumber.hasMin())
-            result += 1;
-        if (argumentNumber.hasMax())
-            result += 2;
-        return result;
-    }
-
-    /**
-     * Builds an argument nod and add it to the nodes list.
-     *
-     * @param nodes      the current nodes list
-     * @param argument   the argument
-     * @param executable true if this will be the last argument, false otherwise
-     * @return the created {@link DeclareCommandsPacket.Node}
-     */
-    @NotNull
-    private DeclareCommandsPacket.Node simpleArgumentNode(@NotNull List<DeclareCommandsPacket.Node> nodes,
-                                                          @NotNull Argument<?> argument, boolean executable, boolean suggestion) {
-        DeclareCommandsPacket.Node argumentNode = new DeclareCommandsPacket.Node();
-        nodes.add(argumentNode);
-
-        argumentNode.flags = getFlag(NodeType.ARGUMENT, executable, false, suggestion);
-        argumentNode.name = argument.getId();
-
-        return argumentNode;
-    }
-
-    private byte getFlag(@NotNull NodeType type, boolean executable, boolean redirect, boolean suggestionType) {
-        byte result = (byte) type.mask;
-
-        if (executable) {
-            result |= 0x04;
-        }
-
-        if (redirect) {
-            result |= 0x08;
-        }
-
-        if (suggestionType) {
-            result |= 0x10;
-        }
-        return result;
-    }
-
-    private enum NodeType {
-        ROOT(0), LITERAL(0b1), ARGUMENT(0b10), NONE(0x11);
-
-        private final int mask;
-
-        NodeType(int mask) {
-            this.mask = mask;
-        }
-
+    private void addCommandNameNode(@NotNull DeclareCommandsPacket.Node commandNode,
+                                    @NotNull IntList rootChildren,
+                                    @NotNull List<DeclareCommandsPacket.Node> nodes) {
+        rootChildren.add(nodes.size());
+        nodes.add(commandNode);
     }
 }
