@@ -108,7 +108,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     protected final Queue<Consumer<Entity>> nextTick = Queues.newConcurrentLinkedQueue();
 
     // Cache for generated UUID. Based on the Entity's ID. Specifically meant to please the client.
-    protected final UUID uuid;
+    protected UUID uuid;
 
     // Tick related
     private long ticks;
@@ -1074,10 +1074,20 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         this.metadata.setIndex((byte) 3, Metadata.Boolean(customNameVisible));
     }
 
+    /**
+     * If the mob makes no ambient noises by default
+     *
+     * @return If the mob makes no ambient noises by default
+     */
     public boolean isSilent() {
         return metadata.getIndex((byte) 4, false);
     }
 
+    /**
+     * Sets the "silence" of the mob, aka if it makes ambient noises or not
+     *
+     * @param silent the boolean to set it to -- true will make it not make ambient noises.
+     */
     public void setSilent(boolean silent) {
         this.metadata.setIndex((byte) 4, Metadata.Boolean(silent));
     }

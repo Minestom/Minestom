@@ -195,8 +195,6 @@ public class Player extends LivingEntity implements CommandSender {
     // Tick related
     private final PlayerTickEvent playerTickEvent = new PlayerTickEvent(this);
 
-    protected UUID uuid;
-
     public Player(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
         super(EntityType.PLAYER);
         this.uuid = uuid;
