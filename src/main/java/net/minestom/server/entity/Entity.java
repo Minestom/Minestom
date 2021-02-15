@@ -114,9 +114,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     private long ticks;
     private final EntityTickEvent tickEvent = new EntityTickEvent(this);
 
-    public Entity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
+    public Entity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
         this.id = generateId();
-        this.uuid = UUID.randomUUID();
+        this.uuid = uuid;
         this.entityType = entityType;
         this.position = spawnPosition.clone();
         this.lastX = spawnPosition.getX();
@@ -128,6 +128,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
         Entity.entityById.put(id, this);
         Entity.entityByUuid.put(uuid, this);
+    }
+
+    public Entity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
+        this(entityType, UUID.randomUUID(), spawnPosition);
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -193,12 +197,21 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     public abstract void spawn();
 
     /**
-     * Generates a UUID from the entity ID. May be CPU expensive in large operations.
+     * Gets the Entity's UUID, unique to any other entity.
      *
-     * @return The UUID generated on the spot.
+     * @return The UUID assigned to the Entity
      */
     public UUID getUuid() {
         return uuid;
+    }
+
+    /**
+     * Sets a new UUID for the entity.
+     *
+     * @param uuid The uuid to prefer over the current uuid
+     */
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public boolean isOnGround() {

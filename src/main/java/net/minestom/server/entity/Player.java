@@ -222,14 +222,6 @@ public class Player extends LivingEntity implements CommandSender {
         playerConnectionInit();
     }
 
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
-
 
     /**
      * Used when the player is created.
