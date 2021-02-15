@@ -55,6 +55,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
     // Generation for entity IDs
     private static final Map<Integer, Entity> entityById = new ConcurrentHashMap<>();
+    private static final Map<UUID, Entity> entityByUuid = new ConcurrentHashMap<>();
     private static final AtomicInteger lastEntityId = new AtomicInteger();
 
     // Position
@@ -115,7 +116,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
     public Entity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
         this.id = generateId();
-        this.uuid = generateUuid();
+        this.uuid = UUID.randomUUID();
         this.entityType = entityType;
         this.position = spawnPosition.clone();
         this.lastX = spawnPosition.getX();
@@ -126,6 +127,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         setAutoViewable(true);
 
         Entity.entityById.put(id, this);
+        Entity.entityByUuid.put(uuid, this);
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -158,14 +160,13 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     /**
      * Gets an entity based on its uuid (from {@link #getUuid()} ()}).
      * <p>
-     * UUIDs are based on an Entity's ID (EID), preventing duplicates.
      *
      * @param uuid the entity unique universal id
      * @return the entity having the specified id, null if not found
      */
     @Nullable
     public static Entity getEntity(UUID uuid) {
-        return Entity.entityById.getOrDefault((int) uuid.getLeastSignificantBits(), null);
+        return entityByUuid.get(uuid);
     }
 
     /**
@@ -190,15 +191,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * Called when a new instance is set.
      */
     public abstract void spawn();
-
-    /**
-     * Generates a UUID from the Entity ID (EID). May be CPU expensive in large operations.
-     *
-     * @return The UUID generated on the spot.
-     */
-    protected UUID generateUuid() {
-        return new UUID(getEntityId(), getEntityId());
-    }
 
     /**
      * Generates a UUID from the entity ID. May be CPU expensive in large operations.
@@ -1255,6 +1247,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     public void remove() {
         this.removed = true;
         Entity.entityById.remove(id);
+        Entity.entityByUuid.remove(uuid);
         if (instance != null)
             instance.UNSAFE_removeEntity(this);
     }
