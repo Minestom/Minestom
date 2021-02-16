@@ -74,4 +74,32 @@ public class DeclareCommandsPacket implements ServerPacket {
 
     }
 
+    public static byte getFlag(@NotNull NodeType type, boolean executable, boolean redirect, boolean suggestionType) {
+        byte result = (byte) type.mask;
+
+        if (executable) {
+            result |= 0x04;
+        }
+
+        if (redirect) {
+            result |= 0x08;
+        }
+
+        if (suggestionType) {
+            result |= 0x10;
+        }
+        return result;
+    }
+
+    public enum NodeType {
+        ROOT(0), LITERAL(0b1), ARGUMENT(0b10), NONE(0x11);
+
+        private final int mask;
+
+        NodeType(int mask) {
+            this.mask = mask;
+        }
+
+    }
+
 }

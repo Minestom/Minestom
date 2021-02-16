@@ -27,7 +27,7 @@ public abstract class RelativeLocation<T> {
      * @param entity the entity to get the relative position from
      * @return the location
      */
-    public abstract T fromRelativePosition(@Nullable Entity entity);
+    public abstract T from(@Nullable Entity entity);
 
     /**
      * Gets if the 'x' field is relative.

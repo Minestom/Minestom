@@ -44,6 +44,20 @@ public abstract class ArgumentNumber<T extends Number> extends Argument<T> {
     }
 
     /**
+     * Creates the byteflag based on the number's min/max existance.
+     *
+     * @return A byteflag for argument specification.
+     */
+    public byte getNumberProperties() {
+        byte result = 0;
+        if (this.hasMin())
+            result |= 0x1;
+        if (this.hasMax())
+            result |= 0x2;
+        return result;
+    }
+
+    /**
      * Gets if the argument has a minimum.
      *
      * @return true if the argument has a minimum

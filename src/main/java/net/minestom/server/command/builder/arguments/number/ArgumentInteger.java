@@ -1,14 +1,14 @@
 package net.minestom.server.command.builder.arguments.number;
 
+import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 
 public class ArgumentInteger extends ArgumentNumber<Integer> {
 
     public ArgumentInteger(String id) {
         super(id);
-        this.min = Integer.MIN_VALUE;
-        this.max = Integer.MAX_VALUE;
     }
 
     @NotNull
@@ -29,6 +29,22 @@ public class ArgumentInteger extends ArgumentNumber<Integer> {
         } catch (NumberFormatException | NullPointerException e) {
             throw new ArgumentSyntaxException("Input is not a number/long", input, NOT_NUMBER_ERROR);
         }
+    }
+
+    @Override
+    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
+        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
+
+        argumentNode.parser = "brigadier:integer";
+        argumentNode.properties = packetWriter -> {
+            packetWriter.writeByte(getNumberProperties());
+            if (this.hasMin())
+                packetWriter.writeInt(this.getMin());
+            if (this.hasMax())
+                packetWriter.writeInt(this.getMax());
+        };
+
+        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
 }

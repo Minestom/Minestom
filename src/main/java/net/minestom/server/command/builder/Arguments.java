@@ -35,9 +35,22 @@ public final class Arguments {
 
     private Map<String, Object> args = new HashMap<>();
 
+    private CommandData returnData;
+
     @NotNull
     public <T> T get(@NotNull Argument<T> argument) {
         return (T) getObject(argument.getId());
+    }
+
+    public <T> T get(@NotNull String identifier) {
+        return (T) args.computeIfAbsent(identifier, s -> {
+            throw new NullPointerException(
+                    "The argument with the id '" + identifier + "' has no value assigned, be sure to check your arguments id, your syntax, and that you do not change the argument id dynamically.");
+        });
+    }
+
+    public boolean has(@NotNull String identifier) {
+        return args.containsKey(identifier);
     }
 
     /**
@@ -242,6 +255,10 @@ public final class Arguments {
         return (RelativeVec) getObject(id);
     }
 
+    /**
+     * @deprecated use {@link #get(String)}.
+     */
+    @Deprecated
     @NotNull
     public Object getObject(@NotNull String id) {
         return args.computeIfAbsent(id, s -> {
@@ -250,11 +267,25 @@ public final class Arguments {
         });
     }
 
-    protected void setArg(@NotNull String id, Object value) {
+    @Nullable
+    public CommandData getReturnData() {
+        return returnData;
+    }
+
+    public void setReturnData(@Nullable CommandData returnData) {
+        this.returnData = returnData;
+    }
+
+    @NotNull
+    public Map<String, Object> getMap() {
+        return args;
+    }
+
+    public void setArg(@NotNull String id, Object value) {
         this.args.put(id, value);
     }
 
-    protected void copy(@NotNull Arguments arguments) {
+    public void copy(@NotNull Arguments arguments) {
         this.args = arguments.args;
     }
 

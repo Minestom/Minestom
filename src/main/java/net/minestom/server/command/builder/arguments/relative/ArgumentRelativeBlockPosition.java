@@ -1,6 +1,8 @@
 package net.minestom.server.command.builder.arguments.relative;
 
+import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.location.RelativeBlockPosition;
 import org.apache.commons.lang3.StringUtils;
@@ -77,5 +79,13 @@ public class ArgumentRelativeBlockPosition extends ArgumentRelative<RelativeBloc
         }
 
         return new RelativeBlockPosition(blockPosition, relativeX, relativeY, relativeZ);
+    }
+
+    @Override
+    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
+        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
+        argumentNode.parser = "minecraft:block_pos";
+
+        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 }

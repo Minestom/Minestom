@@ -1,19 +1,21 @@
 package net.minestom.server.instance.batch;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minestom.server.data.Data;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.block.CustomBlockUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+import net.minestom.server.utils.chunk.ChunkUtils;
 
 /**
  * Used when the blocks you want to place need to be divided in multiple chunks,
@@ -76,44 +78,70 @@ public class BlockBatch implements InstanceBatch {
     }
 
     public void flush(@Nullable Runnable callback) {
+    	this.flush(callback, false);
+    }
+    
+    public void flush(@Nullable Runnable callback, boolean shouldLoadChunks) {
         synchronized (data) {
-            AtomicInteger counter = new AtomicInteger();
-            for (Map.Entry<Chunk, List<BlockData>> entry : data.entrySet()) {
-                final Chunk chunk = entry.getKey();
-                final List<BlockData> dataList = entry.getValue();
-                BLOCK_BATCH_POOL.execute(() -> {
-                    synchronized (chunk) {
-                        if (!chunk.isLoaded())
-                            return;
+        	// Load chunks if applicable
+        	if (shouldLoadChunks) {
+        		
+        		// Get chunks
+            	Chunk[] chunks = data.keySet().toArray(new Chunk[data.size()]);
+            	
+            	// Get chunk indexs
+            	long[] indexs = new long[chunks.length];
+            	for (int i = 0; i < chunks.length; i++) {
+            		indexs[i] = ChunkUtils.getChunkIndex(chunks[i].getChunkX(), chunks[i].getChunkZ());
+            	}
+            	
+            	// Load all chunks + flush block data
+        		ChunkUtils.optionalLoadAll(instance, indexs, null, (chunk) -> {
+        			flushBlockData(callback);
+        		});
+        	} else {
+        		flushBlockData(callback);
+        	}
+        }
+    }
+    
+    private void flushBlockData(@Nullable Runnable callback) {
+    	AtomicInteger counter = new AtomicInteger();
+        for (Map.Entry<Chunk, List<BlockData>> entry : data.entrySet()) {
+            final Chunk chunk = entry.getKey();
+            final List<BlockData> dataList = entry.getValue();
+            BLOCK_BATCH_POOL.execute(() -> {
+                synchronized (chunk) {
+                    if (!chunk.isLoaded())
+                        return;
 
-                        if (batchOption.isFullChunk()) {
-                            chunk.reset();
-                        }
-
-                        for (BlockData data : dataList) {
-                            data.apply(chunk);
-                        }
-
-                        // Refresh chunk for viewers
-                        if (batchOption.isFullChunk()) {
-                            chunk.sendChunk();
-                        } else {
-                            chunk.sendChunkUpdate();
-                        }
-
-                        final boolean isLast = counter.incrementAndGet() == data.size();
-
-                        // Execute the callback if this was the last chunk to process
-                        if (isLast) {
-                            this.instance.refreshLastBlockChangeTime();
-                            if (callback != null) {
-                                this.instance.scheduleNextTick(inst -> callback.run());
-                            }
-                        }
-
+                    if (batchOption.isFullChunk()) {
+                        chunk.reset();
                     }
-                });
-            }
+
+                    for (BlockData data : dataList) {
+                        data.apply(chunk);
+                    }
+
+                    // Refresh chunk for viewers
+                    if (batchOption.isFullChunk()) {
+                        chunk.sendChunk();
+                    } else {
+                        chunk.sendChunkUpdate();
+                    }
+
+                    final boolean isLast = counter.incrementAndGet() == data.size();
+
+                    // Execute the callback if this was the last chunk to process
+                    if (isLast) {
+                        this.instance.refreshLastBlockChangeTime();
+                        if (callback != null) {
+                            this.instance.scheduleNextTick(inst -> callback.run());
+                        }
+                    }
+
+                }
+            });
         }
     }
 

@@ -9,7 +9,7 @@ public enum SuggestionType {
     AVAILABLE_SOUNDS("minecraft:available_sounds"),
     SUMMONABLE_ENTITIES("minecraft:summonable_entities");
 
-    private String identifier;
+    private final String identifier;
 
     SuggestionType(@NotNull String identifier) {
         this.identifier = identifier;
