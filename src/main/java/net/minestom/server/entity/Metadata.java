@@ -153,7 +153,7 @@ public class Metadata {
 
     private final Entity entity;
 
-    private Map<Byte, Entry<?>> metadataMap = new ConcurrentHashMap<>();
+    private final Map<Byte, Entry<?>> metadataMap = new ConcurrentHashMap<>();
 
     public Metadata(@Nullable Entity entity) {
         this.entity = entity;

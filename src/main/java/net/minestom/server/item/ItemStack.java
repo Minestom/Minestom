@@ -472,7 +472,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      */
     @NotNull
     public Set<ItemFlag> getItemFlags() {
-        Set<ItemFlag> currentFlags = EnumSet.noneOf(ItemFlag.class);
+        EnumSet<ItemFlag> currentFlags = EnumSet.noneOf(ItemFlag.class);
 
         for (ItemFlag f : ItemFlag.values()) {
             if (hasItemFlag(f)) {
@@ -759,8 +759,11 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      *
      * @param player the player who used the item
      * @param hand   the hand used
+     *
+     * @return true if it stops any more click events from happening.
      */
-    public void onRightClick(@NotNull Player player, @NotNull Player.Hand hand) {
+    public boolean onRightClick(@NotNull Player player, @NotNull Player.Hand hand) {
+        return false;
     }
 
     /**
@@ -768,8 +771,11 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      *
      * @param player the player who used the item
      * @param hand   the hand used
+     *
+     * @return true if it stops any more click events from happening.
      */
-    public void onLeftClick(@NotNull Player player, @NotNull Player.Hand hand) {
+    public boolean onLeftClick(@NotNull Player player, @NotNull Player.Hand hand) {
+        return false;
     }
 
     /**
