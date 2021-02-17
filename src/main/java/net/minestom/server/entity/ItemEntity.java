@@ -42,18 +42,53 @@ public class ItemEntity extends ObjectEntity {
     private long spawnTime;
     private long pickupDelay;
 
-    public ItemEntity(@NotNull ItemStack itemStack, @NotNull Position spawnPosition) {
-        super(EntityType.ITEM, spawnPosition);
+    /**
+     * Creates an ItemEntity with a type as well.
+     *
+     * @param entityType The type of entity you want to pick up.
+     * @param itemStack The ItemStack that this entity holds
+     * @param spawnPosition Where to spawn this entities.
+     */
+    public ItemEntity(@NotNull EntityType entityType, @NotNull ItemStack itemStack, @NotNull Position spawnPosition) {
+        super(entityType, spawnPosition);
         setItemStack(itemStack);
         setBoundingBox(0.25f, 0.25f, 0.25f);
     }
 
-    public ItemEntity(@NotNull ItemStack itemStack, @NotNull Position spawnPosition, @Nullable Instance instance) {
-        this(itemStack, spawnPosition);
+    /**
+     * Creates an ItemEntity with a specific type and position
+     *
+     * @param itemStack The ItemStack that this entity holds
+     * @param spawnPosition Where to spawn this entities.
+     */
+    public ItemEntity(@NotNull ItemStack itemStack, @NotNull Position spawnPosition) {
+        this(EntityType.ITEM, itemStack, spawnPosition);
+    }
+
+    /**
+     * Creates an ItemEntity with a type as well. Convenience constructor to set the instance as well.
+     *
+     * @param entityType The type of entity you want to pick up.
+     * @param itemStack The ItemStack that this entity holds
+     * @param spawnPosition Where to spawn this entities.
+     */
+    public ItemEntity(@NotNull EntityType entityType, @NotNull ItemStack itemStack, @NotNull Position spawnPosition, @Nullable Instance instance) {
+        this(entityType, itemStack, spawnPosition);
 
         if (instance != null) {
             setInstance(instance);
         }
+    }
+
+    /**
+     * Creates an ItemEntity with a specific item, position, and instance. Convenience constructor to set the instance as well.
+     *
+     * @param itemStack The ItemStack that this entity holds
+     * @param spawnPosition Where to spawn this entities.
+     * @param instance The instance to set this entity at.
+     */
+    public ItemEntity(@NotNull ItemStack itemStack, @NotNull Position spawnPosition, @Nullable Instance instance) {
+        this(EntityType.ITEM, itemStack, spawnPosition, instance);
     }
 
     /**
