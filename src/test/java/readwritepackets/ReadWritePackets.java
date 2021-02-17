@@ -13,6 +13,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -55,7 +56,9 @@ public class ReadWritePackets {
                         MinecraftServer.init();
 
                         BinaryWriter writer = new BinaryWriter();
-                        T packet = (T) clazz.getConstructor().newInstance();
+                        Constructor<?> constructor = clazz.getDeclaredConstructor();
+                        constructor.setAccessible(true);
+                        T packet = (T) constructor.newInstance();
 
                         // write packet
                         packet.write(writer);

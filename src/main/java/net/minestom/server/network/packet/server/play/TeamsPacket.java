@@ -113,13 +113,13 @@ public class TeamsPacket implements ComponentHoldingServerPacket {
         switch (action) {
             case CREATE_TEAM:
             case UPDATE_TEAM_INFO:
-                this.teamDisplayName = reader.readJsonMessage(Integer.MAX_VALUE);
+                this.teamDisplayName = reader.readComponent(Integer.MAX_VALUE);
                 this.friendlyFlags = reader.readByte();
                 nameTagVisibility = NameTagVisibility.fromIdentifier(reader.readSizedString(Integer.MAX_VALUE));
                 collisionRule = CollisionRule.fromIdentifier(reader.readSizedString(Integer.MAX_VALUE));
-                this.teamColor = reader.readVarInt();
-                this.teamPrefix = reader.readJsonMessage(Integer.MAX_VALUE);
-                this.teamSuffix = reader.readJsonMessage(Integer.MAX_VALUE);
+                this.teamColor = NamedTextColor.ofExact(reader.readVarInt());
+                this.teamPrefix = reader.readComponent(Integer.MAX_VALUE);
+                this.teamSuffix = reader.readComponent(Integer.MAX_VALUE);
                 break;
             case REMOVE_TEAM:
 

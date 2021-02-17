@@ -136,7 +136,15 @@ public class BinaryReader extends InputStream {
         return array;
     }
 
+    /**
+     * @deprecated Use {@link #readRemainingBytes()} (same semantics, but more consistent naming)
+     */
+    @Deprecated
     public byte[] getRemainingBytes() {
+        return readRemainingBytes();
+    }
+
+    public byte[] readRemainingBytes() {
         return readBytes(buffer.readableBytes());
     }
 

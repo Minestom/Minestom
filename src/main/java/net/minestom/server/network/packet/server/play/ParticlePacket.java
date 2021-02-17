@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +17,11 @@ public class ParticlePacket implements ServerPacket {
     public float particleData;
     public int particleCount;
 
-    public Consumer<BinaryWriter> dataConsumer;
+    public byte[] data;
+
+    public ParticlePacket() {
+        data = new byte[0];
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -31,9 +36,23 @@ public class ParticlePacket implements ServerPacket {
         writer.writeFloat(particleData);
         writer.writeInt(particleCount);
 
-        if (dataConsumer != null) {
-            dataConsumer.accept(writer);
-        }
+        writer.writeBytes(data);
+    }
+
+    @Override
+    public void read(@NotNull BinaryReader reader) {
+        particleId = reader.readInt();
+        longDistance = reader.readBoolean();
+        x = reader.readDouble();
+        y = reader.readDouble();
+        z = reader.readDouble();
+        offsetX = reader.readFloat();
+        offsetY = reader.readFloat();
+        offsetZ = reader.readFloat();
+        particleData = reader.readFloat();
+        particleCount = reader.readInt();
+
+        data = reader.readRemainingBytes();
     }
 
     @Override

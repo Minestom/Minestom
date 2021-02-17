@@ -52,9 +52,9 @@ public class TabCompletePacket implements ComponentHoldingServerPacket {
         for (int i = 0; i < matchCount; i++) {
             String match = reader.readSizedString(Integer.MAX_VALUE);
             boolean hasTooltip = reader.readBoolean();
-            JsonMessage tooltip = null;
+            Component tooltip = null;
             if(hasTooltip) {
-                tooltip = reader.readJsonMessage(Integer.MAX_VALUE);
+                tooltip = reader.readComponent(Integer.MAX_VALUE);
             }
             Match newMatch = new Match();
             newMatch.match = match;

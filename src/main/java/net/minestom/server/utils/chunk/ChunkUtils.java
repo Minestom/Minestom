@@ -296,4 +296,24 @@ public final class ChunkUtils {
         return (byte) (index >> 12 & 0xF);
     }
 
+    /**
+     * Returns the section, from a chunk index encoded with {@link #getChunkIndexWithSection(int, int, int)}
+     */
+    public static int getSectionFromChunkIndexWithSection(long index) {
+        return (int) (index & 1048575L);
+    }
+
+    /**
+     * Returns the chunk X, from a chunk index encoded with {@link #getChunkIndexWithSection(int, int, int)}
+     */
+    public static int getChunkXFromChunkIndexWithSection(long index) {
+        return (int) ((index >> 42) & 4194303L);
+    }
+
+    /**
+     * Returns the chunk Z, from a chunk index encoded with {@link #getChunkIndexWithSection(int, int, int)}
+     */
+    public static int getChunkZFromChunkIndexWithSection(long index) {
+        return (int) ((index >> 20) & 4194303L);
+    }
 }
