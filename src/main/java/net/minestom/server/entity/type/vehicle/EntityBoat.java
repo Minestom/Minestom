@@ -3,11 +3,10 @@ package net.minestom.server.entity.type.vehicle;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.ObjectEntity;
-import net.minestom.server.entity.type.Vehicle;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
-public class EntityBoat extends ObjectEntity implements Vehicle {
+public class EntityBoat extends ObjectEntity {
 
     public EntityBoat(Position spawnPosition) {
         super(EntityType.BOAT, spawnPosition);

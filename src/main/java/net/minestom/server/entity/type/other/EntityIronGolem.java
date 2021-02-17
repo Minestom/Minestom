@@ -3,10 +3,9 @@ package net.minestom.server.entity.type.other;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.type.Constructable;
 import net.minestom.server.utils.Position;
 
-public class EntityIronGolem extends EntityCreature implements Constructable {
+public class EntityIronGolem extends EntityCreature {
 
     public EntityIronGolem(Position spawnPosition) {
         super(EntityType.IRON_GOLEM, spawnPosition);

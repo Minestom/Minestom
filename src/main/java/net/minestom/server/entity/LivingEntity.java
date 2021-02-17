@@ -5,6 +5,7 @@ import net.minestom.server.attribute.AttributeInstance;
 import net.minestom.server.attribute.Attributes;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.type.Monster;
 import net.minestom.server.event.entity.EntityDamageEvent;
 import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.entity.EntityFireEvent;
@@ -231,9 +232,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * @return true if damage has been applied, false if it didn't
      */
     public boolean damage(@NotNull DamageType type, float value) {
-        if (isDead())
-            return false;
-        if (isInvulnerable() || isImmune(type)) {
+        if (isDead() || isInvulnerable() || isImmune(type)) {
             return false;
         }
 
@@ -273,9 +272,10 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
                 SoundCategory soundCategory;
                 if (this instanceof Player) {
                     soundCategory = SoundCategory.PLAYERS;
-                } else {
-                    // TODO: separate living entity categories
+                } else if (this instanceof Monster) {
                     soundCategory = SoundCategory.HOSTILE;
+                } else {
+                    soundCategory = SoundCategory.NEUTRAL;
                 }
 
                 SoundEffectPacket damageSoundPacket =
