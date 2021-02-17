@@ -8,6 +8,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import net.minestom.server.ping.ResponseDataConsumer;
+import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -124,6 +125,13 @@ public class ExtensionManager {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
         }
+
+        // periodically cleanup observers
+        MinecraftServer.getSchedulerManager().buildTask(() -> {
+            for(Extension ext : extensionList) {
+                ext.cleanupObservers();
+            }
+        }).repeat(1L, TimeUnit.MINUTE).schedule();
     }
 
     private void setupClassLoader(@NotNull DiscoveredExtension discoveredExtension) {
@@ -241,16 +249,19 @@ public class ExtensionManager {
     @NotNull
     private List<DiscoveredExtension> discoverExtensions() {
         List<DiscoveredExtension> extensions = new LinkedList<>();
-        for (File file : extensionFolder.listFiles()) {
-            if (file.isDirectory()) {
-                continue;
-            }
-            if (!file.getName().endsWith(".jar")) {
-                continue;
-            }
-            DiscoveredExtension extension = discoverFromJar(file);
-            if (extension != null && extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
-                extensions.add(extension);
+        File[] fileList = extensionFolder.listFiles();
+        if(fileList != null) {
+            for (File file : fileList) {
+                if (file.isDirectory()) {
+                    continue;
+                }
+                if (!file.getName().endsWith(".jar")) {
+                    continue;
+                }
+                DiscoveredExtension extension = discoverFromJar(file);
+                if (extension != null && extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
+                    extensions.add(extension);
+                }
             }
         }
 

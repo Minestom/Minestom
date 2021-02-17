@@ -1,14 +1,13 @@
 package net.minestom.server.extensions;
 
-import net.minestom.server.event.handler.EventHandler;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
+import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 public abstract class Extension {
@@ -26,6 +25,7 @@ public abstract class Extension {
      * from being cleaned up.
      */
     private Set<WeakReference<IExtensionObserver>> observers = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    private ReferenceQueue<IExtensionObserver> observerReferenceQueue = new ReferenceQueue<>();
 
     protected Extension() {
 
@@ -74,7 +74,7 @@ public abstract class Extension {
      * @param observer
      */
     public void observe(IExtensionObserver observer) {
-        observers.add(new WeakReference<>(observer));
+        observers.add(new WeakReference<>(observer, observerReferenceQueue));
     }
 
     /**
@@ -95,6 +95,18 @@ public abstract class Extension {
      */
     public boolean areCodeModifiersAllLoadedCorrectly() {
         return !getDescription().failedToLoadMixin && getDescription().getMissingCodeModifiers().isEmpty();
+    }
+
+    /**
+     * Removes all expired reference to observers
+     *
+     * @see #observers
+     */
+    public void cleanupObservers() {
+        Reference<? extends IExtensionObserver> ref;
+        while((ref = observerReferenceQueue.poll()) != null) {
+            observers.remove(ref);
+        }
     }
 
     public static class ExtensionDescription {
