@@ -1257,10 +1257,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param potion The potion to add
      */
     public void addEffect(@NotNull Potion potion) {
-        removeEffect(potion.getEffect());
-        this.effects.add(new TimedPotion(potion, System.currentTimeMillis()));
-        potion.sendAddPacket(this);
-        callEvent(EntityPotionAddEvent.class, new EntityPotionAddEvent(this, potion));
+        callCancellableEvent(EntityPotionAddEvent.class, new EntityPotionAddEvent(this, potion), () -> {
+            removeEffect(potion.getEffect());
+            this.effects.add(new TimedPotion(potion, System.currentTimeMillis()));
+            potion.sendAddPacket(this);
+        });
     }
 
     /**
@@ -1309,6 +1310,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         return scheduledRemoveTime != 0;
     }
 
+    /**
+     * Gets the formed velocity packet based on the current entity's velocity and the set TPS.
+     *
+     * @return A new velocity packet to be sent out.
+     */
     @NotNull
     protected EntityVelocityPacket getVelocityPacket() {
         final float strength = 8000f / MinecraftServer.TICK_PER_SECOND;

@@ -129,7 +129,7 @@ public class Player extends LivingEntity implements CommandSender {
     // The amount of time it takes for a packet to travel from the server to the client.
     private int latency;
 
-    // The preffered display name, or the "nickname" of the said Player.
+    // The preferred display name, or the "nickname" of the said Player.
     private JsonMessage displayName;
 
     // The displayed skin that appears on the player. Modifiable via get/setSkin
@@ -139,8 +139,8 @@ public class Player extends LivingEntity implements CommandSender {
     private GameMode gameMode;
     protected final Set<Chunk> viewableChunks = new CopyOnWriteArraySet<>();
 
+    // Teleportation confirmation
     private final AtomicInteger teleportId = new AtomicInteger();
-
     private final IntPriorityQueue teleportQueue = IntPriorityQueues.synchronize(new IntArrayPriorityQueue());
 
     // Queued list of packets, meant for catching up with any client sent packets if it gets filled up too much.
@@ -1994,7 +1994,7 @@ public class Player extends LivingEntity implements CommandSender {
     /**
      * Checks if the netty player needs to confirm any more teleports.
      *
-     * @return If they dont need to confirm any, its true.
+     * @return If they don't need to confirm any teleportations.
      */
     public boolean noQueuedTeleportConfirmations() {
         return teleportQueue.isEmpty();
@@ -2565,9 +2565,12 @@ public class Player extends LivingEntity implements CommandSender {
 
     public class PlayerSettings {
 
+        /** The locale (language) of the player. */
         private String locale;
+        /** How far this player can see in chunks*/
         private byte viewDistance;
         private ChatMode chatMode;
+        /** If this player has chat colors enabled or disabled. */
         private boolean chatColors;
         private byte displayedSkinParts;
         private MainHand mainHand;
