@@ -1,6 +1,9 @@
 package net.minestom.server.entity;
 
 import com.google.common.collect.Queues;
+import it.unimi.dsi.fastutil.ints.IntArrayPriorityQueue;
+import it.unimi.dsi.fastutil.ints.IntPriorityQueue;
+import it.unimi.dsi.fastutil.ints.IntPriorityQueues;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.attribute.AttributeInstance;
@@ -136,8 +139,9 @@ public class Player extends LivingEntity implements CommandSender {
     private GameMode gameMode;
     protected final Set<Chunk> viewableChunks = new CopyOnWriteArraySet<>();
 
-    // TODO actually use this to verify teleports
     private final AtomicInteger teleportId = new AtomicInteger();
+
+    private final IntPriorityQueue teleportQueue = IntPriorityQueues.synchronize(new IntArrayPriorityQueue());
 
     // Queued list of packets, meant for catching up with any client sent packets if it gets filled up too much.
     private final Queue<ClientPlayPacket> packets = Queues.newConcurrentLinkedQueue();
@@ -1972,8 +1976,28 @@ public class Player extends LivingEntity implements CommandSender {
         PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
         positionAndLookPacket.position = position.clone(); // clone needed to prevent synchronization issue
         positionAndLookPacket.flags = 0x00;
-        positionAndLookPacket.teleportId = teleportId.incrementAndGet();
+        int teleportationID = teleportId.incrementAndGet();
+        positionAndLookPacket.teleportId = teleportationID;
+        teleportQueue.enqueue(teleportationID);
         playerConnection.sendPacket(positionAndLookPacket);
+    }
+
+    /**
+     * Confirms a teleportation that happened before.
+     *
+     * @param teleportId The teleport ID to confirm.
+     */
+    public void confirmTeleportation(int teleportId) {
+        if (teleportQueue.lastInt() == teleportId) teleportQueue.dequeueInt();
+    }
+
+    /**
+     * Checks if the netty player needs to confirm any more teleports.
+     *
+     * @return If they dont need to confirm any, its true.
+     */
+    public boolean noQueuedTeleportConfirmations() {
+        return teleportQueue.isEmpty();
     }
 
     /**

@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.client.play.ClientTeleportConfirmPacke
 public class TeleportListener {
 
     public static void listener(ClientTeleportConfirmPacket packet, Player player) {
-        // Empty
+        player.confirmTeleportation(packet.teleportId);
     }
 
 }

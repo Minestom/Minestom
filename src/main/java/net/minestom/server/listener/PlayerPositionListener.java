@@ -50,6 +50,10 @@ public class PlayerPositionListener {
 
     private static void processMovement(@NotNull Player player, double x, double y, double z,
                                         float yaw, float pitch, boolean onGround) {
+
+        // Checks if the player needs to confirm any more teleports.
+        if (!player.noQueuedTeleportConfirmations()) return;
+
         final Instance instance = player.getInstance();
 
         // Prevent moving before the player spawned, probably a modified client (or high latency?)
