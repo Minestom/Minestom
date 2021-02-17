@@ -8,8 +8,6 @@ import net.minestom.server.utils.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
-
 public class ExperienceOrb extends Entity {
 
     private short experienceCount;
@@ -45,10 +43,10 @@ public class ExperienceOrb extends Entity {
 
         //todo lava
 
-        double d = 8.0;
+        float distance = 8.0f;
         if (lastTargetUpdateTick < time - 20 + getEntityId() % 100) {
             if (target == null || target.getPosition().getDistanceSquared(getPosition()) > 64) {
-                this.target = getClosestPlayer(this, 8);
+                this.target = getClosestPlayer(this, distance);
             }
 
             lastTargetUpdateTick = time;
@@ -75,6 +73,7 @@ public class ExperienceOrb extends Entity {
 //            g = 2f;
             g = 0.6f * 0.98f;
         }
+
         // apply slipperiness
 
         setVelocity(getVelocity().multiply(new Vector(g, 0.98f, g)));
@@ -121,22 +120,31 @@ public class ExperienceOrb extends Entity {
      * @param experienceCount the new experience count
      */
     public void setExperienceCount(short experienceCount) {
-        // Remove the entity in order to respawn it with the correct experience count
-        getViewers().forEach(this::removeViewer);
+        for (Player viewer : getViewers()) this.removeViewer(viewer);
 
         this.experienceCount = experienceCount;
 
-        getViewers().forEach(this::addViewer);
+        for (Player viewer : getViewers()) this.addViewer(viewer);
     }
 
     private Player getClosestPlayer(Entity entity, float maxDistance) {
-        Player closest = entity.getInstance()
-                .getPlayers()
-                .stream()
-                .min(Comparator.comparingDouble(a -> a.getDistance(entity)))
-                .orElse(null);
-        if (closest == null) return null;
-        if (closest.getDistance(entity) > maxDistance) return null;
-        return closest;
+
+        if (entity.getInstance() == null) return null;
+
+        Player closestPlayer = null;
+
+        for (Player player : entity.getInstance().getPlayers()) {
+            if (closestPlayer == null) {
+                closestPlayer = player;
+                continue;
+            }
+
+            if (player.getDistance(entity) < closestPlayer.getDistance(entity))
+                closestPlayer = player;
+        }
+
+        if (closestPlayer == null) return null;
+        if (closestPlayer.getDistance(entity) > maxDistance) return null;
+        return closestPlayer;
     }
 }

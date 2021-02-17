@@ -226,7 +226,7 @@ public enum EntityType {
 
     FISHING_BOBBER("minecraft:fishing_bobber");
 
-    private String namespaceID;
+    private final String namespaceID;
 
     EntityType(String namespaceID) {
         this.namespaceID = namespaceID;
