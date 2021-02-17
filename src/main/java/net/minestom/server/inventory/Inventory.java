@@ -16,13 +16,13 @@ import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -80,7 +80,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
         this.itemStacks = new ItemStack[size];
 
-        Arrays.fill(itemStacks, ItemStack.getAirItem());
+        ArrayUtils.fill(itemStacks, ItemStack::getAirItem);
     }
 
     private static byte generateId() {

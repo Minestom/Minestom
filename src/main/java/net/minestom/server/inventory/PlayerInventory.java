@@ -16,12 +16,12 @@ import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -32,7 +32,7 @@ import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
  */
 public class PlayerInventory implements InventoryModifier, InventoryClickHandler, EquipmentHandler, DataContainer {
 
-    public static final byte INVENTORY_SIZE = 46;
+    public static final int INVENTORY_SIZE = 46;
 
     protected final Player player;
     protected final ItemStack[] items = new ItemStack[INVENTORY_SIZE];
@@ -46,7 +46,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     public PlayerInventory(@NotNull Player player) {
         this.player = player;
 
-        Arrays.fill(items, ItemStack.getAirItem());
+        ArrayUtils.fill(items, ItemStack::getAirItem);
     }
 
     @NotNull

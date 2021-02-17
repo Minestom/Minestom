@@ -132,10 +132,7 @@ public class Player extends LivingEntity implements CommandSender {
     // The displayed skin that appears on the player. Modifiable via get/setSkin
     private PlayerSkin skin;
 
-    // The dimension this Player is in.
-    @NotNull
     private DimensionType dimensionType;
-
     private GameMode gameMode;
     protected final Set<Chunk> viewableChunks = new CopyOnWriteArraySet<>();
 
@@ -166,7 +163,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     // Everything about food. Eating food, the amount of food, etc.
 
-    private byte food;
+    private int food;
     private float foodSaturation;
     private long startEatingTime;
     private long defaultEatingTime = 1000L;
@@ -627,13 +624,12 @@ public class Player extends LivingEntity implements CommandSender {
         }
 
         // Clear all viewable entities
-        for (Entity entity : viewableEntities) entity.removeViewer(this);
-
+        this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         // Clear all viewable chunks
-        for (Chunk chunk : viewableChunks) {
-            if (chunk.isLoaded()) chunk.removeViewer(this);
-        }
-
+        this.viewableChunks.forEach(chunk -> {
+            if (chunk.isLoaded())
+                chunk.removeViewer(this);
+        });
         resetTargetBlock();
         playerConnection.disconnect();
     }
@@ -749,7 +745,7 @@ public class Player extends LivingEntity implements CommandSender {
      */
     private void spawnPlayer(@NotNull Instance instance, @Nullable Position spawnPosition,
                              boolean firstSpawn, boolean updateChunks) {
-        for (Entity entity : this.viewableEntities) entity.removeViewer(this);
+        this.viewableEntities.forEach(entity -> entity.removeViewer(this));
 
         super.setInstance(instance);
 
@@ -759,7 +755,7 @@ public class Player extends LivingEntity implements CommandSender {
                 return;
 
             // Remove all previous viewable chunks (from the previous instance)
-            for (Chunk chunk : viewableChunks) chunk.removeViewer(this);
+            this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
             final Chunk chunk = getChunk();
             if (chunk != null) {
                 refreshVisibleChunks(chunk);
@@ -1147,7 +1143,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param food the new food value
      * @throws IllegalArgumentException if {@code food} is not between 0 and 20
      */
-    public void setFood(byte food) {
+    public void setFood(int food) {
         Check.argCondition(!MathUtils.isBetween(food, 0, 20), "Food has to be between 0 and 20");
         this.food = food;
         sendUpdateHealthPacket();
@@ -1268,7 +1264,7 @@ public class Player extends LivingEntity implements CommandSender {
             sendPacketToViewers(destroyEntitiesPacket);
 
             // Show player again
-            for (Player viewer : getViewers()) showPlayer(viewer.getPlayerConnection());
+            getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
         }
 
         getInventory().update();
@@ -1555,12 +1551,12 @@ public class Player extends LivingEntity implements CommandSender {
         final int[] newChunks = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunks, lastVisibleChunks);
 
         // Unload old chunks
-        UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket(); // Create this packet once, reusable.
         for (int index : oldChunks) {
             final long chunkIndex = lastVisibleChunks[index];
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
 
+            UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
             unloadChunkPacket.chunkX = chunkX;
             unloadChunkPacket.chunkZ = chunkZ;
             playerConnection.sendPacket(unloadChunkPacket);
@@ -1600,7 +1596,7 @@ public class Player extends LivingEntity implements CommandSender {
         final float maximalDistance = entityViewDistance * Chunk.CHUNK_SECTION_SIZE;
 
         // Manage already viewable entities
-        for (Entity entity : viewableEntities) {
+        this.viewableEntities.forEach(entity -> {
             final double distance = entity.getDistance(this);
             if (distance > maximalDistance) {
                 // Entity shouldn't be viewable anymore
@@ -1611,7 +1607,7 @@ public class Player extends LivingEntity implements CommandSender {
                     removeViewer((Player) entity);
                 }
             }
-        }
+        });
 
         // Manage entities in unchecked chunks
         EntityUtils.forEachRange(instance, newChunk.toPosition(), entityViewDistance, entity -> {
@@ -1683,7 +1679,6 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @return the player current dimension
      */
-    @NotNull
     public DimensionType getDimensionType() {
         return dimensionType;
     }

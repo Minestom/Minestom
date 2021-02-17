@@ -4,6 +4,8 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Supplier;
+
 public final class ArrayUtils {
 
     private ArrayUtils() {
@@ -100,6 +102,19 @@ public final class ArrayUtils {
             }
         }
         return true;
+    }
+
+    /**
+     * Fills an array using a supplier.
+     *
+     * @param array    the array to fill
+     * @param supplier the supplier to fill the array
+     * @param <T>      the array type
+     */
+    public static <T> void fill(@NotNull T[] array, @NotNull Supplier<T> supplier) {
+        for (int i = 0; i < array.length; i++) {
+            array[i] = supplier.get();
+        }
     }
 
 }
