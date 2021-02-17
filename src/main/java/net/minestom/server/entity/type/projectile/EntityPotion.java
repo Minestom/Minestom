@@ -3,12 +3,11 @@ package net.minestom.server.entity.type.projectile;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.ObjectEntity;
-import net.minestom.server.entity.type.Projectile;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
-public class EntityPotion extends ObjectEntity implements Projectile {
+public class EntityPotion extends ObjectEntity {
 
     public EntityPotion(Position spawnPosition, @NotNull ItemStack potion) {
         super(EntityType.POTION, spawnPosition);
