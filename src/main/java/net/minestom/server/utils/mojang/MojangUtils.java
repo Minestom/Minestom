@@ -18,8 +18,7 @@ public final class MojangUtils {
     public static JsonObject fromUuid(@NotNull String uuid) {
         final String url = "https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false";
         try {
-            final String response = URLUtils.getText(url);
-            return JsonParser.parseString(response).getAsJsonObject();
+            return JsonParser.parseReader(URLUtils.getReader(url)).getAsJsonObject();
         } catch (IOException e) {
             MinecraftServer.getExceptionManager().handleException(e);
             return null;
@@ -31,8 +30,7 @@ public final class MojangUtils {
         final String url = "https://api.mojang.com/users/profiles/minecraft/" + username;
         try {
             // Retrieve the mojang uuid from the name
-            final String response = URLUtils.getText(url);
-            return JsonParser.parseString(response).getAsJsonObject();
+            return JsonParser.parseReader(URLUtils.getReader(url)).getAsJsonObject();
         } catch (IOException e) {
             MinecraftServer.getExceptionManager().handleException(e);
             return null;

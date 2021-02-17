@@ -13,22 +13,9 @@ public final class URLUtils {
 
     }
 
+
     public static String getText(String url) throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-        //add headers to the connection, or check the status if desired..
-
-        // handle error response code it occurs
-        final int responseCode = connection.getResponseCode();
-        final InputStream inputStream;
-        if (200 <= responseCode && responseCode <= 299) {
-            inputStream = connection.getInputStream();
-        } else {
-            inputStream = connection.getErrorStream();
-        }
-
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(
-                        inputStream));
+        BufferedReader in = new BufferedReader(getReader(url));
 
         StringBuilder response = new StringBuilder();
         String currentLine;
@@ -40,4 +27,21 @@ public final class URLUtils {
 
         return response.toString();
     }
+
+    public static InputStreamReader getReader(String url) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        // add headers to the connection, or check the status if desired..
+
+        // handle error response code it occurs
+        final int responseCode = connection.getResponseCode();
+        final InputStream inputStream;
+        if (200 <= responseCode && responseCode <= 299) {
+            inputStream = connection.getInputStream();
+        } else {
+            inputStream = connection.getErrorStream();
+        }
+
+        return new InputStreamReader(inputStream);
+    }
+
 }
