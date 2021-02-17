@@ -54,23 +54,23 @@ public class Navigator {
         final double targetY = direction.getY();
         final double targetZ = direction.getZ();
 
-        final double dx = targetX - currentX;
-        final double dy = targetY - currentY;
-        final double dz = targetZ - currentZ;
+        final double deltaX = targetX - currentX;
+        final double deltaY = targetY - currentY;
+        final double deltaZ = targetZ - currentZ;
 
         // the purpose of these few lines is to slow down entities when they reach their destination
-        final double distSquared = dx * dx + dy * dy + dz * dz;
+        final double distSquared = deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
         if (speed > distSquared) {
             speed = distSquared;
         }
 
-        final double radians = Math.atan2(dz, dx);
+        final double radians = Math.atan2(deltaZ, deltaX);
         final double speedX = Math.cos(radians) * speed;
-        final double speedY = dy * speed;
+        final double speedY = deltaY * speed;
         final double speedZ = Math.sin(radians) * speed;
 
         // Update 'position' view
-        PositionUtils.lookAlong(position, dx, direction.getY(), dz);
+        PositionUtils.lookAlong(position, deltaX, direction.getY(), deltaZ);
 
         Position newPosition = new Position();
         Vector newVelocityOut = new Vector();
@@ -227,7 +227,7 @@ public class Navigator {
      * @param pathPosition the new current path position
      * @deprecated Please use {@link #setPathTo(Position)}
      */
-    @Deprecated
+    @Deprecated(forRemoval = true)
     public void setPathPosition(@Nullable Position pathPosition) {
         this.pathPosition = pathPosition;
     }

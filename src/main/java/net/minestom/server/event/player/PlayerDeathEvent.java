@@ -1,8 +1,8 @@
 package net.minestom.server.event.player;
 
-import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,10 +10,11 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Called when a player die in {@link Player#kill()}.
  */
-public class PlayerDeathEvent extends PlayerEvent {
+public class PlayerDeathEvent extends PlayerEvent implements CancellableEvent {
 
     private JsonMessage deathText;
     private JsonMessage chatMessage;
+    private boolean cancelled;
 
     public PlayerDeathEvent(@NotNull Player player, JsonMessage deathText, JsonMessage chatMessage) {
         super(player);
@@ -57,5 +58,15 @@ public class PlayerDeathEvent extends PlayerEvent {
      */
     public void setChatMessage(@Nullable JsonMessage chatMessage) {
         this.chatMessage = chatMessage;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 }

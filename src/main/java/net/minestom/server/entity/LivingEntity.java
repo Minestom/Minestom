@@ -27,7 +27,6 @@ import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,7 +41,8 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
 
     protected boolean isDead;
 
-    protected DamageType lastDamageSource;
+    @NotNull
+    protected DamageType lastDamageSource = DamageType.UNKNOWN;
 
     // Bounding box used for items' pickup (see LivingEntity#setBoundingBox)
     protected BoundingBox expandedBoundingBox;
@@ -169,6 +169,13 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * Kills the entity, trigger the {@link EntityDeathEvent} event.
      */
     public void kill() {
+        kill(DamageType.UNKNOWN);
+    }
+
+    /**
+     * Kills the entity, trigger the {@link EntityDeathEvent} event.
+     */
+    public void kill(DamageType damageType) {
         refreshIsDead(true); // So the entity isn't killed over and over again
         triggerStatus((byte) 3); // Start death animation status
         setHealth(0);
@@ -181,7 +188,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
             getPassengers().forEach(this::removePassenger);
         }
 
-        EntityDeathEvent entityDeathEvent = new EntityDeathEvent(this);
+        EntityDeathEvent entityDeathEvent = new EntityDeathEvent(this, damageType);
         callEvent(EntityDeathEvent.class, entityDeathEvent);
     }
 
@@ -309,7 +316,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     public void setHealth(float health) {
         health = Math.min(health, getMaxHealth());
         if (health <= 0 && !isDead) {
-            kill();
+            kill(lastDamageSource);
         }
 
         this.metadata.setIndex((byte) 8, Metadata.Float(health));
@@ -320,7 +327,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      *
      * @return the last damage source, null if not any
      */
-    @Nullable
+    @NotNull
     public DamageType getLastDamageSource() {
         return lastDamageSource;
     }

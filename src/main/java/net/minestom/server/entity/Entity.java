@@ -135,7 +135,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     }
 
     public Entity(@NotNull EntityType entityType) {
-        this(entityType, new Position());
+        this(entityType, UUID.randomUUID(), new Position());
     }
 
     /**

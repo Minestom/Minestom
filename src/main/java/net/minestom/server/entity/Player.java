@@ -119,22 +119,37 @@ public class Player extends LivingEntity implements CommandSender {
 
     private String username;
     protected final PlayerConnection playerConnection;
+
     // All the entities that this player can see
     protected final Set<Entity> viewableEntities = new CopyOnWriteArraySet<>();
 
+    // The amount of time it takes for a packet to travel from the server to the client.
     private int latency;
+
+    // The preffered display name, or the "nickname" of the said Player.
     private JsonMessage displayName;
+
+    // The displayed skin that appears on the player. Modifiable via get/setSkin
     private PlayerSkin skin;
 
     private DimensionType dimensionType;
     private GameMode gameMode;
     protected final Set<Chunk> viewableChunks = new CopyOnWriteArraySet<>();
+
+    // TODO actually use this to verify teleports
     private final AtomicInteger teleportId = new AtomicInteger();
 
+    // Queued list of packets, meant for catching up with any client sent packets if it gets filled up too much.
     private final Queue<ClientPlayPacket> packets = Queues.newConcurrentLinkedQueue();
+
+    // Defines if the instance that the player is in is flat or not.
     private final boolean levelFlat;
     private final PlayerSettings settings;
+
+    // Defines the internal XP bar, from 0 to 1 in a decimal percentage.
     private float exp;
+
+    // Display level for the client, appears as a green number over the experience bar.
     private int level;
 
     protected PlayerInventory inventory;
@@ -145,6 +160,8 @@ public class Player extends LivingEntity implements CommandSender {
     private byte heldSlot;
 
     private Position respawnPoint;
+
+    // Everything about food. Eating food, the amount of food, etc.
 
     private int food;
     private float foodSaturation;
@@ -502,47 +519,37 @@ public class Player extends LivingEntity implements CommandSender {
     public void kill() {
         if (!isDead()) {
 
-            JsonMessage deathText;
-            JsonMessage chatMessage;
-
             // get death screen text to the killed player
-            {
-                if (lastDamageSource != null) {
-                    deathText = lastDamageSource.buildDeathScreenText(this);
-                } else { // may happen if killed by the server without applying damage
-                    deathText = ColoredText.of("Killed by poor programming.");
-                }
-            }
+            final JsonMessage deathText = lastDamageSource.buildDeathScreenText(this);
 
             // get death message to chat
-            {
-                if (lastDamageSource != null) {
-                    chatMessage = lastDamageSource.buildDeathMessage(this);
-                } else { // may happen if killed by the server without applying damage
-                    chatMessage = ColoredText.of(getUsername() + " was killed by poor programming.");
-                }
-            }
+            final JsonMessage chatMessage = lastDamageSource.buildDeathMessage(this);
 
             // Call player death event
             PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(this, deathText, chatMessage);
-            callEvent(PlayerDeathEvent.class, playerDeathEvent);
+            callCancellableEvent(PlayerDeathEvent.class, playerDeathEvent, () -> {
 
-            deathText = playerDeathEvent.getDeathText();
-            chatMessage = playerDeathEvent.getChatMessage();
+                JsonMessage eventDeathText = null;
+                JsonMessage eventChatMessage = null;
 
-            // #buildDeathScreenText can return null, check here
-            if (deathText != null) {
-                CombatEventPacket deathPacket = CombatEventPacket.death(this, null, deathText);
-                playerConnection.sendPacket(deathPacket);
-            }
+                if (playerDeathEvent.getDeathText() != null) eventDeathText = playerDeathEvent.getDeathText();
+                if (playerDeathEvent.getChatMessage() != null) eventChatMessage = playerDeathEvent.getChatMessage();
 
-            // #buildDeathMessage can return null, check here
-            if (chatMessage != null) {
-                MinecraftServer.getConnectionManager().broadcastMessage(chatMessage);
-            }
+                // #buildDeathScreenText can return null, check here
+                if (eventDeathText != null) {
+                    CombatEventPacket deathPacket = CombatEventPacket.death(this, null, eventDeathText);
+                    playerConnection.sendPacket(deathPacket);
+                }
+
+                // #buildDeathMessage can return null, check here
+                if (eventChatMessage != null) {
+                    MinecraftServer.getConnectionManager().broadcastMessage(eventChatMessage);
+                }
+
+                super.kill(lastDamageSource);
+            });
 
         }
-        super.kill();
     }
 
     /**

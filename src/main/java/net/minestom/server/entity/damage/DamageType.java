@@ -24,12 +24,14 @@ public class DamageType implements DataContainer {
 
     public static final DamageType VOID = new DamageType("attack.outOfWorld");
     public static final DamageType GRAVITY = new DamageType("attack.fall");
+    public static final DamageType UNKNOWN = new DamageType("attack.unknown");
     public static final DamageType ON_FIRE = new DamageType("attack.onFire") {
         @Override
         protected Sound getPlayerSound(@NotNull Player player) {
             return Sound.ENTITY_PLAYER_HURT_ON_FIRE;
         }
     };
+
     private final String identifier;
     private Data data;
 
