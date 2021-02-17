@@ -465,6 +465,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
                 Vector newVelocityOut = new Vector();
 
+                // TODO fix "non-vanilla" like gravity
                 // Gravity force
                 final double gravityY = !hasNoGravity() ? Math.min(
                         gravityDragPerTick + (gravityAcceleration * (double) gravityTickCount),

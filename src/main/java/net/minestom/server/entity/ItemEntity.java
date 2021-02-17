@@ -1,10 +1,13 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.event.entity.EntityItemMergeEvent;
+import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
+import net.minestom.server.network.packet.server.play.CollectItemPacket;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
@@ -34,6 +37,7 @@ public class ItemEntity extends ObjectEntity {
     private boolean pickable = true;
     private boolean mergeable = true;
     private float mergeRange = 1;
+    private float pickupRange = 1.5f;
 
     private long spawnTime;
     private long pickupDelay;
@@ -74,6 +78,7 @@ public class ItemEntity extends ObjectEntity {
 
     @Override
     public void update(long time) {
+        // TODO add pickup check cooldown?
         if (isMergeable() && isPickable() &&
                 (mergeUpdateOption == null || !CooldownUtils.hasCooldown(time, lastMergeCheck, mergeUpdateOption))) {
             this.lastMergeCheck = time;
@@ -117,6 +122,38 @@ public class ItemEntity extends ObjectEntity {
                         itemEntity.remove();
                     });
 
+                }
+                else if (entity instanceof LivingEntity) {
+
+                    // Do not pickup if not visible
+                    if (entity instanceof Player && !this.isViewer((Player) entity))
+                        continue;
+
+                    // Do not pick up if the entity can not pick up items
+                    final LivingEntity livingEntity = (LivingEntity) entity;
+                    if (!livingEntity.canPickupItem())
+                        continue;
+
+                    // Do not pick up the item if its too far away.
+                    if (getDistance(entity) > pickupRange)
+                        continue;
+
+                    // Do not pick up if the entity's "expanded bounding box" doesn't intersect with this item.
+                    final BoundingBox itemBoundingBox = this.getBoundingBox();
+                    if (livingEntity.getExpandedBoundingBox().intersect(itemBoundingBox)) {
+                        if (this.isRemoveScheduled())
+                            continue;
+                        final ItemStack item = this.getItemStack();
+                        PickupItemEvent pickupItemEvent = new PickupItemEvent(livingEntity, item);
+                        callCancellableEvent(PickupItemEvent.class, pickupItemEvent, () -> {
+                            CollectItemPacket collectItemPacket = new CollectItemPacket();
+                            collectItemPacket.collectedEntityId = this.getEntityId();
+                            collectItemPacket.collectorEntityId = getEntityId();
+                            collectItemPacket.pickupItemCount = item.getAmount();
+                            sendPacketToViewersAndSelf(collectItemPacket);
+                            this.remove();
+                        });
+                    }
                 }
             }
         }
@@ -208,6 +245,24 @@ public class ItemEntity extends ObjectEntity {
      */
     public void setMergeRange(float mergeRange) {
         this.mergeRange = mergeRange;
+    }
+
+    /**
+     * Gets the pickup range.
+     *
+     * @return the pickup range
+     */
+    public float getPickupRange() {
+        return pickupRange;
+    }
+
+    /**
+     * Changes the pickup range
+     *
+     * @param pickupRange the pickup range
+     */
+    public void setPickupRange(float pickupRange) {
+        this.pickupRange = pickupRange;
     }
 
     /**

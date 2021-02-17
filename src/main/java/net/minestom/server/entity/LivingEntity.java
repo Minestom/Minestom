@@ -37,8 +37,6 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
 
     // Item pickup
     protected boolean canPickupItem;
-    protected UpdateOption itemPickupCooldown = new UpdateOption(5, TimeUnit.TICK);
-    private long lastItemPickupCheckTime;
 
     protected boolean isDead;
 
@@ -89,42 +87,6 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
                 if (time - lastFireDamageTime > fireDamagePeriod) {
                     damage(DamageType.ON_FIRE, 1.0f);
                     lastFireDamageTime = time;
-                }
-            }
-        }
-
-        // Items picking
-        if (canPickupItem() && !CooldownUtils.hasCooldown(time, lastItemPickupCheckTime, itemPickupCooldown)) {
-            this.lastItemPickupCheckTime = time;
-
-            final Chunk chunk = getChunk(); // TODO check surrounding chunks
-            final Set<Entity> entities = instance.getChunkEntities(chunk);
-            for (Entity entity : entities) {
-                if (entity instanceof ItemEntity) {
-
-                    // Do not pickup if not visible
-                    if (this instanceof Player && !entity.isViewer((Player) this))
-                        continue;
-
-                    final ItemEntity itemEntity = (ItemEntity) entity;
-                    if (!itemEntity.isPickable())
-                        continue;
-
-                    final BoundingBox itemBoundingBox = itemEntity.getBoundingBox();
-                    if (expandedBoundingBox.intersect(itemBoundingBox)) {
-                        if (itemEntity.isRemoved() || itemEntity.isRemoveScheduled())
-                            continue;
-                        final ItemStack item = itemEntity.getItemStack();
-                        PickupItemEvent pickupItemEvent = new PickupItemEvent(this, item);
-                        callCancellableEvent(PickupItemEvent.class, pickupItemEvent, () -> {
-                            CollectItemPacket collectItemPacket = new CollectItemPacket();
-                            collectItemPacket.collectedEntityId = itemEntity.getEntityId();
-                            collectItemPacket.collectorEntityId = getEntityId();
-                            collectItemPacket.pickupItemCount = item.getAmount();
-                            sendPacketToViewersAndSelf(collectItemPacket);
-                            entity.remove();
-                        });
-                    }
                 }
             }
         }
@@ -412,6 +374,10 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     public void setBoundingBox(double x, double y, double z) {
         super.setBoundingBox(x, y, z);
         this.expandedBoundingBox = getBoundingBox().expand(1, 0.5f, 1);
+    }
+
+    public BoundingBox getExpandedBoundingBox() {
+        return this.expandedBoundingBox;
     }
 
     /**
