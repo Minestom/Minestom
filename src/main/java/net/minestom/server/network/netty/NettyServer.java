@@ -36,6 +36,8 @@ import java.util.concurrent.ScheduledExecutorService;
 public final class NettyServer {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(NettyServer.class);
+    private static final WriteBufferWaterMark SERVER_WRITE_MARK = new WriteBufferWaterMark(1 << 20,
+            1 << 21);
 
     private static final long DEFAULT_COMPRESSED_CHANNEL_WRITE_LIMIT = 600_000L;
     private static final long DEFAULT_COMPRESSED_CHANNEL_READ_LIMIT = 100_000L;
@@ -154,6 +156,7 @@ public final class NettyServer {
 
         bootstrap = new ServerBootstrap()
                 .group(boss, worker)
+                .childOption(ChannelOption.WRITE_BUFFER_WATER_MARK, SERVER_WRITE_MARK)
                 .channel(channel);
 
 

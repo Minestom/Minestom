@@ -112,7 +112,7 @@ public class NettyPlayerConnection extends PlayerConnection {
      */
     @Override
     public void sendPacket(@NotNull ServerPacket serverPacket) {
-        if (!isOnline())
+        if (!channel.isActive())
             return;
 
         if (shouldSendPacket(serverPacket)) {
@@ -152,7 +152,7 @@ public class NettyPlayerConnection extends PlayerConnection {
 
         if (MinecraftServer.shouldProcessNettyErrors()) {
             return channelFuture.addListener(future -> {
-                if (!future.isSuccess()) {
+                if (!future.isSuccess() && channel.isActive()) {
                     MinecraftServer.getExceptionManager().handleException(future.cause());
                 }
             });
@@ -167,7 +167,7 @@ public class NettyPlayerConnection extends PlayerConnection {
 
         if (MinecraftServer.shouldProcessNettyErrors()) {
             return channelFuture.addListener(future -> {
-                if (!future.isSuccess()) {
+                if (!future.isSuccess() && channel.isActive()) {
                     MinecraftServer.getExceptionManager().handleException(future.cause());
                 }
             });

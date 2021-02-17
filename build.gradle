@@ -106,10 +106,10 @@ dependencies {
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.2')
 
     // Netty
-    api 'io.netty:netty-handler:4.1.58.Final'
-    api 'io.netty:netty-codec:4.1.58.Final'
-    api 'io.netty:netty-transport-native-epoll:4.1.58.Final:linux-x86_64'
-    api 'io.netty:netty-transport-native-kqueue:4.1.58.Final:osx-x86_64'
+    api 'io.netty:netty-handler:4.1.59.Final'
+    api 'io.netty:netty-codec:4.1.59.Final'
+    api 'io.netty:netty-transport-native-epoll:4.1.59.Final:linux-x86_64'
+    api 'io.netty:netty-transport-native-kqueue:4.1.59.Final:osx-x86_64'
     api 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.3.Final:linux-x86_64'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
