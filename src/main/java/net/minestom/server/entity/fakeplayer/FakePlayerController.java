@@ -71,7 +71,7 @@ public class FakePlayerController {
     public void closeWindow() {
         Inventory openInventory = fakePlayer.getOpenInventory();
 
-        ClientCloseWindow closeWindow = new ClientCloseWindow();
+        ClientCloseWindowPacket closeWindow = new ClientCloseWindowPacket();
         closeWindow.windowId = openInventory == null ? 0 : openInventory.getWindowId();
         addToQueue(closeWindow);
     }

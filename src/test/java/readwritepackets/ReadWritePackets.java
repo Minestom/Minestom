@@ -68,7 +68,7 @@ public class ReadWritePackets {
                         BinaryReader reader = new BinaryReader(originalBytes);
                         packet.read(reader);
 
-                        Assertions.assertEquals(0, reader.getRemainingBytes().length, "Packet did not read all available data");
+                        Assertions.assertEquals(0, reader.readRemainingBytes().length, "Packet did not read all available data");
 
                         // re-write to ensure packet contents are the same
                         BinaryWriter secondWriter = new BinaryWriter();
