@@ -736,27 +736,22 @@ public class Player extends LivingEntity implements CommandSender {
      */
     private void spawnPlayer(@NotNull Instance instance, @Nullable Position spawnPosition,
                              boolean firstSpawn, boolean updateChunks) {
-        this.viewableEntities.forEach(entity -> entity.removeViewer(this));
+        // Clear previous instance elements
+        if (!firstSpawn) {
+            this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
+            this.viewableEntities.forEach(entity -> entity.removeViewer(this));
+        }
 
         super.setInstance(instance);
 
-        // Runnable used to send newly visible chunks to player once spawned in the instance
-        final Runnable refreshRunnable = () -> {
-            if (!updateChunks)
-                return;
-
-            // Remove all previous viewable chunks (from the previous instance)
-            this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
+        if (spawnPosition != null && !position.isSimilar(spawnPosition)) {
+            teleport(spawnPosition);
+        } else if (updateChunks) {
+            // Send newly visible chunks to player once spawned in the instance
             final Chunk chunk = getChunk();
             if (chunk != null) {
                 refreshVisibleChunks(chunk);
             }
-        };
-
-        if (spawnPosition != null && !position.isSimilar(spawnPosition)) {
-            teleport(spawnPosition, refreshRunnable);
-        } else {
-            refreshRunnable.run();
         }
 
         PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
