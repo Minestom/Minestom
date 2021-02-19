@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 /**
  * Class used to read from a byte array.
@@ -209,5 +211,20 @@ public class BinaryReader extends InputStream {
 
     public NBT readTag() throws IOException, NBTException {
         return nbtReader.read();
+    }
+
+    /**
+     * Records the current position, runs the given Runnable, and then returns the bytes between the position before
+     * running the runnable and the position after.
+     * Can be used to extract a subsection of this reader's buffer with complex data
+     * @param extractor the extraction code, simply call the reader's read* methods here.
+     */
+    public byte[] extractBytes(Runnable extractor) {
+        int startingPosition = getBuffer().readerIndex();
+        extractor.run();
+        int endingPosition = getBuffer().readerIndex();
+        byte[] output = new byte[endingPosition-startingPosition];
+        getBuffer().getBytes(startingPosition, output);
+        return output;
     }
 }

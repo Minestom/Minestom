@@ -6,6 +6,7 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,14 +17,16 @@ import java.util.function.UnaryOperator;
 
 public class BossBarPacket implements ComponentHoldingServerPacket {
 
-    public UUID uuid;
-    public Action action;
+    public UUID uuid = new UUID(0, 0);
+    public Action action = Action.ADD;
 
-    public Component title; // Only text
+    public Component title = Component.empty(); // Only text
     public float health;
-    public BossBar.Color color;
-    public BossBar.Overlay overlay;
+    public BossBar.Color color = BossBar.Color.BLUE;
+    public BossBar.Overlay overlay = BossBar.Overlay.PROGRESS;
     public byte flags;
+
+    public BossBarPacket() {}
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -53,6 +56,38 @@ public class BossBarPacket implements ComponentHoldingServerPacket {
                 break;
             case UPDATE_FLAGS:
                 writer.writeByte(flags);
+                break;
+        }
+    }
+
+    @Override
+    public void read(@NotNull BinaryReader reader) {
+        uuid = reader.readUuid();
+        action = Action.values()[reader.readVarInt()];
+
+        switch (action) {
+            case ADD:
+                title = reader.readComponent(Integer.MAX_VALUE);
+                health = reader.readFloat();
+                color = BossBar.Color.values()[reader.readVarInt()];
+                overlay = BossBar.Overlay.values()[reader.readVarInt()];
+                flags = reader.readByte();
+                break;
+            case REMOVE:
+
+                break;
+            case UPDATE_HEALTH:
+                health = reader.readFloat();
+                break;
+            case UPDATE_TITLE:
+                title = reader.readComponent(Integer.MAX_VALUE);
+                break;
+            case UPDATE_STYLE:
+                color = BossBar.Color.values()[reader.readVarInt()];
+                overlay = BossBar.Overlay.values()[reader.readVarInt()];
+                break;
+            case UPDATE_FLAGS:
+                flags = reader.readByte();
                 break;
         }
     }

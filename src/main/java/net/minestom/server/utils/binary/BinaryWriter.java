@@ -341,4 +341,13 @@ public class BinaryWriter extends OutputStream {
     public void writeUnsignedShort(int yourShort) {
         buffer.writeShort(yourShort & 0xFFFF);
     }
+
+    /**
+     * Returns a byte[] with the contents written via BinaryWriter
+     */
+    public static byte[] makeArray(Consumer<BinaryWriter> writing) {
+        BinaryWriter writer = new BinaryWriter();
+        writing.accept(writer);
+        return writer.toByteArray();
+    }
 }

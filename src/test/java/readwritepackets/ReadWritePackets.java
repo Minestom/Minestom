@@ -2,8 +2,10 @@ package readwritepackets;
 
 import com.google.common.reflect.ClassPath;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Readable;
@@ -58,7 +60,19 @@ public class ReadWritePackets {
                         BinaryWriter writer = new BinaryWriter();
                         Constructor<?> constructor = clazz.getDeclaredConstructor();
                         constructor.setAccessible(true);
-                        T packet = (T) constructor.newInstance();
+                        T packet;
+
+                        // exceptions
+                        if(clazz.getSimpleName().equals("EntityEquipmentPacket")) {
+                            // requires at least one slot and one item
+                            EntityEquipmentPacket p = new EntityEquipmentPacket();
+                            p.itemStacks = new ItemStack[] { ItemStack.getAirItem() };
+                            p.slots = new EntityEquipmentPacket.Slot[] { EntityEquipmentPacket.Slot.MAIN_HAND };
+                            packet = (T) p;
+                        }
+                        else {
+                            packet = (T) constructor.newInstance();
+                        }
 
                         // write packet
                         packet.write(writer);
