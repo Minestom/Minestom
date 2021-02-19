@@ -861,6 +861,48 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
+     * Plays a sound from the {@link Sound} enum.
+     *
+     * @param sound         the sound to play
+     * @param soundCategory the sound category
+     * @param position      the block position to use.
+     * @param volume        the volume of the sound (1 is 100%)
+     * @param pitch         the pitch of the sound, between 0.5 and 2.0
+     */
+    public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
+        SoundEffectPacket soundEffectPacket = new SoundEffectPacket();
+        soundEffectPacket.soundId = sound.getId();
+        soundEffectPacket.soundCategory = soundCategory;
+        soundEffectPacket.x = position.getX();
+        soundEffectPacket.y = position.getY();
+        soundEffectPacket.z = position.getZ();
+        soundEffectPacket.volume = volume;
+        soundEffectPacket.pitch = pitch;
+        playerConnection.sendPacket(soundEffectPacket);
+    }
+
+    /**
+     * Plays a sound from an identifier (represents a custom sound in a resource pack).
+     *
+     * @param identifier    the identifier of the sound to play
+     * @param soundCategory the sound category
+     * @param position      the block position to use.
+     * @param volume        the volume of the sound (1 is 100%)
+     * @param pitch         the pitch of the sound, between 0.5 and 2.0
+     */
+    public void playSound(@NotNull String identifier, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
+        NamedSoundEffectPacket namedSoundEffectPacket = new NamedSoundEffectPacket();
+        namedSoundEffectPacket.soundName = identifier;
+        namedSoundEffectPacket.soundCategory = soundCategory;
+        namedSoundEffectPacket.x = position.getX();
+        namedSoundEffectPacket.y = position.getY();
+        namedSoundEffectPacket.z = position.getZ();
+        namedSoundEffectPacket.volume = volume;
+        namedSoundEffectPacket.pitch = pitch;
+        playerConnection.sendPacket(namedSoundEffectPacket);
+    }
+
+    /**
      * Plays a sound from an identifier (represents a custom sound in a resource pack).
      *
      * @param identifier    the identifier of the sound to play
