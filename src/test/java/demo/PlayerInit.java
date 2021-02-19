@@ -5,10 +5,7 @@ import demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.chat.ColoredText;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.GameMode;
-import net.minestom.server.entity.ItemEntity;
-import net.minestom.server.entity.Player;
+import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -115,11 +112,16 @@ public class PlayerInit {
                 Vector velocity = source.getPosition().clone().getDirection().multiply(4);
                 velocity.setY(3.5f);
                 target.setVelocity(velocity);
-                target.damage(DamageType.fromEntity(source), 5);
-            } else {
-                Vector velocity = source.getPosition().clone().getDirection().multiply(3);
+                target.damage(DamageType.fromEntity(source), 1);
+            } else if (entity instanceof LivingEntity) {
+
+                LivingEntity livingEntity = (LivingEntity) entity;
+
+                Vector velocity = source.getPosition().clone().getDirection().multiply(5);
                 velocity.setY(3f);
                 entity.setVelocity(velocity);
+
+                livingEntity.damage(DamageType.fromEntity(source), 1f);
             }
 
             if (source instanceof Player) {

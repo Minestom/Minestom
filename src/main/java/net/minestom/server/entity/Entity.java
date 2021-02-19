@@ -74,6 +74,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     protected final Vector velocity = new Vector(); // Movement in block per second
 
     // Gravity
+    private static final float strength = 8000f * (MinecraftServer.TICK_MS / (float) MinecraftServer.MS_TO_SEC / 2);
     protected double gravityDragPerTick;
     protected double gravityAcceleration;
     protected double gravityTerminalVelocity;
@@ -107,7 +108,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     // list of scheduled tasks to be executed during the next entity tick
     protected final Queue<Consumer<Entity>> nextTick = Queues.newConcurrentLinkedQueue();
 
-    // Cache for generated UUID. Based on the Entity's ID. Specifically meant to please the client.
+    // The UUID of this entity.
     protected UUID uuid;
 
     // Tick related
@@ -461,9 +462,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                 final double newX = position.getX() + velocity.getX() / tps;
                 final double newY = position.getY() + velocity.getY() / tps;
                 final double newZ = position.getZ() + velocity.getZ() / tps;
-                Position newPosition = new Position(newX, newY, newZ);
+                final Position newPosition = new Position(newX, newY, newZ);
 
-                Vector newVelocityOut = new Vector();
+                final Vector newVelocityOut = new Vector();
 
                 // TODO fix "non-vanilla" like gravity
                 // Gravity force
@@ -1317,7 +1318,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      */
     @NotNull
     protected EntityVelocityPacket getVelocityPacket() {
-        final float strength = 8000f / MinecraftServer.TICK_PER_SECOND;
         EntityVelocityPacket velocityPacket = new EntityVelocityPacket();
         velocityPacket.entityId = getEntityId();
         velocityPacket.velocityX = (short) (velocity.getX() * strength);

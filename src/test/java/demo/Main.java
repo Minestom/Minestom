@@ -42,6 +42,7 @@ public class Main {
         commandManager.register(new PotionCommand());
         commandManager.register(new TitleCommand());
         commandManager.register(new BookCommand());
+        commandManager.register(new ZombieCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage("unknown command"));
 
