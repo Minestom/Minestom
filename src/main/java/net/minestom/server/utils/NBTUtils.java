@@ -160,10 +160,10 @@ public final class NBTUtils {
                     uuid = Utils.intArrayToUuid(uuidArray);
                 }
 
-                final double value = attributeNBT.getNumber("Amount").doubleValue();
+                final double value = attributeNBT.getAsDouble("Amount");
                 final String slot = attributeNBT.containsKey("Slot") ? attributeNBT.getString("Slot") : "MAINHAND";
                 final String attributeName = attributeNBT.getString("AttributeName");
-                final int operation = attributeNBT.getNumber("Operation").intValue();
+                final int operation = attributeNBT.getAsInt("Operation");
                 final String name = attributeNBT.getString("Name");
 
                 final Attribute attribute = Attribute.fromKey(attributeName);
