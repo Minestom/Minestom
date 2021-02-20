@@ -6,5 +6,22 @@ public enum AttributeSlot {
     FEET,
     LEGS,
     CHEST,
-    HEAD
+    HEAD;
+
+    public static AttributeSlot parse(String string) {
+        switch (string.toUpperCase()) {
+            case "OFFHAND":
+                return OFFHAND;
+            case "FEET":
+                return FEET;
+            case "LEGS":
+                return LEGS;
+            case "CHEST":
+                return CHEST;
+            case "HEAD":
+                return HEAD;
+            default:
+                return MAINHAND;
+        }
+    }
 }
