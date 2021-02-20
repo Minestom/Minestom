@@ -306,38 +306,7 @@ public final class CommandManager {
 
         // Brigadier-like commands
         for (Command command : dispatcher.getCommands()) {
-            // Check if player should see this command
-            final CommandCondition commandCondition = command.getCondition();
-            if (commandCondition != null) {
-                // Do not show command if return false
-                if (!commandCondition.canUse(player, null)) {
-                    continue;
-                }
-            }
-
-            // The main root of this command
-            IntList cmdChildren = new IntArrayList();
-            final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
-
-            // Create command for main name
-            final int mainNodeIndex = createCommand(player, nodes, cmdChildren,
-                    command.getName(), syntaxes, rootChildren);
-
-            // Use redirection to hook aliases with the command
-            final String[] aliases = command.getAliases();
-            if (aliases == null)
-                continue;
-
-            for (String alias : aliases) {
-                DeclareCommandsPacket.Node aliasNode = new DeclareCommandsPacket.Node();
-                aliasNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
-                        false, true, false);
-                aliasNode.name = alias;
-                aliasNode.redirectedNode = mainNodeIndex;
-
-                addCommandNameNode(aliasNode, rootChildren, nodes);
-            }
-
+            serializeCommand(player, command, nodes, rootChildren);
         }
 
         // Pair<CommandName,EnabledTracking>
@@ -394,6 +363,52 @@ public final class CommandManager {
         return declareCommandsPacket;
     }
 
+    private int serializeCommand(CommandSender sender, Command command,
+                                 List<DeclareCommandsPacket.Node> nodes,
+                                 IntList rootChildren) {
+        // Check if player should see this command
+        final CommandCondition commandCondition = command.getCondition();
+        if (commandCondition != null) {
+            // Do not show command if return false
+            if (!commandCondition.canUse(sender, null)) {
+                return -1;
+            }
+        }
+
+        // The main root of this command
+        IntList cmdChildren = new IntArrayList();
+        final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
+
+        // Create command for main name
+        final DeclareCommandsPacket.Node mainNode = createCommand(sender, nodes, cmdChildren,
+                command.getName(), syntaxes, rootChildren);
+        final int mainNodeIndex = nodes.indexOf(mainNode);
+
+        // Serialize all the subcommands
+        for (Command subcommand : command.getSubcommands()) {
+            final int subNodeIndex = serializeCommand(sender, subcommand, nodes, cmdChildren);
+            if (subNodeIndex != -1) {
+                mainNode.children = ArrayUtils.concatenateIntArrays(mainNode.children, new int[]{subNodeIndex});
+            }
+        }
+
+        // Use redirection to hook aliases with the command
+        final String[] aliases = command.getAliases();
+        if (aliases != null) {
+            for (String alias : aliases) {
+                DeclareCommandsPacket.Node aliasNode = new DeclareCommandsPacket.Node();
+                aliasNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
+                        false, true, false);
+                aliasNode.name = alias;
+                aliasNode.redirectedNode = mainNodeIndex;
+
+                addCommandNameNode(aliasNode, rootChildren, nodes);
+            }
+        }
+
+        return mainNodeIndex;
+    }
+
     /**
      * Adds the command's syntaxes to the nodes list.
      *
@@ -405,12 +420,12 @@ public final class CommandManager {
      * @param rootChildren the children of the main node (all commands name)
      * @return The index of the main node for alias redirection
      */
-    private int createCommand(@NotNull CommandSender sender,
-                              @NotNull List<DeclareCommandsPacket.Node> nodes,
-                              @NotNull IntList cmdChildren,
-                              @NotNull String name,
-                              @NotNull Collection<CommandSyntax> syntaxes,
-                              @NotNull IntList rootChildren) {
+    private DeclareCommandsPacket.Node createCommand(@NotNull CommandSender sender,
+                                                     @NotNull List<DeclareCommandsPacket.Node> nodes,
+                                                     @NotNull IntList cmdChildren,
+                                                     @NotNull String name,
+                                                     @NotNull Collection<CommandSyntax> syntaxes,
+                                                     @NotNull IntList rootChildren) {
 
         DeclareCommandsPacket.Node literalNode = createMainNode(name, syntaxes.isEmpty());
 
@@ -511,8 +526,7 @@ public final class CommandManager {
         }
 
         literalNode.children = ArrayUtils.toArray(cmdChildren);
-
-        return nodes.indexOf(literalNode);
+        return literalNode;
 
     }
 

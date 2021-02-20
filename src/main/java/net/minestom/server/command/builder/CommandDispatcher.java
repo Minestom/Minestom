@@ -110,7 +110,10 @@ public class CommandDispatcher {
         }
 
         // Removes the command's name + the space after
-        final String[] args = commandString.replaceFirst(Pattern.quote(commandName), "").trim().split(StringUtils.SPACE);
+        String[] args = commandString.replaceFirst(Pattern.quote(commandName), "").trim().split(StringUtils.SPACE);
+        if (args.length == 1 && args[0].length() == 0) {
+            args = new String[0];
+        }
 
         // Find the used syntax
         ParsedCommand parsedCommand = findParsedCommand(command, args);
@@ -133,13 +136,26 @@ public class CommandDispatcher {
 
     @Nullable
     private ParsedCommand findParsedCommand(@NotNull Command command, @NotNull String[] args) {
+        final boolean hasArgument = args.length > 0;
+
+        // Search for subcommand
+        if (hasArgument) {
+            final String firstArgument = args[0];
+            for (Command subcommand : command.getSubcommands()) {
+                if (Command.isValidName(subcommand, firstArgument)) {
+                    return findParsedCommand(subcommand, Arrays.copyOfRange(args, 1, args.length));
+                }
+            }
+        }
+
+
         ParsedCommand parsedCommand = new ParsedCommand();
         parsedCommand.command = command;
 
         // The default executor should be used if no argument is provided
         {
             final CommandExecutor defaultExecutor = command.getDefaultExecutor();
-            if (defaultExecutor != null && args[0].length() == 0) {
+            if (defaultExecutor != null && !hasArgument) {
                 parsedCommand.executor = defaultExecutor;
                 parsedCommand.arguments = new Arguments();
                 return parsedCommand;

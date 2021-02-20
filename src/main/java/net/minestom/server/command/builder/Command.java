@@ -45,6 +45,7 @@ public class Command {
     private CommandExecutor defaultExecutor;
     private CommandCondition condition;
 
+    private final List<Command> subcommands;
     private final List<CommandSyntax> syntaxes;
 
     /**
@@ -58,6 +59,7 @@ public class Command {
         this.name = name;
         this.aliases = aliases;
 
+        this.subcommands = new ArrayList<>();
         this.syntaxes = new ArrayList<>();
     }
 
@@ -106,6 +108,15 @@ public class Command {
      */
     public void setArgumentCallback(@NotNull ArgumentCallback callback, @NotNull Argument<?> argument) {
         argument.setCallback(callback);
+    }
+
+    public void addSubcommand(@NotNull Command command) {
+        this.subcommands.add(command);
+    }
+
+    @NotNull
+    public List<Command> getSubcommands() {
+        return Collections.unmodifiableList(subcommands);
     }
 
     /**
@@ -276,6 +287,19 @@ public class Command {
      * @param command   the raw UNCHECKED received command
      */
     public void globalListener(@NotNull CommandSender sender, @NotNull Arguments arguments, @NotNull String command) {
+    }
+
+    public static boolean isValidName(@NotNull Command command, @NotNull String name) {
+        if (command.getName().equals(name))
+            return true;
+        final String[] aliases = command.getAliases();
+        if (aliases == null)
+            return false;
+        for (String alias : aliases) {
+            if (alias.equals(name))
+                return true;
+        }
+        return false;
     }
 
 }
