@@ -163,7 +163,7 @@ public final class NBTUtils {
                 final double value = attributeNBT.getNumber("Amount").doubleValue();
                 final String slot = attributeNBT.containsKey("Slot") ? attributeNBT.getString("Slot") : "MAINHAND";
                 final String attributeName = attributeNBT.getString("AttributeName");
-                final int operation = attributeNBT.getInt("Operation").intValue();
+                final int operation = attributeNBT.getNumber("Operation").intValue();
                 final String name = attributeNBT.getString("Name");
 
                 final Attribute attribute = Attribute.fromKey(attributeName);
