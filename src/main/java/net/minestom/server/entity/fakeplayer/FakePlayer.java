@@ -1,8 +1,13 @@
 package net.minestom.server.entity.fakeplayer;
 
+import com.extollit.gaming.ai.path.HydrazinePathFinder;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.attribute.Attributes;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.pathfinding.NavigableEntity;
+import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.event.player.PlayerSpawnEvent;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.player.FakePlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
@@ -21,12 +26,14 @@ import java.util.function.Consumer;
  * You can create one using {@link #initPlayer(UUID, String, Consumer)}. Be aware that this really behave exactly like a player
  * and this is a feature not a bug, you will need to check at some place if the player is a fake one or not (instanceof) if you want to change it.
  */
-public class FakePlayer extends Player {
+public class FakePlayer extends Player implements NavigableEntity {
 
     private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 
     private final FakePlayerOption option;
     private final FakePlayerController fakePlayerController;
+
+    private final Navigator navigator = new Navigator(this);
 
     /**
      * Initializes a new {@link FakePlayer} with the given {@code uuid}, {@code username} and {@code option}'s.
@@ -36,8 +43,8 @@ public class FakePlayer extends Player {
      * @param option   Any option for the fake player.
      */
     protected FakePlayer(@NotNull UUID uuid, @NotNull String username,
-                       @NotNull FakePlayerOption option,
-                       @Nullable Consumer<FakePlayer> spawnCallback) {
+                         @NotNull FakePlayerOption option,
+                         @Nullable Consumer<FakePlayer> spawnCallback) {
         super(uuid, username, new FakePlayerConnection());
 
         this.option = option;
@@ -102,6 +109,21 @@ public class FakePlayer extends Player {
         return fakePlayerController;
     }
 
+    @Override
+    public void update(long time) {
+        super.update(time);
+
+        // Path finding
+        this.navigator.tick(getAttributeValue(Attributes.MOVEMENT_SPEED));
+    }
+
+    @Override
+    public void setInstance(@NotNull Instance instance) {
+        this.navigator.setPathFinder(new HydrazinePathFinder(navigator.getPathingEntity(), instance.getInstanceSpace()));
+
+        super.setInstance(instance);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -113,5 +135,11 @@ public class FakePlayer extends Player {
             MinecraftServer.getSchedulerManager().buildTask(() -> connection.sendPacket(getRemovePlayerToList())).delay(20, TimeUnit.TICK).schedule();
         }
 
+    }
+
+    @NotNull
+    @Override
+    public Navigator getNavigator() {
+        return navigator;
     }
 }
