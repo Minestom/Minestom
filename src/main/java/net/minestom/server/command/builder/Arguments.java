@@ -49,6 +49,10 @@ public final class Arguments {
         });
     }
 
+    public boolean has(@NotNull Argument<T> argument) {
+        return args.containsKey(argument.getId());
+    }
+    
     public boolean has(@NotNull String identifier) {
         return args.containsKey(identifier);
     }
