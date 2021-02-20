@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Manager used to register {@link Command} and {@link CommandProcessor}.
@@ -431,11 +432,8 @@ public final class CommandManager {
 
         final int literalNodeId = addCommandNameNode(literalNode, rootChildren, nodes);
 
-        // Contains the arguments of the already-parsed syntaxes
-        List<Argument<?>[]> syntaxesArguments = new ArrayList<>();
-        // Contains the nodes of an argument
-        Map<Argument<?>, List<DeclareCommandsPacket.Node[]>> storedArgumentsNodes = new HashMap<>();
-
+        // Sort syntaxes by argument count. Brigadier requires it.
+        syntaxes = syntaxes.stream().sorted(Comparator.comparingInt(o -> -o.getArguments().length)).collect(Collectors.toList());
         for (CommandSyntax syntax : syntaxes) {
             final CommandCondition commandCondition = syntax.getCommandCondition();
             if (commandCondition != null && !commandCondition.canUse(sender, null)) {
@@ -457,33 +455,12 @@ public final class CommandManager {
                 final Argument<?> argument = arguments[i];
                 final boolean isLast = i == arguments.length - 1;
 
-                // Search previously parsed syntaxes to find identical part in order to create a node between those
-                {
-                    // Find shared part
-                    boolean foundSharedPart = false;
-                    for (Argument<?>[] parsedArguments : syntaxesArguments) {
-                        final int index = i + 1;
-                        if (ArrayUtils.sameStart(arguments, parsedArguments, index)) {
-                            final Argument<?> sharedArgument = parsedArguments[i];
-                            final List<DeclareCommandsPacket.Node[]> storedNodes = storedArgumentsNodes.get(sharedArgument);
-
-                            argChildren = new IntArrayList();
-                            lastNodes = storedNodes.get(index);
-                            foundSharedPart = true;
-                        }
-                    }
-                    if (foundSharedPart) {
-                        continue;
-                    }
-                }
-
                 // Process the nodes for the argument
                 {
                     argument.processNodes(nodeMaker, isLast);
 
                     // Each node array represent a layer
                     final List<DeclareCommandsPacket.Node[]> nodesLayer = nodeMaker.getNodes();
-                    storedArgumentsNodes.put(argument, nodesLayer);
                     for (int nodeIndex = lastArgumentNodeIndex; nodeIndex < nodesLayer.size(); nodeIndex++) {
                         final NodeMaker.ConfiguredNodes configuredNodes = nodeMaker.getConfiguredNodes().get(nodeIndex);
                         final NodeMaker.Options options = configuredNodes.getOptions();
@@ -520,9 +497,6 @@ public final class CommandManager {
                     lastArgumentNodeIndex = nodesLayer.size();
                 }
             }
-
-            syntaxesArguments.add(arguments);
-
         }
 
         literalNode.children = ArrayUtils.toArray(cmdChildren);
