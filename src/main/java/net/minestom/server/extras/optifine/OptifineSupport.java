@@ -30,4 +30,7 @@ public final class OptifineSupport {
         biomeManager.addBiome(Biome.builder().name(NamespaceID.from("minecraft:swamp_hills")).build());
     }
 
+    public static boolean isEnabled() {
+        return enabled;
+    }
 }
