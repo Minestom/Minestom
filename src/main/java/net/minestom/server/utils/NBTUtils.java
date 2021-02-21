@@ -176,8 +176,11 @@ public final class NBTUtils {
                     break;
                 }
 
-                final AttributeSlot attributeSlot = AttributeSlot.parse(slot.toUpperCase());
+                AttributeSlot attributeSlot = AttributeSlot.valueOf(slot.toUpperCase());
                 // Wrong attribute slot, stop here
+
+                if (attributeSlot == null)
+                    attributeSlot = AttributeSlot.MAINHAND;
 
                 // Add attribute
                 final ItemAttribute itemAttribute =
