@@ -11,6 +11,7 @@ import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.entity.EntityFinder;
 import net.minestom.server.utils.math.IntRange;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -92,11 +93,11 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     public static EntityFinder staticParse(@NotNull String input,
                                            boolean onlySingleEntity, boolean onlyPlayers) throws ArgumentSyntaxException {
         // Check for raw player name or UUID
-        if (!input.contains(SELECTOR_PREFIX)) {
+        if (!input.contains(SELECTOR_PREFIX) && !input.contains(StringUtils.SPACE)) {
 
             // Check if the input is a valid UUID
             try {
-                UUID uuid = UUID.fromString(input);
+                final UUID uuid = UUID.fromString(input);
                 return new EntityFinder()
                         .setTargetSelector(EntityFinder.TargetSelector.ALL_ENTITIES)
                         .setUuid(uuid);
