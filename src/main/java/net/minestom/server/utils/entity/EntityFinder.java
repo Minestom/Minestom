@@ -1,5 +1,6 @@
 package net.minestom.server.utils.entity;
 
+import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
@@ -38,7 +39,8 @@ public class EntityFinder {
     // By traits
     private Integer limit;
     private final ToggleableMap<EntityType> entityTypes = new ToggleableMap<>();
-    private final ToggleableMap<String> names = new ToggleableMap<>();
+    private String name;
+    private UUID uuid;
 
     // Players specific
     private final ToggleableMap<GameMode> gameModes = new ToggleableMap<>();
@@ -79,8 +81,13 @@ public class EntityFinder {
         return this;
     }
 
-    public EntityFinder setName(@NotNull String name, @NotNull ToggleableType toggleableType) {
-        this.names.put(name, toggleableType.getValue());
+    public EntityFinder setName(@NotNull String name) {
+        this.name = name;
+        return this;
+    }
+
+    public EntityFinder setUuid(@NotNull UUID uuid) {
+        this.uuid = uuid;
         return this;
     }
 
@@ -154,7 +161,6 @@ public class EntityFinder {
 
         // GameMode
         if (!gameModes.isEmpty()) {
-            final GameMode requirement = gameModes.requirement;
             result = result.stream().filter(entity -> {
                 if (!(entity instanceof Player))
                     return false;
@@ -176,13 +182,19 @@ public class EntityFinder {
         }
 
         // Name
-        if (!names.isEmpty()) {
-            // TODO entity name
+        if (name != null) {
             result = result.stream().filter(entity -> {
                 if (!(entity instanceof Player))
                     return false;
-                return filterToggleableMap(entity, ((Player) entity).getUsername(), names);
+                return ((Player) entity).getUsername().equals(name);
             }).collect(Collectors.toList());
+        }
+
+        // UUID
+        if (uuid != null) {
+            result = result.stream()
+                    .filter(entity -> entity.getUuid().equals(uuid))
+                    .collect(Collectors.toList());
         }
 
 
@@ -298,10 +310,6 @@ public class EntityFinder {
     }
 
     private static class ToggleableMap<T> extends Object2BooleanOpenHashMap<T> {
-
-        @Nullable
-        private T requirement;
-
     }
 
     @NotNull
@@ -343,10 +351,16 @@ public class EntityFinder {
         if (!(entity instanceof Player))
             return false;
 
-        final T requirement = map.requirement;
-        // true if the entity type has not been mentioned or if is accepted
-        return (!map.containsKey(value) && requirement == null) ||
-                Objects.equals(requirement, value) ||
-                map.getBoolean(value);
+        for (Object2BooleanMap.Entry<T> entry : map.object2BooleanEntrySet()) {
+            final T key = entry.getKey();
+            final boolean include = entry.getBooleanValue();
+
+            final boolean equals = Objects.equals(value, key);
+            if (include && !equals || !include && equals) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

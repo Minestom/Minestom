@@ -1,10 +1,12 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
+import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.entity.EntityFinder;
@@ -13,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Represents the target selector argument.
@@ -88,11 +91,25 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     @NotNull
     public static EntityFinder staticParse(@NotNull String input,
                                            boolean onlySingleEntity, boolean onlyPlayers) throws ArgumentSyntaxException {
-        // Check for raw player name
-        if (input.length() <= 16 && !input.contains(SELECTOR_PREFIX)) {
-            return new EntityFinder()
-                    .setTargetSelector(EntityFinder.TargetSelector.ALL_PLAYERS)
-                    .setName(input, EntityFinder.ToggleableType.INCLUDE);
+        // Check for raw player name or UUID
+        if (!input.contains(SELECTOR_PREFIX)) {
+
+            // Check if the input is a valid UUID
+            try {
+                UUID uuid = UUID.fromString(input);
+                return new EntityFinder()
+                        .setTargetSelector(EntityFinder.TargetSelector.ALL_ENTITIES)
+                        .setUuid(uuid);
+            } catch (IllegalArgumentException ignored) {
+            }
+
+            // Check if the input is a valid player name
+            final Player player = MinecraftServer.getConnectionManager().getPlayer(input);
+            if (player != null) {
+                return new EntityFinder()
+                        .setTargetSelector(EntityFinder.TargetSelector.ALL_PLAYERS)
+                        .setName(input);
+            }
         }
 
         // The minimum size is always 2 (for the selector variable, ex: @p)
