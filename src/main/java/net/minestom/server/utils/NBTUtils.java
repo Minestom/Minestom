@@ -126,7 +126,7 @@ public final class NBTUtils {
 
     public static void loadDataIntoItem(@NotNull ItemStack item, @NotNull NBTCompound nbt) {
         if (nbt.containsKey("Damage")) item.setDamage(nbt.getInt("Damage"));
-        if (nbt.containsKey("Unbreakable")) item.setUnbreakable(nbt.getNumber("Unbreakable").byteValue() == 1);
+        if (nbt.containsKey("Unbreakable")) item.setUnbreakable(nbt.getAsByte("Unbreakable") == 1);
         if (nbt.containsKey("HideFlags")) item.setHideFlag(nbt.getInt("HideFlags"));
         if (nbt.containsKey("display")) {
             final NBTCompound display = nbt.getCompound("display");
