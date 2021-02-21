@@ -937,8 +937,6 @@ public class Player extends LivingEntity implements CommandSender {
      */
     public void sendHeaderFooter(@Nullable JsonMessage header, @Nullable JsonMessage footer) {
         PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket();
-        playerListHeaderAndFooterPacket.emptyHeader = header == null;
-        playerListHeaderAndFooterPacket.emptyFooter = footer == null;
         playerListHeaderAndFooterPacket.header = header;
         playerListHeaderAndFooterPacket.footer = footer;
 

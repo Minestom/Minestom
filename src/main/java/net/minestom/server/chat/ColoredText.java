@@ -178,7 +178,6 @@ public class ColoredText extends JsonMessage {
 
         String currentColor = "";
         SpecialComponentContainer specialComponentContainer = new SpecialComponentContainer();
-
         for (int i = 0; i < message.length(); i++) {
             // Last char or null
             final Character p = i == 0 ? null : message.charAt(i - 1);
@@ -202,7 +201,7 @@ public class ColoredText extends JsonMessage {
                     continue;
 
                 inFormat = false;
-                formatStart = 0;
+                //formatStart = 0;
                 formatEnd = i;
 
                 // Color component
@@ -270,13 +269,20 @@ public class ColoredText extends JsonMessage {
                     objects.add(getMessagePart(MessageType.KEYBIND, keybindCode, currentColor, specialComponentContainer));
                     continue;
                 }
+
+                // Was not a component, add the encapsulated string
+                final String current = message.substring(formatStart, i + 1);
+                objects.add(getMessagePart(MessageType.RAW, current, currentColor, specialComponentContainer));
             }
         }
 
         // Add the remaining of the message as a raw message when any
         if (formatEnd < message.length()) {
             final String lastRawMessage = message.substring(formatEnd + 1);
-            objects.add(getMessagePart(MessageType.RAW, lastRawMessage, currentColor, specialComponentContainer));
+            // if 'objects' is empty, an empty message is required for the client to understand the final JSON
+            if (!lastRawMessage.isEmpty() || objects.isEmpty()) {
+                objects.add(getMessagePart(MessageType.RAW, lastRawMessage, currentColor, specialComponentContainer));
+            }
         }
 
         return objects;

@@ -10,22 +10,18 @@ public class PlayerListHeaderAndFooterPacket implements ServerPacket {
 
     private static final String EMPTY_COMPONENT = "{\"translate\":\"\"}";
 
-    public boolean emptyHeader;
-    public boolean emptyFooter;
-
     public JsonMessage header; // Only text
     public JsonMessage footer; // Only text
 
-
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        if (emptyHeader) {
+        if (header == null) {
             writer.writeSizedString(EMPTY_COMPONENT);
         } else {
             writer.writeSizedString(header.toString());
         }
 
-        if (emptyFooter) {
+        if (footer == null) {
             writer.writeSizedString(EMPTY_COMPONENT);
         } else {
             writer.writeSizedString(footer.toString());
