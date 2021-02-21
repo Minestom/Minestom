@@ -3,7 +3,6 @@ package net.minestom.server.utils.entity;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
@@ -238,7 +237,7 @@ public class EntityFinder {
      */
     @Nullable
     public Player findFirstPlayer(@Nullable Instance instance, @Nullable Entity self) {
-        List<Entity> entities = find(instance, self);
+        final List<Entity> entities = find(instance, self);
         for (Entity entity : entities) {
             if (entity instanceof Player) {
                 return (Player) entity;
@@ -250,10 +249,29 @@ public class EntityFinder {
     @Nullable
     public Player findFirstPlayer(@NotNull CommandSender sender) {
         if (sender.isPlayer()) {
-            Player player = sender.asPlayer();
+            final Player player = sender.asPlayer();
             return findFirstPlayer(player.getInstance(), player);
         } else {
             return findFirstPlayer(null, null);
+        }
+    }
+
+    @Nullable
+    public Entity findFirstEntity(@Nullable Instance instance, @Nullable Entity self) {
+        final List<Entity> entities = find(instance, self);
+        for (Entity entity : entities) {
+            return entity;
+        }
+        return null;
+    }
+
+    @Nullable
+    public Entity findFirstEntity(@NotNull CommandSender sender) {
+        if (sender.isPlayer()) {
+            final Player player = sender.asPlayer();
+            return findFirstEntity(player.getInstance(), player);
+        } else {
+            return findFirstEntity(null, null);
         }
     }
 
