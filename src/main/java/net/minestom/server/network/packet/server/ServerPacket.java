@@ -17,6 +17,10 @@ public interface ServerPacket extends Writeable {
      */
     void write(@NotNull BinaryWriter writer);
 
+    default boolean isPlayerSpecific() {
+        return false;
+    }
+
     /**
      * Gets the id of this packet.
      * <p>

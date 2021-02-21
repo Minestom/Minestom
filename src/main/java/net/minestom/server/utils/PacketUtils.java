@@ -8,6 +8,7 @@ import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.netty.packet.FramedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.network.packet.server.ServerPlayerSpecificPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -56,11 +57,11 @@ public final class PacketUtils {
         if (players.isEmpty())
             return;
 
-        if (MinecraftServer.hasGroupedPacket()) {
+        if (MinecraftServer.hasGroupedPacket() && !packet.isPlayerSpecific()) {
             // Send grouped packet...
             final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
             if (success) {
-                final ByteBuf finalBuffer = createFramedPacket(packet, false);
+                final ByteBuf finalBuffer = createFramedPacket(packet, false, null);
                 final FramedPacket framedPacket = new FramedPacket(finalBuffer);
 
                 // Send packet to all players
@@ -111,9 +112,10 @@ public final class PacketUtils {
      *
      * @param buf    the recipient of {@code packet}
      * @param packet the packet to write into {@code buf}
+     * @param player the player to write packet for
      */
-    public static void writePacket(@NotNull ByteBuf buf, @NotNull ServerPacket packet) {
-        final ByteBuf packetBuffer = getPacketBuffer(packet);
+    public static void writePacket(@NotNull ByteBuf buf, @NotNull ServerPacket packet, @Nullable Player player) {
+        final ByteBuf packetBuffer = getPacketBuffer(packet, player);
 
         writePacket(buf, packetBuffer, packet.getId());
     }
@@ -122,11 +124,12 @@ public final class PacketUtils {
      * Writes a {@link ServerPacket} into a newly created {@link ByteBuf}.
      *
      * @param packet the packet to write
+     * @param player the player to write packet for
      * @return a {@link ByteBuf} containing {@code packet}
      */
     @NotNull
-    public static ByteBuf writePacket(@NotNull ServerPacket packet) {
-        final ByteBuf packetBuffer = getPacketBuffer(packet);
+    public static ByteBuf writePacket(@NotNull ServerPacket packet, @Nullable Player player) {
+        final ByteBuf packetBuffer = getPacketBuffer(packet, player);
 
         // Add 5 for the packet id and for the packet size
         final int size = packetBuffer.writerIndex() + 5 + 5;
@@ -154,10 +157,11 @@ public final class PacketUtils {
      * Gets the buffer representing the raw packet data.
      *
      * @param packet the packet to write
+     * @param player the player to write packet for
      * @return the {@link ByteBuf} containing the raw packet data
      */
     @NotNull
-    private static ByteBuf getPacketBuffer(@NotNull ServerPacket packet) {
+    private static ByteBuf getPacketBuffer(@NotNull ServerPacket packet, @Nullable Player player) {
         BinaryWriter writer;
         if (packet.getId() == ServerPacketIdentifier.CHUNK_DATA || packet.getId() == ServerPacketIdentifier.UPDATE_LIGHT) {
             writer = new BinaryWriter(BufUtils.getBuffer(true, 40_000));
@@ -166,7 +170,11 @@ public final class PacketUtils {
         }
 
         try {
-            packet.write(writer);
+            if (packet.isPlayerSpecific()) {
+                ((ServerPlayerSpecificPacket) packet).writeForSpecificPlayer(writer, player);
+            } else {
+                packet.write(writer);
+            }
         } catch (Exception e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
@@ -255,11 +263,12 @@ public final class PacketUtils {
      * Compression is applied if {@link MinecraftServer#getCompressionThreshold()} is greater than 0.
      *
      * @param serverPacket the server packet to write
+     * @param player the player to write packet for
      * @return the framed packet from the server one
      */
     @NotNull
-    public static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket, boolean directBuffer) {
-        ByteBuf packetBuf = writePacket(serverPacket);
+    public static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket, boolean directBuffer, @Nullable Player player) {
+        ByteBuf packetBuf = writePacket(serverPacket, player);
 
         if (MinecraftServer.getCompressionThreshold() > 0) {
             ByteBuf compressedBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();

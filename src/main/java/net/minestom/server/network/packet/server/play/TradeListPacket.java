@@ -1,12 +1,15 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.network.packet.server.ServerPlayerSpecificPacket;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class TradeListPacket implements ServerPacket {
+public class TradeListPacket implements ServerPlayerSpecificPacket {
 
     public int windowId;
     public Trade[] trades;
@@ -16,11 +19,11 @@ public class TradeListPacket implements ServerPacket {
     public boolean canRestock;
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
+    public void writeForSpecificPlayer(@NotNull BinaryWriter writer, @Nullable Player player) {
         writer.writeVarInt(windowId);
         writer.writeByte((byte) trades.length);
         for (Trade trade : trades) {
-            trade.write(writer);
+            trade.write(writer, player);
         }
         writer.writeVarInt(villagerLevel);
         writer.writeVarInt(experience);
@@ -47,14 +50,15 @@ public class TradeListPacket implements ServerPacket {
         public int demand;
 
 
-        private void write(BinaryWriter writer) {
+        private void write(BinaryWriter writer, Player player) {
             boolean hasSecondItem = inputItem2 != null;
 
-            writer.writeItemStack(inputItem1);
-            writer.writeItemStack(result);
+            writer.writeItemStack(inputItem1, player);
+            writer.writeItemStack(result, player);
             writer.writeBoolean(hasSecondItem);
-            if (hasSecondItem)
-                writer.writeItemStack(inputItem2);
+            if (hasSecondItem) {
+                writer.writeItemStack(inputItem2, player);
+            }
             writer.writeBoolean(tradeDisabled);
             writer.writeInt(tradeUsesNumber);
             writer.writeInt(maxTradeUsesNumber);

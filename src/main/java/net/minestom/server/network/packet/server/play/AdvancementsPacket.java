@@ -97,7 +97,7 @@ public class AdvancementsPacket implements ServerPacket {
         public void write(@NotNull BinaryWriter writer) {
             writer.writeSizedString(title.toString());
             writer.writeSizedString(description.toString());
-            writer.writeItemStack(icon);
+            writer.writeItemStack(icon); // TODO: serialize this packet depending on the player it's about to be sent to? Idk whether it's needed.
             writer.writeVarInt(frameType.ordinal());
             writer.writeInt(flags);
             if ((flags & 0x1) != 0) {

@@ -12,6 +12,7 @@ import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.listener.manager.ClientPacketConsumer;
 import net.minestom.server.listener.manager.ServerPacketConsumer;
+import net.minestom.server.network.netty.channel.ClientChannel;
 import net.minestom.server.network.packet.client.login.LoginStartPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.ChatMessagePacket;
@@ -438,6 +439,10 @@ public final class ConnectionManager {
                                  @NotNull UUID uuid, @NotNull String username,
                                  boolean register) {
         final Player player = getPlayerProvider().createPlayer(uuid, username, connection);
+
+        if (connection instanceof NettyPlayerConnection) {
+            ((NettyPlayerConnection) connection).getChannel().attr(ClientChannel.PLAYER_ATTRIBUTE_KEY).set(player);
+        }
 
         startPlayState(player, register);
 

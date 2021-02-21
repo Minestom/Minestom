@@ -2,12 +2,14 @@ package net.minestom.server.item;
 
 import net.minestom.server.chat.JsonMessage;
 
+import java.util.List;
+
 public class ItemDisplay {
 
     private JsonMessage displayName;
-    private JsonMessage[] lore;
+    private List<JsonMessage> lore;
 
-    public ItemDisplay(JsonMessage displayName, JsonMessage[] lore) {
+    public ItemDisplay(JsonMessage displayName, List<JsonMessage> lore) {
         this.displayName = displayName;
         this.lore = lore;
     }
@@ -26,7 +28,7 @@ public class ItemDisplay {
      *
      * @return the item lore
      */
-    public JsonMessage[] getLore() {
+    public List<JsonMessage> getLore() {
         return lore;
     }
 }

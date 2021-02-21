@@ -1,9 +1,11 @@
 package demo;
 
+import com.google.common.collect.ImmutableList;
 import demo.generator.ChunkGeneratorDemo;
 import demo.generator.NoiseTestGenerator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.benchmark.BenchmarkManager;
+import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.GameMode;
@@ -24,6 +26,7 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.item.ItemDisplay;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
@@ -216,7 +219,32 @@ public class PlayerInit {
                 item.setDisplayName(ColoredText.of("test"));
 
                 inventory.refreshSlot((short) PlayerInventoryUtils.CHESTPLATE_SLOT);
+            }
 
+            {
+                // ItemStack with ItemDisplay and with default Lore
+                ItemStack item = new ItemStack(Material.DIAMOND_LEGGINGS);
+                item.setLore(ImmutableList.of(ColoredText.of("This line should never appear.")));
+                item.setupCustomDisplay(p -> new ItemDisplay(
+                        null,
+                        ImmutableList.of(ColoredText.of(
+                                ChatColor.BRIGHT_GREEN,
+                                String.format("%s, this item is especially for you.", p.getUsername())
+                        ))
+                ));
+                inventory.setLeggings(item);
+            }
+            {
+                // ItemStack with ItemDisplay and without default lore
+                ItemStack item = new ItemStack(Material.DIAMOND_BOOTS);
+                item.setupCustomDisplay(p -> new ItemDisplay(
+                        null,
+                        ImmutableList.of(ColoredText.of(
+                                ChatColor.BRIGHT_GREEN,
+                                String.format("%s, this item is especially for you.", p.getUsername())
+                        ))
+                ));
+                inventory.setBoots(item);
             }
 
             //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 32));

@@ -26,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
+import java.util.function.Function;
 
 // TODO should we cache a ByteBuf of this item for faster packet write
 
@@ -64,6 +65,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
     private int hideFlag;
     private int customModelData;
 
+    private Function<Player, ItemDisplay> customDisplayGenerator;
     private StackingRule stackingRule;
     private Data data;
 
@@ -88,6 +90,10 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
 
     public ItemStack(@NotNull Material material, byte amount) {
         this(material, amount, (short) 0);
+    }
+
+    public ItemStack(@NotNull Material material) {
+        this(material, (byte) 1);
     }
 
     /**
@@ -546,6 +552,25 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      * @return true if the item has nbt tag, false otherwise
      */
     public boolean hasNbtTag() {
+        return hasNbtTag(null);
+    }
+
+    /**
+     * Gets if the item has any nbt tag when viewed by a specific player.
+     *
+     * @param forPlayer the player that is about to see this item.
+     * @return true if the item has nbt tag, false otherwise
+     */
+    public boolean hasNbtTag(@Nullable Player forPlayer) {
+        if (forPlayer != null) {
+            ItemDisplay display = getCustomDisplay(forPlayer);
+            if (display != null && (
+                    display.getDisplayName() != null ||
+                    display.getLore() != null && !display.getLore().isEmpty()
+            )) {
+                return true;
+            }
+        }
         return hasDisplayName() ||
                 hasLore() ||
                 damage != 0 ||
@@ -723,20 +748,41 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      */
     @NotNull
     public NBTCompound toNBT() {
+        return toNBT(null);
+    }
+
+    /**
+     * Creates a {@link NBTCompound} containing the data of this item.
+     * <p>
+     * WARNING: modifying the returned nbt will not affect the item.
+     *
+     * @param forPlayer player for whom NBT must be built.
+     * @return this item nbt
+     */
+    @NotNull
+    public NBTCompound toNBT(@Nullable Player forPlayer) {
         NBTCompound compound = new NBTCompound()
                 .setByte("Count", amount)
                 .setString("id", material.getName());
-        if (hasNbtTag()) {
+        if (hasNbtTag(forPlayer)) {
             NBTCompound additionalTag = new NBTCompound();
-            NBTUtils.saveDataIntoNBT(this, additionalTag);
+            NBTUtils.saveDataIntoNBT(this, additionalTag, forPlayer);
             compound.set("tag", additionalTag);
         }
         return compound;
     }
 
     /**
-     * WARNING: not implemented yet.
-     * <p>
+     * Setup custom {@link ItemDisplay} generator for this item.
+     * @see ItemStack#getCustomDisplay(Player)
+     *
+     * @param itemDisplayGenerator function that generates {@link ItemDisplay} for a specific {@link Player}.
+     */
+    public void setupCustomDisplay(Function<Player, ItemDisplay> itemDisplayGenerator) {
+        this.customDisplayGenerator = itemDisplayGenerator;
+    }
+
+    /**
      * This is be called each time an item is serialized to be send to a player,
      * can be used to customize the display of the item based on player data.
      *
@@ -745,7 +791,10 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      * null to use the normal item display name &amp; lore
      */
     public ItemDisplay getCustomDisplay(Player player) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if (this.customDisplayGenerator == null) {
+            return null;
+        }
+        return this.customDisplayGenerator.apply(player);
     }
 
     // Callback events

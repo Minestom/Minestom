@@ -134,17 +134,18 @@ public class NettyPlayerConnection extends PlayerConnection {
                         if (buffer == null) {
                             // Buffer not found, create and cache it
                             final long time = System.currentTimeMillis();
-                            buffer = PacketUtils.createFramedPacket(serverPacket, false);
+                            buffer = PacketUtils.createFramedPacket(serverPacket, false, getPlayer());
                             temporaryCache.cacheObject(identifier, buffer, time);
                         }
                         FramedPacket framedPacket = new FramedPacket(buffer);
                         write(framedPacket);
                     }
-
-                } else
+                } else {
                     write(serverPacket);
-            } else
+                }
+            } else {
                 writeAndFlush(serverPacket);
+            }
         }
     }
 

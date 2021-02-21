@@ -36,6 +36,12 @@ public class EntityEquipmentPacket implements ServerPacket {
             }
 
             writer.writeByte(slotEnum);
+            /**
+             * TODO: Do we need to serialize itemStack depending on the player it is about to be sent to?
+             * Currently it's being used only because of {@link net.minestom.server.item.ItemDisplay}, which can
+             * mutate item's display name and lore. But it seems that both of those values have none effect on
+             * entity equipment display.
+             */
             writer.writeItemStack(itemStack);
         }
     }

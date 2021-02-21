@@ -3,6 +3,8 @@ package net.minestom.server.network.netty.channel;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.util.Attribute;
+import io.netty.util.AttributeKey;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionManager;
@@ -17,8 +19,10 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ClientChannel.class);
 
+    public final static AttributeKey<Player> PLAYER_ATTRIBUTE_KEY = AttributeKey.newInstance("player");
+
     private final static ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
-    private final PacketProcessor packetProcessor;
+    private final        PacketProcessor   packetProcessor;
 
     public ClientChannel(@NotNull PacketProcessor packetProcessor) {
         this.packetProcessor = packetProcessor;
@@ -37,18 +41,15 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
             MinecraftServer.getExceptionManager().handleException(e);
         } finally {
             // Check remaining
-            final ByteBuf body = packet.getBody();
-            final int packetId = packet.getPacketId();
+            final ByteBuf body     = packet.getBody();
+            final int     packetId = packet.getPacketId();
 
             final int availableBytes = body.readableBytes();
 
             if (availableBytes > 0) {
                 final PlayerConnection playerConnection = packetProcessor.getPlayerConnection(ctx);
 
-                LOGGER.warn("WARNING: Packet 0x{} not fully read ({} bytes left), {}",
-                        Integer.toHexString(packetId),
-                        availableBytes,
-                        playerConnection);
+                LOGGER.warn("WARNING: Packet 0x{} not fully read ({} bytes left), {}", Integer.toHexString(packetId), availableBytes, playerConnection);
 
                 body.skipBytes(availableBytes);
             }

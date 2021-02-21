@@ -1,23 +1,26 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.network.packet.server.ServerPlayerSpecificPacket;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class DeclareRecipesPacket implements ServerPacket {
+public class DeclareRecipesPacket implements ServerPlayerSpecificPacket {
 
     public DeclaredRecipe[] recipes;
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
+    public void writeForSpecificPlayer(@NotNull BinaryWriter writer, @Nullable Player player) {
         Check.notNull(recipes, "Recipes cannot be null!");
 
         writer.writeVarInt(recipes.length);
         for (DeclaredRecipe recipe : recipes) {
-            recipe.write(writer);
+            recipe.write(writer, player);
         }
     }
 
@@ -35,7 +38,7 @@ public class DeclareRecipesPacket implements ServerPacket {
             this.recipeType = recipeType;
         }
 
-        public void write(@NotNull BinaryWriter writer) {
+        public void write(@NotNull BinaryWriter writer, @Nullable Player player) {
             writer.writeSizedString(recipeType);
             writer.writeSizedString(recipeId);
         }
@@ -59,14 +62,14 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
+        public void write(@NotNull BinaryWriter writer, @Nullable Player player) {
             // Write type & id
-            super.write(writer);
+            super.write(writer, player);
             // Write recipe specific stuff.
             writer.writeSizedString(group);
             writer.writeVarInt(ingredients.length);
             for (Ingredient ingredient : ingredients) {
-                ingredient.write(writer);
+                ingredient.write(writer, player);
             }
             writer.writeItemStack(result);
         }
@@ -96,17 +99,17 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
+        public void write(@NotNull BinaryWriter writer, @Nullable Player player) {
             // Write type & id
-            super.write(writer);
+            super.write(writer, player);
             // Write recipe specific stuff.
             writer.writeVarInt(width);
             writer.writeVarInt(height);
             writer.writeSizedString(group);
             for (Ingredient ingredient : ingredients) {
-                ingredient.write(writer);
+                ingredient.write(writer, player);
             }
-            writer.writeItemStack(result);
+            writer.writeItemStack(result, player);
         }
     }
 
@@ -134,13 +137,13 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
+        public void write(@NotNull BinaryWriter writer, @Nullable Player player) {
             // Write type & id
-            super.write(writer);
+            super.write(writer, player);
             // Write recipe specific stuff.
             writer.writeSizedString(group);
-            ingredient.write(writer);
-            writer.writeItemStack(result);
+            ingredient.write(writer, player);
+            writer.writeItemStack(result, player);
             writer.writeFloat(experience);
             writer.writeVarInt(cookingTime);
         }
@@ -170,13 +173,13 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
+        public void write(@NotNull BinaryWriter writer, @Nullable Player player) {
             // Write type & id
-            super.write(writer);
+            super.write(writer, player);
             // Write recipe specific stuff.
             writer.writeSizedString(group);
-            ingredient.write(writer);
-            writer.writeItemStack(result);
+            ingredient.write(writer, player);
+            writer.writeItemStack(result, player);
             writer.writeFloat(experience);
             writer.writeVarInt(cookingTime);
         }
@@ -206,13 +209,13 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
+        public void write(@NotNull BinaryWriter writer, @Nullable Player player) {
             // Write type & id
-            super.write(writer);
+            super.write(writer, player);
             // Write recipe specific stuff.
             writer.writeSizedString(group);
-            ingredient.write(writer);
-            writer.writeItemStack(result);
+            ingredient.write(writer, player);
+            writer.writeItemStack(result, player);
             writer.writeFloat(experience);
             writer.writeVarInt(cookingTime);
         }
@@ -242,13 +245,13 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
+        public void write(@NotNull BinaryWriter writer, @Nullable Player player) {
             // Write type & id
-            super.write(writer);
+            super.write(writer, player);
             // Write recipe specific stuff.
             writer.writeSizedString(group);
-            ingredient.write(writer);
-            writer.writeItemStack(result);
+            ingredient.write(writer, player);
+            writer.writeItemStack(result, player);
             writer.writeFloat(experience);
             writer.writeVarInt(cookingTime);
         }
@@ -272,13 +275,13 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
+        public void write(@NotNull BinaryWriter writer, @Nullable Player player) {
             // Write type & id
-            super.write(writer);
+            super.write(writer, player);
             // Write recipe specific stuff.
             writer.writeSizedString(group);
-            ingredient.write(writer);
-            writer.writeItemStack(result);
+            ingredient.write(writer, player);
+            writer.writeItemStack(result, player);
         }
     }
 
@@ -300,13 +303,13 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
 
         @Override
-        public void write(@NotNull BinaryWriter writer) {
+        public void write(@NotNull BinaryWriter writer, @Nullable Player player) {
             // Write type & id
-            super.write(writer);
+            super.write(writer, player);
             // Write recipe specific stuff.
-            base.write(writer);
-            addition.write(writer);
-            writer.writeItemStack(result);
+            base.write(writer, player);
+            addition.write(writer, player);
+            writer.writeItemStack(result, player);
         }
     }
 
@@ -315,10 +318,10 @@ public class DeclareRecipesPacket implements ServerPacket {
         // The count of each item should be 1
         public ItemStack[] items;
 
-        private void write(BinaryWriter writer) {
+        private void write(BinaryWriter writer, Player player) {
             writer.writeVarInt(items.length);
             for (ItemStack itemStack : items) {
-                writer.writeItemStack(itemStack);
+                writer.writeItemStack(itemStack, player);
             }
         }
 

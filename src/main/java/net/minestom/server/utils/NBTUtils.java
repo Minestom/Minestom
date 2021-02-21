@@ -8,8 +8,10 @@ import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataType;
+import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.item.Enchantment;
+import net.minestom.server.item.ItemDisplay;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.attribute.AttributeSlot;
@@ -62,12 +64,16 @@ public final class NBTUtils {
     }
 
     public static void saveAllItems(@NotNull NBTList<NBTCompound> list, @NotNull Inventory inventory) {
+        saveAllItems(list, inventory, null);
+    }
+
+    public static void saveAllItems(@NotNull NBTList<NBTCompound> list, @NotNull Inventory inventory, @Nullable Player forPlayer) {
         for (int i = 0; i < inventory.getSize(); i++) {
             final ItemStack stack = inventory.getItemStack(i);
             NBTCompound nbt = new NBTCompound();
 
             NBTCompound tag = new NBTCompound();
-            saveDataIntoNBT(stack, tag);
+            saveDataIntoNBT(stack, tag, forPlayer);
 
             nbt.set("tag", tag);
             nbt.setByte("Slot", (byte) i);
@@ -233,7 +239,7 @@ public final class NBTUtils {
         }
     }
 
-    public static void writeItemStack(BinaryWriter packet, ItemStack itemStack) {
+    public static void writeItemStack(BinaryWriter packet, ItemStack itemStack, @Nullable Player forPlayer) {
         if (itemStack == null || itemStack.isAir()) {
             packet.writeBoolean(false);
         } else {
@@ -241,7 +247,7 @@ public final class NBTUtils {
             packet.writeVarInt(itemStack.getMaterial().getId());
             packet.writeByte(itemStack.getAmount());
 
-            if (!itemStack.hasNbtTag()) {
+            if (!itemStack.hasNbtTag(forPlayer)) {
                 packet.writeByte((byte) NBTTypes.TAG_End); // No nbt
                 return;
             }
@@ -249,7 +255,7 @@ public final class NBTUtils {
             NBTCompound itemNBT = new NBTCompound();
 
             // Vanilla compound
-            saveDataIntoNBT(itemStack, itemNBT);
+            saveDataIntoNBT(itemStack, itemNBT, forPlayer);
 
             // End custom model data
             packet.writeNBT("", itemNBT);
@@ -257,6 +263,10 @@ public final class NBTUtils {
     }
 
     public static void saveDataIntoNBT(@NotNull ItemStack itemStack, @NotNull NBTCompound itemNBT) {
+        saveDataIntoNBT(itemStack, itemNBT, null);
+    }
+
+    public static void saveDataIntoNBT(@NotNull ItemStack itemStack, @NotNull NBTCompound itemNBT, @Nullable Player forPlayer) {
         // Unbreakable
         if (itemStack.isUnbreakable()) {
             itemNBT.setInt("Unbreakable", 1);
@@ -272,26 +282,34 @@ public final class NBTUtils {
         // End damage
 
         // Display
-        final boolean hasDisplayName = itemStack.hasDisplayName();
-        final boolean hasLore = itemStack.hasLore();
+        JsonMessage displayName = null;
+        List<JsonMessage> lore = null;
 
-        if (hasDisplayName || hasLore) {
-            NBTCompound displayNBT = new NBTCompound();
-            if (hasDisplayName) {
-                final String name = itemStack.getDisplayName().toString();
-                displayNBT.setString("Name", name);
+        if (forPlayer != null) {
+            ItemDisplay display = itemStack.getCustomDisplay(forPlayer);
+            if (display != null) {
+                displayName = display.getDisplayName();
+                lore = display.getLore();
             }
+        }
 
-            if (hasLore) {
-                final List<JsonMessage> lore = itemStack.getLore();
+        if (displayName == null && itemStack.hasDisplayName()) {
+            displayName = itemStack.getDisplayName();
+        }
+        if (lore == null && itemStack.hasLore()) {
+            lore = itemStack.getLore();
+        }
 
-                final NBTList<NBTString> loreNBT = new NBTList<>(NBTTypes.TAG_String);
-                for (JsonMessage line : lore) {
-                    loreNBT.add(new NBTString(line.toString()));
-                }
+        if (displayName != null || lore != null) {
+            NBTCompound displayNBT = new NBTCompound();
+            if (displayName != null) {
+                displayNBT.setString("Name", displayName.toString());
+            }
+            if (lore != null) {
+                NBTList<NBTString> loreNBT = new NBTList<>(NBTTypes.TAG_String);
+                lore.forEach(line -> loreNBT.add(new NBTString(line.toString())));
                 displayNBT.set("Lore", loreNBT);
             }
-
             itemNBT.set("display", displayNBT);
         }
         // End display

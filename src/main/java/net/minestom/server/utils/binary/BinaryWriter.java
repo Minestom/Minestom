@@ -3,12 +3,14 @@ package net.minestom.server.utils.binary;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 
@@ -241,7 +243,11 @@ public class BinaryWriter extends OutputStream {
     }
 
     public void writeItemStack(@NotNull ItemStack itemStack) {
-        NBTUtils.writeItemStack(this, itemStack);
+        writeItemStack(itemStack, null);
+    }
+
+    public void writeItemStack(@NotNull ItemStack itemStack, @Nullable Player forPlayer) {
+        NBTUtils.writeItemStack(this, itemStack, forPlayer);
     }
 
     public void writeNBT(@NotNull String name, @NotNull NBT tag) {
