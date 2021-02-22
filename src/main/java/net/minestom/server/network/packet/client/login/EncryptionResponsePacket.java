@@ -1,7 +1,7 @@
 package net.minestom.server.network.packet.client.login;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.type.array.ByteArrayData;
 import net.minestom.server.extras.MojangAuth;
@@ -14,11 +14,16 @@ import net.minestom.server.utils.binary.BinaryReader;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.SecretKey;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.net.URL;
 import java.util.Arrays;
+import java.util.UUID;
 
 public class EncryptionResponsePacket implements ClientPreplayPacket {
-
+    private static final Gson GSON = new Gson();
     private byte[] sharedSecret;
     private byte[] verifyToken;
 
@@ -38,7 +43,7 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
                     MinecraftServer.LOGGER.error("{} tried to login with an invalid nonce!", loginUsername);
                     return;
                 }
-                if (!loginUsername.isEmpty()) {
+                if (loginUsername != null && !loginUsername.isEmpty()) {
 
                     final byte[] digestedData = MojangCrypt.digestData("", MojangAuth.getKeyPair().getPublic(), getSecretKey());
 
@@ -49,14 +54,24 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
                         return;
                     }
 
-                    final String string3 = new BigInteger(digestedData).toString(16);
-                    final GameProfile gameProfile = MojangAuth.getSessionService().hasJoinedServer(new GameProfile(null, loginUsername), string3);
-                    nettyConnection.setEncryptionKey(getSecretKey());
+                    // Query Mojang's sessionserver.
+                    final String serverId = new BigInteger(digestedData).toString(16);
+                    InputStream gameProfileStream = new URL(
+                            "https://sessionserver.mojang.com/session/minecraft/hasJoined?"
+                                    + "username=" + loginUsername + "&"
+                            + "serverId=" + serverId
+                            // TODO: Add ability to add ip query tag. See: https://wiki.vg/Protocol_Encryption#Authentication
+                    ).openStream();
 
-                    MinecraftServer.LOGGER.info("UUID of player {} is {}", loginUsername, gameProfile.getId());
-                    CONNECTION_MANAGER.startPlayState(connection, gameProfile.getId(), gameProfile.getName(), true);
+                    final JsonObject gameProfile = GSON.fromJson(new InputStreamReader(gameProfileStream), JsonObject.class);
+                    nettyConnection.setEncryptionKey(getSecretKey());
+                    UUID profileUUID = UUID.fromString(gameProfile.get("id").getAsString().replaceFirst("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5"));
+                    String profileName = gameProfile.get("name").getAsString();
+
+                    MinecraftServer.LOGGER.info("UUID of player {} is {}", loginUsername, profileUUID);
+                    CONNECTION_MANAGER.startPlayState(connection, profileUUID, profileName, true);
                 }
-            } catch (AuthenticationUnavailableException e) {
+            } catch (IOException e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
         });
