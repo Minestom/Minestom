@@ -79,9 +79,4 @@ public class UpdateLightPacket implements ServerPacket, CacheablePacket {
     public UUID getIdentifier() {
         return identifier;
     }
-
-    @Override
-    public long getLastUpdateTime() {
-        return lastUpdate;
-    }
 }

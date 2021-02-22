@@ -23,7 +23,7 @@ import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
 import net.minestom.server.utils.validate.Check;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.similarity.JaroWinklerDistance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -95,7 +95,8 @@ public final class ConnectionManager {
         String lowercase = username.toLowerCase();
         double currentDistance = 0;
         for (Player player : getOnlinePlayers()) {
-            double distance = StringUtils.getJaroWinklerDistance(lowercase, player.getUsername().toLowerCase());
+            final JaroWinklerDistance jaroWinklerDistance = new JaroWinklerDistance();
+            final double distance = jaroWinklerDistance.apply(lowercase, player.getUsername().toLowerCase());
             if (distance > currentDistance) {
                 currentDistance = distance;
                 exact = player;
