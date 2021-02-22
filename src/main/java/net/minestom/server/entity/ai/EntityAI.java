@@ -1,102 +1,51 @@
 package net.minestom.server.entity.ai;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
+import java.util.Collection;
 import java.util.List;
 
 /**
  * Represents an entity which can contain
  * {@link GoalSelector goal selectors} and {@link TargetSelector target selectors}.
+ * <p>
+ * Both types of selectors are being stored in {@link EntityAIGroup AI groups}.
+ * For every group there could be only a single {@link GoalSelector goal selector} running at a time,
+ * but multiple groups are independent of each other, so each of them can have own goal selector running.
  */
 public interface EntityAI {
 
     /**
-     * Gets the goal selectors of this entity.
+     * Gets the AI groups of this entity.
      *
-     * @return a modifiable list containing the entity goal selectors
+     * @return a modifiable collection of AI groups of this entity.
      */
-    @NotNull
-    List<GoalSelector> getGoalSelectors();
+    Collection<EntityAIGroup> getAIGroups();
 
     /**
-     * Gets the target selectors of this entity.
+     * Adds new AI group to this entity.
      *
-     * @return a modifiable list containing the entity target selectors
+     * @param group a group to be added.
      */
-    @NotNull
-    List<TargetSelector> getTargetSelectors();
-
-    /**
-     * Gets the current entity goal selector.
-     *
-     * @return the current entity goal selector, null if not any
-     */
-    @Nullable
-    GoalSelector getCurrentGoalSelector();
-
-    /**
-     * Changes the entity current goal selector.
-     * <p>
-     * Mostly unsafe since the current goal selector should normally
-     * be chosen during the entity tick method.
-     *
-     * @param goalSelector the new entity goal selector, null to disable it
-     */
-    void setCurrentGoalSelector(@Nullable GoalSelector goalSelector);
-
-    /**
-     * Performs an AI tick, it includes finding a new {@link GoalSelector}
-     * or tick the current one,
-     *
-     * @param time the tick time in milliseconds
-     */
-    default void aiTick(long time) {
-        GoalSelector currentGoalSelector = getCurrentGoalSelector();
-        // true if the goal selector changed this tick
-        boolean newGoalSelector = false;
-
-        if (currentGoalSelector == null) {
-            // No goal selector, get a new one
-            currentGoalSelector = findGoal();
-            newGoalSelector = currentGoalSelector != null;
-        } else {
-            final boolean stop = currentGoalSelector.shouldEnd();
-            if (stop) {
-                // The current goal selector stopped, find a new one
-                currentGoalSelector.end();
-                currentGoalSelector = findGoal();
-                newGoalSelector = currentGoalSelector != null;
-            }
-        }
-
-        // Start the new goal selector
-        if (newGoalSelector) {
-            setCurrentGoalSelector(currentGoalSelector);
-            currentGoalSelector.start();
-        }
-
-        // Execute tick for the current goal selector
-        if (currentGoalSelector != null) {
-            currentGoalSelector.tick(time);
-        }
+    default void addAIGroup(EntityAIGroup group) {
+        getAIGroups().add(group);
     }
 
     /**
-     * Finds a new {@link GoalSelector} for the entity.
-     * <p>
-     * Uses {@link GoalSelector#shouldStart()} and return the goal selector if true.
+     * Adds new AI group to this entity, consisting of the given
+     * {@link GoalSelector goal selectors} and {@link TargetSelector target selectors}.
+     * Their order is also a priority: the lower element index is, the higher priority is.
      *
-     * @return the goal selector found, null if not any
+     * @param goalSelectors   goal selectors of the group.
+     * @param targetSelectors target selectors of the group.
      */
-    private GoalSelector findGoal() {
-        for (GoalSelector goalSelector : getGoalSelectors()) {
-            final boolean start = goalSelector.shouldStart();
-            if (start) {
-                return goalSelector;
-            }
-        }
-        return null;
+    default void addAIGroup(List<GoalSelector> goalSelectors, List<TargetSelector> targetSelectors) {
+        EntityAIGroup group = new EntityAIGroup();
+        group.getGoalSelectors().addAll(goalSelectors);
+        group.getTargetSelectors().addAll(targetSelectors);
+        addAIGroup(group);
+    }
+
+    default void aiTick(long time) {
+        getAIGroups().forEach(group -> group.tick(time));
     }
 
 }

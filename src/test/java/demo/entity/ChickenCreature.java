@@ -1,5 +1,6 @@
 package demo.entity;
 
+import com.google.common.collect.ImmutableList;
 import net.minestom.server.attribute.Attributes;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.ai.goal.RandomStrollGoal;
@@ -14,28 +15,17 @@ public class ChickenCreature extends EntityChicken {
     public ChickenCreature(Position defaultPosition) {
         super(defaultPosition);
 
-        //goalSelectors.add(new DoNothingGoal(this, 500, 0.1f));
-        //goalSelectors.add(new MeleeAttackGoal(this, 500, TimeUnit.MILLISECOND));
-        goalSelectors.add(new RandomStrollGoal(this, 2));
-        /*goalSelectors.add(new EatBlockGoal(this,
-                new HashMap<>() {
-                    {
-                        put(Block.GRASS.getBlockId(), Block.AIR.getBlockId());
-                    }
-                },
-                new HashMap<>() {
-                    {
-                        put(Block.GRASS_BLOCK.getBlockId(), Block.DIRT.getBlockId());
-                    }
-                },
-                100))
-        ;
-        //goalSelectors.add(new FollowTargetGoal(this));*/
-
-
-        //targetSelectors.add(new LastEntityDamagerTarget(this, 15));
-        //targetSelectors.add(new ClosestEntityTarget(this, 15, LivingEntity.class));
-
+        addAIGroup(
+                ImmutableList.of(
+//                        new DoNothingGoal(this, 500, 0.1f),
+//                        new MeleeAttackGoal(this, 500, 2, TimeUnit.MILLISECOND),
+                        new RandomStrollGoal(this, 2)
+                ),
+                ImmutableList.of(
+//                        new LastEntityDamagerTarget(this, 15),
+//                        new ClosestEntityTarget(this, 15, LivingEntity.class)
+                )
+        );
 
         getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1f);
 

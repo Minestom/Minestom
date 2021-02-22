@@ -5,8 +5,11 @@ import net.minestom.server.entity.EntityCreature;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.WeakReference;
+
 public abstract class GoalSelector {
 
+    private WeakReference<EntityAIGroup> aiGroupWeakReference;
     protected EntityCreature entityCreature;
 
     public GoalSelector(@NotNull EntityCreature entityCreature) {
@@ -51,7 +54,11 @@ public abstract class GoalSelector {
      */
     @Nullable
     public Entity findTarget() {
-        for (TargetSelector targetSelector : entityCreature.getTargetSelectors()) {
+        EntityAIGroup aiGroup = getAIGroup();
+        if (aiGroup == null) {
+            return null;
+        }
+        for (TargetSelector targetSelector : aiGroup.getTargetSelectors()) {
             final Entity entity = targetSelector.findTarget();
             if (entity != null) {
                 return entity;
@@ -74,12 +81,22 @@ public abstract class GoalSelector {
      * Changes the entity affected by the goal selector.
      * <p>
      * WARNING: this does not add the goal selector to {@code entityCreature},
-     * this only change the internal entity field. Be sure to remove the goal from
-     * the previous entity and add it to the new one using {@link EntityCreature#getGoalSelectors()}.
+     * this only change the internal entity AI group's field. Be sure to remove the goal from
+     * the previous entity AI group and add it to the new one using {@link EntityAIGroup#getGoalSelectors()}.
      *
      * @param entityCreature the new affected entity
      */
     public void setEntityCreature(@NotNull EntityCreature entityCreature) {
         this.entityCreature = entityCreature;
     }
+
+    void setAIGroup(@NotNull EntityAIGroup group) {
+        this.aiGroupWeakReference = new WeakReference<>(group);
+    }
+
+    @Nullable
+    protected EntityAIGroup getAIGroup() {
+        return this.aiGroupWeakReference.get();
+    }
+
 }
