@@ -16,13 +16,13 @@ import java.util.function.BiFunction;
 
 public class RangedAttackGoal extends GoalSelector {
 
-    private       long     lastShot;
-    private final int      delay;
+    private long lastShot;
+    private final int delay;
     private final TimeUnit timeUnit;
-    private final int      attackRangeSquared;
-    private final int      desirableRangeSquared;
-    private final boolean  comeClose;
-    private final double   spread;
+    private final int attackRangeSquared;
+    private final int desirableRangeSquared;
+    private final boolean comeClose;
+    private final double spread;
 
     private BiFunction<Entity, Position, Projectile> projectileGenerator;
 
@@ -71,8 +71,8 @@ public class RangedAttackGoal extends GoalSelector {
             this.stop = true;
             return;
         }
-        double  distanceSquared = this.entityCreature.getDistanceSquared(target);
-        boolean comeClose       = false;
+        double distanceSquared = this.entityCreature.getDistanceSquared(target);
+        boolean comeClose = false;
         if (distanceSquared <= this.attackRangeSquared) {
             if (!CooldownUtils.hasCooldown(time, this.lastShot, this.timeUnit, this.delay)) {
                 if (this.entityCreature.hasLineOfSight(target)) {
@@ -91,8 +91,8 @@ public class RangedAttackGoal extends GoalSelector {
                 }
             }
         }
-        Navigator navigator    = this.entityCreature.getNavigator();
-        Position  pathPosition = navigator.getPathPosition();
+        Navigator navigator = this.entityCreature.getNavigator();
+        Position pathPosition = navigator.getPathPosition();
         if (!comeClose && distanceSquared <= this.desirableRangeSquared) {
             if (pathPosition != null) {
                 navigator.setPathTo(null);

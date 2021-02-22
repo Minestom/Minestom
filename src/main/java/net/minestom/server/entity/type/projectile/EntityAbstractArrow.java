@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class EntityAbstractArrow extends ObjectEntity implements Projectile {
 
     private final static byte CRITICAL_BIT = 0x01;
-    private final static byte NO_CLIP_BIT  = 0x02;
+    private final static byte NO_CLIP_BIT = 0x02;
 
     private final Entity shooter;
 
@@ -53,21 +53,33 @@ public class EntityAbstractArrow extends ObjectEntity implements Projectile {
         }
     }
 
+    /**
+     * Checks whether an arrow is stuck in block / hit an entity.
+     *
+     * @param pos    position right before current tick.
+     * @param posNow position after current tick.
+     * @return if an arrow is stuck in block / hit an entity.
+     */
     @SuppressWarnings("ConstantConditions")
     private boolean isStuck(Position pos, Position posNow) {
         if (pos.isSimilar(posNow)) {
             return true;
         }
 
-        Instance           instance = getInstance();
-        Chunk              chunk    = null;
+        Instance instance = getInstance();
+        Chunk chunk = null;
         Collection<Entity> entities = null;
 
-        double   part      = .25D; // half of the bounding box
-        Vector   dir       = posNow.toVector().subtract(pos.toVector());
-        int      parts     = (int) Math.ceil(dir.length() / part);
+        /*
+          What we're about to do is to discretely jump from the previous position to the new one.
+          For each point we will be checking blocks and entities we're in.
+         */
+        double part = .25D; // half of the bounding box
+        Vector dir = posNow.toVector().subtract(pos.toVector());
+        int parts = (int) Math.ceil(dir.length() / part);
         Position direction = dir.normalize().multiply(part).toPosition();
         for (int i = 0; i < parts; ++i) {
+            // If we're at last part, we can't just add another direction-vector, because we can exceed end point.
             if (i == parts - 1) {
                 pos.setX(posNow.getX());
                 pos.setY(posNow.getY());
@@ -75,8 +87,8 @@ public class EntityAbstractArrow extends ObjectEntity implements Projectile {
             } else {
                 pos.add(direction);
             }
-            BlockPosition bpos  = pos.toBlockPosition();
-            Block         block = getInstance().getBlock(bpos.getX(), bpos.getY() - 1, bpos.getZ());
+            BlockPosition bpos = pos.toBlockPosition();
+            Block block = instance.getBlock(bpos.getX(), bpos.getY() - 1, bpos.getZ());
             if (!block.isAir() && !block.isLiquid()) {
                 teleport(pos);
                 return true;
@@ -90,6 +102,10 @@ public class EntityAbstractArrow extends ObjectEntity implements Projectile {
                         .filter(entity -> entity instanceof LivingEntity)
                         .collect(Collectors.toSet());
             }
+            /*
+              We won't check collisions with entities for first ticks of arrow's life, because it spawns in the
+              shooter and will immediately damage him.
+             */
             if (getAliveTicks() < 3) {
                 continue;
             }
@@ -140,7 +156,7 @@ public class EntityAbstractArrow extends ObjectEntity implements Projectile {
     }
 
     private void modifyMask(byte bit, boolean value) {
-        byte    mask      = getMask();
+        byte mask = getMask();
         boolean isPresent = (mask & bit) == bit;
         if (isPresent == value) {
             return;
