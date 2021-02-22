@@ -1,5 +1,7 @@
 package net.minestom.server.command.builder;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
@@ -12,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 /**
@@ -21,6 +24,10 @@ public class CommandDispatcher {
 
     private final Map<String, Command> commandMap = new HashMap<>();
     private final Set<Command> commands = new HashSet<>();
+
+    private final Cache<String, CommandResult> cache = CacheBuilder.newBuilder()
+            .expireAfterWrite(30, TimeUnit.SECONDS)
+            .build();
 
     /**
      * Registers a command,
@@ -99,6 +106,14 @@ public class CommandDispatcher {
     public CommandResult parse(@NotNull String commandString) {
         commandString = commandString.trim();
 
+        // Verify if the result is cached
+        {
+            final CommandResult cachedResult = cache.getIfPresent(commandString);
+            if (cachedResult != null) {
+                return cachedResult;
+            }
+        }
+
         // Split space
         final String[] parts = commandString.split(StringUtils.SPACE);
         final String commandName = parts[0];
@@ -119,6 +134,12 @@ public class CommandDispatcher {
         result.input = commandString;
         // Find the used syntax and fill CommandResult#type and CommandResult#parsedCommand
         findParsedCommand(command, args, result);
+
+        // Cache result
+        {
+            this.cache.put(commandString, result);
+        }
+
         return result;
     }
 
