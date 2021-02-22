@@ -1,6 +1,5 @@
 package net.minestom.server.item.metadata;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.utils.Utils;
@@ -118,7 +117,6 @@ public class PlayerHeadMeta extends ItemMeta {
             }
 
         }
-
     }
 
     /**
@@ -135,7 +133,9 @@ public class PlayerHeadMeta extends ItemMeta {
         }
 
         NBTList<NBTCompound> textures = new NBTList<>(NBTTypes.TAG_Compound);
-        textures.add(new NBTCompound().setString("Value", this.playerSkin.getTextures()).setString("Signature", this.playerSkin.getSignature()));
+        String value = this.playerSkin.getTextures() == null ? "" : this.playerSkin.getTextures();
+        String signature = this.playerSkin.getSignature() == null ? "" : this.playerSkin.getSignature();
+        textures.add(new NBTCompound().setString("Value", value).setString("Signature", signature));
         skullOwnerCompound.set("Properties", new NBTCompound().set("textures", textures));
 
         compound.set("SkullOwner", skullOwnerCompound);

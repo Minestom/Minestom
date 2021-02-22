@@ -126,7 +126,7 @@ public final class NBTUtils {
 
     public static void loadDataIntoItem(@NotNull ItemStack item, @NotNull NBTCompound nbt) {
         if (nbt.containsKey("Damage")) item.setDamage(nbt.getInt("Damage"));
-        if (nbt.containsKey("Unbreakable")) item.setUnbreakable(nbt.getInt("Unbreakable") == 1);
+        if (nbt.containsKey("Unbreakable")) item.setUnbreakable(nbt.getAsByte("Unbreakable") == 1);
         if (nbt.containsKey("HideFlags")) item.setHideFlag(nbt.getInt("HideFlags"));
         if (nbt.containsKey("display")) {
             final NBTCompound display = nbt.getCompound("display");
@@ -159,10 +159,11 @@ public final class NBTUtils {
                     final int[] uuidArray = attributeNBT.getIntArray("UUID");
                     uuid = Utils.intArrayToUuid(uuidArray);
                 }
-                final double value = attributeNBT.getDouble("Amount");
-                final String slot = attributeNBT.getString("Slot");
+
+                final double value = attributeNBT.getAsDouble("Amount");
+                final String slot = attributeNBT.containsKey("Slot") ? attributeNBT.getString("Slot") : "MAINHAND";
                 final String attributeName = attributeNBT.getString("AttributeName");
-                final int operation = attributeNBT.getInt("Operation");
+                final int operation = attributeNBT.getAsInt("Operation");
                 final String name = attributeNBT.getString("Name");
 
                 final Attribute attribute = Attribute.fromKey(attributeName);
@@ -174,11 +175,12 @@ public final class NBTUtils {
                 if (attributeOperation == null) {
                     break;
                 }
-                final AttributeSlot attributeSlot = AttributeSlot.valueOf(slot.toUpperCase());
+
+                AttributeSlot attributeSlot = AttributeSlot.valueOf(slot.toUpperCase());
                 // Wrong attribute slot, stop here
-                if (attributeSlot == null) {
-                    break;
-                }
+
+                if (attributeSlot == null)
+                    attributeSlot = AttributeSlot.MAINHAND;
 
                 // Add attribute
                 final ItemAttribute itemAttribute =
