@@ -90,6 +90,9 @@ public class EntityAbstractArrow extends ObjectEntity implements Projectile {
                         .filter(entity -> entity instanceof LivingEntity)
                         .collect(Collectors.toSet());
             }
+            if (getAliveTicks() < 3) {
+                continue;
+            }
             Optional<Entity> victimOptional = entities.stream()
                     .filter(entity -> entity.getBoundingBox().intersect(pos.getX(), pos.getY(), pos.getZ()))
                     .findAny();
