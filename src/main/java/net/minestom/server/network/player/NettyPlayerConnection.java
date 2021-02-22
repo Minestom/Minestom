@@ -121,21 +121,20 @@ public class NettyPlayerConnection extends PlayerConnection {
             if (getPlayer() != null) {
                 // Flush happen during #update()
                 if (serverPacket instanceof CacheablePacket && MinecraftServer.hasPacketCaching()) {
-                    CacheablePacket cacheablePacket = (CacheablePacket) serverPacket;
+                    final CacheablePacket cacheablePacket = (CacheablePacket) serverPacket;
                     final UUID identifier = cacheablePacket.getIdentifier();
 
                     if (identifier == null) {
-                        // This packet explicitly said to do not retrieve the cache
+                        // This packet explicitly asks to do not retrieve the cache
                         write(serverPacket);
                     } else {
                         // Try to retrieve the cached buffer
                         TemporaryCache<ByteBuf> temporaryCache = cacheablePacket.getCache();
-                        ByteBuf buffer = temporaryCache.retrieve(identifier, cacheablePacket.getLastUpdateTime());
+                        ByteBuf buffer = temporaryCache.retrieve(identifier);
                         if (buffer == null) {
                             // Buffer not found, create and cache it
-                            final long time = System.currentTimeMillis();
                             buffer = PacketUtils.createFramedPacket(serverPacket, false);
-                            temporaryCache.cacheObject(identifier, buffer, time);
+                            temporaryCache.cache(identifier, buffer);
                         }
                         FramedPacket framedPacket = new FramedPacket(buffer);
                         write(framedPacket);

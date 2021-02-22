@@ -10,8 +10,7 @@ import java.util.UUID;
  * Implemented by {@link ServerPacket server packets} which can be temporary cached in memory to be re-sent later
  * without having to go through all the writing and compression.
  * <p>
- * {@link #getIdentifier()} is to differenciate this packet from the others of the same type,
- * and {@link #getLastUpdateTime()} to know if one packet is newer than the previous one.
+ * {@link #getIdentifier()} is to differentiate this packet from the others of the same type.
  */
 public interface CacheablePacket {
 
@@ -34,12 +33,5 @@ public interface CacheablePacket {
      */
     @Nullable
     UUID getIdentifier();
-
-    /**
-     * Gets the last time this packet changed.
-     *
-     * @return the last packet update time in milliseconds
-     */
-    long getLastUpdateTime();
 
 }
