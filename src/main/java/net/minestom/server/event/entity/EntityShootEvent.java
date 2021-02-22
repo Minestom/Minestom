@@ -13,15 +13,17 @@ import org.jetbrains.annotations.NotNull;
 public class EntityShootEvent extends EntityEvent implements CancellableEvent {
 
     private final Projectile projectile;
-    private final Position   to;
-    private       double     spread;
+    private final Position to;
+    private double power;
+    private double spread;
 
     private boolean cancelled;
 
-    public EntityShootEvent(@NotNull Entity entity, @NotNull Projectile projectile, @NotNull Position to, double spread) {
+    public EntityShootEvent(@NotNull Entity entity, @NotNull Projectile projectile, @NotNull Position to, double power, double spread) {
         super(entity);
         this.projectile = projectile;
         this.to = to;
+        this.power = power;
         this.spread = spread;
     }
 
@@ -59,6 +61,24 @@ public class EntityShootEvent extends EntityEvent implements CancellableEvent {
      */
     public void setSpread(double spread) {
         this.spread = spread;
+    }
+
+    /**
+     * Gets shot power.
+     *
+     * @return shot power.
+     */
+    public double getPower() {
+        return this.power;
+    }
+
+    /**
+     * Sets shot power.
+     *
+     * @param power shot power.
+     */
+    public void setPower(double power) {
+        this.power = power;
     }
 
     @Override

@@ -22,6 +22,7 @@ public class RangedAttackGoal extends GoalSelector {
     private final int attackRangeSquared;
     private final int desirableRangeSquared;
     private final boolean comeClose;
+    private final double power;
     private final double spread;
 
     private BiFunction<Entity, Position, Projectile> projectileGenerator;
@@ -35,15 +36,17 @@ public class RangedAttackGoal extends GoalSelector {
      * @param desirableRange the desirable range: the entity will try to stay no further than this distance.
      * @param comeClose      whether entity should go as close as possible to the target whether target is not in line of sight.
      * @param spread         shot spread (0 for best accuracy).
+     * @param power          shot power (1 for normal).
      * @param timeUnit       the unit of the delay.
      */
-    public RangedAttackGoal(@NotNull EntityCreature entityCreature, int delay, int attackRange, int desirableRange, boolean comeClose, double spread, @NotNull TimeUnit timeUnit) {
+    public RangedAttackGoal(@NotNull EntityCreature entityCreature, int delay, int attackRange, int desirableRange, boolean comeClose, double power, double spread, @NotNull TimeUnit timeUnit) {
         super(entityCreature);
         this.delay = delay;
         this.timeUnit = timeUnit;
         this.attackRangeSquared = attackRange * attackRange;
         this.desirableRangeSquared = desirableRange * desirableRange;
         this.comeClose = comeClose;
+        this.power = power;
         this.spread = spread;
         Check.argCondition(desirableRange > attackRange, "Desirable range can not exceed attack range!");
     }
@@ -84,7 +87,7 @@ public class RangedAttackGoal extends GoalSelector {
                     }
                     Projectile projectile = projectileGenerator.apply(this.entityCreature, new Position(0D, 0D, 0D));
 
-                    Projectile.shoot(projectile, this.entityCreature, to, this.spread);
+                    Projectile.shoot(projectile, this.entityCreature, to, this.power, this.spread);
                     this.lastShot = time;
                 } else {
                     comeClose = this.comeClose;

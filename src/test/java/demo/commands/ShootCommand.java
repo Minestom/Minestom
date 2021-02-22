@@ -62,6 +62,6 @@ public class ShootCommand extends Command {
         ((Entity) projectile).setInstance(player.getInstance());
         var dir = pos.getDirection().multiply(30D);
         pos = pos.clone().add(dir.getX(), dir.getY(), dir.getZ());
-        Projectile.shoot(projectile, player, pos, 0D);
+        Projectile.shoot(projectile, player, pos, 1D, 0D);
     }
 }

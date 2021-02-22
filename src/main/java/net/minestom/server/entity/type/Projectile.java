@@ -12,9 +12,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public interface Projectile {
 
-    static void shoot(@NotNull Projectile projectile, @NotNull Entity shooter, Position to, double spread) {
+    static void shoot(@NotNull Projectile projectile, @NotNull Entity shooter, Position to, double power, double spread) {
         Check.argCondition(!(projectile instanceof Entity), "Projectile must be an instance of Entity!");
-        EntityShootEvent event = new EntityShootEvent(shooter, projectile, to, spread);
+        EntityShootEvent event = new EntityShootEvent(shooter, projectile, to, power, spread);
         shooter.callEvent(EntityShootEvent.class, event);
         if (event.isCancelled()) {
             Entity proj = (Entity) projectile;
@@ -22,11 +22,11 @@ public interface Projectile {
             return;
         }
         Position from = shooter.getPosition().clone().add(0D, shooter.getEyeHeight(), 0D);
-        shoot(projectile, from, to, event.getSpread());
+        shoot(projectile, from, to, event.getPower(), event.getSpread());
     }
 
     @SuppressWarnings("ConstantConditions")
-    static void shoot(@NotNull Projectile projectile, @NotNull Position from, @NotNull Position to, double spread) {
+    static void shoot(@NotNull Projectile projectile, @NotNull Position from, @NotNull Position to, double power, double spread) {
         Check.argCondition(!(projectile instanceof Entity), "Projectile must be an instance of Entity!");
         Entity proj     = (Entity) projectile;
         double dx       = to.getX() - from.getX();
@@ -48,7 +48,7 @@ public interface Projectile {
         velocity.setX(dx);
         velocity.setY(dy);
         velocity.setZ(dz);
-        velocity.multiply(20);
+        velocity.multiply(20 * power);
         proj.setView(
                 (float) Math.toDegrees(Math.atan2(dx, dz)),
                 (float) Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)))
