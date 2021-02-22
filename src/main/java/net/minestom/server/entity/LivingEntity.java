@@ -22,6 +22,7 @@ import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
@@ -588,6 +589,30 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
             if (Block.fromStateId(getInstance().getBlockStateId(position)) != Block.AIR) blocks.add(position);
         }
         return blocks;
+    }
+
+    /**
+     * Checks whether the current entity has line of sight to the given one.
+     * If so, it doesn't mean that the given entity is IN line of sight of the current,
+     * but the current one can rotate so that it will be true.
+     *
+     * @param entity the entity to be checked.
+     * @return if the current entity has line of sight to the given one.
+     */
+    public boolean hasLineOfSight(Entity entity) {
+        Vector start       = getPosition().toVector().add(0D, getEyeHeight(), 0D);
+        Vector end         = entity.getPosition().toVector().add(0D, getEyeHeight(), 0D);
+        Vector direction   = end.subtract(start);
+        int    maxDistance = (int) Math.ceil(direction.length());
+
+        Iterator<BlockPosition> it = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
+        while (it.hasNext()) {
+            Block block = Block.fromStateId(getInstance().getBlockStateId(it.next()));
+            if (!block.isAir() && !block.isLiquid()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
