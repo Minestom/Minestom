@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9};
+var data = {"i0":9,"i1":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -184,6 +184,11 @@ extends java.lang.Object</pre>
 <div class="block">Enables optifine support by registering the required biomes.</div>
 </td>
 </tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>static boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isEnabled()">isEnabled</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -230,7 +235,7 @@ extends java.lang.Object</pre>
 <a id="enable()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>enable</h4>
 <pre class="methodSignature">public static&nbsp;void&nbsp;enable()</pre>
@@ -239,6 +244,15 @@ extends java.lang.Object</pre>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.IllegalStateException</code> - if optifine support is already enabled</dd>
 </dl>
+</li>
+</ul>
+<a id="isEnabled()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>isEnabled</h4>
+<pre class="methodSignature">public static&nbsp;boolean&nbsp;isEnabled()</pre>
 </li>
 </ul>
 </li>
