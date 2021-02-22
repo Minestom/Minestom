@@ -176,11 +176,13 @@ public final class NBTUtils {
                     break;
                 }
 
-                AttributeSlot attributeSlot = AttributeSlot.valueOf(slot.toUpperCase());
-                // Wrong attribute slot, stop here
-
-                if (attributeSlot == null)
+                // Find slot, default to the main hand if the nbt tag is invalid
+                AttributeSlot attributeSlot;
+                try {
+                    attributeSlot = AttributeSlot.valueOf(slot.toUpperCase());
+                } catch (IllegalArgumentException e) {
                     attributeSlot = AttributeSlot.MAINHAND;
+                }
 
                 // Add attribute
                 final ItemAttribute itemAttribute =
