@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":10,"i2":10,"i3":10,"i4":6,"i5":6,"i6":6,"i7":6};
+var data = {"i0":6,"i1":10,"i2":10,"i3":10,"i4":10,"i5":6,"i6":6,"i7":6,"i8":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -209,47 +209,54 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findAndUpdateTarget()">findAndUpdateTarget</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Finds a target for an entity.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findTarget()">findTarget</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Finds a target based on the entity <a href="TargetSelector.html" title="class in net.minestom.server.entity.ai"><code>TargetSelector</code></a>.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntityCreature()">getEntityCreature</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the entity behind the goal selector.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEntityCreature(net.minestom.server.entity.EntityCreature)">setEntityCreature</a></span>&#8203;(<a href="../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature)</code></th>
 <td class="colLast">
 <div class="block">Changes the entity affected by the goal selector.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>abstract boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shouldEnd()">shouldEnd</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Whether or not this <a href="GoalSelector.html" title="class in net.minestom.server.entity.ai"><code>GoalSelector</code></a> should end.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>abstract boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shouldStart()">shouldStart</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Whether or not this <a href="GoalSelector.html" title="class in net.minestom.server.entity.ai"><code>GoalSelector</code></a> should start.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#start()">start</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Starts this <a href="GoalSelector.html" title="class in net.minestom.server.entity.ai"><code>GoalSelector</code></a>.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#tick(long)">tick</a></span>&#8203;(long&nbsp;time)</code></th>
 <td class="colLast">
@@ -390,6 +397,23 @@ extends java.lang.Object</pre>
 <pre class="methodSignature">@Nullable
 public&nbsp;<a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;findTarget()</pre>
 <div class="block">Finds a target based on the entity <a href="TargetSelector.html" title="class in net.minestom.server.entity.ai"><code>TargetSelector</code></a>.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the target entity, null if not found</dd>
+</dl>
+</li>
+</ul>
+<a id="findAndUpdateTarget()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findAndUpdateTarget</h4>
+<pre class="methodSignature">@Nullable
+public&nbsp;<a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;findAndUpdateTarget()</pre>
+<div class="block">Finds a target for an entity.
+ If the current one is not present, falls back to <a href="#findTarget()"><code>findTarget()</code></a>
+ and updates the target inside the entity.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the target entity, null if not found</dd>
