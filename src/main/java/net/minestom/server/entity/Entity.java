@@ -1262,6 +1262,18 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     }
 
     /**
+     * Adds an effect to an entity.
+     *
+     * @param potion The potion to add
+     */
+    public void addEffect(@NotNull Potion potion) {
+        removeEffect(potion.getEffect());
+        this.effects.add(new TimedPotion(potion, System.currentTimeMillis()));
+        potion.sendAddPacket(this);
+        callEvent(EntityPotionAddEvent.class, new EntityPotionAddEvent(this, potion));
+    }
+
+    /**
      * Removes effect from entity, if it has it.
      *
      * @param effect The effect to remove
@@ -1281,15 +1293,17 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     }
 
     /**
-     * Adds an effect to an entity.
-     *
-     * @param potion The potion to add
+     * Removes all the effects currently applied to the entity.
      */
-    public void addEffect(@NotNull Potion potion) {
-        removeEffect(potion.getEffect());
-        this.effects.add(new TimedPotion(potion, System.currentTimeMillis()));
-        potion.sendAddPacket(this);
-        callEvent(EntityPotionAddEvent.class, new EntityPotionAddEvent(this, potion));
+    public void clearEffects() {
+        for (TimedPotion timedPotion : effects) {
+            timedPotion.getPotion().sendRemovePacket(this);
+            callEvent(EntityPotionRemoveEvent.class, new EntityPotionRemoveEvent(
+                    this,
+                    timedPotion.getPotion()
+            ));
+        }
+        this.effects.clear();
     }
 
     /**
