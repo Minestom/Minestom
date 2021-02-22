@@ -88,13 +88,13 @@ loadScripts(document, 'script');</script>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -147,39 +147,6 @@ extends java.lang.Object</pre>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- =========== FIELD SUMMARY =========== -->
-<section role="region">
-<ul class="blockList">
-<li class="blockList"><a id="field.summary">
-<!--   -->
-</a>
-<h3>Field Summary</h3>
-<table class="memberSummary">
-<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Field</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected java.util.concurrent.ConcurrentHashMap&lt;java.util.UUID,&#8203;<a href="TemporaryCache.html" title="type parameter in TemporaryCache">T</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#cache">cache</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected java.util.concurrent.ConcurrentHashMap&lt;java.util.UUID,&#8203;java.lang.Long&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#cacheTime">cacheTime</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static java.util.concurrent.ScheduledExecutorService</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#REMOVER_SERVICE">REMOVER_SERVICE</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-</table>
-</li>
-</ul>
-</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -219,9 +186,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#cacheObject(java.util.UUID,T,long)">cacheObject</a></span>&#8203;(java.util.UUID&nbsp;identifier,
-           <a href="TemporaryCache.html" title="type parameter in TemporaryCache">T</a>&nbsp;value,
-           long&nbsp;time)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#cache(java.util.UUID,T)">cache</a></span>&#8203;(java.util.UUID&nbsp;identifier,
+     <a href="TemporaryCache.html" title="type parameter in TemporaryCache">T</a>&nbsp;value)</code></th>
 <td class="colLast">
 <div class="block">Caches an object.</div>
 </td>
@@ -235,8 +201,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="TemporaryCache.html" title="type parameter in TemporaryCache">T</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retrieve(java.util.UUID,long)">retrieve</a></span>&#8203;(java.util.UUID&nbsp;identifier,
-        long&nbsp;lastUpdate)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retrieve(java.util.UUID)">retrieve</a></span>&#8203;(java.util.UUID&nbsp;identifier)</code></th>
 <td class="colLast">
 <div class="block">Retrieves an object from cache.</div>
 </td>
@@ -258,43 +223,6 @@ extends java.lang.Object</pre>
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ FIELD DETAIL =========== -->
-<section role="region">
-<ul class="blockList">
-<li class="blockList"><a id="field.detail">
-<!--   -->
-</a>
-<h3>Field Detail</h3>
-<a id="REMOVER_SERVICE">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>REMOVER_SERVICE</h4>
-<pre>public static final&nbsp;java.util.concurrent.ScheduledExecutorService REMOVER_SERVICE</pre>
-</li>
-</ul>
-<a id="cache">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>cache</h4>
-<pre>protected&nbsp;java.util.concurrent.ConcurrentHashMap&lt;java.util.UUID,&#8203;<a href="TemporaryCache.html" title="type parameter in TemporaryCache">T</a>&gt; cache</pre>
-</li>
-</ul>
-<a id="cacheTime">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>cacheTime</h4>
-<pre>protected&nbsp;java.util.concurrent.ConcurrentHashMap&lt;java.util.UUID,&#8203;java.lang.Long&gt; cacheTime</pre>
-</li>
-</ul>
-</li>
-</ul>
-</section>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <section role="region">
 <ul class="blockList">
@@ -328,28 +256,26 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="cacheObject(java.util.UUID,java.lang.Object,long)">
+<a id="cache(java.util.UUID,java.lang.Object)">
 <!--   -->
-</a><a id="cacheObject(java.util.UUID,T,long)">
+</a><a id="cache(java.util.UUID,T)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>cacheObject</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;cacheObject&#8203;(@NotNull
-                        java.util.UUID&nbsp;identifier,
-                        <a href="TemporaryCache.html" title="type parameter in TemporaryCache">T</a>&nbsp;value,
-                        long&nbsp;time)</pre>
+<h4>cache</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;cache&#8203;(@NotNull
+                  java.util.UUID&nbsp;identifier,
+                  <a href="TemporaryCache.html" title="type parameter in TemporaryCache">T</a>&nbsp;value)</pre>
 <div class="block">Caches an object.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>identifier</code> - the object identifier</dd>
 <dd><code>value</code> - the object to cache</dd>
-<dd><code>time</code> - the current time in milliseconds</dd>
 </dl>
 </li>
 </ul>
-<a id="retrieve(java.util.UUID,long)">
+<a id="retrieve(java.util.UUID)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -357,14 +283,11 @@ extends java.lang.Object</pre>
 <h4>retrieve</h4>
 <pre class="methodSignature">@Nullable
 public&nbsp;<a href="TemporaryCache.html" title="type parameter in TemporaryCache">T</a>&nbsp;retrieve&#8203;(@NotNull
-                  java.util.UUID&nbsp;identifier,
-                  long&nbsp;lastUpdate)</pre>
+                  java.util.UUID&nbsp;identifier)</pre>
 <div class="block">Retrieves an object from cache.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>identifier</code> - the object identifier</dd>
-<dd><code>lastUpdate</code> - the last update time of your identifier's object,
-                   used to see if the cached value is up-to-date</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the retrieved object or null if not found</dd>
 </dl>
@@ -436,13 +359,13 @@ public&nbsp;<a href="TemporaryCache.html" title="type parameter in TemporaryCach
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

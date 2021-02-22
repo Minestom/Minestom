@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6,"i2":6};
+var data = {"i0":6,"i1":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -130,8 +130,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Implemented by <a href="../../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>server packets</code></a> which can be temporary cached in memory to be re-sent later
  without having to go through all the writing and compression.
  <p>
- <a href="#getIdentifier()"><code>getIdentifier()</code></a> is to differenciate this packet from the others of the same type,
- and <a href="#getLastUpdateTime()"><code>getLastUpdateTime()</code></a> to know if one packet is newer than the previous one.</div>
+ <a href="#getIdentifier()"><code>getIdentifier()</code></a> is to differentiate this packet from the others of the same type.</div>
 </li>
 </ul>
 </div>
@@ -164,13 +163,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getIdentifier()">getIdentifier</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the identifier of this packet.</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>long</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLastUpdateTime()">getLastUpdateTime</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the last time this packet changed.</div>
 </td>
 </tr>
 </table>
@@ -210,7 +202,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <a id="getIdentifier()">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getIdentifier</h4>
 <pre class="methodSignature">@Nullable
@@ -221,20 +213,6 @@ java.util.UUID&nbsp;getIdentifier()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this packet identifier, null to do not retrieve the cache</dd>
-</dl>
-</li>
-</ul>
-<a id="getLastUpdateTime()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>getLastUpdateTime</h4>
-<pre class="methodSignature">long&nbsp;getLastUpdateTime()</pre>
-<div class="block">Gets the last time this packet changed.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the last packet update time in milliseconds</dd>
 </dl>
 </li>
 </ul>
