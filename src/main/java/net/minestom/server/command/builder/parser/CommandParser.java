@@ -31,6 +31,10 @@ public class CommandParser {
             final Argument<?> argument = commandArguments[argCount];
             useRemaining = argument.useRemaining();
 
+            final boolean end = splitIndex == inputArguments.length;
+            if (end) // True if there is no input to analyze left
+                break;
+
             // the parsed argument value, null if incorrect
             Object parsedValue;
             // the argument exception, null if the input is correct
