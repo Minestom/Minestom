@@ -13,16 +13,21 @@ import java.util.concurrent.ThreadLocalRandom;
 public interface Projectile {
 
     static void shoot(@NotNull Projectile projectile, @NotNull Entity shooter, Position to, double spread) {
+        Check.argCondition(!(projectile instanceof Entity), "Projectile must be an instance of Entity!");
         EntityShootEvent event = new EntityShootEvent(shooter, projectile, to, spread);
-        shooter.callCancellableEvent(EntityShootEvent.class, event, () -> {
-            Position from = shooter.getPosition().clone().add(0D, shooter.getEyeHeight(), 0D);
-            shoot(projectile, from, to, event.getSpread());
-        });
+        shooter.callEvent(EntityShootEvent.class, event);
+        if (event.isCancelled()) {
+            Entity proj = (Entity) projectile;
+            proj.remove();
+            return;
+        }
+        Position from = shooter.getPosition().clone().add(0D, shooter.getEyeHeight(), 0D);
+        shoot(projectile, from, to, event.getSpread());
     }
 
     @SuppressWarnings("ConstantConditions")
     static void shoot(@NotNull Projectile projectile, @NotNull Position from, @NotNull Position to, double spread) {
-        Check.argCondition(projectile instanceof Entity, "Projectile must be an instance of Entity!");
+        Check.argCondition(!(projectile instanceof Entity), "Projectile must be an instance of Entity!");
         Entity proj     = (Entity) projectile;
         double dx       = to.getX() - from.getX();
         double dy       = to.getY() - from.getY();
@@ -39,17 +44,15 @@ public interface Projectile {
         dx += random.nextGaussian() * spread;
         dy += random.nextGaussian() * spread;
         dz += random.nextGaussian() * spread;
-        dx *= 2;
-        dy *= 2;
-        dz *= 2;
         Vector velocity = proj.getVelocity();
         velocity.setX(dx);
         velocity.setY(dy);
         velocity.setZ(dz);
-        xzLength = Math.sqrt(dx * dx + dz * dz);
-        double yaw   = Math.max(Math.abs(dx), Math.abs(dz));
-        double pitch = Math.max(Math.abs(dy), Math.abs(xzLength));
-        proj.setView((float) (yaw * Math.toDegrees(1D)), (float) (pitch * Math.toDegrees(1D)));
+        velocity.multiply(20);
+        proj.setView(
+                (float) Math.toDegrees(Math.atan2(dx, dz)),
+                (float) Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)))
+        );
     }
 
 }

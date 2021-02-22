@@ -14,6 +14,7 @@ public class EntityArrow extends EntityAbstractArrow {
 
     public EntityArrow(@Nullable Entity shooter, @NotNull Position spawnPosition) {
         super(shooter, EntityType.ARROW, spawnPosition);
+
     }
 
     public void setColor(int value) {

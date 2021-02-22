@@ -48,7 +48,7 @@ public class RangedAttackGoal extends GoalSelector {
         this.desirableRangeSquared = desirableRange * desirableRange;
         this.comeClose = comeClose;
         this.spread = spread;
-        Check.argCondition(desirableRange <= attackRange, "Desirable range can not exceed attack range!");
+        Check.argCondition(desirableRange > attackRange, "Desirable range can not exceed attack range!");
     }
 
     public void setProjectileGenerator(BiFunction<Entity, Position, Projectile> projectileGenerator) {

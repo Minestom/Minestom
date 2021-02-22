@@ -91,7 +91,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     protected Entity vehicle;
 
     // Velocity
-    protected Vector velocity = new Vector(); // Movement in block per second
+    protected Vector  velocity   = new Vector(); // Movement in block per second
+    protected boolean hasPhysics = true;
 
     protected double gravityDragPerTick;
     protected double gravityAcceleration;
@@ -483,7 +484,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
                         getVelocity().getZ() / tps
                 );
 
-                this.onGround = CollisionUtils.handlePhysics(this, deltaPos, newPosition, newVelocityOut);
+                if (this.hasPhysics) {
+                    this.onGround = CollisionUtils.handlePhysics(this, deltaPos, newPosition, newVelocityOut);
+                } else {
+                    newVelocityOut = deltaPos;
+                }
 
                 // World border collision
                 final Position finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
