@@ -345,23 +345,19 @@ public class BlockIterator implements Iterator<BlockPosition> {
             thirdError -= gridSize;
             secondError -= gridSize;
             currentBlock = 2;
-            return;
         } else if (secondError > 0) {
             blockQueue[1] = blockQueue[0].getRelative(mainFace);
             blockQueue[0] = blockQueue[1].getRelative(secondFace);
             secondError -= gridSize;
             currentBlock = 1;
-            return;
         } else if (thirdError > 0) {
             blockQueue[1] = blockQueue[0].getRelative(mainFace);
             blockQueue[0] = blockQueue[1].getRelative(thirdFace);
             thirdError -= gridSize;
             currentBlock = 1;
-            return;
         } else {
             blockQueue[0] = blockQueue[0].getRelative(mainFace);
             currentBlock = 0;
-            return;
         }
     }
 

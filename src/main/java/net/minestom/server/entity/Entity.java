@@ -863,6 +863,16 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     }
 
     /**
+     * Gets the distance squared between two entities.
+     *
+     * @param entity the entity to get the distance from
+     * @return the distance squared between this and {@code entity}
+     */
+    public double getDistanceSquared(@NotNull Entity entity) {
+        return getPosition().getDistanceSquared(entity.getPosition());
+    }
+
+    /**
      * Gets the entity vehicle or null.
      *
      * @return the entity vehicle, or null if there is not any
