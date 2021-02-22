@@ -1,17 +1,20 @@
 package net.minestom.server.entity.type.projectile;
 
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.ObjectEntity;
+import net.minestom.server.entity.*;
+import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.type.Projectile;
+import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.network.packet.server.play.EntityTeleportPacket;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by k.shandurenko on 22.02.2021
@@ -21,11 +24,11 @@ public class EntityAbstractArrow extends ObjectEntity implements Projectile {
     private final static byte CRITICAL_BIT = 0x01;
     private final static byte NO_CLIP_BIT  = 0x02;
 
-    private final int     shooterID;
+    private final Entity shooter;
 
     EntityAbstractArrow(@Nullable Entity shooter, @NotNull EntityType entityType, @NotNull Position spawnPosition) {
         super(entityType, spawnPosition);
-        this.shooterID = shooter == null ? 0 : shooter.getEntityId();
+        this.shooter = shooter;
         super.hasPhysics = false;
 
         setBoundingBox(.5F, .5F, .5F);
@@ -53,17 +56,25 @@ public class EntityAbstractArrow extends ObjectEntity implements Projectile {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     private boolean isStuck(Position pos, Position posNow) {
         if (pos.isSimilar(posNow)) {
             return true;
         }
+
+        Instance           instance = getInstance();
+        Chunk              chunk    = null;
+        Collection<Entity> entities = null;
+
         double   part      = .25D; // half of the bounding box
         Vector   dir       = posNow.toVector().subtract(pos.toVector());
         int      parts     = (int) Math.ceil(dir.length() / part);
         Position direction = dir.normalize().multiply(part).toPosition();
         for (int i = 0; i < parts; ++i) {
             if (i == parts - 1) {
-                pos = posNow;
+                pos.setX(posNow.getX());
+                pos.setY(posNow.getY());
+                pos.setZ(posNow.getZ());
             } else {
                 pos.add(direction);
             }
@@ -72,6 +83,25 @@ public class EntityAbstractArrow extends ObjectEntity implements Projectile {
             if (!block.isAir() && !block.isLiquid()) {
                 teleport(pos);
                 return true;
+            }
+
+            Chunk currentChunk = instance.getChunkAt(pos);
+            if (currentChunk != chunk) {
+                chunk = currentChunk;
+                entities = instance.getChunkEntities(chunk)
+                        .stream()
+                        .filter(entity -> entity instanceof LivingEntity)
+                        .collect(Collectors.toSet());
+            }
+            Optional<Entity> victimOptional = entities.stream()
+                    .filter(entity -> entity.getBoundingBox().intersect(pos.getX(), pos.getY(), pos.getZ()))
+                    .findAny();
+            if (victimOptional.isPresent()) {
+                LivingEntity victim = (LivingEntity) victimOptional.get();
+                victim.setArrowCount(victim.getArrowCount() + 1);
+                victim.damage(DamageType.fromProjectile(this.shooter, this), 2F);
+                remove();
+                return super.onGround;
             }
         }
         return false;
@@ -125,7 +155,7 @@ public class EntityAbstractArrow extends ObjectEntity implements Projectile {
 
     @Override
     public int getObjectData() {
-        return this.shooterID + 1;
+        return this.shooter == null ? 0 : this.shooter.getEntityId() + 1;
     }
 
 }
