@@ -61,6 +61,23 @@ public abstract class GoalSelector {
     }
 
     /**
+     * Finds a target for an entity.
+     * If the current one is not present, falls back to {@link GoalSelector#findTarget()}
+     * and updates the target inside the entity.
+     *
+     * @return the target entity, null if not found
+     */
+    @Nullable
+    public Entity findAndUpdateTarget() {
+        Entity target = entityCreature.getTarget();
+        if (target == null) {
+            target = findTarget();
+            entityCreature.setTarget(target);
+        }
+        return target;
+    }
+
+    /**
      * Gets the entity behind the goal selector.
      *
      * @return the entity
