@@ -15,59 +15,40 @@ public class UseItemListener {
     public static void useItemListener(ClientUseItemPacket packet, Player player) {
         final PlayerInventory inventory = player.getInventory();
         final Player.Hand hand = packet.hand;
-        final ItemStack itemStack = hand == Player.Hand.MAIN ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
+        ItemStack itemStack = hand == Player.Hand.MAIN ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
         itemStack.onRightClick(player, hand);
         PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack);
         player.callEvent(PlayerUseItemEvent.class, useItemEvent);
 
+        final PlayerInventory playerInventory = player.getInventory();
+        if (useItemEvent.isCancelled()) {
+            playerInventory.update();
+            return;
+        }
+
+        itemStack = useItemEvent.getItemStack();
         final Material material = itemStack.getMaterial();
 
         // Equip armor with right click
         if (material.isArmor()) {
-            final PlayerInventory playerInventory = player.getInventory();
-            if (useItemEvent.isCancelled()) {
-                playerInventory.update();
-                return;
-            }
-
-            final ArmorEquipEvent.ArmorSlot armorSlot;
+            ItemStack currentlyEquipped;
             if (material.isHelmet()) {
-                armorSlot = ArmorEquipEvent.ArmorSlot.HELMET;
+                currentlyEquipped = playerInventory.getHelmet();
+                playerInventory.setHelmet(itemStack);
             } else if (material.isChestplate()) {
-                armorSlot = ArmorEquipEvent.ArmorSlot.CHESTPLATE;
+                currentlyEquipped = playerInventory.getChestplate();
+                playerInventory.setChestplate(itemStack);
             } else if (material.isLeggings()) {
-                armorSlot = ArmorEquipEvent.ArmorSlot.LEGGINGS;
+                currentlyEquipped = playerInventory.getLeggings();
+                playerInventory.setLeggings(itemStack);
             } else {
-                armorSlot = ArmorEquipEvent.ArmorSlot.BOOTS;
+                currentlyEquipped = playerInventory.getBoots();
+                playerInventory.setBoots(itemStack);
             }
-            ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, itemStack, armorSlot);
-            player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
-            final ItemStack armorItem = armorEquipEvent.getArmorItem();
-
-            if (hand == Player.Hand.MAIN) {
-                playerInventory.setItemInMainHand(ItemStack.getAirItem());
-            } else {
-                playerInventory.setItemInOffHand(ItemStack.getAirItem());
-            }
-
-            switch (armorSlot) {
-                case HELMET:
-                    playerInventory.setHelmet(armorItem);
-                    break;
-                case CHESTPLATE:
-                    playerInventory.setChestplate(armorItem);
-                    break;
-                case LEGGINGS:
-                    playerInventory.setLeggings(armorItem);
-                    break;
-                case BOOTS:
-                    playerInventory.setBoots(armorItem);
-                    break;
-            }
+            playerInventory.setItemInHand(hand, currentlyEquipped);
         }
 
         PlayerItemAnimationEvent.ItemAnimationType itemAnimationType = null;
-        final boolean offhand = hand == Player.Hand.OFF;
         boolean riptideSpinAttack = false;
 
         if (material == Material.BOW) {
@@ -89,7 +70,7 @@ public class UseItemListener {
         if (itemAnimationType != null) {
             PlayerItemAnimationEvent playerItemAnimationEvent = new PlayerItemAnimationEvent(player, itemAnimationType);
             player.callCancellableEvent(PlayerItemAnimationEvent.class, playerItemAnimationEvent, () -> {
-                player.refreshActiveHand(true, offhand, riptideSpinAttack);
+                player.refreshActiveHand(true, hand == Player.Hand.OFF, riptideSpinAttack);
                 player.sendPacketToViewers(player.getMetadataPacket());
             });
         }
