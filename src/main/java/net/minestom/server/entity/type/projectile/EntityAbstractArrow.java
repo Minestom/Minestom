@@ -16,9 +16,6 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Created by k.shandurenko on 22.02.2021
- */
 public class EntityAbstractArrow extends ObjectEntity implements Projectile {
 
     private final static byte CRITICAL_BIT = 0x01;

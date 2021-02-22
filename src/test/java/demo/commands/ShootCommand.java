@@ -13,9 +13,6 @@ import net.minestom.server.entity.type.projectile.EntitySpectralArrow;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-/**
- * Created by k.shandurenko on 22.02.2021
- */
 public class ShootCommand extends Command {
 
     public ShootCommand() {

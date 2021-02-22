@@ -14,9 +14,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiFunction;
 
-/**
- * Created by k.shandurenko on 22.02.2021
- */
 public class RangedAttackGoal extends GoalSelector {
 
     private       long     lastShot;
