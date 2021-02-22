@@ -26,6 +26,12 @@
     catch(err) {
     }
 //-->
+var data = {"i0":6,"i1":1,"i2":1};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
+var altColor = "altColor";
+var rowColor = "rowColor";
+var tableTab = "tableTab";
+var activeTableTab = "activeTableTab";
 var pathtoroot = "../../../../../";
 var useModuleDirectories = true;
 loadScripts(document, 'script');</script>
@@ -117,7 +123,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><code><a href="projectile/EntityAbstractArrow.html" title="class in net.minestom.server.entity.type.projectile">EntityAbstractArrow</a></code>, <code><a href="projectile/EntityArrow.html" title="class in net.minestom.server.entity.type.projectile">EntityArrow</a></code>, <code><a href="projectile/EntityEyeOfEnder.html" title="class in net.minestom.server.entity.type.projectile">EntityEyeOfEnder</a></code>, <code><a href="projectile/EntityPotion.html" title="class in net.minestom.server.entity.type.projectile">EntityPotion</a></code>, <code><a href="projectile/EntitySpectralArrow.html" title="class in net.minestom.server.entity.type.projectile">EntitySpectralArrow</a></code></dd>
+<dd><code><a href="projectile/AbstractProjectile.html" title="class in net.minestom.server.entity.type.projectile">AbstractProjectile</a></code>, <code><a href="projectile/EntityAbstractArrow.html" title="class in net.minestom.server.entity.type.projectile">EntityAbstractArrow</a></code>, <code><a href="projectile/EntityArrow.html" title="class in net.minestom.server.entity.type.projectile">EntityArrow</a></code>, <code><a href="projectile/EntityEyeOfEnder.html" title="class in net.minestom.server.entity.type.projectile">EntityEyeOfEnder</a></code>, <code><a href="projectile/EntityPotion.html" title="class in net.minestom.server.entity.type.projectile">EntityPotion</a></code>, <code><a href="projectile/EntitySpectralArrow.html" title="class in net.minestom.server.entity.type.projectile">EntitySpectralArrow</a></code></dd>
 </dl>
 <hr>
 <pre>public interface <span class="typeNameLabel">Projectile</span></pre>
@@ -135,13 +141,20 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span>Static Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getShooter()">getShooter</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the shooter of this projectile.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shoot(net.minestom.server.entity.type.Projectile,net.minestom.server.entity.Entity,net.minestom.server.utils.Position,double,double)">shoot</a></span>&#8203;(<a href="Projectile.html" title="interface in net.minestom.server.entity.type">Projectile</a>&nbsp;projectile,
      <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;shooter,
@@ -150,7 +163,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
      double&nbsp;spread)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shoot(net.minestom.server.entity.type.Projectile,net.minestom.server.utils.Position,net.minestom.server.utils.Position,double,double)">shoot</a></span>&#8203;(<a href="Projectile.html" title="interface in net.minestom.server.entity.type">Projectile</a>&nbsp;projectile,
      <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;from,
@@ -194,7 +207,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <a id="shoot(net.minestom.server.entity.type.Projectile,net.minestom.server.utils.Position,net.minestom.server.utils.Position,double,double)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>shoot</h4>
 <pre class="methodSignature">static&nbsp;void&nbsp;shoot&#8203;(@NotNull
@@ -205,6 +218,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
                   <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;to,
                   double&nbsp;power,
                   double&nbsp;spread)</pre>
+</li>
+</ul>
+<a id="getShooter()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getShooter</h4>
+<pre class="methodSignature">@Nullable
+<a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;getShooter()</pre>
+<div class="block">Gets the shooter of this projectile.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the shooter of this projectile.</dd>
+</dl>
 </li>
 </ul>
 </li>
