@@ -28,6 +28,7 @@ public class RangedAttackGoal extends GoalSelector {
     private BiFunction<Entity, Position, Projectile> projectileGenerator;
 
     private boolean stop;
+    private Entity cachedTarget;
 
     /**
      * @param entityCreature the entity to add the goal to.
@@ -57,19 +58,24 @@ public class RangedAttackGoal extends GoalSelector {
 
     @Override
     public boolean shouldStart() {
-        return findAndUpdateTarget() != null;
+        this.cachedTarget = findTarget();
+        return this.cachedTarget != null;
     }
 
     @Override
     public void start() {
-        Entity target = findAndUpdateTarget();
-        Check.notNull(target, "The target is not expected to be null!");
-        this.entityCreature.getNavigator().setPathTo(target.getPosition());
+        this.entityCreature.getNavigator().setPathTo(this.cachedTarget.getPosition());
     }
 
     @Override
     public void tick(long time) {
-        Entity target = findAndUpdateTarget();
+        Entity target;
+        if (this.cachedTarget != null) {
+            target = this.cachedTarget;
+            this.cachedTarget = null;
+        } else {
+            target = findTarget();
+        }
         if (target == null) {
             this.stop = true;
             return;
