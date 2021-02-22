@@ -179,7 +179,7 @@ public final class CommandManager {
                     if (unknownCommandCallback != null) {
                         this.unknownCommandCallback.apply(sender, command);
                     }
-                    return CommandResult.of(CommandResult.Type.CANCELLED, command);
+                    return CommandResult.of(CommandResult.Type.UNKNOWN, command);
                 }
 
                 // Execute the legacy-command
