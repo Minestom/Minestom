@@ -8,7 +8,7 @@ import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called with {@link Projectile#shoot(Projectile, Entity, Position, double)}.
+ * Called with {@link Projectile#shoot(Projectile, Entity, Position, double, double)}.
  */
 public class EntityShootEvent extends EntityEvent implements CancellableEvent {
 
