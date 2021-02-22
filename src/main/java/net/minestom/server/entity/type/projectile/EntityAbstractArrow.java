@@ -1,8 +1,10 @@
 package net.minestom.server.entity.type.projectile;
 
-import net.minestom.server.entity.*;
-import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.type.Projectile;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.LivingEntity;
+import net.minestom.server.entity.Metadata;
+import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
@@ -16,16 +18,13 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class EntityAbstractArrow extends ObjectEntity implements Projectile {
+public class EntityAbstractArrow extends AbstractProjectile {
 
     private final static byte CRITICAL_BIT = 0x01;
     private final static byte NO_CLIP_BIT = 0x02;
 
-    private final Entity shooter;
-
     EntityAbstractArrow(@Nullable Entity shooter, @NotNull EntityType entityType, @NotNull Position spawnPosition) {
-        super(entityType, spawnPosition);
-        this.shooter = shooter;
+        super(shooter, entityType, spawnPosition);
         super.hasPhysics = false;
 
         setBoundingBox(.5F, .5F, .5F);
@@ -115,7 +114,7 @@ public class EntityAbstractArrow extends ObjectEntity implements Projectile {
             if (victimOptional.isPresent()) {
                 LivingEntity victim = (LivingEntity) victimOptional.get();
                 victim.setArrowCount(victim.getArrowCount() + 1);
-                victim.damage(DamageType.fromProjectile(this.shooter, this), 2F);
+                callEvent(EntityAttackEvent.class, new EntityAttackEvent(this, victim));
                 remove();
                 return super.onGround;
             }
@@ -171,7 +170,8 @@ public class EntityAbstractArrow extends ObjectEntity implements Projectile {
 
     @Override
     public int getObjectData() {
-        return this.shooter == null ? 0 : this.shooter.getEntityId() + 1;
+        Entity shooter = getShooter();
+        return shooter == null ? 0 : shooter.getEntityId() + 1;
     }
 
 }

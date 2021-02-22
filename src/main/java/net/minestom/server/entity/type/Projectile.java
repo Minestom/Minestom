@@ -55,4 +55,6 @@ public interface Projectile {
         );
     }
 
+    Entity getShooter();
+
 }
