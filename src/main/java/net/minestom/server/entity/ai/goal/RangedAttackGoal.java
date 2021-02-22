@@ -4,11 +4,15 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
+import net.minestom.server.entity.type.Projectile;
+import net.minestom.server.entity.type.projectile.EntityArrow;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.BiFunction;
 
 /**
  * Created by k.shandurenko on 22.02.2021
@@ -21,6 +25,9 @@ public class RangedAttackGoal extends GoalSelector {
     private final int      attackRangeSquared;
     private final int      desirableRangeSquared;
     private final boolean  comeClose;
+    private final double   spread;
+
+    private BiFunction<Entity, Position, Projectile> projectileGenerator;
 
     private boolean stop;
 
@@ -30,16 +37,22 @@ public class RangedAttackGoal extends GoalSelector {
      * @param attackRange    the allowed range the entity can shoot others.
      * @param desirableRange the desirable range: the entity will try to stay no further than this distance.
      * @param comeClose      whether entity should go as close as possible to the target whether target is not in line of sight.
+     * @param spread         shot spread (0 for best accuracy).
      * @param timeUnit       the unit of the delay.
      */
-    public RangedAttackGoal(@NotNull EntityCreature entityCreature, int delay, int attackRange, int desirableRange, boolean comeClose, @NotNull TimeUnit timeUnit) {
+    public RangedAttackGoal(@NotNull EntityCreature entityCreature, int delay, int attackRange, int desirableRange, boolean comeClose, double spread, @NotNull TimeUnit timeUnit) {
         super(entityCreature);
         this.delay = delay;
         this.timeUnit = timeUnit;
         this.attackRangeSquared = attackRange * attackRange;
         this.desirableRangeSquared = desirableRange * desirableRange;
         this.comeClose = comeClose;
+        this.spread = spread;
         Check.argCondition(desirableRange <= attackRange, "Desirable range can not exceed attack range!");
+    }
+
+    public void setProjectileGenerator(BiFunction<Entity, Position, Projectile> projectileGenerator) {
+        this.projectileGenerator = projectileGenerator;
     }
 
     @Override
@@ -66,7 +79,15 @@ public class RangedAttackGoal extends GoalSelector {
         if (distanceSquared <= this.attackRangeSquared) {
             if (!CooldownUtils.hasCooldown(time, this.lastShot, this.timeUnit, this.delay)) {
                 if (this.entityCreature.hasLineOfSight(target)) {
+                    Position to = target.getPosition().clone().add(0D, target.getEyeHeight(), 0D);
 
+                    BiFunction<Entity, Position, Projectile> projectileGenerator = this.projectileGenerator;
+                    if (projectileGenerator == null) {
+                        projectileGenerator = EntityArrow::new;
+                    }
+                    Projectile projectile = projectileGenerator.apply(this.entityCreature, new Position(0D, 0D, 0D));
+
+                    Projectile.shoot(projectile, this.entityCreature, to, this.spread);
                     this.lastShot = time;
                 } else {
                     comeClose = this.comeClose;
