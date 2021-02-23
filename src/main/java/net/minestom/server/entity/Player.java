@@ -861,6 +861,32 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
+     * Plays a sound from the {@link Sound} enum.
+     *
+     * @param sound         the sound to play
+     * @param soundCategory the sound category
+     * @param position      the block position to use.
+     * @param volume        the volume of the sound (1 is 100%)
+     * @param pitch         the pitch of the sound, between 0.5 and 2.0
+     */
+    public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
+        playSound(sound, soundCategory, position.getX(), position.getY(), position.getZ(), volume, pitch);
+    }
+
+    /**
+     * Plays a sound from an identifier (represents a custom sound in a resource pack).
+     *
+     * @param identifier    the identifier of the sound to play
+     * @param soundCategory the sound category
+     * @param position      the block position to use.
+     * @param volume        the volume of the sound (1 is 100%)
+     * @param pitch         the pitch of the sound, between 0.5 and 2.0
+     */
+    public void playSound(@NotNull String identifier, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
+        playSound(identifier, soundCategory, position.getX(), position.getY(), position.getZ(), volume, pitch);
+    }
+
+    /**
      * Plays a sound from an identifier (represents a custom sound in a resource pack).
      *
      * @param identifier    the identifier of the sound to play
