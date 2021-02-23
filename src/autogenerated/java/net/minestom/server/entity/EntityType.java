@@ -1,6 +1,7 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.entity.type.ambient.EntityBat;
+import net.minestom.server.entity.type.ambient.EntityTraderLlama;
 import net.minestom.server.entity.type.ambient.EntityVillager;
 import net.minestom.server.entity.type.ambient.EntityWanderingTrader;
 import net.minestom.server.entity.type.animal.*;
@@ -8,6 +9,7 @@ import net.minestom.server.entity.type.decoration.EntityArmorStand;
 import net.minestom.server.entity.type.monster.*;
 import net.minestom.server.entity.type.other.EntityAreaEffectCloud;
 import net.minestom.server.entity.type.other.EntityIronGolem;
+import net.minestom.server.entity.type.other.EntityShulker;
 import net.minestom.server.entity.type.other.EntitySnowman;
 import net.minestom.server.entity.type.projectile.EntityArrow;
 import net.minestom.server.entity.type.projectile.EntityPotion;
@@ -206,7 +208,7 @@ public enum EntityType {
 
     TRIDENT("minecraft:trident"),
 
-    TRADER_LLAMA("minecraft:trader_llama", EntityRaderLlama.class),
+    TRADER_LLAMA("minecraft:trader_llama", EntityTraderLlama.class),
 
     TROPICAL_FISH("minecraft:tropical_fish", EntityTropicalFish.class),
 

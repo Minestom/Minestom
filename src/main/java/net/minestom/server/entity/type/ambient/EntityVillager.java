@@ -23,10 +23,12 @@ public class EntityVillager extends EntityAbstractVillager {
 
     EntityVillager(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
         super(entityType, spawnPosition);
+        setBoundingBox(.6D, 1.95D, .6D);
     }
 
     EntityVillager(@NotNull EntityType entityType, @NotNull Position spawnPosition, @Nullable Instance instance) {
         super(entityType, spawnPosition, instance);
+        setBoundingBox(.6D, 1.95D, .6D);
     }
 
     public VillagerData getVillagerData() {

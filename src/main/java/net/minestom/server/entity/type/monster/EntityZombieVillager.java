@@ -3,6 +3,7 @@ package net.minestom.server.entity.type.monster;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.type.ambient.EntityAbstractVillager;
+import net.minestom.server.entity.type.ambient.EntityVillager;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,15 +24,15 @@ public class EntityZombieVillager extends EntityZombie {
         this.metadata.setIndex((byte) 18, Metadata.Boolean(value));
     }
 
-    public EntityAbstractVillager.VillagerData getVillagerData() {
+    public EntityVillager.VillagerData getVillagerData() {
         int[] data = this.metadata.getIndex((byte) 17, null);
         if (data == null) {
-            return new EntityAbstractVillager.VillagerData(EntityAbstractVillager.Type.PLAINS, EntityAbstractVillager.Profession.NONE, EntityAbstractVillager.Level.NOVICE);
+            return new EntityVillager.VillagerData(EntityVillager.Type.PLAINS, EntityVillager.Profession.NONE, EntityVillager.Level.NOVICE);
         }
-        return new EntityAbstractVillager.VillagerData(EntityAbstractVillager.Type.VALUES[data[0]], EntityAbstractVillager.Profession.VALUES[data[1]], EntityAbstractVillager.Level.VALUES[data[2] - 1]);
+        return new EntityVillager.VillagerData(EntityVillager.Type.VALUES[data[0]], EntityVillager.Profession.VALUES[data[1]], EntityVillager.Level.VALUES[data[2] - 1]);
     }
 
-    public void setVillagerData(EntityAbstractVillager.VillagerData data) {
+    public void setVillagerData(EntityVillager.VillagerData data) {
         this.metadata.setIndex((byte) 17, Metadata.VillagerData(
                 data.getType().ordinal(),
                 data.getProfession().ordinal(),
