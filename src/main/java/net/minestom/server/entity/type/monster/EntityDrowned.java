@@ -7,10 +7,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Created by k.shandurenko on 23.02.2021
  */
-public class EntityZombifiedPiglin extends EntityZombie {
+public class EntityDrowned extends EntityZombie {
 
-    public EntityZombifiedPiglin(@NotNull Position spawnPosition) {
-        super(EntityType.ZOMBIFIED_PIGLIN, spawnPosition);
+    public EntityDrowned(@NotNull Position spawnPosition) {
+        super(EntityType.DROWNED, spawnPosition);
     }
 
 }
