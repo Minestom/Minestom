@@ -12,16 +12,18 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Created by k.shandurenko on 23.02.2021
+ * TODO: update bounding box depending on state
  */
 public class EntityShulker extends EntityCreature implements Constructable {
 
     public EntityShulker(@NotNull Position spawnPosition) {
         super(EntityType.SHULKER, spawnPosition);
+        setBoundingBox(1D, 1D, 1D);
     }
 
     public EntityShulker(@NotNull Position spawnPosition, @Nullable Instance instance) {
         super(EntityType.SHULKER, spawnPosition, instance);
+        setBoundingBox(1D, 1D, 1D);
     }
 
     public Direction getAttachFace() {
@@ -49,7 +51,7 @@ public class EntityShulker extends EntityCreature implements Constructable {
     }
 
     public byte getColor() {
-        return this.metadata.getIndex((byte) 18, (byte) 0);
+        return this.metadata.getIndex((byte) 18, (byte) 10);
     }
 
     public void setColor(byte value) {

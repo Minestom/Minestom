@@ -15,6 +15,7 @@ import net.minestom.server.entity.type.projectile.EntityArrow;
 import net.minestom.server.entity.type.projectile.EntityPotion;
 import net.minestom.server.entity.type.projectile.EntitySpectralArrow;
 import net.minestom.server.entity.type.vehicle.EntityBoat;
+import net.minestom.server.entity.type.water.*;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.LambdaMetafactoryUtils;
 import net.minestom.server.utils.NamespaceID;
@@ -50,7 +51,7 @@ public enum EntityType {
 
     CHICKEN("minecraft:chicken", EntityChicken.class),
 
-    COD("minecraft:cod"),
+    COD("minecraft:cod", EntityCod.class),
 
     COW("minecraft:cow", EntityCow.class),
 

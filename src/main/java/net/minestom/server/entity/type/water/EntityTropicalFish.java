@@ -1,0 +1,125 @@
+package net.minestom.server.entity.type.water;
+
+import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.Metadata;
+import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.Position;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/**
+ * Created by k.shandurenko on 23.02.2021
+ */
+public class EntityTropicalFish extends EntityAbstractFish {
+
+    public EntityTropicalFish(@NotNull Position spawnPosition) {
+        super(EntityType.TROPICAL_FISH, spawnPosition);
+        setBoundingBox(.5D, .4D, .5D);
+    }
+
+    public EntityTropicalFish(@NotNull Position spawnPosition, @Nullable Instance instance) {
+        super(EntityType.TROPICAL_FISH, spawnPosition, instance);
+        setBoundingBox(.5D, .4D, .5D);
+    }
+
+    public Variant getVariant() {
+        return getVariantFromID(this.metadata.getIndex((byte) 16, 0));
+    }
+
+    public void setVariant(Variant variant) {
+        this.metadata.setIndex((byte) 16, Metadata.VarInt(getVariantID(variant)));
+    }
+
+    public static int getVariantID(Variant variant) {
+        int id = 0;
+        id |= variant.patternColor;
+        id <<= 8;
+        id |= variant.bodyColor;
+        id <<= 8;
+        id |= variant.pattern.ordinal();
+        id <<= 8;
+        id |= variant.type.ordinal();
+        return id;
+    }
+
+    public static Variant getVariantFromID(int variantID) {
+        Type type = Type.VALUES[variantID & 0xFF];
+        variantID >>= 8;
+        Pattern pattern = Pattern.VALUES[variantID & 0xFF];
+        variantID >>= 8;
+        byte bodyColor = (byte) (variantID & 0xFF);
+        variantID >>= 8;
+        byte patternColor = (byte) (variantID & 0xFF);
+        return new Variant(type, pattern, bodyColor, patternColor);
+    }
+
+    public static class Variant {
+
+        private Type type;
+        private Pattern pattern;
+        private byte bodyColor;
+        private byte patternColor;
+
+        public Variant(@NotNull Type type, @NotNull Pattern pattern, byte bodyColor, byte patternColor) {
+            this.type = type;
+            this.pattern = pattern;
+            this.bodyColor = bodyColor;
+            this.patternColor = patternColor;
+        }
+
+        @NotNull
+        public Type getType() {
+            return this.type;
+        }
+
+        public void setType(@NotNull Type type) {
+            this.type = type;
+        }
+
+        @NotNull
+        public Pattern getPattern() {
+            return this.pattern;
+        }
+
+        public void setPattern(@NotNull Pattern pattern) {
+            this.pattern = pattern;
+        }
+
+        public byte getBodyColor() {
+            return this.bodyColor;
+        }
+
+        public void setBodyColor(byte bodyColor) {
+            this.bodyColor = bodyColor;
+        }
+
+        public byte getPatternColor() {
+            return this.patternColor;
+        }
+
+        public void setPatternColor(byte patternColor) {
+            this.patternColor = patternColor;
+        }
+    }
+
+    public enum Type {
+        SMALL,
+        LARGE,
+        INVISIBLE;
+
+        private final static Type[] VALUES = values();
+    }
+
+    public enum Pattern {
+        KOB, // FLOPPER for LARGE fish
+        SUNSTREAK, // STRIPEY for LARGE fish
+        SNOOPER, // GLITTER for LARGE fish
+        DASHER, // BLOCKFISH for LARGE fish
+        BRINELY, // BETTY for LARGE fish
+        SPOTTY, // CLAYFISH for LARGE fish
+        NONE;
+
+        private final static Pattern[] VALUES = values();
+    }
+
+}
