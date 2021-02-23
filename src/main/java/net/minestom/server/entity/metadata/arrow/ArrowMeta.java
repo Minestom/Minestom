@@ -2,10 +2,10 @@ package net.minestom.server.entity.metadata.arrow;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.metadata.BaseEntityMeta;
+import net.minestom.server.entity.metadata.EntityMeta;
 import org.jetbrains.annotations.NotNull;
 
-public class ArrowMeta extends BaseEntityMeta {
+public class ArrowMeta extends EntityMeta {
 
     public ArrowMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

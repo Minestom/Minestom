@@ -7,7 +7,7 @@ import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class LivingEntityMeta extends BaseEntityMeta {
+public class LivingEntityMeta extends EntityMeta {
 
     private final static byte MASK_INDEX = 7;
 

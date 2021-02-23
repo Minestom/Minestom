@@ -2,11 +2,11 @@ package net.minestom.server.entity.metadata.other;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.metadata.BaseEntityMeta;
+import net.minestom.server.entity.metadata.EntityMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FishingHookMeta extends BaseEntityMeta {
+public class FishingHookMeta extends EntityMeta {
 
     private Entity hooked;
 

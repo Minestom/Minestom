@@ -27,7 +27,6 @@ import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
-import net.minestom.server.utils.binary.BitmaskUtil;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -990,7 +989,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @return true if the entity is in fire, false otherwise
      */
     public boolean isOnFire() {
-        return (getStateMeta() & 0x01) != 0;
+        return this.entityMeta.isOnFire();
     }
 
     /**
@@ -1002,8 +1001,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param fire should the entity be set in fire
      */
     public void setOnFire(boolean fire) {
-        final byte state = BitmaskUtil.changeBit(getStateMeta(), (byte) 0x01, (byte) (fire ? 1 : 0), (byte) 0);
-        this.metadata.setIndex((byte) 0, Metadata.Byte(state));
+        this.entityMeta.setOnFire(fire);
     }
 
     /**
@@ -1014,7 +1012,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @return true if the player is sneaking
      */
     public boolean isSneaking() {
-        return (getStateMeta() & 0x02) != 0;
+        return this.entityMeta.isSneaking();
     }
 
     /**
@@ -1026,9 +1024,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      */
     public void setSneaking(boolean sneaking) {
         setPose(sneaking ? Pose.SNEAKING : Pose.STANDING);
-        // update the crouched metadata
-        final byte state = BitmaskUtil.changeBit(getStateMeta(), (byte) 0x02, (byte) (sneaking ? 1 : 0), (byte) 1);
-        this.metadata.setIndex((byte) 0, Metadata.Byte(state));
+        this.entityMeta.setSneaking(sneaking);
     }
 
     /**
@@ -1039,7 +1035,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @return true if the player is sprinting
      */
     public boolean isSprinting() {
-        return (getStateMeta() & 0x08) != 0;
+        return this.entityMeta.isSprinting();
     }
 
     /**
@@ -1050,8 +1046,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param sprinting true to make the entity sprint
      */
     public void setSprinting(boolean sprinting) {
-        final byte state = BitmaskUtil.changeBit(getStateMeta(), (byte) 0x08, (byte) (sprinting ? 1 : 0), (byte) 3);
-        this.metadata.setIndex((byte) 0, Metadata.Byte(state));
+        this.entityMeta.setSprinting(sprinting);
     }
 
     /**
@@ -1060,7 +1055,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @return true if the entity is invisible, false otherwise
      */
     public boolean isInvisible() {
-        return (getStateMeta() & 0x20) != 0;
+        return this.entityMeta.isInvisible();
     }
 
     /**
@@ -1070,8 +1065,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param invisible true to set the entity invisible, false otherwise
      */
     public void setInvisible(boolean invisible) {
-        final byte state = BitmaskUtil.changeBit(getStateMeta(), (byte) 0x20, (byte) (invisible ? 1 : 0), (byte) 5);
-        this.metadata.setIndex((byte) 0, Metadata.Byte(state));
+        this.entityMeta.setInvisible(invisible);
     }
 
     /**
@@ -1080,7 +1074,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @return true if the entity is glowing, false otherwise
      */
     public boolean isGlowing() {
-        return (getStateMeta() & 0x40) != 0;
+        return this.entityMeta.isHasGlowingEffect();
     }
 
     /**
@@ -1089,8 +1083,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param glowing true to make the entity glows, false otherwise
      */
     public void setGlowing(boolean glowing) {
-        final byte state = BitmaskUtil.changeBit(getStateMeta(), (byte) 0x40, (byte) (glowing ? 1 : 0), (byte) 6);
-        this.metadata.setIndex((byte) 0, Metadata.Byte(state));
+        this.entityMeta.setHasGlowingEffect(glowing);
     }
 
     /**
@@ -1100,7 +1093,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      */
     @NotNull
     public Pose getPose() {
-        return metadata.getIndex((byte) 6, Pose.STANDING);
+        return this.entityMeta.getPose();
     }
 
     /**
@@ -1113,7 +1106,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      */
     @NotNull
     public void setPose(@NotNull Pose pose) {
-        this.metadata.setIndex((byte) 6, Metadata.Pose(pose));
+        this.entityMeta.setPose(pose);
     }
 
     /**
@@ -1123,7 +1116,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      */
     @Nullable
     public JsonMessage getCustomName() {
-        return metadata.getIndex((byte) 2, null);
+        return this.entityMeta.getCustomName();
     }
 
     /**
@@ -1132,7 +1125,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param customName the custom name of the entity, null to remove it
      */
     public void setCustomName(@Nullable JsonMessage customName) {
-        this.metadata.setIndex((byte) 2, Metadata.OptChat(customName));
+        this.entityMeta.setCustomName(customName);
     }
 
     /**
@@ -1141,7 +1134,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @return true if the custom name is visible, false otherwise
      */
     public boolean isCustomNameVisible() {
-        return metadata.getIndex((byte) 3, false);
+        return this.entityMeta.isCustomNameVisible();
     }
 
     /**
@@ -1151,15 +1144,15 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param customNameVisible true to make the custom name visible, false otherwise
      */
     public void setCustomNameVisible(boolean customNameVisible) {
-        this.metadata.setIndex((byte) 3, Metadata.Boolean(customNameVisible));
+        this.entityMeta.setCustomNameVisible(customNameVisible);
     }
 
     public boolean isSilent() {
-        return metadata.getIndex((byte) 4, false);
+        return this.entityMeta.isSilent();
     }
 
     public void setSilent(boolean silent) {
-        this.metadata.setIndex((byte) 4, Metadata.Boolean(silent));
+        this.entityMeta.setSilent(silent);
     }
 
     /**
@@ -1168,7 +1161,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @return true if the entity ignore gravity, false otherwise
      */
     public boolean hasNoGravity() {
-        return metadata.getIndex((byte) 5, false);
+        return this.entityMeta.isHasNoGravity();
     }
 
     /**
@@ -1177,7 +1170,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      * @param noGravity should the entity ignore gravity
      */
     public void setNoGravity(boolean noGravity) {
-        this.metadata.setIndex((byte) 5, Metadata.Boolean(noGravity));
+        this.entityMeta.setHasNoGravity(noGravity);
     }
 
     /**
@@ -1405,10 +1398,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         metaDataPacket.entityId = getEntityId();
         metaDataPacket.entries = metadata.getEntries();
         return metaDataPacket;
-    }
-
-    private byte getStateMeta() {
-        return metadata.getIndex((byte) 0, (byte) 0);
     }
 
     protected void sendSynchronization() {

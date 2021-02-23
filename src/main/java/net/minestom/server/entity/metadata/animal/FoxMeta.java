@@ -40,11 +40,11 @@ public class FoxMeta extends AnimalMeta {
         setMaskBit(MASK_INDEX, SITTING_BIT, value);
     }
 
-    public boolean isCrounching() {
+    public boolean isFoxSneaking() {
         return getMaskBit(MASK_INDEX, CROUCHING_BIT);
     }
 
-    public void setCrounching(boolean value) {
+    public void setFoxSneaking(boolean value) {
         setMaskBit(MASK_INDEX, CROUCHING_BIT, value);
     }
 

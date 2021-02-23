@@ -2,10 +2,10 @@ package net.minestom.server.entity.metadata.arrow;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.metadata.BaseEntityMeta;
+import net.minestom.server.entity.metadata.EntityMeta;
 import org.jetbrains.annotations.NotNull;
 
-public class AbstractArrowMeta extends BaseEntityMeta {
+public class AbstractArrowMeta extends EntityMeta {
 
     private final static byte MASK_INDEX = 7;
 
