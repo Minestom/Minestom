@@ -5,6 +5,10 @@ import net.minestom.server.entity.type.AgeableCreature;
 import net.minestom.server.entity.type.Animal;
 import net.minestom.server.utils.Position;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.water.DolphinMeta} instead.
+ */
+@Deprecated
 public class EntityDolphin extends AgeableCreature implements Animal {
     public EntityDolphin(Position spawnPosition) {
         super(EntityType.DOLPHIN, spawnPosition);

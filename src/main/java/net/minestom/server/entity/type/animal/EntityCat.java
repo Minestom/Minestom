@@ -8,6 +8,10 @@ import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.animal.tameable.CatMeta} instead.
+ */
+@Deprecated
 public class EntityCat extends TameableAnimalCreature {
 
     public EntityCat(@NotNull Position spawnPosition) {

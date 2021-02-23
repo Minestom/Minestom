@@ -8,6 +8,10 @@ import net.minestom.server.utils.binary.BinaryWriter;
 
 import java.util.function.Consumer;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.other.AreaEffectCloudMeta} instead.
+ */
+@Deprecated
 public class EntityAreaEffectCloud extends ObjectEntity {
 
     public Consumer<BinaryWriter> particleDataConsumer;

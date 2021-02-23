@@ -7,6 +7,10 @@ import net.minestom.server.entity.type.Monster;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.monster.zombie.ZombieMeta} instead.
+ */
+@Deprecated
 public class EntityZombie extends EntityCreature implements Monster {
 
     public EntityZombie(@NotNull Position spawnPosition) {

@@ -2,7 +2,6 @@ package net.minestom.server.entity.metadata.water.fish;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.type.water.EntityTropicalFish;
 import org.jetbrains.annotations.NotNull;
 
 public class TropicalFishMeta extends AbstractFishMeta {

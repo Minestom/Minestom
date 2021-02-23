@@ -3,7 +3,6 @@ package net.minestom.server.entity.metadata.monster.zombie;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.villager.VillagerMeta;
-import net.minestom.server.entity.type.ambient.EntityVillager;
 import org.jetbrains.annotations.NotNull;
 
 public class ZombieVillagerMeta extends ZombieMeta {
@@ -28,7 +27,7 @@ public class ZombieVillagerMeta extends ZombieMeta {
         return new VillagerMeta.VillagerData(VillagerMeta.Type.VALUES[data[0]], VillagerMeta.Profession.VALUES[data[1]], VillagerMeta.Level.VALUES[data[2] - 1]);
     }
 
-    public void setVillagerData(EntityVillager.VillagerData data) {
+    public void setVillagerData(VillagerMeta.VillagerData data) {
         getMetadata().setIndex((byte) 17, Metadata.VillagerData(
                 data.getType().ordinal(),
                 data.getProfession().ordinal(),

@@ -6,6 +6,10 @@ import net.minestom.server.entity.type.AgeableCreature;
 import net.minestom.server.entity.type.Animal;
 import net.minestom.server.utils.Position;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.animal.PolarBearMeta} instead.
+ */
+@Deprecated
 public class EntityPolarBear extends AgeableCreature implements Animal {
 
     public EntityPolarBear(Position spawnPosition) {

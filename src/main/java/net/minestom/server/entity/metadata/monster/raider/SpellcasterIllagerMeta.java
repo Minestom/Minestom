@@ -2,7 +2,6 @@ package net.minestom.server.entity.metadata.monster.raider;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.type.monster.EntitySpellcasterIllager;
 import org.jetbrains.annotations.NotNull;
 
 public class SpellcasterIllagerMeta extends AbstractIllagerMeta {

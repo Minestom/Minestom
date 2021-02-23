@@ -13,6 +13,10 @@ import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.binary.BitmaskUtil;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.other.ArmorStandMeta} instead.
+ */
+@Deprecated
 public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
 
     // Equipments

@@ -10,6 +10,10 @@ import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.monster.GuardianMeta} instead.
+ */
+@Deprecated
 public class EntityGuardian extends EntityCreature implements Monster {
 
     private Entity target;

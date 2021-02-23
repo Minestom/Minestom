@@ -11,6 +11,10 @@ import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.object.EyeOfEnderMeta} instead.
+ */
+@Deprecated
 public class EntityEyeOfEnder extends AbstractProjectile {
 
     public EntityEyeOfEnder(@Nullable Entity shooter, @NotNull Position spawnPosition) {

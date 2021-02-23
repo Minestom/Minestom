@@ -5,9 +5,10 @@ import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.type.animal.EntityHorse;
+import net.minestom.server.entity.metadata.animal.HorseMeta;
 
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -20,8 +21,8 @@ public class HorseCommand extends Command {
         setCondition(this::condition);
         setDefaultExecutor(this::defaultExecutor);
         var babyArg = ArgumentType.Boolean("baby");
-        var markingArg = ArgumentType.Enum("marking", EntityHorse.Marking.class);
-        var colorArg = ArgumentType.Enum("color", EntityHorse.Color.class);
+        var markingArg = ArgumentType.Enum("marking", HorseMeta.Marking.class);
+        var colorArg = ArgumentType.Enum("color", HorseMeta.Color.class);
         setArgumentCallback(this::onBabyError, babyArg);
         setArgumentCallback(this::onMarkingError, markingArg);
         setArgumentCallback(this::onColorError, colorArg);
@@ -45,14 +46,14 @@ public class HorseCommand extends Command {
     }
 
     private void onMarkingError(CommandSender sender, ArgumentSyntaxException exception) {
-        String values = Stream.of(EntityHorse.Marking.values())
+        String values = Stream.of(HorseMeta.Marking.values())
                 .map(value -> "'" + value.name().toLowerCase(Locale.ROOT) + "'")
                 .collect(Collectors.joining(", "));
         sender.sendMessage("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by " + values + ".");
     }
 
     private void onColorError(CommandSender sender, ArgumentSyntaxException exception) {
-        String values = Stream.of(EntityHorse.Color.values())
+        String values = Stream.of(HorseMeta.Color.values())
                 .map(value -> "'" + value.name().toLowerCase(Locale.ROOT) + "'")
                 .collect(Collectors.joining(", "));
         sender.sendMessage("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by " + values + ".");
@@ -62,11 +63,12 @@ public class HorseCommand extends Command {
         var player = (Player) sender;
 
         boolean baby = args.get("baby");
-        EntityHorse.Marking marking = args.get("marking");
-        EntityHorse.Color color = args.get("color");
-        var horse = (EntityHorse) EntityType.HORSE.createFromPosition(player.getPosition());
-        horse.setBaby(baby);
-        horse.setVariant(new EntityHorse.Variant(marking, color));
+        HorseMeta.Marking marking = args.get("marking");
+        HorseMeta.Color color = args.get("color");
+        var horse = new EntityCreature(EntityType.HORSE, player.getPosition());
+        var meta = new HorseMeta(horse);
+        meta.setBaby(baby);
+        meta.setVariant(new HorseMeta.Variant(marking, color));
         horse.setInstance(player.getInstance());
     }
 

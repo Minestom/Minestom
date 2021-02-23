@@ -2,7 +2,6 @@ package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.type.animal.EntityLlama;
 import org.jetbrains.annotations.NotNull;
 
 public class LlamaMeta extends ChestedHorseMeta {
@@ -31,7 +30,7 @@ public class LlamaMeta extends ChestedHorseMeta {
         return Variant.VALUES[getMetadata().getIndex((byte) 21, 0)];
     }
 
-    public void setVariant(EntityLlama.Variant value) {
+    public void setVariant(Variant value) {
         getMetadata().setIndex((byte) 21, Metadata.VarInt(value.ordinal()));
     }
 

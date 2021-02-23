@@ -7,6 +7,10 @@ import net.minestom.server.entity.type.Animal;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.animal.MooshroomMeta} instead.
+ */
+@Deprecated
 public class EntityMooshroom extends AgeableCreature implements Animal {
 
     public EntityMooshroom(Position spawnPosition) {

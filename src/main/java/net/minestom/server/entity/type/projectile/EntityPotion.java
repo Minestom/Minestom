@@ -10,6 +10,10 @@ import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.object.ThrownPotionMeta} instead.
+ */
+@Deprecated
 public class EntityPotion extends AbstractProjectile {
 
     public EntityPotion(@Nullable Entity shooter, @NotNull Position spawnPosition, @NotNull ItemStack potion) {

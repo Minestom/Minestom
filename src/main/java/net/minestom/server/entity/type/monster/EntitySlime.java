@@ -7,6 +7,10 @@ import net.minestom.server.entity.type.Monster;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.other.SlimeMeta} instead.
+ */
+@Deprecated
 public class EntitySlime extends EntityCreature implements Monster {
 
     public EntitySlime(@NotNull Position spawnPosition) {
