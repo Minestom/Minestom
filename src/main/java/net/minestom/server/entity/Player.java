@@ -870,15 +870,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param pitch         the pitch of the sound, between 0.5 and 2.0
      */
     public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
-        SoundEffectPacket soundEffectPacket = new SoundEffectPacket();
-        soundEffectPacket.soundId = sound.getId();
-        soundEffectPacket.soundCategory = soundCategory;
-        soundEffectPacket.x = position.getX();
-        soundEffectPacket.y = position.getY();
-        soundEffectPacket.z = position.getZ();
-        soundEffectPacket.volume = volume;
-        soundEffectPacket.pitch = pitch;
-        playerConnection.sendPacket(soundEffectPacket);
+        playSound(sound, soundCategory, position.getX(), position.getY(), position.getZ(), volume, pitch);
     }
 
     /**
@@ -891,15 +883,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param pitch         the pitch of the sound, between 0.5 and 2.0
      */
     public void playSound(@NotNull String identifier, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
-        NamedSoundEffectPacket namedSoundEffectPacket = new NamedSoundEffectPacket();
-        namedSoundEffectPacket.soundName = identifier;
-        namedSoundEffectPacket.soundCategory = soundCategory;
-        namedSoundEffectPacket.x = position.getX();
-        namedSoundEffectPacket.y = position.getY();
-        namedSoundEffectPacket.z = position.getZ();
-        namedSoundEffectPacket.volume = volume;
-        namedSoundEffectPacket.pitch = pitch;
-        playerConnection.sendPacket(namedSoundEffectPacket);
+        playSound(identifier, soundCategory, position.getX(), position.getY(), position.getZ(), volume, pitch);
     }
 
     /**
