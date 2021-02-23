@@ -2004,36 +2004,8 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
                       float&nbsp;pitch)</pre>
 <div class="block">Plays a sound from the <a href="../sound/Sound.html" title="enum in net.minestom.server.sound"><code>Sound</code></a> enum.</div>
 <dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>sound</code> - the sound to play</dd>
-<dd><code>soundCategory</code> - the sound category</dd>
-<dd><code>position</code> - the block position to use.</dd>
-<dd><code>volume</code> - the volume of the sound (1 is 100%)</dd>
-<dd><code>pitch</code> - the pitch of the sound, between 0.5 and 2.0</dd>
-</dl>
-</li>
-</ul>
-<a id="playSound(java.lang.String,net.minestom.server.sound.SoundCategory,net.minestom.server.utils.BlockPosition,float,float)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>playSound</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;playSound&#8203;(@NotNull
-                      java.lang.String&nbsp;identifier,
-                      @NotNull
-                      <a href="../sound/SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a>&nbsp;soundCategory,
-                      <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
-                      float&nbsp;volume,
-                      float&nbsp;pitch)</pre>
-<div class="block">Plays a sound from an identifier (represents a custom sound in a resource pack).</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>identifier</code> - the identifier of the sound to play</dd>
-<dd><code>soundCategory</code> - the sound category</dd>
-<dd><code>position</code> - the block position to use.</dd>
-<dd><code>volume</code> - the volume of the sound (1 is 100%)</dd>
-<dd><code>pitch</code> - the pitch of the sound, between 0.5 and 2.0</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#playSound(net.minestom.server.sound.Sound,net.minestom.server.sound.SoundCategory,int,int,int,float,float)"><code>playSound(Sound, SoundCategory, int, int, int, float, float)</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -2062,6 +2034,26 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <dd><code>z</code> - the effect Z</dd>
 <dd><code>volume</code> - the volume of the sound (1 is 100%)</dd>
 <dd><code>pitch</code> - the pitch of the sound, between 0.5 and 2.0</dd>
+</dl>
+</li>
+</ul>
+<a id="playSound(java.lang.String,net.minestom.server.sound.SoundCategory,net.minestom.server.utils.BlockPosition,float,float)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>playSound</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;playSound&#8203;(@NotNull
+                      java.lang.String&nbsp;identifier,
+                      @NotNull
+                      <a href="../sound/SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a>&nbsp;soundCategory,
+                      <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
+                      float&nbsp;volume,
+                      float&nbsp;pitch)</pre>
+<div class="block">Plays a sound from an identifier (represents a custom sound in a resource pack).</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#playSound(java.lang.String,net.minestom.server.sound.SoundCategory,int,int,int,float,float)"><code>playSound(String, SoundCategory, int, int, int, float, float)</code></a></dd>
 </dl>
 </li>
 </ul>
