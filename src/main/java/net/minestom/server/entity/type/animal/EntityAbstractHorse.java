@@ -1,8 +1,8 @@
 package net.minestom.server.entity.type.animal;
 
-import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.type.AgeableCreature;
 import net.minestom.server.entity.type.Animal;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.Position;
@@ -14,7 +14,7 @@ import java.util.UUID;
 /**
  * Created by k.shandurenko on 23.02.2021
  */
-public class EntityAbstractHorse extends EntityCreature implements Animal {
+public class EntityAbstractHorse extends AgeableCreature implements Animal {
 
     private final static byte TAMED_BIT = 0x02;
     private final static byte SADDLED_BIT = 0x04;

@@ -1,4 +1,4 @@
 package net.minestom.server.entity.type;
 
-public interface Animal {
+public interface Animal extends Ageable {
 }

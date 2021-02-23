@@ -1,6 +1,8 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.entity.type.ambient.EntityBat;
+import net.minestom.server.entity.type.ambient.EntityVillager;
+import net.minestom.server.entity.type.ambient.EntityWanderingTrader;
 import net.minestom.server.entity.type.animal.*;
 import net.minestom.server.entity.type.decoration.EntityArmorStand;
 import net.minestom.server.entity.type.monster.*;
