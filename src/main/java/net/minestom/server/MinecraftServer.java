@@ -30,7 +30,7 @@ import net.minestom.server.network.netty.NettyServer;
 import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.packet.server.play.UpdateViewDistancePacket;
-import net.minestom.server.particle.ParticleType;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
@@ -159,7 +159,7 @@ public final class MinecraftServer {
         Enchantment.values();
         EntityType.values();
         Sound.values();
-        ParticleType.values();
+        Particle.values();
         StatisticType.values();
         Fluid.values();
 

@@ -7,11 +7,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
-public class ParticleTypeEnumGenerator extends BasicEnumGenerator {
+public class ParticleEnumGenerator extends BasicEnumGenerator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ParticleTypeEnumGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ParticleEnumGenerator.class);
 
     public static void main(String[] args) throws IOException {
         String targetVersion;
@@ -38,10 +37,10 @@ public class ParticleTypeEnumGenerator extends BasicEnumGenerator {
             targetFolder.mkdirs();
         }
 
-        new ParticleTypeEnumGenerator(targetFolder);
+        new ParticleEnumGenerator(targetFolder);
     }
 
-    private ParticleTypeEnumGenerator(File targetFolder) throws IOException {
+    private ParticleEnumGenerator(File targetFolder) throws IOException {
         super(targetFolder);
     }
 
@@ -57,7 +56,7 @@ public class ParticleTypeEnumGenerator extends BasicEnumGenerator {
 
     @Override
     public String getClassName() {
-        return "ParticleType";
+        return "Particle";
     }
 
     @Override

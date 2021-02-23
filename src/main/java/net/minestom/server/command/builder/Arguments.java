@@ -6,7 +6,7 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.particle.ParticleType;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.utils.entity.EntityFinder;
 import net.minestom.server.utils.location.RelativeBlockPosition;
@@ -156,8 +156,8 @@ public final class Arguments {
      */
     @Deprecated
     @NotNull
-    public ParticleType getParticle(@NotNull String id) {
-        return (ParticleType) getObject(id);
+    public Particle getParticle(@NotNull String id) {
+        return (Particle) getObject(id);
     }
 
     /**

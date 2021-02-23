@@ -10,7 +10,7 @@ import java.util.function.Consumer;
  */
 public class ParticleCreator {
 
-    public static ParticlePacket createParticlePacket(ParticleType particleType, boolean distance,
+    public static ParticlePacket createParticlePacket(Particle particleType, boolean distance,
                                                       double x, double y, double z,
                                                       float offsetX, float offsetY, float offsetZ,
                                                       float particleData, int count, Consumer<BinaryWriter> dataWriter) {
@@ -33,7 +33,7 @@ public class ParticleCreator {
         return particlePacket;
     }
 
-    public static ParticlePacket createParticlePacket(ParticleType particleType,
+    public static ParticlePacket createParticlePacket(Particle particleType,
                                                       double x, double y, double z,
                                                       float offsetX, float offsetY, float offsetZ,
                                                       int count) {

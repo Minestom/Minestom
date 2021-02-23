@@ -7,7 +7,7 @@ import net.minestom.server.fluids.Fluid;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
-import net.minestom.server.particle.ParticleType;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.sound.Sound;
@@ -48,7 +48,7 @@ public final class Registries {
      * Should only be used for internal code, please use the get* methods.
      */
     @Deprecated
-    public static final HashMap<NamespaceID, ParticleType> particleTypes = new HashMap<>();
+    public static final HashMap<NamespaceID, Particle> particles = new HashMap<>();
 
     /**
      * Should only be used for internal code, please use the get* methods.
@@ -129,35 +129,35 @@ public final class Registries {
     }
 
     /**
-     * Returns the corresponding EntityType matching the given id. Returns 'PIG' if none match.
+     * Returns the corresponding EntityType matching the given id. Returns null if none match.
      */
-    @NotNull
+    @Nullable
     public static EntityType getEntityType(String id) {
         return getEntityType(NamespaceID.from(id));
     }
 
     /**
-     * Returns the corresponding EntityType matching the given id. Returns 'PIG' if none match.
+     * Returns the corresponding EntityType matching the given id. Returns null if none match.
      */
-    @NotNull
+    @Nullable
     public static EntityType getEntityType(NamespaceID id) {
-        return entityTypes.getOrDefault(id, EntityType.PIG);
+        return entityTypes.get(id);
     }
 
     /**
-     * Returns the corresponding ParticleType matching the given id. Returns null if none match.
+     * Returns the corresponding Particle matching the given id. Returns null if none match.
      */
     @Nullable
-    public static ParticleType getParticleType(String id) {
-        return getParticleType(NamespaceID.from(id));
+    public static Particle getParticle(String id) {
+        return getParticle(NamespaceID.from(id));
     }
 
     /**
-     * Returns the corresponding ParticleType matching the given id. Returns null if none match.
+     * Returns the corresponding Particle matching the given id. Returns null if none match.
      */
     @Nullable
-    public static ParticleType getParticleType(NamespaceID id) {
-        return particleTypes.get(id);
+    public static Particle getParticle(NamespaceID id) {
+        return particles.get(id);
     }
 
     /**

@@ -2,7 +2,7 @@ package net.minestom.server.entity.type.other;
 
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.ObjectEntity;
-import net.minestom.server.particle.ParticleType;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryWriter;
 
@@ -18,14 +18,14 @@ public class EntityAreaEffectCloud extends ObjectEntity {
     private float radius;
     private int color;
     private boolean ignoreRadius;
-    private ParticleType particleType;
+    private Particle particleType;
 
     public EntityAreaEffectCloud(Position spawnPosition) {
         super(EntityType.AREA_EFFECT_CLOUD, spawnPosition);
         setRadius(0.5f);
         setColor(0);
         setIgnoreRadius(false);
-        setParticle(ParticleType.EFFECT);
+        setParticle(Particle.EFFECT);
         setParticleDataConsumer(packetWriter -> {
         });
     }
@@ -98,11 +98,11 @@ public class EntityAreaEffectCloud extends ObjectEntity {
         //sendMetadataIndex(9);
     }
 
-    public ParticleType getParticle() {
+    public Particle getParticle() {
         return particleType;
     }
 
-    public void setParticle(ParticleType particleType) {
+    public void setParticle(Particle particleType) {
         this.particleType = particleType;
         //sendMetadataIndex(10);
     }

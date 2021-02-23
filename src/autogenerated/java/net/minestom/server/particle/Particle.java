@@ -9,7 +9,7 @@ import net.minestom.server.utils.NamespaceID;
  * //==============================
  */
 @SuppressWarnings({"deprecation"})
-public enum ParticleType {
+public enum Particle {
     AMBIENT_ENTITY_EFFECT("minecraft:ambient_entity_effect"),
 
     ANGRY_VILLAGER("minecraft:angry_villager"),
@@ -156,9 +156,9 @@ public enum ParticleType {
 
     private String namespaceID;
 
-    ParticleType(String namespaceID) {
+    Particle(String namespaceID) {
         this.namespaceID = namespaceID;
-        Registries.particleTypes.put(NamespaceID.from(namespaceID), this);
+        Registries.particles.put(NamespaceID.from(namespaceID), this);
     }
 
     public int getId() {
@@ -169,7 +169,7 @@ public enum ParticleType {
         return namespaceID;
     }
 
-    public static ParticleType fromId(int id) {
+    public static Particle fromId(int id) {
         if (id >= 0 && id < values().length) {
             return values()[id];
         }

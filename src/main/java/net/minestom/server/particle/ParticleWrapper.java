@@ -6,22 +6,27 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class Particle {
+/**
+ * @deprecated It's a a temporary solution so that
+ * {@link net.minestom.server.entity.metadata.other.AreaEffectCloudMeta} could work.
+ */
+@Deprecated
+public class ParticleWrapper {
 
-    private ParticleType type;
+    private Particle type;
     private Consumer<BinaryWriter> dataWriter;
 
-    public Particle(@NotNull ParticleType type, @Nullable Consumer<BinaryWriter> dataWriter) {
+    public ParticleWrapper(@NotNull Particle type, @Nullable Consumer<BinaryWriter> dataWriter) {
         this.type = type;
         this.dataWriter = dataWriter;
     }
 
     @NotNull
-    public ParticleType getType() {
+    public Particle getType() {
         return this.type;
     }
 
-    public void setType(@NotNull ParticleType type) {
+    public void setType(@NotNull Particle type) {
         this.type = type;
     }
 
