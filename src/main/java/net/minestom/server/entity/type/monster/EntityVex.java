@@ -9,9 +9,6 @@ import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Created by k.shandurenko on 23.02.2021
- */
 public class EntityVex extends EntityCreature implements Monster {
 
     private final static byte ATTACKING_BIT = 0x1;

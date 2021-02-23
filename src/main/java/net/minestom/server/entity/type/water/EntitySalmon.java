@@ -6,9 +6,6 @@ import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Created by k.shandurenko on 23.02.2021
- */
 public class EntitySalmon extends EntityAbstractFish {
 
     public EntitySalmon(@NotNull Position spawnPosition) {

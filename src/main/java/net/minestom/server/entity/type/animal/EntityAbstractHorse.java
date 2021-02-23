@@ -11,9 +11,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-/**
- * Created by k.shandurenko on 23.02.2021
- */
 public class EntityAbstractHorse extends AgeableCreature implements Animal {
 
     private final static byte TAMED_BIT = 0x02;

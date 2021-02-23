@@ -8,9 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Locale;
 import java.util.function.Consumer;
 
-/**
- * Created by k.shandurenko on 23.02.2021
- */
 @SuppressWarnings("rawtypes")
 public class ArgumentEnum<E extends Enum> extends Argument<E> {
 

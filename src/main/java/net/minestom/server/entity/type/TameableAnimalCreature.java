@@ -9,9 +9,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-/**
- * Created by k.shandurenko on 23.02.2021
- */
 public class TameableAnimalCreature extends AgeableCreature implements TameableAnimal {
 
     private final static byte SITTING_BIT = 0x1;

@@ -7,9 +7,6 @@ import java.lang.invoke.MethodType;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-/**
- * Created by k.shandurenko on 23.02.2021
- */
 @SuppressWarnings("unchecked")
 public class LambdaMetafactoryUtils {
 
