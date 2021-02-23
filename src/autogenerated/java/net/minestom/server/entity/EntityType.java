@@ -1,7 +1,23 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.entity.type.ambient.EntityBat;
+import net.minestom.server.entity.type.animal.*;
+import net.minestom.server.entity.type.decoration.EntityArmorStand;
+import net.minestom.server.entity.type.monster.*;
+import net.minestom.server.entity.type.other.EntityAreaEffectCloud;
+import net.minestom.server.entity.type.other.EntityIronGolem;
+import net.minestom.server.entity.type.other.EntitySnowman;
+import net.minestom.server.entity.type.projectile.EntityArrow;
+import net.minestom.server.entity.type.projectile.EntityPotion;
+import net.minestom.server.entity.type.projectile.EntitySpectralArrow;
+import net.minestom.server.entity.type.vehicle.EntityBoat;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.utils.LambdaMetafactoryUtils;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.Position;
+import net.minestom.server.utils.validate.Check;
+
+import java.util.function.Function;
 
 /**
  * //==============================
@@ -10,51 +26,51 @@ import net.minestom.server.utils.NamespaceID;
  */
 @SuppressWarnings({"deprecation"})
 public enum EntityType {
-    AREA_EFFECT_CLOUD("minecraft:area_effect_cloud"),
+    AREA_EFFECT_CLOUD("minecraft:area_effect_cloud", EntityAreaEffectCloud.class),
 
-    ARMOR_STAND("minecraft:armor_stand"),
+    ARMOR_STAND("minecraft:armor_stand", EntityArmorStand.class),
 
     ARROW("minecraft:arrow"),
 
-    BAT("minecraft:bat"),
+    BAT("minecraft:bat", EntityBat.class),
 
-    BEE("minecraft:bee"),
+    BEE("minecraft:bee", EntityBee.class),
 
-    BLAZE("minecraft:blaze"),
+    BLAZE("minecraft:blaze", EntityBlaze.class),
 
-    BOAT("minecraft:boat"),
+    BOAT("minecraft:boat", EntityBoat.class),
 
-    CAT("minecraft:cat"),
+    CAT("minecraft:cat", EntityCat.class),
 
-    CAVE_SPIDER("minecraft:cave_spider"),
+    CAVE_SPIDER("minecraft:cave_spider", EntityCaveSpider.class),
 
-    CHICKEN("minecraft:chicken"),
+    CHICKEN("minecraft:chicken", EntityChicken.class),
 
     COD("minecraft:cod"),
 
-    COW("minecraft:cow"),
+    COW("minecraft:cow", EntityCow.class),
 
-    CREEPER("minecraft:creeper"),
+    CREEPER("minecraft:creeper", EntityCreeper.class),
 
-    DOLPHIN("minecraft:dolphin"),
+    DOLPHIN("minecraft:dolphin", EntityDolphin.class),
 
-    DONKEY("minecraft:donkey"),
+    DONKEY("minecraft:donkey", EntityDonkey.class),
 
     DRAGON_FIREBALL("minecraft:dragon_fireball"),
 
-    DROWNED("minecraft:drowned"),
+    DROWNED("minecraft:drowned", EntityDrowned.class),
 
-    ELDER_GUARDIAN("minecraft:elder_guardian"),
+    ELDER_GUARDIAN("minecraft:elder_guardian", EntityElderGuardian.class),
 
     END_CRYSTAL("minecraft:end_crystal"),
 
     ENDER_DRAGON("minecraft:ender_dragon"),
 
-    ENDERMAN("minecraft:enderman"),
+    ENDERMAN("minecraft:enderman", EntityEnderman.class),
 
-    ENDERMITE("minecraft:endermite"),
+    ENDERMITE("minecraft:endermite", EntityEndermite.class),
 
-    EVOKER("minecraft:evoker"),
+    EVOKER("minecraft:evoker", EntityEvoker.class),
 
     EVOKER_FANGS("minecraft:evoker_fangs"),
 
@@ -66,23 +82,23 @@ public enum EntityType {
 
     FIREWORK_ROCKET("minecraft:firework_rocket"),
 
-    FOX("minecraft:fox"),
+    FOX("minecraft:fox", EntityFox.class),
 
-    GHAST("minecraft:ghast"),
+    GHAST("minecraft:ghast", EntityGhast.class),
 
-    GIANT("minecraft:giant"),
+    GIANT("minecraft:giant", EntityGiant.class),
 
-    GUARDIAN("minecraft:guardian"),
+    GUARDIAN("minecraft:guardian", EntityGuardian.class),
 
-    HOGLIN("minecraft:hoglin"),
+    HOGLIN("minecraft:hoglin", EntityHoglin.class),
 
-    HORSE("minecraft:horse"),
+    HORSE("minecraft:horse", EntityHorse.class),
 
-    HUSK("minecraft:husk"),
+    HUSK("minecraft:husk", EntityHusk.class),
 
-    ILLUSIONER("minecraft:illusioner"),
+    ILLUSIONER("minecraft:illusioner", EntityIllusioner.class),
 
-    IRON_GOLEM("minecraft:iron_golem"),
+    IRON_GOLEM("minecraft:iron_golem", EntityIronGolem.class),
 
     ITEM("minecraft:item"),
 
@@ -94,11 +110,11 @@ public enum EntityType {
 
     LIGHTNING_BOLT("minecraft:lightning_bolt"),
 
-    LLAMA("minecraft:llama"),
+    LLAMA("minecraft:llama", EntityLlama.class),
 
     LLAMA_SPIT("minecraft:llama_spit"),
 
-    MAGMA_CUBE("minecraft:magma_cube"),
+    MAGMA_CUBE("minecraft:magma_cube", EntityMagmaCube.class),
 
     MINECART("minecraft:minecart"),
 
@@ -114,69 +130,69 @@ public enum EntityType {
 
     TNT_MINECART("minecraft:tnt_minecart"),
 
-    MULE("minecraft:mule"),
+    MULE("minecraft:mule", EntityMule.class),
 
-    MOOSHROOM("minecraft:mooshroom"),
+    MOOSHROOM("minecraft:mooshroom", EntityMooshroom.class),
 
-    OCELOT("minecraft:ocelot"),
+    OCELOT("minecraft:ocelot", EntityOcelot.class),
 
     PAINTING("minecraft:painting"),
 
-    PANDA("minecraft:panda"),
+    PANDA("minecraft:panda", EntityPanda.class),
 
-    PARROT("minecraft:parrot"),
+    PARROT("minecraft:parrot", EntityParrot.class),
 
-    PHANTOM("minecraft:phantom"),
+    PHANTOM("minecraft:phantom", EntityPhantom.class),
 
-    PIG("minecraft:pig"),
+    PIG("minecraft:pig", EntityPig.class),
 
-    PIGLIN("minecraft:piglin"),
+    PIGLIN("minecraft:piglin", EntityPiglin.class),
 
-    PIGLIN_BRUTE("minecraft:piglin_brute"),
+    PIGLIN_BRUTE("minecraft:piglin_brute", EntityPiglinBrute.class),
 
-    PILLAGER("minecraft:pillager"),
+    PILLAGER("minecraft:pillager", EntityPillager.class),
 
-    POLAR_BEAR("minecraft:polar_bear"),
+    POLAR_BEAR("minecraft:polar_bear", EntityPolarBear.class),
 
     TNT("minecraft:tnt"),
 
-    PUFFERFISH("minecraft:pufferfish"),
+    PUFFERFISH("minecraft:pufferfish", EntityPufferFish.class),
 
-    RABBIT("minecraft:rabbit"),
+    RABBIT("minecraft:rabbit", EntityRabbit.class),
 
-    RAVAGER("minecraft:ravager"),
+    RAVAGER("minecraft:ravager", EntityRavager.class),
 
-    SALMON("minecraft:salmon"),
+    SALMON("minecraft:salmon", EntitySalmon.class),
 
-    SHEEP("minecraft:sheep"),
+    SHEEP("minecraft:sheep", EntitySheep.class),
 
-    SHULKER("minecraft:shulker"),
+    SHULKER("minecraft:shulker", EntityShulker.class),
 
     SHULKER_BULLET("minecraft:shulker_bullet"),
 
-    SILVERFISH("minecraft:silverfish"),
+    SILVERFISH("minecraft:silverfish", EntitySilverfish.class),
 
-    SKELETON("minecraft:skeleton"),
+    SKELETON("minecraft:skeleton", EntitySkeleton.class),
 
-    SKELETON_HORSE("minecraft:skeleton_horse"),
+    SKELETON_HORSE("minecraft:skeleton_horse", EntitySkeletonHorse.class),
 
-    SLIME("minecraft:slime"),
+    SLIME("minecraft:slime", EntitySlime.class),
 
     SMALL_FIREBALL("minecraft:small_fireball"),
 
-    SNOW_GOLEM("minecraft:snow_golem"),
+    SNOW_GOLEM("minecraft:snow_golem", EntitySnowman.class),
 
     SNOWBALL("minecraft:snowball"),
 
-    SPECTRAL_ARROW("minecraft:spectral_arrow"),
+    SPECTRAL_ARROW("minecraft:spectral_arrow", EntitySpectralArrow.class),
 
-    SPIDER("minecraft:spider"),
+    SPIDER("minecraft:spider", EntitySpider.class),
 
-    SQUID("minecraft:squid"),
+    SQUID("minecraft:squid", EntitySquid.class),
 
-    STRAY("minecraft:stray"),
+    STRAY("minecraft:stray", EntityStray.class),
 
-    STRIDER("minecraft:strider"),
+    STRIDER("minecraft:strider", EntityStrider.class),
 
     EGG("minecraft:egg"),
 
@@ -184,53 +200,68 @@ public enum EntityType {
 
     EXPERIENCE_BOTTLE("minecraft:experience_bottle"),
 
-    POTION("minecraft:potion"),
+    POTION("minecraft:potion", EntityPotion.class),
 
     TRIDENT("minecraft:trident"),
 
-    TRADER_LLAMA("minecraft:trader_llama"),
+    TRADER_LLAMA("minecraft:trader_llama", EntityRaderLlama.class),
 
-    TROPICAL_FISH("minecraft:tropical_fish"),
+    TROPICAL_FISH("minecraft:tropical_fish", EntityTropicalFish.class),
 
     TURTLE("minecraft:turtle"),
 
-    VEX("minecraft:vex"),
+    VEX("minecraft:vex", EntityVex.class),
 
-    VILLAGER("minecraft:villager"),
+    VILLAGER("minecraft:villager", EntityVillager.class),
 
-    VINDICATOR("minecraft:vindicator"),
+    VINDICATOR("minecraft:vindicator", EntityVindicator.class),
 
-    WANDERING_TRADER("minecraft:wandering_trader"),
+    WANDERING_TRADER("minecraft:wandering_trader", EntityWanderingTrader.class),
 
-    WITCH("minecraft:witch"),
+    WITCH("minecraft:witch", EntityWitch.class),
 
     WITHER("minecraft:wither"),
 
-    WITHER_SKELETON("minecraft:wither_skeleton"),
+    WITHER_SKELETON("minecraft:wither_skeleton", EntityWitherSkeleton.class),
 
     WITHER_SKULL("minecraft:wither_skull"),
 
-    WOLF("minecraft:wolf"),
+    WOLF("minecraft:wolf", EntityWolf.class),
 
-    ZOGLIN("minecraft:zoglin"),
+    ZOGLIN("minecraft:zoglin", EntityZoglin.class),
 
-    ZOMBIE("minecraft:zombie"),
+    ZOMBIE("minecraft:zombie", EntityZombie.class),
 
-    ZOMBIE_HORSE("minecraft:zombie_horse"),
+    ZOMBIE_HORSE("minecraft:zombie_horse", EntityZombieHorse.class),
 
-    ZOMBIE_VILLAGER("minecraft:zombie_villager"),
+    ZOMBIE_VILLAGER("minecraft:zombie_villager", EntityZombieVillager.class),
 
-    ZOMBIFIED_PIGLIN("minecraft:zombified_piglin"),
+    ZOMBIFIED_PIGLIN("minecraft:zombified_piglin", EntityZombifiedPiglin.class),
 
     PLAYER("minecraft:player"),
 
     FISHING_BOBBER("minecraft:fishing_bobber");
 
-    private String namespaceID;
+    private final String namespaceID;
+    private Class<? extends Entity> defaultEntityClass;
+    private Function<Position, ? extends Entity> defaultGenerator;
 
-    EntityType(String namespaceID) {
+    EntityType(String namespaceID, Class<? extends Entity> defaultEntityClass) {
         this.namespaceID = namespaceID;
         Registries.entityTypes.put(NamespaceID.from(namespaceID), this);
+
+        this.defaultEntityClass = defaultEntityClass;
+        if (defaultEntityClass != null) {
+            try {
+                this.defaultGenerator = LambdaMetafactoryUtils.getSingleArgumentConstructor(defaultEntityClass, Position.class);
+            } catch (Throwable t) {
+                // no position constructor
+            }
+        }
+    }
+
+    EntityType(String namespaceID) {
+        this(namespaceID, null);
     }
 
     public int getId() {
@@ -239,6 +270,20 @@ public enum EntityType {
 
     public String getNamespaceID() {
         return namespaceID;
+    }
+
+    public void setDefaultEntityClass(Class<? extends Entity> defaultEntityClass) {
+        this.defaultEntityClass = defaultEntityClass;
+    }
+
+    public Class<? extends Entity> getDefaultEntityClass() {
+        Check.notNull(this.defaultEntityClass, "Default class for " + name() + " is not yet present");
+        return this.defaultEntityClass;
+    }
+
+    public Entity createFromPosition(Position position) {
+        Check.notNull(this.defaultGenerator, "Default generator for " + name() + " is not yet supported");
+        return this.defaultGenerator.apply(position);
     }
 
     public static EntityType fromId(int id) {
