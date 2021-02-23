@@ -1,6 +1,6 @@
 package net.minestom.server.entity;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.metadata.ambient.BatMeta;
@@ -345,10 +345,10 @@ public enum EntityType {
     private double height;
 
     @NotNull
-    private Function<? extends Entity, ? extends EntityMeta> metaConstructor;
+    private BiFunction<Entity, Metadata, EntityMeta> metaConstructor;
 
     EntityType(@NotNull String namespaceID, double width, double height,
-            @NotNull Function<? extends Entity, ? extends EntityMeta> metaConstructor) {
+            @NotNull BiFunction<Entity, Metadata, EntityMeta> metaConstructor) {
         this.namespaceID = namespaceID;
         this.width = width;
         this.height = height;
@@ -372,7 +372,7 @@ public enum EntityType {
         return this.height;
     }
 
-    public Function<? extends Entity, ? extends EntityMeta> getMetaConstructor() {
+    public BiFunction<Entity, Metadata, EntityMeta> getMetaConstructor() {
         return this.metaConstructor;
     }
 

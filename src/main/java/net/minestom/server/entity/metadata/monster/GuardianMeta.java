@@ -8,16 +8,16 @@ public class GuardianMeta extends MonsterMeta {
 
     private Entity target;
 
-    public GuardianMeta(@NotNull Entity entity) {
-        super(entity);
+    public GuardianMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isRetractingSpikes() {
-        return getMetadata().getIndex((byte) 15, false);
+        return super.metadata.getIndex((byte) 15, false);
     }
 
     public void setRetractingSpikes(boolean retractingSpikes) {
-        getMetadata().setIndex((byte) 15, Metadata.Boolean(retractingSpikes));
+        super.metadata.setIndex((byte) 15, Metadata.Boolean(retractingSpikes));
     }
 
     public Entity getTarget() {
@@ -26,7 +26,7 @@ public class GuardianMeta extends MonsterMeta {
 
     public void setTarget(@NotNull Entity target) {
         this.target = target;
-        getMetadata().setIndex((byte) 16, Metadata.VarInt(target.getEntityId()));
+        super.metadata.setIndex((byte) 16, Metadata.VarInt(target.getEntityId()));
     }
 
 }

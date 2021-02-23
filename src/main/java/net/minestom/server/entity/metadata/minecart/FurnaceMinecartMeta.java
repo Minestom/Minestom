@@ -6,16 +6,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class FurnaceMinecartMeta extends AbstractMinecartMeta {
 
-    public FurnaceMinecartMeta(@NotNull Entity entity) {
-        super(entity);
+    public FurnaceMinecartMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isHasFuel() {
-        return getMetadata().getIndex((byte) 13, false);
+        return super.metadata.getIndex((byte) 13, false);
     }
 
     public void setHasFuel(boolean value) {
-        getMetadata().setIndex((byte) 13, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 13, Metadata.Boolean(value));
     }
 
 }

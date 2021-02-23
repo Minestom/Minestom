@@ -12,8 +12,8 @@ public class AbstractArrowMeta extends BaseEntityMeta {
     private final static byte CRITICAL_BIT = 0x01;
     private final static byte NO_CLIP_BIT = 0x01;
 
-    protected AbstractArrowMeta(@NotNull Entity entity) {
-        super(entity);
+    protected AbstractArrowMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isCritical() {
@@ -33,11 +33,11 @@ public class AbstractArrowMeta extends BaseEntityMeta {
     }
 
     public byte getPiercingLevel() {
-        return getMetadata().getIndex((byte) 8, (byte) 0);
+        return super.metadata.getIndex((byte) 8, (byte) 0);
     }
 
     public void setPiercingLevel(byte value) {
-        getMetadata().setIndex((byte) 8, Metadata.Byte(value));
+        super.metadata.setIndex((byte) 8, Metadata.Byte(value));
     }
 
 }

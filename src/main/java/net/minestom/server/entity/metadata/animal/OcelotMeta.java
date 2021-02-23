@@ -6,16 +6,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class OcelotMeta extends AnimalMeta {
 
-    public OcelotMeta(@NotNull Entity entity) {
-        super(entity);
+    public OcelotMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isTrusting() {
-        return getMetadata().getIndex((byte) 16, false);
+        return super.metadata.getIndex((byte) 16, false);
     }
 
     public void setTrusting(boolean value) {
-        getMetadata().setIndex((byte) 16, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 16, Metadata.Boolean(value));
     }
 
 }

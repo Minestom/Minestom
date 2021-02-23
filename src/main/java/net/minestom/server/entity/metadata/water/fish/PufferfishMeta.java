@@ -6,16 +6,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class PufferfishMeta extends AbstractFishMeta {
 
-    public PufferfishMeta(@NotNull Entity entity) {
-        super(entity);
+    public PufferfishMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public State getState() {
-        return State.VALUES[getMetadata().getIndex((byte) 16, 0)];
+        return State.VALUES[super.metadata.getIndex((byte) 16, 0)];
     }
 
     public void setState(State state) {
-        getMetadata().setIndex((byte) 16, Metadata.VarInt(state.ordinal()));
+        super.metadata.setIndex((byte) 16, Metadata.VarInt(state.ordinal()));
         updateBoundingBox(state);
     }
 

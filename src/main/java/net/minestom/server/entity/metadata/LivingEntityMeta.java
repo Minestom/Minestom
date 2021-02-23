@@ -15,8 +15,8 @@ public class LivingEntityMeta extends BaseEntityMeta {
     private final static byte ACTIVE_HAND_BIT = 0x02;
     private final static byte IS_IN_SPIN_ATTACK_BIT = 0x04;
 
-    protected LivingEntityMeta(@NotNull Entity entity) {
-        super(entity);
+    protected LivingEntityMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isHandActive() {
@@ -45,52 +45,52 @@ public class LivingEntityMeta extends BaseEntityMeta {
     }
 
     public float getHealth() {
-        return getMetadata().getIndex((byte) 8, 1F);
+        return super.metadata.getIndex((byte) 8, 1F);
     }
 
     public void setHealth(float value) {
-        getMetadata().setIndex((byte) 8, Metadata.Float(value));
+        super.metadata.setIndex((byte) 8, Metadata.Float(value));
     }
 
     public int getPotionEffectColor() {
-        return getMetadata().getIndex((byte) 9, 0);
+        return super.metadata.getIndex((byte) 9, 0);
     }
 
     public void setPotionEffectColor(int value) {
-        getMetadata().setIndex((byte) 9, Metadata.VarInt(value));
+        super.metadata.setIndex((byte) 9, Metadata.VarInt(value));
     }
 
     public boolean isPotionEffectAmbient() {
-        return getMetadata().getIndex((byte) 10, false);
+        return super.metadata.getIndex((byte) 10, false);
     }
 
     public void setPotionEffectAmbient(boolean value) {
-        getMetadata().setIndex((byte) 10, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 10, Metadata.Boolean(value));
     }
 
     public int getNumberOfArrows() {
-        return getMetadata().getIndex((byte) 11, 0);
+        return super.metadata.getIndex((byte) 11, 0);
     }
 
     public void setNumberOfArrows(int value) {
-        getMetadata().getIndex((byte) 11, Metadata.VarInt(value));
+        super.metadata.getIndex((byte) 11, Metadata.VarInt(value));
     }
 
     public int getHealthAddedByAbsorption() {
-        return getMetadata().getIndex((byte) 12, 0);
+        return super.metadata.getIndex((byte) 12, 0);
     }
 
     public void setHealthAddedByAbsorption(int value) {
-        getMetadata().getIndex((byte) 12, Metadata.VarInt(value));
+        super.metadata.getIndex((byte) 12, Metadata.VarInt(value));
     }
 
     @Nullable
     public BlockPosition getBedInWhichSleepingPosition() {
-        return getMetadata().getIndex((byte) 13, null);
+        return super.metadata.getIndex((byte) 13, null);
     }
 
     public void setBedInWhichSleepingPosition(@Nullable BlockPosition value) {
-        getMetadata().setIndex((byte) 13, Metadata.OptPosition(value));
+        super.metadata.setIndex((byte) 13, Metadata.OptPosition(value));
     }
 
 }

@@ -7,16 +7,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class RaiderMeta extends MonsterMeta {
 
-    protected RaiderMeta(@NotNull Entity entity) {
-        super(entity);
+    protected RaiderMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isCelebrating() {
-        return getMetadata().getIndex((byte) 15, false);
+        return super.metadata.getIndex((byte) 15, false);
     }
 
     public void setCelebrating(boolean value) {
-        getMetadata().setIndex((byte) 15, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 15, Metadata.Boolean(value));
     }
 
 }

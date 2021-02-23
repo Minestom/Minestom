@@ -7,16 +7,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class PrimedTntMeta extends BaseEntityMeta {
 
-    public PrimedTntMeta(@NotNull Entity entity) {
-        super(entity);
+    public PrimedTntMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public int getFuseTime() {
-        return getMetadata().getIndex((byte) 7, 80);
+        return super.metadata.getIndex((byte) 7, 80);
     }
 
     public void setFuseTime(int value) {
-        getMetadata().setIndex((byte) 7, Metadata.VarInt(value));
+        super.metadata.setIndex((byte) 7, Metadata.VarInt(value));
     }
 
 }

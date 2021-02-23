@@ -6,16 +6,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class TropicalFishMeta extends AbstractFishMeta {
 
-    public TropicalFishMeta(@NotNull Entity entity) {
-        super(entity);
+    public TropicalFishMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public Variant getVariant() {
-        return getVariantFromID(getMetadata().getIndex((byte) 16, 0));
+        return getVariantFromID(super.metadata.getIndex((byte) 16, 0));
     }
 
     public void setVariant(Variant variant) {
-        getMetadata().setIndex((byte) 16, Metadata.VarInt(getVariantID(variant)));
+        super.metadata.setIndex((byte) 16, Metadata.VarInt(getVariantID(variant)));
     }
 
     public static int getVariantID(Variant variant) {

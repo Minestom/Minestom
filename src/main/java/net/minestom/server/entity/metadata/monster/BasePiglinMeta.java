@@ -6,16 +6,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class BasePiglinMeta extends MonsterMeta {
 
-    protected BasePiglinMeta(@NotNull Entity entity) {
-        super(entity);
+    protected BasePiglinMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isImmuneToZombification() {
-        return getMetadata().getIndex((byte) 15, false);
+        return super.metadata.getIndex((byte) 15, false);
     }
 
     public void setImmuneToZombification(boolean value) {
-        getMetadata().setIndex((byte) 15, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 15, Metadata.Boolean(value));
     }
 
 }

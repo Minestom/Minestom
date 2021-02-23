@@ -17,8 +17,8 @@ public class AbstractHorseMeta extends AnimalMeta {
     private final static byte REARING_BIT = 0x20;
     private final static byte MOUTH_OPEN_BIT = 0x40;
 
-    protected AbstractHorseMeta(@NotNull Entity entity) {
-        super(entity);
+    protected AbstractHorseMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isTamed() {
@@ -70,11 +70,11 @@ public class AbstractHorseMeta extends AnimalMeta {
     }
 
     public UUID getOwner() {
-        return getMetadata().getIndex((byte) 17, null);
+        return super.metadata.getIndex((byte) 17, null);
     }
 
     public void setOwner(UUID value) {
-        getMetadata().setIndex((byte) 17, Metadata.OptUUID(value));
+        super.metadata.setIndex((byte) 17, Metadata.OptUUID(value));
     }
 
 }

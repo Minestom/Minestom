@@ -66,7 +66,7 @@ public class HorseCommand extends Command {
         HorseMeta.Marking marking = args.get("marking");
         HorseMeta.Color color = args.get("color");
         var horse = new EntityCreature(EntityType.HORSE, player.getPosition());
-        var meta = new HorseMeta(horse);
+        var meta = (HorseMeta) horse.getEntityMeta();
         meta.setBaby(baby);
         meta.setVariant(new HorseMeta.Variant(marking, color));
         horse.setInstance(player.getInstance());

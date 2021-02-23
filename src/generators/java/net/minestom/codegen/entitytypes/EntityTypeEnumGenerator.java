@@ -8,6 +8,7 @@ import net.minestom.codegen.ConstructorLambda;
 import net.minestom.codegen.EnumGenerator;
 import net.minestom.codegen.MinestomEnumGenerator;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.ResourceGatherer;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -130,9 +132,10 @@ public class EntityTypeEnumGenerator extends MinestomEnumGenerator<EntityTypeCon
                 ParameterSpec.builder(TypeName.DOUBLE, "width").build(),
                 ParameterSpec.builder(TypeName.DOUBLE, "height").build(),
                 ParameterSpec.builder(ParameterizedTypeName.get(
-                        ClassName.get(Function.class),
-                        WildcardTypeName.subtypeOf(ClassName.get(Entity.class)),
-                        WildcardTypeName.subtypeOf(ClassName.get(EntityMeta.class))
+                        BiFunction.class,
+                        Entity.class,
+                        Metadata.class,
+                        EntityMeta.class
                 ), "metaConstructor").addAnnotation(NotNull.class).build()
         );
         generator.appendToConstructor(code -> {
@@ -153,9 +156,10 @@ public class EntityTypeEnumGenerator extends MinestomEnumGenerator<EntityTypeCon
         });
         generator.addMethod("getMetaConstructor", new ParameterSpec[0],
                 ParameterizedTypeName.get(
-                        ClassName.get(Function.class),
-                        WildcardTypeName.subtypeOf(ClassName.get(Entity.class)),
-                        WildcardTypeName.subtypeOf(ClassName.get(EntityMeta.class))
+                        BiFunction.class,
+                        Entity.class,
+                        Metadata.class,
+                        EntityMeta.class
                 ),
                 code -> code.addStatement("return this.metaConstructor")
         );

@@ -13,50 +13,50 @@ public class PandaMeta extends AnimalMeta {
     private final static byte SITTING_BIT = 0x08;
     private final static byte ON_BACK_BIT = 0x10;
 
-    public PandaMeta(@NotNull Entity entity) {
-        super(entity);
+    public PandaMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public int getBreedTimer() {
-        return getMetadata().getIndex((byte) 16, 0);
+        return super.metadata.getIndex((byte) 16, 0);
     }
 
     public void setBreedTimer(int value) {
-        getMetadata().setIndex((byte) 16, Metadata.VarInt(value));
+        super.metadata.setIndex((byte) 16, Metadata.VarInt(value));
     }
 
     public int getSneezeTimer() {
-        return getMetadata().getIndex((byte) 17, 0);
+        return super.metadata.getIndex((byte) 17, 0);
     }
 
     public void setSneezeTimer(int value) {
-        getMetadata().setIndex((byte) 17, Metadata.VarInt(value));
+        super.metadata.setIndex((byte) 17, Metadata.VarInt(value));
     }
 
     public int getEatTimer() {
-        return getMetadata().getIndex((byte) 18, 0);
+        return super.metadata.getIndex((byte) 18, 0);
     }
 
     public void setEatTimer(int value) {
-        getMetadata().setIndex((byte) 18, Metadata.VarInt(value));
+        super.metadata.setIndex((byte) 18, Metadata.VarInt(value));
     }
 
     @NotNull
     public Gene getMainGene() {
-        return Gene.VALUES[getMetadata().getIndex((byte) 19, (byte) 0)];
+        return Gene.VALUES[super.metadata.getIndex((byte) 19, (byte) 0)];
     }
 
     public void setMainGene(@NotNull Gene value) {
-        getMetadata().setIndex((byte) 19, Metadata.Byte((byte) value.ordinal()));
+        super.metadata.setIndex((byte) 19, Metadata.Byte((byte) value.ordinal()));
     }
 
     @NotNull
     public Gene getHiddenGene() {
-        return Gene.VALUES[getMetadata().getIndex((byte) 20, (byte) 0)];
+        return Gene.VALUES[super.metadata.getIndex((byte) 20, (byte) 0)];
     }
 
     public void setHiddenGene(@NotNull Gene value) {
-        getMetadata().setIndex((byte) 20, Metadata.Byte((byte) value.ordinal()));
+        super.metadata.setIndex((byte) 20, Metadata.Byte((byte) value.ordinal()));
     }
 
     public boolean isSneezing() {

@@ -9,25 +9,25 @@ import org.jetbrains.annotations.Nullable;
 
 public class EndCrystalMeta extends BaseEntityMeta {
 
-    public EndCrystalMeta(@NotNull Entity entity) {
-        super(entity);
+    public EndCrystalMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     @Nullable
     public BlockPosition getBeamTarget() {
-        return getMetadata().getIndex((byte) 7, null);
+        return super.metadata.getIndex((byte) 7, null);
     }
 
     public void setBeamTarget(@Nullable BlockPosition value) {
-        getMetadata().setIndex((byte) 7, Metadata.OptPosition(value));
+        super.metadata.setIndex((byte) 7, Metadata.OptPosition(value));
     }
 
     public boolean isShowingBottom() {
-        return getMetadata().getIndex((byte) 8, true);
+        return super.metadata.getIndex((byte) 8, true);
     }
 
     public void setShowingBottom(boolean value) {
-        getMetadata().setIndex((byte) 8, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 8, Metadata.Boolean(value));
     }
 
 }

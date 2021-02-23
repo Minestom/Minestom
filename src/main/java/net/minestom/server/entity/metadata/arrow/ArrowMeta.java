@@ -7,16 +7,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class ArrowMeta extends BaseEntityMeta {
 
-    public ArrowMeta(@NotNull Entity entity) {
-        super(entity);
+    public ArrowMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public int getColor() {
-        return getMetadata().getIndex((byte) 9, -1);
+        return super.metadata.getIndex((byte) 9, -1);
     }
 
     public void setColor(int value) {
-        getMetadata().setIndex((byte) 9, Metadata.VarInt(value));
+        super.metadata.setIndex((byte) 9, Metadata.VarInt(value));
     }
 
 }

@@ -1,6 +1,7 @@
 package net.minestom.server.entity.metadata;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
 
 public class MobMeta extends LivingEntityMeta {
@@ -11,8 +12,8 @@ public class MobMeta extends LivingEntityMeta {
     private final static byte IS_LEFT_HANDED_BIT = 0x02;
     private final static byte IS_AGGRESSIVE_BIT = 0x04;
 
-    protected MobMeta(@NotNull Entity entity) {
-        super(entity);
+    protected MobMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isNoAi() {

@@ -9,40 +9,40 @@ import org.jetbrains.annotations.NotNull;
 
 public class AreaEffectCloudMeta extends BaseEntityMeta {
 
-    public AreaEffectCloudMeta(@NotNull Entity entity) {
-        super(entity);
+    public AreaEffectCloudMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public float getRadius() {
-        return getMetadata().getIndex((byte) 7, .5F);
+        return super.metadata.getIndex((byte) 7, .5F);
     }
 
     public void setRadius(float value) {
-        getMetadata().setIndex((byte) 7, Metadata.Float(value));
+        super.metadata.setIndex((byte) 7, Metadata.Float(value));
     }
 
     public int getColor() {
-        return getMetadata().getIndex((byte) 8, 0);
+        return super.metadata.getIndex((byte) 8, 0);
     }
 
     public void setColor(int value) {
-        getMetadata().setIndex((byte) 8, Metadata.VarInt(value));
+        super.metadata.setIndex((byte) 8, Metadata.VarInt(value));
     }
 
     public boolean isSinglePoint() {
-        return getMetadata().getIndex((byte) 9, false);
+        return super.metadata.getIndex((byte) 9, false);
     }
 
     public void setSinglePoint(boolean value) {
-        getMetadata().setIndex((byte) 9, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 9, Metadata.Boolean(value));
     }
 
     public Particle getParticle() {
-        return getMetadata().getIndex((byte) 10, new Particle(ParticleType.EFFECT, null));
+        return super.metadata.getIndex((byte) 10, new Particle(ParticleType.EFFECT, null));
     }
 
     public void setParticle(Particle value) {
-        getMetadata().setIndex((byte) 11, Metadata.Particle(value));
+        super.metadata.setIndex((byte) 11, Metadata.Particle(value));
     }
 
 }

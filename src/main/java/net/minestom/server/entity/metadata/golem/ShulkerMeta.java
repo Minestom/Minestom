@@ -8,40 +8,40 @@ import org.jetbrains.annotations.NotNull;
 
 public class ShulkerMeta extends AbstractGolemMeta {
 
-    public ShulkerMeta(@NotNull Entity entity) {
-        super(entity);
+    public ShulkerMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public Direction getAttachFace() {
-        return getMetadata().getIndex((byte) 15, Direction.DOWN);
+        return super.metadata.getIndex((byte) 15, Direction.DOWN);
     }
 
     public void setAttachFace(Direction value) {
-        getMetadata().setIndex((byte) 15, Metadata.Direction(value));
+        super.metadata.setIndex((byte) 15, Metadata.Direction(value));
     }
 
     public BlockPosition getAttachmentPosition() {
-        return getMetadata().getIndex((byte) 16, null);
+        return super.metadata.getIndex((byte) 16, null);
     }
 
     public void setAttachmentPosition(BlockPosition value) {
-        getMetadata().setIndex((byte) 16, Metadata.OptPosition(value));
+        super.metadata.setIndex((byte) 16, Metadata.OptPosition(value));
     }
 
     public byte getShieldHeight() {
-        return getMetadata().getIndex((byte) 17, (byte) 0);
+        return super.metadata.getIndex((byte) 17, (byte) 0);
     }
 
     public void setShieldHeight(byte value) {
-        getMetadata().setIndex((byte) 17, Metadata.Byte(value));
+        super.metadata.setIndex((byte) 17, Metadata.Byte(value));
     }
 
     public byte getColor() {
-        return getMetadata().getIndex((byte) 18, (byte) 10);
+        return super.metadata.getIndex((byte) 18, (byte) 10);
     }
 
     public void setColor(byte value) {
-        getMetadata().setIndex((byte) 18, Metadata.Byte(value));
+        super.metadata.setIndex((byte) 18, Metadata.Byte(value));
     }
 
 }

@@ -6,17 +6,17 @@ import org.jetbrains.annotations.NotNull;
 
 public class ParrotMeta extends TameableAnimalMeta {
 
-    public ParrotMeta(@NotNull Entity entity) {
-        super(entity);
+    public ParrotMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     @NotNull
     public Color getColor() {
-        return Color.VALUES[getMetadata().getIndex((byte) 18, 0)];
+        return Color.VALUES[super.metadata.getIndex((byte) 18, 0)];
     }
 
     public void setColor(@NotNull Color value) {
-        getMetadata().setIndex((byte) 18, Metadata.VarInt(value.ordinal()));
+        super.metadata.setIndex((byte) 18, Metadata.VarInt(value.ordinal()));
     }
 
     public enum Color {

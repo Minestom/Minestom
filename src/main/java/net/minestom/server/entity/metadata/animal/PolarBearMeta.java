@@ -6,16 +6,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class PolarBearMeta extends AnimalMeta {
 
-    public PolarBearMeta(@NotNull Entity entity) {
-        super(entity);
+    public PolarBearMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isStandingUp() {
-        return getMetadata().getIndex((byte) 16, false);
+        return super.metadata.getIndex((byte) 16, false);
     }
 
     public void setStandingUp(boolean value) {
-        getMetadata().setIndex((byte) 16, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 16, Metadata.Boolean(value));
     }
 
 }

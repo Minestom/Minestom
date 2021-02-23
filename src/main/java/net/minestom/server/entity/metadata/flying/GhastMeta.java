@@ -6,16 +6,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class GhastMeta extends FlyingMeta {
 
-    public GhastMeta(@NotNull Entity entity) {
-        super(entity);
+    public GhastMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isAttacking() {
-        return getMetadata().getIndex((byte) 15, false);
+        return super.metadata.getIndex((byte) 15, false);
     }
 
     public void setAttacking(boolean value) {
-        getMetadata().setIndex((byte) 15, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 15, Metadata.Boolean(value));
     }
 
 }

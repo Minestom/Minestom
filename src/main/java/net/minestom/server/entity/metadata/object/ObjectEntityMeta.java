@@ -11,18 +11,18 @@ public class ObjectEntityMeta extends BaseEntityMeta {
 
     private final ItemStack defaultItem;
 
-    protected ObjectEntityMeta(@NotNull Entity entity, @NotNull Material defaultItemMaterial) {
-        super(entity);
+    protected ObjectEntityMeta(@NotNull Entity entity, @NotNull Metadata metadata, @NotNull Material defaultItemMaterial) {
+        super(entity, metadata);
         this.defaultItem = new ItemStack(defaultItemMaterial, (byte) 1);
     }
 
     @NotNull
     public ItemStack getItem() {
-        return getMetadata().getIndex((byte) 7, this.defaultItem);
+        return super.metadata.getIndex((byte) 7, this.defaultItem);
     }
 
     public void setItem(@NotNull ItemStack item) {
-        getMetadata().setIndex((byte) 7, Metadata.Slot(item));
+        super.metadata.setIndex((byte) 7, Metadata.Slot(item));
     }
 
 }

@@ -6,13 +6,13 @@ import org.jetbrains.annotations.NotNull;
 
 public class VillagerMeta extends AbstractVillagerMeta {
 
-    public VillagerMeta(@NotNull Entity entity) {
-        super(entity);
+    public VillagerMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     @NotNull
     public VillagerData getVillagerData() {
-        int[] data = getMetadata().getIndex((byte) 17, null);
+        int[] data = super.metadata.getIndex((byte) 17, null);
         if (data == null) {
             return new VillagerData(Type.PLAINS, Profession.NONE, Level.NOVICE);
         }
@@ -20,7 +20,7 @@ public class VillagerMeta extends AbstractVillagerMeta {
     }
 
     public void setVillagerData(@NotNull VillagerData data) {
-        getMetadata().setIndex((byte) 17, Metadata.VillagerData(
+        super.metadata.setIndex((byte) 17, Metadata.VillagerData(
                 data.type.ordinal(),
                 data.profession.ordinal(),
                 data.level.ordinal() + 1

@@ -6,17 +6,17 @@ import org.jetbrains.annotations.NotNull;
 
 public class SpellcasterIllagerMeta extends AbstractIllagerMeta {
 
-    protected SpellcasterIllagerMeta(@NotNull Entity entity) {
-        super(entity);
+    protected SpellcasterIllagerMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     @NotNull
     public Spell getSpell() {
-        return Spell.VALUES[getMetadata().getIndex((byte) 16, (byte) 0)];
+        return Spell.VALUES[super.metadata.getIndex((byte) 16, (byte) 0)];
     }
 
     public void setSpell(@NotNull Spell spell) {
-        getMetadata().setIndex((byte) 16, Metadata.Byte((byte) spell.ordinal()));
+        super.metadata.setIndex((byte) 16, Metadata.Byte((byte) spell.ordinal()));
     }
 
     public enum Spell {

@@ -8,6 +8,7 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
+import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.entity.*;
@@ -123,6 +124,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
 
     protected Metadata metadata = new Metadata(this);
+    protected EntityMeta entityMeta;
 
     private final List<TimedPotion> effects = new CopyOnWriteArrayList<>();
 
@@ -142,6 +144,8 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         this.lastY = spawnPosition.getY();
         this.lastZ = spawnPosition.getZ();
 
+        this.entityMeta = entityType.getMetaConstructor().apply(this, this.metadata);
+
         setBoundingBox(0, 0, 0);
 
         setAutoViewable(true);
@@ -156,10 +160,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
     public Entity(@NotNull EntityType entityType) {
         this(entityType, new Position());
-    }
-
-    public Metadata getMetadata() {
-        return this.metadata;
     }
 
     /**
@@ -222,6 +222,17 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
 
     public boolean isOnGround() {
         return onGround || EntityUtils.isOnGround(this) /* backup for levitating entities */;
+    }
+
+    /**
+     * Gets metadata of this entity.
+     * You may want to cast it to specific implementation.
+     *
+     * @return metadata of this entity.
+     */
+    @NotNull
+    public EntityMeta getEntityMeta() {
+        return this.entityMeta;
     }
 
     /**

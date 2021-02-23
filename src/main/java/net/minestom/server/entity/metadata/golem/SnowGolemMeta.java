@@ -6,16 +6,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class SnowGolemMeta extends AbstractGolemMeta {
 
-    public SnowGolemMeta(@NotNull Entity entity) {
-        super(entity);
+    public SnowGolemMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isHasPumpkinHat() {
-        return getMetadata().getIndex((byte) 15, (byte) 0x10) == (byte) 0x10;
+        return super.metadata.getIndex((byte) 15, (byte) 0x10) == (byte) 0x10;
     }
 
     public void setHasPumpkinHat(boolean value) {
-        getMetadata().setIndex((byte) 15, Metadata.Byte(value ? (byte) 0x10 : (byte) 0x00));
+        super.metadata.setIndex((byte) 15, Metadata.Byte(value ? (byte) 0x10 : (byte) 0x00));
     }
 
 }

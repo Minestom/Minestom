@@ -8,25 +8,25 @@ import org.jetbrains.annotations.NotNull;
 
 public class ItemFrameMeta extends BaseEntityMeta {
 
-    public ItemFrameMeta(@NotNull Entity entity) {
-        super(entity);
+    public ItemFrameMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     @NotNull
     public ItemStack getItem() {
-        return getMetadata().getIndex((byte) 7, ItemStack.getAirItem());
+        return super.metadata.getIndex((byte) 7, ItemStack.getAirItem());
     }
 
     public void setItem(@NotNull ItemStack value) {
-        getMetadata().setIndex((byte) 7, Metadata.Slot(value));
+        super.metadata.setIndex((byte) 7, Metadata.Slot(value));
     }
 
     public int getRotation() {
-        return getMetadata().getIndex((byte) 8, 0);
+        return super.metadata.getIndex((byte) 8, 0);
     }
 
     public void setRotation(int value) {
-        getMetadata().setIndex((byte) 8, Metadata.VarInt(value));
+        super.metadata.setIndex((byte) 8, Metadata.VarInt(value));
     }
 
 }

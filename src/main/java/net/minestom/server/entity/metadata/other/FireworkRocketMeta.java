@@ -11,17 +11,17 @@ public class FireworkRocketMeta extends BaseEntityMeta {
 
     private Entity shooter;
 
-    public FireworkRocketMeta(@NotNull Entity entity) {
-        super(entity);
+    public FireworkRocketMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     @NotNull
     public ItemStack getFireworkInfo() {
-        return getMetadata().getIndex((byte) 7, ItemStack.getAirItem());
+        return super.metadata.getIndex((byte) 7, ItemStack.getAirItem());
     }
 
     public void setFireworkInfo(@NotNull ItemStack value) {
-        getMetadata().setIndex((byte) 7, Metadata.Slot(value));
+        super.metadata.setIndex((byte) 7, Metadata.Slot(value));
     }
 
     @Nullable
@@ -32,15 +32,15 @@ public class FireworkRocketMeta extends BaseEntityMeta {
     public void setShooter(@Nullable Entity value) {
         this.shooter = value;
         Integer entityID = value == null ? null : value.getEntityId();
-        getMetadata().setIndex((byte) 8, Metadata.OptVarInt(entityID));
+        super.metadata.setIndex((byte) 8, Metadata.OptVarInt(entityID));
     }
 
     public boolean isShotAtAngle() {
-        return getMetadata().getIndex((byte) 9, false);
+        return super.metadata.getIndex((byte) 9, false);
     }
 
     public void setShotAtAngle(boolean value) {
-        getMetadata().setIndex((byte) 9, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 9, Metadata.Boolean(value));
     }
 
 }

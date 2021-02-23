@@ -6,32 +6,32 @@ import org.jetbrains.annotations.NotNull;
 
 public class LlamaMeta extends ChestedHorseMeta {
 
-    public LlamaMeta(@NotNull Entity entity) {
-        super(entity);
+    public LlamaMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public int getStrength() {
-        return getMetadata().getIndex((byte) 19, 0);
+        return super.metadata.getIndex((byte) 19, 0);
     }
 
     public void setStrength(int value) {
-        getMetadata().setIndex((byte) 19, Metadata.VarInt(value));
+        super.metadata.setIndex((byte) 19, Metadata.VarInt(value));
     }
 
     public int getCarpetColor() {
-        return getMetadata().getIndex((byte) 20, -1);
+        return super.metadata.getIndex((byte) 20, -1);
     }
 
     public void setCarpetColor(int value) {
-        getMetadata().setIndex((byte) 20, Metadata.VarInt(value));
+        super.metadata.setIndex((byte) 20, Metadata.VarInt(value));
     }
 
     public Variant getVariant() {
-        return Variant.VALUES[getMetadata().getIndex((byte) 21, 0)];
+        return Variant.VALUES[super.metadata.getIndex((byte) 21, 0)];
     }
 
     public void setVariant(Variant value) {
-        getMetadata().setIndex((byte) 21, Metadata.VarInt(value.ordinal()));
+        super.metadata.setIndex((byte) 21, Metadata.VarInt(value.ordinal()));
     }
 
     public enum Variant {

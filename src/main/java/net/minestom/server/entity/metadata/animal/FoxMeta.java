@@ -19,17 +19,17 @@ public class FoxMeta extends AnimalMeta {
     private final static byte FACEPLANTED_BIT = 0x40;
     private final static byte DEFENDING_BIT = (byte) 0x80;
 
-    public FoxMeta(@NotNull Entity entity) {
-        super(entity);
+    public FoxMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     @NotNull
     public Type getType() {
-        return Type.VALUES[getMetadata().getIndex((byte) 16, 0)];
+        return Type.VALUES[super.metadata.getIndex((byte) 16, 0)];
     }
 
     public void setType(@NotNull Type type) {
-        getMetadata().setIndex((byte) 16, Metadata.VarInt(type.ordinal()));
+        super.metadata.setIndex((byte) 16, Metadata.VarInt(type.ordinal()));
     }
 
     public boolean isSitting() {
@@ -90,20 +90,20 @@ public class FoxMeta extends AnimalMeta {
 
     @Nullable
     public UUID getFirstUUID() {
-        return getMetadata().getIndex((byte) 18, null);
+        return super.metadata.getIndex((byte) 18, null);
     }
 
     public void setFirstUUID(@Nullable UUID value) {
-        getMetadata().setIndex((byte) 18, Metadata.OptUUID(value));
+        super.metadata.setIndex((byte) 18, Metadata.OptUUID(value));
     }
 
     @Nullable
     public UUID getSecondUUID() {
-        return getMetadata().getIndex((byte) 19, null);
+        return super.metadata.getIndex((byte) 19, null);
     }
 
     public void setSecondUUID(@Nullable UUID value) {
-        getMetadata().setIndex((byte) 19, Metadata.OptUUID(value));
+        super.metadata.setIndex((byte) 19, Metadata.OptUUID(value));
     }
 
     public enum Type {

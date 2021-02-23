@@ -12,8 +12,8 @@ public class BeeMeta extends AnimalMeta {
     private final static byte HAS_STUNG_BIT = 0x04;
     private final static byte HAS_NECTAR_BIT = 0x08;
 
-    public BeeMeta(@NotNull Entity entity) {
-        super(entity);
+    public BeeMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isAngry() {
@@ -41,11 +41,11 @@ public class BeeMeta extends AnimalMeta {
     }
 
     public int getAngerTicks() {
-        return getMetadata().getIndex((byte) 17, 0);
+        return super.metadata.getIndex((byte) 17, 0);
     }
 
     public void setAngerTicks(int value) {
-        getMetadata().setIndex((byte) 17, Metadata.VarInt(value));
+        super.metadata.setIndex((byte) 17, Metadata.VarInt(value));
     }
 
 }

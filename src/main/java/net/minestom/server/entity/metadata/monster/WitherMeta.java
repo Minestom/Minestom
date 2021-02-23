@@ -11,8 +11,8 @@ public class WitherMeta extends MonsterMeta {
     private Entity leftHead;
     private Entity rightHead;
 
-    public WitherMeta(@NotNull Entity entity) {
-        super(entity);
+    public WitherMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     @Nullable
@@ -22,7 +22,7 @@ public class WitherMeta extends MonsterMeta {
 
     public void setCenterHead(@Nullable Entity value) {
         this.centerHead = value;
-        getMetadata().setIndex((byte) 15, Metadata.VarInt(value == null ? 0 : value.getEntityId()));
+        super.metadata.setIndex((byte) 15, Metadata.VarInt(value == null ? 0 : value.getEntityId()));
     }
 
     @Nullable
@@ -32,7 +32,7 @@ public class WitherMeta extends MonsterMeta {
 
     public void setLeftHead(@Nullable Entity value) {
         this.leftHead = value;
-        getMetadata().setIndex((byte) 16, Metadata.VarInt(value == null ? 0 : value.getEntityId()));
+        super.metadata.setIndex((byte) 16, Metadata.VarInt(value == null ? 0 : value.getEntityId()));
     }
 
     @Nullable
@@ -42,15 +42,15 @@ public class WitherMeta extends MonsterMeta {
 
     public void setRightHead(@Nullable Entity value) {
         this.rightHead = value;
-        getMetadata().setIndex((byte) 17, Metadata.VarInt(value == null ? 0 : value.getEntityId()));
+        super.metadata.setIndex((byte) 17, Metadata.VarInt(value == null ? 0 : value.getEntityId()));
     }
 
     public int getInvulnerableTime() {
-        return getMetadata().getIndex((byte) 18, 0);
+        return super.metadata.getIndex((byte) 18, 0);
     }
 
     public void setInvulnerableTime(int value) {
-        getMetadata().setIndex((byte) 18, Metadata.VarInt(value));
+        super.metadata.setIndex((byte) 18, Metadata.VarInt(value));
     }
 
 }

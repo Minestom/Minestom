@@ -55,7 +55,7 @@ public class ShootCommand extends Command {
                 break;
             case "colored":
                 projectile = new EntityArrow(player, pos);
-                var meta = new ArrowMeta((Entity) projectile);
+                var meta = (ArrowMeta) ((Entity) projectile).getEntityMeta();
                 meta.setColor(ThreadLocalRandom.current().nextInt());
                 break;
             default:

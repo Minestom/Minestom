@@ -7,12 +7,12 @@ import org.jetbrains.annotations.NotNull;
 
 public class PiglinMeta extends BasePiglinMeta {
 
-    public PiglinMeta(@NotNull Entity entity) {
-        super(entity);
+    public PiglinMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isBaby() {
-        return getMetadata().getIndex((byte) 16, false);
+        return super.metadata.getIndex((byte) 16, false);
     }
 
     public void setBaby(boolean value) {
@@ -25,23 +25,23 @@ public class PiglinMeta extends BasePiglinMeta {
         } else {
             setBoundingBox(bb.getWidth() * 2, bb.getHeight() * 2);
         }
-        getMetadata().setIndex((byte) 16, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 16, Metadata.Boolean(value));
     }
 
     public boolean isChargingCrossbow() {
-        return getMetadata().getIndex((byte) 17, false);
+        return super.metadata.getIndex((byte) 17, false);
     }
 
     public void setChargingCrossbow(boolean value) {
-        getMetadata().setIndex((byte) 17, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 17, Metadata.Boolean(value));
     }
 
     public boolean isDancing() {
-        return getMetadata().getIndex((byte) 18, false);
+        return super.metadata.getIndex((byte) 18, false);
     }
 
     public void setDancing(boolean value) {
-        getMetadata().setIndex((byte) 18, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 18, Metadata.Boolean(value));
     }
 
 }

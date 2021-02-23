@@ -1,6 +1,7 @@
 package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
 
 public class SheepMeta extends AnimalMeta {
@@ -10,8 +11,8 @@ public class SheepMeta extends AnimalMeta {
     private final static byte COLOR_BITS = 0x0F;
     private final static byte SHEARED_BIT = 0x10;
 
-    public SheepMeta(@NotNull Entity entity) {
-        super(entity);
+    public SheepMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public int getColor() {

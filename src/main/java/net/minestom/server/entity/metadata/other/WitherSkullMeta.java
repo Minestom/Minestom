@@ -7,16 +7,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class WitherSkullMeta extends BaseEntityMeta {
 
-    public WitherSkullMeta(@NotNull Entity entity) {
-        super(entity);
+    public WitherSkullMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isInvulnerable() {
-        return getMetadata().getIndex((byte) 7, false);
+        return super.metadata.getIndex((byte) 7, false);
     }
 
     public void setInvulnerable(boolean value) {
-        getMetadata().setIndex((byte) 7, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 7, Metadata.Boolean(value));
     }
 
 }

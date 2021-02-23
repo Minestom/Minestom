@@ -7,33 +7,33 @@ import org.jetbrains.annotations.NotNull;
 
 public class DolphinMeta extends WaterAnimalMeta {
 
-    public DolphinMeta(@NotNull Entity entity) {
-        super(entity);
+    public DolphinMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     @NotNull
     public BlockPosition getTreasurePosition() {
-        return getMetadata().getIndex((byte) 15, new BlockPosition(0, 0, 0));
+        return super.metadata.getIndex((byte) 15, new BlockPosition(0, 0, 0));
     }
 
     public void setTreasurePosition(@NotNull BlockPosition value) {
-        getMetadata().setIndex((byte) 15, Metadata.Position(value));
+        super.metadata.setIndex((byte) 15, Metadata.Position(value));
     }
 
     public boolean isCanFindTreasure() {
-        return getMetadata().getIndex((byte) 16, false);
+        return super.metadata.getIndex((byte) 16, false);
     }
 
     public void setCanFindTreasure(boolean value) {
-        getMetadata().setIndex((byte) 16, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 16, Metadata.Boolean(value));
     }
 
     public boolean isHasFish() {
-        return getMetadata().getIndex((byte) 17, false);
+        return super.metadata.getIndex((byte) 17, false);
     }
 
     public void setHasFish(boolean value) {
-        getMetadata().setIndex((byte) 17, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 17, Metadata.Boolean(value));
     }
 
 }

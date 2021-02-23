@@ -7,20 +7,20 @@ import org.jetbrains.annotations.NotNull;
 
 public class ZombieVillagerMeta extends ZombieMeta {
 
-    public ZombieVillagerMeta(@NotNull Entity entity) {
-        super(entity);
+    public ZombieVillagerMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isConverting() {
-        return getMetadata().getIndex((byte) 18, false);
+        return super.metadata.getIndex((byte) 18, false);
     }
 
     public void setConverting(boolean value) {
-        getMetadata().setIndex((byte) 18, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 18, Metadata.Boolean(value));
     }
 
     public VillagerMeta.VillagerData getVillagerData() {
-        int[] data = getMetadata().getIndex((byte) 17, null);
+        int[] data = super.metadata.getIndex((byte) 17, null);
         if (data == null) {
             return new VillagerMeta.VillagerData(VillagerMeta.Type.PLAINS, VillagerMeta.Profession.NONE, VillagerMeta.Level.NOVICE);
         }
@@ -28,7 +28,7 @@ public class ZombieVillagerMeta extends ZombieMeta {
     }
 
     public void setVillagerData(VillagerMeta.VillagerData data) {
-        getMetadata().setIndex((byte) 17, Metadata.VillagerData(
+        super.metadata.setIndex((byte) 17, Metadata.VillagerData(
                 data.getType().ordinal(),
                 data.getProfession().ordinal(),
                 data.getLevel().ordinal() + 1

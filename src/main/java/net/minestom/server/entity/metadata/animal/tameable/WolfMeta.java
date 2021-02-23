@@ -6,32 +6,32 @@ import org.jetbrains.annotations.NotNull;
 
 public class WolfMeta extends TameableAnimalMeta {
 
-    public WolfMeta(@NotNull Entity entity) {
-        super(entity);
+    public WolfMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isBegging() {
-        return getMetadata().getIndex((byte) 18, false);
+        return super.metadata.getIndex((byte) 18, false);
     }
 
     public void setBegging(boolean value) {
-        getMetadata().setIndex((byte) 18, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 18, Metadata.Boolean(value));
     }
 
     public int getCollarColor() {
-        return getMetadata().getIndex((byte) 19, 14);
+        return super.metadata.getIndex((byte) 19, 14);
     }
 
     public void setCollarColor(int value) {
-        getMetadata().setIndex((byte) 19, Metadata.VarInt(value));
+        super.metadata.setIndex((byte) 19, Metadata.VarInt(value));
     }
 
     public int getAngerTime() {
-        return getMetadata().getIndex((byte) 20, 0);
+        return super.metadata.getIndex((byte) 20, 0);
     }
 
     public void setAngerTime(int value) {
-        getMetadata().setIndex((byte) 20, Metadata.VarInt(value));
+        super.metadata.setIndex((byte) 20, Metadata.VarInt(value));
     }
 
 }

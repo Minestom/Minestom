@@ -7,32 +7,32 @@ import org.jetbrains.annotations.Nullable;
 
 public class EndermanMeta extends MonsterMeta {
 
-    public EndermanMeta(@NotNull Entity entity) {
-        super(entity);
+    public EndermanMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public Integer getCarriedBlockID() {
-        return getMetadata().getIndex((byte) 15, null);
+        return super.metadata.getIndex((byte) 15, null);
     }
 
     public void setCarriedBlockID(@Nullable Integer value) {
-        getMetadata().setIndex((byte) 15, Metadata.OptBlockID(value));
+        super.metadata.setIndex((byte) 15, Metadata.OptBlockID(value));
     }
 
     public boolean isScreaming() {
-        return getMetadata().getIndex((byte) 16, false);
+        return super.metadata.getIndex((byte) 16, false);
     }
 
     public void setScreaming(boolean value) {
-        getMetadata().setIndex((byte) 16, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 16, Metadata.Boolean(value));
     }
 
     public boolean isStaring() {
-        return getMetadata().getIndex((byte) 17, false);
+        return super.metadata.getIndex((byte) 17, false);
     }
 
     public void setStaring(boolean value) {
-        getMetadata().setIndex((byte) 17, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 17, Metadata.Boolean(value));
     }
 
 }

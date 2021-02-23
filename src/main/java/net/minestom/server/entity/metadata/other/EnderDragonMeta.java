@@ -7,17 +7,17 @@ import org.jetbrains.annotations.NotNull;
 
 public class EnderDragonMeta extends MobMeta {
 
-    public EnderDragonMeta(@NotNull Entity entity) {
-        super(entity);
+    public EnderDragonMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     @NotNull
     public Phase getPhase() {
-        return Phase.VALUES[getMetadata().getIndex((byte) 15, 0)];
+        return Phase.VALUES[super.metadata.getIndex((byte) 15, 0)];
     }
 
     public void setPhase(@NotNull Phase value) {
-        getMetadata().getIndex((byte) 15, Metadata.VarInt(value.ordinal()));
+        super.metadata.getIndex((byte) 15, Metadata.VarInt(value.ordinal()));
     }
 
     public enum Phase {

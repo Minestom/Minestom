@@ -1,6 +1,7 @@
 package net.minestom.server.entity.metadata.monster;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
 
 public class VexMeta extends MonsterMeta {
@@ -9,8 +10,8 @@ public class VexMeta extends MonsterMeta {
 
     private final static byte ATTACKING_BIT = 0x01;
 
-    public VexMeta(@NotNull Entity entity) {
-        super(entity);
+    public VexMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isAttacking() {

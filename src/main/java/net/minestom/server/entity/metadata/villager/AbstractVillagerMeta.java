@@ -7,15 +7,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class AbstractVillagerMeta extends AgeableMobMeta {
 
-    protected AbstractVillagerMeta(@NotNull Entity entity) {
-        super(entity);
+    protected AbstractVillagerMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public int getHeadShakeTimer() {
-        return getMetadata().getIndex((byte) 16, 0);
+        return super.metadata.getIndex((byte) 16, 0);
     }
 
     public void setHeadShakeTimer(int value) {
-        getMetadata().setIndex((byte) 16, Metadata.VarInt(value));
+        super.metadata.setIndex((byte) 16, Metadata.VarInt(value));
     }
 }

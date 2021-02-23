@@ -6,16 +6,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class PhantomMeta extends FlyingMeta {
 
-    public PhantomMeta(@NotNull Entity entity) {
-        super(entity);
+    public PhantomMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public int getSize() {
-        return getMetadata().getIndex((byte) 15, 0);
+        return super.metadata.getIndex((byte) 15, 0);
     }
 
     public void setSize(int value) {
-        getMetadata().setIndex((byte) 15, Metadata.VarInt(value));
+        super.metadata.setIndex((byte) 15, Metadata.VarInt(value));
     }
 
 }

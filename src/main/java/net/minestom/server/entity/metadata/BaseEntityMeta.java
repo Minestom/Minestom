@@ -17,8 +17,8 @@ public class BaseEntityMeta extends EntityMeta {
     private final static byte HAS_GLOWING_EFFECT_BIT = 0x40;
     private final static byte FLYING_WITH_ELYTRA_BIT = (byte) 0x80;
 
-    protected BaseEntityMeta(@NotNull Entity entity) {
-        super(entity);
+    protected BaseEntityMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isOnFire() {
@@ -78,63 +78,59 @@ public class BaseEntityMeta extends EntityMeta {
     }
 
     public int getAirTicks() {
-        return getMetadata().getIndex((byte) 1, 300);
+        return super.metadata.getIndex((byte) 1, 300);
     }
 
     public void setAirTicks(int value) {
-        getMetadata().setIndex((byte) 1, Metadata.VarInt(value));
+        super.metadata.setIndex((byte) 1, Metadata.VarInt(value));
     }
 
     public JsonMessage getCustomName() {
-        return getMetadata().getIndex((byte) 2, null);
+        return super.metadata.getIndex((byte) 2, null);
     }
 
     public void setCustomName(JsonMessage value) {
-        getMetadata().setIndex((byte) 2, Metadata.OptChat(value));
+        super.metadata.setIndex((byte) 2, Metadata.OptChat(value));
     }
 
     public boolean isCustomNameVisible() {
-        return getMetadata().getIndex((byte) 3, false);
+        return super.metadata.getIndex((byte) 3, false);
     }
 
     public void setCustomNameVisible(boolean value) {
-        getMetadata().setIndex((byte) 3, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 3, Metadata.Boolean(value));
     }
 
     public boolean isSilent() {
-        return getMetadata().getIndex((byte) 4, false);
+        return super.metadata.getIndex((byte) 4, false);
     }
 
     public void setSilent(boolean value) {
-        getMetadata().setIndex((byte) 4, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 4, Metadata.Boolean(value));
     }
 
     public boolean isHasNoGravity() {
-        return getMetadata().getIndex((byte) 5, false);
+        return super.metadata.getIndex((byte) 5, false);
     }
 
     public void setHasNoGravity(boolean value) {
-        getMetadata().setIndex((byte) 5, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 5, Metadata.Boolean(value));
     }
 
     public Entity.Pose getPose() {
-        return getMetadata().getIndex((byte) 6, Entity.Pose.STANDING);
+        return super.metadata.getIndex((byte) 6, Entity.Pose.STANDING);
     }
 
     public void setPose(Entity.Pose value) {
-        getMetadata().setIndex((byte) 6, Metadata.Pose(value));
-    }
-
-    protected Metadata getMetadata() {
-        return this.entity.getMetadata();
+        super.metadata.setIndex((byte) 6, Metadata.Pose(value));
     }
 
     protected byte getMask(byte index) {
-        return getMetadata().getIndex(index, (byte) 0);
+        return super.metadata.getIndex(index, (byte) 0);
     }
 
     protected void setMask(byte index, byte mask) {
-        getMetadata().setIndex(index, Metadata.Byte(mask));
+        super.metadata.setIndex(index, Metadata.Byte(mask));
     }
 
     protected boolean getMaskBit(byte index, byte bit) {

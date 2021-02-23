@@ -10,8 +10,8 @@ public class FishingHookMeta extends BaseEntityMeta {
 
     private Entity hooked;
 
-    public FishingHookMeta(@NotNull Entity entity) {
-        super(entity);
+    public FishingHookMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     @Nullable
@@ -22,15 +22,15 @@ public class FishingHookMeta extends BaseEntityMeta {
     public void setHookedEntity(@Nullable Entity value) {
         this.hooked = value;
         int entityID = value == null ? 0 : value.getEntityId() + 1;
-        getMetadata().setIndex((byte) 7, Metadata.VarInt(entityID));
+        super.metadata.setIndex((byte) 7, Metadata.VarInt(entityID));
     }
 
     public boolean isCatchable() {
-        return getMetadata().getIndex((byte) 8, false);
+        return super.metadata.getIndex((byte) 8, false);
     }
 
     public void setCatchable(boolean value) {
-        getMetadata().setIndex((byte) 8, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 8, Metadata.Boolean(value));
     }
 
 }

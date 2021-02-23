@@ -8,26 +8,26 @@ import org.jetbrains.annotations.NotNull;
 
 public class CommandBlockMinecartMeta extends AbstractMinecartMeta {
 
-    public CommandBlockMinecartMeta(@NotNull Entity entity) {
-        super(entity);
+    public CommandBlockMinecartMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     @NotNull
     public String getCommand() {
-        return getMetadata().getIndex((byte) 13, "");
+        return super.metadata.getIndex((byte) 13, "");
     }
 
     public void setCommand(@NotNull String value) {
-        getMetadata().setIndex((byte) 13, Metadata.String(value));
+        super.metadata.setIndex((byte) 13, Metadata.String(value));
     }
 
     @NotNull
     public JsonMessage getLastOutput() {
-        return getMetadata().getIndex((byte) 14, ColoredText.of(""));
+        return super.metadata.getIndex((byte) 14, ColoredText.of(""));
     }
 
     public void setLastOutput(@NotNull JsonMessage value) {
-        getMetadata().setIndex((byte) 14, Metadata.Chat(value));
+        super.metadata.setIndex((byte) 14, Metadata.Chat(value));
     }
 
 }

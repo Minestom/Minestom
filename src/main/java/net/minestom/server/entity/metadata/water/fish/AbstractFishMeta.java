@@ -7,15 +7,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class AbstractFishMeta extends WaterAnimalMeta {
 
-    protected AbstractFishMeta(@NotNull Entity entity) {
-        super(entity);
+    protected AbstractFishMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isFromBucket() {
-        return getMetadata().getIndex((byte) 15, false);
+        return super.metadata.getIndex((byte) 15, false);
     }
 
     public void setFromBucket(boolean value) {
-        getMetadata().setIndex((byte) 15, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 15, Metadata.Boolean(value));
     }
 }

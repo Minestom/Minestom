@@ -6,13 +6,13 @@ import org.jetbrains.annotations.NotNull;
 
 public class RabbitMeta extends AnimalMeta {
 
-    public RabbitMeta(@NotNull Entity entity) {
-        super(entity);
+    public RabbitMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     @NotNull
     public Type getType() {
-        int id = getMetadata().getIndex((byte) 16, 0);
+        int id = super.metadata.getIndex((byte) 16, 0);
         if (id == 99) {
             return Type.KILLER_BUNNY;
         }
@@ -21,7 +21,7 @@ public class RabbitMeta extends AnimalMeta {
 
     public void setType(@NotNull Type value) {
         int id = value == Type.KILLER_BUNNY ? 99 : value.ordinal();
-        getMetadata().setIndex((byte) 16, Metadata.VarInt(id));
+        super.metadata.setIndex((byte) 16, Metadata.VarInt(id));
     }
 
     public enum Type {

@@ -6,16 +6,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class ChestedHorseMeta extends AbstractHorseMeta {
 
-    protected ChestedHorseMeta(@NotNull Entity entity) {
-        super(entity);
+    protected ChestedHorseMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isHasChest() {
-        return getMetadata().getIndex((byte) 18, false);
+        return super.metadata.getIndex((byte) 18, false);
     }
 
     public void setHasChest(boolean value) {
-        getMetadata().setIndex((byte) 18, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 18, Metadata.Boolean(value));
     }
 
 }

@@ -8,16 +8,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class FallingBlockMeta extends BaseEntityMeta {
 
-    public FallingBlockMeta(@NotNull Entity entity) {
-        super(entity);
+    public FallingBlockMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public BlockPosition getSpawnPosition() {
-        return getMetadata().getIndex((byte) 7, new BlockPosition(0, 0, 0));
+        return super.metadata.getIndex((byte) 7, new BlockPosition(0, 0, 0));
     }
 
     public void setSpawnPosition(BlockPosition value) {
-        getMetadata().setIndex((byte) 7, Metadata.Position(value));
+        super.metadata.setIndex((byte) 7, Metadata.Position(value));
     }
 
 }

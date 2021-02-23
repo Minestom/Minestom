@@ -6,16 +6,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class WitchMeta extends RaiderMeta {
 
-    public WitchMeta(@NotNull Entity entity) {
-        super(entity);
+    public WitchMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+        super(entity, metadata);
     }
 
     public boolean isDrinkingPotion() {
-        return getMetadata().getIndex((byte) 16, false);
+        return super.metadata.getIndex((byte) 16, false);
     }
 
     public void setDrinkingPotion(boolean value) {
-        getMetadata().setIndex((byte) 16, Metadata.Boolean(value));
+        super.metadata.setIndex((byte) 16, Metadata.Boolean(value));
     }
 
 }
