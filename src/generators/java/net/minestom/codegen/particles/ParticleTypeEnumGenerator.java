@@ -1,17 +1,17 @@
 package net.minestom.codegen.particles;
 
 import net.minestom.codegen.BasicEnumGenerator;
-import net.minestom.codegen.stats.StatsEnumGenerator;
 import net.minestom.server.registry.ResourceGatherer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
-public class ParticleEnumGenerator extends BasicEnumGenerator {
+public class ParticleTypeEnumGenerator extends BasicEnumGenerator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ParticleEnumGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ParticleTypeEnumGenerator.class);
 
     public static void main(String[] args) throws IOException {
         String targetVersion;
@@ -38,10 +38,10 @@ public class ParticleEnumGenerator extends BasicEnumGenerator {
             targetFolder.mkdirs();
         }
 
-        new ParticleEnumGenerator(targetFolder);
+        new ParticleTypeEnumGenerator(targetFolder);
     }
 
-    private ParticleEnumGenerator(File targetFolder) throws IOException {
+    private ParticleTypeEnumGenerator(File targetFolder) throws IOException {
         super(targetFolder);
     }
 
@@ -57,7 +57,7 @@ public class ParticleEnumGenerator extends BasicEnumGenerator {
 
     @Override
     public String getClassName() {
-        return "Particle";
+        return "ParticleType";
     }
 
     @Override

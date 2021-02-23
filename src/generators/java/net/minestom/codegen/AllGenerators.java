@@ -5,7 +5,7 @@ import net.minestom.codegen.enchantment.EnchantmentEnumGenerator;
 import net.minestom.codegen.entitytypes.EntityTypeEnumGenerator;
 import net.minestom.codegen.fluids.FluidEnumGenerator;
 import net.minestom.codegen.items.ItemEnumGenerator;
-import net.minestom.codegen.particles.ParticleEnumGenerator;
+import net.minestom.codegen.particles.ParticleTypeEnumGenerator;
 import net.minestom.codegen.potions.PotionEffectEnumGenerator;
 import net.minestom.codegen.potions.PotionEnumGenerator;
 import net.minestom.codegen.sounds.SoundEnumGenerator;
@@ -23,7 +23,7 @@ public class AllGenerators {
         EnchantmentEnumGenerator.main(args);
         EntityTypeEnumGenerator.main(args);
         SoundEnumGenerator.main(args);
-        ParticleEnumGenerator.main(args);
+        ParticleTypeEnumGenerator.main(args);
         StatsEnumGenerator.main(args);
         FluidEnumGenerator.main(args);
         RegistriesGenerator.main(args);

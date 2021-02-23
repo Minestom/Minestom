@@ -3,6 +3,7 @@ package net.minestom.server.entity;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Vector;
@@ -129,6 +130,15 @@ public class Metadata {
 
     public static Value<Entity.Pose> Pose(@NotNull Entity.Pose value) {
         return new Value<>(TYPE_POSE, value, writer -> writer.writeVarInt(value.ordinal()));
+    }
+
+    public static Value<Particle> Particle(@NotNull Particle value) {
+        return new Value<>(TYPE_PARTICLE, value, writer -> {
+            writer.writeVarInt(value.getType().getId());
+            if (value.getDataWriter() != null) {
+                value.getDataWriter().accept(writer);
+            }
+        });
     }
 
     public static final byte TYPE_BYTE = 0;

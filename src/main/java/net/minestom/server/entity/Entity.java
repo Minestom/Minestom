@@ -158,6 +158,10 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         this(entityType, new Position());
     }
 
+    public Metadata getMetadata() {
+        return this.metadata;
+    }
+
     /**
      * Schedules a task to be run during the next entity tick.
      * It ensures that the task will be executed in the same thread as the entity (depending of the {@link ThreadProvider}).

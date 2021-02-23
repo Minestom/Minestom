@@ -6,7 +6,7 @@ import net.minestom.server.fluids.Fluid;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
-import net.minestom.server.particle.Particle;
+import net.minestom.server.particle.ParticleType;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.registry.ResourceGatherer;
@@ -40,7 +40,7 @@ public class RegistriesGenerator implements CodeGenerator {
             new ImmutablePair<>(Material.class.getCanonicalName(), "AIR"),
             new ImmutablePair<>(Enchantment.class.getCanonicalName(), null),
             new ImmutablePair<>(EntityType.class.getCanonicalName(), "PIG"),
-            new ImmutablePair<>(Particle.class.getCanonicalName(), null),
+            new ImmutablePair<>(ParticleType.class.getCanonicalName(), null),
             new ImmutablePair<>(PotionType.class.getCanonicalName(), null),
             new ImmutablePair<>(PotionEffect.class.getCanonicalName(), null),
             new ImmutablePair<>(Sound.class.getCanonicalName(), null),

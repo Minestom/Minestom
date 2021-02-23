@@ -11,7 +11,6 @@ import net.minestom.server.entity.type.other.EntityAreaEffectCloud;
 import net.minestom.server.entity.type.other.EntityIronGolem;
 import net.minestom.server.entity.type.other.EntityShulker;
 import net.minestom.server.entity.type.other.EntitySnowman;
-import net.minestom.server.entity.type.projectile.EntityArrow;
 import net.minestom.server.entity.type.projectile.EntityPotion;
 import net.minestom.server.entity.type.projectile.EntitySpectralArrow;
 import net.minestom.server.entity.type.vehicle.EntityBoat;
@@ -289,6 +288,14 @@ public enum EntityType {
     public Entity createFromPosition(Position position) {
         Check.notNull(this.defaultGenerator, "Default generator for " + name() + " is not yet supported");
         return this.defaultGenerator.apply(position);
+    }
+
+    public double getDefaultWidth() {
+        return 0D;
+    }
+
+    public double getDefaultHeight() {
+        return 0D;
     }
 
     public static EntityType fromId(int id) {
