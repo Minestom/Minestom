@@ -68,11 +68,11 @@ public class LivingEntityMeta extends EntityMeta {
         super.metadata.setIndex((byte) 10, Metadata.Boolean(value));
     }
 
-    public int getNumberOfArrows() {
+    public int getArrowCount() {
         return super.metadata.getIndex((byte) 11, 0);
     }
 
-    public void setNumberOfArrows(int value) {
+    public void setArrowCount(int value) {
         super.metadata.getIndex((byte) 11, Metadata.VarInt(value));
     }
 

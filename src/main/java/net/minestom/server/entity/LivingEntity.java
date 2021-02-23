@@ -5,6 +5,7 @@ import net.minestom.server.attribute.AttributeInstance;
 import net.minestom.server.attribute.Attributes;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.entity.EntityDamageEvent;
 import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.entity.EntityFireEvent;
@@ -27,6 +28,7 @@ import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,6 +71,9 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     private long fireDamagePeriod = 1000L;
 
     private Team team;
+
+    private int arrowCount;
+    private float health = 1F;
 
     public LivingEntity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
         super(entityType, spawnPosition);
@@ -152,7 +157,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * @return the arrow count
      */
     public int getArrowCount() {
-        return metadata.getIndex((byte) 11, 0);
+        return this.arrowCount;
     }
 
     /**
@@ -161,7 +166,11 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * @param arrowCount the arrow count
      */
     public void setArrowCount(int arrowCount) {
-        this.metadata.setIndex((byte) 11, Metadata.VarInt(arrowCount));
+        this.arrowCount = arrowCount;
+        LivingEntityMeta meta = getLivingEntityMeta();
+        if (meta != null) {
+            meta.setArrowCount(arrowCount);
+        }
     }
 
     /**
@@ -315,7 +324,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * @return the entity health
      */
     public float getHealth() {
-        return metadata.getIndex((byte) 8, 1f);
+        return this.health;
     }
 
     /**
@@ -324,12 +333,14 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * @param health the new entity health
      */
     public void setHealth(float health) {
-        health = Math.min(health, getMaxHealth());
-        if (health <= 0 && !isDead) {
+        this.health = Math.min(health, getMaxHealth());
+        if (this.health <= 0 && !isDead) {
             kill();
         }
-
-        this.metadata.setIndex((byte) 8, Metadata.Float(health));
+        LivingEntityMeta meta = getLivingEntityMeta();
+        if (meta != null) {
+            meta.setHealth(this.health);
+        }
     }
 
     /**
@@ -447,15 +458,12 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     public void refreshActiveHand(boolean isHandActive, boolean offHand, boolean riptideSpinAttack) {
-        byte handState = 0;
-        if (isHandActive)
-            handState |= 0x01;
-        if (offHand)
-            handState |= 0x02;
-        if (riptideSpinAttack)
-            handState |= 0x04;
-
-        this.metadata.setIndex((byte) 7, Metadata.Byte(handState));
+        LivingEntityMeta meta = getLivingEntityMeta();
+        if (meta != null) {
+            meta.setHandActive(isHandActive);
+            meta.setActiveHand(offHand ? Player.Hand.OFF : Player.Hand.MAIN);
+            meta.setInRiptideSpinAttack(riptideSpinAttack);
+        }
     }
 
     /**
@@ -626,6 +634,18 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         while (it.hasNext()) {
             BlockPosition position = it.next();
             if (Block.fromStateId(getInstance().getBlockStateId(position)) != Block.AIR) return position;
+        }
+        return null;
+    }
+
+    /**
+     * Gets {@link net.minestom.server.entity.metadata.EntityMeta} of this entity casted to {@link LivingEntityMeta}.
+     *
+     * @return null if meta of this entity does not inherit {@link LivingEntityMeta}, casted value otherwise.
+     */
+    public LivingEntityMeta getLivingEntityMeta() {
+        if (this.entityMeta instanceof LivingEntityMeta) {
+            return (LivingEntityMeta) this.entityMeta;
         }
         return null;
     }
