@@ -143,9 +143,9 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
         this.lastY = spawnPosition.getY();
         this.lastZ = spawnPosition.getZ();
 
-        this.entityMeta = entityType.getMetaConstructor().apply(this, this.metadata);
-
         setBoundingBox(entityType.getWidth(), entityType.getHeight(), entityType.getWidth());
+
+        this.entityMeta = entityType.getMetaConstructor().apply(this, this.metadata);
 
         setAutoViewable(true);
 

@@ -8,6 +8,7 @@ public class PufferfishMeta extends AbstractFishMeta {
 
     public PufferfishMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
+        updateBoundingBox(State.UNPUFFED);
     }
 
     public State getState() {
