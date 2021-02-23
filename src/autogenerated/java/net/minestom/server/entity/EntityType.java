@@ -337,6 +337,8 @@ public enum EntityType {
 
     FISHING_BOBBER("minecraft:fishing_bobber", 0.25, 0.25, FishingHookMeta::new);
 
+    private static final EntityType[] VALUES = values();
+
     @NotNull
     private String namespaceID;
 
@@ -377,9 +379,9 @@ public enum EntityType {
     }
 
     public static EntityType fromId(short id) {
-        if(id >= 0 && id < values().length) {
-            return values()[id];
+        if(id >= 0 && id < VALUES.length) {
+            return VALUES[id];
         }
-        return PIG;
+        return null;
     }
 }

@@ -8,6 +8,7 @@ import net.minestom.codegen.ConstructorLambda;
 import net.minestom.codegen.EnumGenerator;
 import net.minestom.codegen.MinestomEnumGenerator;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.registry.Registries;
@@ -24,7 +25,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.*;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * Generates an EntityType enum containing all data about entity types
@@ -164,11 +164,13 @@ public class EntityTypeEnumGenerator extends MinestomEnumGenerator<EntityTypeCon
                 code -> code.addStatement("return this.metaConstructor")
         );
 
+        generator.addStaticField(ArrayTypeName.of(ClassName.get(EntityType.class)), "VALUES", "values()");
+
         generator.addStaticMethod("fromId", new ParameterSpec[]{ParameterSpec.builder(TypeName.SHORT, "id").build()}, className, code -> {
-            code.beginControlFlow("if(id >= 0 && id < values().length)")
-                    .addStatement("return values()[id]")
+            code.beginControlFlow("if(id >= 0 && id < VALUES.length)")
+                    .addStatement("return VALUES[id]")
                     .endControlFlow()
-                    .addStatement("return PIG");
+                    .addStatement("return null");
         });
     }
 

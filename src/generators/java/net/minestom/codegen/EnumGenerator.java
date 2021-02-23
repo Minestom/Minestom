@@ -21,6 +21,7 @@ public class EnumGenerator implements CodeGenerator {
     private final String enumName;
     private ParameterSpec[] parameters;
     private List<Method> methods = new LinkedList<>();
+    private List<Field> fields = new LinkedList<>();
     private List<Instance> instances = new LinkedList<>();
     private List<Field> hardcodedFields = new LinkedList<>();
     private List<AnnotationSpec> annotations = new LinkedList<>();
@@ -48,6 +49,10 @@ public class EnumGenerator implements CodeGenerator {
 
     public void addStaticMethod(String name, ParameterSpec[] signature, TypeName returnType, Consumer<CodeBlock.Builder> code) {
         methods.add(new Method(true, name, signature, returnType, code, false));
+    }
+
+    public void addStaticField(TypeName type, String name, String value) {
+        fields.add(new Field(type, name, value));
     }
 
     public void addInstance(String name, Object... parameters) {
@@ -92,6 +97,13 @@ public class EnumGenerator implements CodeGenerator {
                 enumClass.addField(FieldSpec.builder(property.type, property.name)
                         .addModifiers(Modifier.PRIVATE)
                         .addAnnotations(property.annotations)
+                        .build());
+            }
+
+            for (Field field : fields) {
+                enumClass.addField(FieldSpec.builder(field.type, field.name)
+                        .initializer("$L", field.value)
+                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC)
                         .build());
             }
 
