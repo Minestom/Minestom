@@ -1,10 +1,10 @@
 package net.minestom.server.entity.metadata.other;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.metadata.EntityMeta;
+import net.minestom.server.entity.metadata.BaseEntityMeta;
 import org.jetbrains.annotations.NotNull;
 
-public class LlamaSpitMeta extends EntityMeta {
+public class LlamaSpitMeta extends BaseEntityMeta {
 
     public LlamaSpitMeta(@NotNull Entity entity) {
         super(entity);

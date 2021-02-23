@@ -3,9 +3,9 @@ package net.minestom.server.entity.metadata.minecart;
 import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
-public class MinecartChestMeta extends AbstractMinecartContainerMeta {
+public class TntMinecartMeta extends AbstractMinecartMeta {
 
-    public MinecartChestMeta(@NotNull Entity entity) {
+    public TntMinecartMeta(@NotNull Entity entity) {
         super(entity);
     }
 

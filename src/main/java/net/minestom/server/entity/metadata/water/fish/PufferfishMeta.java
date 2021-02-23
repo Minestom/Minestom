@@ -4,9 +4,9 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
 
-public class PufferFishMeta extends AbstractFishMeta {
+public class PufferfishMeta extends AbstractFishMeta {
 
-    public PufferFishMeta(@NotNull Entity entity) {
+    public PufferfishMeta(@NotNull Entity entity) {
         super(entity);
     }
 

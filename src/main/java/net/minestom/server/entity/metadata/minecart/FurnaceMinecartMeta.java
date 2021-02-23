@@ -4,9 +4,9 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
 
-public class MinecartFurnaceMeta extends AbstractMinecartMeta {
+public class FurnaceMinecartMeta extends AbstractMinecartMeta {
 
-    public MinecartFurnaceMeta(@NotNull Entity entity) {
+    public FurnaceMinecartMeta(@NotNull Entity entity) {
         super(entity);
     }
 

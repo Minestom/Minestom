@@ -2,10 +2,10 @@ package net.minestom.server.entity.metadata.minecart;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.metadata.EntityMeta;
+import net.minestom.server.entity.metadata.BaseEntityMeta;
 import org.jetbrains.annotations.NotNull;
 
-public class AbstractMinecartMeta extends EntityMeta {
+public class AbstractMinecartMeta extends BaseEntityMeta {
 
     protected AbstractMinecartMeta(@NotNull Entity entity) {
         super(entity);

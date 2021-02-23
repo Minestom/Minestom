@@ -2,12 +2,12 @@ package net.minestom.server.entity.metadata.other;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.metadata.EntityMeta;
+import net.minestom.server.entity.metadata.BaseEntityMeta;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.ParticleType;
 import org.jetbrains.annotations.NotNull;
 
-public class AreaEffectCloudMeta extends EntityMeta {
+public class AreaEffectCloudMeta extends BaseEntityMeta {
 
     public AreaEffectCloudMeta(@NotNull Entity entity) {
         super(entity);

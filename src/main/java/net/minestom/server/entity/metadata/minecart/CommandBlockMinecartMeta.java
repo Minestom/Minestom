@@ -6,9 +6,9 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
 
-public class MinecartCommandBlockMeta extends AbstractMinecartMeta {
+public class CommandBlockMinecartMeta extends AbstractMinecartMeta {
 
-    public MinecartCommandBlockMeta(@NotNull Entity entity) {
+    public CommandBlockMinecartMeta(@NotNull Entity entity) {
         super(entity);
     }
 

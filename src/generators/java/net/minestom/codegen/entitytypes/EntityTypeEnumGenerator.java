@@ -4,8 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
+import net.minestom.codegen.ConstructorLambda;
 import net.minestom.codegen.EnumGenerator;
 import net.minestom.codegen.MinestomEnumGenerator;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.utils.NamespaceID;
@@ -13,9 +16,13 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * Generates an EntityType enum containing all data about entity types
@@ -101,6 +108,9 @@ public class EntityTypeEnumGenerator extends MinestomEnumGenerator<EntityTypeCon
 
         TreeSet<EntityTypeContainer> types = new TreeSet<>(EntityTypeContainer::compareTo);
         for (var burgerEntity : burgerEntities) {
+            if (burgerEntity.name.contains("~")) {
+                continue;
+            }
             types.add(new EntityTypeContainer(
                     burgerEntity.id,
                     NamespaceID.from("minecraft:" + burgerEntity.name),
@@ -115,8 +125,16 @@ public class EntityTypeEnumGenerator extends MinestomEnumGenerator<EntityTypeCon
     protected void prepare(EnumGenerator generator) {
         ClassName className = ClassName.get(getPackageName(), getClassName());
         generator.addClassAnnotation(AnnotationSpec.builder(SuppressWarnings.class).addMember("value", "{$S}", "deprecation").build());
-        generator.setParams(ParameterSpec.builder(String.class, "namespaceID").addAnnotation(NotNull.class).build(), ParameterSpec.builder(TypeName.DOUBLE, "width").build(),
-                ParameterSpec.builder(TypeName.DOUBLE, "height").build());
+        generator.setParams(
+                ParameterSpec.builder(String.class, "namespaceID").addAnnotation(NotNull.class).build(),
+                ParameterSpec.builder(TypeName.DOUBLE, "width").build(),
+                ParameterSpec.builder(TypeName.DOUBLE, "height").build(),
+                ParameterSpec.builder(ParameterizedTypeName.get(
+                        ClassName.get(Function.class),
+                        WildcardTypeName.subtypeOf(ClassName.get(Entity.class)),
+                        WildcardTypeName.subtypeOf(ClassName.get(EntityMeta.class))
+                ), "metaConstructor").addAnnotation(NotNull.class).build()
+        );
         generator.appendToConstructor(code -> {
             code.addStatement("$T.$N.put($T.from(namespaceID), this)", Registries.class, "entityTypes", NamespaceID.class);
         });
@@ -133,6 +151,14 @@ public class EntityTypeEnumGenerator extends MinestomEnumGenerator<EntityTypeCon
         generator.addMethod("getHeight", new ParameterSpec[0], TypeName.DOUBLE, code -> {
             code.addStatement("return this.height");
         });
+        generator.addMethod("getMetaConstructor", new ParameterSpec[0],
+                ParameterizedTypeName.get(
+                        ClassName.get(Function.class),
+                        WildcardTypeName.subtypeOf(ClassName.get(Entity.class)),
+                        WildcardTypeName.subtypeOf(ClassName.get(EntityMeta.class))
+                ),
+                code -> code.addStatement("return this.metaConstructor")
+        );
 
         generator.addStaticMethod("fromId", new ParameterSpec[]{ParameterSpec.builder(TypeName.SHORT, "id").build()}, className, code -> {
             code.beginControlFlow("if(id >= 0 && id < values().length)")
@@ -148,7 +174,8 @@ public class EntityTypeEnumGenerator extends MinestomEnumGenerator<EntityTypeCon
         generator.addInstance(instanceName,
                 "\"" + type.getName().toString() + "\"",
                 type.getWidth(),
-                type.getHeight()
+                type.getHeight(),
+                new ConstructorLambda(ClassName.get(type.getMetaClass()))
         );
     }
 
