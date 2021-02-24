@@ -3,12 +3,17 @@ package demo.entity;
 import com.google.common.collect.ImmutableList;
 import net.minestom.server.attribute.Attributes;
 import net.minestom.server.entity.LivingEntity;
+import net.minestom.server.entity.ai.goal.DoNothingGoal;
+import net.minestom.server.entity.ai.goal.MeleeAttackGoal;
 import net.minestom.server.entity.ai.goal.RandomStrollGoal;
+import net.minestom.server.entity.ai.target.ClosestEntityTarget;
+import net.minestom.server.entity.ai.target.LastEntityDamagerTarget;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.type.animal.EntityChicken;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
+import net.minestom.server.utils.time.TimeUnit;
 
 public class ChickenCreature extends EntityChicken {
 
@@ -26,6 +31,15 @@ public class ChickenCreature extends EntityChicken {
 //                        new ClosestEntityTarget(this, 15, LivingEntity.class)
                 )
         );
+
+        // Another way to register previously added EntityAIGroup, using specialized builder:
+//        newAIGroupBuilder()
+//                .addGoalSelector(new DoNothingGoal(this, 500, .1F))
+//                .addGoalSelector(new MeleeAttackGoal(this, 500, 2, TimeUnit.MILLISECOND))
+//                .addGoalSelector(new RandomStrollGoal(this, 2))
+//                .addTargetSelector(new LastEntityDamagerTarget(this, 15))
+//                .addTargetSelector(new ClosestEntityTarget(this, 15, LivingEntity.class))
+//                .build();
 
         getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1f);
 

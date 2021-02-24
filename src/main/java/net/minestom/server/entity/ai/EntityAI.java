@@ -44,6 +44,15 @@ public interface EntityAI {
         addAIGroup(group);
     }
 
+    /**
+     * Creates new {@link EntityAIGroup} builder.
+     *
+     * @return a builder to create and add an {@link EntityAIGroup}.
+     */
+    default EntityAIGroupBuilder newAIGroupBuilder() {
+        return new EntityAIGroupBuilder(this);
+    }
+
     default void aiTick(long time) {
         getAIGroups().forEach(group -> group.tick(time));
     }

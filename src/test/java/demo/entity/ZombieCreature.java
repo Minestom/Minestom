@@ -11,11 +11,8 @@ public class ZombieCreature extends EntityZombie {
 
     public ZombieCreature(Position spawnPosition) {
         super(spawnPosition);
-        addAIGroup(
-                ImmutableList.of(
-                        new RandomLookAroundGoal(this, 20)
-                ),
-                Collections.emptyList()
-        );
+        newAIGroupBuilder()
+                .addGoalSelector(new RandomLookAroundGoal(this, 20))
+                .build();
     }
 }
