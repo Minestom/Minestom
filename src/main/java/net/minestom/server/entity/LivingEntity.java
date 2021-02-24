@@ -460,9 +460,11 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     public void refreshActiveHand(boolean isHandActive, boolean offHand, boolean riptideSpinAttack) {
         LivingEntityMeta meta = getLivingEntityMeta();
         if (meta != null) {
+            meta.setNotifyAboutChanges(false);
             meta.setHandActive(isHandActive);
             meta.setActiveHand(offHand ? Player.Hand.OFF : Player.Hand.MAIN);
             meta.setInRiptideSpinAttack(riptideSpinAttack);
+            meta.setNotifyAboutChanges(true);
         }
     }
 

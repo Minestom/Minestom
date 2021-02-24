@@ -25,6 +25,23 @@ public class EntityMeta {
         this.metadata = metadata;
     }
 
+    /**
+     * Sets whether any changes to this meta must result in a metadata packet being sent to entity viewers.
+     * By default it's set to true.
+     * <p>
+     * It's usable if you want to change multiple values of this meta at the same time and want just a
+     * single packet being sent: if so, disable notification before your first change and enable it
+     * right after the last one: once notification is set to false, we collect all the updates
+     * that are being performed, and when it's returned to true we send them all together.
+     * An example usage could be found at
+     * {@link net.minestom.server.entity.LivingEntity#refreshActiveHand(boolean, boolean, boolean)}.
+     *
+     * @param notifyAboutChanges if to notify entity viewers about this meta changes.
+     */
+    public void setNotifyAboutChanges(boolean notifyAboutChanges) {
+        this.metadata.setNotifyAboutChanges(notifyAboutChanges);
+    }
+
     public boolean isOnFire() {
         return getMaskBit(MASK_INDEX, ON_FIRE_BIT);
     }
