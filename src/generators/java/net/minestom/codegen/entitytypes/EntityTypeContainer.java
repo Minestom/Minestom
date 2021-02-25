@@ -2,6 +2,10 @@ package net.minestom.codegen.entitytypes;
 
 import com.google.common.base.CaseFormat;
 import net.minestom.server.entity.EntitySpawnType;
+import net.minestom.server.entity.metadata.LivingEntityMeta;
+import net.minestom.server.entity.metadata.PlayerMeta;
+import net.minestom.server.entity.metadata.other.ExperienceOrbMeta;
+import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +23,7 @@ public class EntityTypeContainer implements Comparable<EntityTypeContainer> {
     private double width;
     private double height;
     private Class<?> metaClass;
-    private EntitySpawnType spawnType = EntitySpawnType.BASE;
+    private EntitySpawnType spawnType;
 
     public EntityTypeContainer(int id, NamespaceID name, double width, double height) {
         this.id = id;
@@ -50,6 +54,18 @@ public class EntityTypeContainer implements Comparable<EntityTypeContainer> {
         }
         metaClassName += "Meta";
         this.metaClass = findClassIn("net.minestom.server.entity.metadata", metaClassName);
+
+        if (this.metaClass == PlayerMeta.class) {
+            this.spawnType = EntitySpawnType.PLAYER;
+        } else if (this.metaClass == PaintingMeta.class) {
+            this.spawnType = EntitySpawnType.PAINTING;
+        } else if (this.metaClass == ExperienceOrbMeta.class) {
+            this.spawnType = EntitySpawnType.EXPERIENCE_ORB;
+        } else if (LivingEntityMeta.class.isAssignableFrom(this.metaClass)) {
+            this.spawnType = EntitySpawnType.LIVING;
+        } else {
+            this.spawnType = EntitySpawnType.BASE;
+        }
     }
 
     public int getId() {

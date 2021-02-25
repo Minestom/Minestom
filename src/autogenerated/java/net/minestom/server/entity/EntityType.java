@@ -123,53 +123,53 @@ import org.jetbrains.annotations.NotNull;
 public enum EntityType {
     AREA_EFFECT_CLOUD("minecraft:area_effect_cloud", 6.0, 0.5, AreaEffectCloudMeta::new, EntitySpawnType.BASE),
 
-    ARMOR_STAND("minecraft:armor_stand", 0.5, 1.975, ArmorStandMeta::new, EntitySpawnType.BASE),
+    ARMOR_STAND("minecraft:armor_stand", 0.5, 1.975, ArmorStandMeta::new, EntitySpawnType.LIVING),
 
     ARROW("minecraft:arrow", 0.5, 0.5, ArrowMeta::new, EntitySpawnType.BASE),
 
-    BAT("minecraft:bat", 0.5, 0.9, BatMeta::new, EntitySpawnType.BASE),
+    BAT("minecraft:bat", 0.5, 0.9, BatMeta::new, EntitySpawnType.LIVING),
 
-    BEE("minecraft:bee", 0.7, 0.6, BeeMeta::new, EntitySpawnType.BASE),
+    BEE("minecraft:bee", 0.7, 0.6, BeeMeta::new, EntitySpawnType.LIVING),
 
-    BLAZE("minecraft:blaze", 0.6, 1.8, BlazeMeta::new, EntitySpawnType.BASE),
+    BLAZE("minecraft:blaze", 0.6, 1.8, BlazeMeta::new, EntitySpawnType.LIVING),
 
     BOAT("minecraft:boat", 1.375, 0.5625, BoatMeta::new, EntitySpawnType.BASE),
 
-    CAT("minecraft:cat", 0.6, 0.7, CatMeta::new, EntitySpawnType.BASE),
+    CAT("minecraft:cat", 0.6, 0.7, CatMeta::new, EntitySpawnType.LIVING),
 
-    CAVE_SPIDER("minecraft:cave_spider", 0.7, 0.5, CaveSpiderMeta::new, EntitySpawnType.BASE),
+    CAVE_SPIDER("minecraft:cave_spider", 0.7, 0.5, CaveSpiderMeta::new, EntitySpawnType.LIVING),
 
-    CHICKEN("minecraft:chicken", 0.4, 0.7, ChickenMeta::new, EntitySpawnType.BASE),
+    CHICKEN("minecraft:chicken", 0.4, 0.7, ChickenMeta::new, EntitySpawnType.LIVING),
 
-    COD("minecraft:cod", 0.5, 0.3, CodMeta::new, EntitySpawnType.BASE),
+    COD("minecraft:cod", 0.5, 0.3, CodMeta::new, EntitySpawnType.LIVING),
 
-    COW("minecraft:cow", 0.9, 1.4, CowMeta::new, EntitySpawnType.BASE),
+    COW("minecraft:cow", 0.9, 1.4, CowMeta::new, EntitySpawnType.LIVING),
 
-    CREEPER("minecraft:creeper", 0.6, 1.7, CreeperMeta::new, EntitySpawnType.BASE),
+    CREEPER("minecraft:creeper", 0.6, 1.7, CreeperMeta::new, EntitySpawnType.LIVING),
 
-    DOLPHIN("minecraft:dolphin", 0.9, 0.6, DolphinMeta::new, EntitySpawnType.BASE),
+    DOLPHIN("minecraft:dolphin", 0.9, 0.6, DolphinMeta::new, EntitySpawnType.LIVING),
 
-    DONKEY("minecraft:donkey", 1.39648, 1.5, DonkeyMeta::new, EntitySpawnType.BASE),
+    DONKEY("minecraft:donkey", 1.39648, 1.5, DonkeyMeta::new, EntitySpawnType.LIVING),
 
     DRAGON_FIREBALL("minecraft:dragon_fireball", 1.0, 1.0, DragonFireballMeta::new, EntitySpawnType.BASE),
 
-    DROWNED("minecraft:drowned", 0.6, 1.95, DrownedMeta::new, EntitySpawnType.BASE),
+    DROWNED("minecraft:drowned", 0.6, 1.95, DrownedMeta::new, EntitySpawnType.LIVING),
 
-    ELDER_GUARDIAN("minecraft:elder_guardian", 1.9975, 1.9975, ElderGuardianMeta::new, EntitySpawnType.BASE),
+    ELDER_GUARDIAN("minecraft:elder_guardian", 1.9975, 1.9975, ElderGuardianMeta::new, EntitySpawnType.LIVING),
 
     END_CRYSTAL("minecraft:end_crystal", 2.0, 2.0, EndCrystalMeta::new, EntitySpawnType.BASE),
 
-    ENDER_DRAGON("minecraft:ender_dragon", 16.0, 8.0, EnderDragonMeta::new, EntitySpawnType.BASE),
+    ENDER_DRAGON("minecraft:ender_dragon", 16.0, 8.0, EnderDragonMeta::new, EntitySpawnType.LIVING),
 
-    ENDERMAN("minecraft:enderman", 0.6, 2.9, EndermanMeta::new, EntitySpawnType.BASE),
+    ENDERMAN("minecraft:enderman", 0.6, 2.9, EndermanMeta::new, EntitySpawnType.LIVING),
 
-    ENDERMITE("minecraft:endermite", 0.4, 0.3, EndermiteMeta::new, EntitySpawnType.BASE),
+    ENDERMITE("minecraft:endermite", 0.4, 0.3, EndermiteMeta::new, EntitySpawnType.LIVING),
 
-    EVOKER("minecraft:evoker", 0.6, 1.95, EvokerMeta::new, EntitySpawnType.BASE),
+    EVOKER("minecraft:evoker", 0.6, 1.95, EvokerMeta::new, EntitySpawnType.LIVING),
 
     EVOKER_FANGS("minecraft:evoker_fangs", 0.5, 0.8, EvokerFangsMeta::new, EntitySpawnType.BASE),
 
-    EXPERIENCE_ORB("minecraft:experience_orb", 0.5, 0.5, ExperienceOrbMeta::new, EntitySpawnType.BASE),
+    EXPERIENCE_ORB("minecraft:experience_orb", 0.5, 0.5, ExperienceOrbMeta::new, EntitySpawnType.EXPERIENCE_ORB),
 
     EYE_OF_ENDER("minecraft:eye_of_ender", 0.25, 0.25, EyeOfEnderMeta::new, EntitySpawnType.BASE),
 
@@ -177,23 +177,23 @@ public enum EntityType {
 
     FIREWORK_ROCKET("minecraft:firework_rocket", 0.25, 0.25, FireworkRocketMeta::new, EntitySpawnType.BASE),
 
-    FOX("minecraft:fox", 0.6, 0.7, FoxMeta::new, EntitySpawnType.BASE),
+    FOX("minecraft:fox", 0.6, 0.7, FoxMeta::new, EntitySpawnType.LIVING),
 
-    GHAST("minecraft:ghast", 4.0, 4.0, GhastMeta::new, EntitySpawnType.BASE),
+    GHAST("minecraft:ghast", 4.0, 4.0, GhastMeta::new, EntitySpawnType.LIVING),
 
-    GIANT("minecraft:giant", 3.6, 12.0, GiantMeta::new, EntitySpawnType.BASE),
+    GIANT("minecraft:giant", 3.6, 12.0, GiantMeta::new, EntitySpawnType.LIVING),
 
-    GUARDIAN("minecraft:guardian", 0.85, 0.85, GuardianMeta::new, EntitySpawnType.BASE),
+    GUARDIAN("minecraft:guardian", 0.85, 0.85, GuardianMeta::new, EntitySpawnType.LIVING),
 
-    HOGLIN("minecraft:hoglin", 1.39648, 1.4, HoglinMeta::new, EntitySpawnType.BASE),
+    HOGLIN("minecraft:hoglin", 1.39648, 1.4, HoglinMeta::new, EntitySpawnType.LIVING),
 
-    HORSE("minecraft:horse", 1.39648, 1.6, HorseMeta::new, EntitySpawnType.BASE),
+    HORSE("minecraft:horse", 1.39648, 1.6, HorseMeta::new, EntitySpawnType.LIVING),
 
-    HUSK("minecraft:husk", 0.6, 1.95, HuskMeta::new, EntitySpawnType.BASE),
+    HUSK("minecraft:husk", 0.6, 1.95, HuskMeta::new, EntitySpawnType.LIVING),
 
-    ILLUSIONER("minecraft:illusioner", 0.6, 1.95, IllusionerMeta::new, EntitySpawnType.BASE),
+    ILLUSIONER("minecraft:illusioner", 0.6, 1.95, IllusionerMeta::new, EntitySpawnType.LIVING),
 
-    IRON_GOLEM("minecraft:iron_golem", 1.4, 2.7, IronGolemMeta::new, EntitySpawnType.BASE),
+    IRON_GOLEM("minecraft:iron_golem", 1.4, 2.7, IronGolemMeta::new, EntitySpawnType.LIVING),
 
     ITEM("minecraft:item", 0.25, 0.25, ItemEntityMeta::new, EntitySpawnType.BASE),
 
@@ -205,11 +205,11 @@ public enum EntityType {
 
     LIGHTNING_BOLT("minecraft:lightning_bolt", 0.0, 0.0, LightningBoltMeta::new, EntitySpawnType.BASE),
 
-    LLAMA("minecraft:llama", 0.9, 1.87, LlamaMeta::new, EntitySpawnType.BASE),
+    LLAMA("minecraft:llama", 0.9, 1.87, LlamaMeta::new, EntitySpawnType.LIVING),
 
     LLAMA_SPIT("minecraft:llama_spit", 0.25, 0.25, LlamaSpitMeta::new, EntitySpawnType.BASE),
 
-    MAGMA_CUBE("minecraft:magma_cube", 2.04, 2.04, MagmaCubeMeta::new, EntitySpawnType.BASE),
+    MAGMA_CUBE("minecraft:magma_cube", 2.04, 2.04, MagmaCubeMeta::new, EntitySpawnType.LIVING),
 
     MINECART("minecraft:minecart", 0.98, 0.7, MinecartMeta::new, EntitySpawnType.BASE),
 
@@ -225,69 +225,69 @@ public enum EntityType {
 
     TNT_MINECART("minecraft:tnt_minecart", 0.98, 0.7, TntMinecartMeta::new, EntitySpawnType.BASE),
 
-    MULE("minecraft:mule", 1.39648, 1.6, MuleMeta::new, EntitySpawnType.BASE),
+    MULE("minecraft:mule", 1.39648, 1.6, MuleMeta::new, EntitySpawnType.LIVING),
 
-    MOOSHROOM("minecraft:mooshroom", 0.9, 1.4, MooshroomMeta::new, EntitySpawnType.BASE),
+    MOOSHROOM("minecraft:mooshroom", 0.9, 1.4, MooshroomMeta::new, EntitySpawnType.LIVING),
 
-    OCELOT("minecraft:ocelot", 0.6, 0.7, OcelotMeta::new, EntitySpawnType.BASE),
+    OCELOT("minecraft:ocelot", 0.6, 0.7, OcelotMeta::new, EntitySpawnType.LIVING),
 
-    PAINTING("minecraft:painting", 0.5, 0.5, PaintingMeta::new, EntitySpawnType.BASE),
+    PAINTING("minecraft:painting", 0.5, 0.5, PaintingMeta::new, EntitySpawnType.PAINTING),
 
-    PANDA("minecraft:panda", 1.3, 1.25, PandaMeta::new, EntitySpawnType.BASE),
+    PANDA("minecraft:panda", 1.3, 1.25, PandaMeta::new, EntitySpawnType.LIVING),
 
-    PARROT("minecraft:parrot", 0.5, 0.9, ParrotMeta::new, EntitySpawnType.BASE),
+    PARROT("minecraft:parrot", 0.5, 0.9, ParrotMeta::new, EntitySpawnType.LIVING),
 
-    PHANTOM("minecraft:phantom", 0.9, 0.5, PhantomMeta::new, EntitySpawnType.BASE),
+    PHANTOM("minecraft:phantom", 0.9, 0.5, PhantomMeta::new, EntitySpawnType.LIVING),
 
-    PIG("minecraft:pig", 0.9, 0.9, PigMeta::new, EntitySpawnType.BASE),
+    PIG("minecraft:pig", 0.9, 0.9, PigMeta::new, EntitySpawnType.LIVING),
 
-    PIGLIN("minecraft:piglin", 0.6, 1.95, PiglinMeta::new, EntitySpawnType.BASE),
+    PIGLIN("minecraft:piglin", 0.6, 1.95, PiglinMeta::new, EntitySpawnType.LIVING),
 
-    PIGLIN_BRUTE("minecraft:piglin_brute", 0.6, 1.95, PiglinBruteMeta::new, EntitySpawnType.BASE),
+    PIGLIN_BRUTE("minecraft:piglin_brute", 0.6, 1.95, PiglinBruteMeta::new, EntitySpawnType.LIVING),
 
-    PILLAGER("minecraft:pillager", 0.6, 1.95, PillagerMeta::new, EntitySpawnType.BASE),
+    PILLAGER("minecraft:pillager", 0.6, 1.95, PillagerMeta::new, EntitySpawnType.LIVING),
 
-    POLAR_BEAR("minecraft:polar_bear", 1.4, 1.4, PolarBearMeta::new, EntitySpawnType.BASE),
+    POLAR_BEAR("minecraft:polar_bear", 1.4, 1.4, PolarBearMeta::new, EntitySpawnType.LIVING),
 
     TNT("minecraft:tnt", 0.98, 0.98, PrimedTntMeta::new, EntitySpawnType.BASE),
 
-    PUFFERFISH("minecraft:pufferfish", 0.7, 0.7, PufferfishMeta::new, EntitySpawnType.BASE),
+    PUFFERFISH("minecraft:pufferfish", 0.7, 0.7, PufferfishMeta::new, EntitySpawnType.LIVING),
 
-    RABBIT("minecraft:rabbit", 0.4, 0.5, RabbitMeta::new, EntitySpawnType.BASE),
+    RABBIT("minecraft:rabbit", 0.4, 0.5, RabbitMeta::new, EntitySpawnType.LIVING),
 
-    RAVAGER("minecraft:ravager", 1.95, 2.2, RavagerMeta::new, EntitySpawnType.BASE),
+    RAVAGER("minecraft:ravager", 1.95, 2.2, RavagerMeta::new, EntitySpawnType.LIVING),
 
-    SALMON("minecraft:salmon", 0.7, 0.4, SalmonMeta::new, EntitySpawnType.BASE),
+    SALMON("minecraft:salmon", 0.7, 0.4, SalmonMeta::new, EntitySpawnType.LIVING),
 
-    SHEEP("minecraft:sheep", 0.9, 1.3, SheepMeta::new, EntitySpawnType.BASE),
+    SHEEP("minecraft:sheep", 0.9, 1.3, SheepMeta::new, EntitySpawnType.LIVING),
 
-    SHULKER("minecraft:shulker", 1.0, 1.0, ShulkerMeta::new, EntitySpawnType.BASE),
+    SHULKER("minecraft:shulker", 1.0, 1.0, ShulkerMeta::new, EntitySpawnType.LIVING),
 
     SHULKER_BULLET("minecraft:shulker_bullet", 0.3125, 0.3125, ShulkerBulletMeta::new, EntitySpawnType.BASE),
 
-    SILVERFISH("minecraft:silverfish", 0.4, 0.3, SilverfishMeta::new, EntitySpawnType.BASE),
+    SILVERFISH("minecraft:silverfish", 0.4, 0.3, SilverfishMeta::new, EntitySpawnType.LIVING),
 
-    SKELETON("minecraft:skeleton", 0.6, 1.99, SkeletonMeta::new, EntitySpawnType.BASE),
+    SKELETON("minecraft:skeleton", 0.6, 1.99, SkeletonMeta::new, EntitySpawnType.LIVING),
 
-    SKELETON_HORSE("minecraft:skeleton_horse", 1.39648, 1.6, SkeletonHorseMeta::new, EntitySpawnType.BASE),
+    SKELETON_HORSE("minecraft:skeleton_horse", 1.39648, 1.6, SkeletonHorseMeta::new, EntitySpawnType.LIVING),
 
-    SLIME("minecraft:slime", 2.04, 2.04, SlimeMeta::new, EntitySpawnType.BASE),
+    SLIME("minecraft:slime", 2.04, 2.04, SlimeMeta::new, EntitySpawnType.LIVING),
 
     SMALL_FIREBALL("minecraft:small_fireball", 0.3125, 0.3125, SmallFireballMeta::new, EntitySpawnType.BASE),
 
-    SNOW_GOLEM("minecraft:snow_golem", 0.7, 1.9, SnowGolemMeta::new, EntitySpawnType.BASE),
+    SNOW_GOLEM("minecraft:snow_golem", 0.7, 1.9, SnowGolemMeta::new, EntitySpawnType.LIVING),
 
     SNOWBALL("minecraft:snowball", 0.25, 0.25, SnowballMeta::new, EntitySpawnType.BASE),
 
     SPECTRAL_ARROW("minecraft:spectral_arrow", 0.5, 0.5, SpectralArrowMeta::new, EntitySpawnType.BASE),
 
-    SPIDER("minecraft:spider", 1.4, 0.9, SpiderMeta::new, EntitySpawnType.BASE),
+    SPIDER("minecraft:spider", 1.4, 0.9, SpiderMeta::new, EntitySpawnType.LIVING),
 
-    SQUID("minecraft:squid", 0.8, 0.8, SquidMeta::new, EntitySpawnType.BASE),
+    SQUID("minecraft:squid", 0.8, 0.8, SquidMeta::new, EntitySpawnType.LIVING),
 
-    STRAY("minecraft:stray", 0.6, 1.99, StrayMeta::new, EntitySpawnType.BASE),
+    STRAY("minecraft:stray", 0.6, 1.99, StrayMeta::new, EntitySpawnType.LIVING),
 
-    STRIDER("minecraft:strider", 0.9, 1.7, StriderMeta::new, EntitySpawnType.BASE),
+    STRIDER("minecraft:strider", 0.9, 1.7, StriderMeta::new, EntitySpawnType.LIVING),
 
     EGG("minecraft:egg", 0.25, 0.25, ThrownEggMeta::new, EntitySpawnType.BASE),
 
@@ -301,39 +301,39 @@ public enum EntityType {
 
     TRADER_LLAMA("minecraft:trader_llama", 0.9, 1.87, TraderLlamaMeta::new, EntitySpawnType.BASE),
 
-    TROPICAL_FISH("minecraft:tropical_fish", 0.5, 0.4, TropicalFishMeta::new, EntitySpawnType.BASE),
+    TROPICAL_FISH("minecraft:tropical_fish", 0.5, 0.4, TropicalFishMeta::new, EntitySpawnType.LIVING),
 
-    TURTLE("minecraft:turtle", 1.2, 0.4, TurtleMeta::new, EntitySpawnType.BASE),
+    TURTLE("minecraft:turtle", 1.2, 0.4, TurtleMeta::new, EntitySpawnType.LIVING),
 
-    VEX("minecraft:vex", 0.4, 0.8, VexMeta::new, EntitySpawnType.BASE),
+    VEX("minecraft:vex", 0.4, 0.8, VexMeta::new, EntitySpawnType.LIVING),
 
-    VILLAGER("minecraft:villager", 0.6, 1.95, VillagerMeta::new, EntitySpawnType.BASE),
+    VILLAGER("minecraft:villager", 0.6, 1.95, VillagerMeta::new, EntitySpawnType.LIVING),
 
-    VINDICATOR("minecraft:vindicator", 0.6, 1.95, VindicatorMeta::new, EntitySpawnType.BASE),
+    VINDICATOR("minecraft:vindicator", 0.6, 1.95, VindicatorMeta::new, EntitySpawnType.LIVING),
 
-    WANDERING_TRADER("minecraft:wandering_trader", 0.6, 1.95, WanderingTraderMeta::new, EntitySpawnType.BASE),
+    WANDERING_TRADER("minecraft:wandering_trader", 0.6, 1.95, WanderingTraderMeta::new, EntitySpawnType.LIVING),
 
-    WITCH("minecraft:witch", 0.6, 1.95, WitchMeta::new, EntitySpawnType.BASE),
+    WITCH("minecraft:witch", 0.6, 1.95, WitchMeta::new, EntitySpawnType.LIVING),
 
-    WITHER("minecraft:wither", 0.9, 3.5, WitherMeta::new, EntitySpawnType.BASE),
+    WITHER("minecraft:wither", 0.9, 3.5, WitherMeta::new, EntitySpawnType.LIVING),
 
-    WITHER_SKELETON("minecraft:wither_skeleton", 0.7, 2.4, WitherSkeletonMeta::new, EntitySpawnType.BASE),
+    WITHER_SKELETON("minecraft:wither_skeleton", 0.7, 2.4, WitherSkeletonMeta::new, EntitySpawnType.LIVING),
 
     WITHER_SKULL("minecraft:wither_skull", 0.3125, 0.3125, WitherSkullMeta::new, EntitySpawnType.BASE),
 
-    WOLF("minecraft:wolf", 0.6, 0.85, WolfMeta::new, EntitySpawnType.BASE),
+    WOLF("minecraft:wolf", 0.6, 0.85, WolfMeta::new, EntitySpawnType.LIVING),
 
-    ZOGLIN("minecraft:zoglin", 1.39648, 1.4, ZoglinMeta::new, EntitySpawnType.BASE),
+    ZOGLIN("minecraft:zoglin", 1.39648, 1.4, ZoglinMeta::new, EntitySpawnType.LIVING),
 
-    ZOMBIE("minecraft:zombie", 0.6, 1.95, ZombieMeta::new, EntitySpawnType.BASE),
+    ZOMBIE("minecraft:zombie", 0.6, 1.95, ZombieMeta::new, EntitySpawnType.LIVING),
 
-    ZOMBIE_HORSE("minecraft:zombie_horse", 1.39648, 1.6, ZombieHorseMeta::new, EntitySpawnType.BASE),
+    ZOMBIE_HORSE("minecraft:zombie_horse", 1.39648, 1.6, ZombieHorseMeta::new, EntitySpawnType.LIVING),
 
-    ZOMBIE_VILLAGER("minecraft:zombie_villager", 0.6, 1.95, ZombieVillagerMeta::new, EntitySpawnType.BASE),
+    ZOMBIE_VILLAGER("minecraft:zombie_villager", 0.6, 1.95, ZombieVillagerMeta::new, EntitySpawnType.LIVING),
 
-    ZOMBIFIED_PIGLIN("minecraft:zombified_piglin", 0.6, 1.95, ZombifiedPiglinMeta::new, EntitySpawnType.BASE),
+    ZOMBIFIED_PIGLIN("minecraft:zombified_piglin", 0.6, 1.95, ZombifiedPiglinMeta::new, EntitySpawnType.LIVING),
 
-    PLAYER("minecraft:player", 0.6, 1.8, PlayerMeta::new, EntitySpawnType.BASE),
+    PLAYER("minecraft:player", 0.6, 1.8, PlayerMeta::new, EntitySpawnType.PLAYER),
 
     FISHING_BOBBER("minecraft:fishing_bobber", 0.25, 0.25, FishingHookMeta::new, EntitySpawnType.BASE);
 
