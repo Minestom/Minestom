@@ -56,7 +56,7 @@ import java.util.function.Consumer;
  * <p>
  * To create your own entity you probably want to extends {@link ObjectEntity} or {@link EntityCreature} instead.
  */
-public abstract class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler {
+public class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler {
 
     private static final Map<Integer, Entity> entityById = new ConcurrentHashMap<>();
     private static final Map<UUID, Entity> entityByUuid = new ConcurrentHashMap<>();
@@ -201,12 +201,16 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      *
      * @param time time of the update in milliseconds
      */
-    public abstract void update(long time);
+    public void update(long time) {
+
+    }
 
     /**
      * Called when a new instance is set.
      */
-    public abstract void spawn();
+    public void spawn() {
+
+    }
 
     public boolean isOnGround() {
         return onGround || EntityUtils.isOnGround(this) /* backup for levitating entities */;
