@@ -709,6 +709,7 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
      *
      * @return the entity type
      */
+    @NotNull
     public EntityType getEntityType() {
         return entityType;
     }
