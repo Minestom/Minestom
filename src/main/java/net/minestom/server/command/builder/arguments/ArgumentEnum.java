@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 @SuppressWarnings("rawtypes")
 public class ArgumentEnum<E extends Enum> extends Argument<E> {
@@ -15,6 +16,7 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
 
     private final Class<E> enumClass;
     private final E[] values;
+    private Format format = Format.DEFAULT;
 
     public ArgumentEnum(@NotNull String id, Class<E> enumClass) {
         super(id);
@@ -22,11 +24,15 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
         this.values = enumClass.getEnumConstants();
     }
 
+    public void setFormat(@NotNull Format format) {
+        this.format = format;
+    }
+
     @NotNull
     @Override
     public E parse(@NotNull String input) throws ArgumentSyntaxException {
         for (E value : this.values) {
-            if (value.name().equalsIgnoreCase(input)) {
+            if (this.format.formatter.apply(value.name()).equals(input)) {
                 return value;
             }
         }
@@ -52,10 +58,23 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
 
             argumentNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
                     executable, false, false);
-            argumentNode.name = this.values[i].name().toLowerCase(Locale.ROOT);
+            argumentNode.name = this.format.formatter.apply(this.values[i].name());
             wordConsumer.accept(argumentNode);
             nodes[i] = argumentNode;
         }
         nodeMaker.addNodes(nodes);
     }
+
+    public enum Format {
+        DEFAULT(name -> name),
+        LOWER_CASED(name -> name.toLowerCase(Locale.ROOT)),
+        UPPER_CASED(name -> name.toUpperCase(Locale.ROOT));
+
+        private final Function<String, String> formatter;
+
+        Format(Function<String, String> formatter) {
+            this.formatter = formatter;
+        }
+    }
+
 }
