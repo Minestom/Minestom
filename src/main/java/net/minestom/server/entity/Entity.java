@@ -58,27 +58,6 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     private static final Map<UUID, Entity> entityByUuid = new ConcurrentHashMap<>();
     private static final AtomicInteger lastEntityId = new AtomicInteger();
 
-    // Metadata
-    protected static final byte METADATA_BYTE = 0;
-    protected static final byte METADATA_VARINT = 1;
-    protected static final byte METADATA_FLOAT = 2;
-    protected static final byte METADATA_STRING = 3;
-    protected static final byte METADATA_CHAT = 4;
-    protected static final byte METADATA_OPTCHAT = 5;
-    protected static final byte METADATA_SLOT = 6;
-    protected static final byte METADATA_BOOLEAN = 7;
-    protected static final byte METADATA_ROTATION = 8;
-    protected static final byte METADATA_POSITION = 9;
-    protected static final byte METADATA_OPTPOSITION = 10;
-    protected static final byte METADATA_DIRECTION = 11;
-    protected static final byte METADATA_OPTUUID = 12;
-    protected static final byte METADATA_OPTBLOCKID = 13;
-    protected static final byte METADATA_NBT = 14;
-    protected static final byte METADATA_PARTICLE = 15;
-    protected static final byte METADATA_VILLAGERDATA = 16;
-    protected static final byte METADATA_OPTVARINT = 17;
-    protected static final byte METADATA_POSE = 18;
-
     protected Instance instance;
     protected final Position position;
     protected double lastX, lastY, lastZ;
