@@ -69,15 +69,10 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
     }
 
     @Override
-    public void setInstance(@NotNull Instance instance) {
+    public void setInstance(@NotNull Instance instance, @NotNull Position spawnPosition) {
         this.navigator.setPathFinder(new HydrazinePathFinder(navigator.getPathingEntity(), instance.getInstanceSpace()));
 
-        super.setInstance(instance);
-    }
-
-    @Override
-    public void spawn() {
-
+        super.setInstance(instance, spawnPosition);
     }
 
     @Override

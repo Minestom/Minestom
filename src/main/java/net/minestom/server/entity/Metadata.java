@@ -102,9 +102,7 @@ public class Metadata {
     }
 
     public static Value<NBT> NBT(@NotNull NBT nbt) {
-        return new Value<>(TYPE_NBT, nbt, writer -> {
-            writer.writeNBT("", nbt);
-        });
+        return new Value<>(TYPE_NBT, nbt, writer -> writer.writeNBT("", nbt));
     }
 
     public static Value<int[]> VillagerData(int villagerType,

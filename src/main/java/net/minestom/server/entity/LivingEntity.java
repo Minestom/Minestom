@@ -26,7 +26,6 @@ import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -248,11 +247,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                 }
             }
         }
-    }
-
-    @Override
-    public void spawn() {
-
     }
 
     /**
@@ -723,10 +717,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return if the current entity has line of sight to the given one.
      */
     public boolean hasLineOfSight(Entity entity) {
-        Vector start       = getPosition().toVector().add(0D, getEyeHeight(), 0D);
-        Vector end         = entity.getPosition().toVector().add(0D, getEyeHeight(), 0D);
-        Vector direction   = end.subtract(start);
-        int    maxDistance = (int) Math.ceil(direction.length());
+        Vector start = getPosition().toVector().add(0D, getEyeHeight(), 0D);
+        Vector end = entity.getPosition().toVector().add(0D, getEyeHeight(), 0D);
+        Vector direction = end.subtract(start);
+        int maxDistance = (int) Math.ceil(direction.length());
 
         Iterator<BlockPosition> it = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
         while (it.hasNext()) {

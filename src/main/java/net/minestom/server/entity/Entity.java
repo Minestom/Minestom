@@ -75,7 +75,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     protected Entity vehicle;
 
     // Velocity
-    protected Vector  velocity   = new Vector(); // Movement in block per second
+    protected Vector velocity = new Vector(); // Movement in block per second
     protected boolean hasPhysics = true;
 
     protected double gravityDragPerTick;
@@ -814,7 +814,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     /**
      * Changes the entity instance, i.e. spawns it.
      *
-     * @param instance the new instance of the entity
+     * @param instance      the new instance of the entity
      * @param spawnPosition the spawn position for the entity.
      * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
      */
@@ -845,7 +845,9 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      * @param instance the new instance of the entity
      * @throws NullPointerException  if {@code instance} is null
      * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
+     * @deprecated Use {@link Entity#setInstance(Instance, Position)} instead.
      */
+    @Deprecated
     public void setInstance(@NotNull Instance instance) {
         setInstance(instance, this.position);
     }
