@@ -93,7 +93,7 @@ public enum EntitySpawnType {
                     case NORTH:
                         packet.direction = 2;
                         break;
-                    default:
+                    case EAST:
                         packet.direction = 3;
                         break;
                 }
