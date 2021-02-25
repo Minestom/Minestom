@@ -152,7 +152,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="TemporaryPacketCache.html" title="class in net.minestom.server.utils.cache">TemporaryPacketCache</a></code></td>
+<td class="colFirst"><code><a href="TemporaryCache.html" title="class in net.minestom.server.utils.cache">TemporaryCache</a>&lt;io.netty.buffer.ByteBuf&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCache()">getCache</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the cache linked to this packet.</div>
@@ -189,7 +189,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>getCache</h4>
 <pre class="methodSignature">@NotNull
-<a href="TemporaryPacketCache.html" title="class in net.minestom.server.utils.cache">TemporaryPacketCache</a>&nbsp;getCache()</pre>
+<a href="TemporaryCache.html" title="class in net.minestom.server.utils.cache">TemporaryCache</a>&lt;io.netty.buffer.ByteBuf&gt;&nbsp;getCache()</pre>
 <div class="block">Gets the cache linked to this packet.
  <p>
  WARNING: the cache needs to be shared between all the object instances, tips is to make it static.</div>
@@ -212,7 +212,7 @@ java.util.UUID&nbsp;getIdentifier()</pre>
  Used to verify if this packet is already cached or not.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>this packet identifier, null to do not retrieve the cache</dd>
+<dd>this packet identifier, null to prevent caching</dd>
 </dl>
 </li>
 </ul>
