@@ -34,7 +34,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 //TODO: Default attributes registration (and limitation ?)
-public abstract class LivingEntity extends Entity implements EquipmentHandler {
+public class LivingEntity extends Entity implements EquipmentHandler {
 
     // Item pickup
     protected boolean canPickupItem;
@@ -246,6 +246,11 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
                 }
             }
         }
+    }
+
+    @Override
+    public void spawn() {
+
     }
 
     /**
