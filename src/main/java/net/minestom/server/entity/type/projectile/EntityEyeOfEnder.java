@@ -40,8 +40,4 @@ public class EntityEyeOfEnder extends AbstractProjectile {
         this.metadata.setIndex((byte) 7, Metadata.Slot(itemStack));
     }
 
-    @Override
-    public int getObjectData() {
-        return 0;
-    }
 }

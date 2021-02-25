@@ -119,10 +119,4 @@ public class EntityAbstractArrow extends AbstractProjectile {
         return false;
     }
 
-    @Override
-    public int getObjectData() {
-        Entity shooter = getShooter();
-        return shooter == null ? 0 : shooter.getEntityId() + 1;
-    }
-
 }

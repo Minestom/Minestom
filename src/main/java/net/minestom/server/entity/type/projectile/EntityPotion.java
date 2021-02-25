@@ -20,11 +20,6 @@ public class EntityPotion extends AbstractProjectile {
         setPotion(potion);
     }
 
-    @Override
-    public int getObjectData() {
-        return 0;
-    }
-
     @NotNull
     public ItemStack getPotion() {
         return metadata.getIndex((byte) 7, ItemStack.getAirItem());

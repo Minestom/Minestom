@@ -2,12 +2,11 @@ package net.minestom.server.entity.metadata.arrow;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ArrowMeta extends EntityMeta implements ObjectDataProvider {
+public class ArrowMeta extends AbstractArrowMeta implements ObjectDataProvider {
 
     private Entity shooter;
 
