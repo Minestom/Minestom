@@ -733,7 +733,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param spawnPosition the position to teleport the player
      * @param firstSpawn    true if this is the player first spawn
      */
-    private void spawnPlayer(@NotNull Instance instance, @Nullable Position spawnPosition,
+    private void spawnPlayer(@NotNull Instance instance, @NotNull Position spawnPosition,
                              boolean firstSpawn, boolean updateChunks) {
         // Clear previous instance elements
         if (!firstSpawn) {
@@ -741,9 +741,9 @@ public class Player extends LivingEntity implements CommandSender {
             this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         }
 
-        super.setInstance(instance);
+        super.setInstance(instance, spawnPosition);
 
-        if (spawnPosition != null && !position.isSimilar(spawnPosition)) {
+        if (!position.isSimilar(spawnPosition)) {
             teleport(spawnPosition);
         } else if (updateChunks) {
             // Send newly visible chunks to player once spawned in the instance

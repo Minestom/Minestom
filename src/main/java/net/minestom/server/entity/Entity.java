@@ -843,11 +843,9 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      * Changes the entity instance.
      *
      * @param instance the new instance of the entity
-     * @deprecated Use {@link Entity#setInstance(Instance, Position)} instead.
      * @throws NullPointerException  if {@code instance} is null
      * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
      */
-    @Deprecated
     public void setInstance(@NotNull Instance instance) {
         setInstance(instance, this.position);
     }
