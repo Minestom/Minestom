@@ -13,11 +13,15 @@ import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.entity.*;
 import net.minestom.server.event.handler.EventHandler;
+import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.inventory.EquipmentHandler;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.permission.PermissionHandler;
 import net.minestom.server.potion.Potion;
@@ -113,6 +117,11 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     // Tick related
     private long ticks;
     private final EntityTickEvent tickEvent = new EntityTickEvent(this);
+
+    /**
+     * Lock used to support #switchEntityType
+     */
+    private final Object entityTypeLock = new Object();
 
     public Entity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
         this.id = generateId();
@@ -313,18 +322,41 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     }
 
     @Override
-    public boolean addViewer(@NotNull Player player) {
-        boolean result = this.viewers.add(player);
-        if (!result)
+    public final boolean addViewer(@NotNull Player player) {
+        synchronized (this.entityTypeLock) {
+            return addViewer0(player);
+        }
+    }
+
+    public boolean addViewer0(@NotNull Player player) {
+        if (!this.viewers.add(player)) {
             return false;
+        }
         player.viewableEntities.add(this);
+
+        PlayerConnection playerConnection = player.getPlayerConnection();
+        playerConnection.sendPacket(getEntityType().getSpawnType().getSpawnPacket(this));
+        playerConnection.sendPacket(getVelocityPacket());
+        playerConnection.sendPacket(getMetadataPacket());
+
+        if (hasPassenger()) {
+            playerConnection.sendPacket(getPassengersPacket());
+        }
+
         return true;
     }
 
     @Override
-    public boolean removeViewer(@NotNull Player player) {
-        if (!viewers.remove(player))
+    public final boolean removeViewer(@NotNull Player player) {
+        synchronized (this.entityTypeLock) {
+            return removeViewer0(player);
+        }
+    }
+
+    public boolean removeViewer0(@NotNull Player player) {
+        if (!viewers.remove(player)) {
             return false;
+        }
 
         DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
         destroyEntitiesPacket.entityIds = new int[]{getEntityId()};
@@ -337,6 +369,29 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     @Override
     public Set<Player> getViewers() {
         return unmodifiableViewers;
+    }
+
+    /**
+     * Changes the entity type of this entity.
+     * <p>
+     * Works by changing the internal entity type field and by calling {@link #removeViewer(Player)}
+     * followed by {@link #addViewer(Player)} to all current viewers.
+     * <p>
+     * Be aware that this only change the visual of the entity, the {@link net.minestom.server.collision.BoundingBox}
+     * will not be modified.
+     *
+     * @param entityType the new entity type
+     */
+    public final void switchEntityType(@NotNull EntityType entityType) {
+        synchronized (entityTypeLock) {
+            this.entityType = entityType;
+            this.metadata = new Metadata(this);
+            this.entityMeta = entityType.getMetaConstructor().apply(this, this.metadata);
+
+            Set<Player> viewers = new HashSet<>(getViewers());
+            getViewers().forEach(this::removeViewer);
+            viewers.forEach(this::addViewer);
+        }
     }
 
     @Override

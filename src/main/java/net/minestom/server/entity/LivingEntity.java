@@ -9,15 +9,13 @@ import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.entity.EntityDamageEvent;
 import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.entity.EntityFireEvent;
+import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.server.play.CollectItemPacket;
-import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
-import net.minestom.server.network.packet.server.play.EntityPropertiesPacket;
-import net.minestom.server.network.packet.server.play.SoundEffectPacket;
+import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
@@ -75,10 +73,20 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     private int arrowCount;
     private float health = 1F;
 
+    // Equipments
+    private ItemStack mainHandItem;
+    private ItemStack offHandItem;
+
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+
     public LivingEntity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
         super(entityType, spawnPosition);
         setupAttributes();
         setGravity(0.02f, 0.08f, 3.92f);
+        initEquipments();
     }
 
     /**
@@ -88,6 +96,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         super(entityType, uuid, spawnPosition);
         setupAttributes();
         setGravity(0.02f, 0.08f, 3.92f);
+        initEquipments();
     }
 
     public LivingEntity(@NotNull EntityType entityType) {
@@ -99,6 +108,94 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      */
     public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid) {
         this(entityType, uuid, new Position());
+    }
+
+    private void initEquipments() {
+        this.mainHandItem = ItemStack.getAirItem();
+        this.offHandItem = ItemStack.getAirItem();
+
+        this.helmet = ItemStack.getAirItem();
+        this.chestplate = ItemStack.getAirItem();
+        this.leggings = ItemStack.getAirItem();
+        this.boots = ItemStack.getAirItem();
+    }
+
+    @NotNull
+    @Override
+    public ItemStack getItemInMainHand() {
+        return mainHandItem;
+    }
+
+    @Override
+    public void setItemInMainHand(@NotNull ItemStack itemStack) {
+        this.mainHandItem = itemStack;
+        syncEquipment(EntityEquipmentPacket.Slot.MAIN_HAND);
+    }
+
+    @NotNull
+    @Override
+    public ItemStack getItemInOffHand() {
+        return offHandItem;
+    }
+
+    @Override
+    public void setItemInOffHand(@NotNull ItemStack itemStack) {
+        this.offHandItem = itemStack;
+        syncEquipment(EntityEquipmentPacket.Slot.OFF_HAND);
+    }
+
+    @NotNull
+    @Override
+    public ItemStack getHelmet() {
+        return helmet;
+    }
+
+    @Override
+    public void setHelmet(@NotNull ItemStack itemStack) {
+        this.helmet = getEquipmentItem(itemStack, ArmorEquipEvent.ArmorSlot.HELMET);
+        syncEquipment(EntityEquipmentPacket.Slot.HELMET);
+    }
+
+    @NotNull
+    @Override
+    public ItemStack getChestplate() {
+        return chestplate;
+    }
+
+    @Override
+    public void setChestplate(@NotNull ItemStack itemStack) {
+        this.chestplate = getEquipmentItem(itemStack, ArmorEquipEvent.ArmorSlot.CHESTPLATE);
+        syncEquipment(EntityEquipmentPacket.Slot.CHESTPLATE);
+    }
+
+    @NotNull
+    @Override
+    public ItemStack getLeggings() {
+        return leggings;
+    }
+
+    @Override
+    public void setLeggings(@NotNull ItemStack itemStack) {
+        this.leggings = getEquipmentItem(itemStack, ArmorEquipEvent.ArmorSlot.LEGGINGS);
+        syncEquipment(EntityEquipmentPacket.Slot.LEGGINGS);
+    }
+
+    @NotNull
+    @Override
+    public ItemStack getBoots() {
+        return boots;
+    }
+
+    @Override
+    public void setBoots(@NotNull ItemStack itemStack) {
+        this.boots = getEquipmentItem(itemStack, ArmorEquipEvent.ArmorSlot.BOOTS);
+        syncEquipment(EntityEquipmentPacket.Slot.BOOTS);
+    }
+
+    private ItemStack getEquipmentItem(@NotNull ItemStack itemStack, @NotNull ArmorEquipEvent.ArmorSlot armorSlot) {
+        ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(this, itemStack, armorSlot);
+        callEvent(ArmorEquipEvent.class, armorEquipEvent);
+        return armorEquipEvent.getArmorItem();
     }
 
     @Override
@@ -427,6 +524,15 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      */
     public void setCanPickupItem(boolean canPickupItem) {
         this.canPickupItem = canPickupItem;
+    }
+
+    @Override
+    public boolean addViewer0(@NotNull Player player) {
+        if (!super.addViewer0(player)) {
+            return false;
+        }
+        syncEquipments(player.getPlayerConnection());
+        return true;
     }
 
     @Override

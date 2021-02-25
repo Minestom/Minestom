@@ -626,13 +626,10 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     @Override
-    public boolean addViewer(@NotNull Player player) {
-        if (player == this)
+    public boolean addViewer0(@NotNull Player player) {
+        if (player == this || !super.addViewer0(player)) {
             return false;
-
-        final boolean result = super.addViewer(player);
-        if (!result)
-            return false;
+        }
 
         PlayerConnection viewerConnection = player.getPlayerConnection();
         showPlayer(viewerConnection);
@@ -640,18 +637,19 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     @Override
-    public boolean removeViewer(@NotNull Player player) {
-        if (player == this)
+    public boolean removeViewer0(@NotNull Player player) {
+        if (player == this || !super.removeViewer0(player)) {
             return false;
+        }
 
-        boolean result = super.removeViewer(player);
         PlayerConnection viewerConnection = player.getPlayerConnection();
         viewerConnection.sendPacket(getRemovePlayerToList());
 
         // Team
-        if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) // If team only contains "this" player
+        if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) {// If team only contains "this" player
             viewerConnection.sendPacket(this.getTeam().createTeamDestructionPacket());
-        return result;
+        }
+        return true;
     }
 
     /**
