@@ -128,9 +128,6 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         this.entityType = entityType;
         this.uuid = uuid;
         this.position = new Position();
-        this.lastX = this.position.getX();
-        this.lastY = this.position.getY();
-        this.lastZ = this.position.getZ();
 
         setBoundingBox(entityType.getWidth(), entityType.getHeight(), entityType.getWidth());
 
@@ -148,22 +145,11 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
     @Deprecated
     public Entity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
-        this.id = generateId();
-        this.entityType = entityType;
-        this.uuid = uuid;
-        this.position = spawnPosition.clone();
+        this(entityType, uuid);
+        this.position.set(spawnPosition);
         this.lastX = spawnPosition.getX();
         this.lastY = spawnPosition.getY();
         this.lastZ = spawnPosition.getZ();
-
-        setBoundingBox(entityType.getWidth(), entityType.getHeight(), entityType.getWidth());
-
-        this.entityMeta = entityType.getMetaConstructor().apply(this, this.metadata);
-
-        setAutoViewable(true);
-
-        Entity.entityById.put(id, this);
-        Entity.entityByUuid.put(uuid, this);
     }
 
     @Deprecated
