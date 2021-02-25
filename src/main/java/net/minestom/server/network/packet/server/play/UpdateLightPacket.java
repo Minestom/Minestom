@@ -1,10 +1,11 @@
 package net.minestom.server.network.packet.server.play;
 
+import io.netty.buffer.ByteBuf;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.cache.CacheablePacket;
-import net.minestom.server.utils.cache.TemporaryPacketCache;
+import net.minestom.server.utils.cache.TemporaryCache;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +14,7 @@ import java.util.UUID;
 
 public class UpdateLightPacket implements ServerPacket, CacheablePacket {
 
-    private static final TemporaryPacketCache CACHE = new TemporaryPacketCache(10000L);
+    private static final TemporaryCache<ByteBuf> CACHE = new TemporaryCache<>(10000L);
 
     public int chunkX;
     public int chunkZ;
@@ -71,7 +72,7 @@ public class UpdateLightPacket implements ServerPacket, CacheablePacket {
 
     @NotNull
     @Override
-    public TemporaryPacketCache getCache() {
+    public TemporaryCache<ByteBuf> getCache() {
         return CACHE;
     }
 
