@@ -1417,11 +1417,7 @@ public class Player extends LivingEntity implements CommandSender {
     protected void refreshAfterTeleport() {
         getInventory().update();
 
-        SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
-        spawnPlayerPacket.entityId = getEntityId();
-        spawnPlayerPacket.playerUuid = getUuid();
-        spawnPlayerPacket.position = getPosition();
-        sendPacketToViewers(spawnPlayerPacket);
+        sendPacketsToViewers(getEntityType().getSpawnType().getSpawnPacket(this));
 
         // Update for viewers
         sendPacketToViewersAndSelf(getVelocityPacket());
@@ -2400,14 +2396,9 @@ public class Player extends LivingEntity implements CommandSender {
      * @param connection the connection to show the player to
      */
     protected void showPlayer(@NotNull PlayerConnection connection) {
-        SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
-        spawnPlayerPacket.entityId = getEntityId();
-        spawnPlayerPacket.playerUuid = getUuid();
-        spawnPlayerPacket.position = getPosition();
-
         connection.sendPacket(getAddPlayerToList());
 
-        connection.sendPacket(spawnPlayerPacket);
+        connection.sendPacket(getEntityType().getSpawnType().getSpawnPacket(this));
         connection.sendPacket(getVelocityPacket());
         connection.sendPacket(getMetadataPacket());
 

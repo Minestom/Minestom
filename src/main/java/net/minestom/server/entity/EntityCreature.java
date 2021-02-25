@@ -12,7 +12,6 @@ import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
-import net.minestom.server.network.packet.server.play.SpawnLivingEntityPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.TimeUnit;
@@ -116,14 +115,7 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
 
             final PlayerConnection playerConnection = player.getPlayerConnection();
 
-            SpawnLivingEntityPacket spawnLivingEntityPacket = new SpawnLivingEntityPacket();
-            spawnLivingEntityPacket.entityId = getEntityId();
-            spawnLivingEntityPacket.entityUuid = getUuid();
-            spawnLivingEntityPacket.entityType = getEntityType().getId();
-            spawnLivingEntityPacket.position = getPosition();
-            spawnLivingEntityPacket.headPitch = getPosition().getYaw();
-
-            playerConnection.sendPacket(spawnLivingEntityPacket);
+            playerConnection.sendPacket(getEntityType().getSpawnType().getSpawnPacket(this));
             playerConnection.sendPacket(getVelocityPacket());
             playerConnection.sendPacket(getMetadataPacket());
 
