@@ -2,6 +2,7 @@ package net.minestom.server.chat;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -107,6 +108,10 @@ public abstract class JsonMessage {
 
         public RawJsonMessage(@NotNull JsonObject jsonObject) {
             this.jsonObject = jsonObject;
+        }
+
+        public RawJsonMessage(@NotNull String jsonObject) {
+            this.jsonObject = JsonParser.parseString(jsonObject).getAsJsonObject();
         }
 
         @NotNull
