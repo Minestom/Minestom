@@ -340,21 +340,21 @@ public enum EntityType {
     private static final EntityType[] VALUES = values();
 
     @NotNull
-    private String namespaceID;
+    private final String namespaceID;
 
-    private double width;
+    private final double width;
 
-    private double height;
-
-    @NotNull
-    private BiFunction<Entity, Metadata, EntityMeta> metaConstructor;
+    private final double height;
 
     @NotNull
-    private EntitySpawnType spawnType;
+    private final BiFunction<Entity, Metadata, EntityMeta> metaConstructor;
 
-    EntityType(@NotNull final String namespaceID, final double width, final double height,
-            @NotNull final BiFunction<Entity, Metadata, EntityMeta> metaConstructor,
-            @NotNull final EntitySpawnType spawnType) {
+    @NotNull
+    private final EntitySpawnType spawnType;
+
+    EntityType(@NotNull String namespaceID, double width, double height,
+            @NotNull BiFunction<Entity, Metadata, EntityMeta> metaConstructor,
+            @NotNull EntitySpawnType spawnType) {
         this.namespaceID = namespaceID;
         this.width = width;
         this.height = height;

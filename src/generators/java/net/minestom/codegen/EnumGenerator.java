@@ -95,7 +95,7 @@ public class EnumGenerator implements CodeGenerator {
             // properties
             for (ParameterSpec property : parameters) {
                 enumClass.addField(FieldSpec.builder(property.type, property.name)
-                        .addModifiers(Modifier.PRIVATE)
+                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
                         .addAnnotations(property.annotations)
                         .build());
             }
