@@ -10,4 +10,9 @@ public class SpawnerMinecartMeta extends AbstractMinecartMeta {
         super(entity, metadata);
     }
 
+    @Override
+    public int getObjectData() {
+        return 4;
+    }
+
 }

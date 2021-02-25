@@ -10,4 +10,9 @@ public class HopperMinecartMeta extends AbstractMinecartContainerMeta {
         super(entity, metadata);
     }
 
+    @Override
+    public int getObjectData() {
+        return 5;
+    }
+
 }

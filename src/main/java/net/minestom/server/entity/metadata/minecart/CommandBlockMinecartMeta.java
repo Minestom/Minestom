@@ -30,4 +30,9 @@ public class CommandBlockMinecartMeta extends AbstractMinecartMeta {
         super.metadata.setIndex((byte) 14, Metadata.Chat(value));
     }
 
+    @Override
+    public int getObjectData() {
+        return 6;
+    }
+
 }

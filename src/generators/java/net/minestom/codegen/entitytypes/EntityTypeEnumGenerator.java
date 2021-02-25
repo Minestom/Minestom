@@ -8,6 +8,7 @@ import net.minestom.codegen.ConstructorLambda;
 import net.minestom.codegen.EnumGenerator;
 import net.minestom.codegen.MinestomEnumGenerator;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.EntityMeta;
@@ -136,17 +137,18 @@ public class EntityTypeEnumGenerator extends MinestomEnumGenerator<EntityTypeCon
                         Entity.class,
                         Metadata.class,
                         EntityMeta.class
-                ), "metaConstructor").addAnnotation(NotNull.class).build()
+                ), "metaConstructor").addAnnotation(NotNull.class).build(),
+                ParameterSpec.builder(EntitySpawnType.class, "spawnType").addAnnotation(NotNull.class).build()
         );
         generator.appendToConstructor(code -> {
             code.addStatement("$T.$N.put($T.from(namespaceID), this)", Registries.class, "entityTypes", NamespaceID.class);
         });
 
         generator.addMethod("getId", new ParameterSpec[0], TypeName.SHORT, code -> {
-            code.addStatement("return (short)ordinal()");
+            code.addStatement("return (short) ordinal()");
         });
         generator.addMethod("getNamespaceID", new ParameterSpec[0], ClassName.get(String.class), code -> {
-            code.addStatement("return namespaceID");
+            code.addStatement("return this.namespaceID");
         });
         generator.addMethod("getWidth", new ParameterSpec[0], TypeName.DOUBLE, code -> {
             code.addStatement("return this.width");
@@ -163,6 +165,9 @@ public class EntityTypeEnumGenerator extends MinestomEnumGenerator<EntityTypeCon
                 ),
                 code -> code.addStatement("return this.metaConstructor")
         );
+        generator.addMethod("getSpawnType", new ParameterSpec[0], ClassName.get(EntitySpawnType.class), code -> {
+            code.addStatement("return this.spawnType");
+        });
 
         generator.addStaticField(ArrayTypeName.of(ClassName.get(EntityType.class)), "VALUES", "values()");
 
@@ -181,7 +186,8 @@ public class EntityTypeEnumGenerator extends MinestomEnumGenerator<EntityTypeCon
                 "\"" + type.getName().toString() + "\"",
                 type.getWidth(),
                 type.getHeight(),
-                new ConstructorLambda(ClassName.get(type.getMetaClass()))
+                new ConstructorLambda(ClassName.get(type.getMetaClass())),
+                "EntitySpawnType." + type.getSpawnType().name()
         );
     }
 

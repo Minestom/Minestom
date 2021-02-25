@@ -2,9 +2,10 @@ package net.minestom.server.entity.metadata.water.fish;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.NotNull;
 
-public class TropicalFishMeta extends AbstractFishMeta {
+public class TropicalFishMeta extends AbstractFishMeta implements ObjectDataProvider {
 
     public TropicalFishMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
@@ -39,6 +40,17 @@ public class TropicalFishMeta extends AbstractFishMeta {
         variantID >>= 8;
         byte patternColor = (byte) (variantID & 0xFF);
         return new Variant(type, pattern, bodyColor, patternColor);
+    }
+
+    @Override
+    public int getObjectData() {
+        // TODO: returns Entity ID of the owner (???)
+        return 0;
+    }
+
+    @Override
+    public boolean requiresVelocityPacketAtSpawn() {
+        return false;
     }
 
     public static class Variant {

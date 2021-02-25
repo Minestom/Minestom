@@ -3,15 +3,13 @@ package net.minestom.server.entity.type.projectile;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.ObjectEntity;
-import net.minestom.server.entity.type.Projectile;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * @deprecated Use {@link net.minestom.server.entity.metadata.object.ThrownPotionMeta} instead.
+ * @deprecated Use {@link net.minestom.server.entity.metadata.item.ThrownPotionMeta} instead.
  */
 @Deprecated
 public class EntityPotion extends AbstractProjectile {

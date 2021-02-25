@@ -39,6 +39,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Year;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -1377,13 +1378,18 @@ public abstract class Entity implements Viewable, EventHandler, DataContainer, P
     }
 
     @NotNull
+    protected Vector getVelocityForPacket() {
+        return this.velocity.clone().multiply(8000f / MinecraftServer.TICK_PER_SECOND);
+    }
+
+    @NotNull
     protected EntityVelocityPacket getVelocityPacket() {
-        final float strength = 8000f / MinecraftServer.TICK_PER_SECOND;
         EntityVelocityPacket velocityPacket = new EntityVelocityPacket();
         velocityPacket.entityId = getEntityId();
-        velocityPacket.velocityX = (short) (velocity.getX() * strength);
-        velocityPacket.velocityY = (short) (velocity.getY() * strength);
-        velocityPacket.velocityZ = (short) (velocity.getZ() * strength);
+        Vector velocity = getVelocityForPacket();
+        velocityPacket.velocityX = (short) velocity.getX();
+        velocityPacket.velocityY = (short) velocity.getY();
+        velocityPacket.velocityZ = (short) velocity.getZ();
         return velocityPacket;
     }
 

@@ -18,4 +18,9 @@ public class FurnaceMinecartMeta extends AbstractMinecartMeta {
         super.metadata.setIndex((byte) 13, Metadata.Boolean(value));
     }
 
+    @Override
+    public int getObjectData() {
+        return 2;
+    }
+
 }

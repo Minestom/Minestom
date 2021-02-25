@@ -10,4 +10,9 @@ public class MinecartMeta extends AbstractMinecartMeta {
         super(entity, metadata);
     }
 
+    @Override
+    public int getObjectData() {
+        return 0;
+    }
+
 }

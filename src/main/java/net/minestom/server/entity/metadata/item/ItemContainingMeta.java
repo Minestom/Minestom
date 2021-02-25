@@ -1,4 +1,4 @@
-package net.minestom.server.entity.metadata.object;
+package net.minestom.server.entity.metadata.item;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
@@ -7,11 +7,11 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 
-public class ObjectEntityMeta extends EntityMeta {
+class ItemContainingMeta extends EntityMeta {
 
     private final ItemStack defaultItem;
 
-    protected ObjectEntityMeta(@NotNull Entity entity, @NotNull Metadata metadata, @NotNull Material defaultItemMaterial) {
+    protected ItemContainingMeta(@NotNull Entity entity, @NotNull Metadata metadata, @NotNull Material defaultItemMaterial) {
         super(entity, metadata);
         this.defaultItem = new ItemStack(defaultItemMaterial, (byte) 1);
     }

@@ -1,6 +1,7 @@
 package net.minestom.codegen.entitytypes;
 
 import com.google.common.base.CaseFormat;
+import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,6 +19,7 @@ public class EntityTypeContainer implements Comparable<EntityTypeContainer> {
     private double width;
     private double height;
     private Class<?> metaClass;
+    private EntitySpawnType spawnType = EntitySpawnType.BASE;
 
     public EntityTypeContainer(int id, NamespaceID name, double width, double height) {
         this.id = id;
@@ -68,6 +70,10 @@ public class EntityTypeContainer implements Comparable<EntityTypeContainer> {
 
     public Class<?> getMetaClass() {
         return metaClass;
+    }
+
+    public EntitySpawnType getSpawnType() {
+        return spawnType;
     }
 
     @Override

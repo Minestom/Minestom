@@ -3,9 +3,10 @@ package net.minestom.server.entity.metadata.minecart;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.EntityMeta;
+import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.NotNull;
 
-public class AbstractMinecartMeta extends EntityMeta {
+public abstract class AbstractMinecartMeta extends EntityMeta implements ObjectDataProvider {
 
     protected AbstractMinecartMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
@@ -50,6 +51,11 @@ public class AbstractMinecartMeta extends EntityMeta {
 
     public void setCustomBlockYPosition(int value) {
         super.metadata.setIndex((byte) 11, Metadata.VarInt(value));
+    }
+
+    @Override
+    public boolean requiresVelocityPacketAtSpawn() {
+        return true;
     }
 
 }

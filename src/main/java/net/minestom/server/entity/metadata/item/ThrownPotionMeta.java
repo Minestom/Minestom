@@ -1,13 +1,13 @@
-package net.minestom.server.entity.metadata.object;
+package net.minestom.server.entity.metadata.item;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 
-public class FireballMeta extends ObjectEntityMeta {
+public class ThrownPotionMeta extends ItemContainingMeta {
 
-    public FireballMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public ThrownPotionMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata, Material.AIR);
     }
 
