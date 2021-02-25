@@ -6,7 +6,6 @@ import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 @SuppressWarnings("rawtypes")
@@ -41,14 +40,6 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
 
     @Override
     public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
-        // Add the single word properties + parser
-        final Consumer<DeclareCommandsPacket.Node> wordConsumer = node -> {
-            node.parser = "brigadier:string";
-            node.properties = packetWriter -> {
-                packetWriter.writeVarInt(0); // Single word
-            };
-        };
-
         // Create a primitive array for mapping
         DeclareCommandsPacket.Node[] nodes = new DeclareCommandsPacket.Node[this.values.length];
 
@@ -59,7 +50,6 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
             argumentNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
                     executable, false, false);
             argumentNode.name = this.format.formatter.apply(this.values[i].name());
-            wordConsumer.accept(argumentNode);
             nodes[i] = argumentNode;
         }
         nodeMaker.addNodes(nodes);
