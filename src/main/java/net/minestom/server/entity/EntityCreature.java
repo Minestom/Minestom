@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class EntityCreature extends LivingEntity implements NavigableEntity, EntityAI {
 
@@ -29,15 +30,27 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
 
     private Entity target;
 
-    public EntityCreature(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
-        super(entityType, spawnPosition);
-
+    /**
+     * Constructor which allows to specify an UUID. Only use if you know what you are doing!
+     */
+    public EntityCreature(@NotNull EntityType entityType, @NotNull UUID uuid) {
+        super(entityType, uuid);
         heal();
     }
 
+    public EntityCreature(@NotNull EntityType entityType) {
+        this(entityType, UUID.randomUUID());
+    }
+
+    @Deprecated
+    public EntityCreature(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
+        super(entityType, spawnPosition);
+        heal();
+    }
+
+    @Deprecated
     public EntityCreature(@NotNull EntityType entityType, @NotNull Position spawnPosition, @Nullable Instance instance) {
         this(entityType, spawnPosition);
-
         if (instance != null) {
             setInstance(instance);
         }

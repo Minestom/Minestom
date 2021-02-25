@@ -661,6 +661,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param instance      the new player instance
      * @param spawnPosition the new position of the player
      */
+    @Override
     public void setInstance(@NotNull Instance instance, @NotNull Position spawnPosition) {
         Check.argCondition(this.instance == instance, "Instance should be different than the current one");
 

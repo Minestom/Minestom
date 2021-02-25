@@ -82,16 +82,24 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     private ItemStack leggings;
     private ItemStack boots;
 
-    public LivingEntity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
-        super(entityType, spawnPosition);
+    /**
+     * Constructor which allows to specify an UUID. Only use if you know what you are doing!
+     */
+    public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid) {
+        this(entityType, uuid, new Position());
         setupAttributes();
         setGravity(0.02f, 0.08f, 3.92f);
         initEquipments();
     }
 
+    public LivingEntity(@NotNull EntityType entityType) {
+        this(entityType, UUID.randomUUID());
+    }
+
     /**
      * Constructor which allows to specify an UUID. Only use if you know what you are doing!
      */
+    @Deprecated
     public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
         super(entityType, uuid, spawnPosition);
         setupAttributes();
@@ -99,15 +107,9 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         initEquipments();
     }
 
-    public LivingEntity(@NotNull EntityType entityType) {
-        this(entityType, new Position());
-    }
-
-    /**
-     * Constructor which allows to specify an UUID. Only use if you know what you are doing!
-     */
-    public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid) {
-        this(entityType, uuid, new Position());
+    @Deprecated
+    public LivingEntity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
+        this(entityType, UUID.randomUUID(), spawnPosition);
     }
 
     private void initEquipments() {

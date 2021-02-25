@@ -123,6 +123,30 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      */
     private final Object entityTypeLock = new Object();
 
+    public Entity(@NotNull EntityType entityType, @NotNull UUID uuid) {
+        this.id = generateId();
+        this.entityType = entityType;
+        this.uuid = uuid;
+        this.position = new Position();
+        this.lastX = this.position.getX();
+        this.lastY = this.position.getY();
+        this.lastZ = this.position.getZ();
+
+        setBoundingBox(entityType.getWidth(), entityType.getHeight(), entityType.getWidth());
+
+        this.entityMeta = entityType.getMetaConstructor().apply(this, this.metadata);
+
+        setAutoViewable(true);
+
+        Entity.entityById.put(id, this);
+        Entity.entityByUuid.put(uuid, this);
+    }
+
+    public Entity(@NotNull EntityType entityType) {
+        this(entityType, UUID.randomUUID());
+    }
+
+    @Deprecated
     public Entity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
         this.id = generateId();
         this.entityType = entityType;
@@ -142,12 +166,9 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         Entity.entityByUuid.put(uuid, this);
     }
 
+    @Deprecated
     public Entity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
         this(entityType, UUID.randomUUID(), spawnPosition);
-    }
-
-    public Entity(@NotNull EntityType entityType) {
-        this(entityType, new Position());
     }
 
     /**
@@ -805,13 +826,13 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     }
 
     /**
-     * Changes the entity instance.
+     * Changes the entity instance, i.e. spawns it.
      *
      * @param instance the new instance of the entity
-     * @throws NullPointerException  if {@code instance} is null
+     * @param spawnPosition the spawn position for the entity.
      * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
      */
-    public void setInstance(@NotNull Instance instance) {
+    public void setInstance(@NotNull Instance instance, @NotNull Position spawnPosition) {
         Check.stateCondition(!instance.isRegistered(),
                 "Instances need to be registered, please use InstanceManager#registerInstance or InstanceManager#registerSharedInstance");
 
@@ -819,12 +840,30 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
             this.instance.UNSAFE_removeEntity(this);
         }
 
+        this.position.set(spawnPosition);
+        this.lastX = this.position.getX();
+        this.lastY = this.position.getY();
+        this.lastZ = this.position.getZ();
+
         this.isActive = true;
         this.instance = instance;
         instance.UNSAFE_addEntity(this);
         spawn();
         EntitySpawnEvent entitySpawnEvent = new EntitySpawnEvent(this, instance);
         callEvent(EntitySpawnEvent.class, entitySpawnEvent);
+    }
+
+    /**
+     * Changes the entity instance.
+     *
+     * @param instance the new instance of the entity
+     * @deprecated Use {@link Entity#setInstance(Instance, Position)} instead.
+     * @throws NullPointerException  if {@code instance} is null
+     * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
+     */
+    @Deprecated
+    public void setInstance(@NotNull Instance instance) {
+        setInstance(instance, this.position);
     }
 
     /**
