@@ -393,8 +393,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
             this.entityMeta = entityType.getMetaConstructor().apply(this, this.metadata);
 
             Set<Player> viewers = new HashSet<>(getViewers());
-            getViewers().forEach(this::removeViewer);
-            viewers.forEach(this::addViewer);
+            getViewers().forEach(this::removeViewer0);
+            viewers.forEach(this::addViewer0);
         }
     }
 
