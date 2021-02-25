@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -143,7 +143,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a></code>, <code><a href="Player.html" title="class in net.minestom.server.entity">Player</a></code></dd>
 </dl>
 <hr>
-<pre>public abstract class <span class="typeNameLabel">LivingEntity</span>
+<pre>public class <span class="typeNameLabel">LivingEntity</span>
 extends <a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>
 implements <a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></pre>
 </li>
@@ -219,7 +219,7 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;net.minestom.server.entity.<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></h3>
-<code><a href="Entity.html#cachePitch">cachePitch</a>, <a href="Entity.html#cacheX">cacheX</a>, <a href="Entity.html#cacheY">cacheY</a>, <a href="Entity.html#cacheYaw">cacheYaw</a>, <a href="Entity.html#cacheZ">cacheZ</a>, <a href="Entity.html#entityType">entityType</a>, <a href="Entity.html#gravityAcceleration">gravityAcceleration</a>, <a href="Entity.html#gravityDragPerTick">gravityDragPerTick</a>, <a href="Entity.html#gravityTerminalVelocity">gravityTerminalVelocity</a>, <a href="Entity.html#gravityTickCount">gravityTickCount</a>, <a href="Entity.html#hasPhysics">hasPhysics</a>, <a href="Entity.html#instance">instance</a>, <a href="Entity.html#lastPitch">lastPitch</a>, <a href="Entity.html#lastX">lastX</a>, <a href="Entity.html#lastY">lastY</a>, <a href="Entity.html#lastYaw">lastYaw</a>, <a href="Entity.html#lastZ">lastZ</a>, <a href="Entity.html#metadata">metadata</a>, <a href="Entity.html#METADATA_BOOLEAN">METADATA_BOOLEAN</a>, <a href="Entity.html#METADATA_BYTE">METADATA_BYTE</a>, <a href="Entity.html#METADATA_CHAT">METADATA_CHAT</a>, <a href="Entity.html#METADATA_DIRECTION">METADATA_DIRECTION</a>, <a href="Entity.html#METADATA_FLOAT">METADATA_FLOAT</a>, <a href="Entity.html#METADATA_NBT">METADATA_NBT</a>, <a href="Entity.html#METADATA_OPTBLOCKID">METADATA_OPTBLOCKID</a>, <a href="Entity.html#METADATA_OPTCHAT">METADATA_OPTCHAT</a>, <a href="Entity.html#METADATA_OPTPOSITION">METADATA_OPTPOSITION</a>, <a href="Entity.html#METADATA_OPTUUID">METADATA_OPTUUID</a>, <a href="Entity.html#METADATA_OPTVARINT">METADATA_OPTVARINT</a>, <a href="Entity.html#METADATA_PARTICLE">METADATA_PARTICLE</a>, <a href="Entity.html#METADATA_POSE">METADATA_POSE</a>, <a href="Entity.html#METADATA_POSITION">METADATA_POSITION</a>, <a href="Entity.html#METADATA_ROTATION">METADATA_ROTATION</a>, <a href="Entity.html#METADATA_SLOT">METADATA_SLOT</a>, <a href="Entity.html#METADATA_STRING">METADATA_STRING</a>, <a href="Entity.html#METADATA_VARINT">METADATA_VARINT</a>, <a href="Entity.html#METADATA_VILLAGERDATA">METADATA_VILLAGERDATA</a>, <a href="Entity.html#nextTick">nextTick</a>, <a href="Entity.html#onGround">onGround</a>, <a href="Entity.html#position">position</a>, <a href="Entity.html#uuid">uuid</a>, <a href="Entity.html#vehicle">vehicle</a>, <a href="Entity.html#velocity">velocity</a>, <a href="Entity.html#viewers">viewers</a></code></li>
+<code><a href="Entity.html#cachePitch">cachePitch</a>, <a href="Entity.html#cacheX">cacheX</a>, <a href="Entity.html#cacheY">cacheY</a>, <a href="Entity.html#cacheYaw">cacheYaw</a>, <a href="Entity.html#cacheZ">cacheZ</a>, <a href="Entity.html#entityMeta">entityMeta</a>, <a href="Entity.html#entityType">entityType</a>, <a href="Entity.html#gravityAcceleration">gravityAcceleration</a>, <a href="Entity.html#gravityDragPerTick">gravityDragPerTick</a>, <a href="Entity.html#gravityTerminalVelocity">gravityTerminalVelocity</a>, <a href="Entity.html#gravityTickCount">gravityTickCount</a>, <a href="Entity.html#hasPhysics">hasPhysics</a>, <a href="Entity.html#instance">instance</a>, <a href="Entity.html#lastPitch">lastPitch</a>, <a href="Entity.html#lastX">lastX</a>, <a href="Entity.html#lastY">lastY</a>, <a href="Entity.html#lastYaw">lastYaw</a>, <a href="Entity.html#lastZ">lastZ</a>, <a href="Entity.html#metadata">metadata</a>, <a href="Entity.html#nextTick">nextTick</a>, <a href="Entity.html#onGround">onGround</a>, <a href="Entity.html#position">position</a>, <a href="Entity.html#uuid">uuid</a>, <a href="Entity.html#vehicle">vehicle</a>, <a href="Entity.html#velocity">velocity</a>, <a href="Entity.html#viewers">viewers</a></code></li>
 </ul>
 </li>
 </ul>
@@ -253,13 +253,15 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
             java.util.UUID&nbsp;uuid,
             <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition)</code></th>
 <td class="colLast">
-<div class="block">Constructor which allows to specify an UUID.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 </td>
 </tr>
 <tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.EntityType,net.minestom.server.utils.Position)">LivingEntity</a></span>&#8203;(<a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType,
             <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+</td>
 </tr>
 </table>
 </li>
@@ -281,12 +283,17 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addViewer0(net.minestom.server.entity.Player)">addViewer0</a></span>&#8203;(<a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#canPickupItem()">canPickupItem</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the entity is able to pickup items.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#damage(net.minestom.server.entity.damage.DamageType,float)">damage</a></span>&#8203;(<a href="damage/DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a>&nbsp;type,
       float&nbsp;value)</code></th>
@@ -294,161 +301,217 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <div class="block">Damages the entity by a value, the type of the damage also has to be specified.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getArrowCount()">getArrowCount</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the amount of arrows in the entity.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../attribute/AttributeInstance.html" title="class in net.minestom.server.attribute">AttributeInstance</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAttribute(net.minestom.server.attribute.Attribute)">getAttribute</a></span>&#8203;(<a href="../attribute/Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;attribute)</code></th>
 <td class="colLast">
 <div class="block">Retrieves the attribute instance and its modifiers.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAttributeValue(net.minestom.server.attribute.Attribute)">getAttributeValue</a></span>&#8203;(<a href="../attribute/Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;attribute)</code></th>
 <td class="colLast">
 <div class="block">Retrieves the attribute value.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
+<td class="colFirst"><code><a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBoots()">getBoots</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the boots.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code><a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChestplate()">getChestplate</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the chestplate.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFireDamagePeriod()">getFireDamagePeriod</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the time in ms between two fire damage applications.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getHealth()">getHealth</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the entity health.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i10" class="altColor">
+<td class="colFirst"><code><a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getHelmet()">getHelmet</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the helmet.</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code><a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getItemInMainHand()">getItemInMainHand</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> in main hand.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code><a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getItemInOffHand()">getItemInOffHand</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> in off hand.</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="damage/DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLastDamageSource()">getLastDamageSource</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the last damage source which damaged of this entity.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i14" class="altColor">
+<td class="colFirst"><code><a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLeggings()">getLeggings</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the leggings.</div>
+</td>
+</tr>
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLineOfSight(int)">getLineOfSight</a></span>&#8203;(int&nbsp;maxDistance)</code></th>
 <td class="colLast">
 <div class="block">Gets the line of sight in <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils"><code>BlockPosition</code></a> of the entity.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i16" class="altColor">
+<td class="colFirst"><code><a href="metadata/LivingEntityMeta.html" title="class in net.minestom.server.entity.metadata">LivingEntityMeta</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLivingEntityMeta()">getLivingEntityMeta</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets <a href="metadata/EntityMeta.html" title="class in net.minestom.server.entity.metadata"><code>EntityMeta</code></a> of this entity casted to <a href="metadata/LivingEntityMeta.html" title="class in net.minestom.server.entity.metadata"><code>LivingEntityMeta</code></a>.</div>
+</td>
+</tr>
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMaxHealth()">getMaxHealth</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the entity max health from <a href="#getAttributeValue(net.minestom.server.attribute.Attribute)"><code>getAttributeValue(Attribute)</code></a> <a href="../attribute/Attributes.html#MAX_HEALTH"><code>Attributes.MAX_HEALTH</code></a>.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>protected <a href="../network/packet/server/play/EntityPropertiesPacket.html" title="class in net.minestom.server.network.packet.server.play">EntityPropertiesPacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPropertiesPacket()">getPropertiesPacket</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets an <a href="../network/packet/server/play/EntityPropertiesPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityPropertiesPacket</code></a> for this entity with all of its attributes values.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code><a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTargetBlockPosition(int)">getTargetBlockPosition</a></span>&#8203;(int&nbsp;maxDistance)</code></th>
 <td class="colLast">
 <div class="block">Gets the target (not-air) <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils"><code>BlockPosition</code></a> of the entity.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard">Team</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTeam()">getTeam</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> of the entity.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#handleVoid()">handleVoid</a></span>()</code></th>
 <td class="colLast">
 <div class="block">How does this entity handle being in the void?</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasLineOfSight(net.minestom.server.entity.Entity)">hasLineOfSight</a></span>&#8203;(<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
 <td class="colLast">
 <div class="block">Checks whether the current entity has line of sight to the given one.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#heal()">heal</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Sets the heal of the entity as its max health.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isDead()">isDead</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the entity is dead or not.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isImmune(net.minestom.server.entity.damage.DamageType)">isImmune</a></span>&#8203;(<a href="damage/DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a>&nbsp;type)</code></th>
 <td class="colLast">
 <div class="block">Is this entity immune to the given type of damage?</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInvulnerable()">isInvulnerable</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the entity is invulnerable.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#kill()">kill</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Kills the entity, trigger the <a href="../event/entity/EntityDeathEvent.html" title="class in net.minestom.server.event.entity"><code>EntityDeathEvent</code></a> event.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onAttributeChanged(net.minestom.server.attribute.AttributeInstance)">onAttributeChanged</a></span>&#8203;(<a href="../attribute/AttributeInstance.html" title="class in net.minestom.server.attribute">AttributeInstance</a>&nbsp;instance)</code></th>
 <td class="colLast">
 <div class="block">Callback used when an attribute instance has been modified.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshActiveHand(boolean,boolean,boolean)">refreshActiveHand</a></span>&#8203;(boolean&nbsp;isHandActive,
                  boolean&nbsp;offHand,
                  boolean&nbsp;riptideSpinAttack)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshIsDead(boolean)">refreshIsDead</a></span>&#8203;(boolean&nbsp;isDead)</code></th>
 <td class="colLast">
 <div class="block">Used to change the <code>isDead</code> internal field.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setArrowCount(int)">setArrowCount</a></span>&#8203;(int&nbsp;arrowCount)</code></th>
 <td class="colLast">
 <div class="block">Changes the amount of arrow stuck in the entity.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i32" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBoots(net.minestom.server.item.ItemStack)">setBoots</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
+<td class="colLast">
+<div class="block">Changes the boots.</div>
+</td>
+</tr>
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBoundingBox(double,double,double)">setBoundingBox</a></span>&#8203;(double&nbsp;x,
               double&nbsp;y,
@@ -457,14 +520,21 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <div class="block">Changes the internal entity bounding box.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCanPickupItem(boolean)">setCanPickupItem</a></span>&#8203;(boolean&nbsp;canPickupItem)</code></th>
 <td class="colLast">
 <div class="block">When set to false, the entity will not be able to pick <a href="ItemEntity.html" title="class in net.minestom.server.entity"><code>ItemEntity</code></a> on the ground.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i35" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChestplate(net.minestom.server.item.ItemStack)">setChestplate</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
+<td class="colLast">
+<div class="block">Changes the chestplate.</div>
+</td>
+</tr>
+<tr id="i36" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFireDamagePeriod(long,net.minestom.server.utils.time.TimeUnit)">setFireDamagePeriod</a></span>&#8203;(long&nbsp;fireDamagePeriod,
                    <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;timeUnit)</code></th>
@@ -472,14 +542,14 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <div class="block">Changes the delay between two fire damage applications.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFireForDuration(int)">setFireForDuration</a></span>&#8203;(int&nbsp;duration)</code></th>
 <td class="colLast">
 <div class="block">Sets fire to this entity for a given duration.</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFireForDuration(int,net.minestom.server.utils.time.TimeUnit)">setFireForDuration</a></span>&#8203;(int&nbsp;duration,
                   <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit)</code></th>
@@ -487,28 +557,63 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <div class="block">Sets fire to this entity for a given duration.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setHealth(float)">setHealth</a></span>&#8203;(float&nbsp;health)</code></th>
 <td class="colLast">
 <div class="block">Changes the entity health, kill it if <code>health</code> is &gt;= 0 and is not dead yet.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i40" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setHelmet(net.minestom.server.item.ItemStack)">setHelmet</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
+<td class="colLast">
+<div class="block">Changes the helmet.</div>
+</td>
+</tr>
+<tr id="i41" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setInvulnerable(boolean)">setInvulnerable</a></span>&#8203;(boolean&nbsp;invulnerable)</code></th>
 <td class="colLast">
 <div class="block">Makes the entity vulnerable or invulnerable.</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i42" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setItemInMainHand(net.minestom.server.item.ItemStack)">setItemInMainHand</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
+<td class="colLast">
+<div class="block">Changes the main hand <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a>.</div>
+</td>
+</tr>
+<tr id="i43" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setItemInOffHand(net.minestom.server.item.ItemStack)">setItemInOffHand</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
+<td class="colLast">
+<div class="block">Changes the off hand <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a>.</div>
+</td>
+</tr>
+<tr id="i44" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLeggings(net.minestom.server.item.ItemStack)">setLeggings</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
+<td class="colLast">
+<div class="block">Changes the leggings.</div>
+</td>
+</tr>
+<tr id="i45" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTeam(net.minestom.server.scoreboard.Team)">setTeam</a></span>&#8203;(<a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard">Team</a>&nbsp;team)</code></th>
 <td class="colLast">
 <div class="block">Changes the <a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> for the entity.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i46" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#spawn()">spawn</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Called when a new instance is set.</div>
+</td>
+</tr>
+<tr id="i47" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#swingMainHand()">swingMainHand</a></span>()</code></th>
 <td class="colLast">
@@ -516,7 +621,7 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
  (can be used for attack animation).</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i48" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#swingOffHand()">swingOffHand</a></span>()</code></th>
 <td class="colLast">
@@ -524,7 +629,7 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
  (can be used for attack animation).</div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i49" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update(long)">update</a></span>&#8203;(long&nbsp;time)</code></th>
 <td class="colLast">
@@ -537,7 +642,7 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.entity.<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></h3>
-<code><a href="Entity.html#addEffect(net.minestom.server.potion.Potion)">addEffect</a>, <a href="Entity.html#addPassenger(net.minestom.server.entity.Entity)">addPassenger</a>, <a href="Entity.html#addViewer(net.minestom.server.entity.Player)">addViewer</a>, <a href="Entity.html#askSynchronization()">askSynchronization</a>, <a href="Entity.html#clearEffects()">clearEffects</a>, <a href="Entity.html#generateId()">generateId</a>, <a href="Entity.html#getActiveEffects()">getActiveEffects</a>, <a href="Entity.html#getAliveTicks()">getAliveTicks</a>, <a href="Entity.html#getAllPermissions()">getAllPermissions</a>, <a href="Entity.html#getBoundingBox()">getBoundingBox</a>, <a href="Entity.html#getChunk()">getChunk</a>, <a href="Entity.html#getCustomName()">getCustomName</a>, <a href="Entity.html#getData()">getData</a>, <a href="Entity.html#getDistance(net.minestom.server.entity.Entity)">getDistance</a>, <a href="Entity.html#getDistanceSquared(net.minestom.server.entity.Entity)">getDistanceSquared</a>, <a href="Entity.html#getEntity(int)">getEntity</a>, <a href="Entity.html#getEntity(java.util.UUID)">getEntity</a>, <a href="Entity.html#getEntityId()">getEntityId</a>, <a href="Entity.html#getEntityType()">getEntityType</a>, <a href="Entity.html#getEventCallbacksMap()">getEventCallbacksMap</a>, <a href="Entity.html#getEyeHeight()">getEyeHeight</a>, <a href="Entity.html#getGravityAcceleration()">getGravityAcceleration</a>, <a href="Entity.html#getGravityDragPerTick()">getGravityDragPerTick</a>, <a href="Entity.html#getGravityTerminalVelocity()">getGravityTerminalVelocity</a>, <a href="Entity.html#getGravityTickCount()">getGravityTickCount</a>, <a href="Entity.html#getInstance()">getInstance</a>, <a href="Entity.html#getMetadataPacket()">getMetadataPacket</a>, <a href="Entity.html#getPassengers()">getPassengers</a>, <a href="Entity.html#getPassengersPacket()">getPassengersPacket</a>, <a href="Entity.html#getPose()">getPose</a>, <a href="Entity.html#getPosition()">getPosition</a>, <a href="Entity.html#getUuid()">getUuid</a>, <a href="Entity.html#getVehicle()">getVehicle</a>, <a href="Entity.html#getVelocity()">getVelocity</a>, <a href="Entity.html#getVelocityPacket()">getVelocityPacket</a>, <a href="Entity.html#getViewers()">getViewers</a>, <a href="Entity.html#hasNoGravity()">hasNoGravity</a>, <a href="Entity.html#hasPassenger()">hasPassenger</a>, <a href="Entity.html#hasVelocity()">hasVelocity</a>, <a href="Entity.html#isActive()">isActive</a>, <a href="Entity.html#isAutoViewable()">isAutoViewable</a>, <a href="Entity.html#isCustomNameVisible()">isCustomNameVisible</a>, <a href="Entity.html#isGlowing()">isGlowing</a>, <a href="Entity.html#isInvisible()">isInvisible</a>, <a href="Entity.html#isOnFire()">isOnFire</a>, <a href="Entity.html#isOnGround()">isOnGround</a>, <a href="Entity.html#isRemoved()">isRemoved</a>, <a href="Entity.html#isRemoveScheduled()">isRemoveScheduled</a>, <a href="Entity.html#isSilent()">isSilent</a>, <a href="Entity.html#isSneaking()">isSneaking</a>, <a href="Entity.html#isSprinting()">isSprinting</a>, <a href="Entity.html#refreshPosition(double,double,double)">refreshPosition</a>, <a href="Entity.html#refreshPosition(net.minestom.server.utils.Position)">refreshPosition</a>, <a href="Entity.html#refreshView(float,float)">refreshView</a>, <a href="Entity.html#remove()">remove</a>, <a href="Entity.html#removeEffect(net.minestom.server.potion.PotionEffect)">removeEffect</a>, <a href="Entity.html#removePassenger(net.minestom.server.entity.Entity)">removePassenger</a>, <a href="Entity.html#removeViewer(net.minestom.server.entity.Player)">removeViewer</a>, <a href="Entity.html#scheduleNextTick(java.util.function.Consumer)">scheduleNextTick</a>, <a href="Entity.html#scheduleRemove(long,net.minestom.server.utils.time.TimeUnit)">scheduleRemove</a>, <a href="Entity.html#sendSynchronization()">sendSynchronization</a>, <a href="Entity.html#setAutoViewable(boolean)">setAutoViewable</a>, <a href="Entity.html#setBoundingBox(net.minestom.server.collision.BoundingBox)">setBoundingBox</a>, <a href="Entity.html#setCustomName(net.minestom.server.chat.JsonMessage)">setCustomName</a>, <a href="Entity.html#setCustomNameVisible(boolean)">setCustomNameVisible</a>, <a href="Entity.html#setData(net.minestom.server.data.Data)">setData</a>, <a href="Entity.html#setGlowing(boolean)">setGlowing</a>, <a href="Entity.html#setGravity(double,double,double)">setGravity</a>, <a href="Entity.html#setInstance(net.minestom.server.instance.Instance)">setInstance</a>, <a href="Entity.html#setInvisible(boolean)">setInvisible</a>, <a href="Entity.html#setNoGravity(boolean)">setNoGravity</a>, <a href="Entity.html#setOnFire(boolean)">setOnFire</a>, <a href="Entity.html#setPose(net.minestom.server.entity.Entity.Pose)">setPose</a>, <a href="Entity.html#setSilent(boolean)">setSilent</a>, <a href="Entity.html#setSneaking(boolean)">setSneaking</a>, <a href="Entity.html#setSprinting(boolean)">setSprinting</a>, <a href="Entity.html#setUuid(java.util.UUID)">setUuid</a>, <a href="Entity.html#setVelocity(net.minestom.server.utils.Vector)">setVelocity</a>, <a href="Entity.html#setView(float,float)">setView</a>, <a href="Entity.html#setView(net.minestom.server.utils.Position)">setView</a>, <a href="Entity.html#shouldRemove()">shouldRemove</a>, <a href="Entity.html#spawn()">spawn</a>, <a href="Entity.html#teleport(net.minestom.server.utils.Position)">teleport</a>, <a href="Entity.html#teleport(net.minestom.server.utils.Position,long%5B%5D,java.lang.Runnable)">teleport</a>, <a href="Entity.html#teleport(net.minestom.server.utils.Position,java.lang.Runnable)">teleport</a>, <a href="Entity.html#tick(long)">tick</a>, <a href="Entity.html#triggerStatus(byte)">triggerStatus</a></code></li>
+<code><a href="Entity.html#addEffect(net.minestom.server.potion.Potion)">addEffect</a>, <a href="Entity.html#addPassenger(net.minestom.server.entity.Entity)">addPassenger</a>, <a href="Entity.html#addViewer(net.minestom.server.entity.Player)">addViewer</a>, <a href="Entity.html#askSynchronization()">askSynchronization</a>, <a href="Entity.html#clearEffects()">clearEffects</a>, <a href="Entity.html#generateId()">generateId</a>, <a href="Entity.html#getActiveEffects()">getActiveEffects</a>, <a href="Entity.html#getAliveTicks()">getAliveTicks</a>, <a href="Entity.html#getAllPermissions()">getAllPermissions</a>, <a href="Entity.html#getBoundingBox()">getBoundingBox</a>, <a href="Entity.html#getChunk()">getChunk</a>, <a href="Entity.html#getCustomName()">getCustomName</a>, <a href="Entity.html#getData()">getData</a>, <a href="Entity.html#getDistance(net.minestom.server.entity.Entity)">getDistance</a>, <a href="Entity.html#getDistanceSquared(net.minestom.server.entity.Entity)">getDistanceSquared</a>, <a href="Entity.html#getEntity(int)">getEntity</a>, <a href="Entity.html#getEntity(java.util.UUID)">getEntity</a>, <a href="Entity.html#getEntityId()">getEntityId</a>, <a href="Entity.html#getEntityMeta()">getEntityMeta</a>, <a href="Entity.html#getEntityType()">getEntityType</a>, <a href="Entity.html#getEventCallbacksMap()">getEventCallbacksMap</a>, <a href="Entity.html#getEyeHeight()">getEyeHeight</a>, <a href="Entity.html#getGravityAcceleration()">getGravityAcceleration</a>, <a href="Entity.html#getGravityDragPerTick()">getGravityDragPerTick</a>, <a href="Entity.html#getGravityTerminalVelocity()">getGravityTerminalVelocity</a>, <a href="Entity.html#getGravityTickCount()">getGravityTickCount</a>, <a href="Entity.html#getInstance()">getInstance</a>, <a href="Entity.html#getMetadataPacket()">getMetadataPacket</a>, <a href="Entity.html#getPassengers()">getPassengers</a>, <a href="Entity.html#getPassengersPacket()">getPassengersPacket</a>, <a href="Entity.html#getPose()">getPose</a>, <a href="Entity.html#getPosition()">getPosition</a>, <a href="Entity.html#getUuid()">getUuid</a>, <a href="Entity.html#getVehicle()">getVehicle</a>, <a href="Entity.html#getVelocity()">getVelocity</a>, <a href="Entity.html#getVelocityForPacket()">getVelocityForPacket</a>, <a href="Entity.html#getVelocityPacket()">getVelocityPacket</a>, <a href="Entity.html#getViewers()">getViewers</a>, <a href="Entity.html#hasNoGravity()">hasNoGravity</a>, <a href="Entity.html#hasPassenger()">hasPassenger</a>, <a href="Entity.html#hasVelocity()">hasVelocity</a>, <a href="Entity.html#isActive()">isActive</a>, <a href="Entity.html#isAutoViewable()">isAutoViewable</a>, <a href="Entity.html#isCustomNameVisible()">isCustomNameVisible</a>, <a href="Entity.html#isGlowing()">isGlowing</a>, <a href="Entity.html#isInvisible()">isInvisible</a>, <a href="Entity.html#isOnFire()">isOnFire</a>, <a href="Entity.html#isOnGround()">isOnGround</a>, <a href="Entity.html#isRemoved()">isRemoved</a>, <a href="Entity.html#isRemoveScheduled()">isRemoveScheduled</a>, <a href="Entity.html#isSilent()">isSilent</a>, <a href="Entity.html#isSneaking()">isSneaking</a>, <a href="Entity.html#isSprinting()">isSprinting</a>, <a href="Entity.html#refreshPosition(double,double,double)">refreshPosition</a>, <a href="Entity.html#refreshPosition(net.minestom.server.utils.Position)">refreshPosition</a>, <a href="Entity.html#refreshView(float,float)">refreshView</a>, <a href="Entity.html#remove()">remove</a>, <a href="Entity.html#removeEffect(net.minestom.server.potion.PotionEffect)">removeEffect</a>, <a href="Entity.html#removePassenger(net.minestom.server.entity.Entity)">removePassenger</a>, <a href="Entity.html#removeViewer(net.minestom.server.entity.Player)">removeViewer</a>, <a href="Entity.html#removeViewer0(net.minestom.server.entity.Player)">removeViewer0</a>, <a href="Entity.html#scheduleNextTick(java.util.function.Consumer)">scheduleNextTick</a>, <a href="Entity.html#scheduleRemove(long,net.minestom.server.utils.time.TimeUnit)">scheduleRemove</a>, <a href="Entity.html#sendSynchronization()">sendSynchronization</a>, <a href="Entity.html#setAutoViewable(boolean)">setAutoViewable</a>, <a href="Entity.html#setBoundingBox(net.minestom.server.collision.BoundingBox)">setBoundingBox</a>, <a href="Entity.html#setCustomName(net.minestom.server.chat.JsonMessage)">setCustomName</a>, <a href="Entity.html#setCustomNameVisible(boolean)">setCustomNameVisible</a>, <a href="Entity.html#setData(net.minestom.server.data.Data)">setData</a>, <a href="Entity.html#setGlowing(boolean)">setGlowing</a>, <a href="Entity.html#setGravity(double,double,double)">setGravity</a>, <a href="Entity.html#setInstance(net.minestom.server.instance.Instance)">setInstance</a>, <a href="Entity.html#setInstance(net.minestom.server.instance.Instance,net.minestom.server.utils.Position)">setInstance</a>, <a href="Entity.html#setInvisible(boolean)">setInvisible</a>, <a href="Entity.html#setNoGravity(boolean)">setNoGravity</a>, <a href="Entity.html#setOnFire(boolean)">setOnFire</a>, <a href="Entity.html#setPose(net.minestom.server.entity.Entity.Pose)">setPose</a>, <a href="Entity.html#setSilent(boolean)">setSilent</a>, <a href="Entity.html#setSneaking(boolean)">setSneaking</a>, <a href="Entity.html#setSprinting(boolean)">setSprinting</a>, <a href="Entity.html#setUuid(java.util.UUID)">setUuid</a>, <a href="Entity.html#setVelocity(net.minestom.server.utils.Vector)">setVelocity</a>, <a href="Entity.html#setView(float,float)">setView</a>, <a href="Entity.html#setView(net.minestom.server.utils.Position)">setView</a>, <a href="Entity.html#shouldRemove()">shouldRemove</a>, <a href="Entity.html#switchEntityType(net.minestom.server.entity.EntityType)">switchEntityType</a>, <a href="Entity.html#teleport(net.minestom.server.utils.Position)">teleport</a>, <a href="Entity.html#teleport(net.minestom.server.utils.Position,long%5B%5D,java.lang.Runnable)">teleport</a>, <a href="Entity.html#teleport(net.minestom.server.utils.Position,java.lang.Runnable)">teleport</a>, <a href="Entity.html#tick(long)">tick</a>, <a href="Entity.html#triggerStatus(byte)">triggerStatus</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -551,7 +656,7 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;net.minestom.server.inventory.<a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></h3>
-<code><a href="../inventory/EquipmentHandler.html#getBoots()">getBoots</a>, <a href="../inventory/EquipmentHandler.html#getChestplate()">getChestplate</a>, <a href="../inventory/EquipmentHandler.html#getEquipment(net.minestom.server.network.packet.server.play.EntityEquipmentPacket.Slot)">getEquipment</a>, <a href="../inventory/EquipmentHandler.html#getEquipmentsPacket()">getEquipmentsPacket</a>, <a href="../inventory/EquipmentHandler.html#getHelmet()">getHelmet</a>, <a href="../inventory/EquipmentHandler.html#getItemInHand(net.minestom.server.entity.Player.Hand)">getItemInHand</a>, <a href="../inventory/EquipmentHandler.html#getItemInMainHand()">getItemInMainHand</a>, <a href="../inventory/EquipmentHandler.html#getItemInOffHand()">getItemInOffHand</a>, <a href="../inventory/EquipmentHandler.html#getLeggings()">getLeggings</a>, <a href="../inventory/EquipmentHandler.html#setBoots(net.minestom.server.item.ItemStack)">setBoots</a>, <a href="../inventory/EquipmentHandler.html#setChestplate(net.minestom.server.item.ItemStack)">setChestplate</a>, <a href="../inventory/EquipmentHandler.html#setHelmet(net.minestom.server.item.ItemStack)">setHelmet</a>, <a href="../inventory/EquipmentHandler.html#setItemInHand(net.minestom.server.entity.Player.Hand,net.minestom.server.item.ItemStack)">setItemInHand</a>, <a href="../inventory/EquipmentHandler.html#setItemInMainHand(net.minestom.server.item.ItemStack)">setItemInMainHand</a>, <a href="../inventory/EquipmentHandler.html#setItemInOffHand(net.minestom.server.item.ItemStack)">setItemInOffHand</a>, <a href="../inventory/EquipmentHandler.html#setLeggings(net.minestom.server.item.ItemStack)">setLeggings</a>, <a href="../inventory/EquipmentHandler.html#syncEquipment(net.minestom.server.network.packet.server.play.EntityEquipmentPacket.Slot)">syncEquipment</a>, <a href="../inventory/EquipmentHandler.html#syncEquipments()">syncEquipments</a>, <a href="../inventory/EquipmentHandler.html#syncEquipments(net.minestom.server.network.player.PlayerConnection)">syncEquipments</a></code></li>
+<code><a href="../inventory/EquipmentHandler.html#getEquipment(net.minestom.server.network.packet.server.play.EntityEquipmentPacket.Slot)">getEquipment</a>, <a href="../inventory/EquipmentHandler.html#getEquipmentsPacket()">getEquipmentsPacket</a>, <a href="../inventory/EquipmentHandler.html#getItemInHand(net.minestom.server.entity.Player.Hand)">getItemInHand</a>, <a href="../inventory/EquipmentHandler.html#setItemInHand(net.minestom.server.entity.Player.Hand,net.minestom.server.item.ItemStack)">setItemInHand</a>, <a href="../inventory/EquipmentHandler.html#syncEquipment(net.minestom.server.network.packet.server.play.EntityEquipmentPacket.Slot)">syncEquipment</a>, <a href="../inventory/EquipmentHandler.html#syncEquipments()">syncEquipments</a>, <a href="../inventory/EquipmentHandler.html#syncEquipments(net.minestom.server.network.player.PlayerConnection)">syncEquipments</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.event.handler.EventHandler">
@@ -654,7 +759,7 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.entity.EntityType,net.minestom.server.utils.Position)">
+<a id="&lt;init&gt;(net.minestom.server.entity.EntityType,java.util.UUID)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -663,21 +768,7 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <pre>public&nbsp;LivingEntity&#8203;(@NotNull
                     <a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType,
                     @NotNull
-                    <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition)</pre>
-</li>
-</ul>
-<a id="&lt;init&gt;(net.minestom.server.entity.EntityType,java.util.UUID,net.minestom.server.utils.Position)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>LivingEntity</h4>
-<pre>public&nbsp;LivingEntity&#8203;(@NotNull
-                    <a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType,
-                    @NotNull
-                    java.util.UUID&nbsp;uuid,
-                    @NotNull
-                    <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition)</pre>
+                    java.util.UUID&nbsp;uuid)</pre>
 <div class="block">Constructor which allows to specify an UUID. Only use if you know what you are doing!</div>
 </li>
 </ul>
@@ -691,17 +782,35 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
                     <a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType)</pre>
 </li>
 </ul>
-<a id="&lt;init&gt;(net.minestom.server.entity.EntityType,java.util.UUID)">
+<a id="&lt;init&gt;(net.minestom.server.entity.EntityType,java.util.UUID,net.minestom.server.utils.Position)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>LivingEntity</h4>
+<pre>@Deprecated
+public&nbsp;LivingEntity&#8203;(@NotNull
+                    <a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType,
+                    @NotNull
+                    java.util.UUID&nbsp;uuid,
+                    @NotNull
+                    <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block">Constructor which allows to specify an UUID. Only use if you know what you are doing!</div>
+</li>
+</ul>
+<a id="&lt;init&gt;(net.minestom.server.entity.EntityType,net.minestom.server.utils.Position)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>LivingEntity</h4>
-<pre>public&nbsp;LivingEntity&#8203;(@NotNull
+<pre>@Deprecated
+public&nbsp;LivingEntity&#8203;(@NotNull
                     <a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType,
                     @NotNull
-                    java.util.UUID&nbsp;uuid)</pre>
-<div class="block">Constructor which allows to specify an UUID. Only use if you know what you are doing!</div>
+                    <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 </li>
@@ -714,6 +823,222 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="getItemInMainHand()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getItemInMainHand</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getItemInMainHand()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../inventory/EquipmentHandler.html#getItemInMainHand()">EquipmentHandler</a></code></span></div>
+<div class="block">Gets the <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> in main hand.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../inventory/EquipmentHandler.html#getItemInMainHand()">getItemInMainHand</a></code>&nbsp;in interface&nbsp;<code><a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> in main hand</dd>
+</dl>
+</li>
+</ul>
+<a id="setItemInMainHand(net.minestom.server.item.ItemStack)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setItemInMainHand</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setItemInMainHand&#8203;(@NotNull
+                              <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../inventory/EquipmentHandler.html#setItemInMainHand(net.minestom.server.item.ItemStack)">EquipmentHandler</a></code></span></div>
+<div class="block">Changes the main hand <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a>.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../inventory/EquipmentHandler.html#setItemInMainHand(net.minestom.server.item.ItemStack)">setItemInMainHand</a></code>&nbsp;in interface&nbsp;<code><a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>itemStack</code> - the main hand <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="getItemInOffHand()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getItemInOffHand</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getItemInOffHand()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../inventory/EquipmentHandler.html#getItemInOffHand()">EquipmentHandler</a></code></span></div>
+<div class="block">Gets the <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> in off hand.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../inventory/EquipmentHandler.html#getItemInOffHand()">getItemInOffHand</a></code>&nbsp;in interface&nbsp;<code><a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the item in off hand</dd>
+</dl>
+</li>
+</ul>
+<a id="setItemInOffHand(net.minestom.server.item.ItemStack)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setItemInOffHand</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setItemInOffHand&#8203;(@NotNull
+                             <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../inventory/EquipmentHandler.html#setItemInOffHand(net.minestom.server.item.ItemStack)">EquipmentHandler</a></code></span></div>
+<div class="block">Changes the off hand <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a>.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../inventory/EquipmentHandler.html#setItemInOffHand(net.minestom.server.item.ItemStack)">setItemInOffHand</a></code>&nbsp;in interface&nbsp;<code><a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>itemStack</code> - the off hand <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="getHelmet()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHelmet</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getHelmet()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../inventory/EquipmentHandler.html#getHelmet()">EquipmentHandler</a></code></span></div>
+<div class="block">Gets the helmet.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../inventory/EquipmentHandler.html#getHelmet()">getHelmet</a></code>&nbsp;in interface&nbsp;<code><a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the helmet</dd>
+</dl>
+</li>
+</ul>
+<a id="setHelmet(net.minestom.server.item.ItemStack)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setHelmet</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setHelmet&#8203;(@NotNull
+                      <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../inventory/EquipmentHandler.html#setHelmet(net.minestom.server.item.ItemStack)">EquipmentHandler</a></code></span></div>
+<div class="block">Changes the helmet.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../inventory/EquipmentHandler.html#setHelmet(net.minestom.server.item.ItemStack)">setHelmet</a></code>&nbsp;in interface&nbsp;<code><a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>itemStack</code> - the helmet</dd>
+</dl>
+</li>
+</ul>
+<a id="getChestplate()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getChestplate</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getChestplate()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../inventory/EquipmentHandler.html#getChestplate()">EquipmentHandler</a></code></span></div>
+<div class="block">Gets the chestplate.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../inventory/EquipmentHandler.html#getChestplate()">getChestplate</a></code>&nbsp;in interface&nbsp;<code><a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the chestplate</dd>
+</dl>
+</li>
+</ul>
+<a id="setChestplate(net.minestom.server.item.ItemStack)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setChestplate</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setChestplate&#8203;(@NotNull
+                          <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../inventory/EquipmentHandler.html#setChestplate(net.minestom.server.item.ItemStack)">EquipmentHandler</a></code></span></div>
+<div class="block">Changes the chestplate.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../inventory/EquipmentHandler.html#setChestplate(net.minestom.server.item.ItemStack)">setChestplate</a></code>&nbsp;in interface&nbsp;<code><a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>itemStack</code> - the chestplate</dd>
+</dl>
+</li>
+</ul>
+<a id="getLeggings()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLeggings</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getLeggings()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../inventory/EquipmentHandler.html#getLeggings()">EquipmentHandler</a></code></span></div>
+<div class="block">Gets the leggings.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../inventory/EquipmentHandler.html#getLeggings()">getLeggings</a></code>&nbsp;in interface&nbsp;<code><a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the leggings</dd>
+</dl>
+</li>
+</ul>
+<a id="setLeggings(net.minestom.server.item.ItemStack)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setLeggings</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setLeggings&#8203;(@NotNull
+                        <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../inventory/EquipmentHandler.html#setLeggings(net.minestom.server.item.ItemStack)">EquipmentHandler</a></code></span></div>
+<div class="block">Changes the leggings.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../inventory/EquipmentHandler.html#setLeggings(net.minestom.server.item.ItemStack)">setLeggings</a></code>&nbsp;in interface&nbsp;<code><a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>itemStack</code> - the leggings</dd>
+</dl>
+</li>
+</ul>
+<a id="getBoots()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBoots</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getBoots()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../inventory/EquipmentHandler.html#getBoots()">EquipmentHandler</a></code></span></div>
+<div class="block">Gets the boots.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../inventory/EquipmentHandler.html#getBoots()">getBoots</a></code>&nbsp;in interface&nbsp;<code><a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the boots</dd>
+</dl>
+</li>
+</ul>
+<a id="setBoots(net.minestom.server.item.ItemStack)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setBoots</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setBoots&#8203;(@NotNull
+                     <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../inventory/EquipmentHandler.html#setBoots(net.minestom.server.item.ItemStack)">EquipmentHandler</a></code></span></div>
+<div class="block">Changes the boots.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../inventory/EquipmentHandler.html#setBoots(net.minestom.server.item.ItemStack)">setBoots</a></code>&nbsp;in interface&nbsp;<code><a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>itemStack</code> - the boots</dd>
+</dl>
+</li>
+</ul>
 <a id="update(long)">
 <!--   -->
 </a>
@@ -724,10 +1049,25 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Entity.html#update(long)">Entity</a></code></span></div>
 <div class="block">Called each tick.</div>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="Entity.html#update(long)">update</a></code>&nbsp;in class&nbsp;<code><a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>time</code> - time of the update in milliseconds</dd>
+</dl>
+</li>
+</ul>
+<a id="spawn()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>spawn</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;spawn()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Entity.html#spawn()">Entity</a></code></span></div>
+<div class="block">Called when a new instance is set.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="Entity.html#spawn()">spawn</a></code>&nbsp;in class&nbsp;<code><a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -1026,6 +1366,20 @@ public&nbsp;<a href="../attribute/AttributeInstance.html" title="class in net.mi
 </dl>
 </li>
 </ul>
+<a id="addViewer0(net.minestom.server.entity.Player)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addViewer0</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;addViewer0&#8203;(@NotNull
+                          <a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="Entity.html#addViewer0(net.minestom.server.entity.Player)">addViewer0</a></code>&nbsp;in class&nbsp;<code><a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></dd>
+</dl>
+</li>
+</ul>
 <a id="setBoundingBox(double,double,double)">
 <!--   -->
 </a>
@@ -1224,7 +1578,7 @@ protected&nbsp;<a href="../network/packet/server/play/EntityPropertiesPacket.htm
 <a id="getTargetBlockPosition(int)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getTargetBlockPosition</h4>
 <pre class="methodSignature">public&nbsp;<a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;getTargetBlockPosition&#8203;(int&nbsp;maxDistance)</pre>
@@ -1234,6 +1588,20 @@ protected&nbsp;<a href="../network/packet/server/play/EntityPropertiesPacket.htm
 <dd><code>maxDistance</code> - The max distance to scan before returning null</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils"><code>BlockPosition</code></a> targeted by this entity, null if non are found</dd>
+</dl>
+</li>
+</ul>
+<a id="getLivingEntityMeta()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getLivingEntityMeta</h4>
+<pre class="methodSignature">public&nbsp;<a href="metadata/LivingEntityMeta.html" title="class in net.minestom.server.entity.metadata">LivingEntityMeta</a>&nbsp;getLivingEntityMeta()</pre>
+<div class="block">Gets <a href="metadata/EntityMeta.html" title="class in net.minestom.server.entity.metadata"><code>EntityMeta</code></a> of this entity casted to <a href="metadata/LivingEntityMeta.html" title="class in net.minestom.server.entity.metadata"><code>LivingEntityMeta</code></a>.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>null if meta of this entity does not inherit <a href="metadata/LivingEntityMeta.html" title="class in net.minestom.server.entity.metadata"><code>LivingEntityMeta</code></a>, casted value otherwise.</dd>
 </dl>
 </li>
 </ul>

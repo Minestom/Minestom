@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":10,"i2":10,"i3":9,"i4":9};
+var data = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":9,"i8":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -615,27 +615,47 @@ extends java.lang.Enum&lt;<a href="EntityType.html" title="enum in net.minestom.
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static <a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromId(int)">fromId</a></span>&#8203;(int&nbsp;id)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromId(short)">fromId</a></span>&#8203;(short&nbsp;id)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getId()">getId</a></span>()</code></th>
+<td class="colFirst"><code>double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getHeight()">getHeight</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>short</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getId()">getId</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>java.util.function.BiFunction&lt;<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>,&#8203;<a href="Metadata.html" title="class in net.minestom.server.entity">Metadata</a>,&#8203;<a href="metadata/EntityMeta.html" title="class in net.minestom.server.entity.metadata">EntityMeta</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMetaConstructor()">getMetaConstructor</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNamespaceID()">getNamespaceID</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="EntitySpawnType.html" title="enum in net.minestom.server.entity">EntitySpawnType</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSpawnType()">getSpawnType</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getWidth()">getWidth</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static <a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#valueOf(java.lang.String)">valueOf</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
 <td class="colLast">
 <div class="block">Returns the enum constant of this type with the specified name.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static <a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#values()">values</a></span>()</code></th>
 <td class="colLast">
@@ -1704,7 +1724,7 @@ not permitted.)</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>getId</h4>
-<pre class="methodSignature">public&nbsp;int&nbsp;getId()</pre>
+<pre class="methodSignature">public&nbsp;short&nbsp;getId()</pre>
 </li>
 </ul>
 <a id="getNamespaceID()">
@@ -1716,13 +1736,49 @@ not permitted.)</div>
 <pre class="methodSignature">public&nbsp;java.lang.String&nbsp;getNamespaceID()</pre>
 </li>
 </ul>
-<a id="fromId(int)">
+<a id="getWidth()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getWidth</h4>
+<pre class="methodSignature">public&nbsp;double&nbsp;getWidth()</pre>
+</li>
+</ul>
+<a id="getHeight()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHeight</h4>
+<pre class="methodSignature">public&nbsp;double&nbsp;getHeight()</pre>
+</li>
+</ul>
+<a id="getMetaConstructor()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMetaConstructor</h4>
+<pre class="methodSignature">public&nbsp;java.util.function.BiFunction&lt;<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>,&#8203;<a href="Metadata.html" title="class in net.minestom.server.entity">Metadata</a>,&#8203;<a href="metadata/EntityMeta.html" title="class in net.minestom.server.entity.metadata">EntityMeta</a>&gt;&nbsp;getMetaConstructor()</pre>
+</li>
+</ul>
+<a id="getSpawnType()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSpawnType</h4>
+<pre class="methodSignature">public&nbsp;<a href="EntitySpawnType.html" title="enum in net.minestom.server.entity">EntitySpawnType</a>&nbsp;getSpawnType()</pre>
+</li>
+</ul>
+<a id="fromId(short)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>fromId</h4>
-<pre class="methodSignature">public static&nbsp;<a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;fromId&#8203;(int&nbsp;id)</pre>
+<pre class="methodSignature">public static&nbsp;<a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;fromId&#8203;(short&nbsp;id)</pre>
 </li>
 </ul>
 </li>

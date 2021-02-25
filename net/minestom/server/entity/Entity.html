@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":9,"i16":9,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10,"i58":10,"i59":10,"i60":10,"i61":10,"i62":10,"i63":10,"i64":10,"i65":10,"i66":10,"i67":10,"i68":10,"i69":10,"i70":10,"i71":10,"i72":10,"i73":10,"i74":10,"i75":10,"i76":10,"i77":10,"i78":10,"i79":10,"i80":10,"i81":10,"i82":10,"i83":6,"i84":10,"i85":10,"i86":10,"i87":10,"i88":10,"i89":6};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":9,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":9,"i17":9,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10,"i58":10,"i59":10,"i60":10,"i61":10,"i62":10,"i63":10,"i64":10,"i65":10,"i66":10,"i67":10,"i68":10,"i69":10,"i70":10,"i71":10,"i72":10,"i73":10,"i74":42,"i75":10,"i76":10,"i77":10,"i78":10,"i79":10,"i80":10,"i81":10,"i82":10,"i83":10,"i84":10,"i85":10,"i86":10,"i87":10,"i88":10,"i89":10,"i90":10,"i91":10,"i92":10,"i93":10,"i94":10,"i95":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -135,10 +135,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><code><a href="ExperienceOrb.html" title="class in net.minestom.server.entity">ExperienceOrb</a></code>, <code><a href="LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></code>, <code><a href="ObjectEntity.html" title="class in net.minestom.server.entity">ObjectEntity</a></code></dd>
+<dd><code><a href="type/projectile/AbstractProjectile.html" title="class in net.minestom.server.entity.type.projectile">AbstractProjectile</a></code>, <code><a href="ExperienceOrb.html" title="class in net.minestom.server.entity">ExperienceOrb</a></code>, <code><a href="LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></code>, <code><a href="ObjectEntity.html" title="class in net.minestom.server.entity">ObjectEntity</a></code></dd>
 </dl>
 <hr>
-<pre>public abstract class <span class="typeNameLabel">Entity</span>
+<pre>public class <span class="typeNameLabel">Entity</span>
 extends java.lang.Object
 implements <a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a>, <a href="../event/handler/EventHandler.html" title="interface in net.minestom.server.event.handler">EventHandler</a>, <a href="../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a>, <a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></pre>
 <div class="block">Could be a player, a monster, or an object.
@@ -213,163 +213,73 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected <a href="metadata/EntityMeta.html" title="class in net.minestom.server.entity.metadata">EntityMeta</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#entityMeta">entityMeta</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#entityType">entityType</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#gravityAcceleration">gravityAcceleration</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#gravityDragPerTick">gravityDragPerTick</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#gravityTerminalVelocity">gravityTerminalVelocity</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#gravityTickCount">gravityTickCount</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasPhysics">hasPhysics</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#instance">instance</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#lastPitch">lastPitch</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#lastX">lastX</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#lastY">lastY</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#lastYaw">lastYaw</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#lastZ">lastZ</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="Metadata.html" title="class in net.minestom.server.entity">Metadata</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#metadata">metadata</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#METADATA_BOOLEAN">METADATA_BOOLEAN</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#METADATA_BYTE">METADATA_BYTE</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#METADATA_CHAT">METADATA_CHAT</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#METADATA_DIRECTION">METADATA_DIRECTION</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#METADATA_FLOAT">METADATA_FLOAT</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#METADATA_NBT">METADATA_NBT</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#METADATA_OPTBLOCKID">METADATA_OPTBLOCKID</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#METADATA_OPTCHAT">METADATA_OPTCHAT</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#METADATA_OPTPOSITION">METADATA_OPTPOSITION</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#METADATA_OPTUUID">METADATA_OPTUUID</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#METADATA_OPTVARINT">METADATA_OPTVARINT</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#METADATA_PARTICLE">METADATA_PARTICLE</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#METADATA_POSE">METADATA_POSE</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#METADATA_POSITION">METADATA_POSITION</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#METADATA_ROTATION">METADATA_ROTATION</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#METADATA_SLOT">METADATA_SLOT</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#METADATA_STRING">METADATA_STRING</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#METADATA_VARINT">METADATA_VARINT</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#METADATA_VILLAGERDATA">METADATA_VILLAGERDATA</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -429,15 +339,24 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.EntityType,java.util.UUID,net.minestom.server.utils.Position)">Entity</a></span>&#8203;(<a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType,
-      java.util.UUID&nbsp;uuid,
-      <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.EntityType,java.util.UUID)">Entity</a></span>&#8203;(<a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType,
+      java.util.UUID&nbsp;uuid)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.EntityType,java.util.UUID,net.minestom.server.utils.Position)">Entity</a></span>&#8203;(<a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType,
+      java.util.UUID&nbsp;uuid,
+      <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition)</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+</td>
+</tr>
+<tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.EntityType,net.minestom.server.utils.Position)">Entity</a></span>&#8203;(<a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType,
       <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+</td>
 </tr>
 </table>
 </li>
@@ -451,7 +370,7 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -479,341 +398,358 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addViewer0(net.minestom.server.entity.Player)">addViewer0</a></span>&#8203;(<a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#askSynchronization()">askSynchronization</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Asks for a synchronization (position) to happen during next entity tick.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clearEffects()">clearEffects</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Removes all the effects currently applied to the entity.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#generateId()">generateId</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Generate and return a new unique entity id.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="../potion/TimedPotion.html" title="class in net.minestom.server.potion">TimedPotion</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getActiveEffects()">getActiveEffects</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the potion effect of this entity.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAliveTicks()">getAliveTicks</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the number of ticks this entity has been active for.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>java.util.Set&lt;<a href="../permission/Permission.html" title="class in net.minestom.server.permission">Permission</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAllPermissions()">getAllPermissions</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns all permissions associated to this handler.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../collision/BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBoundingBox()">getBoundingBox</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Is used to check collision with coordinates or other blocks/entities.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChunk()">getChunk</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Convenient method to get the entity current chunk.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCustomName()">getCustomName</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the entity custom name.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../data/Data.html" title="class in net.minestom.server.data">Data</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getData()">getData</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="../data/Data.html" title="class in net.minestom.server.data"><code>Data</code></a> of this container.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDistance(net.minestom.server.entity.Entity)">getDistance</a></span>&#8203;(<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
 <td class="colLast">
 <div class="block">Gets the distance between two entities.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDistanceSquared(net.minestom.server.entity.Entity)">getDistanceSquared</a></span>&#8203;(<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
 <td class="colLast">
 <div class="block">Gets the distance squared between two entities.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static <a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntity(int)">getEntity</a></span>&#8203;(int&nbsp;id)</code></th>
 <td class="colLast">
 <div class="block">Gets an entity based on its id (from <a href="#getEntityId()"><code>getEntityId()</code></a>).</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>static <a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntity(java.util.UUID)">getEntity</a></span>&#8203;(java.util.UUID&nbsp;uuid)</code></th>
 <td class="colLast">
 <div class="block">Gets an entity based on its UUID (from <a href="#getUuid()"><code>getUuid()</code></a>).</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntityId()">getEntityId</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Each entity has an unique id (server-wide) which will change after a restart.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
+<td class="colFirst"><code><a href="metadata/EntityMeta.html" title="class in net.minestom.server.entity.metadata">EntityMeta</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntityMeta()">getEntityMeta</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets metadata of this entity.</div>
+</td>
+</tr>
+<tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntityType()">getEntityType</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the entity type.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>java.util.Map&lt;java.lang.Class&lt;? extends <a href="../event/Event.html" title="class in net.minestom.server.event">Event</a>&gt;,&#8203;java.util.Collection&lt;<a href="../event/EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEventCallbacksMap()">getEventCallbacksMap</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets a <code>Map</code> containing all the listeners assigned to a specific <a href="../event/Event.html" title="class in net.minestom.server.event"><code>Event</code></a> type.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEyeHeight()">getEyeHeight</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the entity eye height.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getGravityAcceleration()">getGravityAcceleration</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the gravity acceleration.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getGravityDragPerTick()">getGravityDragPerTick</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the gravity drag per tick.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getGravityTerminalVelocity()">getGravityTerminalVelocity</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the maximum gravity velocity.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getGravityTickCount()">getGravityTickCount</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the number of tick this entity has been applied gravity.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code><a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInstance()">getInstance</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the entity current instance.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code><a href="../network/packet/server/play/EntityMetaDataPacket.html" title="class in net.minestom.server.network.packet.server.play">EntityMetaDataPacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMetadataPacket()">getMetadataPacket</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets an <a href="../network/packet/server/play/EntityMetaDataPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityMetaDataPacket</code></a> sent when adding viewers.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>java.util.Set&lt;<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPassengers()">getPassengers</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the entity passengers.</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>protected <a href="../network/packet/server/play/SetPassengersPacket.html" title="class in net.minestom.server.network.packet.server.play">SetPassengersPacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPassengersPacket()">getPassengersPacket</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code><a href="Entity.Pose.html" title="enum in net.minestom.server.entity">Entity.Pose</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPose()">getPose</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the current entity pose.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code><a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPosition()">getPosition</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the entity position.</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>java.util.UUID</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getUuid()">getUuid</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the entity <code>UUID</code>.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code><a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getVehicle()">getVehicle</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the entity vehicle or null.</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code><a href="../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getVelocity()">getVelocity</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the entity current velocity.</div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i36" class="altColor">
+<td class="colFirst"><code>protected <a href="../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getVelocityForPacket()">getVelocityForPacket</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>protected <a href="../network/packet/server/play/EntityVelocityPacket.html" title="class in net.minestom.server.network.packet.server.play">EntityVelocityPacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getVelocityPacket()">getVelocityPacket</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>java.util.Set&lt;<a href="Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getViewers()">getViewers</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the viewers of this viewable element.</div>
 </td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#handleVoid()">handleVoid</a></span>()</code></th>
 <td class="colLast">
 <div class="block">How does this entity handle being in the void?</div>
 </td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i40" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasNoGravity()">hasNoGravity</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the noGravity metadata field.</div>
 </td>
 </tr>
-<tr id="i38" class="altColor">
+<tr id="i41" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasPassenger()">hasPassenger</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the entity has any passenger.</div>
 </td>
 </tr>
-<tr id="i39" class="rowColor">
+<tr id="i42" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasVelocity()">hasVelocity</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the entity currently has a velocity applied.</div>
 </td>
 </tr>
-<tr id="i40" class="altColor">
+<tr id="i43" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isActive()">isActive</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns false just after instantiation, set to true after calling <a href="#setInstance(net.minestom.server.instance.Instance)"><code>setInstance(Instance)</code></a>.</div>
 </td>
 </tr>
-<tr id="i41" class="rowColor">
+<tr id="i44" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isAutoViewable()">isAutoViewable</a></span>()</code></th>
 <td class="colLast">
 <div class="block">When set to true, the entity will automatically get new viewers when they come too close.</div>
 </td>
 </tr>
-<tr id="i42" class="altColor">
+<tr id="i45" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isCustomNameVisible()">isCustomNameVisible</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the custom name visible metadata field.</div>
 </td>
 </tr>
-<tr id="i43" class="rowColor">
+<tr id="i46" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isGlowing()">isGlowing</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the entity is glowing or not.</div>
 </td>
 </tr>
-<tr id="i44" class="altColor">
+<tr id="i47" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInvisible()">isInvisible</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the entity is invisible or not.</div>
 </td>
 </tr>
-<tr id="i45" class="rowColor">
+<tr id="i48" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isOnFire()">isOnFire</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the entity is on fire.</div>
 </td>
 </tr>
-<tr id="i46" class="altColor">
+<tr id="i49" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isOnGround()">isOnGround</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i47" class="rowColor">
+<tr id="i50" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isRemoved()">isRemoved</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if this entity has been removed.</div>
 </td>
 </tr>
-<tr id="i48" class="altColor">
+<tr id="i51" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isRemoveScheduled()">isRemoveScheduled</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the entity removal has been scheduled with <a href="#scheduleRemove(long,net.minestom.server.utils.time.TimeUnit)"><code>scheduleRemove(long, TimeUnit)</code></a>.</div>
 </td>
 </tr>
-<tr id="i49" class="rowColor">
+<tr id="i52" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSilent()">isSilent</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i50" class="altColor">
+<tr id="i53" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSneaking()">isSneaking</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the entity is sneaking.</div>
 </td>
 </tr>
-<tr id="i51" class="rowColor">
+<tr id="i54" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSprinting()">isSprinting</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the player is sprinting.</div>
 </td>
 </tr>
-<tr id="i52" class="altColor">
+<tr id="i55" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshPosition(double,double,double)">refreshPosition</a></span>&#8203;(double&nbsp;x,
                double&nbsp;y,
@@ -825,12 +761,12 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
  - add/remove players from the viewers list if <a href="#isAutoViewable()"><code>isAutoViewable()</code></a> is enabled</div>
 </td>
 </tr>
-<tr id="i53" class="rowColor">
+<tr id="i56" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshPosition(net.minestom.server.utils.Position)">refreshPosition</a></span>&#8203;(<a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i54" class="altColor">
+<tr id="i57" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshView(float,float)">refreshView</a></span>&#8203;(float&nbsp;yaw,
            float&nbsp;pitch)</code></th>
@@ -838,42 +774,47 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="block">Updates the entity view internally.</div>
 </td>
 </tr>
-<tr id="i55" class="rowColor">
+<tr id="i58" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#remove()">remove</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Removes the entity from the server immediately.</div>
 </td>
 </tr>
-<tr id="i56" class="altColor">
+<tr id="i59" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeEffect(net.minestom.server.potion.PotionEffect)">removeEffect</a></span>&#8203;(<a href="../potion/PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a>&nbsp;effect)</code></th>
 <td class="colLast">
 <div class="block">Removes effect from entity, if it has it.</div>
 </td>
 </tr>
-<tr id="i57" class="rowColor">
+<tr id="i60" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removePassenger(net.minestom.server.entity.Entity)">removePassenger</a></span>&#8203;(<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
 <td class="colLast">
 <div class="block">Removes a passenger to this entity.</div>
 </td>
 </tr>
-<tr id="i58" class="altColor">
+<tr id="i61" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeViewer(net.minestom.server.entity.Player)">removeViewer</a></span>&#8203;(<a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">Removes a viewer.</div>
 </td>
 </tr>
-<tr id="i59" class="rowColor">
+<tr id="i62" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeViewer0(net.minestom.server.entity.Player)">removeViewer0</a></span>&#8203;(<a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i63" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#scheduleNextTick(java.util.function.Consumer)">scheduleNextTick</a></span>&#8203;(java.util.function.Consumer&lt;<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Schedules a task to be run during the next entity tick.</div>
 </td>
 </tr>
-<tr id="i60" class="altColor">
+<tr id="i64" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#scheduleRemove(long,net.minestom.server.utils.time.TimeUnit)">scheduleRemove</a></span>&#8203;(long&nbsp;delay,
               <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;timeUnit)</code></th>
@@ -881,19 +822,19 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="block">Triggers <a href="#remove()"><code>remove()</code></a> after the specified time.</div>
 </td>
 </tr>
-<tr id="i61" class="rowColor">
+<tr id="i65" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendSynchronization()">sendSynchronization</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i62" class="altColor">
+<tr id="i66" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setAutoViewable(boolean)">setAutoViewable</a></span>&#8203;(boolean&nbsp;autoViewable)</code></th>
 <td class="colLast">
 <div class="block">Makes the entity auto viewable or only manually.</div>
 </td>
 </tr>
-<tr id="i63" class="rowColor">
+<tr id="i67" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBoundingBox(double,double,double)">setBoundingBox</a></span>&#8203;(double&nbsp;x,
               double&nbsp;y,
@@ -902,21 +843,21 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="block">Changes the internal entity bounding box.</div>
 </td>
 </tr>
-<tr id="i64" class="altColor">
+<tr id="i68" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBoundingBox(net.minestom.server.collision.BoundingBox)">setBoundingBox</a></span>&#8203;(<a href="../collision/BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox)</code></th>
 <td class="colLast">
 <div class="block">Changes the internal entity bounding box.</div>
 </td>
 </tr>
-<tr id="i65" class="rowColor">
+<tr id="i69" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCustomName(net.minestom.server.chat.JsonMessage)">setCustomName</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;customName)</code></th>
 <td class="colLast">
 <div class="block">Changes the entity custom name.</div>
 </td>
 </tr>
-<tr id="i66" class="altColor">
+<tr id="i70" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCustomNameVisible(boolean)">setCustomNameVisible</a></span>&#8203;(boolean&nbsp;customNameVisible)</code></th>
 <td class="colLast">
@@ -924,21 +865,21 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
  to update the entity state to its viewers.</div>
 </td>
 </tr>
-<tr id="i67" class="rowColor">
+<tr id="i71" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setData(net.minestom.server.data.Data)">setData</a></span>&#8203;(<a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
 <td class="colLast">
 <div class="block">Sets the <a href="../data/Data.html" title="class in net.minestom.server.data"><code>Data</code></a> of this container.</div>
 </td>
 </tr>
-<tr id="i68" class="altColor">
+<tr id="i72" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setGlowing(boolean)">setGlowing</a></span>&#8203;(boolean&nbsp;glowing)</code></th>
 <td class="colLast">
 <div class="block">Sets or remove the entity glowing effect.</div>
 </td>
 </tr>
-<tr id="i69" class="rowColor">
+<tr id="i73" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setGravity(double,double,double)">setGravity</a></span>&#8203;(double&nbsp;gravityDragPerTick,
           double&nbsp;gravityAcceleration,
@@ -947,14 +888,24 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="block">Changes the gravity of the entity.</div>
 </td>
 </tr>
-<tr id="i70" class="altColor">
+<tr id="i74" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setInstance(net.minestom.server.instance.Instance)">setInstance</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
 <td class="colLast">
-<div class="block">Changes the entity instance.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#setInstance(net.minestom.server.instance.Instance,net.minestom.server.utils.Position)"><code>setInstance(Instance, Position)</code></a> instead.</div>
+</div>
 </td>
 </tr>
-<tr id="i71" class="rowColor">
+<tr id="i75" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setInstance(net.minestom.server.instance.Instance,net.minestom.server.utils.Position)">setInstance</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+           <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition)</code></th>
+<td class="colLast">
+<div class="block">Changes the entity instance, i.e.</div>
+</td>
+</tr>
+<tr id="i76" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setInvisible(boolean)">setInvisible</a></span>&#8203;(boolean&nbsp;invisible)</code></th>
 <td class="colLast">
@@ -962,61 +913,61 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
  to make visible or invisible the entity to its viewers.</div>
 </td>
 </tr>
-<tr id="i72" class="altColor">
+<tr id="i77" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setNoGravity(boolean)">setNoGravity</a></span>&#8203;(boolean&nbsp;noGravity)</code></th>
 <td class="colLast">
 <div class="block">Changes the noGravity metadata field and change the gravity behaviour accordingly.</div>
 </td>
 </tr>
-<tr id="i73" class="rowColor">
+<tr id="i78" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setOnFire(boolean)">setOnFire</a></span>&#8203;(boolean&nbsp;fire)</code></th>
 <td class="colLast">
 <div class="block">Sets the entity in fire visually.</div>
 </td>
 </tr>
-<tr id="i74" class="altColor">
+<tr id="i79" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPose(net.minestom.server.entity.Entity.Pose)">setPose</a></span>&#8203;(<a href="Entity.Pose.html" title="enum in net.minestom.server.entity">Entity.Pose</a>&nbsp;pose)</code></th>
 <td class="colLast">
 <div class="block">Changes the entity pose.</div>
 </td>
 </tr>
-<tr id="i75" class="rowColor">
+<tr id="i80" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSilent(boolean)">setSilent</a></span>&#8203;(boolean&nbsp;silent)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i76" class="altColor">
+<tr id="i81" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSneaking(boolean)">setSneaking</a></span>&#8203;(boolean&nbsp;sneaking)</code></th>
 <td class="colLast">
 <div class="block">Makes the entity sneak.</div>
 </td>
 </tr>
-<tr id="i77" class="rowColor">
+<tr id="i82" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSprinting(boolean)">setSprinting</a></span>&#8203;(boolean&nbsp;sprinting)</code></th>
 <td class="colLast">
 <div class="block">Makes the entity sprint.</div>
 </td>
 </tr>
-<tr id="i78" class="altColor">
+<tr id="i83" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUuid(java.util.UUID)">setUuid</a></span>&#8203;(java.util.UUID&nbsp;uuid)</code></th>
 <td class="colLast">
 <div class="block">Changes the internal entity UUID, mostly unsafe.</div>
 </td>
 </tr>
-<tr id="i79" class="rowColor">
+<tr id="i84" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setVelocity(net.minestom.server.utils.Vector)">setVelocity</a></span>&#8203;(<a href="../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;velocity)</code></th>
 <td class="colLast">
 <div class="block">Changes the entity velocity and calls <a href="../event/entity/EntityVelocityEvent.html" title="class in net.minestom.server.event.entity"><code>EntityVelocityEvent</code></a>.</div>
 </td>
 </tr>
-<tr id="i80" class="altColor">
+<tr id="i85" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setView(float,float)">setView</a></span>&#8203;(float&nbsp;yaw,
        float&nbsp;pitch)</code></th>
@@ -1024,31 +975,38 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="block">Changes the view of the entity.</div>
 </td>
 </tr>
-<tr id="i81" class="rowColor">
+<tr id="i86" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setView(net.minestom.server.utils.Position)">setView</a></span>&#8203;(<a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
 <td class="colLast">
 <div class="block">Changes the view of the entity.</div>
 </td>
 </tr>
-<tr id="i82" class="altColor">
+<tr id="i87" class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shouldRemove()">shouldRemove</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i83" class="rowColor">
-<td class="colFirst"><code>abstract void</code></td>
+<tr id="i88" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#spawn()">spawn</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Called when a new instance is set.</div>
 </td>
 </tr>
-<tr id="i84" class="altColor">
+<tr id="i89" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#switchEntityType(net.minestom.server.entity.EntityType)">switchEntityType</a></span>&#8203;(<a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType)</code></th>
+<td class="colLast">
+<div class="block">Changes the entity type of this entity.</div>
+</td>
+</tr>
+<tr id="i90" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teleport(net.minestom.server.utils.Position)">teleport</a></span>&#8203;(<a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i85" class="rowColor">
+<tr id="i91" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teleport(net.minestom.server.utils.Position,long%5B%5D,java.lang.Runnable)">teleport</a></span>&#8203;(<a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
         long[]&nbsp;chunks,
@@ -1058,28 +1016,28 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
  <a href="../instance/Instance.html#hasEnabledAutoChunkLoad()"><code>Instance.hasEnabledAutoChunkLoad()</code></a> returns true.</div>
 </td>
 </tr>
-<tr id="i86" class="altColor">
+<tr id="i92" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teleport(net.minestom.server.utils.Position,java.lang.Runnable)">teleport</a></span>&#8203;(<a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
         java.lang.Runnable&nbsp;callback)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i87" class="rowColor">
+<tr id="i93" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#tick(long)">tick</a></span>&#8203;(long&nbsp;time)</code></th>
 <td class="colLast">
 <div class="block">Updates the entity, called every tick.</div>
 </td>
 </tr>
-<tr id="i88" class="altColor">
+<tr id="i94" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#triggerStatus(byte)">triggerStatus</a></span>&#8203;(byte&nbsp;status)</code></th>
 <td class="colLast">
 <div class="block">Entity statuses can be found <a href="https://wiki.vg/Entity_statuses">here</a>.</div>
 </td>
 </tr>
-<tr id="i89" class="rowColor">
-<td class="colFirst"><code>abstract void</code></td>
+<tr id="i95" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update(long)">update</a></span>&#8203;(long&nbsp;time)</code></th>
 <td class="colLast">
 <div class="block">Called each tick.</div>
@@ -1130,253 +1088,6 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a id="METADATA_BYTE">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>METADATA_BYTE</h4>
-<pre>protected static final&nbsp;byte METADATA_BYTE</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.entity.Entity.METADATA_BYTE">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
-<a id="METADATA_VARINT">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>METADATA_VARINT</h4>
-<pre>protected static final&nbsp;byte METADATA_VARINT</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.entity.Entity.METADATA_VARINT">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
-<a id="METADATA_FLOAT">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>METADATA_FLOAT</h4>
-<pre>protected static final&nbsp;byte METADATA_FLOAT</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.entity.Entity.METADATA_FLOAT">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
-<a id="METADATA_STRING">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>METADATA_STRING</h4>
-<pre>protected static final&nbsp;byte METADATA_STRING</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.entity.Entity.METADATA_STRING">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
-<a id="METADATA_CHAT">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>METADATA_CHAT</h4>
-<pre>protected static final&nbsp;byte METADATA_CHAT</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.entity.Entity.METADATA_CHAT">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
-<a id="METADATA_OPTCHAT">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>METADATA_OPTCHAT</h4>
-<pre>protected static final&nbsp;byte METADATA_OPTCHAT</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.entity.Entity.METADATA_OPTCHAT">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
-<a id="METADATA_SLOT">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>METADATA_SLOT</h4>
-<pre>protected static final&nbsp;byte METADATA_SLOT</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.entity.Entity.METADATA_SLOT">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
-<a id="METADATA_BOOLEAN">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>METADATA_BOOLEAN</h4>
-<pre>protected static final&nbsp;byte METADATA_BOOLEAN</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.entity.Entity.METADATA_BOOLEAN">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
-<a id="METADATA_ROTATION">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>METADATA_ROTATION</h4>
-<pre>protected static final&nbsp;byte METADATA_ROTATION</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.entity.Entity.METADATA_ROTATION">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
-<a id="METADATA_POSITION">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>METADATA_POSITION</h4>
-<pre>protected static final&nbsp;byte METADATA_POSITION</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.entity.Entity.METADATA_POSITION">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
-<a id="METADATA_OPTPOSITION">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>METADATA_OPTPOSITION</h4>
-<pre>protected static final&nbsp;byte METADATA_OPTPOSITION</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.entity.Entity.METADATA_OPTPOSITION">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
-<a id="METADATA_DIRECTION">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>METADATA_DIRECTION</h4>
-<pre>protected static final&nbsp;byte METADATA_DIRECTION</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.entity.Entity.METADATA_DIRECTION">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
-<a id="METADATA_OPTUUID">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>METADATA_OPTUUID</h4>
-<pre>protected static final&nbsp;byte METADATA_OPTUUID</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.entity.Entity.METADATA_OPTUUID">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
-<a id="METADATA_OPTBLOCKID">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>METADATA_OPTBLOCKID</h4>
-<pre>protected static final&nbsp;byte METADATA_OPTBLOCKID</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.entity.Entity.METADATA_OPTBLOCKID">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
-<a id="METADATA_NBT">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>METADATA_NBT</h4>
-<pre>protected static final&nbsp;byte METADATA_NBT</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.entity.Entity.METADATA_NBT">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
-<a id="METADATA_PARTICLE">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>METADATA_PARTICLE</h4>
-<pre>protected static final&nbsp;byte METADATA_PARTICLE</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.entity.Entity.METADATA_PARTICLE">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
-<a id="METADATA_VILLAGERDATA">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>METADATA_VILLAGERDATA</h4>
-<pre>protected static final&nbsp;byte METADATA_VILLAGERDATA</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.entity.Entity.METADATA_VILLAGERDATA">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
-<a id="METADATA_OPTVARINT">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>METADATA_OPTVARINT</h4>
-<pre>protected static final&nbsp;byte METADATA_OPTVARINT</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.entity.Entity.METADATA_OPTVARINT">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
-<a id="METADATA_POSE">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>METADATA_POSE</h4>
-<pre>protected static final&nbsp;byte METADATA_POSE</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.entity.Entity.METADATA_POSE">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
 <a id="instance">
 <!--   -->
 </a>
@@ -1593,6 +1304,15 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <pre>protected&nbsp;<a href="Metadata.html" title="class in net.minestom.server.entity">Metadata</a> metadata</pre>
 </li>
 </ul>
+<a id="entityMeta">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>entityMeta</h4>
+<pre>protected&nbsp;<a href="metadata/EntityMeta.html" title="class in net.minestom.server.entity.metadata">EntityMeta</a> entityMeta</pre>
+</li>
+</ul>
 <a id="nextTick">
 <!--   -->
 </a>
@@ -1612,40 +1332,56 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
+<a id="&lt;init&gt;(net.minestom.server.entity.EntityType,java.util.UUID)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>Entity</h4>
+<pre>public&nbsp;Entity&#8203;(@NotNull
+              <a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType,
+              @NotNull
+              java.util.UUID&nbsp;uuid)</pre>
+</li>
+</ul>
+<a id="&lt;init&gt;(net.minestom.server.entity.EntityType)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>Entity</h4>
+<pre>public&nbsp;Entity&#8203;(@NotNull
+              <a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType)</pre>
+</li>
+</ul>
 <a id="&lt;init&gt;(net.minestom.server.entity.EntityType,java.util.UUID,net.minestom.server.utils.Position)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>Entity</h4>
-<pre>public&nbsp;Entity&#8203;(@NotNull
+<pre>@Deprecated
+public&nbsp;Entity&#8203;(@NotNull
               <a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType,
               @NotNull
               java.util.UUID&nbsp;uuid,
               @NotNull
               <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="&lt;init&gt;(net.minestom.server.entity.EntityType,net.minestom.server.utils.Position)">
 <!--   -->
 </a>
-<ul class="blockList">
-<li class="blockList">
-<h4>Entity</h4>
-<pre>public&nbsp;Entity&#8203;(@NotNull
-              <a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType,
-              @NotNull
-              <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition)</pre>
-</li>
-</ul>
-<a id="&lt;init&gt;(net.minestom.server.entity.EntityType)">
-<!--   -->
-</a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Entity</h4>
-<pre>public&nbsp;Entity&#8203;(@NotNull
-              <a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType)</pre>
+<pre>@Deprecated
+public&nbsp;Entity&#8203;(@NotNull
+              <a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType,
+              @NotNull
+              <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 </li>
@@ -1733,7 +1469,7 @@ public static&nbsp;<a href="Entity.html" title="class in net.minestom.server.ent
 <ul class="blockList">
 <li class="blockList">
 <h4>update</h4>
-<pre class="methodSignature">public abstract&nbsp;void&nbsp;update&#8203;(long&nbsp;time)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;update&#8203;(long&nbsp;time)</pre>
 <div class="block">Called each tick.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1747,7 +1483,7 @@ public static&nbsp;<a href="Entity.html" title="class in net.minestom.server.ent
 <ul class="blockList">
 <li class="blockList">
 <h4>spawn</h4>
-<pre class="methodSignature">public abstract&nbsp;void&nbsp;spawn()</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;spawn()</pre>
 <div class="block">Called when a new instance is set.</div>
 </li>
 </ul>
@@ -1758,6 +1494,22 @@ public static&nbsp;<a href="Entity.html" title="class in net.minestom.server.ent
 <li class="blockList">
 <h4>isOnGround</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isOnGround()</pre>
+</li>
+</ul>
+<a id="getEntityMeta()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getEntityMeta</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="metadata/EntityMeta.html" title="class in net.minestom.server.entity.metadata">EntityMeta</a>&nbsp;getEntityMeta()</pre>
+<div class="block">Gets metadata of this entity.
+ You may want to cast it to specific implementation.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>metadata of this entity.</dd>
+</dl>
 </li>
 </ul>
 <a id="teleport(net.minestom.server.utils.Position,long[],java.lang.Runnable)">
@@ -1882,8 +1634,8 @@ public static&nbsp;<a href="Entity.html" title="class in net.minestom.server.ent
 <ul class="blockList">
 <li class="blockList">
 <h4>addViewer</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;addViewer&#8203;(@NotNull
-                         <a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+<pre class="methodSignature">public final&nbsp;boolean&nbsp;addViewer&#8203;(@NotNull
+                               <a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Viewable.html#addViewer(net.minestom.server.entity.Player)">Viewable</a></code></span></div>
 <div class="block">Adds a viewer.</div>
 <dl>
@@ -1896,14 +1648,24 @@ public static&nbsp;<a href="Entity.html" title="class in net.minestom.server.ent
 </dl>
 </li>
 </ul>
+<a id="addViewer0(net.minestom.server.entity.Player)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addViewer0</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;addViewer0&#8203;(@NotNull
+                          <a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+</li>
+</ul>
 <a id="removeViewer(net.minestom.server.entity.Player)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>removeViewer</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;removeViewer&#8203;(@NotNull
-                            <a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+<pre class="methodSignature">public final&nbsp;boolean&nbsp;removeViewer&#8203;(@NotNull
+                                  <a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Viewable.html#removeViewer(net.minestom.server.entity.Player)">Viewable</a></code></span></div>
 <div class="block">Removes a viewer.</div>
 <dl>
@@ -1914,6 +1676,16 @@ public static&nbsp;<a href="Entity.html" title="class in net.minestom.server.ent
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the player has been removed, false otherwise (could be because he was not a viewer)</dd>
 </dl>
+</li>
+</ul>
+<a id="removeViewer0(net.minestom.server.entity.Player)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeViewer0</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;removeViewer0&#8203;(@NotNull
+                             <a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 </li>
 </ul>
 <a id="getViewers()">
@@ -1931,6 +1703,27 @@ public&nbsp;java.util.Set&lt;<a href="Player.html" title="class in net.minestom.
 <dd><code><a href="../Viewable.html#getViewers()">getViewers</a></code>&nbsp;in interface&nbsp;<code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A Set containing all the element's viewers</dd>
+</dl>
+</li>
+</ul>
+<a id="switchEntityType(net.minestom.server.entity.EntityType)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>switchEntityType</h4>
+<pre class="methodSignature">public final&nbsp;void&nbsp;switchEntityType&#8203;(@NotNull
+                                   <a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType)</pre>
+<div class="block">Changes the entity type of this entity.
+ <p>
+ Works by changing the internal entity type field and by calling <a href="#removeViewer(net.minestom.server.entity.Player)"><code>removeViewer(Player)</code></a>
+ followed by <a href="#addViewer(net.minestom.server.entity.Player)"><code>addViewer(Player)</code></a> to all current viewers.
+ <p>
+ Be aware that this only change the visual of the entity, the <a href="../collision/BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a>
+ will not be modified.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>entityType</code> - the new entity type</dd>
 </dl>
 </li>
 </ul>
@@ -2074,7 +1867,8 @@ public&nbsp;java.util.Map&lt;java.lang.Class&lt;? extends <a href="../event/Even
 <ul class="blockList">
 <li class="blockList">
 <h4>getEntityType</h4>
-<pre class="methodSignature">public&nbsp;<a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;getEntityType()</pre>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;getEntityType()</pre>
 <div class="block">Returns the entity type.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -2207,14 +2001,38 @@ public&nbsp;<a href="../instance/Instance.html" title="class in net.minestom.ser
 </dl>
 </li>
 </ul>
-<a id="setInstance(net.minestom.server.instance.Instance)">
+<a id="setInstance(net.minestom.server.instance.Instance,net.minestom.server.utils.Position)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setInstance</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setInstance&#8203;(@NotNull
+                        <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                        @NotNull
+                        <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition)</pre>
+<div class="block">Changes the entity instance, i.e. spawns it.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>instance</code> - the new instance of the entity</dd>
+<dd><code>spawnPosition</code> - the spawn position for the entity.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.IllegalStateException</code> - if <code>instance</code> has not been registered in <a href="../instance/InstanceManager.html" title="class in net.minestom.server.instance"><code>InstanceManager</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="setInstance(net.minestom.server.instance.Instance)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setInstance</h4>
+<pre class="methodSignature">@Deprecated
+public&nbsp;void&nbsp;setInstance&#8203;(@NotNull
                         <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#setInstance(net.minestom.server.instance.Instance,net.minestom.server.utils.Position)"><code>setInstance(Instance, Position)</code></a> instead.</div>
+</div>
 <div class="block">Changes the entity instance.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2975,6 +2793,16 @@ public&nbsp;java.util.List&lt;<a href="../potion/TimedPotion.html" title="class 
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the entity removal has been scheduled</dd>
 </dl>
+</li>
+</ul>
+<a id="getVelocityForPacket()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getVelocityForPacket</h4>
+<pre class="methodSignature">@NotNull
+protected&nbsp;<a href="../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;getVelocityForPacket()</pre>
 </li>
 </ul>
 <a id="getVelocityPacket()">

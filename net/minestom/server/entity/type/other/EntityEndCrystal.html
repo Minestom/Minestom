@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":42,"i1":42,"i2":42,"i3":42,"i4":42};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -144,8 +144,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="../../../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a></code>, <code><a href="../../../event/handler/EventHandler.html" title="interface in net.minestom.server.event.handler">EventHandler</a></code>, <code><a href="../../../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code>, <code><a href="../../../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
 </dl>
 <hr>
-<pre>public class <span class="typeNameLabel">EntityEndCrystal</span>
+<pre>@Deprecated
+public class <span class="typeNameLabel">EntityEndCrystal</span>
 extends <a href="../../ObjectEntity.html" title="class in net.minestom.server.entity">ObjectEntity</a></pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="../../metadata/other/EndCrystalMeta.html" title="class in net.minestom.server.entity.metadata.other"><code>EndCrystalMeta</code></a> instead.</div>
+</div>
 </li>
 </ul>
 </div>
@@ -181,7 +185,7 @@ extends <a href="../../ObjectEntity.html" title="class in net.minestom.server.en
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;net.minestom.server.entity.<a href="../../Entity.html" title="class in net.minestom.server.entity">Entity</a></h3>
-<code><a href="../../Entity.html#cachePitch">cachePitch</a>, <a href="../../Entity.html#cacheX">cacheX</a>, <a href="../../Entity.html#cacheY">cacheY</a>, <a href="../../Entity.html#cacheYaw">cacheYaw</a>, <a href="../../Entity.html#cacheZ">cacheZ</a>, <a href="../../Entity.html#entityType">entityType</a>, <a href="../../Entity.html#gravityAcceleration">gravityAcceleration</a>, <a href="../../Entity.html#gravityDragPerTick">gravityDragPerTick</a>, <a href="../../Entity.html#gravityTerminalVelocity">gravityTerminalVelocity</a>, <a href="../../Entity.html#gravityTickCount">gravityTickCount</a>, <a href="../../Entity.html#hasPhysics">hasPhysics</a>, <a href="../../Entity.html#instance">instance</a>, <a href="../../Entity.html#lastPitch">lastPitch</a>, <a href="../../Entity.html#lastX">lastX</a>, <a href="../../Entity.html#lastY">lastY</a>, <a href="../../Entity.html#lastYaw">lastYaw</a>, <a href="../../Entity.html#lastZ">lastZ</a>, <a href="../../Entity.html#metadata">metadata</a>, <a href="../../Entity.html#METADATA_BOOLEAN">METADATA_BOOLEAN</a>, <a href="../../Entity.html#METADATA_BYTE">METADATA_BYTE</a>, <a href="../../Entity.html#METADATA_CHAT">METADATA_CHAT</a>, <a href="../../Entity.html#METADATA_DIRECTION">METADATA_DIRECTION</a>, <a href="../../Entity.html#METADATA_FLOAT">METADATA_FLOAT</a>, <a href="../../Entity.html#METADATA_NBT">METADATA_NBT</a>, <a href="../../Entity.html#METADATA_OPTBLOCKID">METADATA_OPTBLOCKID</a>, <a href="../../Entity.html#METADATA_OPTCHAT">METADATA_OPTCHAT</a>, <a href="../../Entity.html#METADATA_OPTPOSITION">METADATA_OPTPOSITION</a>, <a href="../../Entity.html#METADATA_OPTUUID">METADATA_OPTUUID</a>, <a href="../../Entity.html#METADATA_OPTVARINT">METADATA_OPTVARINT</a>, <a href="../../Entity.html#METADATA_PARTICLE">METADATA_PARTICLE</a>, <a href="../../Entity.html#METADATA_POSE">METADATA_POSE</a>, <a href="../../Entity.html#METADATA_POSITION">METADATA_POSITION</a>, <a href="../../Entity.html#METADATA_ROTATION">METADATA_ROTATION</a>, <a href="../../Entity.html#METADATA_SLOT">METADATA_SLOT</a>, <a href="../../Entity.html#METADATA_STRING">METADATA_STRING</a>, <a href="../../Entity.html#METADATA_VARINT">METADATA_VARINT</a>, <a href="../../Entity.html#METADATA_VILLAGERDATA">METADATA_VILLAGERDATA</a>, <a href="../../Entity.html#nextTick">nextTick</a>, <a href="../../Entity.html#onGround">onGround</a>, <a href="../../Entity.html#position">position</a>, <a href="../../Entity.html#uuid">uuid</a>, <a href="../../Entity.html#vehicle">vehicle</a>, <a href="../../Entity.html#velocity">velocity</a>, <a href="../../Entity.html#viewers">viewers</a></code></li>
+<code><a href="../../Entity.html#cachePitch">cachePitch</a>, <a href="../../Entity.html#cacheX">cacheX</a>, <a href="../../Entity.html#cacheY">cacheY</a>, <a href="../../Entity.html#cacheYaw">cacheYaw</a>, <a href="../../Entity.html#cacheZ">cacheZ</a>, <a href="../../Entity.html#entityMeta">entityMeta</a>, <a href="../../Entity.html#entityType">entityType</a>, <a href="../../Entity.html#gravityAcceleration">gravityAcceleration</a>, <a href="../../Entity.html#gravityDragPerTick">gravityDragPerTick</a>, <a href="../../Entity.html#gravityTerminalVelocity">gravityTerminalVelocity</a>, <a href="../../Entity.html#gravityTickCount">gravityTickCount</a>, <a href="../../Entity.html#hasPhysics">hasPhysics</a>, <a href="../../Entity.html#instance">instance</a>, <a href="../../Entity.html#lastPitch">lastPitch</a>, <a href="../../Entity.html#lastX">lastX</a>, <a href="../../Entity.html#lastY">lastY</a>, <a href="../../Entity.html#lastYaw">lastYaw</a>, <a href="../../Entity.html#lastZ">lastZ</a>, <a href="../../Entity.html#metadata">metadata</a>, <a href="../../Entity.html#nextTick">nextTick</a>, <a href="../../Entity.html#onGround">onGround</a>, <a href="../../Entity.html#position">position</a>, <a href="../../Entity.html#uuid">uuid</a>, <a href="../../Entity.html#vehicle">vehicle</a>, <a href="../../Entity.html#velocity">velocity</a>, <a href="../../Entity.html#viewers">viewers</a></code></li>
 </ul>
 </li>
 </ul>
@@ -201,7 +205,9 @@ extends <a href="../../ObjectEntity.html" title="class in net.minestom.server.en
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Position)">EntityEndCrystal</a></span>&#8203;(<a href="../../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -215,7 +221,7 @@ extends <a href="../../ObjectEntity.html" title="class in net.minestom.server.en
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -224,29 +230,38 @@ extends <a href="../../ObjectEntity.html" title="class in net.minestom.server.en
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBeamTarget()">getBeamTarget</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getObjectData()">getObjectData</a></span>()</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the data of this object entity.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBeamTarget(net.minestom.server.utils.BlockPosition)">setBeamTarget</a></span>&#8203;(<a href="../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;beamTarget)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setShowBottom(boolean)">setShowBottom</a></span>&#8203;(boolean&nbsp;showBottom)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#showBottom()">showBottom</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -254,14 +269,14 @@ extends <a href="../../ObjectEntity.html" title="class in net.minestom.server.en
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.entity.<a href="../../ObjectEntity.html" title="class in net.minestom.server.entity">ObjectEntity</a></h3>
-<code><a href="../../ObjectEntity.html#addViewer(net.minestom.server.entity.Player)">addViewer</a>, <a href="../../ObjectEntity.html#spawn()">spawn</a>, <a href="../../ObjectEntity.html#update(long)">update</a></code></li>
+<code><a href="../../ObjectEntity.html#spawn()">spawn</a>, <a href="../../ObjectEntity.html#update(long)">update</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.entity.Entity">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.entity.<a href="../../Entity.html" title="class in net.minestom.server.entity">Entity</a></h3>
-<code><a href="../../Entity.html#addEffect(net.minestom.server.potion.Potion)">addEffect</a>, <a href="../../Entity.html#addPassenger(net.minestom.server.entity.Entity)">addPassenger</a>, <a href="../../Entity.html#askSynchronization()">askSynchronization</a>, <a href="../../Entity.html#clearEffects()">clearEffects</a>, <a href="../../Entity.html#generateId()">generateId</a>, <a href="../../Entity.html#getActiveEffects()">getActiveEffects</a>, <a href="../../Entity.html#getAliveTicks()">getAliveTicks</a>, <a href="../../Entity.html#getAllPermissions()">getAllPermissions</a>, <a href="../../Entity.html#getBoundingBox()">getBoundingBox</a>, <a href="../../Entity.html#getChunk()">getChunk</a>, <a href="../../Entity.html#getCustomName()">getCustomName</a>, <a href="../../Entity.html#getData()">getData</a>, <a href="../../Entity.html#getDistance(net.minestom.server.entity.Entity)">getDistance</a>, <a href="../../Entity.html#getDistanceSquared(net.minestom.server.entity.Entity)">getDistanceSquared</a>, <a href="../../Entity.html#getEntity(int)">getEntity</a>, <a href="../../Entity.html#getEntity(java.util.UUID)">getEntity</a>, <a href="../../Entity.html#getEntityId()">getEntityId</a>, <a href="../../Entity.html#getEntityType()">getEntityType</a>, <a href="../../Entity.html#getEventCallbacksMap()">getEventCallbacksMap</a>, <a href="../../Entity.html#getEyeHeight()">getEyeHeight</a>, <a href="../../Entity.html#getGravityAcceleration()">getGravityAcceleration</a>, <a href="../../Entity.html#getGravityDragPerTick()">getGravityDragPerTick</a>, <a href="../../Entity.html#getGravityTerminalVelocity()">getGravityTerminalVelocity</a>, <a href="../../Entity.html#getGravityTickCount()">getGravityTickCount</a>, <a href="../../Entity.html#getInstance()">getInstance</a>, <a href="../../Entity.html#getMetadataPacket()">getMetadataPacket</a>, <a href="../../Entity.html#getPassengers()">getPassengers</a>, <a href="../../Entity.html#getPassengersPacket()">getPassengersPacket</a>, <a href="../../Entity.html#getPose()">getPose</a>, <a href="../../Entity.html#getPosition()">getPosition</a>, <a href="../../Entity.html#getUuid()">getUuid</a>, <a href="../../Entity.html#getVehicle()">getVehicle</a>, <a href="../../Entity.html#getVelocity()">getVelocity</a>, <a href="../../Entity.html#getVelocityPacket()">getVelocityPacket</a>, <a href="../../Entity.html#getViewers()">getViewers</a>, <a href="../../Entity.html#handleVoid()">handleVoid</a>, <a href="../../Entity.html#hasNoGravity()">hasNoGravity</a>, <a href="../../Entity.html#hasPassenger()">hasPassenger</a>, <a href="../../Entity.html#hasVelocity()">hasVelocity</a>, <a href="../../Entity.html#isActive()">isActive</a>, <a href="../../Entity.html#isAutoViewable()">isAutoViewable</a>, <a href="../../Entity.html#isCustomNameVisible()">isCustomNameVisible</a>, <a href="../../Entity.html#isGlowing()">isGlowing</a>, <a href="../../Entity.html#isInvisible()">isInvisible</a>, <a href="../../Entity.html#isOnFire()">isOnFire</a>, <a href="../../Entity.html#isOnGround()">isOnGround</a>, <a href="../../Entity.html#isRemoved()">isRemoved</a>, <a href="../../Entity.html#isRemoveScheduled()">isRemoveScheduled</a>, <a href="../../Entity.html#isSilent()">isSilent</a>, <a href="../../Entity.html#isSneaking()">isSneaking</a>, <a href="../../Entity.html#isSprinting()">isSprinting</a>, <a href="../../Entity.html#refreshPosition(double,double,double)">refreshPosition</a>, <a href="../../Entity.html#refreshPosition(net.minestom.server.utils.Position)">refreshPosition</a>, <a href="../../Entity.html#refreshView(float,float)">refreshView</a>, <a href="../../Entity.html#remove()">remove</a>, <a href="../../Entity.html#removeEffect(net.minestom.server.potion.PotionEffect)">removeEffect</a>, <a href="../../Entity.html#removePassenger(net.minestom.server.entity.Entity)">removePassenger</a>, <a href="../../Entity.html#removeViewer(net.minestom.server.entity.Player)">removeViewer</a>, <a href="../../Entity.html#scheduleNextTick(java.util.function.Consumer)">scheduleNextTick</a>, <a href="../../Entity.html#scheduleRemove(long,net.minestom.server.utils.time.TimeUnit)">scheduleRemove</a>, <a href="../../Entity.html#sendSynchronization()">sendSynchronization</a>, <a href="../../Entity.html#setAutoViewable(boolean)">setAutoViewable</a>, <a href="../../Entity.html#setBoundingBox(double,double,double)">setBoundingBox</a>, <a href="../../Entity.html#setBoundingBox(net.minestom.server.collision.BoundingBox)">setBoundingBox</a>, <a href="../../Entity.html#setCustomName(net.minestom.server.chat.JsonMessage)">setCustomName</a>, <a href="../../Entity.html#setCustomNameVisible(boolean)">setCustomNameVisible</a>, <a href="../../Entity.html#setData(net.minestom.server.data.Data)">setData</a>, <a href="../../Entity.html#setGlowing(boolean)">setGlowing</a>, <a href="../../Entity.html#setGravity(double,double,double)">setGravity</a>, <a href="../../Entity.html#setInstance(net.minestom.server.instance.Instance)">setInstance</a>, <a href="../../Entity.html#setInvisible(boolean)">setInvisible</a>, <a href="../../Entity.html#setNoGravity(boolean)">setNoGravity</a>, <a href="../../Entity.html#setOnFire(boolean)">setOnFire</a>, <a href="../../Entity.html#setPose(net.minestom.server.entity.Entity.Pose)">setPose</a>, <a href="../../Entity.html#setSilent(boolean)">setSilent</a>, <a href="../../Entity.html#setSneaking(boolean)">setSneaking</a>, <a href="../../Entity.html#setSprinting(boolean)">setSprinting</a>, <a href="../../Entity.html#setUuid(java.util.UUID)">setUuid</a>, <a href="../../Entity.html#setVelocity(net.minestom.server.utils.Vector)">setVelocity</a>, <a href="../../Entity.html#setView(float,float)">setView</a>, <a href="../../Entity.html#setView(net.minestom.server.utils.Position)">setView</a>, <a href="../../Entity.html#shouldRemove()">shouldRemove</a>, <a href="../../Entity.html#teleport(net.minestom.server.utils.Position)">teleport</a>, <a href="../../Entity.html#teleport(net.minestom.server.utils.Position,long%5B%5D,java.lang.Runnable)">teleport</a>, <a href="../../Entity.html#teleport(net.minestom.server.utils.Position,java.lang.Runnable)">teleport</a>, <a href="../../Entity.html#tick(long)">tick</a>, <a href="../../Entity.html#triggerStatus(byte)">triggerStatus</a></code></li>
+<code><a href="../../Entity.html#addEffect(net.minestom.server.potion.Potion)">addEffect</a>, <a href="../../Entity.html#addPassenger(net.minestom.server.entity.Entity)">addPassenger</a>, <a href="../../Entity.html#addViewer(net.minestom.server.entity.Player)">addViewer</a>, <a href="../../Entity.html#addViewer0(net.minestom.server.entity.Player)">addViewer0</a>, <a href="../../Entity.html#askSynchronization()">askSynchronization</a>, <a href="../../Entity.html#clearEffects()">clearEffects</a>, <a href="../../Entity.html#generateId()">generateId</a>, <a href="../../Entity.html#getActiveEffects()">getActiveEffects</a>, <a href="../../Entity.html#getAliveTicks()">getAliveTicks</a>, <a href="../../Entity.html#getAllPermissions()">getAllPermissions</a>, <a href="../../Entity.html#getBoundingBox()">getBoundingBox</a>, <a href="../../Entity.html#getChunk()">getChunk</a>, <a href="../../Entity.html#getCustomName()">getCustomName</a>, <a href="../../Entity.html#getData()">getData</a>, <a href="../../Entity.html#getDistance(net.minestom.server.entity.Entity)">getDistance</a>, <a href="../../Entity.html#getDistanceSquared(net.minestom.server.entity.Entity)">getDistanceSquared</a>, <a href="../../Entity.html#getEntity(int)">getEntity</a>, <a href="../../Entity.html#getEntity(java.util.UUID)">getEntity</a>, <a href="../../Entity.html#getEntityId()">getEntityId</a>, <a href="../../Entity.html#getEntityMeta()">getEntityMeta</a>, <a href="../../Entity.html#getEntityType()">getEntityType</a>, <a href="../../Entity.html#getEventCallbacksMap()">getEventCallbacksMap</a>, <a href="../../Entity.html#getEyeHeight()">getEyeHeight</a>, <a href="../../Entity.html#getGravityAcceleration()">getGravityAcceleration</a>, <a href="../../Entity.html#getGravityDragPerTick()">getGravityDragPerTick</a>, <a href="../../Entity.html#getGravityTerminalVelocity()">getGravityTerminalVelocity</a>, <a href="../../Entity.html#getGravityTickCount()">getGravityTickCount</a>, <a href="../../Entity.html#getInstance()">getInstance</a>, <a href="../../Entity.html#getMetadataPacket()">getMetadataPacket</a>, <a href="../../Entity.html#getPassengers()">getPassengers</a>, <a href="../../Entity.html#getPassengersPacket()">getPassengersPacket</a>, <a href="../../Entity.html#getPose()">getPose</a>, <a href="../../Entity.html#getPosition()">getPosition</a>, <a href="../../Entity.html#getUuid()">getUuid</a>, <a href="../../Entity.html#getVehicle()">getVehicle</a>, <a href="../../Entity.html#getVelocity()">getVelocity</a>, <a href="../../Entity.html#getVelocityForPacket()">getVelocityForPacket</a>, <a href="../../Entity.html#getVelocityPacket()">getVelocityPacket</a>, <a href="../../Entity.html#getViewers()">getViewers</a>, <a href="../../Entity.html#handleVoid()">handleVoid</a>, <a href="../../Entity.html#hasNoGravity()">hasNoGravity</a>, <a href="../../Entity.html#hasPassenger()">hasPassenger</a>, <a href="../../Entity.html#hasVelocity()">hasVelocity</a>, <a href="../../Entity.html#isActive()">isActive</a>, <a href="../../Entity.html#isAutoViewable()">isAutoViewable</a>, <a href="../../Entity.html#isCustomNameVisible()">isCustomNameVisible</a>, <a href="../../Entity.html#isGlowing()">isGlowing</a>, <a href="../../Entity.html#isInvisible()">isInvisible</a>, <a href="../../Entity.html#isOnFire()">isOnFire</a>, <a href="../../Entity.html#isOnGround()">isOnGround</a>, <a href="../../Entity.html#isRemoved()">isRemoved</a>, <a href="../../Entity.html#isRemoveScheduled()">isRemoveScheduled</a>, <a href="../../Entity.html#isSilent()">isSilent</a>, <a href="../../Entity.html#isSneaking()">isSneaking</a>, <a href="../../Entity.html#isSprinting()">isSprinting</a>, <a href="../../Entity.html#refreshPosition(double,double,double)">refreshPosition</a>, <a href="../../Entity.html#refreshPosition(net.minestom.server.utils.Position)">refreshPosition</a>, <a href="../../Entity.html#refreshView(float,float)">refreshView</a>, <a href="../../Entity.html#remove()">remove</a>, <a href="../../Entity.html#removeEffect(net.minestom.server.potion.PotionEffect)">removeEffect</a>, <a href="../../Entity.html#removePassenger(net.minestom.server.entity.Entity)">removePassenger</a>, <a href="../../Entity.html#removeViewer(net.minestom.server.entity.Player)">removeViewer</a>, <a href="../../Entity.html#removeViewer0(net.minestom.server.entity.Player)">removeViewer0</a>, <a href="../../Entity.html#scheduleNextTick(java.util.function.Consumer)">scheduleNextTick</a>, <a href="../../Entity.html#scheduleRemove(long,net.minestom.server.utils.time.TimeUnit)">scheduleRemove</a>, <a href="../../Entity.html#sendSynchronization()">sendSynchronization</a>, <a href="../../Entity.html#setAutoViewable(boolean)">setAutoViewable</a>, <a href="../../Entity.html#setBoundingBox(double,double,double)">setBoundingBox</a>, <a href="../../Entity.html#setBoundingBox(net.minestom.server.collision.BoundingBox)">setBoundingBox</a>, <a href="../../Entity.html#setCustomName(net.minestom.server.chat.JsonMessage)">setCustomName</a>, <a href="../../Entity.html#setCustomNameVisible(boolean)">setCustomNameVisible</a>, <a href="../../Entity.html#setData(net.minestom.server.data.Data)">setData</a>, <a href="../../Entity.html#setGlowing(boolean)">setGlowing</a>, <a href="../../Entity.html#setGravity(double,double,double)">setGravity</a>, <a href="../../Entity.html#setInstance(net.minestom.server.instance.Instance)">setInstance</a>, <a href="../../Entity.html#setInstance(net.minestom.server.instance.Instance,net.minestom.server.utils.Position)">setInstance</a>, <a href="../../Entity.html#setInvisible(boolean)">setInvisible</a>, <a href="../../Entity.html#setNoGravity(boolean)">setNoGravity</a>, <a href="../../Entity.html#setOnFire(boolean)">setOnFire</a>, <a href="../../Entity.html#setPose(net.minestom.server.entity.Entity.Pose)">setPose</a>, <a href="../../Entity.html#setSilent(boolean)">setSilent</a>, <a href="../../Entity.html#setSneaking(boolean)">setSneaking</a>, <a href="../../Entity.html#setSprinting(boolean)">setSprinting</a>, <a href="../../Entity.html#setUuid(java.util.UUID)">setUuid</a>, <a href="../../Entity.html#setVelocity(net.minestom.server.utils.Vector)">setVelocity</a>, <a href="../../Entity.html#setView(float,float)">setView</a>, <a href="../../Entity.html#setView(net.minestom.server.utils.Position)">setView</a>, <a href="../../Entity.html#shouldRemove()">shouldRemove</a>, <a href="../../Entity.html#switchEntityType(net.minestom.server.entity.EntityType)">switchEntityType</a>, <a href="../../Entity.html#teleport(net.minestom.server.utils.Position)">teleport</a>, <a href="../../Entity.html#teleport(net.minestom.server.utils.Position,long%5B%5D,java.lang.Runnable)">teleport</a>, <a href="../../Entity.html#teleport(net.minestom.server.utils.Position,java.lang.Runnable)">teleport</a>, <a href="../../Entity.html#tick(long)">tick</a>, <a href="../../Entity.html#triggerStatus(byte)">triggerStatus</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -315,6 +330,7 @@ extends <a href="../../ObjectEntity.html" title="class in net.minestom.server.en
 <h4>EntityEndCrystal</h4>
 <pre>public&nbsp;EntityEndCrystal&#8203;(@NotNull
                         <a href="../../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 </li>
@@ -335,6 +351,7 @@ extends <a href="../../ObjectEntity.html" title="class in net.minestom.server.en
 <h4>getBeamTarget</h4>
 <pre class="methodSignature">@Nullable
 public&nbsp;<a href="../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;getBeamTarget()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="setBeamTarget(net.minestom.server.utils.BlockPosition)">
@@ -345,6 +362,7 @@ public&nbsp;<a href="../../../utils/BlockPosition.html" title="class in net.mine
 <h4>setBeamTarget</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setBeamTarget&#8203;(@Nullable
                           <a href="../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;beamTarget)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="showBottom()">
@@ -354,6 +372,7 @@ public&nbsp;<a href="../../../utils/BlockPosition.html" title="class in net.mine
 <li class="blockList">
 <h4>showBottom</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;showBottom()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="setShowBottom(boolean)">
@@ -363,6 +382,7 @@ public&nbsp;<a href="../../../utils/BlockPosition.html" title="class in net.mine
 <li class="blockList">
 <h4>setShowBottom</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setShowBottom&#8203;(boolean&nbsp;showBottom)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="getObjectData()">
@@ -372,6 +392,7 @@ public&nbsp;<a href="../../../utils/BlockPosition.html" title="class in net.mine
 <li class="blockList">
 <h4>getObjectData</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;getObjectData()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../ObjectEntity.html#getObjectData()">ObjectEntity</a></code></span></div>
 <div class="block">Gets the data of this object entity.</div>
 <dl>
