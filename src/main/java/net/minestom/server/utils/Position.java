@@ -337,6 +337,17 @@ public class Position implements PublicCloneable<Position> {
     }
 
     /**
+     * Changes the position to the given one.
+     *
+     * @param position the new position.
+     */
+    public void set(Position position) {
+        this.x = position.x;
+        this.y = position.y;
+        this.z = position.z;
+    }
+
+    /**
      * Gets the position yaw.
      *
      * @return the yaw

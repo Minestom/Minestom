@@ -1,12 +1,16 @@
 package net.minestom.server.entity.type.animal;
 
-import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.type.AgeableCreature;
 import net.minestom.server.entity.type.Animal;
 import net.minestom.server.utils.Position;
 
-public class EntityPig extends EntityCreature implements Animal {
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.animal.PigMeta} instead.
+ */
+@Deprecated
+public class EntityPig extends AgeableCreature implements Animal {
 
     public EntityPig(Position spawnPosition) {
         super(EntityType.PIG, spawnPosition);

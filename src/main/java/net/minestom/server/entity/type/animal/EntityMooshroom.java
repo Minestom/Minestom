@@ -1,13 +1,17 @@
 package net.minestom.server.entity.type.animal;
 
-import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.type.AgeableCreature;
 import net.minestom.server.entity.type.Animal;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
-public class EntityMooshroom extends EntityCreature implements Animal {
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.animal.MooshroomMeta} instead.
+ */
+@Deprecated
+public class EntityMooshroom extends AgeableCreature implements Animal {
 
     public EntityMooshroom(Position spawnPosition) {
         super(EntityType.MOOSHROOM, spawnPosition);

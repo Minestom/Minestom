@@ -626,13 +626,10 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     @Override
-    public boolean addViewer(@NotNull Player player) {
-        if (player == this)
+    public boolean addViewer0(@NotNull Player player) {
+        if (player == this || !super.addViewer0(player)) {
             return false;
-
-        final boolean result = super.addViewer(player);
-        if (!result)
-            return false;
+        }
 
         PlayerConnection viewerConnection = player.getPlayerConnection();
         showPlayer(viewerConnection);
@@ -640,18 +637,19 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     @Override
-    public boolean removeViewer(@NotNull Player player) {
-        if (player == this)
+    public boolean removeViewer0(@NotNull Player player) {
+        if (player == this || !super.removeViewer0(player)) {
             return false;
+        }
 
-        boolean result = super.removeViewer(player);
         PlayerConnection viewerConnection = player.getPlayerConnection();
         viewerConnection.sendPacket(getRemovePlayerToList());
 
         // Team
-        if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) // If team only contains "this" player
+        if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) {// If team only contains "this" player
             viewerConnection.sendPacket(this.getTeam().createTeamDestructionPacket());
-        return result;
+        }
+        return true;
     }
 
     /**
@@ -663,6 +661,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param instance      the new player instance
      * @param spawnPosition the new position of the player
      */
+    @Override
     public void setInstance(@NotNull Instance instance, @NotNull Position spawnPosition) {
         Check.argCondition(this.instance == instance, "Instance should be different than the current one");
 
@@ -1435,11 +1434,7 @@ public class Player extends LivingEntity implements CommandSender {
     protected void refreshAfterTeleport() {
         getInventory().update();
 
-        SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
-        spawnPlayerPacket.entityId = getEntityId();
-        spawnPlayerPacket.playerUuid = getUuid();
-        spawnPlayerPacket.position = getPosition();
-        sendPacketToViewers(spawnPlayerPacket);
+        sendPacketsToViewers(getEntityType().getSpawnType().getSpawnPacket(this));
 
         // Update for viewers
         sendPacketToViewersAndSelf(getVelocityPacket());
@@ -2418,14 +2413,9 @@ public class Player extends LivingEntity implements CommandSender {
      * @param connection the connection to show the player to
      */
     protected void showPlayer(@NotNull PlayerConnection connection) {
-        SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
-        spawnPlayerPacket.entityId = getEntityId();
-        spawnPlayerPacket.playerUuid = getUuid();
-        spawnPlayerPacket.position = getPosition();
-
         connection.sendPacket(getAddPlayerToList());
 
-        connection.sendPacket(spawnPlayerPacket);
+        connection.sendPacket(getEntityType().getSpawnType().getSpawnPacket(this));
         connection.sendPacket(getVelocityPacket());
         connection.sendPacket(getMetadataPacket());
 

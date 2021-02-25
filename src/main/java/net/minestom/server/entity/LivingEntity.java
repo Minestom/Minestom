@@ -5,18 +5,17 @@ import net.minestom.server.attribute.AttributeInstance;
 import net.minestom.server.attribute.Attributes;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.entity.EntityDamageEvent;
 import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.entity.EntityFireEvent;
+import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.server.play.CollectItemPacket;
-import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
-import net.minestom.server.network.packet.server.play.EntityPropertiesPacket;
-import net.minestom.server.network.packet.server.play.SoundEffectPacket;
+import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
@@ -27,6 +26,7 @@ import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,7 +34,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 //TODO: Default attributes registration (and limitation ?)
-public abstract class LivingEntity extends Entity implements EquipmentHandler {
+public class LivingEntity extends Entity implements EquipmentHandler {
 
     // Item pickup
     protected boolean canPickupItem;
@@ -70,30 +70,134 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
 
     private Team team;
 
-    public LivingEntity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
-        super(entityType, spawnPosition);
-        setupAttributes();
-        setGravity(0.02f, 0.08f, 3.92f);
-    }
+    private int arrowCount;
+    private float health = 1F;
 
-    /**
-     * Constructor which allows to specify an UUID. Only use if you know what you are doing!
-     */
-    public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
-        super(entityType, uuid, spawnPosition);
-        setupAttributes();
-        setGravity(0.02f, 0.08f, 3.92f);
-    }
+    // Equipments
+    private ItemStack mainHandItem;
+    private ItemStack offHandItem;
 
-    public LivingEntity(@NotNull EntityType entityType) {
-        this(entityType, new Position());
-    }
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
 
     /**
      * Constructor which allows to specify an UUID. Only use if you know what you are doing!
      */
     public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid) {
         this(entityType, uuid, new Position());
+        setupAttributes();
+        setGravity(0.02f, 0.08f, 3.92f);
+        initEquipments();
+    }
+
+    public LivingEntity(@NotNull EntityType entityType) {
+        this(entityType, UUID.randomUUID());
+    }
+
+    /**
+     * Constructor which allows to specify an UUID. Only use if you know what you are doing!
+     */
+    @Deprecated
+    public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
+        super(entityType, uuid, spawnPosition);
+        setupAttributes();
+        setGravity(0.02f, 0.08f, 3.92f);
+        initEquipments();
+    }
+
+    @Deprecated
+    public LivingEntity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
+        this(entityType, UUID.randomUUID(), spawnPosition);
+    }
+
+    private void initEquipments() {
+        this.mainHandItem = ItemStack.getAirItem();
+        this.offHandItem = ItemStack.getAirItem();
+
+        this.helmet = ItemStack.getAirItem();
+        this.chestplate = ItemStack.getAirItem();
+        this.leggings = ItemStack.getAirItem();
+        this.boots = ItemStack.getAirItem();
+    }
+
+    @NotNull
+    @Override
+    public ItemStack getItemInMainHand() {
+        return mainHandItem;
+    }
+
+    @Override
+    public void setItemInMainHand(@NotNull ItemStack itemStack) {
+        this.mainHandItem = itemStack;
+        syncEquipment(EntityEquipmentPacket.Slot.MAIN_HAND);
+    }
+
+    @NotNull
+    @Override
+    public ItemStack getItemInOffHand() {
+        return offHandItem;
+    }
+
+    @Override
+    public void setItemInOffHand(@NotNull ItemStack itemStack) {
+        this.offHandItem = itemStack;
+        syncEquipment(EntityEquipmentPacket.Slot.OFF_HAND);
+    }
+
+    @NotNull
+    @Override
+    public ItemStack getHelmet() {
+        return helmet;
+    }
+
+    @Override
+    public void setHelmet(@NotNull ItemStack itemStack) {
+        this.helmet = getEquipmentItem(itemStack, ArmorEquipEvent.ArmorSlot.HELMET);
+        syncEquipment(EntityEquipmentPacket.Slot.HELMET);
+    }
+
+    @NotNull
+    @Override
+    public ItemStack getChestplate() {
+        return chestplate;
+    }
+
+    @Override
+    public void setChestplate(@NotNull ItemStack itemStack) {
+        this.chestplate = getEquipmentItem(itemStack, ArmorEquipEvent.ArmorSlot.CHESTPLATE);
+        syncEquipment(EntityEquipmentPacket.Slot.CHESTPLATE);
+    }
+
+    @NotNull
+    @Override
+    public ItemStack getLeggings() {
+        return leggings;
+    }
+
+    @Override
+    public void setLeggings(@NotNull ItemStack itemStack) {
+        this.leggings = getEquipmentItem(itemStack, ArmorEquipEvent.ArmorSlot.LEGGINGS);
+        syncEquipment(EntityEquipmentPacket.Slot.LEGGINGS);
+    }
+
+    @NotNull
+    @Override
+    public ItemStack getBoots() {
+        return boots;
+    }
+
+    @Override
+    public void setBoots(@NotNull ItemStack itemStack) {
+        this.boots = getEquipmentItem(itemStack, ArmorEquipEvent.ArmorSlot.BOOTS);
+        syncEquipment(EntityEquipmentPacket.Slot.BOOTS);
+    }
+
+    private ItemStack getEquipmentItem(@NotNull ItemStack itemStack, @NotNull ArmorEquipEvent.ArmorSlot armorSlot) {
+        ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(this, itemStack, armorSlot);
+        callEvent(ArmorEquipEvent.class, armorEquipEvent);
+        return armorEquipEvent.getArmorItem();
     }
 
     @Override
@@ -146,13 +250,18 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         }
     }
 
+    @Override
+    public void spawn() {
+
+    }
+
     /**
      * Gets the amount of arrows in the entity.
      *
      * @return the arrow count
      */
     public int getArrowCount() {
-        return metadata.getIndex((byte) 11, 0);
+        return this.arrowCount;
     }
 
     /**
@@ -161,7 +270,11 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * @param arrowCount the arrow count
      */
     public void setArrowCount(int arrowCount) {
-        this.metadata.setIndex((byte) 11, Metadata.VarInt(arrowCount));
+        this.arrowCount = arrowCount;
+        LivingEntityMeta meta = getLivingEntityMeta();
+        if (meta != null) {
+            meta.setArrowCount(arrowCount);
+        }
     }
 
     /**
@@ -315,7 +428,7 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * @return the entity health
      */
     public float getHealth() {
-        return metadata.getIndex((byte) 8, 1f);
+        return this.health;
     }
 
     /**
@@ -324,12 +437,14 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
      * @param health the new entity health
      */
     public void setHealth(float health) {
-        health = Math.min(health, getMaxHealth());
-        if (health <= 0 && !isDead) {
+        this.health = Math.min(health, getMaxHealth());
+        if (this.health <= 0 && !isDead) {
             kill();
         }
-
-        this.metadata.setIndex((byte) 8, Metadata.Float(health));
+        LivingEntityMeta meta = getLivingEntityMeta();
+        if (meta != null) {
+            meta.setHealth(this.health);
+        }
     }
 
     /**
@@ -419,6 +534,15 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     @Override
+    public boolean addViewer0(@NotNull Player player) {
+        if (!super.addViewer0(player)) {
+            return false;
+        }
+        syncEquipments(player.getPlayerConnection());
+        return true;
+    }
+
+    @Override
     public void setBoundingBox(double x, double y, double z) {
         super.setBoundingBox(x, y, z);
         this.expandedBoundingBox = getBoundingBox().expand(1, 0.5f, 1);
@@ -447,15 +571,14 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     public void refreshActiveHand(boolean isHandActive, boolean offHand, boolean riptideSpinAttack) {
-        byte handState = 0;
-        if (isHandActive)
-            handState |= 0x01;
-        if (offHand)
-            handState |= 0x02;
-        if (riptideSpinAttack)
-            handState |= 0x04;
-
-        this.metadata.setIndex((byte) 7, Metadata.Byte(handState));
+        LivingEntityMeta meta = getLivingEntityMeta();
+        if (meta != null) {
+            meta.setNotifyAboutChanges(false);
+            meta.setHandActive(isHandActive);
+            meta.setActiveHand(offHand ? Player.Hand.OFF : Player.Hand.MAIN);
+            meta.setInRiptideSpinAttack(riptideSpinAttack);
+            meta.setNotifyAboutChanges(true);
+        }
     }
 
     /**
@@ -626,6 +749,18 @@ public abstract class LivingEntity extends Entity implements EquipmentHandler {
         while (it.hasNext()) {
             BlockPosition position = it.next();
             if (Block.fromStateId(getInstance().getBlockStateId(position)) != Block.AIR) return position;
+        }
+        return null;
+    }
+
+    /**
+     * Gets {@link net.minestom.server.entity.metadata.EntityMeta} of this entity casted to {@link LivingEntityMeta}.
+     *
+     * @return null if meta of this entity does not inherit {@link LivingEntityMeta}, casted value otherwise.
+     */
+    public LivingEntityMeta getLivingEntityMeta() {
+        if (this.entityMeta instanceof LivingEntityMeta) {
+            return (LivingEntityMeta) this.entityMeta;
         }
         return null;
     }

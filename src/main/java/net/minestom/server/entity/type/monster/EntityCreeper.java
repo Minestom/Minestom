@@ -7,6 +7,10 @@ import net.minestom.server.entity.type.Monster;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.monster.CreeperMeta} instead.
+ */
+@Deprecated
 public class EntityCreeper extends EntityCreature implements Monster {
 
     public EntityCreeper(Position spawnPosition) {
