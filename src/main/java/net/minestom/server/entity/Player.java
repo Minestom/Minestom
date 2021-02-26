@@ -626,13 +626,10 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     @Override
-    public boolean addViewer(@NotNull Player player) {
-        if (player == this)
+    public boolean addViewer0(@NotNull Player player) {
+        if (player == this || !super.addViewer0(player)) {
             return false;
-
-        final boolean result = super.addViewer(player);
-        if (!result)
-            return false;
+        }
 
         PlayerConnection viewerConnection = player.getPlayerConnection();
         showPlayer(viewerConnection);
@@ -640,18 +637,19 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     @Override
-    public boolean removeViewer(@NotNull Player player) {
-        if (player == this)
+    public boolean removeViewer0(@NotNull Player player) {
+        if (player == this || !super.removeViewer0(player)) {
             return false;
+        }
 
-        boolean result = super.removeViewer(player);
         PlayerConnection viewerConnection = player.getPlayerConnection();
         viewerConnection.sendPacket(getRemovePlayerToList());
 
         // Team
-        if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) // If team only contains "this" player
+        if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) {// If team only contains "this" player
             viewerConnection.sendPacket(this.getTeam().createTeamDestructionPacket());
-        return result;
+        }
+        return true;
     }
 
     /**
@@ -663,6 +661,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param instance      the new player instance
      * @param spawnPosition the new position of the player
      */
+    @Override
     public void setInstance(@NotNull Instance instance, @NotNull Position spawnPosition) {
         Check.argCondition(this.instance == instance, "Instance should be different than the current one");
 
@@ -734,7 +733,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param spawnPosition the position to teleport the player
      * @param firstSpawn    true if this is the player first spawn
      */
-    private void spawnPlayer(@NotNull Instance instance, @Nullable Position spawnPosition,
+    private void spawnPlayer(@NotNull Instance instance, @NotNull Position spawnPosition,
                              boolean firstSpawn, boolean updateChunks) {
         // Clear previous instance elements
         if (!firstSpawn) {
@@ -742,9 +741,9 @@ public class Player extends LivingEntity implements CommandSender {
             this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         }
 
-        super.setInstance(instance);
+        super.setInstance(instance, spawnPosition);
 
-        if (spawnPosition != null && !position.isSimilar(spawnPosition)) {
+        if (!position.isSimilar(spawnPosition)) {
             teleport(spawnPosition);
         } else if (updateChunks) {
             // Send newly visible chunks to player once spawned in the instance
@@ -861,6 +860,15 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
+     * Plays a sound from the {@link Sound} enum.
+     *
+     * @see #playSound(Sound, SoundCategory, int, int, int, float, float)
+     */
+    public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
+        playSound(sound, soundCategory, position.getX(), position.getY(), position.getZ(), volume, pitch);
+    }
+
+    /**
      * Plays a sound from an identifier (represents a custom sound in a resource pack).
      *
      * @param identifier    the identifier of the sound to play
@@ -881,6 +889,15 @@ public class Player extends LivingEntity implements CommandSender {
         namedSoundEffectPacket.volume = volume;
         namedSoundEffectPacket.pitch = pitch;
         playerConnection.sendPacket(namedSoundEffectPacket);
+    }
+
+    /**
+     * Plays a sound from an identifier (represents a custom sound in a resource pack).
+     *
+     * @see #playSound(String, SoundCategory, int, int, int, float, float)
+     */
+    public void playSound(@NotNull String identifier, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
+        playSound(identifier, soundCategory, position.getX(), position.getY(), position.getZ(), volume, pitch);
     }
 
     /**
@@ -1417,11 +1434,7 @@ public class Player extends LivingEntity implements CommandSender {
     protected void refreshAfterTeleport() {
         getInventory().update();
 
-        SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
-        spawnPlayerPacket.entityId = getEntityId();
-        spawnPlayerPacket.playerUuid = getUuid();
-        spawnPlayerPacket.position = getPosition();
-        sendPacketToViewers(spawnPlayerPacket);
+        sendPacketsToViewers(getEntityType().getSpawnType().getSpawnPacket(this));
 
         // Update for viewers
         sendPacketToViewersAndSelf(getVelocityPacket());
@@ -2400,14 +2413,9 @@ public class Player extends LivingEntity implements CommandSender {
      * @param connection the connection to show the player to
      */
     protected void showPlayer(@NotNull PlayerConnection connection) {
-        SpawnPlayerPacket spawnPlayerPacket = new SpawnPlayerPacket();
-        spawnPlayerPacket.entityId = getEntityId();
-        spawnPlayerPacket.playerUuid = getUuid();
-        spawnPlayerPacket.position = getPosition();
-
         connection.sendPacket(getAddPlayerToList());
 
-        connection.sendPacket(spawnPlayerPacket);
+        connection.sendPacket(getEntityType().getSpawnType().getSpawnPacket(this));
         connection.sendPacket(getVelocityPacket());
         connection.sendPacket(getMetadataPacket());
 

@@ -1,7 +1,5 @@
 package net.minestom.server.utils.binary;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minestom.server.chat.JsonMessage;
@@ -152,8 +150,7 @@ public class BinaryReader extends InputStream {
     }
 
     public JsonMessage readJsonMessage(int maxLength) {
-        final String string = readSizedString(maxLength);
-        final JsonObject jsonObject = JsonParser.parseString(string).getAsJsonObject();
+        final String jsonObject = readSizedString(maxLength);
         return new JsonMessage.RawJsonMessage(jsonObject);
     }
 

@@ -7,6 +7,10 @@ import net.minestom.server.entity.type.Vehicle;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.other.BoatMeta} instead.
+ */
+@Deprecated
 public class EntityBoat extends ObjectEntity implements Vehicle {
 
     public EntityBoat(Position spawnPosition) {

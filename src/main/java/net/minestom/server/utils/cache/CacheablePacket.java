@@ -1,5 +1,6 @@
 package net.minestom.server.utils.cache;
 
+import io.netty.buffer.ByteBuf;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,14 +23,14 @@ public interface CacheablePacket {
      * @return the temporary packet cache
      */
     @NotNull
-    TemporaryPacketCache getCache();
+    TemporaryCache<ByteBuf> getCache();
 
     /**
      * Gets the identifier of this packet.
      * <p>
      * Used to verify if this packet is already cached or not.
      *
-     * @return this packet identifier, null to do not retrieve the cache
+     * @return this packet identifier, null to prevent caching
      */
     @Nullable
     UUID getIdentifier();

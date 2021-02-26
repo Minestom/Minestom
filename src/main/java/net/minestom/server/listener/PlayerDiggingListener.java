@@ -154,14 +154,11 @@ public class PlayerDiggingListener {
         // Unverified block break, client is fully responsible
         final boolean result = instance.breakBlock(player, blockPosition);
 
-        final int updatedBlockId = result ? 0 : blockStateId;
-        final ClientPlayerDiggingPacket.Status status = result ?
-                ClientPlayerDiggingPacket.Status.FINISHED_DIGGING :
-                ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING;
+        final int updatedBlockId = instance.getBlockStateId(blockPosition);
 
         // Send acknowledge packet to allow or cancel the digging process
         sendAcknowledgePacket(player, blockPosition, updatedBlockId,
-                status, result);
+                ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, result);
 
         if (!result) {
             final boolean solid = Block.fromStateId((short) blockStateId).isSolid();

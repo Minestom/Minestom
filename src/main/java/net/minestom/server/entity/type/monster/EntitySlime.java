@@ -5,11 +5,20 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.type.Monster;
 import net.minestom.server.utils.Position;
+import org.jetbrains.annotations.NotNull;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.other.SlimeMeta} instead.
+ */
+@Deprecated
 public class EntitySlime extends EntityCreature implements Monster {
 
-    public EntitySlime(Position spawnPosition) {
-        super(EntityType.SLIME, spawnPosition);
+    public EntitySlime(@NotNull Position spawnPosition) {
+        this(EntityType.SLIME, spawnPosition);
+    }
+
+    EntitySlime(@NotNull EntityType type, @NotNull Position spawnPosition) {
+        super(type, spawnPosition);
         setSize(1);
     }
 

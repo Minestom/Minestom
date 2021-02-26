@@ -7,6 +7,7 @@ import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.metadata.arrow.ArrowMeta;
 import net.minestom.server.entity.type.Projectile;
 import net.minestom.server.entity.type.projectile.EntityArrow;
 import net.minestom.server.entity.type.projectile.EntitySpectralArrow;
@@ -54,7 +55,8 @@ public class ShootCommand extends Command {
                 break;
             case "colored":
                 projectile = new EntityArrow(player, pos);
-                ((EntityArrow) projectile).setColor(ThreadLocalRandom.current().nextInt());
+                var meta = (ArrowMeta) ((Entity) projectile).getEntityMeta();
+                meta.setColor(ThreadLocalRandom.current().nextInt());
                 break;
             default:
                 return;

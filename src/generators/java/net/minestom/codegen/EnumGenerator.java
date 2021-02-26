@@ -21,6 +21,7 @@ public class EnumGenerator implements CodeGenerator {
     private final String enumName;
     private ParameterSpec[] parameters;
     private List<Method> methods = new LinkedList<>();
+    private List<Field> fields = new LinkedList<>();
     private List<Instance> instances = new LinkedList<>();
     private List<Field> hardcodedFields = new LinkedList<>();
     private List<AnnotationSpec> annotations = new LinkedList<>();
@@ -50,6 +51,10 @@ public class EnumGenerator implements CodeGenerator {
         methods.add(new Method(true, name, signature, returnType, code, false));
     }
 
+    public void addStaticField(TypeName type, String name, String value) {
+        fields.add(new Field(type, name, value));
+    }
+
     public void addInstance(String name, Object... parameters) {
         instances.add(new Instance(name, parameters));
     }
@@ -58,17 +63,22 @@ public class EnumGenerator implements CodeGenerator {
         TypeSpec.Builder enumClass = TypeSpec.enumBuilder(ClassName.get(enumPackage, enumName)).addModifiers(Modifier.PUBLIC);
 
         enumClass.addJavadoc(COMMENT);
-        for(AnnotationSpec annotation : annotations) {
+        for (AnnotationSpec annotation : annotations) {
             enumClass.addAnnotation(annotation);
         }
 
-        for(Instance instance : instances) {
+        for (Instance instance : instances) {
             StringBuilder format = new StringBuilder();
             for (int i = 0; i < instance.parameters.length; i++) {
                 if (i != 0) {
                     format.append(", ");
                 }
-                format.append("$L");
+                if (instance.parameters[i] instanceof ConstructorLambda) {
+                    instance.parameters[i] = ((ConstructorLambda) instance.parameters[i]).getClassName();
+                    format.append("$T::new");
+                } else {
+                    format.append("$L");
+                }
             }
 
             // generate instances
@@ -76,7 +86,7 @@ public class EnumGenerator implements CodeGenerator {
             enumClass.addEnumConstant(instance.name, arguments);
         }
 
-        if(staticBlock != null) {
+        if (staticBlock != null) {
             enumClass.addStaticBlock(staticBlock);
         }
 
@@ -85,8 +95,15 @@ public class EnumGenerator implements CodeGenerator {
             // properties
             for (ParameterSpec property : parameters) {
                 enumClass.addField(FieldSpec.builder(property.type, property.name)
-                        .addModifiers(Modifier.PRIVATE)
+                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
                         .addAnnotations(property.annotations)
+                        .build());
+            }
+
+            for (Field field : fields) {
+                enumClass.addField(FieldSpec.builder(field.type, field.name)
+                        .initializer("$L", field.value)
+                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC)
                         .build());
             }
 
@@ -121,10 +138,10 @@ public class EnumGenerator implements CodeGenerator {
             }
             methodBuilder.addModifiers(Modifier.PUBLIC);
             methodBuilder.returns(m.returnType);
-            if(m.vararg) {
+            if (m.vararg) {
                 methodBuilder.varargs(true);
             }
-            for(ParameterSpec parameter : m.signature) {
+            for (ParameterSpec parameter : m.signature) {
                 methodBuilder.addParameter(parameter);
             }
 
@@ -134,7 +151,6 @@ public class EnumGenerator implements CodeGenerator {
 
             enumClass.addMethod(methodBuilder.build());
         }
-
         JavaFile file = JavaFile.builder(enumPackage, enumClass.build())
                 .skipJavaLangImports(true)
                 .indent("    ")

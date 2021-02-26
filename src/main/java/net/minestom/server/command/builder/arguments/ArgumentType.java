@@ -79,6 +79,11 @@ public class ArgumentType {
         return new ArgumentCommand(id);
     }
 
+    @SuppressWarnings("rawtypes")
+    public static <E extends Enum> ArgumentEnum<E> Enum(@NotNull String id, @NotNull Class<E> enumClass) {
+        return new ArgumentEnum<>(id, enumClass);
+    }
+
     // Minecraft specific arguments
 
     public static ArgumentColor Color(@NotNull String id) {

@@ -6,6 +6,10 @@ import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.type.Constructable;
 import net.minestom.server.utils.Position;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.golem.IronGolemMeta} instead.
+ */
+@Deprecated
 public class EntityIronGolem extends EntityCreature implements Constructable {
 
     public EntityIronGolem(Position spawnPosition) {

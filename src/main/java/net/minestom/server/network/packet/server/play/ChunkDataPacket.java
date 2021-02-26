@@ -15,7 +15,7 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.cache.CacheablePacket;
-import net.minestom.server.utils.cache.TemporaryPacketCache;
+import net.minestom.server.utils.cache.TemporaryCache;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +27,7 @@ import java.util.UUID;
 public class ChunkDataPacket implements ServerPacket, CacheablePacket {
 
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
-    private static final TemporaryPacketCache CACHE = new TemporaryPacketCache(10000L);
+    private static final TemporaryCache<ByteBuf> CACHE = new TemporaryCache<>(10000L);
 
     public boolean fullChunk;
     public Biome[] biomes;
@@ -139,7 +139,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
 
     @NotNull
     @Override
-    public TemporaryPacketCache getCache() {
+    public TemporaryCache<ByteBuf> getCache() {
         return CACHE;
     }
 

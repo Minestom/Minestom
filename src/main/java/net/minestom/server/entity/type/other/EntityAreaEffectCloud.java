@@ -8,13 +8,17 @@ import net.minestom.server.utils.binary.BinaryWriter;
 
 import java.util.function.Consumer;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.other.AreaEffectCloudMeta} instead.
+ */
+@Deprecated
 public class EntityAreaEffectCloud extends ObjectEntity {
 
     public Consumer<BinaryWriter> particleDataConsumer;
     private float radius;
     private int color;
     private boolean ignoreRadius;
-    private Particle particle;
+    private Particle particleType;
 
     public EntityAreaEffectCloud(Position spawnPosition) {
         super(EntityType.AREA_EFFECT_CLOUD, spawnPosition);
@@ -95,11 +99,11 @@ public class EntityAreaEffectCloud extends ObjectEntity {
     }
 
     public Particle getParticle() {
-        return particle;
+        return particleType;
     }
 
-    public void setParticle(Particle particle) {
-        this.particle = particle;
+    public void setParticle(Particle particleType) {
+        this.particleType = particleType;
         //sendMetadataIndex(10);
     }
 

@@ -6,6 +6,10 @@ import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.type.Monster;
 import net.minestom.server.utils.Position;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.monster.BlazeMeta} instead.
+ */
+@Deprecated
 public class EntityBlaze extends EntityCreature implements Monster {
 
     public EntityBlaze(Position spawnPosition) {
