@@ -33,13 +33,15 @@ public class ChickenCreature extends EntityChicken {
         );
 
         // Another way to register previously added EntityAIGroup, using specialized builder:
-//        newAIGroupBuilder()
-//                .addGoalSelector(new DoNothingGoal(this, 500, .1F))
-//                .addGoalSelector(new MeleeAttackGoal(this, 500, 2, TimeUnit.MILLISECOND))
-//                .addGoalSelector(new RandomStrollGoal(this, 2))
-//                .addTargetSelector(new LastEntityDamagerTarget(this, 15))
-//                .addTargetSelector(new ClosestEntityTarget(this, 15, LivingEntity.class))
-//                .build();
+//        addAIGroup(
+//                newAIGroupBuilder()
+//                        .addGoalSelector(new DoNothingGoal(this, 500, .1F))
+//                        .addGoalSelector(new MeleeAttackGoal(this, 500, 2, TimeUnit.MILLISECOND))
+//                        .addGoalSelector(new RandomStrollGoal(this, 2))
+//                        .addTargetSelector(new LastEntityDamagerTarget(this, 15))
+//                        .addTargetSelector(new ClosestEntityTarget(this, 15, LivingEntity.class))
+//                        .build()
+//        );
 
         getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1f);
 

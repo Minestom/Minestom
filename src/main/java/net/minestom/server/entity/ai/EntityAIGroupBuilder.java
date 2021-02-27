@@ -1,17 +1,8 @@
 package net.minestom.server.entity.ai;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class EntityAIGroupBuilder {
 
-    private final EntityAI ai;
-    private final List<GoalSelector> goalSelectors = new ArrayList<>();
-    private final List<TargetSelector> targetSelectors = new ArrayList<>();
-
-    EntityAIGroupBuilder(EntityAI ai) {
-        this.ai = ai;
-    }
+    private final EntityAIGroup group = new EntityAIGroup();
 
     /**
      * Adds {@link GoalSelector} to the list of goal selectors of the building {@link EntityAIGroup}.
@@ -21,7 +12,7 @@ public class EntityAIGroupBuilder {
      * @return this builder.
      */
     public EntityAIGroupBuilder addGoalSelector(GoalSelector goalSelector) {
-        this.goalSelectors.add(goalSelector);
+        this.group.getGoalSelectors().add(goalSelector);
         return this;
     }
 
@@ -33,15 +24,17 @@ public class EntityAIGroupBuilder {
      * @return this builder.
      */
     public EntityAIGroupBuilder addTargetSelector(TargetSelector targetSelector) {
-        this.targetSelectors.add(targetSelector);
+        this.group.getTargetSelectors().add(targetSelector);
         return this;
     }
 
     /**
-     * Creates new {@link EntityAIGroup} and adds it to the owning {@link EntityAI} of this builder.
+     * Creates new {@link EntityAIGroup}.
+     *
+     * @return new {@link EntityAIGroup}.
      */
-    public void build() {
-        this.ai.addAIGroup(this.goalSelectors, this.targetSelectors);
+    public EntityAIGroup build() {
+        return this.group;
     }
 
 }

@@ -50,7 +50,7 @@ public interface EntityAI {
      * @return a builder to create and add an {@link EntityAIGroup}.
      */
     default EntityAIGroupBuilder newAIGroupBuilder() {
-        return new EntityAIGroupBuilder(this);
+        return new EntityAIGroupBuilder();
     }
 
     default void aiTick(long time) {
