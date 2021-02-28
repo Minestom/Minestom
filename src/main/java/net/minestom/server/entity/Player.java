@@ -49,6 +49,7 @@ import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.stat.PlayerStatistic;
+import net.minestom.server.tab.TabList;
 import net.minestom.server.utils.*;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
@@ -141,6 +142,9 @@ public class Player extends LivingEntity implements CommandSender {
     private Inventory openInventory;
     // Used internally to allow the closing of inventory within the inventory listener
     private boolean didCloseInventory;
+
+    //TODO move to more reasonable spot?
+    private TabList tabList;
 
     private byte heldSlot;
 
@@ -1319,6 +1323,26 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
+     * Gets the TabList the player is viewing
+     *
+     * @return the viewed {@link TabList}
+     */
+    @NotNull
+    public TabList getTabList() {
+        return tabList;
+    }
+
+    /**
+     * Sets the TabList the player is viewing.
+     * This should not be directly called and instead you should call {@link TabList#addPlayer(Player)}
+     *
+     * @param tabList
+     */
+    public void setTabList(@NotNull TabList tabList) {
+        this.tabList = tabList;
+    }
+
+    /**
      * Calls an {@link ItemDropEvent} with a specified item.
      * <p>
      * Returns false if {@code item} is air.
@@ -1716,9 +1740,7 @@ public class Player extends LivingEntity implements CommandSender {
         if (isActive()) {
             sendChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId());
 
-            PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE);
-            infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateGamemode(getUuid(), gameMode));
-            sendPacketToViewersAndSelf(infoPacket);
+            this.tabList.updateGamemode(this);
         }
     }
 
@@ -2191,9 +2213,7 @@ public class Player extends LivingEntity implements CommandSender {
      */
     public void refreshLatency(int latency) {
         this.latency = latency;
-        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY);
-        playerInfoPacket.playerInfos.add(new PlayerInfoPacket.UpdateLatency(getUuid(), latency));
-        sendPacketToViewersAndSelf(playerInfoPacket);
+        this.tabList.updateLatency(this);
     }
 
     public void refreshOnGround(boolean onGround) {
