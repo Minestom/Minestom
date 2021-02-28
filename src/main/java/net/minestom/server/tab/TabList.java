@@ -36,6 +36,15 @@ public class TabList {
         return new CopyOnWriteArrayList<>(this.players);
     }
 
+    /**
+     * Gets all the players that are viewing this TabList
+     *
+     * @return A copied Set of players that are viewing the TabList, or empty Set if none
+     */
+    @NotNull
+    public Set<Player> getViewers() {
+        return new CopyOnWriteArraySet<>(this.viewers);
+    }
 
     /**
      * The TabList header
@@ -52,6 +61,12 @@ public class TabList {
      * @param header the new header content
      */
     public void setHeader(@Nullable JsonMessage header) {
+        PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket();
+        playerListHeaderAndFooterPacket.footer = this.footer;
+        playerListHeaderAndFooterPacket.header = header;
+
+        PacketUtils.sendGroupedPacket(this.viewers, playerListHeaderAndFooterPacket);
+
         this.header = header;
     }
 
@@ -75,14 +90,11 @@ public class TabList {
     public void setFooter(@Nullable JsonMessage footer) {
         PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket();
         playerListHeaderAndFooterPacket.footer = footer;
-        playerListHeaderAndFooterPacket.header = header;
+        playerListHeaderAndFooterPacket.header = this.header;
 
-        //prolly do seprate like loop through all the players in the connectionhandler and update it on set intervals..
-
+        PacketUtils.sendGroupedPacket(this.viewers, playerListHeaderAndFooterPacket);
+        
         this.footer = footer;
-        MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(player -> {
-            // Something like this somewhere...
-        });
     }
 
     /**
@@ -131,30 +143,6 @@ public class TabList {
         this.players.remove(player);
     }
 
-    /**
-     * Updates a player's latency for all viewers of the tablist
-     *
-     * @param player The player to update latency for
-     */
-    public void updateLatency(Player player) {
-        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY);
-        playerInfoPacket.playerInfos.add(new PlayerInfoPacket.UpdateLatency(player.getUuid(), player.getLatency()));
-
-        PacketUtils.sendGroupedPacket(this.viewers, playerInfoPacket);
-    }
-
-    /**
-     * Updates a player's gamemode for all viewers of the tablist
-     *
-     * @param player The player to update the gamemode info for
-     */
-    public void updateGamemode(Player player) {
-        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE);
-        playerInfoPacket.playerInfos.add(new PlayerInfoPacket.UpdateGamemode(player.getUuid(), player.getGameMode()));
-
-        PacketUtils.sendGroupedPacket(this.viewers, playerInfoPacket);
-
-    }
 
     /**
      * Gets the last time the tablist was updated (ping & header & footer)
