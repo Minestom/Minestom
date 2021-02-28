@@ -214,29 +214,11 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
     }
 
     /**
-     * Adds the block to the list of blocks that
-     * this item can be placed on.
-     * @param block the block's namespaceID
-     */
-    public void addCanPlaceOn(String block) {
-        canPlaceOn.add(block);
-    }
-
-    /**
-     * Removes the block from the set of blocks that
-     * this item can be placed on.
-     * @param block the block's namespaceID
-     */
-    public void removeCanPlaceOn(String block) {
-        canPlaceOn.remove(block);
-    }
-
-    /**
      * Gets the blocks that this item can be placed on
-     * @return an unmodifiable {@link Set} of blocks
+     * @return the {@link Set} of blocks
      */
     public Set<String> getCanPlaceOn() {
-        return Collections.unmodifiableSet(canPlaceOn);
+        return canPlaceOn;
     }
 
     /**
@@ -250,27 +232,11 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
     }
 
     /**
-     * Adds the block to the set of blocks that can be destroyed by this item.
-     * @param block the block's namespaceID
-     */
-    public void addCanDestroy(String block) {
-        canDestroy.add(block);
-    }
-
-    /**
-     * Removes the block from the set of blocks that can be destroyed by this item.
-     * @param block the block's namespaceID
-     */
-    public void removeCanDestroy(String block) {
-        canDestroy.remove(block);
-    }
-
-    /**
      * Gets the blocks that this item can destroy
-     * @return an unmodifiable {@link Set} of blocks
+     * @return the {@link Set} of blocks
      */
     public Set<String> getCanDestroy() {
-        return Collections.unmodifiableSet(canDestroy);
+        return canDestroy;
     }
 
     /**

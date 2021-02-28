@@ -225,14 +225,14 @@ public final class NBTUtils {
         {
             if (nbt.containsKey("CanPlaceOn")) {
                 NBTList<NBTString> canPlaceOn = nbt.getList("CanPlaceOn");
-                canPlaceOn.forEach(x -> item.addCanPlaceOn(x.getValue()));
+                canPlaceOn.forEach(x -> item.getCanPlaceOn().add(x.getValue()));
             }
         }
         //CanDestroy
         {
             if (nbt.containsKey("CanDestroy")) {
                 NBTList<NBTString> canPlaceOn = nbt.getList("CanDestroy");
-                canPlaceOn.forEach(x -> item.addCanDestroy(x.getValue()));
+                canPlaceOn.forEach(x -> item.getCanDestroy().add(x.getValue()));
             }
         }
     }
