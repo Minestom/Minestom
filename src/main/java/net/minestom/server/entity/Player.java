@@ -1324,10 +1324,11 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Gets the TabList the player is viewing
+     * Will be null if the {@link net.minestom.server.tab.TabListPopulator} has not assigned a TabList
      *
      * @return the viewed {@link TabList}
      */
-    @NotNull
+    @Nullable
     public TabList getTabList() {
         return tabList;
     }

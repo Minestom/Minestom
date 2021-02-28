@@ -59,13 +59,8 @@ public class TabList {
      * @param header the new header content
      */
     public void setHeader(@Nullable JsonMessage header) {
-        PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket();
-        playerListHeaderAndFooterPacket.footer = this.footer;
-        playerListHeaderAndFooterPacket.header = header;
-
-        PacketUtils.sendGroupedPacket(this.viewers, playerListHeaderAndFooterPacket);
-
         this.header = header;
+        PacketUtils.sendGroupedPacket(this.viewers, this.generateHeaderAndFooterPacket());
     }
 
     /**
@@ -86,13 +81,15 @@ public class TabList {
      * @param footer the new footer content
      */
     public void setFooter(@Nullable JsonMessage footer) {
-        PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket();
-        playerListHeaderAndFooterPacket.footer = footer;
-        playerListHeaderAndFooterPacket.header = this.header;
-
-        PacketUtils.sendGroupedPacket(this.viewers, playerListHeaderAndFooterPacket);
-
         this.footer = footer;
+        PacketUtils.sendGroupedPacket(this.viewers, this.generateHeaderAndFooterPacket());
+    }
+
+    private PlayerListHeaderAndFooterPacket generateHeaderAndFooterPacket() {
+        PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket();
+        playerListHeaderAndFooterPacket.footer = this.footer;
+        playerListHeaderAndFooterPacket.header = this.header;
+        return playerListHeaderAndFooterPacket;
     }
 
     /**
@@ -142,14 +139,17 @@ public class TabList {
     }
 
     /**
-     * Changes a player's tab list instance to this class and removes their old tablist instance.
+     * Changes a player's tab list instance to this class and removes their old TabList instance.
      *
-     * @param player the player to change the tablist for
+     * @param player the player to change the TabList for
      */
     public void addViewer(@NotNull Player player) {
-        player.getTabList().removeViewer(player);
+        if (player.getTabList() != null) {
+            player.getTabList().removeViewer(player);
+        }
         this.viewers.add(player);
         player.setTabList(this);
+        player.sendPacketToViewersAndSelf(this.generateHeaderAndFooterPacket());
     }
 
     protected void removeViewer(@NotNull Player player) {

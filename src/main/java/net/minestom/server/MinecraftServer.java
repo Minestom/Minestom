@@ -653,9 +653,9 @@ public final class MinecraftServer {
     }
 
     /**
-     * Gets the manager for handling tablist and tablist updates.
+     * Gets the manager for handling TabList and TabList updates.
      *
-     * @return the tablist manager
+     * @return the TabList manager
      */
     public static TabListManager getTabListManager() {
         checkInitStatus(tabListManager);

@@ -18,4 +18,9 @@ public class DefaultTabPopulator implements TabListPopulator {
         this.defaultTabList.addPlayer(player);
         player.setTabList(this.defaultTabList);
     }
+
+    //TODO document
+    public TabList getDefaultTabList() {
+        return this.defaultTabList;
+    }
 }

@@ -37,6 +37,10 @@ public class TabListManager {
         return this.tabLists;
     }
 
+    public TabListPopulator getTabListPopulator() {
+        return this.tabListPopulator;
+    }
+
     public void setTabListPopulator(@NotNull TabListPopulator tabListPopulator) {
         this.tabListPopulator = tabListPopulator;
     }
