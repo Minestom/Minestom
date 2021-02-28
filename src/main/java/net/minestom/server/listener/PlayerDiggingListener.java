@@ -1,5 +1,6 @@
 package net.minestom.server.listener;
 
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.player.PlayerStartDiggingEvent;
@@ -10,6 +11,7 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
+import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgePlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
@@ -17,6 +19,7 @@ import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -36,8 +39,23 @@ public class PlayerDiggingListener {
             return;
 
         if (status == ClientPlayerDiggingPacket.Status.STARTED_DIGGING) {
-
             final short blockStateId = instance.getBlockStateId(blockPosition);
+
+            //Check if the player is allowed to break blocks based on their game mode
+            if (player.getGameMode() == GameMode.SPECTATOR) {
+                sendAcknowledgePacket(player, blockPosition, blockStateId,
+                        ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
+                return; //Spectators can't break blocks
+            } else if (player.getGameMode() == GameMode.ADVENTURE) {
+                //Check if the item can break the block with the current item
+                ItemStack itemInMainHand = player.getItemInMainHand();
+                if (!itemInMainHand.canDestroy(instance.getBlock(blockPosition).getName())) {
+                    sendAcknowledgePacket(player, blockPosition, blockStateId,
+                            ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
+                    return;
+                }
+            }
+
             final boolean instantBreak = player.isCreative() ||
                     player.isInstantBreak() ||
                     Block.fromStateId(blockStateId).breaksInstantaneously();
