@@ -5,6 +5,10 @@ import net.minestom.server.tab.TabList;
 import net.minestom.server.tab.TabListManager;
 import net.minestom.server.tab.TabListPopulator;
 
+/**
+ * Creates a single {@link TabList} instance that will be used for all players.
+ * All players are viewers & displayed on the TabList.
+ */
 public class DefaultTabPopulator implements TabListPopulator {
     private final TabList defaultTabList;
 
@@ -19,7 +23,11 @@ public class DefaultTabPopulator implements TabListPopulator {
         player.setTabList(this.defaultTabList);
     }
 
-    //TODO document
+    /**
+     * Gets the TabList assigned to every user on join when this populator is active
+     *
+     * @return assigned {@link TabList}
+     */
     public TabList getDefaultTabList() {
         return this.defaultTabList;
     }

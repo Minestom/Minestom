@@ -33,14 +33,29 @@ public class TabListManager {
         return tablist;
     }
 
+    /**
+     * Gets a copy of the registered TabLists
+     *
+     * @return the registered {@link TabList}s
+     */
     public Set<TabList> getTabLists() {
-        return this.tabLists;
+        return new CopyOnWriteArraySet<>(this.tabLists);
     }
 
+    /**
+     * Gets the TabListPopulator used to determine what TabList users are displayed on join
+     *
+     * @return the currently determining {@link TabListPopulator}
+     */
     public TabListPopulator getTabListPopulator() {
         return this.tabListPopulator;
     }
 
+    /**
+     * Sets the TabListPopulator used to determine what TabList users are displayed on join
+     *
+     * @param tabListPopulator the new {@link TabListPopulator} instance
+     */
     public void setTabListPopulator(@NotNull TabListPopulator tabListPopulator) {
         this.tabListPopulator = tabListPopulator;
     }
