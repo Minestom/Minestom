@@ -11,7 +11,6 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
-import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgePlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
@@ -19,7 +18,6 @@ import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

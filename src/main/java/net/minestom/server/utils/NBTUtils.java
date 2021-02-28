@@ -387,7 +387,7 @@ public final class NBTUtils {
             Set<String> canDestroy = itemStack.getCanDestroy();
             if (canDestroy.size() > 0) {
                 NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-                canDestroy.forEach(x -> list.add(new NBTString(x.toString())));
+                canDestroy.forEach(x -> list.add(new NBTString(x)));
                 itemNBT.set("CanDestroy", list);
             }
         }
@@ -397,7 +397,7 @@ public final class NBTUtils {
             Set<String> canPlaceOn = itemStack.getCanPlaceOn();
             if (canPlaceOn.size() > 0) {
                 NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-                canPlaceOn.forEach(x -> list.add(new NBTString(x.toString())));
+                canPlaceOn.forEach(x -> list.add(new NBTString(x)));
                 itemNBT.set("CanPlaceOn", list);
             }
         }
