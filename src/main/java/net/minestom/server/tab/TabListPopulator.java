@@ -16,4 +16,6 @@ public interface TabListPopulator {
      * @param player the player the TabList will be set for
      */
     void onJoin(Player player);
+
+    void onLeave(Player player);
 }

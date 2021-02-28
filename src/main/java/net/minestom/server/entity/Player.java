@@ -268,7 +268,7 @@ public class Player extends LivingEntity implements CommandSender {
         callEvent(PlayerSkinInitEvent.class, skinInitEvent);
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
-        playerConnection.sendPacket(getAddPlayerToList());
+        //playerConnection.sendPacket(getAddPlayerToList());
 
         // Commands start
         {
@@ -647,11 +647,11 @@ public class Player extends LivingEntity implements CommandSender {
         }
 
         PlayerConnection viewerConnection = player.getPlayerConnection();
-        viewerConnection.sendPacket(getRemovePlayerToList());
+        //viewerConnection.sendPacket(getRemovePlayerToList());
 
         // Team
         if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) {// If team only contains "this" player
-            viewerConnection.sendPacket(this.getTeam().createTeamDestructionPacket());
+         //   viewerConnection.sendPacket(this.getTeam().createTeamDestructionPacket());
         }
         return true;
     }
@@ -1250,27 +1250,42 @@ public class Player extends LivingEntity implements CommandSender {
         DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
         destroyEntitiesPacket.entityIds = new int[]{getEntityId()};
 
-        final PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
-        final PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
+        //final PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
+        //final PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
 
         RespawnPacket respawnPacket = new RespawnPacket();
         respawnPacket.dimensionType = getDimensionType();
         respawnPacket.gameMode = getGameMode();
         respawnPacket.isFlat = levelFlat;
 
-        playerConnection.sendPacket(removePlayerPacket);
+        Set<TabList> displayedOn = new HashSet<>();
+        for (TabList tabList : MinecraftServer.getTabListManager().getTabLists()) {
+            if (tabList.getDisplayedPlayers().contains(this)) {
+                displayedOn.add(tabList);
+                tabList.removeDisplayedPlayer(this);
+            }
+        }
+
+        //playerConnection.sendPacket(removePlayerPacket);
         playerConnection.sendPacket(destroyEntitiesPacket);
         playerConnection.sendPacket(respawnPacket);
-        playerConnection.sendPacket(addPlayerPacket);
 
-        {
-            // Remove player
-            sendPacketToViewers(removePlayerPacket);
-            sendPacketToViewers(destroyEntitiesPacket);
-
-            // Show player again
-            getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
+        for (TabList tabList : MinecraftServer.getTabListManager().getTabLists()) {
+            tabList.addDisplayedPlayer(this);
+            if (!displayedOn.contains(tabList)) {
+                tabList.removeDisplayedPlayer(this);
+            }
         }
+        //playerConnection.sendPacket(addPlayerPacket);
+
+//        {
+//            // Remove player
+//            sendPacketToViewers(removePlayerPacket);
+//            sendPacketToViewers(destroyEntitiesPacket);
+//
+//            // Show player again
+//            getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
+//        }
 
         getInventory().update();
         teleport(getPosition());
@@ -2433,7 +2448,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param connection the connection to show the player to
      */
     protected void showPlayer(@NotNull PlayerConnection connection) {
-        connection.sendPacket(getAddPlayerToList());
+        //connection.sendPacket(getAddPlayerToList());
 
         connection.sendPacket(getEntityType().getSpawnType().getSpawnPacket(this));
         connection.sendPacket(getVelocityPacket());

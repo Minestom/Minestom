@@ -2,6 +2,7 @@ package net.minestom.server.tab;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.network.packet.server.play.PlayerInfoPacket;
 import net.minestom.server.tab.populators.DefaultTabPopulator;
@@ -20,6 +21,7 @@ public class TabListManager {
     public TabListManager() {
         this.tabListPopulator = new DefaultTabPopulator(this);
         MinecraftServer.getGlobalEventHandler().addEventCallback(PlayerLoginEvent.class, event -> this.tabListPopulator.onJoin(event.getPlayer()));
+        MinecraftServer.getGlobalEventHandler().addEventCallback(PlayerDisconnectEvent.class, event -> this.tabListPopulator.onLeave(event.getPlayer()));
     }
 
     /**
@@ -34,12 +36,12 @@ public class TabListManager {
     }
 
     /**
-     * Gets a copy of the registered TabLists
+     * Gets the registered TabLists
      *
      * @return the registered {@link TabList}s
      */
     public Set<TabList> getTabLists() {
-        return new CopyOnWriteArraySet<>(this.tabLists);
+        return this.tabLists;
     }
 
     /**

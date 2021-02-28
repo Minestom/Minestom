@@ -19,8 +19,14 @@ public class DefaultTabPopulator implements TabListPopulator {
     @Override
     public void onJoin(Player player) {
         this.defaultTabList.addViewer(player);
-        this.defaultTabList.addPlayer(player);
+        this.defaultTabList.addDisplayedPlayer(player);
         player.setTabList(this.defaultTabList);
+    }
+
+    @Override
+    public void onLeave(Player player) {
+        this.defaultTabList.removeDisplayedPlayer(player);
+        this.defaultTabList.removeViewer(player);
     }
 
     /**

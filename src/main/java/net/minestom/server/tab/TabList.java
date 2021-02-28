@@ -101,7 +101,7 @@ public class TabList {
      *
      * @param player the player to be added
      */
-    public void addPlayer(Player player) {
+    public void addDisplayedPlayer(Player player) {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
 
         PlayerInfoPacket.AddPlayer addPlayer =
@@ -126,11 +126,41 @@ public class TabList {
     }
 
     /**
+     * Adds players to be displayed on this TabList
+     *
+     * @param players the players to be added
+     */
+    public void addDisplayedPlayers(Player... players) {
+        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
+
+        for (Player player : players) {
+            PlayerInfoPacket.AddPlayer addPlayer =
+                    new PlayerInfoPacket.AddPlayer(player.getUuid(), player.getUsername(), player.getGameMode(), player.getLatency());
+            addPlayer.displayName = player.getDisplayName();
+
+            // Skin support
+            if (player.getSkin() != null) {
+                final String textures = player.getSkin().getTextures();
+                final String signature = player.getSkin().getSignature();
+
+                PlayerInfoPacket.AddPlayer.Property prop =
+                        new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
+                addPlayer.properties.add(prop);
+            }
+
+            playerInfoPacket.playerInfos.add(addPlayer);
+            this.displayedPlayers.add(player);
+        }
+
+        PacketUtils.sendGroupedPacket(this.viewers, playerInfoPacket);
+    }
+
+    /**
      * Removes a player from being displayed on this TabList
      *
      * @param player the player to be removed
      */
-    public void removePlayer(Player player) {
+    public void removeDisplayedPlayer(Player player) {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
 
         PlayerInfoPacket.RemovePlayer removePlayer =
@@ -153,10 +183,32 @@ public class TabList {
         }
         this.viewers.add(player);
         player.setTabList(this);
+
+        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
+
+        for (Player playa : this.displayedPlayers) {
+            PlayerInfoPacket.AddPlayer addPlayer =
+                    new PlayerInfoPacket.AddPlayer(playa.getUuid(), playa.getUsername(), playa.getGameMode(), playa.getLatency());
+            addPlayer.displayName = playa.getDisplayName();
+
+            // Skin support
+            if (playa.getSkin() != null) {
+                final String textures = playa.getSkin().getTextures();
+                final String signature = playa.getSkin().getSignature();
+
+                PlayerInfoPacket.AddPlayer.Property prop =
+                        new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
+                addPlayer.properties.add(prop);
+            }
+
+            playerInfoPacket.playerInfos.add(addPlayer);
+            //this.displayedPlayers.add(playa);
+        }
+        player.getPlayerConnection().sendPacket(playerInfoPacket);
         player.sendPacketToViewersAndSelf(this.generateHeaderAndFooterPacket());
     }
 
-    protected void removeViewer(@NotNull Player player) {
+    public void removeViewer(@NotNull Player player) {
         this.viewers.remove(player);
     }
 
@@ -170,7 +222,7 @@ public class TabList {
      * @param gameMode The gamemode to send for the specified player
      * @throws IllegalStateException if the player is not on the TabList or the TabList is set to automatically update gamemodes
      */
-    public void setFakeGamemode(Player player, GameMode gameMode) {
+    public void setDisplayedGamemode(Player player, GameMode gameMode) {
         if (this.gamemodeUpdates)
             throw new IllegalStateException("Cannot set fake gamemode unless gamemodeUpdates is set to false");
         if (!this.displayedPlayers.contains(player))
@@ -189,7 +241,7 @@ public class TabList {
      * @param latency The latency to send for the specified player
      * @throws IllegalStateException if the player is not on the TabList or the TabList is set to automatically update latency
      */
-    public void setFakeLatency(Player player, int latency) {
+    public void setDisplayedPing(Player player, int latency) {
         if (this.latencyUpdates)
             throw new IllegalStateException("Cannot set fake latency unless latencyUpdates is set to false");
         if (!this.displayedPlayers.contains(player))
