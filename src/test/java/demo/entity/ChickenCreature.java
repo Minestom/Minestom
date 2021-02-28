@@ -3,6 +3,7 @@ package demo.entity;
 import com.google.common.collect.ImmutableList;
 import net.minestom.server.attribute.Attributes;
 import net.minestom.server.entity.LivingEntity;
+import net.minestom.server.entity.ai.EntityAIGroupBuilder;
 import net.minestom.server.entity.ai.goal.DoNothingGoal;
 import net.minestom.server.entity.ai.goal.MeleeAttackGoal;
 import net.minestom.server.entity.ai.goal.RandomStrollGoal;
@@ -34,7 +35,7 @@ public class ChickenCreature extends EntityChicken {
 
         // Another way to register previously added EntityAIGroup, using specialized builder:
 //        addAIGroup(
-//                newAIGroupBuilder()
+//                new EntityAIGroupBuilder()
 //                        .addGoalSelector(new DoNothingGoal(this, 500, .1F))
 //                        .addGoalSelector(new MeleeAttackGoal(this, 500, 2, TimeUnit.MILLISECOND))
 //                        .addGoalSelector(new RandomStrollGoal(this, 2))
