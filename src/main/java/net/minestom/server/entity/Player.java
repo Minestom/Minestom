@@ -1334,7 +1334,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Sets the TabList the player is viewing.
-     * This should not be directly called and instead you should call {@link TabList#addPlayer(Player)}
+     * This should not be directly called and instead you should call {@link TabList#addViewer(Player)}
      *
      * @param tabList
      */

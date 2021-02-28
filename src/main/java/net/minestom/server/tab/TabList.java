@@ -1,6 +1,5 @@
 package net.minestom.server.tab;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.PlayerInfoPacket;
@@ -20,8 +19,6 @@ public class TabList {
     private Set<Player> viewers = new CopyOnWriteArraySet<>();
     private JsonMessage header;
     private JsonMessage footer;
-
-    private long lastUpdate = System.currentTimeMillis();
 
     TabList() {
     }
@@ -51,6 +48,7 @@ public class TabList {
      *
      * @return the content of the header
      */
+    @Nullable
     public JsonMessage getHeader() {
         return this.header;
     }
@@ -93,7 +91,7 @@ public class TabList {
         playerListHeaderAndFooterPacket.header = this.header;
 
         PacketUtils.sendGroupedPacket(this.viewers, playerListHeaderAndFooterPacket);
-        
+
         this.footer = footer;
     }
 
@@ -143,19 +141,18 @@ public class TabList {
         this.players.remove(player);
     }
 
-
     /**
-     * Gets the last time the tablist was updated (ping, header and footer)
+     * Changes a player's tab list instance to this class and removes their old tablist instance.
      *
-     * @return a long of the unix millis then the update method was last called
+     * @param player the player to change the tablist for
      */
-    public long getLastUpdate() {
-        return lastUpdate;
+    public void addViewer(@NotNull Player player) {
+        player.getTabList().removeViewer(player);
+        this.viewers.add(player);
+        player.setTabList(this);
     }
 
-    public void update() {
-        this.lastUpdate = System.currentTimeMillis();
+    protected void removeViewer(@NotNull Player player) {
+        this.viewers.remove(player);
     }
-
-
 }
