@@ -16,7 +16,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 public class TabList {
 
-    private final List<Player> players = new CopyOnWriteArrayList<>();
+    private final List<Player> displayedPlayers = new CopyOnWriteArrayList<>();
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
     private JsonMessage header;
     private JsonMessage footer;
@@ -33,8 +33,8 @@ public class TabList {
      * @return A copied List of players that are displayed on the TabList, or empty List if none
      */
     @NotNull
-    public List<Player> getPlayers() {
-        return new CopyOnWriteArrayList<>(this.players);
+    public List<Player> getDisplayedPlayers() {
+        return new CopyOnWriteArrayList<>(this.displayedPlayers);
     }
 
     /**
@@ -122,7 +122,7 @@ public class TabList {
 
         PacketUtils.sendGroupedPacket(this.viewers, playerInfoPacket);
 
-        this.players.add(player);
+        this.displayedPlayers.add(player);
     }
 
     /**
@@ -139,7 +139,7 @@ public class TabList {
         playerInfoPacket.playerInfos.add(removePlayer);
 
         PacketUtils.sendGroupedPacket(this.viewers, playerInfoPacket);
-        this.players.remove(player);
+        this.displayedPlayers.remove(player);
     }
 
     /**
@@ -173,7 +173,7 @@ public class TabList {
     public void setFakeGamemode(Player player, GameMode gameMode) {
         if (this.gamemodeUpdates)
             throw new IllegalStateException("Cannot set fake gamemode unless gamemodeUpdates is set to false");
-        if (!this.players.contains(player))
+        if (!this.displayedPlayers.contains(player))
             throw new IllegalStateException("Cannot set fake gamemode for a player not displayed on the TabList");
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE);
         playerInfoPacket.playerInfos.add(new PlayerInfoPacket.UpdateGamemode(player.getUuid(), gameMode));
@@ -192,7 +192,7 @@ public class TabList {
     public void setFakeLatency(Player player, int latency) {
         if (this.latencyUpdates)
             throw new IllegalStateException("Cannot set fake latency unless latencyUpdates is set to false");
-        if (!this.players.contains(player))
+        if (!this.displayedPlayers.contains(player))
             throw new IllegalStateException("Cannot set fake latency for a player not displayed on the TabList");
 
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY);
