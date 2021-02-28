@@ -145,7 +145,7 @@ public class TabList {
 
 
     /**
-     * Gets the last time the tablist was updated (ping & header & footer)
+     * Gets the last time the tablist was updated (ping, header and footer)
      *
      * @return a long of the unix millis then the update method was last called
      */

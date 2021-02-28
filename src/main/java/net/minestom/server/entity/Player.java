@@ -1739,8 +1739,7 @@ public class Player extends LivingEntity implements CommandSender {
         // Condition to prevent sending the packets before spawning the player
         if (isActive()) {
             sendChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId());
-
-            this.tabList.updateGamemode(this);
+            MinecraftServer.getTabListManager().updateGamemode(this);
         }
     }
 
@@ -2213,7 +2212,7 @@ public class Player extends LivingEntity implements CommandSender {
      */
     public void refreshLatency(int latency) {
         this.latency = latency;
-        this.tabList.updateLatency(this);
+        MinecraftServer.getTabListManager().updateLatency(this);
     }
 
     public void refreshOnGround(boolean onGround) {
