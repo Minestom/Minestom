@@ -191,7 +191,9 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
                     itemStack.attributes.equals(attributes) &&
                     itemStack.hideFlag == hideFlag &&
                     sameMeta &&
-                    dataCheck;
+                    dataCheck &&
+                    itemStack.canPlaceOn.equals(canPlaceOn) &&
+                    itemStack.canDestroy.equals(canDestroy);
         }
     }
 
@@ -632,8 +634,8 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
                 customModelData != 0 ||
                 (itemMeta != null && itemMeta.hasNbt()) ||
                 (data != null && !data.isEmpty()) ||
-                canDestroy.size() != 0 ||
-                canPlaceOn.size() != 0;
+                !canDestroy.isEmpty() ||
+                !canPlaceOn.isEmpty();
     }
 
     /**
