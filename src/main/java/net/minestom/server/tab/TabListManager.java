@@ -55,8 +55,8 @@ public class TabListManager {
         playerInfoPacket.playerInfos.add(new PlayerInfoPacket.UpdateLatency(player.getUuid(), player.getLatency()));
 
 
-        for (TabList tabList : tabLists) {
-            if (tabList.getPlayers().contains(player)) {
+        for (TabList tabList : this.tabLists) {
+            if (tabList.isLatencyUpdates() && tabList.getPlayers().contains(player)) {
                 PacketUtils.sendGroupedPacket(tabList.getViewers(), playerInfoPacket);
             }
         }
@@ -71,8 +71,8 @@ public class TabListManager {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE);
         playerInfoPacket.playerInfos.add(new PlayerInfoPacket.UpdateGamemode(player.getUuid(), player.getGameMode()));
 
-        for (TabList tabList : tabLists) {
-            if (tabList.getPlayers().contains(player)) {
+        for (TabList tabList : this.tabLists) {
+            if (tabList.isGamemodeUpdates() && tabList.getPlayers().contains(player)) {
                 PacketUtils.sendGroupedPacket(tabList.getViewers(), playerInfoPacket);
             }
         }

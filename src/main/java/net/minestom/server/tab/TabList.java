@@ -1,6 +1,7 @@
 package net.minestom.server.tab;
 
 import net.minestom.server.chat.JsonMessage;
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.PlayerInfoPacket;
 import net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterPacket;
@@ -15,10 +16,13 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 public class TabList {
 
-    private List<Player> players = new CopyOnWriteArrayList<>();
-    private Set<Player> viewers = new CopyOnWriteArraySet<>();
+    private final List<Player> players = new CopyOnWriteArrayList<>();
+    private final Set<Player> viewers = new CopyOnWriteArraySet<>();
     private JsonMessage header;
     private JsonMessage footer;
+
+    private boolean latencyUpdates = true;
+    private boolean gamemodeUpdates = true;
 
     TabList() {
     }
@@ -154,5 +158,85 @@ public class TabList {
 
     protected void removeViewer(@NotNull Player player) {
         this.viewers.remove(player);
+    }
+
+    /**
+     * Sends a packet to all viewers of the TabList telling them to display
+     * the gamemode of the specified player as the specified gamemode
+     * <p>
+     * This is used to communicate part of a player's actual gamemode so it's recommended you only use this method with a {@link net.minestom.server.entity.fakeplayer.FakePlayer}
+     *
+     * @param player   The player to set the fake gamemode for
+     * @param gameMode The gamemode to send for the specified player
+     * @throws IllegalStateException if the player is not on the TabList or the TabList is set to automatically update gamemodes
+     */
+    public void setFakeGamemode(Player player, GameMode gameMode) {
+        if (this.gamemodeUpdates)
+            throw new IllegalStateException("Cannot set fake gamemode unless gamemodeUpdates is set to false");
+        if (!this.players.contains(player))
+            throw new IllegalStateException("Cannot set fake gamemode for a player not displayed on the TabList");
+        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE);
+        playerInfoPacket.playerInfos.add(new PlayerInfoPacket.UpdateGamemode(player.getUuid(), gameMode));
+
+        PacketUtils.sendGroupedPacket(this.viewers, playerInfoPacket);
+    }
+
+    /**
+     * Sends a packet to all viewers of the TabList telling them to display
+     * the latency of the specified player as the specified latency
+     *
+     * @param player  The player to set the fake latency for
+     * @param latency The latency to send for the specified player
+     * @throws IllegalStateException if the player is not on the TabList or the TabList is set to automatically update latency
+     */
+    public void setFakeLatency(Player player, int latency) {
+        if (this.latencyUpdates)
+            throw new IllegalStateException("Cannot set fake latency unless latencyUpdates is set to false");
+        if (!this.players.contains(player))
+            throw new IllegalStateException("Cannot set fake latency for a player not displayed on the TabList");
+
+        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY);
+        playerInfoPacket.playerInfos.add(new PlayerInfoPacket.UpdateLatency(player.getUuid(), latency));
+
+        PacketUtils.sendGroupedPacket(this.viewers, playerInfoPacket);
+    }
+
+    /**
+     * Whether the TabList is configured to automatically send player latency
+     * updates to all its viewers
+     *
+     * @return boolean whether player latency will be auto-updated on TabLists
+     */
+    public boolean isLatencyUpdates() {
+        return this.latencyUpdates;
+    }
+
+    /**
+     * Sets whether the TabList will send packets when a user's latency is updated.
+     * This would occur when a keepalive packet is received.
+     *
+     * @param latencyUpdates true/false whether or not latency updates will be sent
+     */
+    public void setLatencyUpdates(boolean latencyUpdates) {
+        this.latencyUpdates = latencyUpdates;
+    }
+
+    /**
+     * Whether the TabList is configured to automatically send player gamemode
+     * updates to all its viewers
+     *
+     * @return boolean whether player gamemode will be auto-updated on TabLists
+     */
+    public boolean isGamemodeUpdates() {
+        return this.gamemodeUpdates;
+    }
+
+    /**
+     * Sets whether the TabList will send packets when a user's gamemode is updated.
+     *
+     * @param gamemodeUpdates true/false whether or not gamemode updates will be sent
+     */
+    public void setGamemodeUpdates(boolean gamemodeUpdates) {
+        this.gamemodeUpdates = gamemodeUpdates;
     }
 }
