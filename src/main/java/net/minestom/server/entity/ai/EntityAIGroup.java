@@ -86,6 +86,7 @@ public class EntityAIGroup {
                 currentGoalSelector = selector;
                 setCurrentGoalSelector(currentGoalSelector);
                 currentGoalSelector.start();
+                break;
             }
         }
 
