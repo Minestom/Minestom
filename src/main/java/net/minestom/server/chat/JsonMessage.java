@@ -3,6 +3,8 @@ package net.minestom.server.chat;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -14,6 +16,7 @@ import java.util.Objects;
  *
  * @see <a href="https://wiki.vg/Chat">Chat Format</a>
  */
+@Deprecated
 public abstract class JsonMessage {
 
     // true if the compiled string is up-to-date, false otherwise
@@ -47,6 +50,14 @@ public abstract class JsonMessage {
     @NotNull
     public String getRawMessage() {
         return getTextMessage(getJsonObject()).toString();
+    }
+
+    /**
+     * Gets this JSON message as an Adventure Component.
+     * @return the component
+     */
+    public Component asComponent() {
+        return GsonComponentSerializer.gson().deserialize(this.toString());
     }
 
     /**
@@ -102,6 +113,7 @@ public abstract class JsonMessage {
         return message;
     }
 
+    @Deprecated
     public static class RawJsonMessage extends JsonMessage {
 
         private final JsonObject jsonObject;

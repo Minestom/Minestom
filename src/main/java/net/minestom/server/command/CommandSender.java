@@ -1,5 +1,7 @@
 package net.minestom.server.command;
 
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.permission.PermissionHandler;
@@ -10,20 +12,26 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Main implementations are {@link Player} and {@link ConsoleSender}.
  */
-public interface CommandSender extends PermissionHandler {
+public interface CommandSender extends PermissionHandler, Audience {
 
     /**
      * Sends a raw string message.
      *
      * @param message the message to send
+     *
+     * @deprecated Use {@link #sendMessage(Component)}
      */
+    @Deprecated
     void sendMessage(@NotNull String message);
 
     /**
      * Sends multiple raw string messages.
      *
      * @param messages the messages to send
+     *
+     * @deprecated Use {@link #sendMessage(Component)}
      */
+    @Deprecated
     default void sendMessage(@NotNull String[] messages) {
         for (String message : messages) {
             sendMessage(message);
@@ -35,13 +43,12 @@ public interface CommandSender extends PermissionHandler {
      * If this is not a {@link Player}, only the content of the message will be sent as a string.
      *
      * @param text The {@link JsonMessage} to send.
+     *
+     * @deprecated Use {@link #sendMessage(Component)}
      * */
+    @Deprecated
     default void sendMessage(@NotNull JsonMessage text) {
-        if (this instanceof Player) {
-            this.sendMessage(text);
-        } else {
-            sendMessage(text.getRawMessage());
-        }
+        this.sendMessage(text.asComponent());
     }
 
     /**

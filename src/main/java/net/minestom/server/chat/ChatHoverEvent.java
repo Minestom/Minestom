@@ -10,6 +10,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 /**
  * Represents a hover event for a specific portion of the message.
  */
+@Deprecated
 public class ChatHoverEvent {
 
     private final String action;

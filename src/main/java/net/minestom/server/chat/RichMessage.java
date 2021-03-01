@@ -19,6 +19,7 @@ import java.util.List;
  * events can be assigned with {@link #setClickEvent(ChatClickEvent)} and {@link #setHoverEvent(ChatHoverEvent)}
  * and new text element can also be appended {@link #append(ColoredText)}.
  */
+@Deprecated
 public class RichMessage extends JsonMessage {
 
     private final List<RichComponent> components = new ArrayList<>();

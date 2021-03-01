@@ -18,6 +18,7 @@ import java.util.Map;
  * <p>
  * Immutable class.
  */
+@Deprecated
 public final class ChatColor {
 
     // Special

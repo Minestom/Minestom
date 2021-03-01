@@ -182,6 +182,13 @@ dependencies {
 
 
     generatorsImplementation("com.squareup:javapoet:1.13.0")
+
+    // Adventure, for text messages
+    api platform("net.kyori:adventure-bom:4.5.1")
+    api "net.kyori:adventure-api"
+    implementation "net.kyori:adventure-text-serializer-gson"
+    implementation "net.kyori:adventure-text-serializer-plain"
+    implementation "net.kyori:adventure-text-serializer-legacy"
 }
 
 publishing {

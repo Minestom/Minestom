@@ -1,6 +1,14 @@
 package net.minestom.server.entity;
 
 import com.google.common.collect.Queues;
+import net.kyori.adventure.audience.MessageType;
+import net.kyori.adventure.identity.Identity;
+import net.kyori.adventure.inventory.Book;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.title.Title;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.attribute.Attribute;
@@ -59,6 +67,7 @@ import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -766,6 +775,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param message the message to send,
      *                you can use {@link ColoredText} and/or {@link RichMessage} to create it easily
      */
+    @Override
     public void sendMessage(@NotNull JsonMessage message) {
         sendJsonMessage(message.toString());
     }
@@ -775,7 +785,10 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param text      the text with the legacy color formatting
      * @param colorChar the color character
+     *
+     * @deprecated Use {@link #sendMessage(Component)}
      */
+    @Deprecated
     public void sendLegacyMessage(@NotNull String text, char colorChar) {
         ColoredText coloredText = ColoredText.ofLegacy(text, colorChar);
         sendJsonMessage(coloredText.toString());
@@ -785,15 +798,26 @@ public class Player extends LivingEntity implements CommandSender {
      * Sends a legacy message with the default color char {@link ChatParser#COLOR_CHAR}.
      *
      * @param text the text with the legacy color formatting
+     *
+     * @deprecated Use {@link #sendMessage(Component)}
      */
+    @Deprecated
     public void sendLegacyMessage(@NotNull String text) {
         ColoredText coloredText = ColoredText.ofLegacy(text, ChatParser.COLOR_CHAR);
         sendJsonMessage(coloredText.toString());
     }
 
+    /**
+     * @deprecated Use {@link #sendMessage(Component)}
+     */
+    @Deprecated
     public void sendJsonMessage(@NotNull String json) {
-        ChatMessagePacket chatMessagePacket =
-                new ChatMessagePacket(json, ChatMessagePacket.Position.CHAT);
+        this.sendMessage(json);
+    }
+
+    @Override
+    public void sendMessage(@NonNull Identity source, @NonNull Component message, @NonNull MessageType type) {
+        ChatMessagePacket chatMessagePacket = new ChatMessagePacket(GsonComponentSerializer.gson().serialize(message), type, source.uuid());
         playerConnection.sendPacket(chatMessagePacket);
     }
 
@@ -926,13 +950,21 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param header the header text, null to set empty
      * @param footer the footer text, null to set empty
+     *
+     * @deprecated Use {@link #sendPlayerListHeaderAndFooter(Component, Component)}
      */
+    @Deprecated
     public void sendHeaderFooter(@Nullable JsonMessage header, @Nullable JsonMessage footer) {
-        PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket();
-        playerListHeaderAndFooterPacket.header = header;
-        playerListHeaderAndFooterPacket.footer = footer;
+        this.sendPlayerListHeaderAndFooter(header == null ? Component.empty() : header.asComponent(),
+                footer == null ? Component.empty() : footer.asComponent());
+    }
 
-        playerConnection.sendPacket(playerListHeaderAndFooterPacket);
+    @Override
+    public void sendPlayerListHeaderAndFooter(@NonNull Component header, @NonNull Component footer) {
+        playerConnection.sendPacket(new PlayerListHeaderAndFooterPacket(
+                GsonComponentSerializer.gson().serialize(header),
+                GsonComponentSerializer.gson().serialize(footer)
+        ));
     }
 
     /**
@@ -941,25 +973,12 @@ public class Player extends LivingEntity implements CommandSender {
      * @param text   the text of the title
      * @param action the action of the title (where to show it)
      * @see #sendTitleTime(int, int, int) to specify the display time
+     *
+     * @deprecated Use {@link #showTitle(Title)} and {@link #sendActionBar(Component)}
      */
+    @Deprecated
     private void sendTitle(@NotNull JsonMessage text, @NotNull TitlePacket.Action action) {
-        TitlePacket titlePacket = new TitlePacket();
-        titlePacket.action = action;
-
-        switch (action) {
-            case SET_TITLE:
-                titlePacket.titleText = text;
-                break;
-            case SET_SUBTITLE:
-                titlePacket.subtitleText = text;
-                break;
-            case SET_ACTION_BAR:
-                titlePacket.actionBarText = text;
-                break;
-            default:
-                throw new UnsupportedOperationException("Invalid TitlePacket.Action type!");
-        }
-
+        TitlePacket titlePacket = new TitlePacket(action, text.toString());
         playerConnection.sendPacket(titlePacket);
     }
 
@@ -969,10 +988,12 @@ public class Player extends LivingEntity implements CommandSender {
      * @param title    the title message
      * @param subtitle the subtitle message
      * @see #sendTitleTime(int, int, int) to specify the display time
+     *
+     * @deprecated Use {@link #showTitle(Title)}
      */
+    @Deprecated
     public void sendTitleSubtitleMessage(@NotNull JsonMessage title, @NotNull JsonMessage subtitle) {
-        sendTitle(title, TitlePacket.Action.SET_TITLE);
-        sendTitle(subtitle, TitlePacket.Action.SET_SUBTITLE);
+        this.showTitle(Title.title(title.asComponent(), subtitle.asComponent()));
     }
 
     /**
@@ -980,9 +1001,12 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param title the title message
      * @see #sendTitleTime(int, int, int) to specify the display time
+     *
+     * @deprecated Use {@link #showTitle(Title)}
      */
+    @Deprecated
     public void sendTitleMessage(@NotNull JsonMessage title) {
-        sendTitle(title, TitlePacket.Action.SET_TITLE);
+        this.showTitle(Title.title(title.asComponent(), Component.empty()));
     }
 
     /**
@@ -990,9 +1014,12 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param subtitle the subtitle message
      * @see #sendTitleTime(int, int, int) to specify the display time
+     *
+     * @deprecated Use {@link #showTitle(Title)}
      */
+    @Deprecated
     public void sendSubtitleMessage(@NotNull JsonMessage subtitle) {
-        sendTitle(subtitle, TitlePacket.Action.SET_SUBTITLE);
+        this.showTitle(Title.title(Component.empty(), subtitle.asComponent()));
     }
 
     /**
@@ -1000,9 +1027,25 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param actionBar the action bar message
      * @see #sendTitleTime(int, int, int) to specify the display time
+     *
+     * @deprecated Use {@link #sendActionBar(Component)}
      */
+    @Deprecated
     public void sendActionBarMessage(@NotNull JsonMessage actionBar) {
-        sendTitle(actionBar, TitlePacket.Action.SET_ACTION_BAR);
+        this.sendActionBar(actionBar.asComponent());
+    }
+
+    @Override
+    public void showTitle(@NonNull Title title) {
+        for (TitlePacket titlePacket : TitlePacket.of(title)) {
+            playerConnection.sendPacket(titlePacket);
+        }
+    }
+
+    @Override
+    public void sendActionBar(@NonNull Component message) {
+        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.SET_ACTION_BAR, GsonComponentSerializer.gson().serialize(message));
+        playerConnection.sendPacket(titlePacket);
     }
 
     /**
@@ -1011,31 +1054,40 @@ public class Player extends LivingEntity implements CommandSender {
      * @param fadeIn  ticks to spend fading in
      * @param stay    ticks to keep the title displayed
      * @param fadeOut ticks to spend out, not when to start fading out
+     *
+     * @deprecated Use {@link #showTitle(Title)}. Note that this will overwrite the
+     * existing title. This is expected behavior and will be the case in 1.17.
      */
+    @Deprecated
     public void sendTitleTime(int fadeIn, int stay, int fadeOut) {
-        TitlePacket titlePacket = new TitlePacket();
-        titlePacket.action = TitlePacket.Action.SET_TIMES_AND_DISPLAY;
-        titlePacket.fadeIn = fadeIn;
-        titlePacket.stay = stay;
-        titlePacket.fadeOut = fadeOut;
+        TitlePacket titlePacket = new TitlePacket(fadeIn, stay, fadeOut);
         playerConnection.sendPacket(titlePacket);
     }
 
     /**
      * Hides the previous title.
+     * @deprecated Use {@link #clearTitle()}. Note this title cannot be shown again. This
+     * is expected behavior and will be the case in 1.17.
      */
+    @Deprecated
     public void hideTitle() {
-        TitlePacket titlePacket = new TitlePacket();
-        titlePacket.action = TitlePacket.Action.HIDE;
+        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.HIDE);
         playerConnection.sendPacket(titlePacket);
     }
 
     /**
      * Resets the previous title.
+     * @deprecated Use {@link #clearTitle()}. Note this title cannot be shown again. This
+     * is expected behavior and will be the case in 1.17.
      */
     public void resetTitle() {
-        TitlePacket titlePacket = new TitlePacket();
-        titlePacket.action = TitlePacket.Action.RESET;
+        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.RESET);
+        playerConnection.sendPacket(titlePacket);
+    }
+
+    @Override
+    public void clearTitle() {
+        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.RESET);
         playerConnection.sendPacket(titlePacket);
     }
 
@@ -1043,7 +1095,10 @@ public class Player extends LivingEntity implements CommandSender {
      * Opens a book ui for the player with the given book metadata.
      *
      * @param bookMeta The metadata of the book to open
+     *
+     * @deprecated Use {@link #openBook(Book)}
      */
+    @Deprecated
     public void openBook(@NotNull WrittenBookMeta bookMeta) {
         // Set book in offhand
         final ItemStack writtenBook = new ItemStack(Material.WRITTEN_BOOK, (byte) 1);
@@ -1061,6 +1116,11 @@ public class Player extends LivingEntity implements CommandSender {
 
         // Update inventory to remove book (which the actual inventory does not have)
         this.inventory.update();
+    }
+
+    @Override
+    public void openBook(@NonNull Book book) {
+        // TODO write the book
     }
 
     @Override
@@ -1730,16 +1790,40 @@ public class Player extends LivingEntity implements CommandSender {
      * Kicks the player with a reason.
      *
      * @param text the kick reason
+     *
+     * @deprecated Use {@link #kick(Component)}
      */
+    @Deprecated
     public void kick(@NotNull JsonMessage text) {
+        this.kick(text.asComponent());
+    }
+
+    /**
+     * Kicks the player with a reason.
+     *
+     * @param message the kick reason
+     *
+     * @deprecated Use {@link #kick(Component)}
+     */
+    @Deprecated
+    public void kick(@NotNull String message) {
+        this.kick(Component.text(message));
+    }
+
+    /**
+     * Kicks the player with a reason.
+     *
+     * @param component the reason
+     */
+    public void kick(@NotNull Component component) {
         final ConnectionState connectionState = playerConnection.getConnectionState();
 
         // Packet type depends on the current player connection state
         final ServerPacket disconnectPacket;
         if (connectionState == ConnectionState.LOGIN) {
-            disconnectPacket = new LoginDisconnectPacket(text);
+            disconnectPacket = new LoginDisconnectPacket(GsonComponentSerializer.gson().serialize(component));
         } else {
-            disconnectPacket = new DisconnectPacket(text);
+            disconnectPacket = new DisconnectPacket(GsonComponentSerializer.gson().serialize(component));
         }
 
         if (playerConnection instanceof NettyPlayerConnection) {
@@ -1749,15 +1833,6 @@ public class Player extends LivingEntity implements CommandSender {
             playerConnection.sendPacket(disconnectPacket);
             playerConnection.refreshOnline(false);
         }
-    }
-
-    /**
-     * Kicks the player with a reason.
-     *
-     * @param message the kick reason
-     */
-    public void kick(@NotNull String message) {
-        kick(ColoredText.of(message));
     }
 
     /**
