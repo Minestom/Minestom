@@ -27,11 +27,6 @@ public class ConsoleSender implements CommandSender {
         LOGGER.info(PlainComponentSerializer.plain().serialize(message));
     }
 
-    @Override
-    public void sendMessage(@NotNull String message) {
-        LOGGER.info(message);
-    }
-
     @NotNull
     @Override
     public Set<Permission> getAllPermissions() {

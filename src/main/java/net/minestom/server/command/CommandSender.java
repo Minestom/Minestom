@@ -22,7 +22,7 @@ public interface CommandSender extends PermissionHandler, Audience {
      * @deprecated Use {@link #sendMessage(Component)}
      */
     @Deprecated
-    void sendMessage(@NotNull String message);
+    default void sendMessage(@NotNull String message) { this.sendMessage(Component.text(message)); }
 
     /**
      * Sends multiple raw string messages.
