@@ -3,10 +3,11 @@ package net.minestom.server.entity.metadata.arrow;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
+import net.minestom.server.entity.metadata.ProjectileMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SpectralArrowMeta extends AbstractArrowMeta implements ObjectDataProvider {
+public class SpectralArrowMeta extends AbstractArrowMeta implements ObjectDataProvider, ProjectileMeta {
 
     private Entity shooter;
 
@@ -14,11 +15,13 @@ public class SpectralArrowMeta extends AbstractArrowMeta implements ObjectDataPr
         super(entity, metadata);
     }
 
+    @Override
     @Nullable
     public Entity getShooter() {
         return this.shooter;
     }
 
+    @Override
     public void setShooter(@Nullable Entity shooter) {
         this.shooter = shooter;
     }

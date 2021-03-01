@@ -3,8 +3,9 @@ package net.minestom.server.entity.type.projectile;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.metadata.ProjectileMeta;
 import net.minestom.server.event.entity.EntityAttackEvent;
+import net.minestom.server.event.entity.EntityShootEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
@@ -16,15 +17,92 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-public class EntityAbstractArrow extends AbstractProjectile {
+/**
+ * Class that allows to instantiate entities with projectile-like physics handling.
+ */
+public class EntityProjectile extends Entity {
 
-    EntityAbstractArrow(@Nullable Entity shooter, @NotNull EntityType entityType, @NotNull Position spawnPosition) {
-        super(shooter, entityType, spawnPosition);
+    private final Entity shooter;
+
+    public EntityProjectile(@Nullable Entity shooter, @NotNull EntityType entityType) {
+        super(entityType);
+        this.shooter = shooter;
+    }
+
+    @Deprecated
+    public EntityProjectile(@Nullable Entity shooter, @NotNull EntityType entityType, @NotNull Position spawnPosition) {
+        super(entityType, spawnPosition);
+        this.shooter = shooter;
+    }
+
+    private void setup() {
         super.hasPhysics = false;
-
+        if (getEntityMeta() instanceof ProjectileMeta) {
+            ((ProjectileMeta) getEntityMeta()).setShooter(this.shooter);
+        }
         setBoundingBox(.5F, .5F, .5F);
+    }
+
+    @Nullable
+    public Entity getShooter() {
+        return this.shooter;
+    }
+
+    /**
+     * Called when this projectile is stuck in blocks.
+     * Probably you want to do nothing with arrows in such case and to remove other types of projectiles.
+     */
+    public void onStuck() {
+
+    }
+
+    /**
+     * Called when this projectile unstucks.
+     * Probably you want to add some random velocity to arrows in such case.
+     */
+    public void onUnstuck() {
+
+    }
+
+    public void shoot(Position to, double power, double spread) {
+        EntityShootEvent event = new EntityShootEvent(this.shooter, this, to, power, spread);
+        this.shooter.callEvent(EntityShootEvent.class, event);
+        if (event.isCancelled()) {
+            remove();
+            return;
+        }
+        Position from = this.shooter.getPosition().clone().add(0D, this.shooter.getEyeHeight(), 0D);
+        shoot(from, to, event.getPower(), event.getSpread());
+    }
+
+    private void shoot(@NotNull Position from, @NotNull Position to, double power, double spread) {
+        double dx = to.getX() - from.getX();
+        double dy = to.getY() - from.getY();
+        double dz = to.getZ() - from.getZ();
+        double xzLength = Math.sqrt(dx * dx + dz * dz);
+        dy += xzLength * 0.20000000298023224D;
+
+        double length = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        dx /= length;
+        dy /= length;
+        dz /= length;
+        Random random = ThreadLocalRandom.current();
+        spread *= 0.007499999832361937D;
+        dx += random.nextGaussian() * spread;
+        dy += random.nextGaussian() * spread;
+        dz += random.nextGaussian() * spread;
+        super.velocity.setX(dx);
+        super.velocity.setY(dy);
+        super.velocity.setZ(dz);
+        super.velocity.multiply(20 * power);
+        setView(
+                (float) Math.toDegrees(Math.atan2(dx, dz)),
+                (float) Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)))
+        );
     }
 
     @Override
@@ -40,12 +118,14 @@ public class EntityAbstractArrow extends AbstractProjectile {
             getVelocity().zero();
             sendPacketToViewersAndSelf(getVelocityPacket());
             setNoGravity(true);
+            onStuck();
         } else {
             if (!super.onGround) {
                 return;
             }
             super.onGround = false;
             setNoGravity(false);
+            onUnstuck();
         }
     }
 

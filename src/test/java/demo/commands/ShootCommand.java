@@ -5,12 +5,10 @@ import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.metadata.arrow.ArrowMeta;
-import net.minestom.server.entity.type.Projectile;
-import net.minestom.server.entity.type.projectile.EntityArrow;
-import net.minestom.server.entity.type.projectile.EntitySpectralArrow;
+import net.minestom.server.entity.type.projectile.EntityProjectile;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -42,28 +40,28 @@ public class ShootCommand extends Command {
     }
 
     private void onShootCommand(CommandSender sender, Arguments args) {
-        Player     player = (Player) sender;
-        String     mode   = args.getWord("type");
-        Projectile projectile;
-        var        pos    = player.getPosition().clone().add(0D, player.getEyeHeight(), 0D);
+        Player player = (Player) sender;
+        String mode = args.getWord("type");
+        EntityProjectile projectile;
         switch (mode) {
             case "default":
-                projectile = new EntityArrow(player, pos);
+                projectile = new EntityProjectile(player, EntityType.ARROW);
                 break;
             case "spectral":
-                projectile = new EntitySpectralArrow(player, pos);
+                projectile = new EntityProjectile(player, EntityType.SPECTRAL_ARROW);
                 break;
             case "colored":
-                projectile = new EntityArrow(player, pos);
-                var meta = (ArrowMeta) ((Entity) projectile).getEntityMeta();
+                projectile = new EntityProjectile(player, EntityType.ARROW);
+                var meta = (ArrowMeta) projectile.getEntityMeta();
                 meta.setColor(ThreadLocalRandom.current().nextInt());
                 break;
             default:
                 return;
         }
-        ((Entity) projectile).setInstance(player.getInstance());
+        var pos = player.getPosition().clone().add(0D, player.getEyeHeight(), 0D);
+        projectile.setInstance(player.getInstance(), pos);
         var dir = pos.getDirection().multiply(30D);
         pos = pos.clone().add(dir.getX(), dir.getY(), dir.getZ());
-        Projectile.shoot(projectile, player, pos, 1D, 0D);
+        projectile.shoot(pos, 1D, 0D);
     }
 }

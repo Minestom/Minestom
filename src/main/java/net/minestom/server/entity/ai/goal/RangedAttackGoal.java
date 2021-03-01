@@ -2,17 +2,17 @@ package net.minestom.server.entity.ai.goal;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
-import net.minestom.server.entity.type.Projectile;
-import net.minestom.server.entity.type.projectile.EntityArrow;
+import net.minestom.server.entity.type.projectile.EntityProjectile;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class RangedAttackGoal extends GoalSelector {
 
@@ -25,7 +25,7 @@ public class RangedAttackGoal extends GoalSelector {
     private final double power;
     private final double spread;
 
-    private BiFunction<Entity, Position, Projectile> projectileGenerator;
+    private Function<Entity, EntityProjectile> projectileGenerator;
 
     private boolean stop;
     private Entity cachedTarget;
@@ -52,7 +52,7 @@ public class RangedAttackGoal extends GoalSelector {
         Check.argCondition(desirableRange > attackRange, "Desirable range can not exceed attack range!");
     }
 
-    public void setProjectileGenerator(BiFunction<Entity, Position, Projectile> projectileGenerator) {
+    public void setProjectileGenerator(Function<Entity, EntityProjectile> projectileGenerator) {
         this.projectileGenerator = projectileGenerator;
     }
 
@@ -87,13 +87,14 @@ public class RangedAttackGoal extends GoalSelector {
                 if (this.entityCreature.hasLineOfSight(target)) {
                     Position to = target.getPosition().clone().add(0D, target.getEyeHeight(), 0D);
 
-                    BiFunction<Entity, Position, Projectile> projectileGenerator = this.projectileGenerator;
+                    Function<Entity, EntityProjectile> projectileGenerator = this.projectileGenerator;
                     if (projectileGenerator == null) {
-                        projectileGenerator = EntityArrow::new;
+                        projectileGenerator = shooter -> new EntityProjectile(shooter, EntityType.ARROW);
                     }
-                    Projectile projectile = projectileGenerator.apply(this.entityCreature, new Position(0D, 0D, 0D));
+                    EntityProjectile projectile = projectileGenerator.apply(this.entityCreature);
+                    projectile.setInstance(this.entityCreature.getInstance(), this.entityCreature.getPosition());
 
-                    Projectile.shoot(projectile, this.entityCreature, to, this.power, this.spread);
+                    projectile.shoot(to, this.power, this.spread);
                     this.lastShot = time;
                 } else {
                     comeClose = this.comeClose;
