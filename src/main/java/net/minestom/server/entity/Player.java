@@ -2,6 +2,7 @@ package net.minestom.server.entity;
 
 import com.google.common.collect.Queues;
 import net.kyori.adventure.audience.MessageType;
+import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.text.Component;
@@ -12,8 +13,10 @@ import net.kyori.adventure.title.Title;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.attribute.Attribute;
+import net.minestom.server.attribute.AttributeInstance;
 import net.minestom.server.bossbar.BossBar;
 import net.minestom.server.chat.ChatParser;
+import net.minestom.server.attribute.Attributes;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.chat.RichMessage;
@@ -561,9 +564,9 @@ public class Player extends LivingEntity implements CommandSender {
 
         // Boss bars cache
         {
-            Set<BossBar> bossBars = BossBar.getBossBars(this);
+            Set<net.minestom.server.bossbar.BossBar> bossBars = net.minestom.server.bossbar.BossBar.getBossBars(this);
             if (bossBars != null) {
-                for (BossBar bossBar : bossBars) {
+                for (net.minestom.server.bossbar.BossBar bossBar : bossBars) {
                     bossBar.removeViewer(this);
                 }
             }
@@ -1089,6 +1092,16 @@ public class Player extends LivingEntity implements CommandSender {
     public void clearTitle() {
         TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.RESET);
         playerConnection.sendPacket(titlePacket);
+    }
+
+    @Override
+    public void showBossBar(@NonNull BossBar bar) {
+        MinecraftServer.getBossBarManager().addBossBar(this, bar);
+    }
+
+    @Override
+    public void hideBossBar(@NonNull BossBar bar) {
+        MinecraftServer.getBossBarManager().removeBossBar(this, bar);
     }
 
     /**

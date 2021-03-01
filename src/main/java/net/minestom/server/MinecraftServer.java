@@ -1,6 +1,7 @@
 package net.minestom.server;
 
 import net.minestom.server.advancements.AdvancementManager;
+import net.minestom.server.adventure.BossBarManager;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
@@ -115,6 +116,7 @@ public final class MinecraftServer {
     private static DimensionTypeManager dimensionTypeManager;
     private static BiomeManager biomeManager;
     private static AdvancementManager advancementManager;
+    private static BossBarManager bossBarManager;
 
     private static ExtensionManager extensionManager;
 
@@ -180,6 +182,7 @@ public final class MinecraftServer {
         dimensionTypeManager = new DimensionTypeManager();
         biomeManager = new BiomeManager();
         advancementManager = new AdvancementManager();
+        bossBarManager = new BossBarManager();
 
         updateManager = new UpdateManager();
 
@@ -425,6 +428,16 @@ public final class MinecraftServer {
     public static ConnectionManager getConnectionManager() {
         checkInitStatus(connectionManager);
         return connectionManager;
+    }
+
+    /**
+     * Gets the boss bar manager.
+     *
+     * @return the boss bar manager
+     */
+    public static BossBarManager getBossBarManager() {
+        checkInitStatus(bossBarManager);
+        return bossBarManager;
     }
 
     /**

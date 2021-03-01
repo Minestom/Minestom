@@ -15,10 +15,10 @@ public class BossBarPacket implements ServerPacket {
     public UUID uuid;
     public Action action;
 
-    public JsonMessage title; // Only text
+    public String title;
     public float health;
-    public BarColor color;
-    public BarDivision division;
+    public int color;
+    public int division;
     public byte flags;
 
 
@@ -29,10 +29,10 @@ public class BossBarPacket implements ServerPacket {
 
         switch (action) {
             case ADD:
-                writer.writeSizedString(title.toString());
+                writer.writeSizedString(title);
                 writer.writeFloat(health);
-                writer.writeVarInt(color.ordinal());
-                writer.writeVarInt(division.ordinal());
+                writer.writeVarInt(color);
+                writer.writeVarInt(division);
                 writer.writeByte(flags);
                 break;
             case REMOVE:
@@ -42,11 +42,11 @@ public class BossBarPacket implements ServerPacket {
                 writer.writeFloat(health);
                 break;
             case UPDATE_TITLE:
-                writer.writeSizedString(title.toString());
+                writer.writeSizedString(title);
                 break;
             case UPDATE_STYLE:
-                writer.writeVarInt(color.ordinal());
-                writer.writeVarInt(division.ordinal());
+                writer.writeVarInt(color);
+                writer.writeVarInt(division);
                 break;
             case UPDATE_FLAGS:
                 writer.writeByte(flags);

@@ -19,7 +19,10 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * and add the {@link Player} you want using {@link #addViewer(Player)} and remove them using {@link #removeViewer(Player)}.
  * <p>
  * You can retrieve all the boss bars of a {@link Player} with {@link #getBossBars(Player)}.
+ *
+ * @deprecated Use {@link net.kyori.adventure.audience.Audience#showBossBar(net.kyori.adventure.bossbar.BossBar)}
  */
+@Deprecated
 public class BossBar implements Viewable {
 
     private static final int MAX_BOSSBAR = 7;
@@ -249,10 +252,10 @@ public class BossBar implements Viewable {
         BossBarPacket bossBarPacket = new BossBarPacket();
         bossBarPacket.uuid = uuid;
         bossBarPacket.action = BossBarPacket.Action.ADD;
-        bossBarPacket.title = title;
+        bossBarPacket.title = title.toString();
         bossBarPacket.health = progress;
-        bossBarPacket.color = color;
-        bossBarPacket.division = division;
+        bossBarPacket.color = color.ordinal();
+        bossBarPacket.division = division.ordinal();
         bossBarPacket.flags = flags;
         player.getPlayerConnection().sendPacket(bossBarPacket);
     }
@@ -275,7 +278,7 @@ public class BossBar implements Viewable {
         BossBarPacket bossBarPacket = new BossBarPacket();
         bossBarPacket.uuid = uuid;
         bossBarPacket.action = BossBarPacket.Action.UPDATE_TITLE;
-        bossBarPacket.title = title;
+        bossBarPacket.title = title.toString();
         sendPacketToViewers(bossBarPacket);
     }
 
@@ -291,7 +294,7 @@ public class BossBar implements Viewable {
         BossBarPacket bossBarPacket = new BossBarPacket();
         bossBarPacket.uuid = uuid;
         bossBarPacket.action = BossBarPacket.Action.UPDATE_STYLE;
-        bossBarPacket.color = color;
+        bossBarPacket.color = color.ordinal();
         sendPacketToViewers(bossBarPacket);
     }
 }

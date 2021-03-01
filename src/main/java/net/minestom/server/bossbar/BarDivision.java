@@ -2,7 +2,10 @@ package net.minestom.server.bossbar;
 
 /**
  * Used to define the number of segments on a {@link BossBar}.
+ *
+ * @deprecated Use {@link net.kyori.adventure.bossbar.BossBar}
  */
+@Deprecated
 public enum BarDivision {
     SOLID,
     SEGMENT_6,
