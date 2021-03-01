@@ -1078,11 +1078,7 @@ public class Player extends LivingEntity implements CommandSender {
         playerConnection.sendPacket(titlePacket);
     }
 
-    /**
-     * Resets the previous title.
-     * @deprecated Use {@link #clearTitle()}. Note this title cannot be shown again. This
-     * is expected behavior and will be the case in 1.17.
-     */
+    @Override
     public void resetTitle() {
         TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.RESET);
         playerConnection.sendPacket(titlePacket);
