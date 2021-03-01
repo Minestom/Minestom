@@ -1,5 +1,8 @@
 package net.minestom.server.scoreboard;
 
+import com.google.common.collect.MapMaker;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.ForwardingAudience;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
@@ -11,16 +14,19 @@ import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule;
 import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility;
 import net.minestom.server.utils.PacketUtils;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * This object represents a team on a scoreboard that has a common display theme and other properties.
  */
-public class Team {
+public class Team implements ForwardingAudience {
 
     private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 
@@ -65,6 +71,9 @@ public class Team {
      */
     private JsonMessage suffix;
 
+    private final Set<Player> playerMembers = Collections.newSetFromMap(new MapMaker().weakKeys().makeMap());
+    private boolean isPlayerMembersUpToDate;
+
     /**
      * Default constructor to creates a team.
      *
@@ -104,6 +113,9 @@ public class Team {
 
         // Sends to all online players the add player packet
         PacketUtils.sendGroupedPacket(CONNECTION_MANAGER.getOnlinePlayers(), addPlayerPacket);
+
+        // invalidate player members
+        this.isPlayerMembersUpToDate = false;
     }
 
     /**
@@ -123,6 +135,9 @@ public class Team {
 
         // Removes the member from the team
         this.members.remove(member);
+
+        // invalidate player members
+        this.isPlayerMembersUpToDate = false;
     }
 
     /**
@@ -411,5 +426,24 @@ public class Team {
         updatePacket.teamSuffix = this.suffix;
 
         PacketUtils.sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), updatePacket);
+    }
+
+    @Override
+    public @NonNull Iterable<? extends Audience> audiences() {
+        if (!this.isPlayerMembersUpToDate) {
+            this.playerMembers.clear();
+
+            for (String member : this.members) {
+                Player player = MinecraftServer.getConnectionManager().getPlayer(member);
+
+                if (player != null) {
+                    this.playerMembers.add(player);
+                }
+            }
+
+            this.isPlayerMembersUpToDate = true;
+        }
+
+        return this.playerMembers;
     }
 }
