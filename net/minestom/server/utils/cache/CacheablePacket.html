@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6};
+var data = {"i0":6,"i1":6,"i2":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -152,7 +152,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="TemporaryCache.html" title="class in net.minestom.server.utils.cache">TemporaryCache</a>&lt;io.netty.buffer.ByteBuf&gt;</code></td>
+<td class="colFirst"><code><a href="TemporaryCache.html" title="class in net.minestom.server.utils.cache">TemporaryCache</a>&lt;<a href="TimedBuffer.html" title="class in net.minestom.server.utils.cache">TimedBuffer</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCache()">getCache</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the cache linked to this packet.</div>
@@ -163,6 +163,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getIdentifier()">getIdentifier</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the identifier of this packet.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>long</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTimestamp()">getTimestamp</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the last time this packet changed.</div>
 </td>
 </tr>
 </table>
@@ -189,7 +196,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>getCache</h4>
 <pre class="methodSignature">@NotNull
-<a href="TemporaryCache.html" title="class in net.minestom.server.utils.cache">TemporaryCache</a>&lt;io.netty.buffer.ByteBuf&gt;&nbsp;getCache()</pre>
+<a href="TemporaryCache.html" title="class in net.minestom.server.utils.cache">TemporaryCache</a>&lt;<a href="TimedBuffer.html" title="class in net.minestom.server.utils.cache">TimedBuffer</a>&gt;&nbsp;getCache()</pre>
 <div class="block">Gets the cache linked to this packet.
  <p>
  WARNING: the cache needs to be shared between all the object instances, tips is to make it static.</div>
@@ -202,7 +209,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <a id="getIdentifier()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getIdentifier</h4>
 <pre class="methodSignature">@Nullable
@@ -213,6 +220,20 @@ java.util.UUID&nbsp;getIdentifier()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this packet identifier, null to prevent caching</dd>
+</dl>
+</li>
+</ul>
+<a id="getTimestamp()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getTimestamp</h4>
+<pre class="methodSignature">long&nbsp;getTimestamp()</pre>
+<div class="block">Gets the last time this packet changed.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the last packet update time in milliseconds</dd>
 </dl>
 </li>
 </ul>
