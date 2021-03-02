@@ -95,7 +95,7 @@ public class BlockPlacementListener {
 
         blockPosition.add(offsetX, offsetY, offsetZ);
 
-        if(!canPlaceBlock) {
+        if (!canPlaceBlock) {
             //Send a block change with AIR as block to keep the client in sync,
             //using refreshChunk results in the client not being in sync
             //after rapid invalid block placements
@@ -143,10 +143,13 @@ public class BlockPlacementListener {
                     if (!playerBlockPlaceEvent.isCancelled()) {
 
                         // BlockPlacementRule check
-                        final Block resultBlock = Block.fromStateId(playerBlockPlaceEvent.getBlockStateId());
+                        short blockStateId = playerBlockPlaceEvent.getBlockStateId();
+                        final Block resultBlock = Block.fromStateId(blockStateId);
                         final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(resultBlock);
-                        final short blockStateId = blockPlacementRule == null ? resultBlock.getBlockId() :
-                                blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player);
+                        if (blockPlacementRule != null) {
+                            // Get id from block placement rule instead of the event
+                            blockStateId = blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player);
+                        }
                         final boolean placementRuleCheck = blockStateId != BlockPlacementRule.CANCEL_CODE;
 
                         if (placementRuleCheck) {
