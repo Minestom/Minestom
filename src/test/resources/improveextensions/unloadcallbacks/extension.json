@@ -1,0 +1,4 @@
+{
+  "entrypoint": "improveextensions.unloadcallbacks.UnloadCallbacksExtension",
+  "name": "UnloadCallbacksExtension"
+}

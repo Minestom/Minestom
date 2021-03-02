@@ -1,0 +1,6 @@
+{
+  "entrypoint": "improveextensions.DisableEarlyLoad",
+  "name": "DisableEarlyLoad",
+  "codeModifiers": [],
+  "mixinConfig": "mixins.minestomcore.json"
+}

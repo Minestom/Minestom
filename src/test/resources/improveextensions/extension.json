@@ -1,0 +1,6 @@
+{
+  "entrypoint": "improveextensions.MixinIntoMinestomCore",
+  "name": "MixinIntoMinestomCore",
+  "codeModifiers": [],
+  "mixinConfig": "mixins.minestomcore.json"
+}

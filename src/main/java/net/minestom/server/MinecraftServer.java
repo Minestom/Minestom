@@ -783,6 +783,7 @@ public final class MinecraftServer {
     public static void stopCleanly() {
         stopping = true;
         LOGGER.info("Stopping Minestom server.");
+        extensionManager.unloadAllExtensions();
         updateManager.stop();
         schedulerManager.shutdown();
         connectionManager.shutdown();

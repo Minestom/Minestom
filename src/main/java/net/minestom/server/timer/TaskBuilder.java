@@ -1,6 +1,7 @@
 package net.minestom.server.timer;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,10 +19,18 @@ public class TaskBuilder {
     private final Runnable runnable;
     // True if the task planned for the application shutdown
     private final boolean shutdown;
+    /** Extension which owns this task, or null if none */
+    private final String owningExtension;
     // Delay value for the task execution
     private long delay;
     // Repeat value for the task execution
     private long repeat;
+    /**
+     * If this task is owned by an extension, should it survive the unloading of said extension?
+     *  May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
+     *  reload of that extension.
+     */
+    private boolean isTransient;
 
     /**
      * Creates a task builder.
@@ -46,6 +55,8 @@ public class TaskBuilder {
         this.schedulerManager = schedulerManager;
         this.runnable = runnable;
         this.shutdown = shutdown;
+        this.isTransient = false;
+        this.owningExtension = MinestomRootClassLoader.findExtensionObjectOwner(runnable);
     }
 
     /**
@@ -96,6 +107,14 @@ public class TaskBuilder {
         return this;
     }
 
+    /** If this task is owned by an extension, should it survive the unloading of said extension?
+     *  May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
+     *  reload of that extension. */
+    public TaskBuilder makeTransient() {
+        isTransient = true;
+        return this;
+    }
+
     /**
      * Schedules this {@link Task} for execution.
      *
@@ -108,11 +127,16 @@ public class TaskBuilder {
                 this.runnable,
                 this.shutdown,
                 this.delay,
-                this.repeat);
+                this.repeat,
+                this.isTransient,
+                this.owningExtension);
         if (this.shutdown) {
             Int2ObjectMap<Task> shutdownTasks = this.schedulerManager.shutdownTasks;
             synchronized (shutdownTasks) {
                 shutdownTasks.put(task.getId(), task);
+            }
+            if(owningExtension != null) {
+                this.schedulerManager.onScheduleShutdownFromExtension(owningExtension, task);
             }
         } else {
             Int2ObjectMap<Task> tasks = this.schedulerManager.tasks;

@@ -10,9 +10,34 @@ public class MinestomExtensionClassLoader extends HierarchyClassLoader {
      */
     private final MinestomRootClassLoader root;
 
-    public MinestomExtensionClassLoader(String name, URL[] urls, MinestomRootClassLoader root) {
-        super(name, urls, root);
+    /**
+     * Main of the main class of the extension linked to this classloader
+     */
+    private final String mainClassName;
+
+    public MinestomExtensionClassLoader(String extensionName, String mainClassName, URL[] urls, MinestomRootClassLoader root) {
+        super(extensionName, urls, root);
         this.root = root;
+        this.mainClassName = mainClassName;
+    }
+
+    /**
+     * Returns the name of the extension linked to this classloader
+     * @return the name of the extension linked to this classloader
+     */
+    public String getExtensionName() {
+        // simply calls ClassLoader#getName as the extension name is used to name this classloader
+        //  this method is simply for ease-of-use
+        return getName();
+    }
+
+    /**
+     * Returns the main class name linked to the extension responsible for this classloader.
+     * Used by the root classloader to let extensions load themselves in a dev environment.
+     * @return the main class name linked to the extension responsible for this classloader
+     */
+    public String getMainClassName() {
+        return mainClassName;
     }
 
     @Override
@@ -71,5 +96,17 @@ public class MinestomExtensionClassLoader extends HierarchyClassLoader {
     protected void finalize() throws Throwable {
         super.finalize();
         System.err.println("Class loader "+getName()+" finalized.");
+    }
+
+    /**
+     * Is the given class name the name of the entry point of one the extensions from this classloader chain?
+     * @param name the class name to check
+     * @return whether the given class name the name of the entry point of one the extensions from this classloader chain
+     * @see MinestomRootClassLoader#loadBytes(String, boolean) for more information
+     */
+    protected boolean isMainExtensionClass(String name) {
+        if(mainClassName.equals(name))
+            return true;
+        return children.stream().anyMatch(c -> c.isMainExtensionClass(name));
     }
 }

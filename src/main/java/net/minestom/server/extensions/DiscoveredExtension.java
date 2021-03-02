@@ -23,6 +23,8 @@ final class DiscoveredExtension {
     private String[] codeModifiers;
     private String[] dependencies;
     private ExternalDependencies externalDependencies;
+    private List<String> missingCodeModifiers = new LinkedList<>();
+    private boolean failedToLoadMixin = false;
     transient List<URL> files = new LinkedList<>();
     transient LoadStatus loadStatus = LoadStatus.LOAD_SUCCESS;
     transient private File originalJar;
@@ -136,6 +138,22 @@ final class DiscoveredExtension {
             extension.externalDependencies = new ExternalDependencies();
         }
 
+    }
+
+    public void addMissingCodeModifier(String codeModifierClass) {
+        missingCodeModifiers.add(codeModifierClass);
+    }
+
+    public void setFailedToLoadMixinFlag() {
+        failedToLoadMixin = true;
+    }
+
+    public List<String> getMissingCodeModifiers() {
+        return missingCodeModifiers;
+    }
+
+    public boolean hasFailedToLoadMixin() {
+        return failedToLoadMixin;
     }
 
     enum LoadStatus {

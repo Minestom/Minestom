@@ -106,6 +106,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
     // Events
     private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
+    private final Map<String, Collection<EventCallback<?>>> extensionCallbacks = new ConcurrentHashMap<>();
 
     protected Metadata metadata = new Metadata(this);
     protected EntityMeta entityMeta;
@@ -704,6 +705,12 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     @Override
     public Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap() {
         return eventCallbacks;
+    }
+
+    @NotNull
+    @Override
+    public Collection<EventCallback<?>> getExtensionCallbacks(String extension) {
+        return extensionCallbacks.computeIfAbsent(extension, e -> new CopyOnWriteArrayList<>());
     }
 
     /**

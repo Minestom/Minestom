@@ -1,7 +1,9 @@
 package net.minestom.server.extras.selfmodification;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.extensions.ExtensionManager;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
@@ -65,9 +67,21 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
     // TODO: priorities?
     private final List<CodeModifier> modifiers = new LinkedList<>();
 
+    /**
+     * Whether Minestom detected that it is running in a dev environment.
+     * Determined by the existence of the system property {@link ExtensionManager#INDEV_CLASSES_FOLDER}
+     */
+    private boolean inDevEnvironment = false;
+
+    /**
+     * List of already loaded code modifier class names. This prevents loading the same class twice.
+     */
+    private final Set<String> alreadyLoadedCodeModifiers = new HashSet<>();
+
     private MinestomRootClassLoader(ClassLoader parent) {
         super("Minestom Root ClassLoader", extractURLsFromClasspath(), parent);
         asmClassLoader = newChild(new URL[0]);
+        inDevEnvironment = System.getProperty(ExtensionManager.INDEV_CLASSES_FOLDER) != null;
     }
 
     public static MinestomRootClassLoader getInstance() {
@@ -179,6 +193,22 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
         if (name == null)
             throw new ClassNotFoundException();
         String path = name.replace(".", "/") + ".class";
+
+        if(inDevEnvironment) {
+            // check if the class to load is the entry point of the extension
+            boolean isMainExtensionClass = false;
+            for(MinestomExtensionClassLoader c : children) {
+                if(c.isMainExtensionClass(name)) {
+                    isMainExtensionClass = true;
+                    break;
+                }
+            }
+            if(isMainExtensionClass) { // entry point of the extension, force load through extension classloader
+                throw new ClassNotFoundException("The class "+name+" is the entry point of an extension. " +
+                        "Because we are in a dev environment, we force its load through its extension classloader, " +
+                        "even though the root classloader has access.");
+            }
+        }
         InputStream input = getResourceAsStream(path);
         if (input == null) {
             throw new ClassNotFoundException("Could not find resource " + path);
@@ -245,12 +275,17 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
         return URLClassLoader.newInstance(urls, this);
     }
 
-    public void loadModifier(File[] originFiles, String codeModifierClass) {
-        URL[] urls = new URL[originFiles.length];
+    /**
+     * Loads a code modifier.
+     * @param urls
+     * @param codeModifierClass
+     * @return whether the modifier has been loaded. Returns 'true' even if the code modifier is already loaded before calling this method
+     */
+    public boolean loadModifier(URL[] urls, String codeModifierClass) {
+        if(alreadyLoadedCodeModifiers.contains(codeModifierClass)) {
+            return true;
+        }
         try {
-            for (int i = 0; i < originFiles.length; i++) {
-                urls[i] = originFiles[i].toURI().toURL();
-            }
             URLClassLoader loader = newChild(urls);
             Class<?> modifierClass = loader.loadClass(codeModifierClass);
             if (CodeModifier.class.isAssignableFrom(modifierClass)) {
@@ -258,11 +293,18 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
                 synchronized (modifiers) {
                     LOGGER.warn("Added Code modifier: {}", modifier);
                     addCodeModifier(modifier);
+                    alreadyLoadedCodeModifiers.add(codeModifierClass);
                 }
             }
-        } catch (MalformedURLException | ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
+            return true;
+        } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
+            if(MinecraftServer.getExceptionManager() != null) {
+                MinecraftServer.getExceptionManager().handleException(e);
+            } else {
+                e.printStackTrace();
+            }
         }
+        return false;
     }
 
     public void addCodeModifier(CodeModifier modifier) {
@@ -278,5 +320,25 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
 
     public List<CodeModifier> getModifiers() {
         return modifiers;
+    }
+
+    /**
+     * Tries to know which extension created this object, based on the classloader of the object. This can only check that the class of the object has been loaded
+     * by an extension.
+     *
+     * While not perfect, this should detect any callback created via extension code.
+     * It is possible this current version of the implementation might struggle with callbacks created through external
+     * libraries, but as libraries are loaded separately for each extension, this *should not*(tm) be a problem.
+     *
+     * @param obj the object to get the extension of
+     * @return <code>null</code> if no extension has been found, otherwise the extension name
+     */
+    @Nullable
+    public static String findExtensionObjectOwner(@NotNull Object obj) {
+        ClassLoader cl = obj.getClass().getClassLoader();
+        if(cl instanceof MinestomExtensionClassLoader) {
+            return ((MinestomExtensionClassLoader) cl).getExtensionName();
+        }
+        return null;
     }
 }
