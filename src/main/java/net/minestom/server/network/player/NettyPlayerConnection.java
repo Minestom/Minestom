@@ -18,6 +18,7 @@ import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.cache.CacheablePacket;
 import net.minestom.server.utils.cache.TemporaryCache;
+import net.minestom.server.utils.cache.TimedBuffer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -128,15 +129,25 @@ public class NettyPlayerConnection extends PlayerConnection {
                         // This packet explicitly asks to do not retrieve the cache
                         write(serverPacket);
                     } else {
+                        final long time = cacheablePacket.getTimestamp();
                         // Try to retrieve the cached buffer
-                        TemporaryCache<ByteBuf> temporaryCache = cacheablePacket.getCache();
-                        ByteBuf buffer = temporaryCache.retrieve(identifier);
-                        if (buffer == null) {
+                        TemporaryCache<TimedBuffer> temporaryCache = cacheablePacket.getCache();
+                        TimedBuffer timedBuffer = temporaryCache.retrieve(identifier);
+                        boolean shouldUpdate = false;
+                        if (timedBuffer == null) {
                             // Buffer not found, create and cache it
-                            buffer = PacketUtils.createFramedPacket(serverPacket, false);
-                            temporaryCache.cache(identifier, buffer);
+                            final ByteBuf buffer = PacketUtils.createFramedPacket(serverPacket, false);
+                            timedBuffer = new TimedBuffer(buffer, time);
+                            shouldUpdate = true;
+                        } else if (time > timedBuffer.getTimestamp()) { // Verify if `serverPacket` is more up-to-date
+                            shouldUpdate = true;
                         }
-                        FramedPacket framedPacket = new FramedPacket(buffer);
+
+                        if (shouldUpdate) {
+                            temporaryCache.cache(identifier, timedBuffer);
+                        }
+
+                        FramedPacket framedPacket = new FramedPacket(timedBuffer.getBuffer());
                         write(framedPacket);
                     }
 
