@@ -26,13 +26,15 @@ import static net.minestom.server.network.packet.server.play.BossBarPacket.Actio
  * boss bar management system.
  */
 public class BossBarManager implements BossBar.Listener {
+    private static final int CONCURRENCY_LEVEL = 4;
+
     private final Map<BossBar, Holder> bars;
 
     /**
      * Creates a new boss bar manager.
      */
     public BossBarManager() {
-        this.bars = new MapMaker().weakKeys().makeMap();
+        this.bars = new MapMaker().concurrencyLevel(CONCURRENCY_LEVEL).weakKeys().makeMap();
 
         MinecraftServer.getGlobalEventHandler().addEventCallback(PlayerDisconnectEvent.class, this::onDisconnect);
     }
