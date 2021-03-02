@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -212,13 +212,22 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#makeTransient()">makeTransient</a></span>()</code></th>
+<td class="colLast">
+<div class="block">If this task is owned by an extension, should it survive the unloading of said extension?
+  May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
+  reload of that extension.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#repeat(long,net.minestom.server.utils.time.TimeUnit)">repeat</a></span>&#8203;(long&nbsp;time,
       <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit)</code></th>
 <td class="colLast">
 <div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should continue to run after waiting for the specified value until it is terminated.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="Task.html" title="class in net.minestom.server.timer">Task</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#schedule()">schedule</a></span>()</code></th>
 <td class="colLast">
@@ -367,6 +376,18 @@ public&nbsp;<a href="TaskBuilder.html" title="class in net.minestom.server.timer
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this builder, for chaining</dd>
 </dl>
+</li>
+</ul>
+<a id="makeTransient()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>makeTransient</h4>
+<pre class="methodSignature">public&nbsp;<a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;makeTransient()</pre>
+<div class="block">If this task is owned by an extension, should it survive the unloading of said extension?
+  May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
+  reload of that extension.</div>
 </li>
 </ul>
 <a id="schedule()">

@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -160,11 +160,13 @@ implements java.lang.Runnable</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.timer.SchedulerManager,java.lang.Runnable,boolean,long,long)">Task</a></span>&#8203;(<a href="SchedulerManager.html" title="class in net.minestom.server.timer">SchedulerManager</a>&nbsp;schedulerManager,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.timer.SchedulerManager,java.lang.Runnable,boolean,long,long,boolean,java.lang.String)">Task</a></span>&#8203;(<a href="SchedulerManager.html" title="class in net.minestom.server.timer">SchedulerManager</a>&nbsp;schedulerManager,
     java.lang.Runnable&nbsp;runnable,
     boolean&nbsp;shutdown,
     long&nbsp;delay,
-    long&nbsp;repeat)</code></th>
+    long&nbsp;repeat,
+    boolean&nbsp;isTransient,
+    java.lang.String&nbsp;owningExtension)</code></th>
 <td class="colLast">
 <div class="block">Creates a task.</div>
 </td>
@@ -207,32 +209,48 @@ implements java.lang.Runnable</pre>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOwningExtension()">getOwningExtension</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Extension which owns this task, or null if none</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="TaskStatus.html" title="enum in net.minestom.server.timer">TaskStatus</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStatus()">getStatus</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the current status of the task.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isTransient()">isTransient</a></span>()</code></th>
+<td class="colLast">
+<div class="block">If this task is owned by an extension, should it survive the unloading of said extension?
+  May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
+  reload of that extension.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#run()">run</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Executes the task.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#runRunnable()">runRunnable</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Executes the internal runnable.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#schedule()">schedule</a></span>()</code></th>
 <td class="colLast">
@@ -263,7 +281,7 @@ implements java.lang.Runnable</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.timer.SchedulerManager,java.lang.Runnable,boolean,long,long)">
+<a id="&lt;init&gt;(net.minestom.server.timer.SchedulerManager,java.lang.Runnable,boolean,long,long,boolean,java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -275,7 +293,10 @@ implements java.lang.Runnable</pre>
             java.lang.Runnable&nbsp;runnable,
             boolean&nbsp;shutdown,
             long&nbsp;delay,
-            long&nbsp;repeat)</pre>
+            long&nbsp;repeat,
+            boolean&nbsp;isTransient,
+            @Nullable
+            java.lang.String&nbsp;owningExtension)</pre>
 <div class="block">Creates a task.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -384,6 +405,28 @@ public&nbsp;<a href="TaskStatus.html" title="enum in net.minestom.server.timer">
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>equals</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
 </dl>
+</li>
+</ul>
+<a id="isTransient()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isTransient</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isTransient()</pre>
+<div class="block">If this task is owned by an extension, should it survive the unloading of said extension?
+  May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
+  reload of that extension.</div>
+</li>
+</ul>
+<a id="getOwningExtension()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getOwningExtension</h4>
+<pre class="methodSignature">public&nbsp;java.lang.String&nbsp;getOwningExtension()</pre>
+<div class="block">Extension which owns this task, or null if none</div>
 </li>
 </ul>
 <a id="hashCode()">

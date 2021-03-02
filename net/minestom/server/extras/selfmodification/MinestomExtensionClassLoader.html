@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -193,7 +193,8 @@ extends <a href="HierarchyClassLoader.html" title="class in net.minestom.server.
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,java.net.URL%5B%5D,net.minestom.server.extras.selfmodification.MinestomRootClassLoader)">MinestomExtensionClassLoader</a></span>&#8203;(java.lang.String&nbsp;name,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.net.URL%5B%5D,net.minestom.server.extras.selfmodification.MinestomRootClassLoader)">MinestomExtensionClassLoader</a></span>&#8203;(java.lang.String&nbsp;extensionName,
+                            java.lang.String&nbsp;mainClassName,
                             java.net.URL[]&nbsp;urls,
                             <a href="MinestomRootClassLoader.html" title="class in net.minestom.server.extras.selfmodification">MinestomRootClassLoader</a>&nbsp;root)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -222,17 +223,38 @@ extends <a href="HierarchyClassLoader.html" title="class in net.minestom.server.
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getExtensionName()">getExtensionName</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the name of the extension linked to this classloader</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMainClassName()">getMainClassName</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns the main class name linked to the extension responsible for this classloader.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isMainExtensionClass(java.lang.String)">isMainExtensionClass</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
+<td class="colLast">
+<div class="block">Is the given class name the name of the entry point of one the extensions from this classloader chain?</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.lang.Class&lt;?&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadClass(java.lang.String)">loadClass</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>protected java.lang.Class&lt;?&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadClass(java.lang.String,boolean)">loadClass</a></span>&#8203;(java.lang.String&nbsp;name,
          boolean&nbsp;resolve)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>java.lang.Class&lt;?&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadClassAsChild(java.lang.String,boolean)">loadClassAsChild</a></span>&#8203;(java.lang.String&nbsp;name,
                 boolean&nbsp;resolve)</code></th>
@@ -292,13 +314,14 @@ extends <a href="HierarchyClassLoader.html" title="class in net.minestom.server.
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(java.lang.String,java.net.URL[],net.minestom.server.extras.selfmodification.MinestomRootClassLoader)">
+<a id="&lt;init&gt;(java.lang.String,java.lang.String,java.net.URL[],net.minestom.server.extras.selfmodification.MinestomRootClassLoader)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>MinestomExtensionClassLoader</h4>
-<pre>public&nbsp;MinestomExtensionClassLoader&#8203;(java.lang.String&nbsp;name,
+<pre>public&nbsp;MinestomExtensionClassLoader&#8203;(java.lang.String&nbsp;extensionName,
+                                    java.lang.String&nbsp;mainClassName,
                                     java.net.URL[]&nbsp;urls,
                                     <a href="MinestomRootClassLoader.html" title="class in net.minestom.server.extras.selfmodification">MinestomRootClassLoader</a>&nbsp;root)</pre>
 </li>
@@ -313,6 +336,35 @@ extends <a href="HierarchyClassLoader.html" title="class in net.minestom.server.
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="getExtensionName()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getExtensionName</h4>
+<pre class="methodSignature">public&nbsp;java.lang.String&nbsp;getExtensionName()</pre>
+<div class="block">Returns the name of the extension linked to this classloader</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the name of the extension linked to this classloader</dd>
+</dl>
+</li>
+</ul>
+<a id="getMainClassName()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMainClassName</h4>
+<pre class="methodSignature">public&nbsp;java.lang.String&nbsp;getMainClassName()</pre>
+<div class="block">Returns the main class name linked to the extension responsible for this classloader.
+ Used by the root classloader to let extensions load themselves in a dev environment.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the main class name linked to the extension responsible for this classloader</dd>
+</dl>
+</li>
+</ul>
 <a id="loadClass(java.lang.String)">
 <!--   -->
 </a>
@@ -368,7 +420,7 @@ extends <a href="HierarchyClassLoader.html" title="class in net.minestom.server.
 <a id="finalize()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>finalize</h4>
 <pre class="methodSignature">protected&nbsp;void&nbsp;finalize()
@@ -378,6 +430,24 @@ extends <a href="HierarchyClassLoader.html" title="class in net.minestom.server.
 <dd><code>finalize</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.Throwable</code></dd>
+</dl>
+</li>
+</ul>
+<a id="isMainExtensionClass(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>isMainExtensionClass</h4>
+<pre class="methodSignature">protected&nbsp;boolean&nbsp;isMainExtensionClass&#8203;(java.lang.String&nbsp;name)</pre>
+<div class="block">Is the given class name the name of the entry point of one the extensions from this classloader chain?</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - the class name to check</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>whether the given class name the name of the entry point of one the extensions from this classloader chain</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="MinestomRootClassLoader.html#loadBytes(java.lang.String,boolean)"><code>for more information</code></a></dd>
 </dl>
 </li>
 </ul>

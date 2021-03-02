@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":6,"i3":10,"i4":10,"i5":10,"i6":10,"i7":6,"i8":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":6,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":6,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -199,46 +199,74 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#areCodeModifiersAllLoadedCorrectly()">areCodeModifiersAllLoadedCorrectly</a></span>()</code></th>
+<td class="colLast">
+<div class="block">If this extension registers code modifiers and/or mixins, are they loaded correctly?</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#cleanupObservers()">cleanupObservers</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Removes all expired reference to observers</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="Extension.ExtensionDescription.html" title="class in net.minestom.server.extensions">Extension.ExtensionDescription</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDescription()">getDescription</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected org.slf4j.Logger</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLogger()">getLogger</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#initialize()">initialize</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#observe(net.minestom.server.extensions.IExtensionObserver)">observe</a></span>&#8203;(<a href="IExtensionObserver.html" title="interface in net.minestom.server.extensions">IExtensionObserver</a>&nbsp;observer)</code></th>
+<td class="colLast">
+<div class="block">Adds a new observer to this extension.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#postInitialize()">postInitialize</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#postTerminate()">postTerminate</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#preInitialize()">preInitialize</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#preTerminate()">preTerminate</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#terminate()">terminate</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#triggerChange(java.util.function.Consumer)">triggerChange</a></span>&#8203;(java.util.function.Consumer&lt;<a href="IExtensionObserver.html" title="interface in net.minestom.server.extensions">IExtensionObserver</a>&gt;&nbsp;action)</code></th>
+<td class="colLast">
+<div class="block">Calls some action on all valid observers of this extension</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unload()">unload</a></span>()</code></th>
 <td class="colLast">
@@ -365,11 +393,64 @@ public&nbsp;<a href="Extension.ExtensionDescription.html" title="class in net.mi
 <a id="getLogger()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getLogger</h4>
 <pre class="methodSignature">@NotNull
 protected&nbsp;org.slf4j.Logger&nbsp;getLogger()</pre>
+</li>
+</ul>
+<a id="observe(net.minestom.server.extensions.IExtensionObserver)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>observe</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;observe&#8203;(<a href="IExtensionObserver.html" title="interface in net.minestom.server.extensions">IExtensionObserver</a>&nbsp;observer)</pre>
+<div class="block">Adds a new observer to this extension.
+ Will be kept as a WeakReference.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>observer</code> - </dd>
+</dl>
+</li>
+</ul>
+<a id="triggerChange(java.util.function.Consumer)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>triggerChange</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;triggerChange&#8203;(java.util.function.Consumer&lt;<a href="IExtensionObserver.html" title="interface in net.minestom.server.extensions">IExtensionObserver</a>&gt;&nbsp;action)</pre>
+<div class="block">Calls some action on all valid observers of this extension</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>action</code> - code to execute on each observer</dd>
+</dl>
+</li>
+</ul>
+<a id="areCodeModifiersAllLoadedCorrectly()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>areCodeModifiersAllLoadedCorrectly</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;areCodeModifiersAllLoadedCorrectly()</pre>
+<div class="block">If this extension registers code modifiers and/or mixins, are they loaded correctly?</div>
+</li>
+</ul>
+<a id="cleanupObservers()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>cleanupObservers</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;cleanupObservers()</pre>
+<div class="block">Removes all expired reference to observers</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#observers"><code>observers</code></a></dd>
+</dl>
 </li>
 </ul>
 </li>

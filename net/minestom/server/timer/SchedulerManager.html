@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -129,9 +129,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="../extensions/IExtensionObserver.html" title="interface in net.minestom.server.extensions">IExtensionObserver</a></code></dd>
+</dl>
 <hr>
 <pre>public final class <span class="typeNameLabel">SchedulerManager</span>
-extends java.lang.Object</pre>
+extends java.lang.Object
+implements <a href="../extensions/IExtensionObserver.html" title="interface in net.minestom.server.extensions">IExtensionObserver</a></pre>
 <div class="block">An object which manages all the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>'s.
  <p>
  <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> first need to be built with <a href="#buildTask(java.lang.Runnable)"><code>buildTask(Runnable)</code></a>, you can then specify a delay with as example
@@ -269,12 +274,26 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onExtensionUnload(java.lang.String)">onExtensionUnload</a></span>&#8203;(java.lang.String&nbsp;extensionName)</code></th>
+<td class="colLast">
+<div class="block">Called before unloading an extension (that is, right after Extension#terminate and right before Extension#unload)</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeExtensionTasksOnUnload(java.lang.String)">removeExtensionTasksOnUnload</a></span>&#8203;(java.lang.String&nbsp;extension)</code></th>
+<td class="colLast">
+<div class="block">Unschedules all non-transient tasks (<a href="Task.html#isTransient()"><code>Task.isTransient()</code></a>) from this scheduler.</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeTask(net.minestom.server.timer.Task)">removeTask</a></span>&#8203;(<a href="Task.html" title="class in net.minestom.server.timer">Task</a>&nbsp;task)</code></th>
 <td class="colLast">
 <div class="block">Removes/Forces the end of a <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shutdown()">shutdown</a></span>()</code></th>
 <td class="colLast">
@@ -494,7 +513,7 @@ public&nbsp;java.util.concurrent.ExecutorService&nbsp;getBatchesPool()</pre>
 <a id="getTimerExecutionService()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getTimerExecutionService</h4>
 <pre class="methodSignature">@NotNull
@@ -503,6 +522,39 @@ public&nbsp;java.util.concurrent.ScheduledExecutorService&nbsp;getTimerExecution
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the scheduled execution service for all the registered <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="removeExtensionTasksOnUnload(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeExtensionTasksOnUnload</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;removeExtensionTasksOnUnload&#8203;(java.lang.String&nbsp;extension)</pre>
+<div class="block">Unschedules all non-transient tasks (<a href="Task.html#isTransient()"><code>Task.isTransient()</code></a>) from this scheduler. Tasks are allowed to complete</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>extension</code> - the name of the extension to unschedule tasks from</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="Task.html#isTransient()"><code>Task.isTransient()</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="onExtensionUnload(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>onExtensionUnload</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;onExtensionUnload&#8203;(java.lang.String&nbsp;extensionName)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../extensions/IExtensionObserver.html#onExtensionUnload(java.lang.String)">IExtensionObserver</a></code></span></div>
+<div class="block">Called before unloading an extension (that is, right after Extension#terminate and right before Extension#unload)</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../extensions/IExtensionObserver.html#onExtensionUnload(java.lang.String)">onExtensionUnload</a></code>&nbsp;in interface&nbsp;<code><a href="../extensions/IExtensionObserver.html" title="interface in net.minestom.server.extensions">IExtensionObserver</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>extensionName</code> - the name of the extension that is being unloaded</dd>
 </dl>
 </li>
 </ul>

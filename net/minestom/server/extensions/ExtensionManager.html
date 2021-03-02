@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -153,6 +153,21 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#DISABLE_EARLY_LOAD_SYSTEM_KEY">DISABLE_EARLY_LOAD_SYSTEM_KEY</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#INDEV_CLASSES_FOLDER">INDEV_CLASSES_FOLDER</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#INDEV_RESOURCES_FOLDER">INDEV_RESOURCES_FOLDER</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static org.slf4j.Logger</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#LOGGER">LOGGER</a></span></code></th>
 <td class="colLast">&nbsp;</td>
@@ -190,7 +205,7 @@ extends java.lang.Object</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -207,7 +222,7 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>java.util.Map&lt;java.lang.String,&#8203;java.net.URLClassLoader&gt;</code></td>
+<td class="colFirst"><code>java.util.Map&lt;java.lang.String,&#8203;<a href="../extras/selfmodification/MinestomExtensionClassLoader.html" title="class in net.minestom.server.extras.selfmodification">MinestomExtensionClassLoader</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getExtensionLoaders()">getExtensionLoaders</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -217,16 +232,23 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadCodeModifiersEarly()">loadCodeModifiersEarly</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Loads code modifiers early, that is before <code>MinecraftServer.init()</code> is called.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadDynamicExtension(java.io.File)">loadDynamicExtension</a></span>&#8203;(java.io.File&nbsp;jarFile)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadExtensions()">loadExtensions</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../extras/selfmodification/MinestomExtensionClassLoader.html" title="class in net.minestom.server.extras.selfmodification">MinestomExtensionClassLoader</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#newClassLoader(net.minestom.server.extensions.DiscoveredExtension,java.net.URL%5B%5D)">newClassLoader</a></span>&#8203;(net.minestom.server.extensions.DiscoveredExtension&nbsp;extension,
               java.net.URL[]&nbsp;urls)</code></th>
@@ -234,33 +256,40 @@ extends java.lang.Object</pre>
 <div class="block">Creates a new class loader for the given extension.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#reload(java.lang.String)">reload</a></span>&#8203;(java.lang.String&nbsp;extensionName)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLoadOnStartup(boolean)">setLoadOnStartup</a></span>&#8203;(boolean&nbsp;loadOnStartup)</code></th>
 <td class="colLast">
 <div class="block">Used to specify if you want extensions to be loaded and initialized during startup.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shouldLoadOnStartup()">shouldLoadOnStartup</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the extensions should be loaded during startup.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shutdown()">shutdown</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Shutdowns all the extensions by unloading them.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unloadAllExtensions()">unloadAllExtensions</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Unloads all extensions</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unloadExtension(java.lang.String)">unloadExtension</a></span>&#8203;(java.lang.String&nbsp;extensionName)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -289,13 +318,52 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Field Detail</h3>
+<a id="DISABLE_EARLY_LOAD_SYSTEM_KEY">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DISABLE_EARLY_LOAD_SYSTEM_KEY</h4>
+<pre>public static final&nbsp;java.lang.String DISABLE_EARLY_LOAD_SYSTEM_KEY</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../constant-values.html#net.minestom.server.extensions.ExtensionManager.DISABLE_EARLY_LOAD_SYSTEM_KEY">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
 <a id="LOGGER">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>LOGGER</h4>
+<pre>public static final&nbsp;org.slf4j.Logger LOGGER</pre>
+</li>
+</ul>
+<a id="INDEV_CLASSES_FOLDER">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>INDEV_CLASSES_FOLDER</h4>
+<pre>public static final&nbsp;java.lang.String INDEV_CLASSES_FOLDER</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../constant-values.html#net.minestom.server.extensions.ExtensionManager.INDEV_CLASSES_FOLDER">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+<a id="INDEV_RESOURCES_FOLDER">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>LOGGER</h4>
-<pre>public static final&nbsp;org.slf4j.Logger LOGGER</pre>
+<h4>INDEV_RESOURCES_FOLDER</h4>
+<pre>public static final&nbsp;java.lang.String INDEV_RESOURCES_FOLDER</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../constant-values.html#net.minestom.server.extensions.ExtensionManager.INDEV_RESOURCES_FOLDER">Constant Field Values</a></dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -425,7 +493,7 @@ public&nbsp;<a href="Extension.html" title="class in net.minestom.server.extensi
 <li class="blockList">
 <h4>getExtensionLoaders</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.Map&lt;java.lang.String,&#8203;java.net.URLClassLoader&gt;&nbsp;getExtensionLoaders()</pre>
+public&nbsp;java.util.Map&lt;java.lang.String,&#8203;<a href="../extras/selfmodification/MinestomExtensionClassLoader.html" title="class in net.minestom.server.extras.selfmodification">MinestomExtensionClassLoader</a>&gt;&nbsp;getExtensionLoaders()</pre>
 </li>
 </ul>
 <a id="reload(java.lang.String)">
@@ -463,11 +531,31 @@ public&nbsp;java.util.Map&lt;java.lang.String,&#8203;java.net.URLClassLoader&gt;
 <a id="shutdown()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>shutdown</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;shutdown()</pre>
 <div class="block">Shutdowns all the extensions by unloading them.</div>
+</li>
+</ul>
+<a id="loadCodeModifiersEarly()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>loadCodeModifiersEarly</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;loadCodeModifiersEarly()</pre>
+<div class="block">Loads code modifiers early, that is before <code>MinecraftServer.init()</code> is called.</div>
+</li>
+</ul>
+<a id="unloadAllExtensions()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>unloadAllExtensions</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;unloadAllExtensions()</pre>
+<div class="block">Unloads all extensions</div>
 </li>
 </ul>
 </li>

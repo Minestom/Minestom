@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":9,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -235,16 +235,23 @@ extends <a href="HierarchyClassLoader.html" title="class in net.minestom.server.
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findExtensionObjectOwner(java.lang.Object)">findExtensionObjectOwner</a></span>&#8203;(java.lang.Object&nbsp;obj)</code></th>
+<td class="colLast">
+<div class="block">Tries to know which extension created this object, based on the classloader of the object.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static <a href="MinestomRootClassLoader.html" title="class in net.minestom.server.extras.selfmodification">MinestomRootClassLoader</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInstance()">getInstance</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="CodeModifier.html" title="class in net.minestom.server.extras.selfmodification">CodeModifier</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getModifiers()">getModifiers</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadBytes(java.lang.String,boolean)">loadBytes</a></span>&#8203;(java.lang.String&nbsp;name,
          boolean&nbsp;transform)</code></th>
@@ -252,25 +259,27 @@ extends <a href="HierarchyClassLoader.html" title="class in net.minestom.server.
 <div class="block">Loads and possibly transforms class bytecode corresponding to the given binary name.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadBytesWithChildren(java.lang.String,boolean)">loadBytesWithChildren</a></span>&#8203;(java.lang.String&nbsp;name,
                      boolean&nbsp;transform)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>java.lang.Class&lt;?&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadClass(java.lang.String,boolean)">loadClass</a></span>&#8203;(java.lang.String&nbsp;name,
          boolean&nbsp;resolve)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadModifier(java.io.File%5B%5D,java.lang.String)">loadModifier</a></span>&#8203;(java.io.File[]&nbsp;originFiles,
-            java.lang.String&nbsp;codeModifierClass)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
 <tr id="i9" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadModifier(java.net.URL%5B%5D,java.lang.String)">loadModifier</a></span>&#8203;(java.net.URL[]&nbsp;urls,
+            java.lang.String&nbsp;codeModifierClass)</code></th>
+<td class="colLast">
+<div class="block">Loads a code modifier.</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>java.net.URLClassLoader</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#newChild(java.net.URL%5B%5D)">newChild</a></span>&#8203;(java.net.URL[]&nbsp;urls)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -458,14 +467,22 @@ public&nbsp;java.net.URLClassLoader&nbsp;newChild&#8203;(@NotNull
                                         java.net.URL[]&nbsp;urls)</pre>
 </li>
 </ul>
-<a id="loadModifier(java.io.File[],java.lang.String)">
+<a id="loadModifier(java.net.URL[],java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>loadModifier</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;loadModifier&#8203;(java.io.File[]&nbsp;originFiles,
-                         java.lang.String&nbsp;codeModifierClass)</pre>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;loadModifier&#8203;(java.net.URL[]&nbsp;urls,
+                            java.lang.String&nbsp;codeModifierClass)</pre>
+<div class="block">Loads a code modifier.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>urls</code> - </dd>
+<dd><code>codeModifierClass</code> - </dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>whether the modifier has been loaded. Returns 'true' even if the code modifier is already loaded before calling this method</dd>
+</dl>
 </li>
 </ul>
 <a id="addCodeModifier(net.minestom.server.extras.selfmodification.CodeModifier)">
@@ -493,10 +510,33 @@ public&nbsp;java.net.URLClassLoader&nbsp;newChild&#8203;(@NotNull
 <a id="getModifiers()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getModifiers</h4>
 <pre class="methodSignature">public&nbsp;java.util.List&lt;<a href="CodeModifier.html" title="class in net.minestom.server.extras.selfmodification">CodeModifier</a>&gt;&nbsp;getModifiers()</pre>
+</li>
+</ul>
+<a id="findExtensionObjectOwner(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>findExtensionObjectOwner</h4>
+<pre class="methodSignature">@Nullable
+public static&nbsp;java.lang.String&nbsp;findExtensionObjectOwner&#8203;(@NotNull
+                                                        java.lang.Object&nbsp;obj)</pre>
+<div class="block">Tries to know which extension created this object, based on the classloader of the object. This can only check that the class of the object has been loaded
+ by an extension.
+
+ While not perfect, this should detect any callback created via extension code.
+ It is possible this current version of the implementation might struggle with callbacks created through external
+ libraries, but as libraries are loaded separately for each extension, this *should not*(tm) be a problem.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>obj</code> - the object to get the extension of</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><code>null</code> if no extension has been found, otherwise the extension name</dd>
+</dl>
 </li>
 </ul>
 </li>
