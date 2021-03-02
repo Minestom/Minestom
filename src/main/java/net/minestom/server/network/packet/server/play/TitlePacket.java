@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.title.Title;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.TickUtils;
@@ -18,14 +17,17 @@ import static net.minestom.server.network.packet.server.play.TitlePacket.Action.
 
 public class TitlePacket implements ServerPacket {
 
-    private Action action;
+    public Action action;
 
-    private String payload;
+    public String payload;
 
-    private int fadeIn, stay, fadeOut;
+    public int fadeIn;
+    public int stay;
+    public int fadeOut;
 
     /**
      * Constructs a new title packet from an action that can take a string argument.
+     *
      * @param action the action
      * @param payload the payload
      * @throws IllegalArgumentException if the action is not {@link Action#SET_TITLE},
@@ -39,6 +41,7 @@ public class TitlePacket implements ServerPacket {
 
     /**
      * Constructs a new title packet from a clear or reset action.
+     *
      * @param action the action
      * @throws IllegalArgumentException if the action is not {@link Action#RESET},
      * or {@link Action#HIDE}
@@ -49,6 +52,7 @@ public class TitlePacket implements ServerPacket {
 
     /**
      * Constructs a new title packet for {@link Action#SET_TIMES_AND_DISPLAY}.
+     *
      * @param fadeIn the fade in time
      * @param stay the stay time
      * @param fadeOut the fade out time
@@ -97,6 +101,7 @@ public class TitlePacket implements ServerPacket {
 
     /**
      * Creates a collection of title packets from an Adventure title.
+     *
      * @param title the title
      * @return the packets
      */

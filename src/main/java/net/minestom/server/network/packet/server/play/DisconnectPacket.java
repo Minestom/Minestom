@@ -1,6 +1,5 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -8,14 +7,14 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 public class DisconnectPacket implements ServerPacket {
-    private String payload;
+    public String message;
 
     /**
      * Creates a new disconnect packet with a given string.
-     * @param payload the message
+     * @param message the message
      */
-    public DisconnectPacket(@NotNull String payload) {
-        this.payload = payload;
+    public DisconnectPacket(@NotNull String message) {
+        this.message = message;
     }
 
     /**
@@ -28,7 +27,7 @@ public class DisconnectPacket implements ServerPacket {
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeSizedString(payload);
+        writer.writeSizedString(message);
     }
 
     @Override
