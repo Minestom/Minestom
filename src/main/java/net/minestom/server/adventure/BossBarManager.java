@@ -168,7 +168,7 @@ public class BossBarManager implements BossBar.Listener {
 
         BossBarPacket createAddPacket() {
             return this.createGenericPacket(ADD, packet -> {
-                packet.title = GsonComponentSerializer.gson().serialize(bar.name());
+                packet.title = MinecraftServer.getSerializationManager().serialize(bar.name());
                 packet.color = bar.color().ordinal();
                 packet.division = bar.overlay().ordinal();
                 packet.health = bar.progress();
@@ -188,7 +188,7 @@ public class BossBarManager implements BossBar.Listener {
         }
 
         BossBarPacket createTitleUpdate(@NotNull Component title) {
-            return this.createGenericPacket(UPDATE_TITLE, packet -> packet.title = GsonComponentSerializer.gson().serialize(title));
+            return this.createGenericPacket(UPDATE_TITLE, packet -> packet.title = MinecraftServer.getSerializationManager().serialize(title));
         }
 
         BossBarPacket createFlagsUpdate() {

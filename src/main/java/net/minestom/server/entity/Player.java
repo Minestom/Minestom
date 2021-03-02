@@ -820,7 +820,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     @Override
     public void sendMessage(@NonNull Identity source, @NonNull Component message, @NonNull MessageType type) {
-        ChatMessagePacket chatMessagePacket = new ChatMessagePacket(GsonComponentSerializer.gson().serialize(message), type, source.uuid());
+        ChatMessagePacket chatMessagePacket = new ChatMessagePacket(MinecraftServer.getSerializationManager().serialize(message), type, source.uuid());
         playerConnection.sendPacket(chatMessagePacket);
     }
 
@@ -964,10 +964,10 @@ public class Player extends LivingEntity implements CommandSender {
 
     @Override
     public void sendPlayerListHeaderAndFooter(@NonNull Component header, @NonNull Component footer) {
-        playerConnection.sendPacket(new PlayerListHeaderAndFooterPacket(
-                GsonComponentSerializer.gson().serialize(header),
-                GsonComponentSerializer.gson().serialize(footer)
-        ));
+        PlayerListHeaderAndFooterPacket packet = new PlayerListHeaderAndFooterPacket();
+        packet.header = MinecraftServer.getSerializationManager().serialize(header);
+        packet.footer = MinecraftServer.getSerializationManager().serialize(footer);
+        playerConnection.sendPacket(packet);
     }
 
     /**
@@ -1047,7 +1047,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     @Override
     public void sendActionBar(@NonNull Component message) {
-        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.SET_ACTION_BAR, GsonComponentSerializer.gson().serialize(message));
+        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.SET_ACTION_BAR, MinecraftServer.getSerializationManager().serialize(message));
         playerConnection.sendPacket(titlePacket);
     }
 
@@ -1830,9 +1830,9 @@ public class Player extends LivingEntity implements CommandSender {
         // Packet type depends on the current player connection state
         final ServerPacket disconnectPacket;
         if (connectionState == ConnectionState.LOGIN) {
-            disconnectPacket = new LoginDisconnectPacket(GsonComponentSerializer.gson().serialize(component));
+            disconnectPacket = new LoginDisconnectPacket(MinecraftServer.getSerializationManager().serialize(component));
         } else {
-            disconnectPacket = new DisconnectPacket(GsonComponentSerializer.gson().serialize(component));
+            disconnectPacket = new DisconnectPacket(MinecraftServer.getSerializationManager().serialize(component));
         }
 
         if (playerConnection instanceof NettyPlayerConnection) {

@@ -24,6 +24,7 @@ public class ConsoleSender implements CommandSender {
 
     @Override
     public void sendMessage(@NonNull Identity source, @NonNull Component message, @NonNull MessageType type) {
+        // we don't use the serializer here as we just need the plain text of the message
         LOGGER.info(PlainComponentSerializer.plain().serialize(message));
     }
 

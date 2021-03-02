@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.title.Title;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.TickUtils;
@@ -109,8 +110,8 @@ public class TitlePacket implements ServerPacket {
         List<TitlePacket> packets = new ArrayList<>(4);
 
         // base packets
-        packets.add(new TitlePacket(SET_TITLE, GsonComponentSerializer.gson().serialize(title.title())));
-        packets.add(new TitlePacket(SET_SUBTITLE, GsonComponentSerializer.gson().serialize(title.subtitle())));
+        packets.add(new TitlePacket(SET_TITLE, MinecraftServer.getSerializationManager().serialize(title.title())));
+        packets.add(new TitlePacket(SET_SUBTITLE, MinecraftServer.getSerializationManager().serialize(title.subtitle())));
 
         // times packet
         Title.Times times = title.times();
