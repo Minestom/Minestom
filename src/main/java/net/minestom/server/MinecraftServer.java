@@ -1,5 +1,7 @@
 package net.minestom.server;
 
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.ForwardingAudience;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.BossBarManager;
 import net.minestom.server.benchmark.BenchmarkManager;
@@ -50,6 +52,7 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
 import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -63,7 +66,7 @@ import java.io.IOException;
  * The server needs to be initialized with {@link #init()} and started with {@link #start(String, int)}.
  * You should register all of your dimensions, biomes, commands, events, etc... in-between.
  */
-public final class MinecraftServer {
+public final class MinecraftServer implements ForwardingAudience.Single {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
@@ -816,4 +819,8 @@ public final class MinecraftServer {
                         "if you are developing an extension be sure to retrieve them at least after Extension#preInitialize");*/
     }
 
+    @Override
+    public @NonNull Audience audience() {
+        return getConnectionManager();
+    }
 }

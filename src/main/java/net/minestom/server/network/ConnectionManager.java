@@ -1,6 +1,8 @@
 package net.minestom.server.network;
 
 import io.netty.channel.Channel;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.ForwardingAudience;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
@@ -24,6 +26,7 @@ import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
 import net.minestom.server.utils.validate.Check;
 import org.apache.commons.text.similarity.JaroWinklerDistance;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,7 +40,7 @@ import java.util.function.Consumer;
 /**
  * Manages the connected clients.
  */
-public final class ConnectionManager {
+public final class ConnectionManager implements ForwardingAudience {
 
     private static final long KEEP_ALIVE_DELAY = 10_000;
     private static final long KEEP_ALIVE_KICK = 30_000;
@@ -527,5 +530,10 @@ public final class ConnectionManager {
      */
     public void addWaitingPlayer(@NotNull Player player) {
         this.waitingPlayers.add(player);
+    }
+
+    @Override
+    public @NonNull Iterable<? extends Audience> audiences() {
+        return this.getOnlinePlayers();
     }
 }

@@ -1,5 +1,8 @@
 package net.minestom.server;
 
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.ForwardingAudience;
+import net.minestom.server.adventure.WrapperAudience;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.PacketUtils;
@@ -81,5 +84,14 @@ public interface Viewable {
      */
     default void sendPacketToViewersAndSelf(@NotNull ServerPacket packet) {
         sendPacketToViewers(packet);
+    }
+
+    /**
+     * Gets the result of {@link #getViewers()} as an Adventure Audience.
+     *
+     * @return the audience
+     */
+    default @NotNull Audience asAudience() {
+        return new WrapperAudience(this.getViewers());
     }
 }
