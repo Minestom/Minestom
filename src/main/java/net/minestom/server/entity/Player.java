@@ -743,7 +743,8 @@ public class Player extends LivingEntity implements CommandSender {
 
         super.setInstance(instance, spawnPosition);
 
-        if (!position.isSimilar(spawnPosition)) {
+        if (!position.isSimilar(spawnPosition) && !firstSpawn) {
+            // Player changed instance at a different position
             teleport(spawnPosition);
         } else if (updateChunks) {
             // Send newly visible chunks to player once spawned in the instance
