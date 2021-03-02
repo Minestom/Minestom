@@ -147,7 +147,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public class <span class="typeNameLabel">EntityShootEvent</span>
 extends <a href="../EntityEvent.html" title="class in net.minestom.server.event">EntityEvent</a>
 implements <a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></pre>
-<div class="block">Called with <a href="../../entity/type/Projectile.html#shoot(net.minestom.server.entity.type.Projectile,net.minestom.server.entity.Entity,net.minestom.server.utils.Position,double,double)"><code>Projectile.shoot(Projectile, Entity, Position, double, double)</code></a>.</div>
+<div class="block">Called with <a href="../../entity/type/projectile/EntityProjectile.html#shoot(net.minestom.server.utils.Position,double,double)"><code>EntityProjectile.shoot(Position, double, double)</code></a></div>
 </li>
 </ul>
 </div>
@@ -185,8 +185,8 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,net.minestom.server.entity.type.Projectile,net.minestom.server.utils.Position,double,double)">EntityShootEvent</a></span>&#8203;(<a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
-                <a href="../../entity/type/Projectile.html" title="interface in net.minestom.server.entity.type">Projectile</a>&nbsp;projectile,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,net.minestom.server.entity.Entity,net.minestom.server.utils.Position,double,double)">EntityShootEvent</a></span>&#8203;(<a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+                <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;projectile,
                 <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;to,
                 double&nbsp;power,
                 double&nbsp;spread)</code></th>
@@ -218,7 +218,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../entity/type/Projectile.html" title="interface in net.minestom.server.entity.type">Projectile</a></code></td>
+<td class="colFirst"><code><a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getProjectile()">getProjectile</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the projectile.</div>
@@ -297,7 +297,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.entity.Entity,net.minestom.server.entity.type.Projectile,net.minestom.server.utils.Position,double,double)">
+<a id="&lt;init&gt;(net.minestom.server.entity.Entity,net.minestom.server.entity.Entity,net.minestom.server.utils.Position,double,double)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -306,7 +306,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <pre>public&nbsp;EntityShootEvent&#8203;(@NotNull
                         <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
                         @NotNull
-                        <a href="../../entity/type/Projectile.html" title="interface in net.minestom.server.entity.type">Projectile</a>&nbsp;projectile,
+                        <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;projectile,
                         @NotNull
                         <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;to,
                         double&nbsp;power,
@@ -329,7 +329,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <ul class="blockList">
 <li class="blockList">
 <h4>getProjectile</h4>
-<pre class="methodSignature">public&nbsp;<a href="../../entity/type/Projectile.html" title="interface in net.minestom.server.entity.type">Projectile</a>&nbsp;getProjectile()</pre>
+<pre class="methodSignature">public&nbsp;<a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;getProjectile()</pre>
 <div class="block">Gets the projectile.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
