@@ -5,14 +5,13 @@ import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.inventory.Book;
+import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentLike;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.title.Title;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.attribute.Attribute;
+import net.minestom.server.adventure.AdventureUtils;
 import net.minestom.server.attribute.AttributeInstance;
 import net.minestom.server.bossbar.BossBar;
 import net.minestom.server.chat.ChatParser;
@@ -845,12 +844,13 @@ public class Player extends LivingEntity implements CommandSender {
      * @param z             the effect Z
      * @param volume        the volume of the sound (1 is 100%)
      * @param pitch         the pitch of the sound, between 0.5 and 2.0
+     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
      */
-    public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory,
-                          int x, int y, int z, float volume, float pitch) {
+    @Deprecated
+    public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
         SoundEffectPacket soundEffectPacket = new SoundEffectPacket();
         soundEffectPacket.soundId = sound.getId();
-        soundEffectPacket.soundCategory = soundCategory;
+        soundEffectPacket.soundCategory = soundCategory.ordinal();
         soundEffectPacket.x = x;
         soundEffectPacket.y = y;
         soundEffectPacket.z = z;
@@ -863,9 +863,10 @@ public class Player extends LivingEntity implements CommandSender {
      * Plays a sound from the {@link Sound} enum.
      *
      * @see #playSound(Sound, SoundCategory, int, int, int, float, float)
+     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
      */
-    public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory,
-                          BlockPosition position, float volume, float pitch) {
+    @Deprecated
+    public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
         playSound(sound, soundCategory, position.getX(), position.getY(), position.getZ(), volume, pitch);
     }
 
@@ -879,12 +880,13 @@ public class Player extends LivingEntity implements CommandSender {
      * @param z             the effect Z
      * @param volume        the volume of the sound (1 is 100%)
      * @param pitch         the pitch of the sound, between 0.5 and 2.0
+     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
      */
-    public void playSound(@NotNull String identifier, @NotNull SoundCategory soundCategory,
-                          int x, int y, int z, float volume, float pitch) {
+    @Deprecated
+    public void playSound(@NotNull String identifier, @NotNull SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
         NamedSoundEffectPacket namedSoundEffectPacket = new NamedSoundEffectPacket();
         namedSoundEffectPacket.soundName = identifier;
-        namedSoundEffectPacket.soundCategory = soundCategory;
+        namedSoundEffectPacket.soundCategory = soundCategory.ordinal();
         namedSoundEffectPacket.x = x;
         namedSoundEffectPacket.y = y;
         namedSoundEffectPacket.z = z;
@@ -897,7 +899,9 @@ public class Player extends LivingEntity implements CommandSender {
      * Plays a sound from an identifier (represents a custom sound in a resource pack).
      *
      * @see #playSound(String, SoundCategory, int, int, int, float, float)
+     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
      */
+    @Deprecated
     public void playSound(@NotNull String identifier, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
         playSound(identifier, soundCategory, position.getX(), position.getY(), position.getZ(), volume, pitch);
     }
@@ -909,7 +913,9 @@ public class Player extends LivingEntity implements CommandSender {
      * @param soundCategory the sound category
      * @param volume        the volume of the sound (1 is 100%)
      * @param pitch         the pitch of the sound, between 0.5 and 2.0
+     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound)}
      */
+    @Deprecated
     public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, float volume, float pitch) {
         EntitySoundEffectPacket entitySoundEffectPacket = new EntitySoundEffectPacket();
         entitySoundEffectPacket.entityId = getEntityId();
@@ -918,6 +924,56 @@ public class Player extends LivingEntity implements CommandSender {
         entitySoundEffectPacket.volume = volume;
         entitySoundEffectPacket.pitch = pitch;
         playerConnection.sendPacket(entitySoundEffectPacket);
+    }
+
+    @Override
+    public void playSound(net.kyori.adventure.sound.@NonNull Sound sound) {
+        this.playSound(sound, this.position.getX(), this.position.getY(), this.position.getZ());
+    }
+
+    @Override
+    public void playSound(net.kyori.adventure.sound.@NonNull Sound sound, double x, double y, double z) {
+        Sound minestomSound = AdventureUtils.asSound(sound.name());
+
+        if (minestomSound == null) {
+            NamedSoundEffectPacket packet = new NamedSoundEffectPacket();
+            packet.soundName = sound.name().asString();
+            packet.soundCategory = sound.source().ordinal();
+            packet.x = (int) x;
+            packet.y = (int) y;
+            packet.z = (int) z;
+            packet.volume = sound.volume();
+            packet.pitch = sound.pitch();
+            playerConnection.sendPacket(packet);
+        } else {
+            SoundEffectPacket packet = new SoundEffectPacket();
+            packet.soundId = minestomSound.getId();
+            packet.soundCategory = sound.source().ordinal();
+            packet.x = (int) x;
+            packet.y = (int) y;
+            packet.z = (int) z;
+            packet.volume = sound.volume();
+            packet.pitch = sound.pitch();
+            playerConnection.sendPacket(packet);
+        }
+    }
+
+    @Override
+    public void stopSound(@NonNull SoundStop stop) {
+        StopSoundPacket packet = new StopSoundPacket();
+        packet.flags = 0x0;
+
+        if (stop.source() != null) {
+            packet.flags |= 0x1;
+            packet.source = stop.source().ordinal();
+        }
+
+        if (stop.sound() != null) {
+            packet.flags |= 0x2;
+            packet.sound = stop.sound().asString();
+        }
+
+        this.playerConnection.sendPacket(packet);
     }
 
     /**
@@ -941,7 +997,9 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Sends a {@link StopSoundPacket} packet.
+     * @deprecated Use {@link #stopSound(SoundStop)} with {@link SoundStop#all()}
      */
+    @Deprecated
     public void stopSound() {
         StopSoundPacket stopSoundPacket = new StopSoundPacket();
         stopSoundPacket.flags = 0x00;
@@ -1129,7 +1187,28 @@ public class Player extends LivingEntity implements CommandSender {
 
     @Override
     public void openBook(@NonNull Book book) {
-        // TODO write the book
+        // make the book
+        ItemStack writtenBook = new ItemStack(Material.WRITTEN_BOOK, (byte) 1);
+        writtenBook.setItemMeta(WrittenBookMeta.fromAdventure(book));
+
+        // Set book in offhand
+        SetSlotPacket setBookPacket = new SetSlotPacket();
+        setBookPacket.windowId = 0;
+        setBookPacket.slot = 45;
+        setBookPacket.itemStack = writtenBook;
+        playerConnection.sendPacket(setBookPacket);
+
+        // Open the book
+        OpenBookPacket openBookPacket = new OpenBookPacket();
+        openBookPacket.hand = Hand.OFF;
+        playerConnection.sendPacket(openBookPacket);
+
+        // Restore the item in offhand
+        SetSlotPacket restoreItemPacket = new SetSlotPacket();
+        restoreItemPacket.windowId = 0;
+        restoreItemPacket.slot = 45;
+        restoreItemPacket.itemStack = getItemInOffHand();
+        playerConnection.sendPacket(restoreItemPacket);
     }
 
     @Override

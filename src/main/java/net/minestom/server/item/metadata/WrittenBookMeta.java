@@ -1,5 +1,8 @@
 package net.minestom.server.item.metadata;
 
+import net.kyori.adventure.inventory.Book;
+import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
@@ -18,7 +21,7 @@ public class WrittenBookMeta extends ItemMeta {
     private WrittenBookGeneration generation;
     private String author;
     private String title;
-    private List<JsonMessage> pages = new ArrayList<>();
+    private List<String> pages = new ArrayList<>();
 
     /**
      * Gets if the book is resolved.
@@ -100,7 +103,7 @@ public class WrittenBookMeta extends ItemMeta {
      *
      * @return a modifiable {@link ArrayList} with the pages of the book
      */
-    public List<JsonMessage> getPages() {
+    public List<String> getPages() {
         return pages;
     }
 
@@ -109,7 +112,7 @@ public class WrittenBookMeta extends ItemMeta {
      *
      * @param pages the array list containing the book pages
      */
-    public void setPages(List<JsonMessage> pages) {
+    public void setPages(List<String> pages) {
         this.pages = pages;
     }
 
@@ -149,9 +152,7 @@ public class WrittenBookMeta extends ItemMeta {
         if (compound.containsKey("pages")) {
             final NBTList<NBTString> list = compound.getList("pages");
             for (NBTString page : list) {
-                final String jsonPage = page.getValue();
-                final ColoredText coloredText = ChatParser.toColoredText(jsonPage);
-                this.pages.add(coloredText);
+                this.pages.add(page.getValue());
             }
         }
     }
@@ -172,8 +173,8 @@ public class WrittenBookMeta extends ItemMeta {
         }
         if (!pages.isEmpty()) {
             NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-            for (JsonMessage page : pages) {
-                list.add(new NBTString(page.toString()));
+            for (String page : pages) {
+                list.add(new NBTString(page));
             }
             compound.set("pages", list);
         }
@@ -196,4 +197,26 @@ public class WrittenBookMeta extends ItemMeta {
         ORIGINAL, COPY_OF_ORIGINAL, COPY_OF_COPY, TATTERED
     }
 
+    /**
+     * Creates a written book meta from an Adventure book. This meta will not be
+     * resolved and the generation will default to {@link WrittenBookGeneration#ORIGINAL}.
+     *
+     * @param book the book
+     *
+     * @return the meta
+     */
+    public static @NotNull WrittenBookMeta fromAdventure(@NotNull Book book) {
+        WrittenBookMeta meta = new WrittenBookMeta();
+        meta.resolved = false;
+        meta.generation = WrittenBookGeneration.ORIGINAL;
+        meta.author = MinecraftServer.getSerializationManager().serialize(book.author());
+        meta.title = MinecraftServer.getSerializationManager().serialize(book.title());
+        meta.pages = new ArrayList<>();
+
+        for (Component page : book.pages()) {
+            meta.pages.add(MinecraftServer.getSerializationManager().serialize(page));
+        }
+
+        return meta;
+    }
 }

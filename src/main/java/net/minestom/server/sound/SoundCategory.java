@@ -1,5 +1,9 @@
 package net.minestom.server.sound;
 
+/**
+ * @deprecated Use {@link net.kyori.adventure.sound.Sound.Source}
+ */
+@Deprecated
 public enum SoundCategory {
     MASTER,
     MUSIC,

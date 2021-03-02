@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public class NamedSoundEffectPacket implements ServerPacket {
 
     public String soundName;
-    public SoundCategory soundCategory;
+    public int soundCategory;
     public int x, y, z;
     public float volume;
     public float pitch;
@@ -17,7 +17,7 @@ public class NamedSoundEffectPacket implements ServerPacket {
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeSizedString(soundName);
-        writer.writeVarInt(soundCategory.ordinal());
+        writer.writeVarInt(soundCategory);
         writer.writeInt(x * 8);
         writer.writeInt(y * 8);
         writer.writeInt(z * 8);
