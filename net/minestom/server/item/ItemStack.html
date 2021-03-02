@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":42,"i5":10,"i6":9,"i7":9,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":9,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":9,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":42,"i7":10,"i8":9,"i9":9,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":9,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":9,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -235,20 +235,34 @@ implements <a href="../data/DataContainer.html" title="interface in net.minestom
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#canDestroy(java.lang.String)">canDestroy</a></span>&#8203;(java.lang.String&nbsp;block)</code></th>
+<td class="colLast">
+<div class="block">Checks if this item is allowed to break the provided block.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#canPlaceOn(java.lang.String)">canPlaceOn</a></span>&#8203;(java.lang.String&nbsp;block)</code></th>
+<td class="colLast">
+<div class="block">Checks if this item can be placed on the block.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Clones this item stack.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#consume(int)">consume</a></span>&#8203;(int&nbsp;amount)</code></th>
 <td class="colLast">
 <div class="block">Consumes this item by a specific amount.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copy()">copy</a></span>()</code></th>
 <td class="colLast">
@@ -257,201 +271,215 @@ implements <a href="../data/DataContainer.html" title="interface in net.minestom
 </div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(java.lang.Object&nbsp;o)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromNBT(org.jglrxavpok.hephaistos.nbt.NBTCompound)">fromNBT</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbt)</code></th>
 <td class="colLast">
 <div class="block">Loads an <a href="ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> from nbt.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAirItem()">getAirItem</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets a new <a href="ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> with the material sets to <a href="Material.html#AIR"><code>Material.AIR</code></a>.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>byte</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAmount()">getAmount</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the item amount.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="attribute/ItemAttribute.html" title="class in net.minestom.server.item.attribute">ItemAttribute</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAttribute(java.lang.String)">getAttribute</a></span>&#8203;(java.lang.String&nbsp;internalName)</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="attribute/ItemAttribute.html" title="class in net.minestom.server.item.attribute"><code>ItemAttribute</code></a> with the specified internal name.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="attribute/ItemAttribute.html" title="class in net.minestom.server.item.attribute">ItemAttribute</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAttributes()">getAttributes</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the item attributes.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>java.util.Set&lt;java.lang.String&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCanDestroy()">getCanDestroy</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the blocks that this item can destroy</div>
+</td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code>java.util.Set&lt;java.lang.String&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCanPlaceOn()">getCanPlaceOn</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the blocks that this item can be placed on</div>
+</td>
+</tr>
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="ItemDisplay.html" title="class in net.minestom.server.item">ItemDisplay</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCustomDisplay(net.minestom.server.entity.Player)">getCustomDisplay</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">WARNING: not implemented yet.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCustomModelData()">getCustomModelData</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the item custom model data.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDamage()">getDamage</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the item damage (durability).</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code><a href="../data/Data.html" title="class in net.minestom.server.data">Data</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getData()">getData</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="../data/Data.html" title="class in net.minestom.server.data"><code>Data</code></a> of this container.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>static <a href="StackingRule.html" title="class in net.minestom.server.item">StackingRule</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDefaultStackingRule()">getDefaultStackingRule</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the default <a href="StackingRule.html" title="class in net.minestom.server.item"><code>StackingRule</code></a> for newly created <a href="ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a>.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDisplayName()">getDisplayName</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the item display name.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEnchantmentLevel(net.minestom.server.item.Enchantment)">getEnchantmentLevel</a></span>&#8203;(<a href="Enchantment.html" title="enum in net.minestom.server.item">Enchantment</a>&nbsp;enchantment)</code></th>
 <td class="colLast">
 <div class="block">Gets an enchantment level.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>java.util.Map&lt;<a href="Enchantment.html" title="enum in net.minestom.server.item">Enchantment</a>,&#8203;java.lang.Short&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEnchantmentMap()">getEnchantmentMap</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the item enchantment map.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getHideFlag()">getHideFlag</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the item hide flag.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>java.util.UUID</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getIdentifier()">getIdentifier</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the unique identifier of this object.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>java.util.Set&lt;<a href="ItemFlag.html" title="enum in net.minestom.server.item">ItemFlag</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getItemFlags()">getItemFlags</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the item flags.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code><a href="metadata/ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getItemMeta()">getItemMeta</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the special meta object for this item.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLore()">getLore</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the item lore.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code><a href="Material.html" title="enum in net.minestom.server.item">Material</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMaterial()">getMaterial</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the item <a href="Material.html" title="enum in net.minestom.server.item"><code>Material</code></a>.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code><a href="StackingRule.html" title="class in net.minestom.server.item">StackingRule</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStackingRule()">getStackingRule</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the item <a href="StackingRule.html" title="class in net.minestom.server.item"><code>StackingRule</code></a>.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasDisplayName()">hasDisplayName</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the item has a display name.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasItemFlag(net.minestom.server.item.ItemFlag)">hasItemFlag</a></span>&#8203;(<a href="ItemFlag.html" title="enum in net.minestom.server.item">ItemFlag</a>&nbsp;flag)</code></th>
 <td class="colLast">
 <div class="block">Gets if the item has an item flag.</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasLore()">hasLore</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the item has a lore.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasNbtTag()">hasNbtTag</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the item has any nbt tag.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isAir()">isAir</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the item material is <a href="Material.html#AIR"><code>Material.AIR</code></a>.</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSimilar(net.minestom.server.item.ItemStack)">isSimilar</a></span>&#8203;(<a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Gets if two items are similar.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isUnbreakable()">isUnbreakable</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the item is unbreakable.</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onInventoryClick(net.minestom.server.entity.Player,net.minestom.server.inventory.click.ClickType,int,boolean)">onInventoryClick</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                 <a href="../inventory/click/ClickType.html" title="enum in net.minestom.server.inventory.click">ClickType</a>&nbsp;clickType,
@@ -461,7 +489,7 @@ implements <a href="../data/DataContainer.html" title="interface in net.minestom
 <div class="block">Called when the player click on this item on an inventory.</div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onLeftClick(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand)">onLeftClick</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
            <a href="../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</code></th>
@@ -469,7 +497,7 @@ implements <a href="../data/DataContainer.html" title="interface in net.minestom
 <div class="block">Called when the player left clicks with this item.</div>
 </td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onRightClick(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand)">onRightClick</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
             <a href="../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</code></th>
@@ -477,7 +505,7 @@ implements <a href="../data/DataContainer.html" title="interface in net.minestom
 <div class="block">Called when the player right clicks with this item.</div>
 </td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i40" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onUseOnBlock(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.utils.BlockPosition,net.minestom.server.utils.Direction)">onUseOnBlock</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
             <a href="../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
@@ -487,70 +515,70 @@ implements <a href="../data/DataContainer.html" title="interface in net.minestom
 <div class="block">Called when the player right clicks with this item on a block.</div>
 </td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i41" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeAttribute(net.minestom.server.item.attribute.ItemAttribute)">removeAttribute</a></span>&#8203;(<a href="attribute/ItemAttribute.html" title="class in net.minestom.server.item.attribute">ItemAttribute</a>&nbsp;itemAttribute)</code></th>
 <td class="colLast">
 <div class="block">Removes an attribute to the item.</div>
 </td>
 </tr>
-<tr id="i38" class="altColor">
+<tr id="i42" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeEnchantment(net.minestom.server.item.Enchantment)">removeEnchantment</a></span>&#8203;(<a href="Enchantment.html" title="enum in net.minestom.server.item">Enchantment</a>&nbsp;enchantment)</code></th>
 <td class="colLast">
 <div class="block">Removes an enchantment.</div>
 </td>
 </tr>
-<tr id="i39" class="rowColor">
+<tr id="i43" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeItemFlags(net.minestom.server.item.ItemFlag...)">removeItemFlags</a></span>&#8203;(<a href="ItemFlag.html" title="enum in net.minestom.server.item">ItemFlag</a>...&nbsp;flags)</code></th>
 <td class="colLast">
 <div class="block">Removes flags from the item.</div>
 </td>
 </tr>
-<tr id="i40" class="altColor">
+<tr id="i44" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setAmount(byte)">setAmount</a></span>&#8203;(byte&nbsp;amount)</code></th>
 <td class="colLast">
 <div class="block">Changes the item amount.</div>
 </td>
 </tr>
-<tr id="i41" class="rowColor">
+<tr id="i45" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCustomModelData(int)">setCustomModelData</a></span>&#8203;(int&nbsp;customModelData)</code></th>
 <td class="colLast">
 <div class="block">Changes the item custom model data.</div>
 </td>
 </tr>
-<tr id="i42" class="altColor">
+<tr id="i46" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDamage(int)">setDamage</a></span>&#8203;(int&nbsp;damage)</code></th>
 <td class="colLast">
 <div class="block">Sets the item damage (durability).</div>
 </td>
 </tr>
-<tr id="i43" class="rowColor">
+<tr id="i47" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setData(net.minestom.server.data.Data)">setData</a></span>&#8203;(<a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
 <td class="colLast">
 <div class="block">Sets the data of this item.</div>
 </td>
 </tr>
-<tr id="i44" class="altColor">
+<tr id="i48" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDefaultStackingRule(net.minestom.server.item.StackingRule)">setDefaultStackingRule</a></span>&#8203;(<a href="StackingRule.html" title="class in net.minestom.server.item">StackingRule</a>&nbsp;defaultStackingRule)</code></th>
 <td class="colLast">
 <div class="block">Changes the default stacking rule for created item stack.</div>
 </td>
 </tr>
-<tr id="i45" class="rowColor">
+<tr id="i49" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDisplayName(net.minestom.server.chat.JsonMessage)">setDisplayName</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;displayName)</code></th>
 <td class="colLast">
 <div class="block">Sets the item display name.</div>
 </td>
 </tr>
-<tr id="i46" class="altColor">
+<tr id="i50" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEnchantment(net.minestom.server.item.Enchantment,short)">setEnchantment</a></span>&#8203;(<a href="Enchantment.html" title="enum in net.minestom.server.item">Enchantment</a>&nbsp;enchantment,
               short&nbsp;level)</code></th>
@@ -558,49 +586,49 @@ implements <a href="../data/DataContainer.html" title="interface in net.minestom
 <div class="block">Sets an enchantment level.</div>
 </td>
 </tr>
-<tr id="i47" class="rowColor">
+<tr id="i51" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setHideFlag(int)">setHideFlag</a></span>&#8203;(int&nbsp;hideFlag)</code></th>
 <td class="colLast">
 <div class="block">Changes the item hide flag.</div>
 </td>
 </tr>
-<tr id="i48" class="altColor">
+<tr id="i52" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setItemMeta(net.minestom.server.item.metadata.ItemMeta)">setItemMeta</a></span>&#8203;(<a href="metadata/ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</code></th>
 <td class="colLast">
 <div class="block">Changes the item meta linked to this item.</div>
 </td>
 </tr>
-<tr id="i49" class="rowColor">
+<tr id="i53" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLore(java.util.List)">setLore</a></span>&#8203;(java.util.List&lt;<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;&nbsp;lore)</code></th>
 <td class="colLast">
 <div class="block">Sets the item lore.</div>
 </td>
 </tr>
-<tr id="i50" class="altColor">
+<tr id="i54" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMaterial(net.minestom.server.item.Material)">setMaterial</a></span>&#8203;(<a href="Material.html" title="enum in net.minestom.server.item">Material</a>&nbsp;material)</code></th>
 <td class="colLast">
 <div class="block">Changes the item <a href="Material.html" title="enum in net.minestom.server.item"><code>Material</code></a>.</div>
 </td>
 </tr>
-<tr id="i51" class="rowColor">
+<tr id="i55" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStackingRule(net.minestom.server.item.StackingRule)">setStackingRule</a></span>&#8203;(<a href="StackingRule.html" title="class in net.minestom.server.item">StackingRule</a>&nbsp;stackingRule)</code></th>
 <td class="colLast">
 <div class="block">Changes the <a href="StackingRule.html" title="class in net.minestom.server.item"><code>StackingRule</code></a> of the item.</div>
 </td>
 </tr>
-<tr id="i52" class="altColor">
+<tr id="i56" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUnbreakable(boolean)">setUnbreakable</a></span>&#8203;(boolean&nbsp;unbreakable)</code></th>
 <td class="colLast">
 <div class="block">Makes the item unbreakable.</div>
 </td>
 </tr>
-<tr id="i53" class="rowColor">
+<tr id="i57" class="rowColor">
 <td class="colFirst"><code>org.jglrxavpok.hephaistos.nbt.NBTCompound</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toNBT()">toNBT</a></span>()</code></th>
 <td class="colLast">
@@ -805,6 +833,68 @@ public static&nbsp;<a href="ItemStack.html" title="class in net.minestom.server.
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>equals</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+</dl>
+</li>
+</ul>
+<a id="canPlaceOn(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>canPlaceOn</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;canPlaceOn&#8203;(java.lang.String&nbsp;block)</pre>
+<div class="block">Checks if this item can be placed on the block.
+ This should be enforced only for adventure mode players.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>block</code> - the block's namespaceID</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><code>true</code> if it can be placed, <code>false</code> otherwise</dd>
+</dl>
+</li>
+</ul>
+<a id="getCanPlaceOn()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCanPlaceOn</h4>
+<pre class="methodSignature">public&nbsp;java.util.Set&lt;java.lang.String&gt;&nbsp;getCanPlaceOn()</pre>
+<div class="block">Gets the blocks that this item can be placed on</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the <code>Set</code> of blocks</dd>
+</dl>
+</li>
+</ul>
+<a id="canDestroy(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>canDestroy</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;canDestroy&#8203;(java.lang.String&nbsp;block)</pre>
+<div class="block">Checks if this item is allowed to break the provided block.
+ This should be enforced only for adventure mode players.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>block</code> - the block's namespaceID</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><code>true</code> if this item can destroy it, otherwise <code>false</code></dd>
+</dl>
+</li>
+</ul>
+<a id="getCanDestroy()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCanDestroy</h4>
+<pre class="methodSignature">public&nbsp;java.util.Set&lt;java.lang.String&gt;&nbsp;getCanDestroy()</pre>
+<div class="block">Gets the blocks that this item can destroy</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the <code>Set</code> of blocks</dd>
 </dl>
 </li>
 </ul>
