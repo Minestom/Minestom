@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":18,"i1":6,"i2":6,"i3":6,"i4":6};
+var data = {"i0":18,"i1":18,"i2":18,"i3":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -128,7 +128,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public interface <span class="typeNameLabel">EntityAI</span></pre>
 <div class="block">Represents an entity which can contain
- <a href="GoalSelector.html" title="class in net.minestom.server.entity.ai"><code>goal selectors</code></a> and <a href="TargetSelector.html" title="class in net.minestom.server.entity.ai"><code>target selectors</code></a>.</div>
+ <a href="GoalSelector.html" title="class in net.minestom.server.entity.ai"><code>goal selectors</code></a> and <a href="TargetSelector.html" title="class in net.minestom.server.entity.ai"><code>target selectors</code></a>.
+ <p>
+ Both types of selectors are being stored in <a href="EntityAIGroup.html" title="class in net.minestom.server.entity.ai"><code>AI groups</code></a>.
+ For every group there could be only a single <a href="GoalSelector.html" title="class in net.minestom.server.entity.ai"><code>goal selector</code></a> running at a time,
+ but multiple groups are independent of each other, so each of them can have own goal selector running.</div>
 </li>
 </ul>
 </div>
@@ -151,38 +155,30 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#aiTick(long)">aiTick</a></span>&#8203;(long&nbsp;time)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addAIGroup(java.util.List,java.util.List)">addAIGroup</a></span>&#8203;(java.util.List&lt;<a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&gt;&nbsp;goalSelectors,
+          java.util.List&lt;<a href="TargetSelector.html" title="class in net.minestom.server.entity.ai">TargetSelector</a>&gt;&nbsp;targetSelectors)</code></th>
 <td class="colLast">
-<div class="block">Performs an AI tick, it includes finding a new <a href="GoalSelector.html" title="class in net.minestom.server.entity.ai"><code>GoalSelector</code></a>
- or tick the current one,</div>
+<div class="block">Adds new AI group to this entity, consisting of the given
+ <a href="GoalSelector.html" title="class in net.minestom.server.entity.ai"><code>goal selectors</code></a> and <a href="TargetSelector.html" title="class in net.minestom.server.entity.ai"><code>target selectors</code></a>.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCurrentGoalSelector()">getCurrentGoalSelector</a></span>()</code></th>
+<td class="colFirst"><code>default void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addAIGroup(net.minestom.server.entity.ai.EntityAIGroup)">addAIGroup</a></span>&#8203;(<a href="EntityAIGroup.html" title="class in net.minestom.server.entity.ai">EntityAIGroup</a>&nbsp;group)</code></th>
 <td class="colLast">
-<div class="block">Gets the current entity goal selector.</div>
+<div class="block">Adds new AI group to this entity.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getGoalSelectors()">getGoalSelectors</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the goal selectors of this entity.</div>
-</td>
+<td class="colFirst"><code>default void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#aiTick(long)">aiTick</a></span>&#8203;(long&nbsp;time)</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="TargetSelector.html" title="class in net.minestom.server.entity.ai">TargetSelector</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTargetSelectors()">getTargetSelectors</a></span>()</code></th>
+<td class="colFirst"><code>java.util.Collection&lt;<a href="EntityAIGroup.html" title="class in net.minestom.server.entity.ai">EntityAIGroup</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAIGroups()">getAIGroups</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets the target selectors of this entity.</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCurrentGoalSelector(net.minestom.server.entity.ai.GoalSelector)">setCurrentGoalSelector</a></span>&#8203;(<a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&nbsp;goalSelector)</code></th>
-<td class="colLast">
-<div class="block">Changes the entity current goal selector.</div>
+<div class="block">Gets the AI groups of this entity.</div>
 </td>
 </tr>
 </table>
@@ -202,66 +198,49 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="getGoalSelectors()">
+<a id="getAIGroups()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getGoalSelectors</h4>
-<pre class="methodSignature">@NotNull
-java.util.List&lt;<a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&gt;&nbsp;getGoalSelectors()</pre>
-<div class="block">Gets the goal selectors of this entity.</div>
+<h4>getAIGroups</h4>
+<pre class="methodSignature">java.util.Collection&lt;<a href="EntityAIGroup.html" title="class in net.minestom.server.entity.ai">EntityAIGroup</a>&gt;&nbsp;getAIGroups()</pre>
+<div class="block">Gets the AI groups of this entity.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a modifiable list containing the entity goal selectors</dd>
+<dd>a modifiable collection of AI groups of this entity.</dd>
 </dl>
 </li>
 </ul>
-<a id="getTargetSelectors()">
+<a id="addAIGroup(net.minestom.server.entity.ai.EntityAIGroup)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getTargetSelectors</h4>
-<pre class="methodSignature">@NotNull
-java.util.List&lt;<a href="TargetSelector.html" title="class in net.minestom.server.entity.ai">TargetSelector</a>&gt;&nbsp;getTargetSelectors()</pre>
-<div class="block">Gets the target selectors of this entity.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a modifiable list containing the entity target selectors</dd>
-</dl>
-</li>
-</ul>
-<a id="getCurrentGoalSelector()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getCurrentGoalSelector</h4>
-<pre class="methodSignature">@Nullable
-<a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&nbsp;getCurrentGoalSelector()</pre>
-<div class="block">Gets the current entity goal selector.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the current entity goal selector, null if not any</dd>
-</dl>
-</li>
-</ul>
-<a id="setCurrentGoalSelector(net.minestom.server.entity.ai.GoalSelector)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setCurrentGoalSelector</h4>
-<pre class="methodSignature">void&nbsp;setCurrentGoalSelector&#8203;(@Nullable
-                            <a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&nbsp;goalSelector)</pre>
-<div class="block">Changes the entity current goal selector.
- <p>
- Mostly unsafe since the current goal selector should normally
- be chosen during the entity tick method.</div>
+<h4>addAIGroup</h4>
+<pre class="methodSignature">default&nbsp;void&nbsp;addAIGroup&#8203;(<a href="EntityAIGroup.html" title="class in net.minestom.server.entity.ai">EntityAIGroup</a>&nbsp;group)</pre>
+<div class="block">Adds new AI group to this entity.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>goalSelector</code> - the new entity goal selector, null to disable it</dd>
+<dd><code>group</code> - a group to be added.</dd>
+</dl>
+</li>
+</ul>
+<a id="addAIGroup(java.util.List,java.util.List)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addAIGroup</h4>
+<pre class="methodSignature">default&nbsp;void&nbsp;addAIGroup&#8203;(java.util.List&lt;<a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&gt;&nbsp;goalSelectors,
+                        java.util.List&lt;<a href="TargetSelector.html" title="class in net.minestom.server.entity.ai">TargetSelector</a>&gt;&nbsp;targetSelectors)</pre>
+<div class="block">Adds new AI group to this entity, consisting of the given
+ <a href="GoalSelector.html" title="class in net.minestom.server.entity.ai"><code>goal selectors</code></a> and <a href="TargetSelector.html" title="class in net.minestom.server.entity.ai"><code>target selectors</code></a>.
+ Their order is also a priority: the lower element index is, the higher priority is.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>goalSelectors</code> - goal selectors of the group.</dd>
+<dd><code>targetSelectors</code> - target selectors of the group.</dd>
 </dl>
 </li>
 </ul>
@@ -272,12 +251,6 @@ java.util.List&lt;<a href="TargetSelector.html" title="class in net.minestom.ser
 <li class="blockList">
 <h4>aiTick</h4>
 <pre class="methodSignature">default&nbsp;void&nbsp;aiTick&#8203;(long&nbsp;time)</pre>
-<div class="block">Performs an AI tick, it includes finding a new <a href="GoalSelector.html" title="class in net.minestom.server.entity.ai"><code>GoalSelector</code></a>
- or tick the current one,</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>time</code> - the tick time in milliseconds</dd>
-</dl>
 </li>
 </ul>
 </li>

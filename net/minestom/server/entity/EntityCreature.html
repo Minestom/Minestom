@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -181,24 +181,6 @@ implements <a href="pathfinding/NavigableEntity.html" title="interface in net.mi
 <!--   -->
 </a>
 <h3>Field Summary</h3>
-<table class="memberSummary">
-<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Field</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected java.util.List&lt;<a href="ai/GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#goalSelectors">goalSelectors</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected java.util.List&lt;<a href="ai/TargetSelector.html" title="class in net.minestom.server.entity.ai">TargetSelector</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#targetSelectors">targetSelectors</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-</table>
 <ul class="blockList">
 <li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.entity.LivingEntity">
 <!--   -->
@@ -289,60 +271,39 @@ implements <a href="pathfinding/NavigableEntity.html" title="interface in net.mi
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="ai/GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCurrentGoalSelector()">getCurrentGoalSelector</a></span>()</code></th>
+<td class="colFirst"><code>java.util.Collection&lt;<a href="ai/EntityAIGroup.html" title="class in net.minestom.server.entity.ai">EntityAIGroup</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAIGroups()">getAIGroups</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets the current entity goal selector.</div>
+<div class="block">Gets the AI groups of this entity.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="ai/GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getGoalSelectors()">getGoalSelectors</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the goal selectors of this entity.</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="pathfinding/Navigator.html" title="class in net.minestom.server.entity.pathfinding">Navigator</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNavigator()">getNavigator</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRemovalAnimationDelay()">getRemovalAnimationDelay</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the kill animation delay before vanishing the entity.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTarget()">getTarget</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the entity target.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="ai/TargetSelector.html" title="class in net.minestom.server.entity.ai">TargetSelector</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTargetSelectors()">getTargetSelectors</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the target selectors of this entity.</div>
-</td>
-</tr>
-<tr id="i8" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#kill()">kill</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Kills the entity, trigger the <a href="../event/entity/EntityDeathEvent.html" title="class in net.minestom.server.event.entity"><code>EntityDeathEvent</code></a> event.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCurrentGoalSelector(net.minestom.server.entity.ai.GoalSelector)">setCurrentGoalSelector</a></span>&#8203;(<a href="ai/GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&nbsp;currentGoalSelector)</code></th>
-<td class="colLast">
-<div class="block">Changes the entity current goal selector.</div>
-</td>
-</tr>
-<tr id="i10" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setInstance(net.minestom.server.instance.Instance,net.minestom.server.utils.Position)">setInstance</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
            <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition)</code></th>
@@ -350,21 +311,21 @@ implements <a href="pathfinding/NavigableEntity.html" title="interface in net.mi
 <div class="block">Changes the entity instance, i.e.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRemovalAnimationDelay(int)">setRemovalAnimationDelay</a></span>&#8203;(int&nbsp;removalAnimationDelay)</code></th>
 <td class="colLast">
 <div class="block">Changes the removal animation delay of the entity.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTarget(net.minestom.server.entity.Entity)">setTarget</a></span>&#8203;(<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;target)</code></th>
 <td class="colLast">
 <div class="block">Changes the entity target.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update(long)">update</a></span>&#8203;(long&nbsp;time)</code></th>
 <td class="colLast">
@@ -398,7 +359,7 @@ implements <a href="pathfinding/NavigableEntity.html" title="interface in net.mi
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;net.minestom.server.entity.ai.<a href="ai/EntityAI.html" title="interface in net.minestom.server.entity.ai">EntityAI</a></h3>
-<code><a href="ai/EntityAI.html#aiTick(long)">aiTick</a></code></li>
+<code><a href="ai/EntityAI.html#addAIGroup(java.util.List,java.util.List)">addAIGroup</a>, <a href="ai/EntityAI.html#addAIGroup(net.minestom.server.entity.ai.EntityAIGroup)">addAIGroup</a>, <a href="ai/EntityAI.html#aiTick(long)">aiTick</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.inventory.EquipmentHandler">
@@ -437,34 +398,6 @@ implements <a href="pathfinding/NavigableEntity.html" title="interface in net.mi
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ FIELD DETAIL =========== -->
-<section role="region">
-<ul class="blockList">
-<li class="blockList"><a id="field.detail">
-<!--   -->
-</a>
-<h3>Field Detail</h3>
-<a id="goalSelectors">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>goalSelectors</h4>
-<pre>protected final&nbsp;java.util.List&lt;<a href="ai/GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&gt; goalSelectors</pre>
-</li>
-</ul>
-<a id="targetSelectors">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>targetSelectors</h4>
-<pre>protected final&nbsp;java.util.List&lt;<a href="ai/TargetSelector.html" title="class in net.minestom.server.entity.ai">TargetSelector</a>&gt; targetSelectors</pre>
-</li>
-</ul>
-</li>
-</ul>
-</section>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <section role="region">
 <ul class="blockList">
@@ -618,77 +551,20 @@ public&nbsp;EntityCreature&#8203;(@NotNull
 </dl>
 </li>
 </ul>
-<a id="getGoalSelectors()">
+<a id="getAIGroups()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getGoalSelectors</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;java.util.List&lt;<a href="ai/GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&gt;&nbsp;getGoalSelectors()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="ai/EntityAI.html#getGoalSelectors()">EntityAI</a></code></span></div>
-<div class="block">Gets the goal selectors of this entity.</div>
+<h4>getAIGroups</h4>
+<pre class="methodSignature">public&nbsp;java.util.Collection&lt;<a href="ai/EntityAIGroup.html" title="class in net.minestom.server.entity.ai">EntityAIGroup</a>&gt;&nbsp;getAIGroups()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="ai/EntityAI.html#getAIGroups()">EntityAI</a></code></span></div>
+<div class="block">Gets the AI groups of this entity.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="ai/EntityAI.html#getGoalSelectors()">getGoalSelectors</a></code>&nbsp;in interface&nbsp;<code><a href="ai/EntityAI.html" title="interface in net.minestom.server.entity.ai">EntityAI</a></code></dd>
+<dd><code><a href="ai/EntityAI.html#getAIGroups()">getAIGroups</a></code>&nbsp;in interface&nbsp;<code><a href="ai/EntityAI.html" title="interface in net.minestom.server.entity.ai">EntityAI</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a modifiable list containing the entity goal selectors</dd>
-</dl>
-</li>
-</ul>
-<a id="getTargetSelectors()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getTargetSelectors</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;java.util.List&lt;<a href="ai/TargetSelector.html" title="class in net.minestom.server.entity.ai">TargetSelector</a>&gt;&nbsp;getTargetSelectors()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="ai/EntityAI.html#getTargetSelectors()">EntityAI</a></code></span></div>
-<div class="block">Gets the target selectors of this entity.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="ai/EntityAI.html#getTargetSelectors()">getTargetSelectors</a></code>&nbsp;in interface&nbsp;<code><a href="ai/EntityAI.html" title="interface in net.minestom.server.entity.ai">EntityAI</a></code></dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a modifiable list containing the entity target selectors</dd>
-</dl>
-</li>
-</ul>
-<a id="getCurrentGoalSelector()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getCurrentGoalSelector</h4>
-<pre class="methodSignature">@Nullable
-public&nbsp;<a href="ai/GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&nbsp;getCurrentGoalSelector()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="ai/EntityAI.html#getCurrentGoalSelector()">EntityAI</a></code></span></div>
-<div class="block">Gets the current entity goal selector.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="ai/EntityAI.html#getCurrentGoalSelector()">getCurrentGoalSelector</a></code>&nbsp;in interface&nbsp;<code><a href="ai/EntityAI.html" title="interface in net.minestom.server.entity.ai">EntityAI</a></code></dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the current entity goal selector, null if not any</dd>
-</dl>
-</li>
-</ul>
-<a id="setCurrentGoalSelector(net.minestom.server.entity.ai.GoalSelector)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setCurrentGoalSelector</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setCurrentGoalSelector&#8203;(<a href="ai/GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&nbsp;currentGoalSelector)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="ai/EntityAI.html#setCurrentGoalSelector(net.minestom.server.entity.ai.GoalSelector)">EntityAI</a></code></span></div>
-<div class="block">Changes the entity current goal selector.
- <p>
- Mostly unsafe since the current goal selector should normally
- be chosen during the entity tick method.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="ai/EntityAI.html#setCurrentGoalSelector(net.minestom.server.entity.ai.GoalSelector)">setCurrentGoalSelector</a></code>&nbsp;in interface&nbsp;<code><a href="ai/EntityAI.html" title="interface in net.minestom.server.entity.ai">EntityAI</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>currentGoalSelector</code> - the new entity goal selector, null to disable it</dd>
+<dd>a modifiable collection of AI groups of this entity.</dd>
 </dl>
 </li>
 </ul>
@@ -828,7 +704,7 @@ public&nbsp;<a href="pathfinding/Navigator.html" title="class in net.minestom.se
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
