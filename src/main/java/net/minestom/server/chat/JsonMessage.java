@@ -58,6 +58,10 @@ public abstract class JsonMessage implements ComponentLike {
         return GsonComponentSerializer.gson().deserialize(this.toString());
     }
 
+    public static @NotNull JsonMessage fromComponent(@NotNull Component component) {
+        return new RawJsonMessage(GsonComponentSerializer.gson().serialize(component));
+    }
+
     /**
      * Gets the Json representation.
      * <p>
