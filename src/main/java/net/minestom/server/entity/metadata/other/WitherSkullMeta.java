@@ -4,10 +4,11 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
+import net.minestom.server.entity.metadata.ProjectileMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class WitherSkullMeta extends EntityMeta implements ObjectDataProvider {
+public class WitherSkullMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
 
     private Entity shooter;
 
@@ -23,11 +24,13 @@ public class WitherSkullMeta extends EntityMeta implements ObjectDataProvider {
         super.metadata.setIndex((byte) 7, Metadata.Boolean(value));
     }
 
+    @Override
     @Nullable
     public Entity getShooter() {
         return shooter;
     }
 
+    @Override
     public void setShooter(@Nullable Entity shooter) {
         this.shooter = shooter;
     }

@@ -13,10 +13,10 @@ import org.jetbrains.annotations.Nullable;
  * @deprecated Use {@link net.minestom.server.entity.metadata.item.EyeOfEnderMeta} instead.
  */
 @Deprecated
-public class EntityEyeOfEnder extends AbstractProjectile {
+public class EntityEyeOfEnder extends Entity {
 
     public EntityEyeOfEnder(@Nullable Entity shooter, @NotNull Position spawnPosition) {
-        super(shooter, EntityType.EYE_OF_ENDER, spawnPosition);
+        super(EntityType.EYE_OF_ENDER, spawnPosition);
     }
 
 
