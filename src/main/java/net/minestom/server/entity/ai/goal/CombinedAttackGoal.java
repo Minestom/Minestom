@@ -120,6 +120,7 @@ public class CombinedAttackGoal extends GoalSelector {
         }
         double distanceSquared = this.entityCreature.getDistanceSquared(target);
         boolean comeClose = false;
+        // First of all, checking if to perform melee or ranged attack depending on the distance to target.
         if (distanceSquared <= this.meleeRangeSquared) {
             if (!CooldownUtils.hasCooldown(time, this.lastAttack, this.meleeTimeUnit, this.meleeDelay)) {
                 this.entityCreature.attack(target, true);
@@ -128,6 +129,7 @@ public class CombinedAttackGoal extends GoalSelector {
         } else if (distanceSquared <= this.rangedRangeSquared) {
             if (!CooldownUtils.hasCooldown(time, this.lastAttack, this.rangedTimeUnit, this.rangedDelay)) {
                 if (this.entityCreature.hasLineOfSight(target)) {
+                    // If target is on line of entity sight, ranged attack can be performed
                     Position to = target.getPosition().clone().add(0D, target.getEyeHeight(), 0D);
 
                     Function<Entity, EntityProjectile> projectileGenerator = this.projectileGenerator;
@@ -140,18 +142,21 @@ public class CombinedAttackGoal extends GoalSelector {
                     projectile.shoot(to, this.rangedPower, this.rangedSpread);
                     this.lastAttack = time;
                 } else {
+                    // Otherwise deciding whether to go to the enemy.
                     comeClose = this.comeClose;
                 }
             }
         }
         Navigator navigator = this.entityCreature.getNavigator();
         Position pathPosition = navigator.getPathPosition();
+        // If we don't want to come close and we're already within desirable range, no movement is needed.
         if (!comeClose && distanceSquared <= this.desirableRangeSquared) {
             if (pathPosition != null) {
                 navigator.setPathTo(null);
             }
             return;
         }
+        // Otherwise going to the target.
         Position targetPosition = target.getPosition();
         if (pathPosition == null || !pathPosition.isSimilar(targetPosition)) {
             navigator.setPathTo(targetPosition);
