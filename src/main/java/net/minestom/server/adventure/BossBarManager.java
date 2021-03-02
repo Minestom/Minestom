@@ -2,21 +2,18 @@ package net.minestom.server.adventure;
 
 import com.google.common.collect.MapMaker;
 import net.kyori.adventure.bossbar.BossBar;
-import net.kyori.adventure.bossbar.BossBar.*;
+import net.kyori.adventure.bossbar.BossBar.Color;
+import net.kyori.adventure.bossbar.BossBar.Flag;
+import net.kyori.adventure.bossbar.BossBar.Overlay;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.network.packet.server.play.BossBarPacket;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.logging.Handler;
 
 import static net.minestom.server.network.packet.server.play.BossBarPacket.Action.*;
 
@@ -69,31 +66,31 @@ public class BossBarManager implements BossBar.Listener {
     }
 
     @Override
-    public void bossBarNameChanged(@NonNull BossBar bar, @NonNull Component oldName, @NonNull Component newName) {
+    public void bossBarNameChanged(@NotNull BossBar bar, @NotNull Component oldName, @NotNull Component newName) {
         Holder holder = this.bars.get(bar);
         this.updatePlayers(holder.createTitleUpdate(newName), holder.players);
     }
 
     @Override
-    public void bossBarProgressChanged(@NonNull BossBar bar, float oldProgress, float newProgress) {
+    public void bossBarProgressChanged(@NotNull BossBar bar, float oldProgress, float newProgress) {
         Holder holder = this.bars.get(bar);
         this.updatePlayers(holder.createPercentUpdate(newProgress), holder.players);
     }
 
     @Override
-    public void bossBarColorChanged(@NonNull BossBar bar, @NonNull Color oldColor, @NonNull Color newColor) {
+    public void bossBarColorChanged(@NotNull BossBar bar, @NotNull Color oldColor, @NotNull Color newColor) {
         Holder holder = this.bars.get(bar);
         this.updatePlayers(holder.createColorUpdate(newColor), holder.players);
     }
 
     @Override
-    public void bossBarOverlayChanged(@NonNull BossBar bar, BossBar.@NonNull Overlay oldOverlay, BossBar.@NonNull Overlay newOverlay) {
+    public void bossBarOverlayChanged(@NotNull BossBar bar, BossBar.@NotNull Overlay oldOverlay, BossBar.@NotNull Overlay newOverlay) {
         Holder holder = this.bars.get(bar);
         this.updatePlayers(holder.createOverlayUpdate(newOverlay), holder.players);
     }
 
     @Override
-    public void bossBarFlagsChanged(@NonNull BossBar bar, @NonNull Set<BossBar.Flag> flagsAdded, @NonNull Set<BossBar.Flag> flagsRemoved) {
+    public void bossBarFlagsChanged(@NotNull BossBar bar, @NotNull Set<BossBar.Flag> flagsAdded, @NotNull Set<BossBar.Flag> flagsRemoved) {
         Holder holder = this.bars.get(bar);
         this.updatePlayers(holder.createFlagsUpdate(), holder.players);
     }
@@ -162,11 +159,11 @@ public class BossBarManager implements BossBar.Listener {
             this.registered = false;
         }
 
-        BossBarPacket createRemovePacket() {
+        @NotNull BossBarPacket createRemovePacket() {
             return this.createGenericPacket(REMOVE, packet -> {});
         }
 
-        BossBarPacket createAddPacket() {
+        @NotNull BossBarPacket createAddPacket() {
             return this.createGenericPacket(ADD, packet -> {
                 packet.title = MinecraftServer.getSerializationManager().serialize(bar.name());
                 packet.color = bar.color().ordinal();
@@ -176,37 +173,37 @@ public class BossBarManager implements BossBar.Listener {
             });
         }
 
-        BossBarPacket createPercentUpdate(float newPercent) {
+        @NotNull BossBarPacket createPercentUpdate(float newPercent) {
             return this.createGenericPacket(UPDATE_HEALTH, packet -> packet.health = newPercent);
         }
 
-        BossBarPacket createColorUpdate(@NotNull Color color) {
+        @NotNull BossBarPacket createColorUpdate(@NotNull Color color) {
             return this.createGenericPacket(UPDATE_STYLE, packet -> {
                 packet.color = color.ordinal();
                 packet.division = bar.overlay().ordinal();
             });
         }
 
-        BossBarPacket createTitleUpdate(@NotNull Component title) {
+        @NotNull BossBarPacket createTitleUpdate(@NotNull Component title) {
             return this.createGenericPacket(UPDATE_TITLE, packet -> packet.title = MinecraftServer.getSerializationManager().serialize(title));
         }
 
-        BossBarPacket createFlagsUpdate() {
+        @NotNull BossBarPacket createFlagsUpdate() {
             return createFlagsUpdate(bar.flags());
         }
 
-        BossBarPacket createFlagsUpdate(@NotNull Set<Flag> newFlags) {
+        @NotNull BossBarPacket createFlagsUpdate(@NotNull Set<Flag> newFlags) {
             return this.createGenericPacket(UPDATE_FLAGS, packet -> packet.flags = serializeFlags(bar.flags()));
         }
 
-        BossBarPacket createOverlayUpdate(@NotNull Overlay overlay) {
+        @NotNull BossBarPacket createOverlayUpdate(@NotNull Overlay overlay) {
             return this.createGenericPacket(UPDATE_STYLE, packet -> {
                 packet.division = overlay.ordinal();
                 packet.color = bar.color().ordinal();
             });
         }
 
-        BossBarPacket createGenericPacket(@NotNull BossBarPacket.Action action, @NotNull Consumer<BossBarPacket> consumer) {
+        @NotNull BossBarPacket createGenericPacket(@NotNull BossBarPacket.Action action, @NotNull Consumer<BossBarPacket> consumer) {
             BossBarPacket packet = new BossBarPacket();
             packet.uuid = this.uuid;
             packet.action = action;

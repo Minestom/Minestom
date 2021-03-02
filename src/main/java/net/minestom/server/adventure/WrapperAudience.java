@@ -2,7 +2,6 @@ package net.minestom.server.adventure;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -22,7 +21,7 @@ public class WrapperAudience implements ForwardingAudience {
     }
 
     @Override
-    public @NonNull Iterable<? extends Audience> audiences() {
+    public @NotNull Iterable<? extends Audience> audiences() {
         return this.audiences;
     }
 }

@@ -26,7 +26,6 @@ import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
 import net.minestom.server.utils.validate.Check;
 import org.apache.commons.text.similarity.JaroWinklerDistance;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -533,7 +532,7 @@ public final class ConnectionManager implements ForwardingAudience {
     }
 
     @Override
-    public @NonNull Iterable<? extends Audience> audiences() {
+    public @NotNull Iterable<? extends Audience> audiences() {
         return this.getOnlinePlayers();
     }
 }

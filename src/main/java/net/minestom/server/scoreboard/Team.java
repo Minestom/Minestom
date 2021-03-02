@@ -14,13 +14,10 @@ import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule;
 import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility;
 import net.minestom.server.utils.PacketUtils;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
@@ -429,7 +426,7 @@ public class Team implements ForwardingAudience {
     }
 
     @Override
-    public @NonNull Iterable<? extends Audience> audiences() {
+    public @NotNull Iterable<? extends Audience> audiences() {
         if (!this.isPlayerMembersUpToDate) {
             this.playerMembers.clear();
 

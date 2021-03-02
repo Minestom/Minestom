@@ -53,7 +53,6 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
 import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -833,7 +832,7 @@ public final class MinecraftServer implements ForwardingAudience.Single {
     }
 
     @Override
-    public @NonNull Audience audience() {
+    public @NotNull Audience audience() {
         return getConnectionManager();
     }
 }
