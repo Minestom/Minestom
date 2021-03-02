@@ -95,6 +95,12 @@ public class EntityAIGroup {
         }
     }
 
+    /**
+     * The purpose of this list is to guarantee that every {@link GoalSelector} added to that group
+     * has a reference to it for some internal interactions. We don't provide developers with
+     * methods like `addGoalSelector` or `removeGoalSelector`: instead we provide them with direct
+     * access to list of goal selectors, so that they could use operations such as `clear`, `set`, `removeIf`, etc.
+     */
     private class GoalSelectorsArrayList extends ArrayList<GoalSelector> {
 
         private GoalSelectorsArrayList() {
