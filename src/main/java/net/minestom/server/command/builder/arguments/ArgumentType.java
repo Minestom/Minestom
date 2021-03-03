@@ -107,10 +107,19 @@ public class ArgumentType {
     // Minecraft specific arguments
 
     /**
-     * @see ArgumentColor
+     * @deprecated Use {@link #TextColor} for colors and {@link #TextDecoration} for styles.
      */
+    @Deprecated
     public static ArgumentColor Color(@NotNull String id) {
         return new ArgumentColor(id);
+    }
+
+    public static ArgumentTextColor TextColor(@NotNull String id) {
+        return new ArgumentTextColor(id);
+    }
+
+    public static ArgumentTextDecoration TextDecoration(@NotNull String id) {
+        return new ArgumentTextDecoration(id);
     }
 
     /**

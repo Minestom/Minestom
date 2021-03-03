@@ -1,6 +1,7 @@
 package net.minestom.server.entity;
 
 import com.google.common.collect.Queues;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
 import net.minestom.server.chat.JsonMessage;
@@ -1193,9 +1194,21 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      * Gets the entity custom name.
      *
      * @return the custom name of the entity, null if there is not
+     * @deprecated Use {@link #getCustomName()}
+     */
+    @Deprecated
+    @Nullable
+    public JsonMessage getCustomNameJson() {
+        return this.entityMeta.getCustomNameJson();
+    }
+
+    /**
+     * Gets the entity custom name.
+     *
+     * @return the custom name of the entity, null if there is not
      */
     @Nullable
-    public JsonMessage getCustomName() {
+    public Component getCustomName() {
         return this.entityMeta.getCustomName();
     }
 
@@ -1203,8 +1216,19 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      * Changes the entity custom name.
      *
      * @param customName the custom name of the entity, null to remove it
+     * @deprecated Use {@link #setCustomName(Component)}
      */
+    @Deprecated
     public void setCustomName(@Nullable JsonMessage customName) {
+        this.entityMeta.setCustomName(customName);
+    }
+
+    /**
+     * Changes the entity custom name.
+     *
+     * @param customName the custom name of the entity, null to remove it
+     */
+    public void setCustomName(@Nullable Component customName) {
         this.entityMeta.setCustomName(customName);
     }
 

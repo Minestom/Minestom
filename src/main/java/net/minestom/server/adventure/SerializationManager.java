@@ -6,9 +6,12 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
 import net.kyori.adventure.translation.Translator;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
@@ -123,7 +126,8 @@ public class SerializationManager {
      *
      * @return the serialized string
      */
-    public @NotNull String serialize(@NotNull Component component) {
+    @Contract("null -> null")
+    public @Nullable String serialize(@Nullable Component component) {
         return this.serialize(component, this.defaultLocale);
     }
 
@@ -138,8 +142,9 @@ public class SerializationManager {
      *
      * @return the serialized string
      */
-    public @NotNull String serialize(@NotNull Component component, @NotNull Localizable localizable) {
-        return this.serialize(component, localizable.getLocale());
+    @Contract("null, _ -> null")
+    public @Nullable String serialize(@Nullable Component component, @NotNull Localizable localizable) {
+        return this.serialize(component, Objects.requireNonNullElse(localizable.getLocale(), this.defaultLocale));
     }
 
     /**
@@ -153,7 +158,12 @@ public class SerializationManager {
      *
      * @return the serialized string
      */
-    public @NotNull String serialize(@NotNull Component component, @NotNull Locale locale) {
+    @Contract("null, _ -> null")
+    public @Nullable String serialize(@Nullable Component component, @NotNull Locale locale) {
+        if (component == null) {
+            return null;
+        }
+
         // apply renderers
         for (Function<Component, Component> renderer : this.renderers) {
             component = renderer.apply(component);

@@ -39,6 +39,19 @@ public class SoundEffectPacket implements ServerPacket {
         return packet;
     }
 
+    @NotNull
+    public static SoundEffectPacket create(Source category, Sound sound, Position position, float volume, float pitch) {
+        SoundEffectPacket packet = new SoundEffectPacket();
+        packet.soundId = sound.getId();
+        packet.soundCategory = category.ordinal();
+        // *8 converts to fixed-point representation with 3 bits for fractional part
+        packet.x = (int) position.getX();
+        packet.y = (int) position.getY();
+        packet.z = (int) position.getZ();
+        packet.volume = volume;
+        packet.pitch = pitch;
+        return packet;
+    }
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(soundId);

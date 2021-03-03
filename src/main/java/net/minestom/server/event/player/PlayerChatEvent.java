@@ -1,5 +1,6 @@
 package net.minestom.server.event.player;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
@@ -19,7 +20,7 @@ public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
 
     private final Collection<Player> recipients;
     private String message;
-    private Function<PlayerChatEvent, JsonMessage> chatFormat;
+    private Function<PlayerChatEvent, Component> chatFormat;
 
     private boolean cancelled;
 
@@ -33,8 +34,19 @@ public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
      * Changes the chat format.
      *
      * @param chatFormat the custom chat format, null to use the default one
+     * @deprecated Use {@link #setChatFormat(Function)}
      */
-    public void setChatFormat(@Nullable Function<PlayerChatEvent, JsonMessage> chatFormat) {
+    @Deprecated
+    public void setChatFormatJson(@Nullable Function<PlayerChatEvent, JsonMessage> chatFormat) {
+        this.chatFormat = chatFormat == null ? null : chatFormat.andThen(JsonMessage::asComponent);
+    }
+
+    /**
+     * Changes the chat format.
+     *
+     * @param chatFormat the custom chat format, null to use the default one
+     */
+    public void setChatFormat(@Nullable Function<PlayerChatEvent, Component> chatFormat) {
         this.chatFormat = chatFormat;
     }
 
@@ -77,7 +89,7 @@ public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
      * @return the chat format which will be used, null if this is the default one
      */
     @Nullable
-    public Function<PlayerChatEvent, JsonMessage> getChatFormatFunction() {
+    public Function<PlayerChatEvent, Component> getChatFormatFunction() {
         return chatFormat;
     }
 

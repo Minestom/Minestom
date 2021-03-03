@@ -2,6 +2,7 @@ package net.minestom.server.item;
 
 import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.data.Data;
@@ -26,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 // TODO should we cache a ByteBuf of this item for faster packet write
 
@@ -54,9 +56,9 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
     private byte amount;
     private int damage;
 
-    private JsonMessage displayName;
+    private Component displayName;
     private boolean unbreakable;
-    private List<JsonMessage> lore;
+    private List<Component> lore;
 
     private Object2ShortMap<Enchantment> enchantmentMap;
     private List<ItemAttribute> attributes;
@@ -176,7 +178,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
                 return true;
             }
 
-            final JsonMessage itemDisplayName = itemStack.getDisplayName();
+            final Component itemDisplayName = itemStack.getDisplayName();
             final boolean displayNameCheck = (displayName == null && itemDisplayName == null) ||
                     (displayName != null && displayName.equals(itemDisplayName));
 
@@ -313,9 +315,21 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      * Gets the item display name.
      *
      * @return the item display name, can be null if not present
+     * @deprecated Use {@link #getDisplayName()}
+     */
+    @Deprecated
+    @Nullable
+    public JsonMessage getDisplayNameJson() {
+        return JsonMessage.fromComponent(displayName);
+    }
+
+    /**
+     * Gets the item display name.
+     *
+     * @return the item display name, can be null if not present
      */
     @Nullable
-    public JsonMessage getDisplayName() {
+    public Component getDisplayName() {
         return displayName;
     }
 
@@ -323,8 +337,19 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      * Sets the item display name.
      *
      * @param displayName the item display name
+     * @deprecated Use {@link #setDisplayName(Component)}
      */
+    @Deprecated
     public void setDisplayName(@Nullable JsonMessage displayName) {
+        this.setDisplayName(displayName == null ? null : displayName.asComponent());
+    }
+
+    /**
+     * Sets the item display name.
+     *
+     * @param displayName the item display name
+     */
+    public void setDisplayName(@Nullable Component displayName) {
         this.displayName = displayName;
     }
 
@@ -341,9 +366,21 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      * Gets the item lore.
      *
      * @return a modifiable list containing the item lore, can be empty if not present
+     * @deprecated Use {@link #getLore()}
+     */
+    @Deprecated
+    @NotNull
+    public List<JsonMessage> getLoreJson() {
+        return lore.stream().map(JsonMessage::fromComponent).collect(Collectors.toList());
+    }
+
+    /**
+     * Gets the item lore.
+     *
+     * @return a modifiable list containing the item lore, can be empty if not present
      */
     @NotNull
-    public List<JsonMessage> getLore() {
+    public List<Component> getLore() {
         return lore;
     }
 
@@ -351,8 +388,20 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      * Sets the item lore.
      *
      * @param lore the item lore, can be empty to remove
+     * @deprecated Use {@link #setLore}
      */
-    public void setLore(@NotNull List<JsonMessage> lore) {
+    @Deprecated
+    public void setLoreJson(@NotNull List<JsonMessage> lore) {
+        this.lore = lore.stream().map(JsonMessage::asComponent).collect(Collectors.toList());
+    }
+
+    /**
+     * Sets the item lore.
+     *
+     * @param lore the item lore, can be empty to remove
+     */
+    @NotNull
+    public void setLore(List<Component> lore) {
         this.lore = lore;
     }
 

@@ -1,5 +1,8 @@
 package net.minestom.server.entity.damage;
 
+import com.google.gson.stream.JsonReader;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.chat.RichMessage;
@@ -56,17 +59,24 @@ public class DamageType implements DataContainer {
     }
 
     /**
+     * @deprecated Use {@link #buildDeathMessage(Player)}
+     */
+    @Deprecated
+    public JsonMessage buildDeathMessageJson(@NotNull Player killed) {
+        return JsonMessage.fromComponent(this.buildDeathMessage(killed));
+    }
+
+    /**
      * Builds the death message linked to this damage type.
      * <p>
      * Used in {@link Player#kill()} to broadcast the proper message.
      *
      * @param killed the player who has been killed
-     * @return the death message, null to do not send anything.
-     * Can be for instance, of type {@link ColoredText} or {@link RichMessage}.
+     * @return the death message, null to do not send anything
      */
     @Nullable
-    public JsonMessage buildDeathMessage(@NotNull Player killed) {
-        return ColoredText.of("{@death." + identifier + "," + killed.getUsername() + "}");
+    public Component buildDeathMessage(@NotNull Player killed) {
+        return Component.translatable("death." + identifier, Component.text(killed.getUsername()));
     }
 
     /**
@@ -104,14 +114,22 @@ public class DamageType implements DataContainer {
     }
 
     /**
+     * @deprecated Use {@link #buildDeathScreenText(Player)}
+     */
+    @Deprecated
+    @Nullable
+    public JsonMessage buildDeathScreenTextJson(@NotNull Player killed) {
+        return JsonMessage.fromComponent(this.buildDeathScreenText(killed));
+    }
+
+    /**
      * Builds the text sent to a player in his death screen.
      *
      * @param killed the player who has been killed
      * @return the death screen text, null to do not send anything
      */
-    @Nullable
-    public JsonMessage buildDeathScreenText(@NotNull Player killed) {
-        return ColoredText.of("{@death." + identifier + "}");
+    public Component buildDeathScreenText(@NotNull Player killed) {
+        return Component.translatable("death." + identifier);
     }
 
     /**

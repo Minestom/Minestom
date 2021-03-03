@@ -11,7 +11,9 @@ import org.jetbrains.annotations.NotNull;
  * Represents an argument which will give you a {@link ChatColor}.
  * <p>
  * Example: red, white, reset
+ * @deprecated Use {@link ArgumentTextColor} for colors and {@link ArgumentTextDecoration} for styles.
  */
+@Deprecated
 public class ArgumentColor extends Argument<ChatColor> {
 
     public static final int UNDEFINED_COLOR = -2;
