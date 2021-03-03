@@ -12,6 +12,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.adventure.AdventureUtils;
+import net.minestom.server.adventure.Localizable;
 import net.minestom.server.attribute.AttributeInstance;
 import net.minestom.server.bossbar.BossBar;
 import net.minestom.server.chat.ChatParser;
@@ -84,7 +85,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <p>
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
-public class Player extends LivingEntity implements CommandSender {
+public class Player extends LivingEntity implements CommandSender, Localizable {
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -2661,6 +2662,22 @@ public class Player extends LivingEntity implements CommandSender {
     @Override
     public void setBoots(@NotNull ItemStack itemStack) {
         inventory.setBoots(itemStack);
+    }
+
+    @Override
+    public Locale getLocale() {
+        return settings.locale == null ? null : Locale.forLanguageTag(settings.locale);
+    }
+
+    /**
+     * Sets the player's locale. This will only set the locale of the player as it
+     * is stored in the server. This will also be reset if the settings are refreshed.
+     *
+     * @param locale the new locale
+     */
+    @Override
+    public void setLocale(@Nullable Locale locale) {
+        settings.locale = locale == null ? null : locale.toLanguageTag();
     }
 
     /**
