@@ -130,12 +130,16 @@ public class ArgumentType {
         return new ArgumentItemStack(id);
     }
 
-    public static ArgumentNbtCompoundTag NbtCompound(@NotNull String id) {
-        return new ArgumentNbtCompoundTag(id);
+    public static ArgumentComponent Component(@NotNull String id) {
+        return new ArgumentComponent(id);
     }
 
     public static ArgumentNbtTag NBT(@NotNull String id) {
         return new ArgumentNbtTag(id);
+    }
+
+    public static ArgumentNbtCompoundTag NbtCompound(@NotNull String id) {
+        return new ArgumentNbtCompoundTag(id);
     }
 
     public static ArgumentRelativeBlockPosition RelativeBlockPosition(@NotNull String id) {
