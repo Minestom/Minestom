@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.client.handshake;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.ChatColor;
-import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.network.ConnectionState;
@@ -21,9 +21,8 @@ public class HandshakePacket implements ClientPreplayPacket {
     /**
      * Text sent if a player tries to connect with an invalid version of the client
      */
-    private static final ColoredText INVALID_VERSION_TEXT = ColoredText.of(ChatColor.RED, "Invalid Version, please use " + MinecraftServer.VERSION_NAME);
-
-    private static final ColoredText INVALID_BUNGEE_FORWARDING = ColoredText.of(ChatColor.RED, "If you wish to use IP forwarding, please enable it in your BungeeCord config as well!");
+    private static final Component INVALID_VERSION_TEXT = Component.text("Invalid Version, please use " + MinecraftServer.VERSION_NAME, NamedTextColor.RED);
+    private static final Component INVALID_BUNGEE_FORWARDING = Component.text("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!", NamedTextColor.RED);
 
     private int protocolVersion;
     private String serverAddress;
@@ -71,7 +70,7 @@ public class HandshakePacket implements ClientPreplayPacket {
                     nettyPlayerConnection.UNSAFE_setBungeeSkin(playerSkin);
 
                 } else {
-                    nettyPlayerConnection.sendPacket(new LoginDisconnectPacket(INVALID_BUNGEE_FORWARDING));
+                    nettyPlayerConnection.sendPacket(new LoginDisconnectPacket(MinecraftServer.getSerializationManager().serialize(INVALID_BUNGEE_FORWARDING)));
                     nettyPlayerConnection.disconnect();
                     return;
                 }
@@ -95,7 +94,7 @@ public class HandshakePacket implements ClientPreplayPacket {
                     }
                 } else {
                     // Incorrect client version
-                    connection.sendPacket(new LoginDisconnectPacket(INVALID_VERSION_TEXT.toString()));
+                    connection.sendPacket(new LoginDisconnectPacket(MinecraftServer.getSerializationManager().serialize(INVALID_VERSION_TEXT)));
                     connection.disconnect();
                 }
                 break;

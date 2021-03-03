@@ -3,6 +3,10 @@ package net.minestom.server.network;
 import io.netty.channel.Channel;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
@@ -43,7 +47,7 @@ public final class ConnectionManager implements ForwardingAudience {
 
     private static final long KEEP_ALIVE_DELAY = 10_000;
     private static final long KEEP_ALIVE_KICK = 30_000;
-    private static final ColoredText TIMEOUT_TEXT = ColoredText.of(ChatColor.RED + "Timeout");
+    private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
 
     private final Queue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
     private final Set<Player> players = new CopyOnWriteArraySet<>();
@@ -60,7 +64,7 @@ public final class ConnectionManager implements ForwardingAudience {
     // The consumers to call once a player connect, mostly used to init events
     private final List<Consumer<Player>> playerInitializations = new CopyOnWriteArrayList<>();
 
-    private JsonMessage shutdownText = ColoredText.of(ChatColor.RED, "The server is shutting down.");
+    private Component shutdownText = Component.text("The server is shutting down.", NamedTextColor.RED);
 
     /**
      * Gets the {@link Player} linked to a {@link PlayerConnection}.
@@ -146,7 +150,10 @@ public final class ConnectionManager implements ForwardingAudience {
      *
      * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
      * @param condition   the condition to receive the message
+     *
+     * @deprecated Use {@link Audience#sendMessage(Component)} on {@link #audiences(PlayerValidator)}
      */
+    @Deprecated
     public void broadcastMessage(@NotNull JsonMessage jsonMessage, @Nullable PlayerValidator condition) {
         final Collection<Player> recipients = getRecipients(condition);
 
@@ -160,7 +167,9 @@ public final class ConnectionManager implements ForwardingAudience {
      * Sends a {@link JsonMessage} to all online players.
      *
      * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
+     * @deprecated Use {@link #sendMessage(Component)}
      */
+    @Deprecated
     public void broadcastMessage(@NotNull JsonMessage jsonMessage) {
         broadcastMessage(jsonMessage, null);
     }
@@ -319,10 +328,35 @@ public final class ConnectionManager implements ForwardingAudience {
      * Gets the kick reason when the server is shutdown using {@link MinecraftServer#stopCleanly()}.
      *
      * @return the kick reason in case on a shutdown
+     *
+     * @deprecated Use {@link #getShutdownText()}
+     */
+    @Deprecated
+    @NotNull
+    public JsonMessage getShutdownTextJson() {
+        return JsonMessage.fromComponent(shutdownText);
+    }
+
+    /**
+     * Gets the kick reason when the server is shutdown using {@link MinecraftServer#stopCleanly()}.
+     *
+     * @return the kick reason in case on a shutdown
      */
     @NotNull
-    public JsonMessage getShutdownText() {
+    public Component getShutdownText() {
         return shutdownText;
+    }
+
+    /**
+     * Changes the kick reason in case of a shutdown.
+     *
+     * @param shutdownText the new shutdown kick reason
+     * @see #getShutdownTextJson()
+     * @deprecated Use {@link #setShutdownText(Component)}
+     */
+    @Deprecated
+    public void setShutdownText(@NotNull JsonMessage shutdownText) {
+        this.shutdownText = shutdownText.asComponent();
     }
 
     /**
@@ -331,7 +365,7 @@ public final class ConnectionManager implements ForwardingAudience {
      * @param shutdownText the new shutdown kick reason
      * @see #getShutdownText()
      */
-    public void setShutdownText(@NotNull JsonMessage shutdownText) {
+    public void setShutdownText(@NotNull Component shutdownText) {
         this.shutdownText = shutdownText;
     }
 
@@ -461,7 +495,7 @@ public final class ConnectionManager implements ForwardingAudience {
      * Shutdowns the connection manager by kicking all the currently connected players.
      */
     public void shutdown() {
-        DisconnectPacket disconnectPacket = new DisconnectPacket(getShutdownText());
+        DisconnectPacket disconnectPacket = new DisconnectPacket(MinecraftServer.getSerializationManager().serialize(shutdownText));
         for (Player player : getOnlinePlayers()) {
             final PlayerConnection playerConnection = player.getPlayerConnection();
             if (playerConnection instanceof NettyPlayerConnection) {
@@ -534,5 +568,28 @@ public final class ConnectionManager implements ForwardingAudience {
     @Override
     public @NotNull Iterable<? extends Audience> audiences() {
         return this.getOnlinePlayers();
+    }
+
+    /**
+     * Gets the audiences of players who match a given validator.
+     *
+     * @param validator the validator
+     *
+     * @return the audience
+     */
+    public @NotNull Iterable<? extends Audience> audiences(@Nullable PlayerValidator validator) {
+        if (validator == null) {
+            return this.audiences();
+        }
+
+        List<Player> validatedPlayers = new ArrayList<>();
+
+        for (Player onlinePlayer : this.getOnlinePlayers()) {
+            if (validator.isValid(onlinePlayer)) {
+                validatedPlayers.add(onlinePlayer);
+            }
+        }
+
+        return validatedPlayers;
     }
 }

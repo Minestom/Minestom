@@ -21,11 +21,17 @@ public class ScoreboardObjectivePacket implements ServerPacket {
     /**
      * The text to be displayed for the score
      */
-    public JsonMessage objectiveValue; // Only text
+    public String objectiveValue; // Only text
     /**
      * The type how the score is displayed
      */
     public Type type;
+
+    /**
+     * @deprecated Use {@link #objectiveValue}
+     */
+    @Deprecated
+    public JsonMessage objectiveValueJson;
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -33,7 +39,7 @@ public class ScoreboardObjectivePacket implements ServerPacket {
         writer.writeByte(mode);
 
         if (mode == 0 || mode == 2) {
-            writer.writeSizedString(objectiveValue.toString());
+            writer.writeSizedString(objectiveValueJson != null ? objectiveValueJson.toString() : objectiveValue);
             writer.writeVarInt(type.ordinal());
         }
     }

@@ -14,6 +14,10 @@ public class LoginDisconnectPacket implements ServerPacket {
         this.kickMessage = kickMessage;
     }
 
+    /**
+     * @deprecated Use {@link #LoginDisconnectPacket(String)}
+     */
+    @Deprecated
     public LoginDisconnectPacket(@NotNull JsonMessage jsonKickMessage) {
         this(jsonKickMessage.toString());
     }

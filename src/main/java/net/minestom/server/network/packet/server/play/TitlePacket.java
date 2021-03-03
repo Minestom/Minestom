@@ -1,6 +1,5 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.title.Title;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.packet.server.ServerPacket;

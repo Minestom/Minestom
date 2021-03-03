@@ -10,6 +10,11 @@ public class DisconnectPacket implements ServerPacket {
     public String message;
 
     /**
+     * @deprecated Use {@link #message}
+     */
+    @Deprecated public JsonMessage messageJson;
+
+    /**
      * Creates a new disconnect packet with a given string.
      * @param message the message
      */
@@ -27,7 +32,7 @@ public class DisconnectPacket implements ServerPacket {
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeSizedString(message);
+        writer.writeSizedString(messageJson != null ? messageJson.toString() : message);
     }
 
     @Override

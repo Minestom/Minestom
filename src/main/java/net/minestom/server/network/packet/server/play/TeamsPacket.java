@@ -23,7 +23,7 @@ public class TeamsPacket implements ServerPacket {
     /**
      * The display name for the team
      */
-    public JsonMessage teamDisplayName;
+    public String teamDisplayName;
     /**
      * The friendly flags to
      */
@@ -43,15 +43,28 @@ public class TeamsPacket implements ServerPacket {
     /**
      * The prefix of the team
      */
-    public JsonMessage teamPrefix;
+    public String teamPrefix;
     /**
      * The suffix of the team
      */
-    public JsonMessage teamSuffix;
+    public String teamSuffix;
     /**
      * An array with all entities in the team
      */
     public String[] entities;
+
+    /**
+     * @deprecated Use {@link #teamDisplayName}
+     */
+    @Deprecated public JsonMessage teamDisplayNameJson;
+    /**
+      @deprecated Use {@link #teamPrefix}
+     */
+    @Deprecated public JsonMessage teamPrefixJson;
+    /**
+      @deprecated Use {@link #teamSuffix}
+     */
+    @Deprecated public JsonMessage teamSuffixJson;
 
     /**
      * Writes data into the {@link BinaryWriter}
@@ -66,13 +79,13 @@ public class TeamsPacket implements ServerPacket {
         switch (action) {
             case CREATE_TEAM:
             case UPDATE_TEAM_INFO:
-                writer.writeSizedString(this.teamDisplayName.toString());
+                writer.writeSizedString(this.teamDisplayNameJson != null ? this.teamDisplayNameJson.toString() : this.teamDisplayName);
                 writer.writeByte(this.friendlyFlags);
                 writer.writeSizedString(this.nameTagVisibility.getIdentifier());
                 writer.writeSizedString(this.collisionRule.getIdentifier());
                 writer.writeVarInt(this.teamColor);
-                writer.writeSizedString(this.teamPrefix.toString());
-                writer.writeSizedString(this.teamSuffix.toString());
+                writer.writeSizedString(this.teamPrefixJson != null ? this.teamPrefixJson.toString() : this.teamPrefix);
+                writer.writeSizedString(this.teamSuffixJson != null ? this.teamSuffixJson.toString() : this.teamSuffix);
                 break;
             case REMOVE_TEAM:
 

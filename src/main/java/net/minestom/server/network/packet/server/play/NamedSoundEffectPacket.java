@@ -14,10 +14,15 @@ public class NamedSoundEffectPacket implements ServerPacket {
     public float volume;
     public float pitch;
 
+    /**
+     * @deprecated Use {@link #soundCategory}
+     */
+    @Deprecated public SoundCategory soundCategoryOld;
+
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeSizedString(soundName);
-        writer.writeVarInt(soundCategory);
+        writer.writeVarInt(soundCategoryOld != null ? soundCategoryOld.ordinal() : soundCategory);
         writer.writeInt(x * 8);
         writer.writeInt(y * 8);
         writer.writeInt(z * 8);

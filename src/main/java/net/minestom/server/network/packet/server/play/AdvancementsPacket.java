@@ -84,8 +84,8 @@ public class AdvancementsPacket implements ServerPacket {
     }
 
     public static class DisplayData implements Writeable {
-        public JsonMessage title; // Only text
-        public JsonMessage description; // Only text
+        public String title; // Only text
+        public String description; // Only text
         public ItemStack icon;
         public FrameType frameType;
         public int flags;
@@ -93,10 +93,19 @@ public class AdvancementsPacket implements ServerPacket {
         public float x;
         public float y;
 
+        /**
+         * @deprecated Use {@link #title}
+         */
+        public @Deprecated JsonMessage titleJson; // Only text
+        /**
+         * @deprecated Use {@link #description}
+         */
+        public @Deprecated JsonMessage descriptionJson; // Only text
+
         @Override
         public void write(@NotNull BinaryWriter writer) {
-            writer.writeSizedString(title.toString());
-            writer.writeSizedString(description.toString());
+            writer.writeSizedString(titleJson != null ? titleJson.toString() : title);
+            writer.writeSizedString(descriptionJson != null ? descriptionJson.toString() : description);
             writer.writeItemStack(icon);
             writer.writeVarInt(frameType.ordinal());
             writer.writeInt(flags);

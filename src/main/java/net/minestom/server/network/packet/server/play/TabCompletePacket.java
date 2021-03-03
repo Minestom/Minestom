@@ -24,7 +24,7 @@ public class TabCompletePacket implements ServerPacket {
             writer.writeSizedString(match.match);
             writer.writeBoolean(match.hasTooltip);
             if (match.hasTooltip)
-                writer.writeSizedString(match.tooltip.toString());
+                writer.writeSizedString(match.tooltipJson != null ? match.tooltipJson.toString() : match.tooltip);
         }
     }
 
@@ -36,7 +36,12 @@ public class TabCompletePacket implements ServerPacket {
     public static class Match {
         public String match;
         public boolean hasTooltip;
-        public JsonMessage tooltip; // Only text
+        public String tooltip;
+
+        /**
+         * @deprecated Use {@link #tooltip}
+         */
+        @Deprecated public String tooltipJson;
     }
 
 }

@@ -63,7 +63,13 @@ public class MapDataPacket implements ServerPacket {
         public int type;
         public byte x, z;
         public byte direction;
-        public JsonMessage displayName; // Only text
+        public String displayName;
+
+        /**
+         * @deprecated Use {@link #displayName}
+         */
+        @Deprecated
+        public JsonMessage displayNameJson; // Only text
 
         private void write(BinaryWriter writer) {
             writer.writeVarInt(type);
@@ -71,10 +77,10 @@ public class MapDataPacket implements ServerPacket {
             writer.writeByte(z);
             writer.writeByte(direction);
 
-            final boolean hasDisplayName = displayName != null;
+            final boolean hasDisplayName = displayName != null || displayNameJson != null;
             writer.writeBoolean(hasDisplayName);
             if (hasDisplayName) {
-                writer.writeSizedString(displayName.toString());
+                writer.writeSizedString(displayNameJson != null ? displayNameJson.toString() : displayName);
             }
         }
 

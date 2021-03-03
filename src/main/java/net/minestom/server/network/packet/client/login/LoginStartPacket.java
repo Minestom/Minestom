@@ -1,5 +1,7 @@
 package net.minestom.server.network.packet.client.login;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
@@ -22,7 +24,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class LoginStartPacket implements ClientPreplayPacket {
 
-    private static final ColoredText ALREADY_CONNECTED_JSON = ColoredText.of(ChatColor.RED, "You are already on this server");
+    private static final Component ALREADY_CONNECTED = Component.text("You are already on this server", NamedTextColor.RED);
 
     public String username;
 
@@ -72,7 +74,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
         if (MojangAuth.isEnabled() && isNettyClient) {
             // Mojang auth
             if (CONNECTION_MANAGER.getPlayer(username) != null) {
-                connection.sendPacket(new LoginDisconnectPacket(ALREADY_CONNECTED_JSON));
+                connection.sendPacket(new LoginDisconnectPacket(MinecraftServer.getSerializationManager().serialize(ALREADY_CONNECTED)));
                 connection.disconnect();
                 return;
             }

@@ -3,6 +3,7 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -19,9 +20,18 @@ import java.util.UUID;
 public class ChatMessagePacket implements ServerPacket {
     private static final UUID NULL_UUID = new UUID(0, 0);
 
-    public String jsonMessage;
+    public String message;
     public MessageType messageType;
     public UUID uuid;
+
+    /**
+     * @deprecated Use {@link #message}
+     */
+    public @Deprecated JsonMessage jsonMessage;
+    /**
+     * @deprecated Use {@link #messageType}
+     */
+    public @Deprecated Position position;
 
     @Deprecated
     public ChatMessagePacket(String jsonMessage, Position position, UUID uuid) {
@@ -49,20 +59,20 @@ public class ChatMessagePacket implements ServerPacket {
      * Constructs a new chat message packet. To send formatted messages please use the
      * respective {@link Audience#sendMessage(Component)} functions.
      *
-     * @param jsonMessage the raw message payload
+     * @param message the raw message payload
      * @param messageType the message type
      * @param uuid the sender of the chat message
      */
-    public ChatMessagePacket(String jsonMessage, MessageType messageType, UUID uuid) {
-        this.jsonMessage = jsonMessage;
+    public ChatMessagePacket(String message, MessageType messageType, UUID uuid) {
+        this.message = message;
         this.messageType = messageType;
         this.uuid = uuid;
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeSizedString(jsonMessage);
-        writer.writeByte((byte) (messageType == null ? 3 : messageType.ordinal()));
+        writer.writeSizedString(jsonMessage != null ? jsonMessage.toString() : message);
+        writer.writeByte((byte) (position != null ? position.ordinal() : messageType == null ? 3 : messageType.ordinal()));
         writer.writeUuid(uuid);
     }
 

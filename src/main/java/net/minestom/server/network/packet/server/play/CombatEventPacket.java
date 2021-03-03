@@ -20,7 +20,7 @@ public class CombatEventPacket implements ServerPacket {
     private int duration;
     private int opponent;
     private int playerID;
-    private JsonMessage deathMessage; // Only text
+    private String deathMessage;
 
     private CombatEventPacket() {
     }
@@ -39,7 +39,15 @@ public class CombatEventPacket implements ServerPacket {
         return packet;
     }
 
+    /**
+     * @deprecated Use {@link #death(Player, Entity, String)}
+     */
+    @Deprecated
     public static CombatEventPacket death(Player player, Entity killer, JsonMessage message) {
+        return death(player, killer, message.toString());
+    }
+
+    public static CombatEventPacket death(Player player, Entity killer, String message) {
         CombatEventPacket packet = new CombatEventPacket();
         packet.type = EventType.DEATH;
         packet.playerID = player.getEntityId();
@@ -64,7 +72,7 @@ public class CombatEventPacket implements ServerPacket {
             case DEATH:
                 writer.writeVarInt(playerID);
                 writer.writeInt(opponent);
-                writer.writeSizedString(deathMessage.toString());
+                writer.writeSizedString(deathMessage);
                 break;
         }
     }

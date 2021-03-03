@@ -75,7 +75,12 @@ public class PlayerInfoPacket implements ServerPacket {
         public List<Property> properties;
         public GameMode gameMode;
         public int ping;
-        public JsonMessage displayName; // Only text
+        public String displayName;
+
+        /**
+         * @deprecated Use {@link #displayName}
+         */
+        @Deprecated public JsonMessage displayNameJson; // Only text
 
         public AddPlayer(UUID uuid, String name, GameMode gameMode, int ping) {
             super(uuid);
@@ -95,10 +100,10 @@ public class PlayerInfoPacket implements ServerPacket {
             writer.writeVarInt(gameMode.getId());
             writer.writeVarInt(ping);
 
-            final boolean hasDisplayName = displayName != null;
+            final boolean hasDisplayName = displayName != null || displayNameJson != null;
             writer.writeBoolean(hasDisplayName);
             if (hasDisplayName)
-                writer.writeSizedString(displayName.toString());
+                writer.writeSizedString(displayNameJson != null ? displayNameJson.toString() : displayName);
         }
 
         public static class Property {
@@ -161,9 +166,22 @@ public class PlayerInfoPacket implements ServerPacket {
 
     public static class UpdateDisplayName extends PlayerInfo {
 
-        public JsonMessage displayName; // Only text
+        public String displayName;
 
+        /**
+         * @deprecated Use {@link #displayName}
+         */
+        @Deprecated public JsonMessage displayNameJson; // Only text
+
+        /**
+         * @deprecated Use {@link #UpdateDisplayName(UUID, String)}
+         */
+        @Deprecated
         public UpdateDisplayName(UUID uuid, JsonMessage displayName) {
+            this(uuid, displayName.toString());
+        }
+
+        public UpdateDisplayName(UUID uuid, String displayName) {
             super(uuid);
             this.displayName = displayName;
         }
@@ -173,7 +191,7 @@ public class PlayerInfoPacket implements ServerPacket {
             final boolean hasDisplayName = displayName != null;
             writer.writeBoolean(hasDisplayName);
             if (hasDisplayName)
-                writer.writeSizedString(displayName.toString());
+                writer.writeSizedString(displayNameJson != null ? displayNameJson.toString() : displayName);
         }
     }
 

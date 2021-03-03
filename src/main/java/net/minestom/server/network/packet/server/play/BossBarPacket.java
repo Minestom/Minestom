@@ -15,12 +15,24 @@ public class BossBarPacket implements ServerPacket {
     public UUID uuid;
     public Action action;
 
-    public String title;
+    public String title; // Only text
     public float health;
     public int color;
     public int division;
     public byte flags;
 
+    /**
+     * @deprecated Use {@link #title}
+     */
+    public @Deprecated JsonMessage titleJson;
+    /**
+     * @deprecated Use {@link #color}
+     */
+    public @Deprecated BarColor colorOld;
+    /**
+     * @deprecated Use {@link #division}
+     */
+    public @Deprecated BarDivision divisionOld;
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -29,10 +41,10 @@ public class BossBarPacket implements ServerPacket {
 
         switch (action) {
             case ADD:
-                writer.writeSizedString(title);
+                writer.writeSizedString(titleJson != null ? titleJson.toString() : title);
                 writer.writeFloat(health);
-                writer.writeVarInt(color);
-                writer.writeVarInt(division);
+                writer.writeVarInt(colorOld != null ? colorOld.ordinal() : color);
+                writer.writeVarInt(divisionOld != null ? divisionOld.ordinal() : division);
                 writer.writeByte(flags);
                 break;
             case REMOVE:
@@ -42,11 +54,11 @@ public class BossBarPacket implements ServerPacket {
                 writer.writeFloat(health);
                 break;
             case UPDATE_TITLE:
-                writer.writeSizedString(title);
+                writer.writeSizedString(titleJson != null ? titleJson.toString() : title);
                 break;
             case UPDATE_STYLE:
-                writer.writeVarInt(color);
-                writer.writeVarInt(division);
+                writer.writeVarInt(colorOld != null ? colorOld.ordinal() : color);
+                writer.writeVarInt(divisionOld != null ? divisionOld.ordinal() : division);
                 break;
             case UPDATE_FLAGS:
                 writer.writeByte(flags);

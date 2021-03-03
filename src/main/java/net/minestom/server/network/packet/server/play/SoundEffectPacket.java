@@ -18,6 +18,11 @@ public class SoundEffectPacket implements ServerPacket {
     public float pitch;
 
     /**
+     * @deprecated Use {@link #soundCategory}
+     */
+    @Deprecated public SoundCategory soundCategoryOld;
+
+    /**
      * @deprecated Use variables
      */
     @Deprecated
@@ -37,7 +42,7 @@ public class SoundEffectPacket implements ServerPacket {
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(soundId);
-        writer.writeVarInt(soundCategory);
+        writer.writeVarInt(soundCategoryOld != null ? soundCategoryOld.ordinal() : soundCategory);
         writer.writeInt(x * 8);
         writer.writeInt(y * 8);
         writer.writeInt(z * 8);
