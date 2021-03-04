@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":10,"i2":10,"i3":10};
+var data = {"i0":10,"i1":6,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -224,27 +224,34 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>abstract <a href="RelativeLocation.html" title="type parameter in RelativeLocation">T</a></code></td>
+<td class="colFirst"><code><a href="RelativeLocation.html" title="type parameter in RelativeLocation">T</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#from(net.minestom.server.entity.Entity)">from</a></span>&#8203;(<a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
 <td class="colLast">
 <div class="block">Gets the location based on the relative fields and <code>entity</code>.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>abstract <a href="RelativeLocation.html" title="type parameter in RelativeLocation">T</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#from(net.minestom.server.utils.Position)">from</a></span>&#8203;(<a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
+<td class="colLast">
+<div class="block">Gets the location based on the relative fields and <code>position</code>.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isRelativeX()">isRelativeX</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the 'x' field is relative.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isRelativeY()">isRelativeY</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the 'y' field is relative.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isRelativeZ()">isRelativeZ</a></span>()</code></th>
 <td class="colLast">
@@ -352,12 +359,29 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>from</h4>
-<pre class="methodSignature">public abstract&nbsp;<a href="RelativeLocation.html" title="type parameter in RelativeLocation">T</a>&nbsp;from&#8203;(@Nullable
-                       <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</pre>
+<pre class="methodSignature">public&nbsp;<a href="RelativeLocation.html" title="type parameter in RelativeLocation">T</a>&nbsp;from&#8203;(@Nullable
+              <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</pre>
 <div class="block">Gets the location based on the relative fields and <code>entity</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>entity</code> - the entity to get the relative position from</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the location</dd>
+</dl>
+</li>
+</ul>
+<a id="from(net.minestom.server.utils.Position)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>from</h4>
+<pre class="methodSignature">public abstract&nbsp;<a href="RelativeLocation.html" title="type parameter in RelativeLocation">T</a>&nbsp;from&#8203;(@Nullable
+                       <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
+<div class="block">Gets the location based on the relative fields and <code>position</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>position</code> - the relative position</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the location</dd>
 </dl>

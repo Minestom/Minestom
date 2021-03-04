@@ -205,9 +205,9 @@ extends <a href="RelativeLocation.html" title="class in net.minestom.server.util
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#from(net.minestom.server.entity.Entity)">from</a></span>&#8203;(<a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#from(net.minestom.server.utils.Position)">from</a></span>&#8203;(<a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
 <td class="colLast">
-<div class="block">Gets the location based on the relative fields and <code>entity</code>.</div>
+<div class="block">Gets the location based on the relative fields and <code>position</code>.</div>
 </td>
 </tr>
 </table>
@@ -216,7 +216,7 @@ extends <a href="RelativeLocation.html" title="class in net.minestom.server.util
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.utils.location.<a href="RelativeLocation.html" title="class in net.minestom.server.utils.location">RelativeLocation</a></h3>
-<code><a href="RelativeLocation.html#isRelativeX()">isRelativeX</a>, <a href="RelativeLocation.html#isRelativeY()">isRelativeY</a>, <a href="RelativeLocation.html#isRelativeZ()">isRelativeZ</a></code></li>
+<code><a href="RelativeLocation.html#from(net.minestom.server.entity.Entity)">from</a>, <a href="RelativeLocation.html#isRelativeX()">isRelativeX</a>, <a href="RelativeLocation.html#isRelativeY()">isRelativeY</a>, <a href="RelativeLocation.html#isRelativeZ()">isRelativeZ</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -263,21 +263,21 @@ extends <a href="RelativeLocation.html" title="class in net.minestom.server.util
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="from(net.minestom.server.entity.Entity)">
+<a id="from(net.minestom.server.utils.Position)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>from</h4>
 <pre class="methodSignature">public&nbsp;<a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;from&#8203;(@Nullable
-                   <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="RelativeLocation.html#from(net.minestom.server.entity.Entity)">RelativeLocation</a></code></span></div>
-<div class="block">Gets the location based on the relative fields and <code>entity</code>.</div>
+                   <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="RelativeLocation.html#from(net.minestom.server.utils.Position)">RelativeLocation</a></code></span></div>
+<div class="block">Gets the location based on the relative fields and <code>position</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="RelativeLocation.html#from(net.minestom.server.entity.Entity)">from</a></code>&nbsp;in class&nbsp;<code><a href="RelativeLocation.html" title="class in net.minestom.server.utils.location">RelativeLocation</a>&lt;<a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&gt;</code></dd>
+<dd><code><a href="RelativeLocation.html#from(net.minestom.server.utils.Position)">from</a></code>&nbsp;in class&nbsp;<code><a href="RelativeLocation.html" title="class in net.minestom.server.utils.location">RelativeLocation</a>&lt;<a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>entity</code> - the entity to get the relative position from</dd>
+<dd><code>position</code> - the relative position</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the location</dd>
 </dl>
