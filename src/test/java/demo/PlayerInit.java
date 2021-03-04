@@ -2,6 +2,7 @@ package demo;
 
 import demo.generator.ChunkGeneratorDemo;
 import demo.generator.NoiseTestGenerator;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.chat.ColoredText;
@@ -78,13 +79,13 @@ public class PlayerInit {
             long ramUsage = benchmarkManager.getUsedMemory();
             ramUsage /= 1e6; // bytes to MB
 
-            final ColoredText header = ColoredText.of("RAM USAGE: " + ramUsage + " MB");
-            final ColoredText footer = ColoredText.of(benchmarkManager.getCpuMonitoringMessage());
+            final Component header = Component.text("RAM USAGE: " + ramUsage + " MB");
+            final Component footer = Component.text(benchmarkManager.getCpuMonitoringMessage());
 
             {
                 PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket();
-                playerListHeaderAndFooterPacket.header = header;
-                playerListHeaderAndFooterPacket.footer = footer;
+                playerListHeaderAndFooterPacket.header = MinecraftServer.getSerializationManager().serialize(header);
+                playerListHeaderAndFooterPacket.footer = MinecraftServer.getSerializationManager().serialize(footer);
 
                 PacketUtils.sendGroupedPacket(players, playerListHeaderAndFooterPacket);
             }
