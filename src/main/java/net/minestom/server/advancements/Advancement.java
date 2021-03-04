@@ -132,6 +132,7 @@ public class Advancement {
      * @deprecated Use {@link #getTitle()}
      */
     @NotNull
+    @Deprecated
     public JsonMessage getTitleJson() {
         return JsonMessage.fromComponent(title);
     }

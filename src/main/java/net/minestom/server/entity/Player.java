@@ -1300,6 +1300,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable {
      * @deprecated Use {@link #getDisplayName()}
      */
     @Nullable
+    @Deprecated
     public JsonMessage getDisplayNameJson() {
         return JsonMessage.fromComponent(displayName);
     }
