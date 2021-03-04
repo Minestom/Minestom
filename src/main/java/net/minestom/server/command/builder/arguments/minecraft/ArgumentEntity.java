@@ -99,8 +99,8 @@ public class ArgumentEntity extends Argument<EntityFinder> {
             try {
                 final UUID uuid = UUID.fromString(input);
                 return new EntityFinder()
-                        .setTargetSelector(EntityFinder.TargetSelector.ALL_ENTITIES)
-                        .setUuid(uuid);
+                        .setTargetSelector(EntityFinder.TargetSelector.MINESTOM_UUID)
+                        .setConstantUuid(uuid);
             } catch (IllegalArgumentException ignored) {
             }
 
@@ -108,8 +108,8 @@ public class ArgumentEntity extends Argument<EntityFinder> {
             final Player player = MinecraftServer.getConnectionManager().getPlayer(input);
             if (player != null) {
                 return new EntityFinder()
-                        .setTargetSelector(EntityFinder.TargetSelector.ALL_PLAYERS)
-                        .setName(input);
+                        .setTargetSelector(EntityFinder.TargetSelector.MINESTOM_USERNAME)
+                        .setConstantName(input);
             }
         }
 
