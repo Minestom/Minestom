@@ -1,6 +1,7 @@
 package net.minestom.server.utils.location;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +28,7 @@ public abstract class RelativeLocation<T> {
      * @param entity the entity to get the relative position from
      * @return the location
      */
-    public abstract T from(@Nullable Entity entity);
+    public abstract T from(@Nullable Position entity);
 
     /**
      * Gets if the 'x' field is relative.
