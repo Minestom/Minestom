@@ -649,6 +649,8 @@ public class Player extends LivingEntity implements CommandSender {
         PlayerConnection viewerConnection = player.getPlayerConnection();
         //viewerConnection.sendPacket(getRemovePlayerToList());
 
+        //TODO RIGHT HERE ^***^
+
         // Team
         if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) {// If team only contains "this" player
          //   viewerConnection.sendPacket(this.getTeam().createTeamDestructionPacket());
@@ -2450,6 +2452,20 @@ public class Player extends LivingEntity implements CommandSender {
      */
     protected void showPlayer(@NotNull PlayerConnection connection) {
         //connection.sendPacket(getAddPlayerToList());
+        Set<TabList> displayedOn = new HashSet<>();
+        for (TabList tabList : MinecraftServer.getTabListManager().getTabLists()) {
+            if (tabList.getDisplayedPlayers().contains(this)) {
+                displayedOn.add(tabList);
+                tabList.removeDisplayedPlayer(this);
+            }
+        }
+
+        for (TabList tabList : MinecraftServer.getTabListManager().getTabLists()) {
+            tabList.addDisplayedPlayer(this);
+            if (!displayedOn.contains(tabList)) {
+                tabList.removeDisplayedPlayer(this);
+            }
+        }
 
         connection.sendPacket(getEntityType().getSpawnType().getSpawnPacket(this));
         connection.sendPacket(getVelocityPacket());
