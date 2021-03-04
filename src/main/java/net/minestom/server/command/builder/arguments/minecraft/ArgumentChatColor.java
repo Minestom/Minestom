@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Example: red, white, reset
  * @deprecated Use {@link ArgumentTextColor} for colors, {@link ArgumentTextDecoration} for styles, {@link ArgumentColor} for raw colors,
- * {@link ArgumentDyeColor} for dye colors and {@link ArgumentTeamFormat} for team formats
+ * {@link ArgumentDyeColor} for dye colors and {@link ArgumentTeamColor} for team formats
  */
 @Deprecated
 public class ArgumentChatColor extends Argument<ChatColor> {

@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.JsonMessage;
-import net.minestom.server.color.TeamFormat;
+import net.minestom.server.color.TeamColor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
@@ -440,7 +440,7 @@ public class Sidebar implements Scoreboard {
         private final byte friendlyFlags = 0x00;
         private final TeamsPacket.NameTagVisibility nameTagVisibility = TeamsPacket.NameTagVisibility.NEVER;
         private final TeamsPacket.CollisionRule collisionRule = TeamsPacket.CollisionRule.NEVER;
-        private final TeamFormat teamformat = TeamFormat.DARK_GREEN;
+        private final TeamColor teamColor = TeamColor.DARK_GREEN;
 
 
         /**
@@ -471,7 +471,7 @@ public class Sidebar implements Scoreboard {
             teamsPacket.friendlyFlags = friendlyFlags;
             teamsPacket.nameTagVisibility = nameTagVisibility;
             teamsPacket.collisionRule = collisionRule;
-            teamsPacket.teamFormat = teamformat;
+            teamsPacket.teamColor = teamColor;
             teamsPacket.teamPrefix = MinecraftServer.getSerializationManager().serialize(prefix);
             teamsPacket.teamSuffix = MinecraftServer.getSerializationManager().serialize(suffix);
             teamsPacket.entities = new String[]{entityName};
@@ -504,7 +504,7 @@ public class Sidebar implements Scoreboard {
             teamsPacket.friendlyFlags = friendlyFlags;
             teamsPacket.nameTagVisibility = nameTagVisibility;
             teamsPacket.collisionRule = collisionRule;
-            teamsPacket.teamFormat = teamformat;
+            teamsPacket.teamColor = teamColor;
             teamsPacket.teamPrefix = MinecraftServer.getSerializationManager().serialize(prefix);
             teamsPacket.teamSuffix = MinecraftServer.getSerializationManager().serialize(suffix);
             return teamsPacket;

@@ -6,9 +6,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.color.Color;
-import net.minestom.server.color.TeamFormat;
+import net.minestom.server.color.TeamColor;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -289,8 +288,17 @@ public final class ChatColor {
         return new Color(red, green, blue);
     }
 
-    public TeamFormat asTeamFormat() {
-        return TeamFormat.values()[this.getId()];
+    /**
+     * Gets the TeamColor of this chat color.
+     *
+     * @return the team color, or null if there is no team color for this chat color
+     */
+    public @Nullable TeamColor asTeamColor() {
+        try {
+            return TeamColor.values()[this.getId()];
+        } catch (ArrayIndexOutOfBoundsException ignored) {
+            return null;
+        }
     }
 
     @NotNull

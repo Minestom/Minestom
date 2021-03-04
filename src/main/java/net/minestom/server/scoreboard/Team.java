@@ -6,17 +6,16 @@ import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
-import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
-import net.minestom.server.color.TeamFormat;
+import net.minestom.server.color.TeamColor;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.instance.ChunkPopulator;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule;
 import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility;
 import net.minestom.server.utils.PacketUtils;
+import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -57,10 +56,10 @@ public class Team implements ForwardingAudience {
     private CollisionRule collisionRule;
 
     /**
-     * Used to format the name of players on the team <br>
-     * The format of a team defines how the names of the team members are visualized.
+     * Used to color the name of players on the team <br>
+     * The color of a team defines how the names of the team members are visualized.
      */
-    private TeamFormat teamFormat;
+    private TeamColor teamColor;
 
     /**
      * Shown before the names of the players who belong to this team.
@@ -87,7 +86,7 @@ public class Team implements ForwardingAudience {
         this.nameTagVisibility = NameTagVisibility.ALWAYS;
         this.collisionRule = CollisionRule.ALWAYS;
 
-        this.teamFormat = TeamFormat.WHITE;
+        this.teamColor = TeamColor.WHITE;
         this.prefix = Component.empty();
         this.suffix = Component.empty();
 
@@ -236,11 +235,13 @@ public class Team implements ForwardingAudience {
      *
      * @param color The new team color
      * @see #updateTeamColor(ChatColor)
-     * @deprecated Use {@link #setTeamFormat(TeamFormat)}
+     * @deprecated Use {@link #setTeamColor(TeamColor)}
      */
     @Deprecated
     public void setTeamColor(@NotNull ChatColor color) {
-        this.setTeamFormat(color.asTeamFormat());
+        TeamColor teamColor = color.asTeamColor();
+        Validate.notNull(teamColor, "Cannot set team color to non-color.");
+        this.setTeamColor(teamColor);
     }
 
     /**
@@ -248,31 +249,33 @@ public class Team implements ForwardingAudience {
      * <br><br>
      * <b>Warning:</b> This is only changed on the <b>server side</b>.
      *
-     * @param format The new team color
-     * @see #updateTeamFormat(TeamFormat)
+     * @param color The new team color
+     * @see #setTeamColor(TeamColor)
      */
-    public void setTeamFormat(@NotNull TeamFormat format) {
-        this.teamFormat = format;
+    public void setTeamColor(@NotNull TeamColor color) {
+        this.teamColor = color;
     }
 
     /**
      * Changes the color of the team and sends an update packet.
      *
-     * @param teamColor The new team color
-     * @deprecated Use {@link #updateTeamFormat(TeamFormat)}
+     * @param chatColor The new team color
+     * @deprecated Use {@link #updateTeamColor(TeamColor)}
      */
     @Deprecated
-    public void updateTeamColor(@NotNull ChatColor teamColor) {
-        this.updateTeamFormat(teamColor.asTeamFormat());
+    public void updateTeamColor(@NotNull ChatColor chatColor) {
+        TeamColor teamColor = chatColor.asTeamColor();
+        Validate.notNull(teamColor, "Cannot set team color to non-color.");
+        this.updateTeamColor(teamColor);
     }
 
     /**
      * Changes the color of the team and sends an update packet.
      *
-     * @param format The new team color
+     * @param color The new team color
      */
-    public void updateTeamFormat(@NotNull TeamFormat format) {
-        this.setTeamFormat(format);
+    public void updateTeamColor(@NotNull TeamColor color) {
+        this.setTeamColor(color);
         sendUpdatePacket();
     }
 
@@ -410,7 +413,7 @@ public class Team implements ForwardingAudience {
         teamsCreationPacket.friendlyFlags = this.friendlyFlags;
         teamsCreationPacket.nameTagVisibility = this.nameTagVisibility;
         teamsCreationPacket.collisionRule = this.collisionRule;
-        teamsCreationPacket.teamFormat = this.teamFormat;
+        teamsCreationPacket.teamColor = this.teamColor;
         teamsCreationPacket.teamPrefix = MinecraftServer.getSerializationManager().serialize(this.prefix);
         teamsCreationPacket.teamSuffix = MinecraftServer.getSerializationManager().serialize(this.suffix);
         teamsCreationPacket.entities = this.members.toArray(new String[0]);
@@ -494,12 +497,12 @@ public class Team implements ForwardingAudience {
      * Gets the color of the team.
      *
      * @return the team color
-     * @deprecated Use {@link #getTeamFormat()}
+     * @deprecated Use {@link #getTeamColor()}
      */
     @Deprecated
     @NotNull
-    public ChatColor getTeamColor() {
-        return ChatColor.fromName(teamFormat.name());
+    public ChatColor getTeamColorOld() {
+        return ChatColor.fromName(teamColor.name());
     }
 
     /**
@@ -508,8 +511,8 @@ public class Team implements ForwardingAudience {
      * @return the team color
      */
     @NotNull
-    public TeamFormat getTeamFormat() {
-        return teamFormat;
+    public TeamColor getTeamColor() {
+        return teamColor;
     }
 
     /**
@@ -563,7 +566,7 @@ public class Team implements ForwardingAudience {
         updatePacket.friendlyFlags = this.friendlyFlags;
         updatePacket.nameTagVisibility = this.nameTagVisibility;
         updatePacket.collisionRule = this.collisionRule;
-        updatePacket.teamFormat = this.teamFormat;
+        updatePacket.teamColor = this.teamColor;
         updatePacket.teamPrefix = MinecraftServer.getSerializationManager().serialize(this.prefix);
         updatePacket.teamSuffix = MinecraftServer.getSerializationManager().serialize(this.suffix);
 

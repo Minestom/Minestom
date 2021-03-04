@@ -3,7 +3,7 @@ package net.minestom.server.scoreboard;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.JsonMessage;
-import net.minestom.server.color.TeamFormat;
+import net.minestom.server.color.TeamColor;
 import net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule;
 import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility;
 
@@ -87,11 +87,11 @@ public class TeamBuilder {
      *
      * @param color The new color
      * @return this builder, for chaining
-     * @deprecated Use {@link #updateTeamFormat(TeamFormat)}
+     * @deprecated Use {@link #updateTeamColor(TeamColor)}
      */
     @Deprecated
     public TeamBuilder updateTeamColor(ChatColor color) {
-        return this.updateTeamFormat(color.asTeamFormat());
+        return this.updateTeamColor(color.asTeamColor());
     }
 
     /**
@@ -100,8 +100,8 @@ public class TeamBuilder {
      * @param color The new color
      * @return this builder, for chaining
      */
-    public TeamBuilder updateTeamFormat(TeamFormat color) {
-        this.team.updateTeamFormat(color);
+    public TeamBuilder updateTeamColor(TeamColor color) {
+        this.team.updateTeamColor(color);
         return this;
     }
 
@@ -315,23 +315,23 @@ public class TeamBuilder {
      *
      * @param color The new team color
      * @return this builder, for chaining
-     * @deprecated Use {@link #teamFormat(TeamFormat)}
+     * @deprecated Use {@link #teamColor(TeamColor)}
      */
     @Deprecated
     public TeamBuilder teamColor(ChatColor color) {
-        return this.teamFormat(color.asTeamFormat());
+        return this.teamColor(color.asTeamColor());
     }
 
     /**
-     * Changes the format of the {@link Team} without an update packet.
+     * Changes the color of the {@link Team} without an update packet.
      * <br><br>
      * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
      *
-     * @param format The new team format
+     * @param color The new team color
      * @return this builder, for chaining
      */
-    public TeamBuilder teamFormat(TeamFormat format) {
-        this.team.setTeamFormat(format);
+    public TeamBuilder teamColor(TeamColor color) {
+        this.team.setTeamColor(color);
         return this;
     }
 

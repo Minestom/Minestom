@@ -108,7 +108,7 @@ public class ArgumentType {
 
     /**
      * @deprecated Use {@link ArgumentTextColor} for colors, {@link ArgumentTextDecoration} for styles, {@link ArgumentColor} for raw colors,
-     * {@link ArgumentDyeColor} for dye colors and {@link ArgumentTeamFormat} for team formats
+     * {@link ArgumentDyeColor} for dye colors and {@link ArgumentTeamColor} for team formats
      */
     @Deprecated
     public static ArgumentChatColor ChatColor(@NotNull String id) {
@@ -131,8 +131,8 @@ public class ArgumentType {
         return new ArgumentDyeColor(id);
     }
 
-    public static ArgumentTeamFormat TeamFormat(@NotNull String id) {
-        return new ArgumentTeamFormat(id);
+    public static ArgumentTeamColor TeamColor(@NotNull String id) {
+        return new ArgumentTeamColor(id);
     }
 
     /**
