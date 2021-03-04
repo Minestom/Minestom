@@ -115,8 +115,9 @@ public class TitlePacket implements ServerPacket {
         // times packet
         Title.Times times = title.times();
         if (times != null) {
-            packets.add(new TitlePacket(TickUtils.fromDuration(times.fadeIn()), TickUtils.fromDuration(times.stay()),
-                    TickUtils.fromDuration(times.fadeOut())));
+            packets.add(new TitlePacket(TickUtils.fromDuration(times.fadeIn(), TickUtils.CLIENT_TICK_MS),
+                    TickUtils.fromDuration(times.stay(), TickUtils.CLIENT_TICK_MS),
+                    TickUtils.fromDuration(times.fadeOut(), TickUtils.CLIENT_TICK_MS)));
         }
 
         return packets;
