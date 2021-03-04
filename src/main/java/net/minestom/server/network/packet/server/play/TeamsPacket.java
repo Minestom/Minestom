@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.chat.JsonMessage;
+import net.minestom.server.color.TeamFormat;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -39,7 +40,7 @@ public class TeamsPacket implements ServerPacket {
     /**
      * The color of the team
      */
-    public int teamColor;
+    public TeamFormat teamFormat;
     /**
      * The prefix of the team
      */
@@ -53,6 +54,11 @@ public class TeamsPacket implements ServerPacket {
      */
     public String[] entities;
 
+
+    /**
+     * @deprecated Use {@link #teamFormat}
+     */
+    @Deprecated public int teamColor = -1;
     /**
      * @deprecated Use {@link #teamDisplayName}
      */
@@ -83,7 +89,7 @@ public class TeamsPacket implements ServerPacket {
                 writer.writeByte(this.friendlyFlags);
                 writer.writeSizedString(this.nameTagVisibility.getIdentifier());
                 writer.writeSizedString(this.collisionRule.getIdentifier());
-                writer.writeVarInt(this.teamColor);
+                writer.writeVarInt(this.teamColor != -1 ? this.teamColor : this.teamFormat.ordinal());
                 writer.writeSizedString(this.teamPrefixJson != null ? this.teamPrefixJson.toString() : this.teamPrefix);
                 writer.writeSizedString(this.teamSuffixJson != null ? this.teamSuffixJson.toString() : this.teamSuffix);
                 break;

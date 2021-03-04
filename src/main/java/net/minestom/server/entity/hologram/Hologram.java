@@ -216,7 +216,7 @@ public class Hologram implements Viewable {
             setSmall(true);
 
             setNoGravity(true);
-            setCustomName(ColoredText.of(""));
+            setCustomName(Component.empty());
             setCustomNameVisible(true);
             setInvisible(true);
         }

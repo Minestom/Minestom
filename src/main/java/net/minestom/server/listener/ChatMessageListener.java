@@ -1,7 +1,9 @@
 package net.minestom.server.listener;
 
+import net.kyori.adventure.audience.MessageType;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.*;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerChatEvent;
@@ -9,7 +11,6 @@ import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.server.play.ChatMessagePacket;
 import net.minestom.server.utils.PacketUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;
 import java.util.function.Function;
@@ -39,9 +40,9 @@ public class ChatMessageListener {
         // Call the event
         player.callCancellableEvent(PlayerChatEvent.class, playerChatEvent, () -> {
 
-            final Function<PlayerChatEvent, JsonMessage> formatFunction = playerChatEvent.getChatFormatFunction();
+            final Function<PlayerChatEvent, Component> formatFunction = playerChatEvent.getChatFormatFunction();
 
-            JsonMessage textObject;
+            Component textObject;
 
             if (formatFunction != null) {
                 // Custom format
@@ -53,11 +54,11 @@ public class ChatMessageListener {
 
             final Collection<Player> recipients = playerChatEvent.getRecipients();
             if (!recipients.isEmpty()) {
-                final String jsonMessage = textObject.toString();
+                final String jsonMessage = MinecraftServer.getSerializationManager().serialize(textObject);
 
                 // Send the message with the correct player UUID
                 ChatMessagePacket chatMessagePacket =
-                        new ChatMessagePacket(jsonMessage, ChatMessagePacket.Position.CHAT, player.getUuid());
+                        new ChatMessagePacket(jsonMessage, MessageType.CHAT, player.getUuid());
 
                 PacketUtils.sendGroupedPacket(recipients, chatMessagePacket);
             }
@@ -66,15 +67,13 @@ public class ChatMessageListener {
 
     }
 
-    private static RichMessage buildDefaultChatMessage(PlayerChatEvent chatEvent) {
+    private static Component buildDefaultChatMessage(PlayerChatEvent chatEvent) {
         final String username = chatEvent.getPlayer().getUsername();
 
-        final ColoredText usernameText = ColoredText.of(String.format("<%s>", username));
-
-        return RichMessage.of(usernameText)
-                .setHoverEvent(ChatHoverEvent.showText("Click to send a message to " + username))
-                .setClickEvent(ChatClickEvent.suggestCommand("/msg " + username + StringUtils.SPACE))
-                .append(ColoredText.of(StringUtils.SPACE + chatEvent.getMessage()));
+        return Component.text("<" + username + ">")
+                .hoverEvent(Component.text("Click to send a message to " + username))
+                .clickEvent(ClickEvent.suggestCommand("/msg " + username + " "))
+                .append(Component.text(" " + chatEvent.getMessage()));
     }
 
 }

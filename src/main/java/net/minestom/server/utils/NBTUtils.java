@@ -1,5 +1,7 @@
 package net.minestom.server.utils;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeOperation;
@@ -130,14 +132,14 @@ public final class NBTUtils {
             final NBTCompound display = nbt.getCompound("display");
             if (display.containsKey("Name")) {
                 final String rawName = display.getString("Name");
-                final ColoredText displayName = ChatParser.toColoredText(rawName);
+                final Component displayName = GsonComponentSerializer.gson().deserialize(rawName);
                 item.setDisplayName(displayName);
             }
             if (display.containsKey("Lore")) {
                 NBTList<NBTString> loreList = display.getList("Lore");
-                List<JsonMessage> lore = new ArrayList<>();
+                List<Component> lore = new ArrayList<>();
                 for (NBTString s : loreList) {
-                    lore.add(ChatParser.toColoredText(s.getValue()));
+                    lore.add(GsonComponentSerializer.gson().deserialize(s.getValue()));
                 }
                 item.setLore(lore);
             }
@@ -300,11 +302,11 @@ public final class NBTUtils {
             }
 
             if (hasLore) {
-                final List<JsonMessage> lore = itemStack.getLore();
+                final List<Component> lore = itemStack.getLore();
 
                 final NBTList<NBTString> loreNBT = new NBTList<>(NBTTypes.TAG_String);
-                for (JsonMessage line : lore) {
-                    loreNBT.add(new NBTString(line.toString()));
+                for (Component line : lore) {
+                    loreNBT.add(new NBTString(GsonComponentSerializer.gson().serialize(line)));
                 }
                 displayNBT.set("Lore", loreNBT);
             }

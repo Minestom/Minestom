@@ -3,13 +3,10 @@ package net.minestom.server.network;
 import io.netty.channel.Channel;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
+import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.ChatColor;
-import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
@@ -175,8 +172,7 @@ public final class ConnectionManager implements ForwardingAudience {
     }
 
     private void broadcastJson(@NotNull String json, @NotNull Collection<Player> recipients) {
-        ChatMessagePacket chatMessagePacket =
-                new ChatMessagePacket(json, ChatMessagePacket.Position.SYSTEM_MESSAGE);
+        ChatMessagePacket chatMessagePacket = new ChatMessagePacket(json, MessageType.SYSTEM);
 
         PacketUtils.sendGroupedPacket(recipients, chatMessagePacket);
     }

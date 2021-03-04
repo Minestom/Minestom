@@ -3,12 +3,15 @@ package net.minestom.server.scoreboard;
 import com.google.common.collect.MapMaker;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
+import net.minestom.server.color.TeamFormat;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.instance.ChunkPopulator;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule;
@@ -39,7 +42,7 @@ public class Team implements ForwardingAudience {
     /**
      * The display name of the team.
      */
-    private JsonMessage teamDisplayName;
+    private Component teamDisplayName;
     /**
      * A BitMask.
      */
@@ -54,19 +57,19 @@ public class Team implements ForwardingAudience {
     private CollisionRule collisionRule;
 
     /**
-     * Used to color the name of players on the team <br>
-     * The color of a team defines how the names of the team members are visualized.
+     * Used to format the name of players on the team <br>
+     * The format of a team defines how the names of the team members are visualized.
      */
-    private ChatColor teamColor;
+    private TeamFormat teamFormat;
 
     /**
      * Shown before the names of the players who belong to this team.
      */
-    private JsonMessage prefix;
+    private Component prefix;
     /**
      * Shown after the names of the player who belong to this team.
      */
-    private JsonMessage suffix;
+    private Component suffix;
 
     private final Set<Player> playerMembers = Collections.newSetFromMap(new MapMaker().weakKeys().makeMap());
     private boolean isPlayerMembersUpToDate;
@@ -79,14 +82,14 @@ public class Team implements ForwardingAudience {
     protected Team(@NotNull String teamName) {
         this.teamName = teamName;
 
-        this.teamDisplayName = ColoredText.of("");
+        this.teamDisplayName = Component.empty();
         this.friendlyFlags = 0x00;
         this.nameTagVisibility = NameTagVisibility.ALWAYS;
         this.collisionRule = CollisionRule.ALWAYS;
 
-        this.teamColor = ChatColor.WHITE;
-        this.prefix = ColoredText.of("");
-        this.suffix = ColoredText.of("");
+        this.teamFormat = TeamFormat.WHITE;
+        this.prefix = Component.empty();
+        this.suffix = Component.empty();
 
         this.members = new CopyOnWriteArraySet<>();
     }
@@ -143,8 +146,21 @@ public class Team implements ForwardingAudience {
      * <b>Warning:</b> This is only changed <b>server side</b>.
      *
      * @param teamDisplayName The new display name
+     * @deprecated Use {@link #setTeamDisplayName(Component)}
      */
+    @Deprecated
     public void setTeamDisplayName(JsonMessage teamDisplayName) {
+        this.setTeamDisplayName(teamDisplayName.asComponent());
+    }
+
+    /**
+     * Changes the display name of the team.
+     * <br><br>
+     * <b>Warning:</b> This is only changed <b>server side</b>.
+     *
+     * @param teamDisplayName The new display name
+     */
+    public void setTeamDisplayName(Component teamDisplayName) {
         this.teamDisplayName = teamDisplayName;
     }
 
@@ -152,8 +168,19 @@ public class Team implements ForwardingAudience {
      * Changes the display name of the team and sends an update packet.
      *
      * @param teamDisplayName The new display name
+     * @deprecated Use {@link #updateTeamDisplayName(Component)}
      */
+    @Deprecated
     public void updateTeamDisplayName(JsonMessage teamDisplayName) {
+        this.updateTeamDisplayName(teamDisplayName.asComponent());
+    }
+
+    /**
+     * Changes the display name of the team and sends an update packet.
+     *
+     * @param teamDisplayName The new display name
+     */
+    public void updateTeamDisplayName(Component teamDisplayName) {
         this.setTeamDisplayName(teamDisplayName);
         sendUpdatePacket();
     }
@@ -209,18 +236,43 @@ public class Team implements ForwardingAudience {
      *
      * @param color The new team color
      * @see #updateTeamColor(ChatColor)
+     * @deprecated Use {@link #setTeamFormat(TeamFormat)}
      */
+    @Deprecated
     public void setTeamColor(@NotNull ChatColor color) {
-        this.teamColor = color;
+        this.setTeamFormat(color.asTeamFormat());
+    }
+
+    /**
+     * Changes the color of the team.
+     * <br><br>
+     * <b>Warning:</b> This is only changed on the <b>server side</b>.
+     *
+     * @param format The new team color
+     * @see #updateTeamFormat(TeamFormat)
+     */
+    public void setTeamFormat(@NotNull TeamFormat format) {
+        this.teamFormat = format;
     }
 
     /**
      * Changes the color of the team and sends an update packet.
      *
      * @param teamColor The new team color
+     * @deprecated Use {@link #updateTeamFormat(TeamFormat)}
      */
+    @Deprecated
     public void updateTeamColor(@NotNull ChatColor teamColor) {
-        this.setTeamColor(teamColor);
+        this.updateTeamFormat(teamColor.asTeamFormat());
+    }
+
+    /**
+     * Changes the color of the team and sends an update packet.
+     *
+     * @param format The new team color
+     */
+    public void updateTeamFormat(@NotNull TeamFormat format) {
+        this.setTeamFormat(format);
         sendUpdatePacket();
     }
 
@@ -230,8 +282,21 @@ public class Team implements ForwardingAudience {
      * <b>Warning:</b> This is only changed on the <b>server side</b>.
      *
      * @param prefix The new prefix
+     * @deprecated Use {@link #setPrefix(Component)}
      */
+    @Deprecated
     public void setPrefix(JsonMessage prefix) {
+        this.setPrefix(prefix.asComponent());
+    }
+
+    /**
+     * Changes the prefix of the team.
+     * <br><br>
+     * <b>Warning:</b> This is only changed on the <b>server side</b>.
+     *
+     * @param prefix The new prefix
+     */
+    public void setPrefix(Component prefix) {
         this.prefix = prefix;
     }
 
@@ -239,8 +304,19 @@ public class Team implements ForwardingAudience {
      * Changes the prefix of the team and sends an update packet.
      *
      * @param prefix The new prefix
+     * @deprecated Use {@link #updatePrefix(Component)}
      */
+    @Deprecated
     public void updatePrefix(JsonMessage prefix) {
+        this.updatePrefix(prefix.asComponent());
+    }
+
+    /**
+     * Changes the prefix of the team and sends an update packet.
+     *
+     * @param prefix The new prefix
+     */
+    public void updatePrefix(Component prefix) {
         this.setPrefix(prefix);
         sendUpdatePacket();
     }
@@ -251,8 +327,21 @@ public class Team implements ForwardingAudience {
      * <b>Warning:</b> This is only changed on the <b>server side</b>.
      *
      * @param suffix The new suffix
+     * @deprecated Use {@link #setSuffix(Component)}
      */
+    @Deprecated
     public void setSuffix(JsonMessage suffix) {
+        this.setSuffix(suffix.asComponent());
+    }
+
+    /**
+     * Changes the suffix of the team.
+     * <br><br>
+     * <b>Warning:</b> This is only changed on the <b>server side</b>.
+     *
+     * @param suffix The new suffix
+     */
+    public void setSuffix(Component suffix) {
         this.suffix = suffix;
     }
 
@@ -260,8 +349,19 @@ public class Team implements ForwardingAudience {
      * Changes the suffix of the team and sends an update packet.
      *
      * @param suffix The new suffix
+     * @deprecated Use {@link #updateSuffix(Component)}
      */
+    @Deprecated
     public void updateSuffix(JsonMessage suffix) {
+        this.updateSuffix(suffix.asComponent());
+    }
+
+    /**
+     * Changes the suffix of the team and sends an update packet.
+     *
+     * @param suffix The new suffix
+     */
+    public void updateSuffix(Component suffix) {
         this.setSuffix(suffix);
         sendUpdatePacket();
     }
@@ -306,13 +406,13 @@ public class Team implements ForwardingAudience {
         TeamsPacket teamsCreationPacket = new TeamsPacket();
         teamsCreationPacket.teamName = teamName;
         teamsCreationPacket.action = TeamsPacket.Action.CREATE_TEAM;
-        teamsCreationPacket.teamDisplayName = this.teamDisplayName;
+        teamsCreationPacket.teamDisplayName = MinecraftServer.getSerializationManager().serialize(this.teamDisplayName);
         teamsCreationPacket.friendlyFlags = this.friendlyFlags;
         teamsCreationPacket.nameTagVisibility = this.nameTagVisibility;
         teamsCreationPacket.collisionRule = this.collisionRule;
-        teamsCreationPacket.teamColor = this.teamColor.getId();
-        teamsCreationPacket.teamPrefix = this.prefix;
-        teamsCreationPacket.teamSuffix = this.suffix;
+        teamsCreationPacket.teamFormat = this.teamFormat;
+        teamsCreationPacket.teamPrefix = MinecraftServer.getSerializationManager().serialize(this.prefix);
+        teamsCreationPacket.teamSuffix = MinecraftServer.getSerializationManager().serialize(this.suffix);
         teamsCreationPacket.entities = this.members.toArray(new String[0]);
 
         return teamsCreationPacket;
@@ -345,8 +445,19 @@ public class Team implements ForwardingAudience {
      * Gets the display name of the team.
      *
      * @return the display name
+     * @deprecated Use {@link #getTeamDisplayName()}
      */
-    public JsonMessage getTeamDisplayName() {
+    @Deprecated
+    public JsonMessage getTeamDisplayNameJson() {
+        return JsonMessage.fromComponent(this.teamDisplayName);
+    }
+
+    /**
+     * Gets the display name of the team.
+     *
+     * @return the display name
+     */
+    public Component getTeamDisplayName() {
         return teamDisplayName;
     }
 
@@ -383,10 +494,33 @@ public class Team implements ForwardingAudience {
      * Gets the color of the team.
      *
      * @return the team color
+     * @deprecated Use {@link #getTeamFormat()}
      */
+    @Deprecated
     @NotNull
     public ChatColor getTeamColor() {
-        return teamColor;
+        return ChatColor.fromName(teamFormat.name());
+    }
+
+    /**
+     * Gets the color of the team.
+     *
+     * @return the team color
+     */
+    @NotNull
+    public TeamFormat getTeamFormat() {
+        return teamFormat;
+    }
+
+    /**
+     * Gets the prefix of the team.
+     *
+     * @return the team prefix
+     * @deprecated Use {@link #getPrefix()}
+     */
+    @Deprecated
+    public JsonMessage getPrefixJson() {
+        return JsonMessage.fromComponent(prefix);
     }
 
     /**
@@ -394,7 +528,7 @@ public class Team implements ForwardingAudience {
      *
      * @return the team prefix
      */
-    public JsonMessage getPrefix() {
+    public Component getPrefix() {
         return prefix;
     }
 
@@ -402,8 +536,19 @@ public class Team implements ForwardingAudience {
      * Gets the suffix of the team.
      *
      * @return the suffix team
+     * @deprecated Use {@link #getSuffix()}
      */
-    public JsonMessage getSuffix() {
+    @Deprecated
+    public JsonMessage getSuffixJson() {
+        return JsonMessage.fromComponent(suffix);
+    }
+
+    /**
+     * Gets the suffix of the team.
+     *
+     * @return the suffix team
+     */
+    public Component getSuffix() {
         return suffix;
     }
 
@@ -414,13 +559,13 @@ public class Team implements ForwardingAudience {
         final TeamsPacket updatePacket = new TeamsPacket();
         updatePacket.teamName = this.teamName;
         updatePacket.action = TeamsPacket.Action.UPDATE_TEAM_INFO;
-        updatePacket.teamDisplayName = this.teamDisplayName;
+        updatePacket.teamDisplayName = MinecraftServer.getSerializationManager().serialize(this.teamDisplayName);
         updatePacket.friendlyFlags = this.friendlyFlags;
         updatePacket.nameTagVisibility = this.nameTagVisibility;
         updatePacket.collisionRule = this.collisionRule;
-        updatePacket.teamColor = this.teamColor.getId();
-        updatePacket.teamPrefix = this.prefix;
-        updatePacket.teamSuffix = this.suffix;
+        updatePacket.teamFormat = this.teamFormat;
+        updatePacket.teamPrefix = MinecraftServer.getSerializationManager().serialize(this.prefix);
+        updatePacket.teamSuffix = MinecraftServer.getSerializationManager().serialize(this.suffix);
 
         PacketUtils.sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), updatePacket);
     }

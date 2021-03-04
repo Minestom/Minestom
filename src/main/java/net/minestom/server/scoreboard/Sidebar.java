@@ -1,9 +1,10 @@
 package net.minestom.server.scoreboard;
 
 import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
-import net.minestom.server.chat.ChatParser;
-import net.minestom.server.chat.ColoredText;
+import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.JsonMessage;
+import net.minestom.server.color.TeamFormat;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
@@ -27,7 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * and remove him later with {@link #removeViewer(Player)}.
  * <p>
  * Lines can be modified using their respective identifier using
- * {@link #updateLineContent(String, JsonMessage)} and {@link #updateLineScore(String, int)}.
+ * {@link #updateLineContent(String, Component)} and {@link #updateLineScore(String, int)}.
  */
 public class Sidebar implements Scoreboard {
 
@@ -51,14 +52,25 @@ public class Sidebar implements Scoreboard {
 
     private final String objectiveName;
 
-    private String title;
+    private Component title;
+
+    /**
+     * Creates a new sidebar
+     *
+     * @param title The title of the sidebar
+     * @deprecated Use {@link #Sidebar(Component)}
+     */
+    @Deprecated
+    public Sidebar(@NotNull String title) {
+        this(Component.text(title));
+    }
 
     /**
      * Creates a new sidebar
      *
      * @param title The title of the sidebar
      */
-    public Sidebar(@NotNull String title) {
+    public Sidebar(@NotNull Component title) {
         this.title = title;
 
         this.objectiveName = SCOREBOARD_PREFIX + COUNTER.incrementAndGet();
@@ -73,14 +85,25 @@ public class Sidebar implements Scoreboard {
      * Changes the {@link Sidebar} title
      *
      * @param title The new sidebar title
+     * @deprecated Use {@link #setTitle(Component)}
      */
+    @Deprecated
     public void setTitle(@NotNull String title) {
+        this.setTitle(Component.text(title));
+    }
+
+    /**
+     * Changes the {@link Sidebar} title
+     *
+     * @param title The new sidebar title
+     */
+    public void setTitle(@NotNull Component title) {
         this.title = title;
 
         ScoreboardObjectivePacket scoreboardObjectivePacket = new ScoreboardObjectivePacket();
         scoreboardObjectivePacket.objectiveName = objectiveName;
         scoreboardObjectivePacket.mode = 2; // Update display text
-        scoreboardObjectivePacket.objectiveValue = ColoredText.of(title);
+        scoreboardObjectivePacket.objectiveValue = MinecraftServer.getSerializationManager().serialize(title);
         scoreboardObjectivePacket.type = ScoreboardObjectivePacket.Type.INTEGER;
 
         sendPacketToViewers(scoreboardObjectivePacket);
@@ -122,8 +145,20 @@ public class Sidebar implements Scoreboard {
      *
      * @param id      The identifier of the {@link ScoreboardLine}
      * @param content The new content for the {@link ScoreboardLine}
+     * @deprecated Use {@link #updateLineContent(String, Component)}
      */
+    @Deprecated
     public void updateLineContent(@NotNull String id, @NotNull JsonMessage content) {
+        this.updateLineContent(id, content.asComponent());
+    }
+
+    /**
+     * Updates a {@link ScoreboardLine} content through the given identifier.
+     *
+     * @param id      The identifier of the {@link ScoreboardLine}
+     * @param content The new content for the {@link ScoreboardLine}
+     */
+    public void updateLineContent(@NotNull String id, @NotNull Component content) {
         final ScoreboardLine scoreboardLine = getLine(id);
         if (scoreboardLine != null) {
             scoreboardLine.refreshContent(content);
@@ -228,7 +263,7 @@ public class Sidebar implements Scoreboard {
     }
 
     @Override
-    public String getObjectiveName() {
+    public @NotNull String getObjectiveName() {
         return this.objectiveName;
     }
 
@@ -244,7 +279,7 @@ public class Sidebar implements Scoreboard {
         /**
          * The content for the line
          */
-        private final JsonMessage content;
+        private final Component content;
         /**
          * The score of the line
          */
@@ -261,7 +296,15 @@ public class Sidebar implements Scoreboard {
          */
         private SidebarTeam sidebarTeam;
 
+        /**
+         * @deprecated Use {@link #ScoreboardLine(String, Component, int)}
+         */
+        @Deprecated
         public ScoreboardLine(@NotNull String id, @NotNull JsonMessage content, int line) {
+            this(id, content.asComponent(), line);
+        }
+
+        public ScoreboardLine(@NotNull String id, @NotNull Component content, int line) {
             this.id = id;
             this.content = content;
             this.line = line;
@@ -283,9 +326,21 @@ public class Sidebar implements Scoreboard {
          * Gets the content of the line
          *
          * @return The line content
+         * @deprecated Use {@link #getContent()}
          */
         @NotNull
-        public JsonMessage getContent() {
+        @Deprecated
+        public JsonMessage getContentJson() {
+            return JsonMessage.fromComponent(getContent());
+        }
+
+        /**
+         * Gets the content of the line
+         *
+         * @return The line content
+         */
+        @NotNull
+        public Component getContent() {
             return sidebarTeam == null ? content : sidebarTeam.getPrefix();
         }
 
@@ -308,9 +363,9 @@ public class Sidebar implements Scoreboard {
          * Creates a new {@link SidebarTeam}
          */
         private void createTeam() {
-            this.entityName = ChatParser.COLOR_CHAR + Integer.toHexString(colorName);
+            this.entityName = ((char) 0xA7) + Integer.toHexString(colorName);
 
-            this.sidebarTeam = new SidebarTeam(teamName, content, ColoredText.of(""), entityName);
+            this.sidebarTeam = new SidebarTeam(teamName, content, Component.empty(), entityName);
         }
 
         private void returnName(IntLinkedOpenHashSet colors) {
@@ -366,7 +421,7 @@ public class Sidebar implements Scoreboard {
          *
          * @param content The new content
          */
-        private void refreshContent(JsonMessage content) {
+        private void refreshContent(Component content) {
             this.sidebarTeam.refreshPrefix(content);
         }
 
@@ -378,14 +433,14 @@ public class Sidebar implements Scoreboard {
     private static class SidebarTeam {
 
         private final String teamName;
-        private JsonMessage prefix, suffix;
+        private Component prefix, suffix;
         private final String entityName;
 
-        private final JsonMessage teamDisplayName = ColoredText.of("displaynametest");
+        private final Component teamDisplayName = Component.text("displaynametest");
         private final byte friendlyFlags = 0x00;
         private final TeamsPacket.NameTagVisibility nameTagVisibility = TeamsPacket.NameTagVisibility.NEVER;
         private final TeamsPacket.CollisionRule collisionRule = TeamsPacket.CollisionRule.NEVER;
-        private final int teamColor = 2;
+        private final TeamFormat teamformat = TeamFormat.DARK_GREEN;
 
 
         /**
@@ -396,7 +451,7 @@ public class Sidebar implements Scoreboard {
          * @param suffix     The team suffix
          * @param entityName The team entity name
          */
-        private SidebarTeam(String teamName, JsonMessage prefix, JsonMessage suffix, String entityName) {
+        private SidebarTeam(String teamName, Component prefix, Component suffix, String entityName) {
             this.teamName = teamName;
             this.prefix = prefix;
             this.suffix = suffix;
@@ -412,13 +467,13 @@ public class Sidebar implements Scoreboard {
             TeamsPacket teamsPacket = new TeamsPacket();
             teamsPacket.teamName = teamName;
             teamsPacket.action = TeamsPacket.Action.CREATE_TEAM;
-            teamsPacket.teamDisplayName = teamDisplayName;
+            teamsPacket.teamDisplayName = MinecraftServer.getSerializationManager().serialize(teamDisplayName);
             teamsPacket.friendlyFlags = friendlyFlags;
             teamsPacket.nameTagVisibility = nameTagVisibility;
             teamsPacket.collisionRule = collisionRule;
-            teamsPacket.teamColor = teamColor;
-            teamsPacket.teamPrefix = prefix;
-            teamsPacket.teamSuffix = suffix;
+            teamsPacket.teamFormat = teamformat;
+            teamsPacket.teamPrefix = MinecraftServer.getSerializationManager().serialize(prefix);
+            teamsPacket.teamSuffix = MinecraftServer.getSerializationManager().serialize(suffix);
             teamsPacket.entities = new String[]{entityName};
             return teamsPacket;
         }
@@ -441,17 +496,17 @@ public class Sidebar implements Scoreboard {
          * @param prefix The new prefix
          * @return a {@link TeamsPacket} with the updated prefix
          */
-        private TeamsPacket updatePrefix(JsonMessage prefix) {
+        private TeamsPacket updatePrefix(Component prefix) {
             TeamsPacket teamsPacket = new TeamsPacket();
             teamsPacket.teamName = teamName;
             teamsPacket.action = TeamsPacket.Action.UPDATE_TEAM_INFO;
-            teamsPacket.teamDisplayName = teamDisplayName;
+            teamsPacket.teamDisplayName = MinecraftServer.getSerializationManager().serialize(teamDisplayName);
             teamsPacket.friendlyFlags = friendlyFlags;
             teamsPacket.nameTagVisibility = nameTagVisibility;
             teamsPacket.collisionRule = collisionRule;
-            teamsPacket.teamColor = teamColor;
-            teamsPacket.teamPrefix = prefix;
-            teamsPacket.teamSuffix = suffix;
+            teamsPacket.teamFormat = teamformat;
+            teamsPacket.teamPrefix = MinecraftServer.getSerializationManager().serialize(prefix);
+            teamsPacket.teamSuffix = MinecraftServer.getSerializationManager().serialize(suffix);
             return teamsPacket;
         }
 
@@ -469,7 +524,7 @@ public class Sidebar implements Scoreboard {
          *
          * @return the prefix
          */
-        private JsonMessage getPrefix() {
+        private Component getPrefix() {
             return prefix;
         }
 
@@ -478,7 +533,7 @@ public class Sidebar implements Scoreboard {
          *
          * @param prefix The refreshed prefix
          */
-        private void refreshPrefix(@NotNull JsonMessage prefix) {
+        private void refreshPrefix(@NotNull Component prefix) {
             this.prefix = prefix;
         }
     }

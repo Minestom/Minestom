@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.color.Color;
+import net.minestom.server.color.TeamFormat;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -286,6 +287,10 @@ public final class ChatColor {
 
     public @NotNull Color asColor() {
         return new Color(red, green, blue);
+    }
+
+    public TeamFormat asTeamFormat() {
+        return TeamFormat.values()[this.getId()];
     }
 
     @NotNull
