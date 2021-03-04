@@ -1,6 +1,5 @@
 package net.minestom.server.utils.cache;
 
-import io.netty.buffer.ByteBuf;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +22,7 @@ public interface CacheablePacket {
      * @return the temporary packet cache
      */
     @NotNull
-    TemporaryCache<ByteBuf> getCache();
+    TemporaryCache<TimedBuffer> getCache();
 
     /**
      * Gets the identifier of this packet.
@@ -34,5 +33,12 @@ public interface CacheablePacket {
      */
     @Nullable
     UUID getIdentifier();
+
+    /**
+     * Gets the last time this packet changed.
+     *
+     * @return the last packet update time in milliseconds
+     */
+    long getTimestamp();
 
 }

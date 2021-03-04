@@ -4,15 +4,17 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectCollection;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.extensions.Extension;
+import net.minestom.server.extensions.IExtensionObserver;
 import net.minestom.server.utils.thread.MinestomThread;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * An object which manages all the {@link Task}'s.
@@ -24,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <p>
  * Shutdown tasks are built with {@link #buildShutdownTask(Runnable)} and are executed, as the name implies, when the server stops.
  */
-public final class SchedulerManager {
+public final class SchedulerManager implements IExtensionObserver {
 
     private static boolean instanced;
     // A counter for all normal tasks
@@ -39,6 +41,16 @@ public final class SchedulerManager {
     protected final Int2ObjectMap<Task> tasks;
     // All the registered shutdown tasks (task id = task)
     protected final Int2ObjectMap<Task> shutdownTasks;
+
+    /**
+     * Tasks scheduled through extensions
+     */
+    private final Map<String, List<Task>> extensionTasks = new ConcurrentHashMap<>();
+
+    /**
+     * Shutdown tasks scheduled through extensions
+     */
+    private final Map<String, List<Task>> extensionShutdownTasks = new ConcurrentHashMap<>();
 
     /**
      * Default constructor
@@ -168,5 +180,63 @@ public final class SchedulerManager {
     @NotNull
     public ScheduledExecutorService getTimerExecutionService() {
         return timerExecutionService;
+    }
+
+    /**
+     * Called when a Task from an extension is scheduled.
+     * @param owningExtension the name of the extension which scheduled the task
+     * @param task the task that has been scheduled
+     */
+    void onScheduleFromExtension(String owningExtension, Task task) {
+        List<Task> scheduledForThisExtension = extensionTasks.computeIfAbsent(owningExtension, s -> new CopyOnWriteArrayList<>());
+        scheduledForThisExtension.add(task);
+
+        Extension ext = MinecraftServer.getExtensionManager().getExtension(owningExtension);
+        ext.observe(this);
+    }
+
+    /**
+     * Called when a Task from an extension is scheduled for server shutdown.
+     * @param owningExtension the name of the extension which scheduled the task
+     * @param task the task that has been scheduled
+     */
+    void onScheduleShutdownFromExtension(String owningExtension, Task task) {
+        List<Task> scheduledForThisExtension = extensionShutdownTasks.computeIfAbsent(owningExtension, s -> new CopyOnWriteArrayList<>());
+        scheduledForThisExtension.add(task);
+
+        Extension ext = MinecraftServer.getExtensionManager().getExtension(owningExtension);
+        ext.observe(this);
+    }
+
+    /**
+     * Unschedules all non-transient tasks ({@link Task#isTransient()}) from this scheduler. Tasks are allowed to complete
+     * @param extension the name of the extension to unschedule tasks from
+     * @see Task#isTransient()
+     */
+    public void removeExtensionTasksOnUnload(String extension) {
+        List<Task> scheduledForThisExtension = extensionTasks.get(extension);
+        if(scheduledForThisExtension != null) {
+            List<Task> toCancel = scheduledForThisExtension.stream()
+                    .filter(t -> !t.isTransient())
+                    .collect(Collectors.toList());
+            toCancel.forEach(Task::cancel);
+            scheduledForThisExtension.removeAll(toCancel);
+        }
+
+
+        List<Task> shutdownScheduledForThisExtension = extensionShutdownTasks.get(extension);
+        if(shutdownScheduledForThisExtension != null) {
+            List<Task> toCancel = shutdownScheduledForThisExtension.stream()
+                    .filter(t -> !t.isTransient())
+                    .collect(Collectors.toList());
+            toCancel.forEach(Task::cancel);
+            shutdownScheduledForThisExtension.removeAll(toCancel);
+            shutdownTasks.values().removeAll(toCancel);
+        }
+    }
+
+    @Override
+    public void onExtensionUnload(String extensionName) {
+        removeExtensionTasksOnUnload(extensionName);
     }
 }

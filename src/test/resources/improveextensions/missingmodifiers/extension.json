@@ -1,0 +1,8 @@
+{
+  "entrypoint": "improveextensions.missingmodifiers.MissingCodeModifiersExtension",
+  "name": "MissingCodeModifiersExtension",
+  "codeModifiers": [
+    "InvalidCodeModifierClass"
+  ],
+  "mixinConfig": "mixins.$invalid$.json"
+}

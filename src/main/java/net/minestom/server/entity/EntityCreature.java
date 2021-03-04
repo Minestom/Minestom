@@ -3,6 +3,7 @@ package net.minestom.server.entity;
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
 import net.minestom.server.attribute.Attributes;
 import net.minestom.server.entity.ai.EntityAI;
+import net.minestom.server.entity.ai.EntityAIGroup;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.pathfinding.NavigableEntity;
@@ -14,17 +15,13 @@ import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class EntityCreature extends LivingEntity implements NavigableEntity, EntityAI {
 
     private int removalAnimationDelay = 1000;
 
-    protected final List<GoalSelector> goalSelectors = new ArrayList<>();
-    protected final List<TargetSelector> targetSelectors = new ArrayList<>();
-    private GoalSelector currentGoalSelector;
+    private final Set<EntityAIGroup> aiGroups = new HashSet<>();
 
     private final Navigator navigator = new Navigator(this);
 
@@ -108,27 +105,9 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
         this.removalAnimationDelay = removalAnimationDelay;
     }
 
-    @NotNull
     @Override
-    public List<GoalSelector> getGoalSelectors() {
-        return goalSelectors;
-    }
-
-    @NotNull
-    @Override
-    public List<TargetSelector> getTargetSelectors() {
-        return targetSelectors;
-    }
-
-    @Nullable
-    @Override
-    public GoalSelector getCurrentGoalSelector() {
-        return currentGoalSelector;
-    }
-
-    @Override
-    public void setCurrentGoalSelector(GoalSelector currentGoalSelector) {
-        this.currentGoalSelector = currentGoalSelector;
+    public Collection<EntityAIGroup> getAIGroups() {
+        return this.aiGroups;
     }
 
     /**

@@ -3,11 +3,12 @@ package net.minestom.server.entity.metadata.item;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
+import net.minestom.server.entity.metadata.ProjectileMeta;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FireballMeta extends ItemContainingMeta implements ObjectDataProvider {
+public class FireballMeta extends ItemContainingMeta implements ObjectDataProvider, ProjectileMeta {
 
     private Entity shooter;
 
@@ -15,11 +16,13 @@ public class FireballMeta extends ItemContainingMeta implements ObjectDataProvid
         super(entity, metadata, Material.AIR);
     }
 
+    @Override
     @Nullable
     public Entity getShooter() {
         return shooter;
     }
 
+    @Override
     public void setShooter(@Nullable Entity shooter) {
         this.shooter = shooter;
     }

@@ -2,17 +2,22 @@ package net.minestom.server.extensions;
 
 import com.google.gson.Gson;
 import net.minestom.dependencies.DependencyGetter;
+import net.minestom.dependencies.ResolvedDependency;
 import net.minestom.dependencies.maven.MavenRepository;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import net.minestom.server.ping.ResponseDataConsumer;
+import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixins;
+import org.spongepowered.asm.mixin.throwables.MixinError;
+import org.spongepowered.asm.mixin.throwables.MixinException;
+import org.spongepowered.asm.service.ServiceNotAvailableError;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -27,10 +32,12 @@ import java.util.zip.ZipFile;
 
 public class ExtensionManager {
 
+    public final static String DISABLE_EARLY_LOAD_SYSTEM_KEY = "minestom.extension.disable_early_load";
+
     public final static Logger LOGGER = LoggerFactory.getLogger(ExtensionManager.class);
 
-    private final static String INDEV_CLASSES_FOLDER = "minestom.extension.indevfolder.classes";
-    private final static String INDEV_RESOURCES_FOLDER = "minestom.extension.indevfolder.resources";
+    public final static String INDEV_CLASSES_FOLDER = "minestom.extension.indevfolder.classes";
+    public final static String INDEV_RESOURCES_FOLDER = "minestom.extension.indevfolder.resources";
     private final static Gson GSON = new Gson();
 
     private final Map<String, MinestomExtensionClassLoader> extensionLoaders = new HashMap<>();
@@ -118,6 +125,13 @@ public class ExtensionManager {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
         }
+
+        // periodically cleanup observers
+        MinecraftServer.getSchedulerManager().buildTask(() -> {
+            for(Extension ext : extensionList) {
+                ext.cleanupObservers();
+            }
+        }).repeat(1L, TimeUnit.MINUTE).schedule();
     }
 
     private void setupClassLoader(@NotNull DiscoveredExtension discoveredExtension) {
@@ -235,16 +249,19 @@ public class ExtensionManager {
     @NotNull
     private List<DiscoveredExtension> discoverExtensions() {
         List<DiscoveredExtension> extensions = new LinkedList<>();
-        for (File file : extensionFolder.listFiles()) {
-            if (file.isDirectory()) {
-                continue;
-            }
-            if (!file.getName().endsWith(".jar")) {
-                continue;
-            }
-            DiscoveredExtension extension = discoverFromJar(file);
-            if (extension != null && extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
-                extensions.add(extension);
+        File[] fileList = extensionFolder.listFiles();
+        if(fileList != null) {
+            for (File file : fileList) {
+                if (file.isDirectory()) {
+                    continue;
+                }
+                if (!file.getName().endsWith(".jar")) {
+                    continue;
+                }
+                DiscoveredExtension extension = discoverFromJar(file);
+                if (extension != null && extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
+                    extensions.add(extension);
+                }
             }
         }
 
@@ -397,13 +414,13 @@ public class ExtensionManager {
 
                 for (var artifact : externalDependencies.artifacts) {
                     var resolved = getter.get(artifact, dependenciesFolder);
-                    addDependencyFile(resolved.getContentsLocation(), ext);
+                    addDependencyFile(resolved, ext);
                     LOGGER.trace("Dependency of extension {}: {}", ext.getName(), resolved);
                 }
 
                 for (var dependencyName : ext.getDependencies()) {
                     var resolved = getter.get(dependencyName, dependenciesFolder);
-                    addDependencyFile(resolved.getContentsLocation(), ext);
+                    addDependencyFile(resolved, ext);
                     LOGGER.trace("Dependency of extension {}: {}", ext.getName(), resolved);
                 }
             } catch (Exception e) {
@@ -415,9 +432,19 @@ public class ExtensionManager {
         }
     }
 
-    private void addDependencyFile(URL dependency, DiscoveredExtension extension) {
-        extension.files.add(dependency);
-        LOGGER.trace("Added dependency {} to extension {} classpath", dependency.toExternalForm(), extension.getName());
+    private void addDependencyFile(ResolvedDependency dependency, DiscoveredExtension extension) {
+        URL location = dependency.getContentsLocation();
+        extension.files.add(location);
+        LOGGER.trace("Added dependency {} to extension {} classpath", location.toExternalForm(), extension.getName());
+
+        // recurse to add full dependency tree
+        if(!dependency.getSubdependencies().isEmpty()) {
+            LOGGER.trace("Dependency {} has subdependencies, adding...", location.toExternalForm());
+            for(ResolvedDependency sub : dependency.getSubdependencies()) {
+                addDependencyFile(sub, extension);
+            }
+            LOGGER.trace("Dependency {} has had its subdependencies added.", location.toExternalForm());
+        }
     }
 
     /**
@@ -429,7 +456,7 @@ public class ExtensionManager {
     @NotNull
     public MinestomExtensionClassLoader newClassLoader(@NotNull DiscoveredExtension extension, @NotNull URL[] urls) {
         MinestomRootClassLoader root = MinestomRootClassLoader.getInstance();
-        MinestomExtensionClassLoader loader = new MinestomExtensionClassLoader(extension.getName(), urls, root);
+        MinestomExtensionClassLoader loader = new MinestomExtensionClassLoader(extension.getName(), extension.getEntrypoint(), urls, root);
         if (extension.getDependencies().length == 0) {
             // orphaned extension, we can insert it directly
             root.addChild(loader);
@@ -469,7 +496,7 @@ public class ExtensionManager {
     }
 
     @NotNull
-    public Map<String, URLClassLoader> getExtensionLoaders() {
+    public Map<String, MinestomExtensionClassLoader> getExtensionLoaders() {
         return new HashMap<>(extensionLoaders);
     }
 
@@ -485,19 +512,40 @@ public class ExtensionManager {
             return;
         }
         MinestomRootClassLoader modifiableClassLoader = (MinestomRootClassLoader) cl;
+        setupCodeModifiers(extensions, modifiableClassLoader);
+    }
+
+    private void setupCodeModifiers(@NotNull List<DiscoveredExtension> extensions, MinestomRootClassLoader modifiableClassLoader) {
         LOGGER.info("Start loading code modifiers...");
         for (DiscoveredExtension extension : extensions) {
             try {
                 for (String codeModifierClass : extension.getCodeModifiers()) {
-                    modifiableClassLoader.loadModifier(extension.files.toArray(new File[0]), codeModifierClass);
+                    boolean loaded = modifiableClassLoader.loadModifier(extension.files.toArray(new URL[0]), codeModifierClass);
+                    if(!loaded) {
+                        extension.addMissingCodeModifier(codeModifierClass);
+                    }
                 }
                 if (!extension.getMixinConfig().isEmpty()) {
                     final String mixinConfigFile = extension.getMixinConfig();
-                    Mixins.addConfiguration(mixinConfigFile);
-                    LOGGER.info("Found mixin in extension {}: {}", extension.getName(), mixinConfigFile);
+                    try {
+                        Mixins.addConfiguration(mixinConfigFile);
+                        LOGGER.info("Found mixin in extension {}: {}", extension.getName(), mixinConfigFile);
+                    } catch (ServiceNotAvailableError | MixinError | MixinException e) {
+                        if(MinecraftServer.getExceptionManager() != null) {
+                            MinecraftServer.getExceptionManager().handleException(e);
+                        } else {
+                            e.printStackTrace();
+                        }
+                        LOGGER.error("Could not load Mixin configuration: "+mixinConfigFile);
+                        extension.setFailedToLoadMixinFlag();
+                    }
                 }
             } catch (Exception e) {
-                MinecraftServer.getExceptionManager().handleException(e);
+                if(MinecraftServer.getExceptionManager() != null) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                } else {
+                    e.printStackTrace();
+                }
                 LOGGER.error("Failed to load code modifier for extension in files: " +
                         extension.files
                                 .stream()
@@ -511,6 +559,11 @@ public class ExtensionManager {
     private void unload(Extension ext) {
         ext.preTerminate();
         ext.terminate();
+        // remove callbacks for this extension
+        String extensionName = ext.getDescription().getName();
+        ext.triggerChange(observer -> observer.onExtensionUnload(extensionName));
+        // TODO: more callback types
+
         ext.postTerminate();
         ext.unload();
 
@@ -663,5 +716,47 @@ public class ExtensionManager {
      */
     public void shutdown() {
         this.extensionList.forEach(this::unload);
+    }
+
+    /**
+     * Loads code modifiers early, that is before <code>MinecraftServer.init()</code> is called.
+     */
+    public static void loadCodeModifiersEarly() {
+        // allow users to disable early code modifier load
+        if("true".equalsIgnoreCase(System.getProperty(DISABLE_EARLY_LOAD_SYSTEM_KEY))) {
+            return;
+        }
+        LOGGER.info("Early load of code modifiers from extensions.");
+        ExtensionManager manager = new ExtensionManager();
+
+        // discover extensions that are present
+        List<DiscoveredExtension> discovered = manager.discoverExtensions();
+
+        // setup extension class loaders, so that Mixin can load the json configuration file correctly
+        for(DiscoveredExtension e : discovered) {
+            manager.setupClassLoader(e);
+        }
+
+        // setup code modifiers and mixins
+        manager.setupCodeModifiers(discovered, MinestomRootClassLoader.getInstance());
+
+        // setup is done, remove all extension classloaders
+        for(MinestomExtensionClassLoader extensionLoader : manager.getExtensionLoaders().values()) {
+            MinestomRootClassLoader.getInstance().removeChildInHierarchy(extensionLoader);
+        }
+        LOGGER.info("Early load of code modifiers from extensions done!");
+    }
+
+    /**
+     * Unloads all extensions
+     */
+    public void unloadAllExtensions() {
+        // copy names, as the extensions map will be modified via the calls to unload
+        Set<String> extensionNames = new HashSet<>(extensions.keySet());
+        for(String ext : extensionNames) {
+            if(extensions.containsKey(ext)) { // is still loaded? Because extensions can depend on one another, it might have already been unloaded
+                unloadExtension(ext);
+            }
+        }
     }
 }

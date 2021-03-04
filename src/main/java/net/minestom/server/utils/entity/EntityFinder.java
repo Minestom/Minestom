@@ -12,6 +12,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.math.IntRange;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,8 +40,11 @@ public class EntityFinder {
     // By traits
     private Integer limit;
     private final ToggleableMap<EntityType> entityTypes = new ToggleableMap<>();
-    private String name;
-    private UUID uuid;
+    private String constantName;
+    private UUID constantUuid;
+    private final ToggleableMap<String> names = new ToggleableMap<>();
+    private final ToggleableMap<UUID> uuids = new ToggleableMap<>();
+
 
     // Players specific
     private final ToggleableMap<GameMode> gameModes = new ToggleableMap<>();
@@ -81,13 +85,23 @@ public class EntityFinder {
         return this;
     }
 
-    public EntityFinder setName(@NotNull String name) {
-        this.name = name;
+    public EntityFinder setConstantName(@NotNull String constantName) {
+        this.constantName = constantName;
         return this;
     }
 
-    public EntityFinder setUuid(@NotNull UUID uuid) {
-        this.uuid = uuid;
+    public EntityFinder setConstantUuid(@NotNull UUID constantUuid) {
+        this.constantUuid = constantUuid;
+        return this;
+    }
+
+    public EntityFinder setName(@NotNull String name, @NotNull ToggleableType toggleableType) {
+        this.names.put(name, toggleableType.getValue());
+        return this;
+    }
+
+    public EntityFinder setUuid(@NotNull UUID uuid, @NotNull ToggleableType toggleableType) {
+        this.uuids.put(uuid, toggleableType.getValue());
         return this;
     }
 
@@ -113,6 +127,16 @@ public class EntityFinder {
      */
     @NotNull
     public List<Entity> find(@Nullable Instance instance, @Nullable Entity self) {
+        if (targetSelector == TargetSelector.MINESTOM_USERNAME) {
+            Check.notNull(constantName, "The player name should not be null when searching for it");
+            final Player player = MinecraftServer.getConnectionManager().getPlayer(constantName);
+            return player != null ? Collections.singletonList(player) : Collections.emptyList();
+        } else if (targetSelector == TargetSelector.MINESTOM_UUID) {
+            Check.notNull(constantUuid, "The UUID should not be null when searching for it");
+            final Entity entity = Entity.getEntity(constantUuid);
+            return entity != null ? Collections.singletonList(entity) : Collections.emptyList();
+        }
+
         List<Entity> result = findTarget(instance, targetSelector, startPosition, self);
 
         // Fast exit if there is nothing to process
@@ -182,19 +206,19 @@ public class EntityFinder {
         }
 
         // Name
-        if (name != null) {
+        if (!names.isEmpty()) {
             result = result.stream().filter(entity -> {
                 if (!(entity instanceof Player))
                     return false;
-                return ((Player) entity).getUsername().equals(name);
+                return filterToggleableMap(entity, ((Player) entity).getUsername(), names);
             }).collect(Collectors.toList());
         }
 
         // UUID
-        if (uuid != null) {
-            result = result.stream()
-                    .filter(entity -> entity.getUuid().equals(uuid))
-                    .collect(Collectors.toList());
+        if (!uuids.isEmpty()) {
+            result = result.stream().filter(entity -> {
+                return filterToggleableMap(entity, entity.getUuid(), uuids);
+            }).collect(Collectors.toList());
         }
 
 
@@ -288,7 +312,7 @@ public class EntityFinder {
     }
 
     public enum TargetSelector {
-        NEAREST_PLAYER, RANDOM_PLAYER, ALL_PLAYERS, ALL_ENTITIES, SELF
+        NEAREST_PLAYER, RANDOM_PLAYER, ALL_PLAYERS, ALL_ENTITIES, SELF, MINESTOM_USERNAME, MINESTOM_UUID
     }
 
     public enum EntitySort {
@@ -344,7 +368,7 @@ public class EntityFinder {
         } else if (targetSelector == TargetSelector.SELF) {
             return Collections.singletonList(self);
         }
-        throw new IllegalStateException("Weird thing happened");
+        throw new IllegalStateException("Weird thing happened: " + targetSelector);
     }
 
     private static <T> boolean filterToggleableMap(@NotNull Entity entity, @NotNull T value, @NotNull ToggleableMap<T> map) {

@@ -1,0 +1,14 @@
+{
+  "entrypoint": "improveextensions.MixinIntoMinestomCoreWithJava9ModuleOnClasspath",
+  "name": "MixinIntoMinestomCoreWithJava9ModuleOnClasspath",
+  "codeModifiers": [],
+  "mixinConfig": "mixins.minestomcore.json",
+  "externalDependencies": {
+    "repositories": [
+      {"name": "JCentral", "url": "https://jcenter.bintray.com/"}
+    ],
+    "artifacts": [
+      "org.mockito:mockito-core:2.28.2"
+    ]
+  }
+}

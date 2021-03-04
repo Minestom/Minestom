@@ -345,6 +345,8 @@ public class Position implements PublicCloneable<Position> {
         this.x = position.x;
         this.y = position.y;
         this.z = position.z;
+        this.yaw = position.yaw;
+        this.pitch = position.pitch;
     }
 
     /**

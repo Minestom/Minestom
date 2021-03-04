@@ -3,6 +3,7 @@ package net.minestom.server.timer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.concurrent.ScheduledFuture;
@@ -27,6 +28,16 @@ public class Task implements Runnable {
     private final long delay;
     // Repeat value for the task execution
     private final long repeat;
+
+    /** Extension which owns this task, or null if none */
+    private final String owningExtension;
+    /**
+     * If this task is owned by an extension, should it survive the unloading of said extension?
+     *  May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
+     *  reload of that extension.
+     */
+    private final boolean isTransient;
+
     // Task completion/execution
     private ScheduledFuture<?> future;
     // The thread of the task
@@ -41,13 +52,15 @@ public class Task implements Runnable {
      * @param delay            The time to delay
      * @param repeat           The time until the repetition
      */
-    public Task(@NotNull SchedulerManager schedulerManager, @NotNull Runnable runnable, boolean shutdown, long delay, long repeat) {
+    public Task(@NotNull SchedulerManager schedulerManager, @NotNull Runnable runnable, boolean shutdown, long delay, long repeat, boolean isTransient, @Nullable String owningExtension) {
         this.schedulerManager = schedulerManager;
         this.runnable = runnable;
         this.shutdown = shutdown;
         this.id = shutdown ? this.schedulerManager.getShutdownCounterIdentifier() : this.schedulerManager.getCounterIdentifier();
         this.delay = delay;
         this.repeat = repeat;
+        this.isTransient = isTransient;
+        this.owningExtension = owningExtension;
     }
 
     /**
@@ -87,6 +100,9 @@ public class Task implements Runnable {
      * Sets up the task for correct execution.
      */
     public void schedule() {
+        if(owningExtension != null) {
+            this.schedulerManager.onScheduleFromExtension(owningExtension, this);
+        }
         this.future = this.repeat == 0L ?
                 this.schedulerManager.getTimerExecutionService().schedule(this, this.delay, TimeUnit.MILLISECONDS) :
                 this.schedulerManager.getTimerExecutionService().scheduleAtFixedRate(this, this.delay, this.repeat, TimeUnit.MILLISECONDS);
@@ -148,6 +164,22 @@ public class Task implements Runnable {
         if (object == null || getClass() != object.getClass()) return false;
         Task task = (Task) object;
         return id == task.id;
+    }
+
+    /**
+     * If this task is owned by an extension, should it survive the unloading of said extension?
+     *  May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
+     *  reload of that extension.
+     */
+    public boolean isTransient() {
+        return isTransient;
+    }
+
+    /**
+     * Extension which owns this task, or null if none
+     */
+    public String getOwningExtension() {
+        return owningExtension;
     }
 
     @Override

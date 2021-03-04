@@ -16,6 +16,7 @@ import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.cache.CacheablePacket;
 import net.minestom.server.utils.cache.TemporaryCache;
+import net.minestom.server.utils.cache.TimedBuffer;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +28,7 @@ import java.util.UUID;
 public class ChunkDataPacket implements ServerPacket, CacheablePacket {
 
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
-    private static final TemporaryCache<ByteBuf> CACHE = new TemporaryCache<>(10000L);
+    private static final TemporaryCache<TimedBuffer> CACHE = new TemporaryCache<>(10000L);
 
     public boolean fullChunk;
     public Biome[] biomes;
@@ -46,12 +47,12 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
     private static final int MAX_BUFFER_SIZE = (Short.BYTES + Byte.BYTES + 5 * Byte.BYTES + (4096 * MAX_BITS_PER_ENTRY / Long.SIZE * Long.BYTES)) * CHUNK_SECTION_COUNT + 256 * Integer.BYTES;
 
     // Cacheable data
-    private UUID identifier;
-    private long lastUpdate;
+    private final UUID identifier;
+    private final long timestamp;
 
-    public ChunkDataPacket(@Nullable UUID identifier, long lastUpdate) {
+    public ChunkDataPacket(@Nullable UUID identifier, long timestamp) {
         this.identifier = identifier;
-        this.lastUpdate = lastUpdate;
+        this.timestamp = timestamp;
     }
 
     @Override
@@ -139,12 +140,17 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
 
     @NotNull
     @Override
-    public TemporaryCache<ByteBuf> getCache() {
+    public TemporaryCache<TimedBuffer> getCache() {
         return CACHE;
     }
 
     @Override
     public UUID getIdentifier() {
         return identifier;
+    }
+
+    @Override
+    public long getTimestamp() {
+        return timestamp;
     }
 }
