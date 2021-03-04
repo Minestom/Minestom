@@ -126,8 +126,8 @@ public class SerializationManager {
      *
      * @return the serialized string
      */
-    @Contract("null -> null")
-    public @Nullable String serialize(@Nullable Component component) {
+    @Contract("null -> null; !null -> !null")
+    public String serialize(@Nullable Component component) {
         return this.serialize(component, this.defaultLocale);
     }
 
@@ -142,8 +142,8 @@ public class SerializationManager {
      *
      * @return the serialized string
      */
-    @Contract("null, _ -> null")
-    public @Nullable String serialize(@Nullable Component component, @NotNull Localizable localizable) {
+    @Contract("null, _ -> null; !null, _ -> !null")
+    public String serialize(@Nullable Component component, @NotNull Localizable localizable) {
         return this.serialize(component, Objects.requireNonNullElse(localizable.getLocale(), this.defaultLocale));
     }
 
@@ -158,8 +158,8 @@ public class SerializationManager {
      *
      * @return the serialized string
      */
-    @Contract("null, _ -> null")
-    public @Nullable String serialize(@Nullable Component component, @NotNull Locale locale) {
+    @Contract("null, _ -> null; !null, _ -> !null")
+    public String serialize(@Nullable Component component, @NotNull Locale locale) {
         if (component == null) {
             return null;
         }
