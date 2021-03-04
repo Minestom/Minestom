@@ -1,5 +1,6 @@
 package demo.commands;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandProcessor;
 import net.minestom.server.command.CommandSender;
@@ -38,11 +39,11 @@ public class DimensionCommand implements CommandProcessor {
 
         Optional<Instance> targetInstance = MinecraftServer.getInstanceManager().getInstances().stream().filter(in -> in.getDimensionType() == targetDimensionType).findFirst();
         if (targetInstance.isPresent()) {
-            player.sendMessage("You were in " + instance.getDimensionType());
+            player.sendMessage(Component.text("You were in " + instance.getDimensionType()));
             player.setInstance(targetInstance.get());
-            player.sendMessage("You are now in " + targetDimensionType);
+            player.sendMessage(Component.text("You are now in " + targetDimensionType));
         } else {
-            player.sendMessage("Could not find instance with dimension " + targetDimensionType);
+            player.sendMessage(Component.text("Could not find instance with dimension " + targetDimensionType));
         }
 
         return true;

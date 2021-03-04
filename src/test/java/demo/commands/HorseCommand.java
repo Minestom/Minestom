@@ -1,5 +1,6 @@
 package demo.commands;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
@@ -31,7 +32,7 @@ public class HorseCommand extends Command {
 
     private boolean condition(CommandSender sender, String commandString) {
         if (!sender.isPlayer()) {
-            sender.sendMessage("The command is only available for player");
+            sender.sendMessage(Component.text("The command is only available for player"));
             return false;
         }
         return true;
@@ -42,21 +43,21 @@ public class HorseCommand extends Command {
     }
 
     private void onBabyError(CommandSender sender, ArgumentSyntaxException exception) {
-        sender.sendMessage("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by 'true' or 'false'");
+        sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by 'true' or 'false'"));
     }
 
     private void onMarkingError(CommandSender sender, ArgumentSyntaxException exception) {
         String values = Stream.of(HorseMeta.Marking.values())
                 .map(value -> "'" + value.name().toLowerCase(Locale.ROOT) + "'")
                 .collect(Collectors.joining(", "));
-        sender.sendMessage("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by " + values + ".");
+        sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by " + values + "."));
     }
 
     private void onColorError(CommandSender sender, ArgumentSyntaxException exception) {
         String values = Stream.of(HorseMeta.Color.values())
                 .map(value -> "'" + value.name().toLowerCase(Locale.ROOT) + "'")
                 .collect(Collectors.joining(", "));
-        sender.sendMessage("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by " + values + ".");
+        sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by " + values + "."));
     }
 
     private void onHorseCommand(CommandSender sender, CommandContext context) {
