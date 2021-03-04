@@ -4,7 +4,6 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.chat.ChatColor;
 import org.apache.commons.lang3.Validate;
-import org.checkerframework.common.value.qual.IntRange;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;

@@ -1,7 +1,6 @@
 package net.minestom.server.color;
 
 import net.kyori.adventure.util.RGBLike;
-import org.checkerframework.common.value.qual.IntRange;
 import org.jetbrains.annotations.NotNull;
 
 /**
