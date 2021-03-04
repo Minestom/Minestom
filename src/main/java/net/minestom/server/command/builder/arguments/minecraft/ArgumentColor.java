@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
-import net.minestom.server.chat.ChatColor;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.color.Color;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -8,28 +9,26 @@ import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents an argument which will give you a {@link ChatColor}.
- * <p>
- * Example: red, white, reset
- * @deprecated Use {@link ArgumentTextColor} for colors and {@link ArgumentTextDecoration} for styles.
+ * Represents an argument that will give you a {@link Color}. Input is parsed
+ * first as a hex string ({@code #int}), then as a CSS hex string ({@code #rrggbb} or
+ * {@code #rgb}), then as an integer and finally as a named text colour. The values for
+ * the named text colours can be found in {@link NamedTextColor}.
+ * <br><br>
+ * This class is essentially a wrapper around {@link ArgumentTextColor}.
  */
-@Deprecated
-public class ArgumentColor extends Argument<ChatColor> {
+public class ArgumentColor extends Argument<Color> {
+    private final ArgumentTextColor argumentTextColor;
 
-    public static final int UNDEFINED_COLOR = -2;
+    public static int UNDEFINED_COLOR = ArgumentTextColor.UNDEFINED_COLOR;
 
-    public ArgumentColor(String id) {
+    public ArgumentColor(@NotNull String id) {
         super(id);
+        argumentTextColor = new ArgumentTextColor(id);
     }
 
-    @NotNull
     @Override
-    public ChatColor parse(@NotNull String input) throws ArgumentSyntaxException {
-        final ChatColor color = ChatColor.fromName(input);
-        if (color == ChatColor.NO_COLOR)
-            throw new ArgumentSyntaxException("Undefined color", input, UNDEFINED_COLOR);
-
-        return color;
+    public @NotNull Color parse(@NotNull String input) throws ArgumentSyntaxException {
+        return new Color(this.argumentTextColor.parse(input));
     }
 
     @Override

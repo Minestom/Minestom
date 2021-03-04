@@ -25,7 +25,7 @@ public class ArgumentTextColor extends Argument<TextColor> {
 
     @Override
     public @NotNull TextColor parse(@NotNull String input) throws ArgumentSyntaxException {
-        TextColor textColor = null;
+        TextColor textColor;
 
         // first try standard hex
         textColor = TextColor.fromHexString(input);
@@ -58,7 +58,7 @@ public class ArgumentTextColor extends Argument<TextColor> {
     @Override
     public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
-        argumentNode.parser = "minecraft:text_decoration";
+        argumentNode.parser = "minecraft:text_color";
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
