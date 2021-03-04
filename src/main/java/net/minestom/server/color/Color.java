@@ -1,8 +1,10 @@
 package net.minestom.server.color;
 
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.chat.ChatColor;
 import org.apache.commons.lang3.Validate;
+import org.checkerframework.common.value.qual.IntRange;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -10,7 +12,7 @@ import java.util.Objects;
 /**
  * A general purpose class for representing colors.
  */
-public class Color {
+public class Color implements RGBLike {
     private static final int BIT_MASK = 0xff;
 
     private int red, green, blue;
@@ -201,5 +203,20 @@ public class Color {
     @Override
     public int hashCode() {
         return Objects.hash(red, green, blue);
+    }
+
+    @Override
+    public int red() {
+        return this.red;
+    }
+
+    @Override
+    public int green() {
+        return this.green;
+    }
+
+    @Override
+    public int blue() {
+        return this.blue;
     }
 }

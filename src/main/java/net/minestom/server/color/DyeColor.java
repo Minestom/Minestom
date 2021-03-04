@@ -1,11 +1,13 @@
 package net.minestom.server.color;
 
+import net.kyori.adventure.util.RGBLike;
+import org.checkerframework.common.value.qual.IntRange;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Color values for dyes, wool and cloth items.
  */
-public enum DyeColor {
+public enum DyeColor implements RGBLike {
     WHITE(new Color(0xF9FFFE), new Color(0xF0F0F0)),
     ORANGE(new Color(0xF9801D), new Color(0xEB8844)),
     MAGENTA(new Color(0xC74EBD), new Color(0xC354CD)),
@@ -49,5 +51,20 @@ public enum DyeColor {
     @NotNull
     public Color getFireworkColor() {
         return this.firework;
+    }
+
+    @Override
+    public int red() {
+        return this.color.red();
+    }
+
+    @Override
+    public int green() {
+        return this.color.green();
+    }
+
+    @Override
+    public int blue() {
+        return this.color.blue();
     }
 }
