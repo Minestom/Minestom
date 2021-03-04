@@ -28,12 +28,12 @@ public class Color implements RGBLike {
     }
 
     /**
-     * Creates a color from an Adventure text color.
+     * Creates a color from an RGB-like color.
      *
-     * @param textColor the text color
+     * @param rgbLike the color
      */
-    public Color(TextColor textColor) {
-        this(textColor.red(), textColor.blue(), textColor.green());
+    public Color(RGBLike rgbLike) {
+        this(rgbLike.red(), rgbLike.blue(), rgbLike.green());
     }
 
     /**
