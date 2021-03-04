@@ -138,14 +138,10 @@ public class NettyPlayerConnection extends PlayerConnection {
                         final boolean shouldUpdate = timedBuffer == null ||
                                 timestamp > timedBuffer.getTimestamp();
 
-
-                        if (timedBuffer == null) {
-                            // Buffer not found, create it
+                        if (shouldUpdate) {
                             final ByteBuf buffer = PacketUtils.createFramedPacket(serverPacket, false);
                             timedBuffer = new TimedBuffer(buffer, timestamp);
-                        }
 
-                        if (shouldUpdate) {
                             temporaryCache.cache(identifier, timedBuffer);
                         }
 
