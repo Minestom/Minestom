@@ -59,6 +59,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
 
 /**
  * The main server class used to start the server and retrieve all the managers.
@@ -66,7 +68,7 @@ import java.io.IOException;
  * The server needs to be initialized with {@link #init()} and started with {@link #start(String, int)}.
  * You should register all of your dimensions, biomes, commands, events, etc... in-between.
  */
-public final class MinecraftServer implements ForwardingAudience.Single {
+public final class MinecraftServer implements ForwardingAudience {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
@@ -832,7 +834,9 @@ public final class MinecraftServer implements ForwardingAudience.Single {
     }
 
     @Override
-    public @NotNull Audience audience() {
-        return getConnectionManager();
+    public @NotNull Iterable<? extends Audience> audiences() {
+        HashSet<Audience> audiences = new HashSet<>(getConnectionManager().getOnlinePlayers());
+        audiences.add(getCommandManager().getConsoleSender());
+        return Collections.unmodifiableSet(audiences);
     }
 }

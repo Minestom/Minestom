@@ -6,6 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -89,7 +90,7 @@ public interface Viewable {
      *
      * @return the audience
      */
-    default @NotNull Audience asAudience() {
-        return Audience.audience(this.getViewers());
+    default @NotNull Iterable<? extends Audience> getViewersAsAudiences() {
+        return Collections.unmodifiableSet(this.getViewers());
     }
 }
