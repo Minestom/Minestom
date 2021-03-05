@@ -3,18 +3,20 @@ package net.minestom.server.entity.type.projectile;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.ObjectEntity;
-import net.minestom.server.entity.type.Projectile;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class EntityEyeOfEnder extends AbstractProjectile {
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.item.EyeOfEnderMeta} instead.
+ */
+@Deprecated
+public class EntityEyeOfEnder extends Entity {
 
     public EntityEyeOfEnder(@Nullable Entity shooter, @NotNull Position spawnPosition) {
-        super(shooter, EntityType.EYE_OF_ENDER, spawnPosition);
+        super(EntityType.EYE_OF_ENDER, spawnPosition);
     }
 
 
@@ -38,8 +40,4 @@ public class EntityEyeOfEnder extends AbstractProjectile {
         this.metadata.setIndex((byte) 7, Metadata.Slot(itemStack));
     }
 
-    @Override
-    public int getObjectData() {
-        return 0;
-    }
 }

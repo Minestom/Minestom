@@ -3,24 +3,21 @@ package net.minestom.server.entity.type.projectile;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.ObjectEntity;
-import net.minestom.server.entity.type.Projectile;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class EntityPotion extends AbstractProjectile {
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.item.ThrownPotionMeta} instead.
+ */
+@Deprecated
+public class EntityPotion extends Entity {
 
     public EntityPotion(@Nullable Entity shooter, @NotNull Position spawnPosition, @NotNull ItemStack potion) {
-        super(shooter, EntityType.POTION, spawnPosition);
+        super(EntityType.POTION, spawnPosition);
         setBoundingBox(0.25f, 0.25f, 0.25f);
         setPotion(potion);
-    }
-
-    @Override
-    public int getObjectData() {
-        return 0;
     }
 
     @NotNull

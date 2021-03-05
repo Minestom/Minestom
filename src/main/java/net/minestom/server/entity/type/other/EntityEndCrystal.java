@@ -8,6 +8,10 @@ import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.other.EndCrystalMeta} instead.
+ */
+@Deprecated
 public class EntityEndCrystal extends ObjectEntity {
 
     public EntityEndCrystal(@NotNull Position spawnPosition) {

@@ -6,6 +6,10 @@ import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.type.Monster;
 import net.minestom.server.utils.Position;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.flying.GhastMeta} instead.
+ */
+@Deprecated
 public class EntityGhast extends EntityCreature implements Monster {
 
     public EntityGhast(Position spawnPosition) {

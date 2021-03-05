@@ -6,19 +6,21 @@ import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.GlobalEventHandler;
+import net.minestom.server.extensions.IExtensionObserver;
+import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Stream;
 
 /**
  * Represents an element which can have {@link Event} listeners assigned to it.
  */
-public interface EventHandler {
+public interface EventHandler extends IExtensionObserver {
 
     /**
      * Gets a {@link Map} containing all the listeners assigned to a specific {@link Event} type.
@@ -29,6 +31,15 @@ public interface EventHandler {
     Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap();
 
     /**
+     * Gets a {@link Collection} containing all the listeners assigned to a specific extension (represented by its name).
+     * Used to unload all callbacks when the extension is unloaded
+     *
+     * @return a {@link Collection} with all the listeners
+     */
+    @NotNull
+    Collection<EventCallback<?>> getExtensionCallbacks(String extension);
+
+    /**
      * Adds a new event callback for the specified type {@code eventClass}.
      *
      * @param eventClass    the event class
@@ -37,6 +48,12 @@ public interface EventHandler {
      * @return true if the callback collection changed as a result of the call
      */
     default <E extends Event> boolean addEventCallback(@NotNull Class<E> eventClass, @NotNull EventCallback<E> eventCallback) {
+        String extensionSource = MinestomRootClassLoader.findExtensionObjectOwner(eventCallback);
+        if(extensionSource != null) {
+            MinecraftServer.getExtensionManager().getExtension(extensionSource).observe(this);
+            getExtensionCallbacks(extensionSource).add(eventCallback);
+        };
+
         Collection<EventCallback> callbacks = getEventCallbacks(eventClass);
         return callbacks.add(eventCallback);
     }
@@ -51,6 +68,11 @@ public interface EventHandler {
      */
     default <E extends Event> boolean removeEventCallback(@NotNull Class<E> eventClass, @NotNull EventCallback<E> eventCallback) {
         Collection<EventCallback> callbacks = getEventCallbacks(eventClass);
+        String extensionSource = MinestomRootClassLoader.findExtensionObjectOwner(eventCallback);
+        if(extensionSource != null) {
+            getExtensionCallbacks(extensionSource).remove(eventCallback);
+        };
+
         return callbacks.remove(eventCallback);
     }
 
@@ -126,10 +148,33 @@ public interface EventHandler {
         }
     }
 
+    /**
+     * Remove all event callbacks owned by the given extension
+     * @param extension the extension to remove callbacks from
+     */
+    default void removeCallbacksOwnedByExtension(String extension) {
+        Collection<EventCallback<?>> extensionCallbacks = getExtensionCallbacks(extension);
+        for(EventCallback<?> callback : extensionCallbacks) {
+
+            // try to remove this callback from all callback collections
+            //  we do this because we do not have information about the event class at this point
+            for(Collection<EventCallback> eventCallbacks : getEventCallbacksMap().values()) {
+                eventCallbacks.remove(callback);
+            }
+        }
+
+        extensionCallbacks.clear();
+    }
+
     private <E extends Event> void runEvent(@NotNull Collection<EventCallback> eventCallbacks, @NotNull E event) {
         for (EventCallback<E> eventCallback : eventCallbacks) {
             eventCallback.run(event);
         }
+    }
+
+    @Override
+    default void onExtensionUnload(String extensionName) {
+        removeCallbacksOwnedByExtension(extensionName);
     }
 
 }

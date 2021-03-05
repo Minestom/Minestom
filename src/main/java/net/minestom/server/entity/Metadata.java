@@ -12,10 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -105,9 +102,7 @@ public class Metadata {
     }
 
     public static Value<NBT> NBT(@NotNull NBT nbt) {
-        return new Value<>(TYPE_NBT, nbt, writer -> {
-            writer.writeNBT("", nbt);
-        });
+        return new Value<>(TYPE_NBT, nbt, writer -> writer.writeNBT("", nbt));
     }
 
     public static Value<int[]> VillagerData(int villagerType,
@@ -153,14 +148,18 @@ public class Metadata {
 
     private final Entity entity;
 
-    private Map<Byte, Entry<?>> metadataMap = new ConcurrentHashMap<>();
+    private final Map<Byte, Entry<?>> metadataMap = new ConcurrentHashMap<>();
+
+    private volatile boolean notifyAboutChanges = true;
+    private final Map<Byte, Entry<?>> notNotifiedChanges = new HashMap<>();
 
     public Metadata(@Nullable Entity entity) {
         this.entity = entity;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T getIndex(byte index, @Nullable T defaultValue) {
-        Entry<?> value = metadataMap.get(index);
+        Entry<?> value = this.metadataMap.get(index);
         return value != null ? (T) value.getMetaValue().value : defaultValue;
     }
 
@@ -169,13 +168,47 @@ public class Metadata {
         this.metadataMap.put(index, entry);
 
         // Send metadata packet to update viewers and self
-        if (entity != null && entity.isActive()) {
+        if (this.entity != null && this.entity.isActive()) {
+            if (!this.notifyAboutChanges) {
+                synchronized (this.notNotifiedChanges) {
+                    this.notNotifiedChanges.put(index, entry);
+                }
+                return;
+            }
             EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
-            metaDataPacket.entityId = entity.getEntityId();
+            metaDataPacket.entityId = this.entity.getEntityId();
             metaDataPacket.entries = Collections.singleton(entry);
 
             this.entity.sendPacketToViewersAndSelf(metaDataPacket);
         }
+    }
+
+    public void setNotifyAboutChanges(boolean notifyAboutChanges) {
+        if (this.notifyAboutChanges == notifyAboutChanges) {
+            return;
+        }
+
+        Collection<Entry<?>> entries = null;
+        synchronized (this.notNotifiedChanges) {
+            this.notifyAboutChanges = notifyAboutChanges;
+            if (notifyAboutChanges) {
+                entries = this.notNotifiedChanges.values();
+                if (entries.isEmpty()) {
+                    return;
+                }
+                this.notNotifiedChanges.clear();
+            }
+        }
+
+        if (entries == null || this.entity == null || !this.entity.isActive()) {
+            return;
+        }
+
+        EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
+        metaDataPacket.entityId = this.entity.getEntityId();
+        metaDataPacket.entries = entries;
+
+        this.entity.sendPacketToViewersAndSelf(metaDataPacket);
     }
 
     @NotNull

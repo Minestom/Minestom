@@ -391,7 +391,9 @@ public class InstanceContainer extends Instance {
         final boolean allowed = !blockBreakEvent.isCancelled();
         if (allowed) {
             // Break or change the broken block based on event result
-            setSeparateBlocks(x, y, z, blockBreakEvent.getResultBlockStateId(), blockBreakEvent.getResultCustomBlockId());
+            final short resultState = blockBreakEvent.getResultBlockStateId();
+            final short resultCustom = blockBreakEvent.getResultCustomBlockId();
+            setSeparateBlocks(x, y, z, resultState, resultCustom);
 
             // Send the block break effect packet
             {

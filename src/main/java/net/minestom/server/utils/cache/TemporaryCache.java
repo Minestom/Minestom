@@ -28,7 +28,7 @@ public class TemporaryCache<T> {
         this.keepTime = keepTime;
         this.cache = CacheBuilder.newBuilder()
                 .expireAfterWrite(keepTime, TimeUnit.MILLISECONDS)
-                .weakValues()
+                .softValues()
                 .build();
     }
 

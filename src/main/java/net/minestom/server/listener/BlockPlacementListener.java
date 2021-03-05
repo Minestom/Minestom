@@ -19,6 +19,7 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
+import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -72,14 +73,19 @@ public class BlockPlacementListener {
         final Material useMaterial = usedItem.getMaterial();
 
         // Verify if the player can place the block
+        boolean canPlaceBlock = true;
         {
             if (useMaterial == Material.AIR) { // Can't place air
                 return;
             }
-            if (player.getGameMode().equals(GameMode.ADVENTURE)) { // Can't place in adventure mode
-                return;
-            }
 
+            //Check if the player is allowed to place blocks based on their game mode
+            if (player.getGameMode() == GameMode.SPECTATOR) {
+                canPlaceBlock = false; //Spectators can't place blocks
+            } else if (player.getGameMode() == GameMode.ADVENTURE) {
+                //Check if the block can placed on the block
+                canPlaceBlock = usedItem.canPlaceOn(instance.getBlock(blockPosition).getName());
+            }
         }
 
         // Get the newly placed block position
@@ -89,6 +95,16 @@ public class BlockPlacementListener {
 
         blockPosition.add(offsetX, offsetY, offsetZ);
 
+        if (!canPlaceBlock) {
+            //Send a block change with AIR as block to keep the client in sync,
+            //using refreshChunk results in the client not being in sync
+            //after rapid invalid block placements
+            BlockChangePacket blockChangePacket = new BlockChangePacket();
+            blockChangePacket.blockPosition = blockPosition;
+            blockChangePacket.blockStateId = Block.AIR.getBlockId();
+            player.getPlayerConnection().sendPacket(blockChangePacket);
+            return;
+        }
 
         final Chunk chunk = instance.getChunkAt(blockPosition);
 
@@ -127,10 +143,13 @@ public class BlockPlacementListener {
                     if (!playerBlockPlaceEvent.isCancelled()) {
 
                         // BlockPlacementRule check
-                        final Block resultBlock = Block.fromStateId(playerBlockPlaceEvent.getBlockStateId());
+                        short blockStateId = playerBlockPlaceEvent.getBlockStateId();
+                        final Block resultBlock = Block.fromStateId(blockStateId);
                         final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(resultBlock);
-                        final short blockStateId = blockPlacementRule == null ? resultBlock.getBlockId() :
-                                blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player);
+                        if (blockPlacementRule != null) {
+                            // Get id from block placement rule instead of the event
+                            blockStateId = blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player);
+                        }
                         final boolean placementRuleCheck = blockStateId != BlockPlacementRule.CANCEL_CODE;
 
                         if (placementRuleCheck) {

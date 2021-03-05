@@ -5,11 +5,20 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.type.Monster;
 import net.minestom.server.utils.Position;
+import org.jetbrains.annotations.NotNull;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.monster.zombie.ZombieMeta} instead.
+ */
+@Deprecated
 public class EntityZombie extends EntityCreature implements Monster {
 
-    public EntityZombie(Position spawnPosition) {
-        super(EntityType.ZOMBIE, spawnPosition);
+    public EntityZombie(@NotNull Position spawnPosition) {
+        this(EntityType.ZOMBIE, spawnPosition);
+    }
+
+    EntityZombie(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
+        super(entityType, spawnPosition);
         setBoundingBox(0.6f, 1.95f, 0.6f);
     }
 

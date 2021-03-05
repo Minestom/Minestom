@@ -79,6 +79,11 @@ public class ArgumentType {
         return new ArgumentCommand(id);
     }
 
+    @SuppressWarnings("rawtypes")
+    public static <E extends Enum> ArgumentEnum<E> Enum(@NotNull String id, @NotNull Class<E> enumClass) {
+        return new ArgumentEnum<>(id, enumClass);
+    }
+
     // Minecraft specific arguments
 
     public static ArgumentColor Color(@NotNull String id) {
@@ -125,12 +130,16 @@ public class ArgumentType {
         return new ArgumentItemStack(id);
     }
 
-    public static ArgumentNbtCompoundTag NbtCompound(@NotNull String id) {
-        return new ArgumentNbtCompoundTag(id);
+    public static ArgumentComponent Component(@NotNull String id) {
+        return new ArgumentComponent(id);
     }
 
     public static ArgumentNbtTag NBT(@NotNull String id) {
         return new ArgumentNbtTag(id);
+    }
+
+    public static ArgumentNbtCompoundTag NbtCompound(@NotNull String id) {
+        return new ArgumentNbtCompoundTag(id);
     }
 
     public static ArgumentRelativeBlockPosition RelativeBlockPosition(@NotNull String id) {

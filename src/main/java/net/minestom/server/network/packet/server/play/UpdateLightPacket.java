@@ -4,7 +4,8 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.cache.CacheablePacket;
-import net.minestom.server.utils.cache.TemporaryPacketCache;
+import net.minestom.server.utils.cache.TemporaryCache;
+import net.minestom.server.utils.cache.TimedBuffer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +14,7 @@ import java.util.UUID;
 
 public class UpdateLightPacket implements ServerPacket, CacheablePacket {
 
-    private static final TemporaryPacketCache CACHE = new TemporaryPacketCache(10000L);
+    private static final TemporaryCache<TimedBuffer> CACHE = new TemporaryCache<>(10000L);
 
     public int chunkX;
     public int chunkZ;
@@ -30,12 +31,12 @@ public class UpdateLightPacket implements ServerPacket, CacheablePacket {
     public List<byte[]> blockLight;
 
     // Cacheable data
-    private UUID identifier;
-    private long lastUpdate;
+    private final UUID identifier;
+    private final long timestamp;
 
-    public UpdateLightPacket(@Nullable UUID identifier, long lastUpdate) {
+    public UpdateLightPacket(@Nullable UUID identifier, long timestamp) {
         this.identifier = identifier;
-        this.lastUpdate = lastUpdate;
+        this.timestamp = timestamp;
     }
 
     @Override
@@ -71,12 +72,17 @@ public class UpdateLightPacket implements ServerPacket, CacheablePacket {
 
     @NotNull
     @Override
-    public TemporaryPacketCache getCache() {
+    public TemporaryCache<TimedBuffer> getCache() {
         return CACHE;
     }
 
     @Override
     public UUID getIdentifier() {
         return identifier;
+    }
+
+    @Override
+    public long getTimestamp() {
+        return timestamp;
     }
 }

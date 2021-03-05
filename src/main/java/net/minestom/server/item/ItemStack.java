@@ -67,6 +67,9 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
     private StackingRule stackingRule;
     private Data data;
 
+    private Set<String> canDestroy;
+    private Set<String> canPlaceOn;
+
     {
         if (defaultStackingRule == null)
             defaultStackingRule = VANILLA_STACKING_RULE;
@@ -82,6 +85,9 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
 
         this.enchantmentMap = new Object2ShortOpenHashMap<>();
         this.attributes = new ArrayList<>();
+
+        this.canDestroy = new HashSet<>();
+        this.canPlaceOn = new HashSet<>();
 
         this.itemMeta = findMeta();
     }
@@ -185,7 +191,9 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
                     itemStack.attributes.equals(attributes) &&
                     itemStack.hideFlag == hideFlag &&
                     sameMeta &&
-                    dataCheck;
+                    dataCheck &&
+                    itemStack.canPlaceOn.equals(canPlaceOn) &&
+                    itemStack.canDestroy.equals(canDestroy);
         }
     }
 
@@ -193,6 +201,42 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
     public boolean equals(Object o) {
         return o instanceof ItemStack &&
                 isSimilar((ItemStack) o) && ((ItemStack) o).getAmount() == getAmount();
+    }
+
+    /**
+     * Checks if this item can be placed on the block.
+     * This should be enforced only for adventure mode players.
+     * @param block the block's namespaceID
+     * @return <code>true</code> if it can be placed, <code>false</code> otherwise
+     */
+    public boolean canPlaceOn(String block) {
+        return canPlaceOn.contains(block);
+    }
+
+    /**
+     * Gets the blocks that this item can be placed on
+     * @return the {@link Set} of blocks
+     */
+    public Set<String> getCanPlaceOn() {
+        return canPlaceOn;
+    }
+
+    /**
+     * Checks if this item is allowed to break the provided block.
+     * This should be enforced only for adventure mode players.
+     * @param block the block's namespaceID
+     * @return <code>true</code> if this item can destroy it, otherwise <code>false</code>
+     */
+    public boolean canDestroy(String block) {
+        return canDestroy.contains(block);
+    }
+
+    /**
+     * Gets the blocks that this item can destroy
+     * @return the {@link Set} of blocks
+     */
+    public Set<String> getCanDestroy() {
+        return canDestroy;
     }
 
     /**
@@ -555,7 +599,9 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
                 hideFlag != 0 ||
                 customModelData != 0 ||
                 (itemMeta != null && itemMeta.hasNbt()) ||
-                (data != null && !data.isEmpty());
+                (data != null && !data.isEmpty()) ||
+                !canDestroy.isEmpty() ||
+                !canPlaceOn.isEmpty();
     }
 
     /**
@@ -593,6 +639,9 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
 
             itemStack.hideFlag = hideFlag;
             itemStack.customModelData = customModelData;
+
+            itemStack.canPlaceOn = new HashSet<>(canPlaceOn);
+            itemStack.canDestroy = new HashSet<>(canDestroy);
 
             if (itemMeta != null)
                 itemStack.itemMeta = itemMeta.clone();

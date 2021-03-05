@@ -22,16 +22,23 @@ public interface CacheablePacket {
      * @return the temporary packet cache
      */
     @NotNull
-    TemporaryPacketCache getCache();
+    TemporaryCache<TimedBuffer> getCache();
 
     /**
      * Gets the identifier of this packet.
      * <p>
      * Used to verify if this packet is already cached or not.
      *
-     * @return this packet identifier, null to do not retrieve the cache
+     * @return this packet identifier, null to prevent caching
      */
     @Nullable
     UUID getIdentifier();
+
+    /**
+     * Gets the last time this packet changed.
+     *
+     * @return the last packet update time in milliseconds
+     */
+    long getTimestamp();
 
 }

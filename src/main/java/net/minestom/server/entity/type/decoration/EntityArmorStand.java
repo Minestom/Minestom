@@ -13,6 +13,10 @@ import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.binary.BitmaskUtil;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.other.ArmorStandMeta} instead.
+ */
+@Deprecated
 public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
 
     // Equipments
@@ -48,10 +52,12 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
     }
 
     @Override
-    public boolean addViewer(@NotNull Player player) {
-        final boolean result = super.addViewer(player);
+    public boolean addViewer0(@NotNull Player player) {
+        if (!super.addViewer0(player)) {
+            return false;
+        }
         syncEquipments(player.getPlayerConnection());
-        return result;
+        return true;
     }
 
     @Override

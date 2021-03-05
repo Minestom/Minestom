@@ -1,10 +1,13 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
-import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @deprecated Use {@link net.minestom.server.entity.metadata.EntityMeta} that inherits
+ * {@link net.minestom.server.entity.metadata.ObjectDataProvider} instead.
+ */
+@Deprecated
 public abstract class ObjectEntity extends Entity {
 
     public ObjectEntity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
@@ -28,31 +31,6 @@ public abstract class ObjectEntity extends Entity {
     @Override
     public void spawn() {
 
-    }
-
-    @Override
-    public boolean addViewer(@NotNull Player player) {
-        final boolean result = super.addViewer(player);
-        if (!result)
-            return false;
-
-        final PlayerConnection playerConnection = player.getPlayerConnection();
-
-        SpawnEntityPacket spawnEntityPacket = new SpawnEntityPacket();
-        spawnEntityPacket.entityId = getEntityId();
-        spawnEntityPacket.uuid = getUuid();
-        spawnEntityPacket.type = getEntityType().getId();
-        spawnEntityPacket.position = getPosition();
-        spawnEntityPacket.data = getObjectData();
-        playerConnection.sendPacket(spawnEntityPacket);
-        playerConnection.sendPacket(getVelocityPacket());
-        playerConnection.sendPacket(getMetadataPacket());
-
-        if (hasPassenger()) {
-            playerConnection.sendPacket(getPassengersPacket());
-        }
-
-        return true;
     }
 
 }

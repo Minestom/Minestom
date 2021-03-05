@@ -41,6 +41,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
@@ -79,6 +80,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     private long lastTickAge = System.currentTimeMillis();
 
     private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
+    private final Map<String, Collection<EventCallback<?>>> extensionCallbacks = new ConcurrentHashMap<>();
 
     // Entities present in this instance
     protected final Set<Entity> entities = new CopyOnWriteArraySet<>();
@@ -862,6 +864,12 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     @Override
     public Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap() {
         return eventCallbacks;
+    }
+
+    @NotNull
+    @Override
+    public Collection<EventCallback<?>> getExtensionCallbacks(String extension) {
+        return extensionCallbacks.computeIfAbsent(extension, e -> new CopyOnWriteArrayList<>());
     }
 
     // UNSAFE METHODS (need most of time to be synchronized)
