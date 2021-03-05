@@ -207,13 +207,21 @@ public class TabList implements Viewable {
             //this.displayedPlayers.add(playa);
         }
         player.getPlayerConnection().sendPacket(playerInfoPacket);
-        player.sendPacketToViewersAndSelf(this.generateHeaderAndFooterPacket());
+        PacketUtils.sendGroupedPacket(this.viewers, this.generateHeaderAndFooterPacket());
         return true;
     }
 
     public boolean removeViewer(@NotNull Player player) {
         return this.viewers.remove(player);
     }
+
+    public void changeDisplayName(Player player) {
+        PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME);
+        infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateDisplayName(player.getUuid(), player.getDisplayName()));
+        PacketUtils.sendGroupedPacket(this.viewers, infoPacket);
+    }
+
+
 
     /**
      * Sends a packet to all viewers of the TabList telling them to display

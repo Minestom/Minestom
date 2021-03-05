@@ -268,27 +268,10 @@ public class Player extends LivingEntity implements CommandSender {
         callEvent(PlayerSkinInitEvent.class, skinInitEvent);
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
-        //playerConnection.sendPacket(getAddPlayerToList());
 
-        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
-        for (Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
-            PlayerInfoPacket.AddPlayer addPlayer =
-                    new PlayerInfoPacket.AddPlayer(player.getUuid(), player.getUsername(), player.getGameMode(), player.getLatency());
-            addPlayer.displayName = player.getDisplayName();
+        playerConnection.sendPacket(getAddAllPlayerToList());
 
-            // Skin support
-            if (player.getSkin() != null) {
-                final String textures = player.getSkin().getTextures();
-                final String signature = player.getSkin().getSignature();
 
-                PlayerInfoPacket.AddPlayer.Property prop =
-                        new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
-                addPlayer.properties.add(prop);
-            }
-
-            playerInfoPacket.playerInfos.add(addPlayer);
-        }
-        playerConnection.sendPacket(playerInfoPacket);
 
 
         // Commands start
@@ -1246,9 +1229,8 @@ public class Player extends LivingEntity implements CommandSender {
     public void setDisplayName(@Nullable JsonMessage displayName) {
         this.displayName = displayName;
 
-        PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME);
-        infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateDisplayName(getUuid(), displayName));
-        sendPacketToViewersAndSelf(infoPacket);
+        assert this.getTabList() != null;
+        this.getTabList().changeDisplayName(this);
     }
 
     /**
@@ -2426,29 +2408,58 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Gets the packet to add the player from the tab-list.
+     * Gets the packet to render all the player that are online.
      *
-     * @return a {@link PlayerInfoPacket} to add the player
+     * @return a {@link PlayerInfoPacket} to add the players
      */
     @NotNull
-    protected PlayerInfoPacket getAddPlayerToList() {
+    protected PlayerInfoPacket getAddAllPlayerToList() {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
+        for (Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+            PlayerInfoPacket.AddPlayer addPlayer =
+                    new PlayerInfoPacket.AddPlayer(player.getUuid(), player.getUsername(), player.getGameMode(), player.getLatency());
+            addPlayer.displayName = player.getDisplayName();
 
-        PlayerInfoPacket.AddPlayer addPlayer =
-                new PlayerInfoPacket.AddPlayer(getUuid(), getUsername(), getGameMode(), getLatency());
-        addPlayer.displayName = displayName;
+            // Skin support
+            if (player.getSkin() != null) {
+                final String textures = player.getSkin().getTextures();
+                final String signature = player.getSkin().getSignature();
 
-        // Skin support
-        if (skin != null) {
-            final String textures = skin.getTextures();
-            final String signature = skin.getSignature();
+                PlayerInfoPacket.AddPlayer.Property prop =
+                        new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
+                addPlayer.properties.add(prop);
+            }
 
-            PlayerInfoPacket.AddPlayer.Property prop =
-                    new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
-            addPlayer.properties.add(prop);
+            playerInfoPacket.playerInfos.add(addPlayer);
         }
+        return playerInfoPacket;
+    }
 
-        playerInfoPacket.playerInfos.add(addPlayer);
+    /**
+     * Gets the packet to remove all the players from tablist.
+     *
+     * @return a {@link PlayerInfoPacket} to remove the players
+     */
+    @NotNull
+    protected PlayerInfoPacket getRemoveAllPlayerToList() {
+        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
+        for (Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+            PlayerInfoPacket.AddPlayer addPlayer =
+                    new PlayerInfoPacket.AddPlayer(player.getUuid(), player.getUsername(), player.getGameMode(), player.getLatency());
+            addPlayer.displayName = player.getDisplayName();
+
+            // Skin support
+            if (player.getSkin() != null) {
+                final String textures = player.getSkin().getTextures();
+                final String signature = player.getSkin().getSignature();
+
+                PlayerInfoPacket.AddPlayer.Property prop =
+                        new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
+                addPlayer.properties.add(prop);
+            }
+
+            playerInfoPacket.playerInfos.add(addPlayer);
+        }
         return playerInfoPacket;
     }
 
