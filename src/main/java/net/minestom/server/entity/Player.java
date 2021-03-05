@@ -53,6 +53,7 @@ import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
@@ -917,7 +918,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable {
 
     @Override
     public void playSound(net.kyori.adventure.sound.@NotNull Sound sound, double x, double y, double z) {
-        Sound minestomSound = AdventureUtils.asSound(sound.name());
+        Sound minestomSound = Registries.getSound(sound.name());
 
         if (minestomSound == null) {
             NamedSoundEffectPacket packet = new NamedSoundEffectPacket();
