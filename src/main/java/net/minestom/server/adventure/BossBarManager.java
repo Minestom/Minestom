@@ -166,10 +166,10 @@ public class BossBarManager implements BossBar.Listener {
         @NotNull BossBarPacket createAddPacket() {
             return this.createGenericPacket(ADD, packet -> {
                 packet.title = MinecraftServer.getSerializationManager().serialize(bar.name());
-                packet.color = bar.color().ordinal();
-                packet.division = bar.overlay().ordinal();
+                packet.color = AdventurePacketConvertor.getBossBarColorValue(bar.color());
+                packet.division = AdventurePacketConvertor.getBossBarOverlayValue(bar.overlay());
                 packet.health = bar.progress();
-                packet.flags = serializeFlags(bar.flags());
+                packet.flags = AdventurePacketConvertor.getBossBarFlagValue(bar.flags());
             });
         }
 
@@ -180,7 +180,7 @@ public class BossBarManager implements BossBar.Listener {
         @NotNull BossBarPacket createColorUpdate(@NotNull Color color) {
             return this.createGenericPacket(UPDATE_STYLE, packet -> {
                 packet.color = color.ordinal();
-                packet.division = bar.overlay().ordinal();
+                packet.division = AdventurePacketConvertor.getBossBarOverlayValue(bar.overlay());
             });
         }
 
@@ -193,13 +193,13 @@ public class BossBarManager implements BossBar.Listener {
         }
 
         @NotNull BossBarPacket createFlagsUpdate(@NotNull Set<Flag> newFlags) {
-            return this.createGenericPacket(UPDATE_FLAGS, packet -> packet.flags = serializeFlags(bar.flags()));
+            return this.createGenericPacket(UPDATE_FLAGS, packet -> packet.flags = AdventurePacketConvertor.getBossBarFlagValue(bar.flags()));
         }
 
         @NotNull BossBarPacket createOverlayUpdate(@NotNull Overlay overlay) {
             return this.createGenericPacket(UPDATE_STYLE, packet -> {
-                packet.division = overlay.ordinal();
-                packet.color = bar.color().ordinal();
+                packet.division = AdventurePacketConvertor.getBossBarOverlayValue(overlay);
+                packet.color = AdventurePacketConvertor.getBossBarColorValue(bar.color());
             });
         }
 
@@ -209,14 +209,6 @@ public class BossBarManager implements BossBar.Listener {
             packet.action = action;
             consumer.accept(packet);
             return packet;
-        }
-
-        private static byte serializeFlags(@NotNull Set<Flag> flags) {
-            byte val = 0x0;
-            for (Flag flag : flags) {
-                val |= flag.ordinal();
-            }
-            return val;
         }
     }
 }

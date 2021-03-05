@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.sound.Sound.Source;
+import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.sound.Sound;
@@ -43,7 +44,7 @@ public class SoundEffectPacket implements ServerPacket {
     public static SoundEffectPacket create(Source category, Sound sound, Position position, float volume, float pitch) {
         SoundEffectPacket packet = new SoundEffectPacket();
         packet.soundId = sound.getId();
-        packet.soundCategory = category.ordinal();
+        packet.soundCategory = AdventurePacketConvertor.getSoundCategoryValue(category);
         // *8 converts to fixed-point representation with 3 bits for fractional part
         packet.x = (int) position.getX();
         packet.y = (int) position.getY();
