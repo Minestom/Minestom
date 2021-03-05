@@ -5,16 +5,27 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.io.FastBufferedInputStream;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.net.URL;
-import java.nio.file.*;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Responsible for making sure Minestom has the necessary files to run (notably registry files)
@@ -177,13 +188,19 @@ public class ResourceGatherer {
         }
         // Verify checksum
         try (FileInputStream fis = new FileInputStream(target)) {
-            String sha1Target = DigestUtils.sha1Hex(fis);
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+            messageDigest.reset();
+            // This just converts the sha1 back into a readable string.
+            String sha1Target = new BigInteger(1, messageDigest.digest(fis.readAllBytes())).toString(16);
             if (!sha1Target.equals(sha1Source)) {
-                LOGGER.debug("The checksum test failed after downloading the Minecraft server jar.");
-                LOGGER.debug("The expected checksum was: {}.", sha1Source);
-                LOGGER.debug("The calculated checksum was: {}.", sha1Target);
+                LOGGER.error("The checksum test failed after downloading the Minecraft server jar.");
+                LOGGER.error("The expected checksum was: {}.", sha1Source);
+                LOGGER.error("The calculated checksum was: {}.", sha1Target);
                 throw new IOException("Failed to download Minecraft server jar.");
             }
+        } catch (NoSuchAlgorithmException e) {
+            LOGGER.error("Failed to find SHA-1 hashing algorithm in Java Environment.");
+            throw new IOException("Failed to download Minecraft server jar.");
         }
         return target;
     }

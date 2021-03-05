@@ -124,9 +124,6 @@ dependencies {
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     api 'com.google.code.gson:gson:2.8.6'
 
-    // https://mvnrepository.com/artifact/commons-codec/commons-codec
-    api 'commons-codec:commons-codec:1.15'
-
     // Noise library for terrain generation
     // https://jitpack.io/#Articdive/Jnoise
     api 'com.github.Articdive:Jnoise:1.0.0'
