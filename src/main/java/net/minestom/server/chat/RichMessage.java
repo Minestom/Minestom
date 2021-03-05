@@ -160,7 +160,7 @@ public class RichMessage extends JsonMessage {
                     // The value is a JsonObject
                     hoverObject = new JsonObject();
                     hoverObject.addProperty("action", hoverEvent.getAction());
-                    hoverObject.add("value", hoverEvent.getValueObject());
+                    hoverObject.add("contents", hoverEvent.getValueObject());
                 } else {
                     // The value is a raw string
                     final String hoverValue = hoverEvent.getValue();
