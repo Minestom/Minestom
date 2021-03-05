@@ -2,6 +2,7 @@
 package net.minestom.server.registry;
 
 import java.util.HashMap;
+import net.kyori.adventure.key.Key;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.fluids.Fluid;
 import net.minestom.server.instance.block.Block;
@@ -97,6 +98,14 @@ public final class Registries {
     }
 
     /**
+     * Returns the corresponding Block matching the given key. Returns 'AIR' if none match.
+     */
+    @NotNull
+    public static Block getBlock(Key key) {
+        return getBlock(NamespaceID.from(key));
+    }
+
+    /**
      * Returns the corresponding Material matching the given id. Returns 'AIR' if none match.
      */
     @NotNull
@@ -110,6 +119,14 @@ public final class Registries {
     @NotNull
     public static Material getMaterial(NamespaceID id) {
         return materials.getOrDefault(id, Material.AIR);
+    }
+
+    /**
+     * Returns the corresponding Material matching the given key. Returns 'AIR' if none match.
+     */
+    @NotNull
+    public static Material getMaterial(Key key) {
+        return getMaterial(NamespaceID.from(key));
     }
 
     /**
@@ -129,6 +146,14 @@ public final class Registries {
     }
 
     /**
+     * Returns the corresponding Enchantment matching the given key. Returns null if none match.
+     */
+    @Nullable
+    public static Enchantment getEnchantment(Key key) {
+        return getEnchantment(NamespaceID.from(key));
+    }
+
+    /**
      * Returns the corresponding EntityType matching the given id. Returns null if none match.
      */
     @Nullable
@@ -142,6 +167,14 @@ public final class Registries {
     @Nullable
     public static EntityType getEntityType(NamespaceID id) {
         return entityTypes.get(id);
+    }
+
+    /**
+     * Returns the corresponding EntityType matching the given key. Returns null if none match.
+     */
+    @Nullable
+    public static EntityType getEntityType(Key key) {
+        return getEntityType(NamespaceID.from(key));
     }
 
     /**
@@ -161,6 +194,14 @@ public final class Registries {
     }
 
     /**
+     * Returns the corresponding Particle matching the given key. Returns null if none match.
+     */
+    @Nullable
+    public static Particle getParticle(Key key) {
+        return getParticle(NamespaceID.from(key));
+    }
+
+    /**
      * Returns the corresponding PotionType matching the given id. Returns null if none match.
      */
     @Nullable
@@ -174,6 +215,14 @@ public final class Registries {
     @Nullable
     public static PotionType getPotionType(NamespaceID id) {
         return potionTypes.get(id);
+    }
+
+    /**
+     * Returns the corresponding PotionType matching the given key. Returns null if none match.
+     */
+    @Nullable
+    public static PotionType getPotionType(Key key) {
+        return getPotionType(NamespaceID.from(key));
     }
 
     /**
@@ -193,6 +242,14 @@ public final class Registries {
     }
 
     /**
+     * Returns the corresponding PotionEffect matching the given key. Returns null if none match.
+     */
+    @Nullable
+    public static PotionEffect getPotionEffect(Key key) {
+        return getPotionEffect(NamespaceID.from(key));
+    }
+
+    /**
      * Returns the corresponding Sound matching the given id. Returns null if none match.
      */
     @Nullable
@@ -206,6 +263,14 @@ public final class Registries {
     @Nullable
     public static Sound getSound(NamespaceID id) {
         return sounds.get(id);
+    }
+
+    /**
+     * Returns the corresponding Sound matching the given key. Returns null if none match.
+     */
+    @Nullable
+    public static Sound getSound(Key key) {
+        return getSound(NamespaceID.from(key));
     }
 
     /**
@@ -225,6 +290,14 @@ public final class Registries {
     }
 
     /**
+     * Returns the corresponding StatisticType matching the given key. Returns null if none match.
+     */
+    @Nullable
+    public static StatisticType getStatisticType(Key key) {
+        return getStatisticType(NamespaceID.from(key));
+    }
+
+    /**
      * Returns the corresponding Fluid matching the given id. Returns 'EMPTY' if none match.
      */
     @NotNull
@@ -238,5 +311,13 @@ public final class Registries {
     @NotNull
     public static Fluid getFluid(NamespaceID id) {
         return fluids.getOrDefault(id, Fluid.EMPTY);
+    }
+
+    /**
+     * Returns the corresponding Fluid matching the given key. Returns 'EMPTY' if none match.
+     */
+    @NotNull
+    public static Fluid getFluid(Key key) {
+        return getFluid(NamespaceID.from(key));
     }
 }

@@ -1,6 +1,7 @@
 package net.minestom.codegen;
 
 import com.squareup.javapoet.*;
+import net.kyori.adventure.key.Key;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.fluids.Fluid;
 import net.minestom.server.instance.block.Block;
@@ -101,6 +102,7 @@ public class RegistriesGenerator implements CodeGenerator {
 
             ParameterSpec namespaceIDParam = ParameterSpec.builder(ClassName.get(NamespaceID.class), "id")
                     .build();
+            ParameterSpec keyIDParam = ParameterSpec.builder(ClassName.get(Key.class), "key").build();
 
             CodeBlock.Builder code = CodeBlock.builder();
             Class<? extends Annotation> annotation;
@@ -133,6 +135,16 @@ public class RegistriesGenerator implements CodeGenerator {
                     .addParameter(namespaceIDParam)
                     .addCode(code.build())
                     .addJavadoc(comment.toString())
+                    .build());
+
+            // Key variant
+            registriesClass.addMethod(MethodSpec.methodBuilder("get" + simpleType)
+                    .returns(type)
+                    .addAnnotation(annotation)
+                    .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
+                    .addParameter(keyIDParam)
+                    .addStatement("return get$N(NamespaceID.from($N))", simpleType, keyIDParam)
+                    .addJavadoc(comment.toString().replace(" id.", " key."))
                     .build());
         }
 

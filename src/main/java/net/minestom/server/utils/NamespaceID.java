@@ -1,6 +1,7 @@
 package net.minestom.server.utils;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -60,6 +61,10 @@ public class NamespaceID implements CharSequence {
 
     public static NamespaceID from(String id) {
         return from(getDomain(id), getPath(id));
+    }
+
+    public static NamespaceID from(Key key) {
+        return from(key.asString());
     }
 
     private NamespaceID(@NotNull String path) {
