@@ -20,9 +20,11 @@ public class EnumGenerator implements CodeGenerator {
 
     private final String enumName;
     private ParameterSpec[] parameters;
+    private List<TypeName> superinterfaces = new LinkedList<>();
     private List<Method> methods = new LinkedList<>();
-    private List<Field> fields = new LinkedList<>();
+    private List<Field> staticFields = new LinkedList<>();
     private List<Instance> instances = new LinkedList<>();
+    private List<Field> fields = new LinkedList<>();
     private List<Field> hardcodedFields = new LinkedList<>();
     private List<AnnotationSpec> annotations = new LinkedList<>();
     private String enumPackage;
@@ -33,6 +35,10 @@ public class EnumGenerator implements CodeGenerator {
         this.enumPackage = packageName;
         parameters = new ParameterSpec[0];
         this.enumName = enumName;
+    }
+
+    public void addSuperinterface(TypeName typeNames) {
+        superinterfaces.add(typeNames);
     }
 
     public void setParams(ParameterSpec... parameters) {
@@ -52,7 +58,7 @@ public class EnumGenerator implements CodeGenerator {
     }
 
     public void addStaticField(TypeName type, String name, String value) {
-        fields.add(new Field(type, name, value));
+        staticFields.add(new Field(type, name, value));
     }
 
     public void addInstance(String name, Object... parameters) {
@@ -86,6 +92,9 @@ public class EnumGenerator implements CodeGenerator {
             enumClass.addEnumConstant(instance.name, arguments);
         }
 
+        // add superinterfaces
+        enumClass.addSuperinterfaces(superinterfaces);
+
         if (staticBlock != null) {
             enumClass.addStaticBlock(staticBlock);
         }
@@ -100,7 +109,7 @@ public class EnumGenerator implements CodeGenerator {
                         .build());
             }
 
-            for (Field field : fields) {
+            for (Field field : staticFields) {
                 enumClass.addField(FieldSpec.builder(field.type, field.name)
                         .initializer("$L", field.value)
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC)
@@ -111,6 +120,13 @@ public class EnumGenerator implements CodeGenerator {
             for (Field hardcoded : hardcodedFields) {
                 enumClass.addField(FieldSpec.builder(hardcoded.type, hardcoded.name)
                         .initializer("$L", hardcoded.value)
+                        .addModifiers(Modifier.PRIVATE)
+                        .build());
+            }
+
+            // normal fields
+            for (Field field : fields) {
+                enumClass.addField(FieldSpec.builder(field.type, field.name)
                         .addModifiers(Modifier.PRIVATE)
                         .build());
             }
@@ -166,6 +182,10 @@ public class EnumGenerator implements CodeGenerator {
         constructorEnds.add(constructorEnding);
     }
 
+    public void addField(TypeName type, String name) {
+        fields.add(new Field(type, name));
+    }
+
     public void addHardcodedField(TypeName type, String name, String value) {
         hardcodedFields.add(new Field(type, name, value));
     }
@@ -209,6 +229,10 @@ public class EnumGenerator implements CodeGenerator {
         private TypeName type;
         private String name;
         private String value;
+
+        public Field(TypeName type, String name) {
+            this(type, name, null);
+        }
 
         public Field(TypeName type, String name, String value) {
             this.type = type;

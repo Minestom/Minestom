@@ -1,6 +1,8 @@
 package net.minestom.server.entity;
 
 import java.util.function.BiFunction;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.metadata.ambient.BatMeta;
@@ -120,7 +122,7 @@ import org.jetbrains.annotations.NotNull;
  * //==============================
  */
 @SuppressWarnings({"deprecation"})
-public enum EntityType {
+public enum EntityType implements Keyed {
     AREA_EFFECT_CLOUD("minecraft:area_effect_cloud", 6.0, 0.5, AreaEffectCloudMeta::new, EntitySpawnType.BASE),
 
     ARMOR_STAND("minecraft:armor_stand", 0.5, 1.975, ArmorStandMeta::new, EntitySpawnType.LIVING),
@@ -352,6 +354,8 @@ public enum EntityType {
     @NotNull
     private final EntitySpawnType spawnType;
 
+    private Key key;
+
     EntityType(@NotNull String namespaceID, double width, double height,
             @NotNull BiFunction<Entity, Metadata, EntityMeta> metaConstructor,
             @NotNull EntitySpawnType spawnType) {
@@ -361,6 +365,7 @@ public enum EntityType {
         this.metaConstructor = metaConstructor;
         this.spawnType = spawnType;
         Registries.entityTypes.put(NamespaceID.from(namespaceID), this);
+        this.key = Key.key(this.namespaceID);
     }
 
     public short getId() {
@@ -392,5 +397,9 @@ public enum EntityType {
             return VALUES[id];
         }
         return null;
+    }
+
+    public Key key() {
+        return this.key;
     }
 }
