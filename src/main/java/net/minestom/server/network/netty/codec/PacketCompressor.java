@@ -36,7 +36,7 @@ public class PacketCompressor extends ByteToMessageCodec<ByteBuf> {
 
     private final byte[] buffer = new byte[8192];
 
-    private final Deflater deflater = new Deflater(3);
+    private final Deflater deflater = new Deflater();
     private final Inflater inflater = new Inflater();
 
     public PacketCompressor(int threshold) {
@@ -45,7 +45,7 @@ public class PacketCompressor extends ByteToMessageCodec<ByteBuf> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf from, ByteBuf to) {
-        PacketUtils.compressBuffer(deflater, buffer, from, to, false);
+        PacketUtils.compressBuffer(deflater, buffer, from, to);
     }
 
     @Override

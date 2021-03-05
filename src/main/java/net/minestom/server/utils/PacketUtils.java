@@ -16,9 +16,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.zip.Deflater;
 
 /**
@@ -28,15 +25,7 @@ import java.util.zip.Deflater;
 public final class PacketUtils {
 
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
-
-    private static final int DEFLATER_COUNT = 10;
-    private static final List<Deflater> DEFLATERS = new CopyOnWriteArrayList<>();
-
-    static {
-        for (int i = 0; i < DEFLATER_COUNT; i++) {
-            DEFLATERS.add(new Deflater(3));
-        }
-    }
+    private static final ThreadLocal<Deflater> DEFLATER = ThreadLocal.withInitial(Deflater::new);
 
     private PacketUtils() {
 
@@ -209,8 +198,7 @@ public final class PacketUtils {
      * @param compressionTarget the buffer which will receive the compressed version of {@code packetBuffer}
      */
     public static void compressBuffer(@NotNull Deflater deflater, @Nullable byte[] buffer,
-                                      @NotNull ByteBuf packetBuffer, @NotNull ByteBuf compressionTarget,
-                                      boolean synchronization) {
+                                      @NotNull ByteBuf packetBuffer, @NotNull ByteBuf compressionTarget) {
         final int packetLength = packetBuffer.readableBytes();
 
         if (packetLength < MinecraftServer.getCompressionThreshold()) {
@@ -220,30 +208,18 @@ public final class PacketUtils {
 
             Utils.writeVarIntBuf(compressionTarget, packetLength);
 
-            final Runnable compressor = () -> {
-                // Allocate buffer if not already
-                byte[] output = buffer != null ? buffer : new byte[8192];
+            // Allocate buffer if not already
+            byte[] output = buffer != null ? buffer : new byte[8192];
 
-                deflater.setInput(packetBuffer.nioBuffer());
-                deflater.finish();
+            deflater.setInput(packetBuffer.nioBuffer());
+            deflater.finish();
 
-                while (!deflater.finished()) {
-                    final int length = deflater.deflate(output);
-                    compressionTarget.writeBytes(output, 0, length);
-                }
-
-                deflater.reset();
-                ;
-            };
-
-            // Synchronize only if asked
-            if (synchronization) {
-                synchronized (deflater) {
-                    compressor.run();
-                }
-            } else {
-                compressor.run();
+            while (!deflater.finished()) {
+                final int length = deflater.deflate(output);
+                compressionTarget.writeBytes(output, 0, length);
             }
+
+            deflater.reset();
         }
     }
 
@@ -265,9 +241,8 @@ public final class PacketUtils {
             ByteBuf compressedBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
             ByteBuf framedBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
 
-            // Get a random deflater
-            final Deflater deflater = DEFLATERS.get(ThreadLocalRandom.current().nextInt(DEFLATER_COUNT));
-            compressBuffer(deflater, null, packetBuf, compressedBuf, true);
+            final Deflater deflater = DEFLATER.get();
+            compressBuffer(deflater, null, packetBuf, compressedBuf);
 
             packetBuf.release();
 
