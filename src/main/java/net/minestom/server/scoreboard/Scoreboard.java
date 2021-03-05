@@ -3,14 +3,12 @@ package net.minestom.server.scoreboard;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
 import net.minestom.server.network.packet.server.play.UpdateScorePacket;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -104,7 +102,7 @@ public interface Scoreboard extends Viewable, ForwardingAudience {
     String getObjectiveName();
 
     @Override
-    @NonNull default Iterable<? extends Audience> audiences() {
+    @NotNull default Iterable<? extends Audience> audiences() {
         return this.getViewers();
     }
 }
