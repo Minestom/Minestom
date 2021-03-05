@@ -1,5 +1,6 @@
 package net.minestom.server.tab;
 
+import net.minestom.server.Viewable;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
@@ -14,7 +15,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-public class TabList {
+public class TabList implements Viewable {
 
     private final List<Player> displayedPlayers = new CopyOnWriteArrayList<>();
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
@@ -176,8 +177,9 @@ public class TabList {
      * Changes a player's tab list instance to this class and removes their old TabList instance.
      *
      * @param player the player to change the TabList for
+     * @return true
      */
-    public void addViewer(@NotNull Player player) {
+    public boolean addViewer(@NotNull Player player) {
         if (player.getTabList() != null) {
             player.getTabList().removeViewer(player);
         }
@@ -206,10 +208,11 @@ public class TabList {
         }
         player.getPlayerConnection().sendPacket(playerInfoPacket);
         player.sendPacketToViewersAndSelf(this.generateHeaderAndFooterPacket());
+        return true;
     }
 
-    public void removeViewer(@NotNull Player player) {
-        this.viewers.remove(player);
+    public boolean removeViewer(@NotNull Player player) {
+        return this.viewers.remove(player);
     }
 
     /**

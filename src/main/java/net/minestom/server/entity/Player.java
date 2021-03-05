@@ -270,6 +270,27 @@ public class Player extends LivingEntity implements CommandSender {
         // FIXME: when using Geyser, this line remove the skin of the client
         //playerConnection.sendPacket(getAddPlayerToList());
 
+        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
+        for (Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+            PlayerInfoPacket.AddPlayer addPlayer =
+                    new PlayerInfoPacket.AddPlayer(player.getUuid(), player.getUsername(), player.getGameMode(), player.getLatency());
+            addPlayer.displayName = player.getDisplayName();
+
+            // Skin support
+            if (player.getSkin() != null) {
+                final String textures = player.getSkin().getTextures();
+                final String signature = player.getSkin().getSignature();
+
+                PlayerInfoPacket.AddPlayer.Property prop =
+                        new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
+                addPlayer.properties.add(prop);
+            }
+
+            playerInfoPacket.playerInfos.add(addPlayer);
+        }
+        playerConnection.sendPacket(playerInfoPacket);
+
+
         // Commands start
         {
             CommandManager commandManager = MinecraftServer.getCommandManager();

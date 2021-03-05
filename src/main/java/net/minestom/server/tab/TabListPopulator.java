@@ -17,5 +17,16 @@ public interface TabListPopulator {
      */
     void onJoin(Player player);
 
+    /**
+     * Called when a player leaves the server.
+     *
+     * @param player the player the TabList will be set for
+     */
     void onLeave(Player player);
+
+    /**
+     * Called after this {@link TabListPopulator} is set in {@link TabListManager}
+     */
+    void init();
+
 }
