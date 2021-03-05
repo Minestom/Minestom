@@ -356,7 +356,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     }
 
     @Override
-    public boolean removeViewer(@NotNull Player player) {
+    public final boolean removeViewer(@NotNull Player player) {
         synchronized (this.entityTypeLock) {
             return removeViewer0(player);
         }
