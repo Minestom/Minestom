@@ -58,7 +58,7 @@ public class ChatMessageListener {
 
                 // Send the message with the correct player UUID
                 ChatMessagePacket chatMessagePacket =
-                        new ChatMessagePacket(jsonMessage, MessageType.CHAT, player.getUuid());
+                        new ChatMessagePacket(jsonMessage, ChatMessagePacket.Position.CHAT, player.getUuid());
 
                 PacketUtils.sendGroupedPacket(recipients, chatMessagePacket);
             }

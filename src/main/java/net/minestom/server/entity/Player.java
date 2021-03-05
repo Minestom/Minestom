@@ -10,6 +10,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
+import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.adventure.AdventureUtils;
 import net.minestom.server.adventure.Localizable;
@@ -804,7 +805,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable {
 
     @Override
     public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
-        ChatMessagePacket chatMessagePacket = new ChatMessagePacket(MinecraftServer.getSerializationManager().serialize(message, this), type, source.uuid());
+        ChatMessagePacket chatMessagePacket = new ChatMessagePacket(MinecraftServer.getSerializationManager().serialize(message, this), ChatMessagePacket.Position.fromMessageType(type), source.uuid());
         playerConnection.sendPacket(chatMessagePacket);
     }
 
@@ -835,7 +836,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable {
     public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
         SoundEffectPacket soundEffectPacket = new SoundEffectPacket();
         soundEffectPacket.soundId = sound.getId();
-        soundEffectPacket.soundCategory = soundCategory.ordinal();
+        soundEffectPacket.soundSource = soundCategory.asSource();
         soundEffectPacket.x = x;
         soundEffectPacket.y = y;
         soundEffectPacket.z = z;
@@ -871,7 +872,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable {
     public void playSound(@NotNull String identifier, @NotNull SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
         NamedSoundEffectPacket namedSoundEffectPacket = new NamedSoundEffectPacket();
         namedSoundEffectPacket.soundName = identifier;
-        namedSoundEffectPacket.soundCategory = soundCategory.ordinal();
+        namedSoundEffectPacket.soundSource = soundCategory.asSource();
         namedSoundEffectPacket.x = x;
         namedSoundEffectPacket.y = y;
         namedSoundEffectPacket.z = z;
@@ -923,7 +924,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable {
         if (minestomSound == null) {
             NamedSoundEffectPacket packet = new NamedSoundEffectPacket();
             packet.soundName = sound.name().asString();
-            packet.soundCategory = sound.source().ordinal();
+            packet.soundSource = sound.source();
             packet.x = (int) x;
             packet.y = (int) y;
             packet.z = (int) z;
@@ -933,7 +934,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable {
         } else {
             SoundEffectPacket packet = new SoundEffectPacket();
             packet.soundId = minestomSound.getId();
-            packet.soundCategory = sound.source().ordinal();
+            packet.soundSource = sound.source();
             packet.x = (int) x;
             packet.y = (int) y;
             packet.z = (int) z;
@@ -950,7 +951,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable {
 
         if (stop.source() != null) {
             packet.flags |= 0x1;
-            packet.source = stop.source().ordinal();
+            packet.source = AdventurePacketConvertor.getSoundSourceValue(stop.source());
         }
 
         if (stop.sound() != null) {

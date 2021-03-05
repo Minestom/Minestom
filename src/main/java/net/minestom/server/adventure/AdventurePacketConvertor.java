@@ -33,7 +33,7 @@ public class AdventurePacketConvertor {
         return color.ordinal();
     }
 
-    public static int getSoundCategoryValue(@NotNull Sound.Source source) {
+    public static int getSoundSourceValue(@NotNull Sound.Source source) {
         return source.ordinal();
     }
 

@@ -172,7 +172,7 @@ public final class ConnectionManager implements ForwardingAudience {
     }
 
     private void broadcastJson(@NotNull String json, @NotNull Collection<Player> recipients) {
-        ChatMessagePacket chatMessagePacket = new ChatMessagePacket(json, MessageType.SYSTEM);
+        ChatMessagePacket chatMessagePacket = new ChatMessagePacket(json, ChatMessagePacket.Position.SYSTEM_MESSAGE);
 
         PacketUtils.sendGroupedPacket(recipients, chatMessagePacket);
     }
