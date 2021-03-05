@@ -10,7 +10,7 @@ import net.minestom.server.tab.TabListPopulator;
 
 /**
  * Creates a single {@link TabList} instance that will be used for all players.
- * All players are viewers & displayed on the TabList.
+ * All players are viewers and displayed on the TabList.
  */
 public class DefaultTabPopulator implements TabListPopulator {
     private final TabList defaultTabList;
