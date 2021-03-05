@@ -649,7 +649,12 @@ public class Player extends LivingEntity implements CommandSender {
         PlayerConnection viewerConnection = player.getPlayerConnection();
         //viewerConnection.sendPacket(getRemovePlayerToList());
 
-        //TODO RIGHT HERE ^***^
+        for (TabList tabList : MinecraftServer.getTabListManager().getTabLists()) {
+            if (tabList.getDisplayedPlayers().contains(this)) {
+                tabList.removeDisplayedPlayer(this);
+            }
+        }
+
 
         // Team
         if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) {// If team only contains "this" player
