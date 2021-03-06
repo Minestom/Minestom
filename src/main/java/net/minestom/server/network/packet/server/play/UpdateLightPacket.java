@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public class UpdateLightPacket implements ServerPacket, CacheablePacket {
 
-    private static final TemporaryCache<TimedBuffer> CACHE = new TemporaryCache<>(10000L);
+    private static final TemporaryCache<TimedBuffer> CACHE = new TemporaryCache<>(30000L);
 
     public int chunkX;
     public int chunkZ;
