@@ -31,12 +31,14 @@ public class EntityProjectile extends Entity {
     public EntityProjectile(@Nullable Entity shooter, @NotNull EntityType entityType) {
         super(entityType);
         this.shooter = shooter;
+        setup();
     }
 
     @Deprecated
     public EntityProjectile(@Nullable Entity shooter, @NotNull EntityType entityType, @NotNull Position spawnPosition) {
         super(entityType, spawnPosition);
         this.shooter = shooter;
+        setup();
     }
 
     private void setup() {
@@ -44,6 +46,7 @@ public class EntityProjectile extends Entity {
         if (getEntityMeta() instanceof ProjectileMeta) {
             ((ProjectileMeta) getEntityMeta()).setShooter(this.shooter);
         }
+        setGravity(0.02f, 0.04f, 1.96f);
         setBoundingBox(.5F, .5F, .5F);
     }
 
