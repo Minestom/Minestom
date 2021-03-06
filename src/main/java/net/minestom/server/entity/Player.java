@@ -76,44 +76,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class Player extends LivingEntity implements CommandSender {
 
-    /**
-     * @see #getPlayerSynchronizationGroup()
-     */
-    private static volatile int playerSynchronizationGroup = 75;
-
-    /**
-     * For the number of viewers that a player has, the position synchronization packet will be sent
-     * every 1 tick + (viewers/{@code playerSynchronizationGroup}).
-     * (eg with a value of 100, having 300 viewers means sending the synchronization packet every 3 ticks)
-     * <p>
-     * Used to prevent sending exponentially more packets and therefore reduce network load.
-     *
-     * @return the viewers count which would result in a 1 tick delay
-     */
-    public static int getPlayerSynchronizationGroup() {
-        return playerSynchronizationGroup;
-    }
-
-    /**
-     * Changes the viewers count resulting in an additional delay of 1 tick for the position synchronization.
-     *
-     * @param playerSynchronizationGroup the new synchronization group size
-     * @see #getPlayerSynchronizationGroup()
-     */
-    public static void setPlayerSynchronizationGroup(int playerSynchronizationGroup) {
-        Player.playerSynchronizationGroup = playerSynchronizationGroup;
-    }
-
-    /**
-     * Gets the number of tick between each position synchronization.
-     *
-     * @param viewersCount the player viewers count
-     * @return the number of tick between each position synchronization.
-     */
-    public static int getPlayerSynchronizationTickDelay(int viewersCount) {
-        return viewersCount / playerSynchronizationGroup + 1;
-    }
-
     private long lastKeepAlive;
     private boolean answerKeepAlive;
 
@@ -437,9 +399,7 @@ public class Player extends LivingEntity implements CommandSender {
         callEvent(PlayerTickEvent.class, playerTickEvent);
 
         // Multiplayer sync
-        final boolean syncCooldown = CooldownUtils.hasCooldown(time, lastPlayerSynchronizationTime,
-                TimeUnit.TICK, getPlayerSynchronizationTickDelay(viewers.size()));
-        if (!viewers.isEmpty() && !syncCooldown) {
+        if (!viewers.isEmpty()) {
             this.lastPlayerSynchronizationTime = time;
 
             final boolean positionChanged = position.getX() != lastPlayerSyncX ||
