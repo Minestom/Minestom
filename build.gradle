@@ -149,7 +149,7 @@ dependencies {
     api "org.spongepowered:mixin:${mixinVersion}"
 
     // Path finding
-    api 'com.github.MadMartian:hydrazine-path-finding:1.5.3'
+    api 'com.github.MadMartian:hydrazine-path-finding:1.5.4'
 
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${project.kotlinVersion}"
     api "org.jetbrains.kotlin:kotlin-reflect:${project.kotlinVersion}"
