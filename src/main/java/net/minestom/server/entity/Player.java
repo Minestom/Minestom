@@ -633,11 +633,10 @@ public class Player extends LivingEntity implements CommandSender {
             final boolean firstSpawn = this.instance == null; // TODO: Handle player reconnections, must be false in that case too
 
             // Send the new dimension if player isn't in any instance or if the dimension is different
-            {
-                final DimensionType instanceDimensionType = instance.getDimensionType();
-                if (dimensionType != instanceDimensionType) {
-                    sendDimension(instanceDimensionType);
-                }
+            final DimensionType instanceDimensionType = instance.getDimensionType();
+            final boolean dimensionChange = dimensionType != instanceDimensionType;
+            if (dimensionChange) {
+                sendDimension(instanceDimensionType);
             }
 
             // Load all the required chunks
@@ -656,7 +655,7 @@ public class Player extends LivingEntity implements CommandSender {
 
             final ChunkCallback endCallback = chunk -> {
                 // This is the last chunk to be loaded , spawn player
-                spawnPlayer(instance, spawnPosition, firstSpawn, true);
+                spawnPlayer(instance, spawnPosition, firstSpawn, true, dimensionChange);
             };
 
             // Chunk 0;0 always needs to be loaded
@@ -667,7 +666,7 @@ public class Player extends LivingEntity implements CommandSender {
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
-            spawnPlayer(instance, spawnPosition, false, false);
+            spawnPlayer(instance, spawnPosition, false, false, false);
         }
     }
 
@@ -694,7 +693,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param firstSpawn    true if this is the player first spawn
      */
     private void spawnPlayer(@NotNull Instance instance, @NotNull Position spawnPosition,
-                             boolean firstSpawn, boolean updateChunks) {
+                             boolean firstSpawn, boolean updateChunks, boolean dimensionChange) {
         // Clear previous instance elements
         if (!firstSpawn) {
             this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
@@ -712,7 +711,11 @@ public class Player extends LivingEntity implements CommandSender {
             if (chunk != null) {
                 refreshVisibleChunks(chunk);
             }
-            updatePlayerPosition(); // So the player doesn't get stuck when changing dimension
+        }
+
+        if (dimensionChange) {
+            updatePlayerPosition(); // So the player doesn't get stuck
+            this.inventory.update();
         }
 
         PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
