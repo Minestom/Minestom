@@ -712,6 +712,7 @@ public class Player extends LivingEntity implements CommandSender {
             if (chunk != null) {
                 refreshVisibleChunks(chunk);
             }
+            updatePlayerPosition(); // So the player doesn't get stuck when changing dimension
         }
 
         PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
