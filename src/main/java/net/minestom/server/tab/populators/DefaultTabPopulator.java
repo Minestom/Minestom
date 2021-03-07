@@ -21,12 +21,6 @@ public class DefaultTabPopulator implements TabListPopulator {
     }
 
     @Override
-    public void init() {
-        MinecraftServer.getGlobalEventHandler().addEventCallback(PlayerSpawnEvent.class, event -> this.onJoin(event.getPlayer()));
-        MinecraftServer.getGlobalEventHandler().addEventCallback(PlayerDisconnectEvent.class, event -> this.onLeave(event.getPlayer()));
-    }
-
-    @Override
     public void onJoin(Player player) {
         this.defaultTabList.addViewer(player);
         this.defaultTabList.addDisplayedPlayer(player);

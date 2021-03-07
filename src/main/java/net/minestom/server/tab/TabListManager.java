@@ -1,6 +1,10 @@
 package net.minestom.server.tab;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.player.PlayerDisconnectEvent;
+import net.minestom.server.event.player.PlayerLoginEvent;
+import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.network.packet.server.play.PlayerInfoPacket;
 import net.minestom.server.tab.populators.DefaultTabPopulator;
 import net.minestom.server.utils.PacketUtils;
@@ -14,9 +18,10 @@ public class TabListManager {
     private final Set<TabList> tabLists = new CopyOnWriteArraySet<>();
     private TabListPopulator tabListPopulator; // needs to be init to default at minimum
 
-
     public TabListManager() {
-        setTabListPopulator(new DefaultTabPopulator(this));
+        this.setTabListPopulator(new DefaultTabPopulator(this));
+        MinecraftServer.getGlobalEventHandler().addEventCallback(PlayerSpawnEvent.class, event -> this.tabListPopulator.onJoin(event.getPlayer()));
+        MinecraftServer.getGlobalEventHandler().addEventCallback(PlayerDisconnectEvent.class, event -> this.tabListPopulator.onLeave(event.getPlayer()));
     }
 
     /**
@@ -55,7 +60,6 @@ public class TabListManager {
      */
     public void setTabListPopulator(@NotNull TabListPopulator tabListPopulator) {
         this.tabListPopulator = tabListPopulator;
-        this.tabListPopulator.init();
     }
 
     /**

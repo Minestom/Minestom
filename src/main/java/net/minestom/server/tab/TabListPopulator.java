@@ -23,10 +23,4 @@ public interface TabListPopulator {
      * @param player the player the TabList will be set for
      */
     void onLeave(Player player);
-
-    /**
-     * Called after this {@link TabListPopulator} is set in {@link TabListManager}
-     */
-    void init();
-
 }
