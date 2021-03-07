@@ -68,7 +68,7 @@ public class InstanceContainer extends Instance {
     private IChunkLoader chunkLoader;
 
     // used to automatically enable the chunk loading or not
-    private boolean autoChunkLoad;
+    private boolean autoChunkLoad = true;
 
     // used to supply a new chunk object at a position when requested
     private ChunkSupplier chunkSupplier;
