@@ -47,7 +47,6 @@ public class EntityProjectile extends Entity {
             ((ProjectileMeta) getEntityMeta()).setShooter(this.shooter);
         }
         setGravity(0.02f, 0.04f, 1.96f);
-        setBoundingBox(.5F, .5F, .5F);
     }
 
     @Nullable
