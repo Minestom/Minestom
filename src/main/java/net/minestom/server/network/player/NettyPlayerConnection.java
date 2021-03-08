@@ -201,7 +201,8 @@ public class NettyPlayerConnection extends PlayerConnection {
         synchronized (tickBuffer) {
             final ByteBuf copy = tickBuffer.copy();
 
-            ChannelFuture channelFuture = channel.write(new FramedPacket(copy)).addListener(future -> copy.release());
+            ChannelFuture channelFuture = channel.write(new FramedPacket(copy));
+            channelFuture.addListener(future -> copy.release());
 
             // Netty debug
             if (MinecraftServer.shouldProcessNettyErrors()) {
