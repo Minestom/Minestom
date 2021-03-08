@@ -58,13 +58,13 @@ public class HealthCommand extends Command {
     }
 
     private void sendSuggestionMessage(CommandSender sender, Arguments args) {
-        sender.sendMessage("/health " + args.getWord("mode") + " [Integer]");
+        sender.sendMessage("/health " + args.get("mode") + " [Integer]");
     }
 
     private void onHealthCommand(CommandSender sender, Arguments args) {
         final Player player = (Player) sender;
-        final String mode = args.getWord("mode");
-        final int value = args.getInteger("value");
+        final String mode = args.get("mode");
+        final int value = args.get("value");
 
         switch (mode.toLowerCase()) {
             case "set":

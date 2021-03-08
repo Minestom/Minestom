@@ -4,7 +4,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.potion.Potion;
@@ -21,8 +20,8 @@ public class PotionCommand extends Command {
             sender.sendMessage("Usage: /potion [type] [duration (seconds)]");
         }));
 
-        Argument potionArg = ArgumentType.Potion("potion");
-        Argument durationArg = ArgumentType.Integer("duration");
+        var potionArg = ArgumentType.Potion("potion");
+        var durationArg = ArgumentType.Integer("duration");
 
         addSyntax(this::onPotionCommand, potionArg, durationArg);
     }
@@ -37,8 +36,8 @@ public class PotionCommand extends Command {
 
     private void onPotionCommand(CommandSender sender, Arguments args) {
         final Player player = (Player) sender;
-        final PotionEffect potion = args.getPotionEffect("potion");
-        final int duration = args.getInteger("duration");
+        final PotionEffect potion = args.get("potion");
+        final int duration = args.get("duration");
 
         player.sendMessage(player.getActiveEffects().toString());
         player.addEffect(new Potion(

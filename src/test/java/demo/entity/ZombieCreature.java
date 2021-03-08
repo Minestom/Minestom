@@ -1,14 +1,14 @@
 package demo.entity;
 
+import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.ai.EntityAIGroupBuilder;
 import net.minestom.server.entity.ai.goal.RandomLookAroundGoal;
-import net.minestom.server.entity.type.monster.EntityZombie;
-import net.minestom.server.utils.Position;
 
-public class ZombieCreature extends EntityZombie {
+public class ZombieCreature extends EntityCreature {
 
-    public ZombieCreature(Position spawnPosition) {
-        super(spawnPosition);
+    public ZombieCreature() {
+        super(EntityType.ZOMBIE);
         addAIGroup(
                 new EntityAIGroupBuilder()
                         .addGoalSelector(new RandomLookAroundGoal(this, 20))
