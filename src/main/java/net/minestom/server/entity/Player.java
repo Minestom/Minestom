@@ -715,7 +715,7 @@ public class Player extends LivingEntity implements CommandSender {
             }
         }
 
-        if (dimensionChange) {
+        if (dimensionChange || firstSpawn) {
             updatePlayerPosition(); // So the player doesn't get stuck
             this.inventory.update();
         }
