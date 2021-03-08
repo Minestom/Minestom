@@ -65,8 +65,6 @@ public final class NettyServer {
     private final PacketProcessor packetProcessor;
     private final GlobalChannelTrafficShapingHandler globalTrafficHandler;
 
-    private boolean tcpNoDelay = false;
-
     private EventLoopGroup boss, worker;
     private ServerBootstrap bootstrap;
 
@@ -163,7 +161,7 @@ public final class NettyServer {
         bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
             protected void initChannel(@NotNull SocketChannel ch) {
                 ChannelConfig config = ch.config();
-                config.setOption(ChannelOption.TCP_NODELAY, tcpNoDelay);
+                config.setOption(ChannelOption.TCP_NODELAY, true);
                 config.setOption(ChannelOption.SO_SNDBUF, 262_144);
                 config.setAllocator(ByteBufAllocator.DEFAULT);
 
@@ -257,14 +255,6 @@ public final class NettyServer {
     @NotNull
     public GlobalChannelTrafficShapingHandler getGlobalTrafficHandler() {
         return globalTrafficHandler;
-    }
-
-    public boolean isTcpNoDelay() {
-        return tcpNoDelay;
-    }
-
-    public void setTcpNoDelay(boolean tcpNoDelay) {
-        this.tcpNoDelay = tcpNoDelay;
     }
 
     /**

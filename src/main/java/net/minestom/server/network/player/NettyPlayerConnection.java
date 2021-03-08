@@ -356,6 +356,11 @@ public class NettyPlayerConnection extends PlayerConnection {
         this.serverPort = serverPort;
     }
 
+    @NotNull
+    public ByteBuf getTickBuffer() {
+        return tickBuffer;
+    }
+
     public byte[] getNonce() {
         return nonce;
     }
