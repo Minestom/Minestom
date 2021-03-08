@@ -163,8 +163,8 @@ public class NettyPlayerConnection extends PlayerConnection {
         if (message instanceof FramedPacket) {
             final FramedPacket framedPacket = (FramedPacket) message;
             synchronized (tickBuffer) {
-                // Duplicate is necessary because of cached packets
-                tickBuffer.writeBytes(framedPacket.getBody().duplicate());
+                final ByteBuf body = framedPacket.getBody();
+                tickBuffer.writeBytes(body, body.readerIndex(), body.readableBytes());
             }
             return;
         } else if (message instanceof ServerPacket) {
