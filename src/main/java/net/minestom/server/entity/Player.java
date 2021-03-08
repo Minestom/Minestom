@@ -91,7 +91,9 @@ public class Player extends LivingEntity implements CommandSender {
     private DimensionType dimensionType;
     private GameMode gameMode;
     protected final Set<Chunk> viewableChunks = new CopyOnWriteArraySet<>();
+
     private final AtomicInteger teleportId = new AtomicInteger();
+    private int receivedTeleportId;
 
     private final Queue<ClientPlayPacket> packets = Queues.newConcurrentLinkedQueue();
     private final boolean levelFlat;
@@ -1925,6 +1927,18 @@ public class Player extends LivingEntity implements CommandSender {
         updateViewPositionPacket.chunkX = chunkX;
         updateViewPositionPacket.chunkZ = chunkZ;
         playerConnection.sendPacket(updateViewPositionPacket);
+    }
+
+    public int getLastSentTeleportId() {
+        return teleportId.get();
+    }
+
+    public int getLastReceivedTeleportId() {
+        return receivedTeleportId;
+    }
+
+    public void refreshReceivedTeleportId(int receivedTeleportId) {
+        this.receivedTeleportId = receivedTeleportId;
     }
 
     /**

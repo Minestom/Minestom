@@ -39,6 +39,7 @@ public final class PacketListenerManager {
         setListener(ClientPlayerRotationPacket.class, PlayerPositionListener::playerLookListener);
         setListener(ClientPlayerPositionPacket.class, PlayerPositionListener::playerPositionListener);
         setListener(ClientPlayerPositionAndRotationPacket.class, PlayerPositionListener::playerPositionAndLookListener);
+        setListener(ClientTeleportConfirmPacket.class, PlayerPositionListener::teleportConfirmListener);
         setListener(ClientPlayerDiggingPacket.class, PlayerDiggingListener::playerDiggingListener);
         setListener(ClientAnimationPacket.class, AnimationListener::animationListener);
         setListener(ClientInteractEntityPacket.class, UseEntityListener::useEntityListener);
@@ -50,7 +51,6 @@ public final class PacketListenerManager {
         setListener(ClientTabCompletePacket.class, TabCompleteListener::listener);
         setListener(ClientPluginMessagePacket.class, PluginMessageListener::listener);
         setListener(ClientPlayerAbilitiesPacket.class, AbilitiesListener::listener);
-        setListener(ClientTeleportConfirmPacket.class, TeleportListener::listener);
         setListener(ClientResourcePackStatusPacket.class, ResourcePackListener::listener);
         setListener(ClientAdvancementTabPacket.class, AdvancementTabListener::listener);
         setListener(ClientSpectatePacket.class, SpectateListener::listener);
