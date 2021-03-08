@@ -163,16 +163,17 @@ public class NettyPlayerConnection extends PlayerConnection {
         if (message instanceof FramedPacket) {
             final FramedPacket framedPacket = (FramedPacket) message;
             synchronized (tickBuffer) {
-                // Copy is necessary because of cached packets
-                tickBuffer.writeBytes(framedPacket.getBody().copy());
+                // Duplicate is necessary because of cached packets
+                tickBuffer.writeBytes(framedPacket.getBody().duplicate());
             }
             return;
         } else if (message instanceof ServerPacket) {
             final ServerPacket serverPacket = (ServerPacket) message;
-            final ByteBuf buffer = PacketUtils.createFramedPacket(serverPacket, false);
+            final ByteBuf buffer = PacketUtils.createFramedPacket(serverPacket, true);
             synchronized (tickBuffer) {
                 tickBuffer.writeBytes(buffer);
             }
+            buffer.release();
             return;
         } else if (message instanceof ByteBuf) {
             synchronized (tickBuffer) {
@@ -200,9 +201,7 @@ public class NettyPlayerConnection extends PlayerConnection {
         synchronized (tickBuffer) {
             final ByteBuf copy = tickBuffer.copy();
 
-            ChannelFuture channelFuture = channel.write(new FramedPacket(copy)).addListener(future -> {
-                copy.release();
-            });
+            ChannelFuture channelFuture = channel.write(new FramedPacket(copy)).addListener(future -> copy.release());
 
             // Netty debug
             if (MinecraftServer.shouldProcessNettyErrors()) {
