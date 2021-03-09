@@ -1,11 +1,9 @@
 package net.minestom.server.entity;
 
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
-import net.minestom.server.attribute.Attributes;
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.entity.ai.EntityAI;
 import net.minestom.server.entity.ai.EntityAIGroup;
-import net.minestom.server.entity.ai.GoalSelector;
-import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.pathfinding.NavigableEntity;
 import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -15,7 +13,10 @@ import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class EntityCreature extends LivingEntity implements NavigableEntity, EntityAI {
 
@@ -59,7 +60,7 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
         aiTick(time);
 
         // Path finding
-        this.navigator.tick(getAttributeValue(Attributes.MOVEMENT_SPEED));
+        this.navigator.tick(getAttributeValue(Attribute.MOVEMENT_SPEED));
 
         // Fire, item pickup, ...
         super.update(time);

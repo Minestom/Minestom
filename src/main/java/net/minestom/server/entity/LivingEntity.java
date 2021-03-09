@@ -457,7 +457,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return the entity max health
      */
     public float getMaxHealth() {
-        return getAttributeValue(Attributes.MAX_HEALTH);
+        return getAttributeValue(Attribute.MAX_HEALTH);
     }
 
     /**
@@ -466,7 +466,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attributes#MAX_HEALTH}.
      */
     public void heal() {
-        setHealth(getAttributeValue(Attributes.MAX_HEALTH));
+        setHealth(getAttributeValue(Attribute.MAX_HEALTH));
     }
 
     /**

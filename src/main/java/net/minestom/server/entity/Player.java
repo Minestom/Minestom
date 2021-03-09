@@ -3,8 +3,8 @@ package net.minestom.server.entity;
 import com.google.common.collect.Queues;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeInstance;
-import net.minestom.server.attribute.Attributes;
 import net.minestom.server.bossbar.BossBar;
 import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
@@ -179,7 +179,7 @@ public class Player extends LivingEntity implements CommandSender {
         this.gameMode = GameMode.SURVIVAL;
         this.dimensionType = DimensionType.OVERWORLD; // Default dimension
         this.levelFlat = true;
-        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1f);
+        getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1f);
 
         // FakePlayer init its connection there
         playerConnectionInit();
@@ -709,10 +709,7 @@ public class Player extends LivingEntity implements CommandSender {
             teleport(spawnPosition);
         } else if (updateChunks) {
             // Send newly visible chunks to player once spawned in the instance
-            final Chunk chunk = getChunk();
-            if (chunk != null) {
-                refreshVisibleChunks(chunk);
-            }
+            refreshVisibleChunks();
         }
 
         if (dimensionChange || firstSpawn) {
@@ -1549,6 +1546,13 @@ public class Player extends LivingEntity implements CommandSender {
         }
     }
 
+    public void refreshVisibleChunks() {
+        final Chunk chunk = getChunk();
+        if (chunk != null) {
+            refreshVisibleChunks(chunk);
+        }
+    }
+
     /**
      * Refreshes the list of entities that the player should be able to see based on {@link MinecraftServer#getEntityViewDistance()}
      * and {@link Entity#isAutoViewable()}.
@@ -2322,11 +2326,15 @@ public class Player extends LivingEntity implements CommandSender {
      * based on which one is the lowest
      */
     public int getChunkRange() {
-        final int serverRange = MinecraftServer.getChunkViewDistance();
         final int playerRange = getSettings().viewDistance;
-        if (playerRange == 0) {
-            return serverRange; // Didn't receive settings packet yet (is the case on login)
+        if (playerRange < 1) {
+            // Didn't receive settings packet yet (is the case on login)
+            // In this case we send the smallest amount of chunks possible
+            // Will be updated in PlayerSettings#refresh.
+            // Non-compliant clients might also be stuck with this view
+            return 1;
         } else {
+            final int serverRange = MinecraftServer.getChunkViewDistance();
             return Math.min(playerRange, serverRange);
         }
     }
@@ -2585,7 +2593,7 @@ public class Player extends LivingEntity implements CommandSender {
         public void refresh(String locale, byte viewDistance, ChatMode chatMode, boolean chatColors,
                             byte displayedSkinParts, MainHand mainHand) {
 
-            final boolean viewDistanceChanged = !firstRefresh && this.viewDistance != viewDistance;
+            final boolean viewDistanceChanged = this.viewDistance != viewDistance;
 
             this.locale = locale;
             this.viewDistance = viewDistance;
@@ -2600,10 +2608,7 @@ public class Player extends LivingEntity implements CommandSender {
 
             // Client changed his view distance in the settings
             if (viewDistanceChanged) {
-                final Chunk playerChunk = getChunk();
-                if (playerChunk != null) {
-                    refreshVisibleChunks(playerChunk);
-                }
+                refreshVisibleChunks();
             }
         }
 

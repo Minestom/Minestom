@@ -1,7 +1,7 @@
 package demo.entity;
 
 import com.google.common.collect.ImmutableList;
-import net.minestom.server.attribute.Attributes;
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.LivingEntity;
@@ -38,7 +38,7 @@ public class ChickenCreature extends EntityCreature {
 //                        .build()
 //        );
 
-        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1f);
+        getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1f);
 
         addEventCallback(EntityAttackEvent.class, event -> {
             //System.out.println("CALL ATTACK");

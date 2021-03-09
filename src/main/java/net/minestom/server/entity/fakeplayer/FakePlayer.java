@@ -2,7 +2,7 @@ package net.minestom.server.entity.fakeplayer;
 
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.attribute.Attributes;
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.NavigableEntity;
 import net.minestom.server.entity.pathfinding.Navigator;
@@ -114,7 +114,7 @@ public class FakePlayer extends Player implements NavigableEntity {
         super.update(time);
 
         // Path finding
-        this.navigator.tick(getAttributeValue(Attributes.MOVEMENT_SPEED));
+        this.navigator.tick(getAttributeValue(Attribute.MOVEMENT_SPEED));
     }
 
     @Override
