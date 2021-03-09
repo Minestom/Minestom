@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
  * Same as {@link ArgumentStringArray} with the exception
  * that this argument can trigger {@link net.minestom.server.command.builder.Command#onDynamicWrite(CommandSender, String)}.
  */
+@Deprecated
 public class ArgumentDynamicStringArray extends Argument<String[]> {
 
     public static final int RESTRICTION_ERROR = 1;

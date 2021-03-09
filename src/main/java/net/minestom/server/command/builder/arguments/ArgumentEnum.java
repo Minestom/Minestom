@@ -23,7 +23,7 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
         this.values = enumClass.getEnumConstants();
     }
 
-    public ArgumentEnum setFormat(@NotNull Format format) {
+    public ArgumentEnum<E> setFormat(@NotNull Format format) {
         this.format = format;
         return this;
     }

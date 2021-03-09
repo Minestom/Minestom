@@ -7,6 +7,7 @@ import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.*;
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerCommandEvent;
@@ -496,6 +497,14 @@ public final class CommandManager {
                             final int childId = nodes.size();
                             nodeMaker.getNodeIdsMap().put(argumentNode, childId);
                             argChildren.add(childId);
+
+                            // Enable ASK_SERVER suggestion if required
+                            {
+                                if (argument.hasSuggestion()) {
+                                    argumentNode.flags |= 0x10; // Suggestion flag
+                                    argumentNode.suggestionsType = SuggestionType.ASK_SERVER.getIdentifier();
+                                }
+                            }
 
                             // Append to the last node
                             {

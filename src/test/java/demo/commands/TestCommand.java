@@ -1,12 +1,13 @@
 package demo.commands;
 
-import net.minestom.server.chat.JsonMessage;
+import net.minestom.server.chat.ChatColor;
+import net.minestom.server.chat.ColoredText;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.suggestion.SuggestionEntry;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.Component;
-import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
+import static net.minestom.server.command.builder.arguments.ArgumentType.String;
 
 public class TestCommand extends Command {
 
@@ -14,11 +15,12 @@ public class TestCommand extends Command {
         super("testcmd");
         setDefaultExecutor(this::usage);
 
-        var number = Integer("number2");
-
         addSyntax((sender, args) -> {
-            sender.sendMessage((JsonMessage) args.get("msg"));
-        }, Component("msg"));
+            System.out.println("test: " + args.get("msg"));
+        }, String("msg").setSuggestionCallback(suggestion -> {
+            suggestion.setLength(999);
+            suggestion.addEntry(new SuggestionEntry("Match", ColoredText.of(ChatColor.RED, "Hover")));
+        }));
     }
 
     private void usage(CommandSender sender, Arguments arguments) {

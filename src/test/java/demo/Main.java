@@ -31,7 +31,7 @@ public class Main {
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
         commandManager.register(new TestCommand());
-        commandManager.register(new GamemodeCommand());
+        /*commandManager.register(new GamemodeCommand());
         commandManager.register(new EntitySelectorCommand());
         commandManager.register(new HealthCommand());
         commandManager.register(new SimpleCommand());
@@ -43,7 +43,7 @@ public class Main {
         commandManager.register(new TitleCommand());
         commandManager.register(new BookCommand());
         commandManager.register(new ShootCommand());
-        commandManager.register(new HorseCommand());
+        commandManager.register(new HorseCommand());*/
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage("unknown command"));
 

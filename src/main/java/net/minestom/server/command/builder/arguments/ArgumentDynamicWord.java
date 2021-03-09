@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
  * that this argument can trigger {@link net.minestom.server.command.builder.Command#onDynamicWrite(CommandSender, String)}
  * when the suggestion type is {@link SuggestionType#ASK_SERVER}, or any other suggestions available in the enum.
  */
+@Deprecated
 public class ArgumentDynamicWord extends Argument<String> {
 
     public static final int SPACE_ERROR = 1;
