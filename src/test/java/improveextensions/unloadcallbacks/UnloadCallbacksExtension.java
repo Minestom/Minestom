@@ -1,7 +1,8 @@
 package improveextensions.unloadcallbacks;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.type.monster.EntityZombie;
+import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.entity.EntityTickEvent;
@@ -42,14 +43,14 @@ public class UnloadCallbacksExtension extends Extension {
 
         // add an event callback on an instance
         instance.addEventCallback(InstanceTickEvent.class, e -> instanceTicked = true);
-        instance.loadChunk(0,0);
+        instance.loadChunk(0, 0);
 
         // add an event callback on an entity
-        EntityZombie zombie = new EntityZombie(new Position(8,64,8) /* middle of chunk */);
+        EntityCreature zombie = new EntityCreature(EntityType.ZOMBIE);
         zombie.addEventCallback(EntityTickEvent.class, e -> {
             zombieTicked = true;
         });
-        zombie.setInstance(instance);
+        zombie.setInstance(instance, new Position(8, 64, 8) /* middle of chunk */);
 
         // this callback will be cancelled
         MinecraftServer.getSchedulerManager().buildTask(() -> {

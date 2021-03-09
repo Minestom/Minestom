@@ -41,7 +41,7 @@ public class ShootCommand extends Command {
 
     private void onShootCommand(CommandSender sender, Arguments args) {
         Player player = (Player) sender;
-        String mode = args.getWord("type");
+        String mode = args.get("type");
         EntityProjectile projectile;
         switch (mode) {
             case "default":

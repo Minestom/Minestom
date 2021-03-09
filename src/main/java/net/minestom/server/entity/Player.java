@@ -91,7 +91,9 @@ public class Player extends LivingEntity implements CommandSender {
     private DimensionType dimensionType;
     private GameMode gameMode;
     protected final Set<Chunk> viewableChunks = new CopyOnWriteArraySet<>();
+
     private final AtomicInteger teleportId = new AtomicInteger();
+    private int receivedTeleportId;
 
     private final Queue<ClientPlayPacket> packets = Queues.newConcurrentLinkedQueue();
     private final boolean levelFlat;
@@ -707,13 +709,10 @@ public class Player extends LivingEntity implements CommandSender {
             teleport(spawnPosition);
         } else if (updateChunks) {
             // Send newly visible chunks to player once spawned in the instance
-            final Chunk chunk = getChunk();
-            if (chunk != null) {
-                refreshVisibleChunks(chunk);
-            }
+            refreshVisibleChunks();
         }
 
-        if (dimensionChange) {
+        if (dimensionChange || firstSpawn) {
             updatePlayerPosition(); // So the player doesn't get stuck
             this.inventory.update();
         }
@@ -1547,6 +1546,13 @@ public class Player extends LivingEntity implements CommandSender {
         }
     }
 
+    public void refreshVisibleChunks() {
+        final Chunk chunk = getChunk();
+        if (chunk != null) {
+            refreshVisibleChunks(chunk);
+        }
+    }
+
     /**
      * Refreshes the list of entities that the player should be able to see based on {@link MinecraftServer#getEntityViewDistance()}
      * and {@link Entity#isAutoViewable()}.
@@ -1925,6 +1931,18 @@ public class Player extends LivingEntity implements CommandSender {
         updateViewPositionPacket.chunkX = chunkX;
         updateViewPositionPacket.chunkZ = chunkZ;
         playerConnection.sendPacket(updateViewPositionPacket);
+    }
+
+    public int getLastSentTeleportId() {
+        return teleportId.get();
+    }
+
+    public int getLastReceivedTeleportId() {
+        return receivedTeleportId;
+    }
+
+    public void refreshReceivedTeleportId(int receivedTeleportId) {
+        this.receivedTeleportId = receivedTeleportId;
     }
 
     /**
@@ -2311,7 +2329,11 @@ public class Player extends LivingEntity implements CommandSender {
         final int serverRange = MinecraftServer.getChunkViewDistance();
         final int playerRange = getSettings().viewDistance;
         if (playerRange == 0) {
-            return serverRange; // Didn't receive settings packet yet (is the case on login)
+            // Didn't receive settings packet yet (is the case on login)
+            // In this case we send the smallest amount of chunks possible
+            // Will be updated in PlayerSettings#refresh.
+            // Non-compliant clients might also be stuck with this view
+            return 1;
         } else {
             return Math.min(playerRange, serverRange);
         }
@@ -2571,7 +2593,7 @@ public class Player extends LivingEntity implements CommandSender {
         public void refresh(String locale, byte viewDistance, ChatMode chatMode, boolean chatColors,
                             byte displayedSkinParts, MainHand mainHand) {
 
-            final boolean viewDistanceChanged = !firstRefresh && this.viewDistance != viewDistance;
+            final boolean viewDistanceChanged = this.viewDistance != viewDistance;
 
             this.locale = locale;
             this.viewDistance = viewDistance;
@@ -2586,10 +2608,7 @@ public class Player extends LivingEntity implements CommandSender {
 
             // Client changed his view distance in the settings
             if (viewDistanceChanged) {
-                final Chunk playerChunk = getChunk();
-                if (playerChunk != null) {
-                    refreshVisibleChunks(playerChunk);
-                }
+                refreshVisibleChunks();
             }
         }
 

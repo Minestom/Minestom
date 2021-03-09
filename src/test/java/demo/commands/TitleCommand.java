@@ -31,7 +31,7 @@ public class TitleCommand extends Command {
         }
 
         Player player = source.asPlayer();
-        String titleContent = args.getString("content");
+        String titleContent = args.get("content");
 
         player.sendTitleTime(10, 100, 10);
         try {

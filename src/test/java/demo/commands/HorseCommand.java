@@ -65,11 +65,11 @@ public class HorseCommand extends Command {
         boolean baby = args.get("baby");
         HorseMeta.Marking marking = args.get("marking");
         HorseMeta.Color color = args.get("color");
-        var horse = new EntityCreature(EntityType.HORSE, player.getPosition());
+        var horse = new EntityCreature(EntityType.HORSE);
         var meta = (HorseMeta) horse.getEntityMeta();
         meta.setBaby(baby);
         meta.setVariant(new HorseMeta.Variant(marking, color));
-        horse.setInstance(player.getInstance());
+        horse.setInstance(player.getInstance(), player.getPosition());
     }
 
 }
