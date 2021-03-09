@@ -4,5 +4,5 @@ import org.jetbrains.annotations.NotNull;
 
 @FunctionalInterface
 public interface SuggestionCallback {
-    void apply(@NotNull Suggestion suggestion);
+    void apply(@NotNull Suggestion suggestion, @NotNull String input);
 }

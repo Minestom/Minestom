@@ -8,6 +8,7 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.parser.CommandParser;
 import net.minestom.server.command.builder.parser.CommandSuggestionHolder;
 import net.minestom.server.command.builder.parser.ValidSyntaxHolder;
@@ -54,13 +55,17 @@ public class TabCompleteListener {
                 final int max = syntaxesSuggestions.firstIntKey();
                 final CommandSuggestionHolder suggestionHolder = syntaxesSuggestions.get(max);
                 final CommandSyntax syntax = suggestionHolder.syntax;
+                final ArgumentSyntaxException argumentSyntaxException = suggestionHolder.argumentSyntaxException;
                 final int argIndex = suggestionHolder.argIndex;
                 final Argument<?> argument = syntax.getArguments()[argIndex];
 
                 final SuggestionCallback suggestionCallback = argument.suggestionCallback;
                 if (suggestionCallback != null) {
-                    Suggestion suggestion = new Suggestion();
-                    suggestionCallback.apply(suggestion);
+                    final int argumentLength = argumentSyntaxException != null ? argumentSyntaxException.getInput().length() :
+                            Integer.MAX_VALUE;
+                    final int start = text.length() - argumentLength;
+                    Suggestion suggestion = new Suggestion(start, argumentLength);
+                    suggestionCallback.apply(suggestion, commandString);
 
                     TabCompletePacket tabCompletePacket = new TabCompletePacket();
                     tabCompletePacket.transactionId = packet.transactionId;

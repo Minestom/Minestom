@@ -17,9 +17,8 @@ public class TestCommand extends Command {
 
         addSyntax((sender, args) -> {
             System.out.println("test: " + args.get("msg"));
-        }, String("msg").setSuggestionCallback(suggestion -> {
-            suggestion.setLength(999);
-            suggestion.addEntry(new SuggestionEntry("Match", ColoredText.of(ChatColor.RED, "Hover")));
+        }, String("msg").setSuggestionCallback((suggestion, input) -> {
+            suggestion.addEntry(new SuggestionEntry(input, ColoredText.of(ChatColor.RED, "Hover")));
         }));
     }
 

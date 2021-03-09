@@ -11,6 +11,11 @@ public class Suggestion {
     private int length;
     private final List<SuggestionEntry> suggestionEntries = new ArrayList<>();
 
+    public Suggestion(int start, int length) {
+        this.start = start;
+        this.length = length;
+    }
+
     public int getStart() {
         return start;
     }
