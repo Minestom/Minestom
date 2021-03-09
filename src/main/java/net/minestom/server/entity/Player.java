@@ -3,8 +3,8 @@ package net.minestom.server.entity;
 import com.google.common.collect.Queues;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeInstance;
-import net.minestom.server.attribute.Attributes;
 import net.minestom.server.bossbar.BossBar;
 import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
@@ -179,7 +179,7 @@ public class Player extends LivingEntity implements CommandSender {
         this.gameMode = GameMode.SURVIVAL;
         this.dimensionType = DimensionType.OVERWORLD; // Default dimension
         this.levelFlat = true;
-        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1f);
+        getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1f);
 
         // FakePlayer init its connection there
         playerConnectionInit();

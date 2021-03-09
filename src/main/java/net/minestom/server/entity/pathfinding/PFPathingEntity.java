@@ -5,7 +5,6 @@ import com.extollit.gaming.ai.path.model.IPathingEntity;
 import com.extollit.gaming.ai.path.model.Passibility;
 import com.extollit.linalg.immutable.Vec3d;
 import net.minestom.server.attribute.Attribute;
-import net.minestom.server.attribute.Attributes;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.utils.Position;
@@ -34,7 +33,7 @@ public class PFPathingEntity implements IPathingEntity {
         this.navigator = navigator;
         this.entity = navigator.getEntity();
 
-        this.searchRange = getAttributeValue(Attributes.FOLLOW_RANGE);
+        this.searchRange = getAttributeValue(Attribute.FOLLOW_RANGE);
     }
 
     public Position getTargetPosition() {
@@ -137,7 +136,7 @@ public class PFPathingEntity implements IPathingEntity {
         return new Capabilities() {
             @Override
             public float speed() {
-                return getAttributeValue(Attributes.MOVEMENT_SPEED);
+                return getAttributeValue(Attribute.MOVEMENT_SPEED);
             }
 
             @Override
