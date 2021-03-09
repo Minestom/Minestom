@@ -60,7 +60,7 @@ public class PlayerDiggingListener {
 
             if (instantBreak) {
                 // No need to check custom block
-                breakBlock(instance, player, blockPosition, blockStateId);
+                breakBlock(instance, player, blockPosition, blockStateId, status);
             } else {
                 final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
                 final int customBlockId = customBlock == null ? 0 : customBlock.getCustomBlockId();
@@ -105,7 +105,7 @@ public class PlayerDiggingListener {
                         ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, false);
             } else {
                 // Vanilla block
-                breakBlock(instance, player, blockPosition, blockStateId);
+                breakBlock(instance, player, blockPosition, blockStateId, status);
             }
 
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM_STACK) {
@@ -163,7 +163,10 @@ public class PlayerDiggingListener {
         }
     }
 
-    private static void breakBlock(Instance instance, Player player, BlockPosition blockPosition, int blockStateId) {
+    private static void breakBlock(Instance instance,
+                                   Player player,
+                                   BlockPosition blockPosition, int blockStateId,
+                                   ClientPlayerDiggingPacket.Status status) {
         // Finished digging, remove effect if any
         player.resetTargetBlock();
 
@@ -174,7 +177,7 @@ public class PlayerDiggingListener {
 
         // Send acknowledge packet to allow or cancel the digging process
         sendAcknowledgePacket(player, blockPosition, updatedBlockId,
-                ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, result);
+                status, result);
 
         if (!result) {
             final boolean solid = Block.fromStateId((short) blockStateId).isSolid();
