@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -269,6 +269,11 @@ extends <a href="PlayerConnection.html" title="class in net.minestom.server.netw
 </td>
 </tr>
 <tr id="i11" class="rowColor">
+<td class="colFirst"><code>io.netty.buffer.ByteBuf</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTickBuffer()">getTickBuffer</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshServerInformation(java.lang.String,int)">refreshServerInformation</a></span>&#8203;(java.lang.String&nbsp;serverAddress,
                         int&nbsp;serverPort)</code></th>
@@ -276,75 +281,75 @@ extends <a href="PlayerConnection.html" title="class in net.minestom.server.netw
 <div class="block">Used in <a href="../packet/client/handshake/HandshakePacket.html" title="class in net.minestom.server.network.packet.client.handshake"><code>HandshakePacket</code></a> to change the internal fields.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacket(net.minestom.server.network.packet.server.ServerPacket)">sendPacket</a></span>&#8203;(<a href="../packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</code></th>
 <td class="colLast">
 <div class="block">Writes a packet to the connection channel.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setConnectionState(net.minestom.server.network.ConnectionState)">setConnectionState</a></span>&#8203;(<a href="../ConnectionState.html" title="enum in net.minestom.server.network">ConnectionState</a>&nbsp;connectionState)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEncryptionKey(javax.crypto.SecretKey)">setEncryptionKey</a></span>&#8203;(javax.crypto.SecretKey&nbsp;secretKey)</code></th>
 <td class="colLast">
 <div class="block">Sets the encryption key and add the codecs to the pipeline.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setNonce(byte%5B%5D)">setNonce</a></span>&#8203;(byte[]&nbsp;nonce)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRemoteAddress(java.net.SocketAddress)">setRemoteAddress</a></span>&#8203;(java.net.SocketAddress&nbsp;remoteAddress)</code></th>
 <td class="colLast">
 <div class="block">Changes the internal remote address field.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#startCompression()">startCompression</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Enables compression and add a new codec to the pipeline.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#UNSAFE_setBungeeSkin(net.minestom.server.entity.PlayerSkin)">UNSAFE_setBungeeSkin</a></span>&#8203;(<a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;bungeeSkin)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#UNSAFE_setBungeeUuid(java.util.UUID)">UNSAFE_setBungeeUuid</a></span>&#8203;(java.util.UUID&nbsp;bungeeUuid)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#UNSAFE_setLoginUsername(java.lang.String)">UNSAFE_setLoginUsername</a></span>&#8203;(java.lang.String&nbsp;loginUsername)</code></th>
 <td class="colLast">
 <div class="block">Sets the internal login username field.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update()">update</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Updates values related to the network connection.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
-<td class="colFirst"><code>io.netty.channel.ChannelFuture</code></td>
+<tr id="i23" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(java.lang.Object)">write</a></span>&#8203;(java.lang.Object&nbsp;message)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i23" class="rowColor">
-<td class="colFirst"><code>io.netty.channel.ChannelFuture</code></td>
+<tr id="i24" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeAndFlush(java.lang.Object)">writeAndFlush</a></span>&#8203;(java.lang.Object&nbsp;message)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -472,9 +477,8 @@ extends <a href="PlayerConnection.html" title="class in net.minestom.server.netw
 <ul class="blockList">
 <li class="blockList">
 <h4>write</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;io.netty.channel.ChannelFuture&nbsp;write&#8203;(@NotNull
-                                            java.lang.Object&nbsp;message)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
+                  java.lang.Object&nbsp;message)</pre>
 </li>
 </ul>
 <a id="writeAndFlush(java.lang.Object)">
@@ -483,9 +487,8 @@ public&nbsp;io.netty.channel.ChannelFuture&nbsp;write&#8203;(@NotNull
 <ul class="blockList">
 <li class="blockList">
 <h4>writeAndFlush</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;io.netty.channel.ChannelFuture&nbsp;writeAndFlush&#8203;(@NotNull
-                                                    java.lang.Object&nbsp;message)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;writeAndFlush&#8203;(@NotNull
+                          java.lang.Object&nbsp;message)</pre>
 </li>
 </ul>
 <a id="getRemoteAddress()">
@@ -720,6 +723,16 @@ public&nbsp;java.lang.String&nbsp;getPluginRequestChannel&#8203;(int&nbsp;messag
 <dd><code>serverAddress</code> - the server address which the client used</dd>
 <dd><code>serverPort</code> - the server port which the client used</dd>
 </dl>
+</li>
+</ul>
+<a id="getTickBuffer()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTickBuffer</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;io.netty.buffer.ByteBuf&nbsp;getTickBuffer()</pre>
 </li>
 </ul>
 <a id="getNonce()">
