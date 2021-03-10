@@ -33,6 +33,7 @@ public class TestCommand extends Command {
                 if (!input.isEmpty()) {
                     int num = Integer.valueOf(input) * 2;
                     suggestion.addEntry(new SuggestionEntry(String.valueOf(num), ColoredText.of(ChatColor.RED, "Hover")));
+                    System.out.println("test: "+context.get("msg3"));
                 }
             });
 

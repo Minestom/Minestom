@@ -154,7 +154,6 @@ public class CommandParser {
     public static ArgumentQueryResult findSuggestibleArgument(@NotNull Command command, String[] args, String commandString) {
         final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
 
-        Map<CommandSyntax, CommandContext> contextMap = new HashMap<>();
         Int2ObjectRBTreeMap<ArgumentQueryResult> suggestions = new Int2ObjectRBTreeMap<>(Collections.reverseOrder());
 
         for (CommandSyntax syntax : syntaxes) {
@@ -163,7 +162,6 @@ public class CommandParser {
             }
 
             final CommandContext context = new CommandContext(commandString);
-            contextMap.put(syntax, context);
 
             final Argument<?>[] commandArguments = syntax.getArguments();
             int inputIndex = 0;
@@ -186,11 +184,12 @@ public class CommandParser {
                 final Argument<?> argument = argumentResult.argument;
                 if (argumentResult.correct) {
                     // Fill context
-                    context.setArg(argument.getId(), argumentResult.parsedValue);
+                    context.setArg(argument.getId(), argumentResult.parsedValue, argumentResult.rawArg);
                 }
 
                 if (argument.hasSuggestion()) {
                     ArgumentQueryResult queryResult = new ArgumentQueryResult();
+                    queryResult.syntax = syntax;
                     queryResult.argument = argument;
                     queryResult.context = context;
                     queryResult.input = argumentResult.rawArg;

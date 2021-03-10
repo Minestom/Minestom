@@ -3,6 +3,9 @@ package net.minestom.server.command.builder;
 import net.minestom.server.command.builder.arguments.Argument;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Class used to retrieve argument data in a {@link CommandExecutor}.
  * <p>
@@ -15,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 public class CommandContext extends Arguments {
 
     private final String input;
+    private Map<String, String> rawArgs = new HashMap<>();
 
     public CommandContext(@NotNull String input) {
         this.input = input;
@@ -24,4 +28,23 @@ public class CommandContext extends Arguments {
     public String getInput() {
         return input;
     }
+
+    @NotNull
+    public <T> T getRaw(@NotNull Argument<T> argument) {
+        return get(argument.getId());
+    }
+
+    public <T> T getRaw(@NotNull String identifier) {
+        return (T) rawArgs.computeIfAbsent(identifier, s -> {
+            throw new NullPointerException(
+                    "The argument with the id '" + identifier + "' has no value assigned, be sure to check your arguments id, your syntax, and that you do not change the argument id dynamically.");
+        });
+    }
+
+    public void setArg(@NotNull String id, Object value, String rawInput) {
+        this.args.put(id, value);
+        this.rawArgs.put(id, rawInput);
+    }
+
+
 }

@@ -28,13 +28,13 @@ import java.util.Map;
 @Deprecated
 public class Arguments {
 
-    private Map<String, Object> args = new HashMap<>();
+    protected Map<String, Object> args = new HashMap<>();
 
     private CommandData returnData;
 
     @NotNull
     public <T> T get(@NotNull Argument<T> argument) {
-        return (T) getObject(argument.getId());
+        return get(argument.getId());
     }
 
     public <T> T get(@NotNull String identifier) {
@@ -280,6 +280,10 @@ public class Arguments {
         return args;
     }
 
+    /**
+     * @deprecated use {@link CommandContext#setArg(String, Object, String)}
+     */
+    @Deprecated
     public void setArg(@NotNull String id, Object value) {
         this.args.put(id, value);
     }
