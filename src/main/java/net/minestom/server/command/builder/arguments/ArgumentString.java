@@ -44,8 +44,7 @@ public class ArgumentString extends Argument<String> {
     public static String staticParse(@NotNull String input) throws ArgumentSyntaxException {
 
         // Return if not quoted
-        if (!input.startsWith(String.valueOf(StringUtil.DOUBLE_QUOTE)) &&
-                !input.endsWith(String.valueOf(StringUtil.DOUBLE_QUOTE)) &&
+        if (!input.contains(String.valueOf(StringUtil.DOUBLE_QUOTE)) &&
                 !input.contains(String.valueOf(StringUtil.SPACE))) {
             return input;
         }
