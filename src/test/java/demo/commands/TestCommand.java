@@ -7,7 +7,7 @@ import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.suggestion.SuggestionEntry;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.String;
+import static net.minestom.server.command.builder.arguments.ArgumentType.*;
 
 public class TestCommand extends Command {
 
@@ -15,11 +15,19 @@ public class TestCommand extends Command {
         super("testcmd");
         setDefaultExecutor(this::usage);
 
-        addSyntax((sender, args) -> {
-            System.out.println("test: " + args.get("msg"));
-        }, String("msg").setSuggestionCallback((suggestion, input) -> {
+        var test1 = Integer("msg").setSuggestionCallback((suggestion, input) -> {
             suggestion.addEntry(new SuggestionEntry(input, ColoredText.of(ChatColor.RED, "Hover")));
-        }));
+        });
+
+        var test2 = Word("msg2").setSuggestionCallback((suggestion, input) -> {
+            suggestion.addEntry(new SuggestionEntry(input, ColoredText.of(ChatColor.BRIGHT_GREEN, "GHRTEG")));
+        });
+
+        var test3 = String("msg3");
+
+        addSyntax((sender, args) -> {
+            System.out.println("COMMAND SYNTAX");
+        }, test3, test1);
     }
 
     private void usage(CommandSender sender, Arguments arguments) {

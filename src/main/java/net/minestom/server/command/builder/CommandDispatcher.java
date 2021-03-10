@@ -15,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 /**
  * Class responsible for parsing {@link Command}.
@@ -124,11 +123,8 @@ public class CommandDispatcher {
             return CommandResult.of(CommandResult.Type.UNKNOWN, commandName);
         }
 
-        // Removes the command's name + the space after
-        String[] args = commandString.replaceFirst(Pattern.quote(commandName), "").trim().split(StringUtils.SPACE);
-        if (args.length == 1 && args[0].length() == 0) {
-            args = new String[0];
-        }
+        String[] args = new String[parts.length - 1];
+        System.arraycopy(parts, 1, args, 0, args.length);
 
         CommandResult result = new CommandResult();
         result.input = commandString;
