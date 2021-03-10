@@ -1,6 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.chat.JsonMessage;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -24,7 +24,7 @@ public class TabCompletePacket implements ServerPacket {
             writer.writeSizedString(match.match);
             writer.writeBoolean(match.hasTooltip);
             if (match.hasTooltip)
-                writer.writeSizedString(match.tooltipJson != null ? match.tooltipJson.toString() : match.tooltip);
+                writer.writeComponent(match.tooltip);
         }
     }
 
@@ -36,12 +36,7 @@ public class TabCompletePacket implements ServerPacket {
     public static class Match {
         public String match;
         public boolean hasTooltip;
-        public String tooltip;
-
-        /**
-         * @deprecated Use {@link #tooltip}
-         */
-        @Deprecated public String tooltipJson;
+        public Component tooltip;
     }
 
 }

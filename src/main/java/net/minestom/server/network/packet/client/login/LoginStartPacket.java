@@ -3,8 +3,6 @@ package net.minestom.server.network.packet.client.login;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.ChatColor;
-import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
@@ -74,7 +72,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
         if (MojangAuth.isEnabled() && isNettyClient) {
             // Mojang auth
             if (CONNECTION_MANAGER.getPlayer(username) != null) {
-                connection.sendPacket(new LoginDisconnectPacket(MinecraftServer.getSerializationManager().serialize(ALREADY_CONNECTED)));
+                connection.sendPacket(new LoginDisconnectPacket(ALREADY_CONNECTED));
                 connection.disconnect();
                 return;
             }

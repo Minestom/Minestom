@@ -6,14 +6,10 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
 import net.kyori.adventure.translation.Translator;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
 
 /**
@@ -22,11 +18,7 @@ import java.util.function.Function;
  * class can be used to change the way text is serialized. For example, a pre-JSON
  * implementation of Minestom could change this to the plain component serializer.
  * <br><br>
- * This manager also provides the ability to wrap the serializer in a renderer that
- * performs operations on each component before the final serialization. This can be
- * done using {@link #addRenderer(Function)} and {@link #removeRenderer(Function)}.
- * <br><br>
- * Finally, this manager also performs translation on all messages and the {@code serialize}
+ * This manager also performs translation on all messages and the {@code serialize}
  * method should be used when converting {@link Component}s into strings. This allows for
  * messages with {@link TranslatableComponent} to be automatically translated into the locale
  * of specific players, or other elements which implement {@link Localizable}. To add your
@@ -34,12 +26,13 @@ import java.util.function.Function;
  * {@link TranslationRegistry} or your own implementation of {@link Translator}.
  */
 public class SerializationManager {
-    private final Set<Function<Component, Component>> renderers = new CopyOnWriteArraySet<>();
+    protected static final Localizable NULL_LOCALIZABLE = () -> null;
+
     private Function<Component, String> serializer = component -> GsonComponentSerializer.gson().serialize(component);
     private Locale defaultLocale = Locale.US;
 
     /**
-     * Gets the root serializer that is used to convert Components into Strings.
+     * Gets the root serializer that is used to convert components into strings.
      *
      * @return the serializer
      */
@@ -48,8 +41,7 @@ public class SerializationManager {
     }
 
     /**
-     * Sets the root serializer that is used to convert Components into Strings. This
-     * method does not replace any existing renderers set with {@link #addRenderer(Function)}.
+     * Sets the root serializer that is used to convert components into strings.
      *
      * @param serializer the serializer
      */
@@ -58,9 +50,9 @@ public class SerializationManager {
     }
 
     /**
-     * Gets the default locale used to translate {@link TranslatableComponent} if
-     * serialized using {@link #serialize(Component)} or when {@link #serialize(Component, Localizable)}
-     * is used but no translation is found. Note that this is just shorthand for
+     * Gets the default locale used to translate {@link TranslatableComponent} if, when
+     * {@link #prepare(Component, Localizable)} is called with a localizable that
+     * does not have a locale.
      *
      * @return the default locale
      */
@@ -69,41 +61,14 @@ public class SerializationManager {
     }
 
     /**
-     * Sets the default locale used to translate {@link TranslatableComponent} if
-     * serialized using {@link #serialize(Component)} or when {@link #serialize(Component, Localizable)}
-     * is used but no translation is found.
+     * Sets the default locale used to translate {@link TranslatableComponent} if, when
+     * {@link #prepare(Component, Localizable)} is called with a localizable that
+     * does not have a locale.
      *
      * @param defaultLocale the new default locale
      */
     public void setDefaultLocale(@NotNull Locale defaultLocale) {
         this.defaultLocale = defaultLocale;
-    }
-
-    /**
-     * Adds a renderer that will be applied to each serializer. The order in which
-     * each renderer will be applied is arbitrary. If you want control over the order
-     * of renderers, create a multi-function using {@link Function#andThen(Function)}.
-     *
-     * @param renderer the renderer
-     */
-    public void addRenderer(@NotNull Function<Component, Component> renderer) {
-        this.renderers.add(renderer);
-    }
-
-    /**
-     * Removes a renderer.
-     *
-     * @param renderer the renderer
-     */
-    public void removeRenderer(@NotNull Function<Component, Component> renderer) {
-        this.renderers.remove(renderer);
-    }
-
-    /**
-     * Removes all current renderers.
-     */
-    public void clearRenderers() {
-        this.renderers.clear();
     }
 
     /**
@@ -117,62 +82,63 @@ public class SerializationManager {
     }
 
     /**
-     * Serializes a component into a String using the current serializer. Any registered
-     * renderers are applied first, followed by the global translator. Finally, the
-     * serializer set with {@link #setSerializer(Function)} is used to convert the
-     * component into a String.
+     * Prepares a component for serialization. This runs the component through the
+     * translator for the localizable's locale.
      *
      * @param component the component
+     * @param localizable the localizable
      *
-     * @return the serialized string
+     * @return the prepared component
      */
-    @Contract("null -> null; !null -> !null")
-    public String serialize(@Nullable Component component) {
-        return this.serialize(component, this.defaultLocale);
+    public @NotNull Component prepare(@NotNull Component component, @NotNull Localizable localizable) {
+        return GlobalTranslator.renderer().render(component, Objects.requireNonNullElse(localizable.getLocale(), this.getDefaultLocale()));
     }
 
     /**
-     * Serializes a component into a String using the current serializer. Any registered
-     * renderers are applied first, followed by the global translator. Finally, the
-     * serializer set with {@link #setSerializer(Function)} is used to convert the
-     * component into a String.
+     * Prepares a component for serialization. This runs the component through the
+     * translator for the locale.
      *
      * @param component the component
-     * @param localizable a localizable object used to translate components
+     * @param locale the locale
      *
-     * @return the serialized string
+     * @return the prepared component
      */
-    @Contract("null, _ -> null; !null, _ -> !null")
-    public String serialize(@Nullable Component component, @NotNull Localizable localizable) {
-        return this.serialize(component, Objects.requireNonNullElse(localizable.getLocale(), this.defaultLocale));
+    public @NotNull Component prepare(@NotNull Component component, @NotNull Locale locale) {
+        return GlobalTranslator.renderer().render(component, locale);
     }
 
     /**
-     * Serializes a component into a String using the current serializer. Any registered
-     * renderers are applied first, followed by the global translator. Finally, the
-     * serializer set with {@link #setSerializer(Function)} is used to convert the
-     * component into a String.
+     * Serializes a component into a string using {@link #getSerializer()}.
      *
      * @param component the component
-     * @param locale the locale used to translate components
      *
      * @return the serialized string
      */
-    @Contract("null, _ -> null; !null, _ -> !null")
-    public String serialize(@Nullable Component component, @NotNull Locale locale) {
-        if (component == null) {
-            return null;
-        }
-
-        // apply renderers
-        for (Function<Component, Component> renderer : this.renderers) {
-            component = renderer.apply(component);
-        }
-
-        // apply translation
-        component = GlobalTranslator.render(component, locale);
-
-        // apply serialisation
+    public @NotNull String serialize(@NotNull Component component) {
         return this.serializer.apply(component);
+    }
+
+    /**
+     * Prepares and then serializes a component.
+     *
+     * @param component the component
+     * @param localizable the localisable
+     *
+     * @return the string
+     */
+    public String prepareAndSerialize(@NotNull Component component, @NotNull Localizable localizable) {
+        return this.prepareAndSerialize(component, Objects.requireNonNullElse(localizable.getLocale(), this.getDefaultLocale()));
+    }
+
+    /**
+     * Prepares and then serializes a component.
+     *
+     * @param component the component
+     * @param locale the locale
+     *
+     * @return the string
+     */
+    public String prepareAndSerialize(@NotNull Component component, @NotNull Locale locale) {
+        return this.serialize(this.prepare(component, locale));
     }
 }

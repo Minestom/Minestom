@@ -252,10 +252,10 @@ public class BossBar implements Viewable {
         BossBarPacket bossBarPacket = new BossBarPacket();
         bossBarPacket.uuid = uuid;
         bossBarPacket.action = BossBarPacket.Action.ADD;
-        bossBarPacket.title = title.toString();
+        bossBarPacket.title = title.asComponent();
         bossBarPacket.health = progress;
-        bossBarPacket.color = color.ordinal();
-        bossBarPacket.division = division.ordinal();
+        bossBarPacket.color = color.asAdventureColor();
+        bossBarPacket.overlay = division.asAdventureOverlay();
         bossBarPacket.flags = flags;
         player.getPlayerConnection().sendPacket(bossBarPacket);
     }
@@ -278,7 +278,7 @@ public class BossBar implements Viewable {
         BossBarPacket bossBarPacket = new BossBarPacket();
         bossBarPacket.uuid = uuid;
         bossBarPacket.action = BossBarPacket.Action.UPDATE_TITLE;
-        bossBarPacket.title = title.toString();
+        bossBarPacket.title = title.asComponent();
         sendPacketToViewers(bossBarPacket);
     }
 
@@ -294,7 +294,7 @@ public class BossBar implements Viewable {
         BossBarPacket bossBarPacket = new BossBarPacket();
         bossBarPacket.uuid = uuid;
         bossBarPacket.action = BossBarPacket.Action.UPDATE_STYLE;
-        bossBarPacket.color = color.ordinal();
+        bossBarPacket.color = color.asAdventureColor();
         sendPacketToViewers(bossBarPacket);
     }
 }

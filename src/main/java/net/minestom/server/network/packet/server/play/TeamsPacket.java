@@ -1,6 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.chat.JsonMessage;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.color.TeamColor;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -24,7 +24,7 @@ public class TeamsPacket implements ServerPacket {
     /**
      * The display name for the team
      */
-    public String teamDisplayName;
+    public Component teamDisplayName;
     /**
      * The friendly flags to
      */
@@ -44,33 +44,15 @@ public class TeamsPacket implements ServerPacket {
     /**
      * The prefix of the team
      */
-    public String teamPrefix;
+    public Component teamPrefix;
     /**
      * The suffix of the team
      */
-    public String teamSuffix;
+    public Component teamSuffix;
     /**
      * An array with all entities in the team
      */
     public String[] entities;
-
-
-    /**
-     * @deprecated Use {@link #teamColor}
-     */
-    @Deprecated public int teamColorOld = -1;
-    /**
-     * @deprecated Use {@link #teamDisplayName}
-     */
-    @Deprecated public JsonMessage teamDisplayNameJson;
-    /**
-      @deprecated Use {@link #teamPrefix}
-     */
-    @Deprecated public JsonMessage teamPrefixJson;
-    /**
-      @deprecated Use {@link #teamSuffix}
-     */
-    @Deprecated public JsonMessage teamSuffixJson;
 
     /**
      * Writes data into the {@link BinaryWriter}
@@ -85,13 +67,13 @@ public class TeamsPacket implements ServerPacket {
         switch (action) {
             case CREATE_TEAM:
             case UPDATE_TEAM_INFO:
-                writer.writeSizedString(this.teamDisplayNameJson != null ? this.teamDisplayNameJson.toString() : this.teamDisplayName);
+                writer.writeComponent(this.teamDisplayName);
                 writer.writeByte(this.friendlyFlags);
                 writer.writeSizedString(this.nameTagVisibility.getIdentifier());
                 writer.writeSizedString(this.collisionRule.getIdentifier());
-                writer.writeVarInt(this.teamColorOld != -1 ? this.teamColorOld : this.teamColor.getId());
-                writer.writeSizedString(this.teamPrefixJson != null ? this.teamPrefixJson.toString() : this.teamPrefix);
-                writer.writeSizedString(this.teamSuffixJson != null ? this.teamSuffixJson.toString() : this.teamSuffix);
+                writer.writeVarInt(this.teamColor.getId());
+                writer.writeComponent(this.teamPrefix);
+                writer.writeComponent(this.teamSuffix);
                 break;
             case REMOVE_TEAM:
 

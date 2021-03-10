@@ -80,7 +80,7 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
                     Player player = CONNECTION_MANAGER.startPlayState(connection, uuid, username, true);
                     player.setSkin(playerSkin);
                 } else {
-                    LoginDisconnectPacket disconnectPacket = new LoginDisconnectPacket(MinecraftServer.getSerializationManager().serialize(INVALID_PROXY_RESPONSE));
+                    LoginDisconnectPacket disconnectPacket = new LoginDisconnectPacket(INVALID_PROXY_RESPONSE);
                     nettyPlayerConnection.sendPacket(disconnectPacket);
                 }
 

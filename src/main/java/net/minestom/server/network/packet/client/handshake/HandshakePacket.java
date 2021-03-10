@@ -70,7 +70,7 @@ public class HandshakePacket implements ClientPreplayPacket {
                     nettyPlayerConnection.UNSAFE_setBungeeSkin(playerSkin);
 
                 } else {
-                    nettyPlayerConnection.sendPacket(new LoginDisconnectPacket(MinecraftServer.getSerializationManager().serialize(INVALID_BUNGEE_FORWARDING)));
+                    nettyPlayerConnection.sendPacket(new LoginDisconnectPacket(INVALID_BUNGEE_FORWARDING));
                     nettyPlayerConnection.disconnect();
                     return;
                 }
@@ -94,7 +94,7 @@ public class HandshakePacket implements ClientPreplayPacket {
                     }
                 } else {
                     // Incorrect client version
-                    connection.sendPacket(new LoginDisconnectPacket(MinecraftServer.getSerializationManager().serialize(INVALID_VERSION_TEXT)));
+                    connection.sendPacket(new LoginDisconnectPacket(INVALID_VERSION_TEXT));
                     connection.disconnect();
                 }
                 break;

@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.bossbar.BarColor;
-import net.minestom.server.bossbar.BarDivision;
-import net.minestom.server.chat.JsonMessage;
+import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.text.Component;
+import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -15,24 +15,11 @@ public class BossBarPacket implements ServerPacket {
     public UUID uuid;
     public Action action;
 
-    public String title; // Only text
+    public Component title; // Only text
     public float health;
-    public int color;
-    public int division;
+    public BossBar.Color color;
+    public BossBar.Overlay overlay;
     public byte flags;
-
-    /**
-     * @deprecated Use {@link #title}
-     */
-    public @Deprecated JsonMessage titleJson;
-    /**
-     * @deprecated Use {@link #color}
-     */
-    public @Deprecated BarColor colorOld;
-    /**
-     * @deprecated Use {@link #division}
-     */
-    public @Deprecated BarDivision divisionOld;
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -41,10 +28,10 @@ public class BossBarPacket implements ServerPacket {
 
         switch (action) {
             case ADD:
-                writer.writeSizedString(titleJson != null ? titleJson.toString() : title);
+                writer.writeComponent(title);
                 writer.writeFloat(health);
-                writer.writeVarInt(colorOld != null ? colorOld.ordinal() : color);
-                writer.writeVarInt(divisionOld != null ? divisionOld.ordinal() : division);
+                writer.writeVarInt(AdventurePacketConvertor.getBossBarColorValue(color));
+                writer.writeVarInt(AdventurePacketConvertor.getBossBarOverlayValue(overlay));
                 writer.writeByte(flags);
                 break;
             case REMOVE:
@@ -54,11 +41,11 @@ public class BossBarPacket implements ServerPacket {
                 writer.writeFloat(health);
                 break;
             case UPDATE_TITLE:
-                writer.writeSizedString(titleJson != null ? titleJson.toString() : title);
+                writer.writeComponent(title);
                 break;
             case UPDATE_STYLE:
-                writer.writeVarInt(colorOld != null ? colorOld.ordinal() : color);
-                writer.writeVarInt(divisionOld != null ? divisionOld.ordinal() : division);
+                writer.writeVarInt(AdventurePacketConvertor.getBossBarColorValue(color));
+                writer.writeVarInt(AdventurePacketConvertor.getBossBarOverlayValue(overlay));
                 break;
             case UPDATE_FLAGS:
                 writer.writeByte(flags);

@@ -1,7 +1,7 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.TickUtils;
@@ -19,21 +19,21 @@ public class TitlePacket implements ServerPacket {
 
     public Action action;
 
-    public String payload;
+    public Component payload;
 
     public int fadeIn;
     public int stay;
     public int fadeOut;
 
     /**
-     * Constructs a new title packet from an action that can take a string argument.
+     * Constructs a new title packet from an action that can take a component argument.
      *
      * @param action the action
      * @param payload the payload
      * @throws IllegalArgumentException if the action is not {@link Action#SET_TITLE},
      * {@link Action#SET_SUBTITLE} or {@link Action#SET_ACTION_BAR}
      */
-    public TitlePacket(@NotNull Action action, @NotNull String payload) {
+    public TitlePacket(@NotNull Action action, @NotNull Component payload) {
         Validate.isTrue(action == SET_TITLE || action == SET_SUBTITLE || action == SET_ACTION_BAR, "Invalid action type");
         this.action = action;
         this.payload = payload;
@@ -72,7 +72,7 @@ public class TitlePacket implements ServerPacket {
             case SET_TITLE:
             case SET_SUBTITLE:
             case SET_ACTION_BAR:
-                writer.writeSizedString(payload);
+                writer.writeComponent(payload);
                 break;
             case SET_TIMES_AND_DISPLAY:
                 writer.writeInt(fadeIn);
@@ -109,8 +109,8 @@ public class TitlePacket implements ServerPacket {
         List<TitlePacket> packets = new ArrayList<>(4);
 
         // base packets
-        packets.add(new TitlePacket(SET_TITLE, MinecraftServer.getSerializationManager().serialize(title.title())));
-        packets.add(new TitlePacket(SET_SUBTITLE, MinecraftServer.getSerializationManager().serialize(title.subtitle())));
+        packets.add(new TitlePacket(SET_TITLE, title.title()));
+        packets.add(new TitlePacket(SET_SUBTITLE, title.subtitle()));
 
         // times packet
         Title.Times times = title.times();

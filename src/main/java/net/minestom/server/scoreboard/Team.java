@@ -409,13 +409,13 @@ public class Team implements ForwardingAudience {
         TeamsPacket teamsCreationPacket = new TeamsPacket();
         teamsCreationPacket.teamName = teamName;
         teamsCreationPacket.action = TeamsPacket.Action.CREATE_TEAM;
-        teamsCreationPacket.teamDisplayName = MinecraftServer.getSerializationManager().serialize(this.teamDisplayName);
+        teamsCreationPacket.teamDisplayName = this.teamDisplayName;
         teamsCreationPacket.friendlyFlags = this.friendlyFlags;
         teamsCreationPacket.nameTagVisibility = this.nameTagVisibility;
         teamsCreationPacket.collisionRule = this.collisionRule;
         teamsCreationPacket.teamColor = this.teamColor;
-        teamsCreationPacket.teamPrefix = MinecraftServer.getSerializationManager().serialize(this.prefix);
-        teamsCreationPacket.teamSuffix = MinecraftServer.getSerializationManager().serialize(this.suffix);
+        teamsCreationPacket.teamPrefix = this.prefix;
+        teamsCreationPacket.teamSuffix = this.suffix;
         teamsCreationPacket.entities = this.members.toArray(new String[0]);
 
         return teamsCreationPacket;
@@ -562,13 +562,13 @@ public class Team implements ForwardingAudience {
         final TeamsPacket updatePacket = new TeamsPacket();
         updatePacket.teamName = this.teamName;
         updatePacket.action = TeamsPacket.Action.UPDATE_TEAM_INFO;
-        updatePacket.teamDisplayName = MinecraftServer.getSerializationManager().serialize(this.teamDisplayName);
+        updatePacket.teamDisplayName = this.teamDisplayName;
         updatePacket.friendlyFlags = this.friendlyFlags;
         updatePacket.nameTagVisibility = this.nameTagVisibility;
         updatePacket.collisionRule = this.collisionRule;
         updatePacket.teamColor = this.teamColor;
-        updatePacket.teamPrefix = MinecraftServer.getSerializationManager().serialize(this.prefix);
-        updatePacket.teamSuffix = MinecraftServer.getSerializationManager().serialize(this.suffix);
+        updatePacket.teamPrefix = this.prefix;
+        updatePacket.teamSuffix = this.suffix;
 
         PacketUtils.sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), updatePacket);
     }

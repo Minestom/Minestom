@@ -1,6 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.chat.JsonMessage;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -63,13 +63,7 @@ public class MapDataPacket implements ServerPacket {
         public int type;
         public byte x, z;
         public byte direction;
-        public String displayName;
-
-        /**
-         * @deprecated Use {@link #displayName}
-         */
-        @Deprecated
-        public JsonMessage displayNameJson; // Only text
+        public Component displayName;
 
         private void write(BinaryWriter writer) {
             writer.writeVarInt(type);
@@ -77,10 +71,10 @@ public class MapDataPacket implements ServerPacket {
             writer.writeByte(z);
             writer.writeByte(direction);
 
-            final boolean hasDisplayName = displayName != null || displayNameJson != null;
+            final boolean hasDisplayName = displayName != null;
             writer.writeBoolean(hasDisplayName);
             if (hasDisplayName) {
-                writer.writeSizedString(displayNameJson != null ? displayNameJson.toString() : displayName);
+                writer.writeComponent(displayName);
             }
         }
 

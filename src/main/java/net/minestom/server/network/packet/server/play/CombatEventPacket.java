@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
@@ -7,8 +8,6 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Optional;
 
 /**
  * Packet sent during combat to a {@link Player}.
@@ -20,7 +19,7 @@ public class CombatEventPacket implements ServerPacket {
     private int duration;
     private int opponent;
     private int playerID;
-    private String deathMessage;
+    private Component deathMessage;
 
     private CombatEventPacket() {
     }
@@ -40,14 +39,14 @@ public class CombatEventPacket implements ServerPacket {
     }
 
     /**
-     * @deprecated Use {@link #death(Player, Entity, String)}
+     * @deprecated Use {@link #death(Player, Entity, Component)}
      */
     @Deprecated
     public static CombatEventPacket death(Player player, Entity killer, JsonMessage message) {
-        return death(player, killer, message.toString());
+        return death(player, killer, message.asComponent());
     }
 
-    public static CombatEventPacket death(Player player, Entity killer, String message) {
+    public static CombatEventPacket death(Player player, Entity killer, Component message) {
         CombatEventPacket packet = new CombatEventPacket();
         packet.type = EventType.DEATH;
         packet.playerID = player.getEntityId();
@@ -72,7 +71,7 @@ public class CombatEventPacket implements ServerPacket {
             case DEATH:
                 writer.writeVarInt(playerID);
                 writer.writeInt(opponent);
-                writer.writeSizedString(deathMessage);
+                writer.writeComponent(deathMessage);
                 break;
         }
     }

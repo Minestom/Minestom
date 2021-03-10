@@ -1,5 +1,6 @@
 package net.minestom.server.adventure;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
@@ -8,6 +9,15 @@ import java.util.Locale;
  * Represents something which can have a locale.
  */
 public interface Localizable {
+
+    /**
+     * Gets a localizable that returns {@code null} for all calls to {@link #getLocale()}.
+     *
+     * @return the empty localizable
+     */
+    static @NotNull Localizable empty() {
+        return SerializationManager.NULL_LOCALIZABLE;
+    }
 
     /**
      * Gets the locale.

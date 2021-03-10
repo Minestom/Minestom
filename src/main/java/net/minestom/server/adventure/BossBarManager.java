@@ -47,7 +47,10 @@ public class BossBarManager implements BossBar.Listener {
         Holder holder = this.getOrCreateHandler(bar);
 
         if (holder.players.add(player.getUuid())) {
-            player.getPlayerConnection().sendPacket(holder.createAddPacket());
+            BossBarPacket packet = holder.createAddPacket();
+            packet.title = MinecraftServer.getSerializationManager().prepare(packet.title, player);
+
+            player.getPlayerConnection().sendPacket(packet);
         }
     }
     /**
@@ -105,12 +108,27 @@ public class BossBarManager implements BossBar.Listener {
     private void updatePlayers(BossBarPacket packet, Set<UUID> players) {
         Iterator<UUID> iterator = players.iterator();
 
+        // check if we need to translate the bossbar
+        Component rawTitle = packet.title;
+        boolean translate = false;
+        if (packet.action == UPDATE_TITLE || packet.action == ADD) {
+            Component rootTitle = MinecraftServer.getSerializationManager().prepare(rawTitle, MinecraftServer.getSerializationManager().getDefaultLocale());
+
+            if (!rawTitle.equals(rootTitle)) {
+                translate = true;
+            }
+        }
+
         while (iterator.hasNext()) {
             Player player = MinecraftServer.getConnectionManager().getPlayer(iterator.next());
 
             if (player == null) {
                 iterator.remove();
             } else {
+                if (translate) {
+                    packet.title = MinecraftServer.getSerializationManager().prepare(rawTitle, player);
+                }
+
                 player.getPlayerConnection().sendPacket(packet);
             }
         }
@@ -165,9 +183,9 @@ public class BossBarManager implements BossBar.Listener {
 
         @NotNull BossBarPacket createAddPacket() {
             return this.createGenericPacket(ADD, packet -> {
-                packet.title = MinecraftServer.getSerializationManager().serialize(bar.name());
-                packet.color = AdventurePacketConvertor.getBossBarColorValue(bar.color());
-                packet.division = AdventurePacketConvertor.getBossBarOverlayValue(bar.overlay());
+                packet.title = bar.name();
+                packet.color = bar.color();
+                packet.overlay = bar.overlay();
                 packet.health = bar.progress();
                 packet.flags = AdventurePacketConvertor.getBossBarFlagValue(bar.flags());
             });
@@ -179,13 +197,13 @@ public class BossBarManager implements BossBar.Listener {
 
         @NotNull BossBarPacket createColorUpdate(@NotNull Color color) {
             return this.createGenericPacket(UPDATE_STYLE, packet -> {
-                packet.color = color.ordinal();
-                packet.division = AdventurePacketConvertor.getBossBarOverlayValue(bar.overlay());
+                packet.color = color;
+                packet.overlay = bar.overlay();
             });
         }
 
         @NotNull BossBarPacket createTitleUpdate(@NotNull Component title) {
-            return this.createGenericPacket(UPDATE_TITLE, packet -> packet.title = MinecraftServer.getSerializationManager().serialize(title));
+            return this.createGenericPacket(UPDATE_TITLE, packet -> packet.title = title);
         }
 
         @NotNull BossBarPacket createFlagsUpdate() {
@@ -198,8 +216,8 @@ public class BossBarManager implements BossBar.Listener {
 
         @NotNull BossBarPacket createOverlayUpdate(@NotNull Overlay overlay) {
             return this.createGenericPacket(UPDATE_STYLE, packet -> {
-                packet.division = AdventurePacketConvertor.getBossBarOverlayValue(overlay);
-                packet.color = AdventurePacketConvertor.getBossBarColorValue(bar.color());
+                packet.overlay = overlay;
+                packet.color = bar.color();
             });
         }
 

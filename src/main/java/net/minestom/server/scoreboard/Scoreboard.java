@@ -3,7 +3,6 @@ package net.minestom.server.scoreboard;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
@@ -42,7 +41,7 @@ public interface Scoreboard extends Viewable, ForwardingAudience {
         final ScoreboardObjectivePacket packet = new ScoreboardObjectivePacket();
         packet.objectiveName = this.getObjectiveName();
         packet.mode = 0; // Create Scoreboard
-        packet.objectiveValue = MinecraftServer.getSerializationManager().serialize(value);
+        packet.objectiveValue = value;
         packet.type = type;
 
         return packet;

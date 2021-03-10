@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -75,12 +76,7 @@ public class PlayerInfoPacket implements ServerPacket {
         public List<Property> properties;
         public GameMode gameMode;
         public int ping;
-        public String displayName;
-
-        /**
-         * @deprecated Use {@link #displayName}
-         */
-        @Deprecated public JsonMessage displayNameJson; // Only text
+        public Component displayName;
 
         public AddPlayer(UUID uuid, String name, GameMode gameMode, int ping) {
             super(uuid);
@@ -100,10 +96,10 @@ public class PlayerInfoPacket implements ServerPacket {
             writer.writeVarInt(gameMode.getId());
             writer.writeVarInt(ping);
 
-            final boolean hasDisplayName = displayName != null || displayNameJson != null;
+            final boolean hasDisplayName = displayName != null;
             writer.writeBoolean(hasDisplayName);
             if (hasDisplayName)
-                writer.writeSizedString(displayNameJson != null ? displayNameJson.toString() : displayName);
+                writer.writeComponent(displayName);
         }
 
         public static class Property {
@@ -166,22 +162,17 @@ public class PlayerInfoPacket implements ServerPacket {
 
     public static class UpdateDisplayName extends PlayerInfo {
 
-        public String displayName;
+        public Component displayName;
 
         /**
-         * @deprecated Use {@link #displayName}
-         */
-        @Deprecated public JsonMessage displayNameJson; // Only text
-
-        /**
-         * @deprecated Use {@link #UpdateDisplayName(UUID, String)}
+         * @deprecated Use {@link #UpdateDisplayName(UUID, Component)}
          */
         @Deprecated
         public UpdateDisplayName(UUID uuid, JsonMessage displayName) {
-            this(uuid, displayName.toString());
+            this(uuid, displayName.asComponent());
         }
 
-        public UpdateDisplayName(UUID uuid, String displayName) {
+        public UpdateDisplayName(UUID uuid, Component displayName) {
             super(uuid);
             this.displayName = displayName;
         }
@@ -191,7 +182,7 @@ public class PlayerInfoPacket implements ServerPacket {
             final boolean hasDisplayName = displayName != null;
             writer.writeBoolean(hasDisplayName);
             if (hasDisplayName)
-                writer.writeSizedString(displayNameJson != null ? displayNameJson.toString() : displayName);
+                writer.writeComponent(displayName);
         }
     }
 

@@ -2,15 +2,10 @@ package net.minestom.server.adventure;
 
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Utility methods to convert adventure enums to their packet values.

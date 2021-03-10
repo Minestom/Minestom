@@ -1,6 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.chat.JsonMessage;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -21,17 +21,11 @@ public class ScoreboardObjectivePacket implements ServerPacket {
     /**
      * The text to be displayed for the score
      */
-    public String objectiveValue; // Only text
+    public Component objectiveValue; // Only text
     /**
      * The type how the score is displayed
      */
     public Type type;
-
-    /**
-     * @deprecated Use {@link #objectiveValue}
-     */
-    @Deprecated
-    public JsonMessage objectiveValueJson;
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -39,7 +33,7 @@ public class ScoreboardObjectivePacket implements ServerPacket {
         writer.writeByte(mode);
 
         if (mode == 0 || mode == 2) {
-            writer.writeSizedString(objectiveValueJson != null ? objectiveValueJson.toString() : objectiveValue);
+            writer.writeComponent(objectiveValue);
             writer.writeVarInt(type.ordinal());
         }
     }

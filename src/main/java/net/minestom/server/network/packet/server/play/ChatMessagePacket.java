@@ -1,7 +1,7 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.audience.MessageType;
-import net.minestom.server.chat.JsonMessage;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -16,28 +16,23 @@ import java.util.UUID;
 public class ChatMessagePacket implements ServerPacket {
     private static final UUID NULL_UUID = new UUID(0, 0);
 
-    public String message;
+    public Component message;
     public Position position;
     public UUID uuid;
 
-    /**
-     * @deprecated Use {@link #message}
-     */
-    public @Deprecated JsonMessage jsonMessage;
-
-    public ChatMessagePacket(String jsonMessage, Position position, UUID uuid) {
-        this.message = jsonMessage;
+    public ChatMessagePacket(Component message, Position position, UUID uuid) {
+        this.message = message;
         this.position = position;
         this.uuid = uuid;
     }
 
-    public ChatMessagePacket(String jsonMessage, Position position) {
-        this(jsonMessage, position, NULL_UUID);
+    public ChatMessagePacket(Component message, Position position) {
+        this(message, position, NULL_UUID);
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeSizedString(jsonMessage != null ? jsonMessage.toString() : message);
+        writer.writeComponent(message);
         writer.writeByte((byte) position.ordinal());
         writer.writeUuid(uuid);
     }

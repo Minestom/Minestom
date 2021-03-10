@@ -1,7 +1,6 @@
 package net.minestom.server.advancements;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
@@ -375,8 +374,8 @@ public class Advancement {
         AdvancementsPacket.DisplayData displayData = new AdvancementsPacket.DisplayData();
         displayData.x = x;
         displayData.y = y;
-        displayData.title = MinecraftServer.getSerializationManager().serialize(title);
-        displayData.description = MinecraftServer.getSerializationManager().serialize(description);
+        displayData.title = title;
+        displayData.description = description;
         displayData.icon = icon;
         displayData.frameType = frameType;
         displayData.flags = getFlags();

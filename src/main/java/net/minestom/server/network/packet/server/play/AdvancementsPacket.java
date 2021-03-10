@@ -1,7 +1,7 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.advancements.FrameType;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -84,8 +84,8 @@ public class AdvancementsPacket implements ServerPacket {
     }
 
     public static class DisplayData implements Writeable {
-        public String title; // Only text
-        public String description; // Only text
+        public Component title; // Only text
+        public Component description; // Only text
         public ItemStack icon;
         public FrameType frameType;
         public int flags;
@@ -93,19 +93,10 @@ public class AdvancementsPacket implements ServerPacket {
         public float x;
         public float y;
 
-        /**
-         * @deprecated Use {@link #title}
-         */
-        public @Deprecated JsonMessage titleJson; // Only text
-        /**
-         * @deprecated Use {@link #description}
-         */
-        public @Deprecated JsonMessage descriptionJson; // Only text
-
         @Override
         public void write(@NotNull BinaryWriter writer) {
-            writer.writeSizedString(titleJson != null ? titleJson.toString() : title);
-            writer.writeSizedString(descriptionJson != null ? descriptionJson.toString() : description);
+            writer.writeComponent(title);
+            writer.writeComponent(description);
             writer.writeItemStack(icon);
             writer.writeVarInt(frameType.ordinal());
             writer.writeInt(flags);

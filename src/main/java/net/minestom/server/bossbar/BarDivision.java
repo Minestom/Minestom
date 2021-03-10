@@ -11,5 +11,9 @@ public enum BarDivision {
     SEGMENT_6,
     SEGMENT_10,
     SEGMENT_12,
-    SEGMENT_20
+    SEGMENT_20;
+
+    public net.kyori.adventure.bossbar.BossBar.Overlay asAdventureOverlay() {
+        return net.kyori.adventure.bossbar.BossBar.Overlay.values()[this.ordinal()];
+    }
 }

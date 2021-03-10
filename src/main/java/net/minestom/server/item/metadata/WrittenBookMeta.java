@@ -3,9 +3,7 @@ package net.minestom.server.item.metadata;
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.ChatParser;
-import net.minestom.server.chat.ColoredText;
-import net.minestom.server.chat.JsonMessage;
+import net.minestom.server.adventure.Localizable;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
@@ -202,15 +200,17 @@ public class WrittenBookMeta extends ItemMeta {
      * resolved and the generation will default to {@link WrittenBookGeneration#ORIGINAL}.
      *
      * @param book the book
+     * @param localizable who the book is for
      *
      * @return the meta
      */
-    public static @NotNull WrittenBookMeta fromAdventure(@NotNull Book book) {
+    public static @NotNull WrittenBookMeta fromAdventure(@NotNull Book book, @NotNull Localizable localizable) {
+        // make the book
         WrittenBookMeta meta = new WrittenBookMeta();
         meta.resolved = false;
         meta.generation = WrittenBookGeneration.ORIGINAL;
-        meta.author = MinecraftServer.getSerializationManager().serialize(book.author());
-        meta.title = MinecraftServer.getSerializationManager().serialize(book.title());
+        meta.author = MinecraftServer.getSerializationManager().prepareAndSerialize(book.author(), localizable);
+        meta.title = MinecraftServer.getSerializationManager().prepareAndSerialize(book.title(), localizable);
         meta.pages = new ArrayList<>();
 
         for (Component page : book.pages()) {

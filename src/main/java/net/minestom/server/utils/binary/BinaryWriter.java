@@ -2,6 +2,7 @@ package net.minestom.server.utils.binary;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.BlockPosition;
@@ -59,6 +60,15 @@ public class BinaryWriter extends OutputStream {
      */
     public BinaryWriter() {
         this.buffer = Unpooled.buffer();
+    }
+
+    /**
+     * Writes a component to the buffer as a sized string.
+     *
+     * @param component the component
+     */
+    public void writeComponent(Component component) {
+        this.writeSizedString(MinecraftServer.getSerializationManager().serialize(component));
     }
 
     /**

@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.login;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -8,23 +9,23 @@ import org.jetbrains.annotations.NotNull;
 
 public class LoginDisconnectPacket implements ServerPacket {
 
-    private final String kickMessage; // JSON text
+    private final Component kickMessage; // JSON text
 
-    public LoginDisconnectPacket(@NotNull String kickMessage) {
+    public LoginDisconnectPacket(@NotNull Component kickMessage) {
         this.kickMessage = kickMessage;
     }
 
     /**
-     * @deprecated Use {@link #LoginDisconnectPacket(String)}
+     * @deprecated Use {@link #LoginDisconnectPacket(Component)}
      */
     @Deprecated
     public LoginDisconnectPacket(@NotNull JsonMessage jsonKickMessage) {
-        this(jsonKickMessage.toString());
+        this(jsonKickMessage.asComponent());
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeSizedString(kickMessage);
+        writer.writeComponent(kickMessage);
     }
 
     @Override

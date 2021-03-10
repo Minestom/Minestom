@@ -1,6 +1,6 @@
 package net.minestom.server.advancements.notifications;
 
-import net.minestom.server.MinecraftServer;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -82,9 +82,9 @@ public class NotificationCenter {
             // Setup display data for the advancement
             AdvancementsPacket.DisplayData displayData = new AdvancementsPacket.DisplayData();
             {
-                displayData.title = MinecraftServer.getSerializationManager().serialize(notification.getTitle());
+                displayData.title = notification.getTitle();
                 // Description is required, but never shown/seen so, small Easter egg.
-                displayData.description = "Articdive was here. #Minestom";
+                displayData.description = Component.text("Articdive was here. #Minestom");
                 displayData.icon = notification.getIcon();
                 displayData.frameType = notification.getFrameType();
                 displayData.flags = 0x6;

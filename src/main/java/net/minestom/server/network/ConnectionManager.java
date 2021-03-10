@@ -4,9 +4,11 @@ import io.netty.channel.Channel;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.audience.MessageType;
+import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.LocalizablePacketSender;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
@@ -17,12 +19,10 @@ import net.minestom.server.listener.manager.ClientPacketConsumer;
 import net.minestom.server.listener.manager.ServerPacketConsumer;
 import net.minestom.server.network.packet.client.login.LoginStartPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
-import net.minestom.server.network.packet.server.play.ChatMessagePacket;
 import net.minestom.server.network.packet.server.play.DisconnectPacket;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
 import net.minestom.server.utils.validate.Check;
@@ -156,7 +156,7 @@ public final class ConnectionManager implements ForwardingAudience {
 
         if (!recipients.isEmpty()) {
             final String jsonText = jsonMessage.toString();
-            broadcastJson(jsonText, recipients);
+            LocalizablePacketSender.sendGroupedMessage(recipients, Identity.nil(), jsonMessage.asComponent(), MessageType.CHAT);
         }
     }
 
@@ -168,13 +168,7 @@ public final class ConnectionManager implements ForwardingAudience {
      */
     @Deprecated
     public void broadcastMessage(@NotNull JsonMessage jsonMessage) {
-        broadcastMessage(jsonMessage, null);
-    }
-
-    private void broadcastJson(@NotNull String json, @NotNull Collection<Player> recipients) {
-        ChatMessagePacket chatMessagePacket = new ChatMessagePacket(json, ChatMessagePacket.Position.SYSTEM_MESSAGE);
-
-        PacketUtils.sendGroupedPacket(recipients, chatMessagePacket);
+        this.sendMessage(jsonMessage);
     }
 
     private Collection<Player> getRecipients(@Nullable PlayerValidator condition) {
@@ -491,10 +485,11 @@ public final class ConnectionManager implements ForwardingAudience {
      * Shutdowns the connection manager by kicking all the currently connected players.
      */
     public void shutdown() {
-        DisconnectPacket disconnectPacket = new DisconnectPacket(MinecraftServer.getSerializationManager().serialize(shutdownText));
+        DisconnectPacket disconnectPacket = new DisconnectPacket(shutdownText);
         for (Player player : getOnlinePlayers()) {
             final PlayerConnection playerConnection = player.getPlayerConnection();
             if (playerConnection instanceof NettyPlayerConnection) {
+                disconnectPacket.message = MinecraftServer.getSerializationManager().prepare(disconnectPacket.message, player);
                 final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
                 final Channel channel = nettyPlayerConnection.getChannel();
                 channel.writeAndFlush(disconnectPacket);

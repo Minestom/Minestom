@@ -12,5 +12,9 @@ public enum BarColor {
     GREEN,
     YELLOW,
     PURPLE,
-    WHITE
+    WHITE;
+
+    public net.kyori.adventure.bossbar.BossBar.Color asAdventureColor() {
+        return net.kyori.adventure.bossbar.BossBar.Color.valueOf(this.name());
+    }
 }
