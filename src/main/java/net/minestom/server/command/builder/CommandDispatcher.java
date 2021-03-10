@@ -7,6 +7,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.parser.CommandParser;
+import net.minestom.server.command.builder.parser.CommandQueryResult;
 import net.minestom.server.command.builder.parser.CommandSuggestionHolder;
 import net.minestom.server.command.builder.parser.ValidSyntaxHolder;
 import org.apache.commons.lang3.StringUtils;
@@ -117,14 +118,16 @@ public class CommandDispatcher {
         final String[] parts = commandString.split(StringUtils.SPACE);
         final String commandName = parts[0];
 
-        final Command command = findCommand(commandName);
-        // Check if the command exists
-        if (command == null) {
-            return CommandResult.of(CommandResult.Type.UNKNOWN, commandName);
-        }
-
         String[] args = new String[parts.length - 1];
         System.arraycopy(parts, 1, args, 0, args.length);
+
+        final CommandQueryResult commandQueryResult = CommandParser.findCommand(commandName, args);
+        // Check if the command exists
+        if (commandQueryResult == null) {
+            return CommandResult.of(CommandResult.Type.UNKNOWN, commandName);
+        }
+        final Command command = commandQueryResult.command;
+        args = commandQueryResult.args;
 
         CommandResult result = new CommandResult();
         result.input = commandString;

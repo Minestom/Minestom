@@ -1,6 +1,8 @@
 package net.minestom.server.command.builder.parser;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
@@ -14,6 +16,38 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class CommandParser {
+
+    private static final CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();
+
+    @Nullable
+    public static CommandQueryResult findCommand(@NotNull String commandName, @NotNull String[] args) {
+        Command command = COMMAND_MANAGER.getDispatcher().findCommand(commandName);
+        if (command == null) {
+            return null;
+        }
+
+        CommandQueryResult commandQueryResult = new CommandQueryResult();
+        commandQueryResult.command = command;
+        commandQueryResult.commandName = commandName;
+        commandQueryResult.args = args;
+
+        boolean correct;
+        do {
+            correct = false;
+
+            if (commandQueryResult.args.length > 0) {
+                final String firstArgument = commandQueryResult.args[0];
+                for (Command subcommand : command.getSubcommands()) {
+                    correct = Command.isValidName(subcommand, firstArgument);
+                    commandQueryResult.command = subcommand;
+                    commandQueryResult.commandName = firstArgument;
+                    commandQueryResult.args = Arrays.copyOfRange(args, 1, args.length);
+                }
+            }
+        } while (correct);
+
+        return commandQueryResult;
+    }
 
     public static void parse(@Nullable CommandSyntax syntax, @NotNull Argument<?>[] commandArguments, @NotNull String[] inputArguments,
                              @Nullable List<ValidSyntaxHolder> validSyntaxes,

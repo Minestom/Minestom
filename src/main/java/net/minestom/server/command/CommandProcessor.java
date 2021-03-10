@@ -14,7 +14,10 @@ import org.jetbrains.annotations.Nullable;
  * {@link #onWrite(CommandSender, String)} and return the possible completions to suggest.
  * <p>
  * Please be sure to check {@link net.minestom.server.command.builder.Command} as it is likely to be better for your use case.
+ *
+ * @deprecated use {@link net.minestom.server.command.builder.Command} instead
  */
+@Deprecated
 public interface CommandProcessor {
 
     /**

@@ -4,10 +4,10 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.CommandProcessor;
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.parser.ArgumentQueryResult;
 import net.minestom.server.command.builder.parser.CommandParser;
+import net.minestom.server.command.builder.parser.CommandQueryResult;
 import net.minestom.server.command.builder.suggestion.Suggestion;
 import net.minestom.server.command.builder.suggestion.SuggestionCallback;
 import net.minestom.server.entity.Player;
@@ -29,16 +29,21 @@ public class TabCompleteListener {
             String commandString = packet.text.replaceFirst(CommandManager.COMMAND_PREFIX, "");
             String[] split = commandString.split(StringUtils.SPACE);
             String commandName = split[0];
-            final CommandDispatcher commandDispatcher = MinecraftServer.getCommandManager().getDispatcher();
-            final Command command = commandDispatcher.findCommand(commandName);
 
             String args = commandString.replaceFirst(commandName, "");
             String[] argsSplit = new String[split.length - 1];
             System.arraycopy(split, 1, argsSplit, 0, argsSplit.length);
 
-            final ArgumentQueryResult queryResult = CommandParser.findSuggestibleArgument(command, argsSplit, text);
+            final CommandQueryResult commandQueryResult = CommandParser.findCommand(commandName, argsSplit);
+            if (commandQueryResult == null) {
+                System.out.println("COMMAND NOT FOUND");
+                return;
+            }
+
+            final ArgumentQueryResult queryResult = CommandParser.findSuggestibleArgument(commandQueryResult.command,
+                    commandQueryResult.args, text);
             if (queryResult == null) {
-                System.out.println("STOP");
+                System.out.println("QUERY NOT FOUND");
                 return;
             }
 
