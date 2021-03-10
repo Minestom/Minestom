@@ -1,6 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
-import net.minestom.server.command.builder.Arguments;
+import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.parser.CommandParser;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArgumentGroup extends Argument<Arguments> {
+public class ArgumentGroup extends Argument<CommandContext> {
 
     public static final int INVALID_ARGUMENTS_ERROR = 1;
 
@@ -24,17 +24,17 @@ public class ArgumentGroup extends Argument<Arguments> {
 
     @NotNull
     @Override
-    public Arguments parse(@NotNull String input) throws ArgumentSyntaxException {
+    public CommandContext parse(@NotNull String input) throws ArgumentSyntaxException {
         List<ValidSyntaxHolder> validSyntaxes = new ArrayList<>();
         CommandParser.parse(null, group, input.split(StringUtils.SPACE), validSyntaxes, null);
 
-        Arguments arguments = new Arguments();
-        CommandParser.findMostCorrectSyntax(validSyntaxes, arguments);
+        CommandContext context = new CommandContext(input);
+        CommandParser.findMostCorrectSyntax(validSyntaxes, context);
         if (validSyntaxes.isEmpty()) {
             throw new ArgumentSyntaxException("Invalid arguments", input, INVALID_ARGUMENTS_ERROR);
         }
 
-        return arguments;
+        return context;
     }
 
     @Override

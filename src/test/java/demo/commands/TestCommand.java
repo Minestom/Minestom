@@ -26,8 +26,8 @@ public class TestCommand extends Command {
 
         var test3 = Integer("msg3");
 
-        addSyntax((sender, args) -> {
-            System.out.println("COMMAND SYNTAX");
+        addSyntax((sender, context) -> {
+            System.out.println("input: "+context.getInput());
         }, test3, test1);
     }
 

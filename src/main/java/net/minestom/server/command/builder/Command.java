@@ -282,11 +282,11 @@ public class Command {
      * <p>
      * Can be used if you wish to still suggest the player syntaxes but want to parse things mostly by yourself.
      *
-     * @param sender    the {@link CommandSender}
-     * @param arguments the UNCHECKED arguments of the command, some can be null even when unexpected
-     * @param command   the raw UNCHECKED received command
+     * @param sender  the {@link CommandSender}
+     * @param context the UNCHECKED context of the command, some can be null even when unexpected
+     * @param command the raw UNCHECKED received command
      */
-    public void globalListener(@NotNull CommandSender sender, @NotNull Arguments arguments, @NotNull String command) {
+    public void globalListener(@NotNull CommandSender sender, @NotNull CommandContext context, @NotNull String command) {
     }
 
     public static boolean isValidName(@NotNull Command command, @NotNull String name) {

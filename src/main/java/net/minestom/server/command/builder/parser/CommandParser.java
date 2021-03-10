@@ -3,6 +3,7 @@ package net.minestom.server.command.builder.parser;
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
 import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -71,12 +72,12 @@ public class CommandParser {
      * valid arguments.
      *
      * @param validSyntaxes the list containing all the valid syntaxes
-     * @param executorArgs  the recipient of the argument parsed values
+     * @param context       the recipient of the argument parsed values
      * @return the command syntax with all of its arguments correct and with the most arguments count, null if not any
      */
     @Nullable
     public static ValidSyntaxHolder findMostCorrectSyntax(@NotNull List<ValidSyntaxHolder> validSyntaxes,
-                                                          @NotNull Arguments executorArgs) {
+                                                          @NotNull CommandContext context) {
         if (validSyntaxes.isEmpty()) {
             return null;
         }
@@ -109,7 +110,7 @@ public class CommandParser {
 
         // Get the arguments values
         if (finalSyntax != null) {
-            executorArgs.copy(finalArguments);
+            context.copy(finalArguments);
         }
 
         return finalSyntax;

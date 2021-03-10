@@ -26,7 +26,7 @@ public class TabCompleteListener {
         final String text = packet.text;
 
         {
-            String commandString = packet.text.replaceFirst("/", "");
+            String commandString = packet.text.replaceFirst(CommandManager.COMMAND_PREFIX, "");
             String[] split = commandString.split(StringUtils.SPACE);
             String commandName = split[0];
             final CommandDispatcher commandDispatcher = MinecraftServer.getCommandManager().getDispatcher();
@@ -50,7 +50,7 @@ public class TabCompleteListener {
                 final int inputLength = input.length();
 
                 final int commandLength = Arrays.stream(split).map(String::length).reduce(0, Integer::sum) +
-                        StringUtils.countMatches(args, " ");
+                        StringUtils.countMatches(args, StringUtils.SPACE);
                 final int trailingSpaces = !input.isEmpty() ? text.length() - text.trim().length() : 0;
 
                 final int start = commandLength - inputLength + 1 - trailingSpaces;
