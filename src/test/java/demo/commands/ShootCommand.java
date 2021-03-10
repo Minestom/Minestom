@@ -1,8 +1,8 @@
 package demo.commands;
 
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityType;
@@ -31,7 +31,7 @@ public class ShootCommand extends Command {
         return true;
     }
 
-    private void defaultExecutor(CommandSender sender, Arguments args) {
+    private void defaultExecutor(CommandSender sender, CommandContext context) {
         sender.sendMessage("Correct usage: shoot [default/spectral/colored]");
     }
 
@@ -39,9 +39,9 @@ public class ShootCommand extends Command {
         sender.sendMessage("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by 'default', 'spectral' or 'colored'");
     }
 
-    private void onShootCommand(CommandSender sender, Arguments args) {
+    private void onShootCommand(CommandSender sender, CommandContext context) {
         Player player = (Player) sender;
-        String mode = args.get("type");
+        String mode = context.get("type");
         EntityProjectile projectile;
         switch (mode) {
             case "default":

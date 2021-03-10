@@ -102,7 +102,7 @@ public abstract class Argument<T> {
 
     /**
      * Gets the ID of the argument, showed in-game above the chat bar
-     * and used to retrieve the data when the command is parsed in {@link net.minestom.server.command.builder.Arguments}.
+     * and used to retrieve the data when the command is parsed in {@link net.minestom.server.command.builder.CommandContext}.
      *
      * @return the argument id
      */

@@ -2,8 +2,8 @@ package demo.commands;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.potion.Potion;
@@ -34,10 +34,10 @@ public class PotionCommand extends Command {
         return true;
     }
 
-    private void onPotionCommand(CommandSender sender, Arguments args) {
+    private void onPotionCommand(CommandSender sender, CommandContext context) {
         final Player player = (Player) sender;
-        final PotionEffect potion = args.get("potion");
-        final int duration = args.get("duration");
+        final PotionEffect potion = context.get("potion");
+        final int duration = context.get("duration");
 
         player.sendMessage(player.getActiveEffects().toString());
         player.addEffect(new Potion(

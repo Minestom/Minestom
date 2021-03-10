@@ -1,8 +1,8 @@
 package demo.commands;
 
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -36,7 +36,7 @@ public class HealthCommand extends Command {
         return true;
     }
 
-    private void defaultExecutor(CommandSender sender, Arguments args) {
+    private void defaultExecutor(CommandSender sender, CommandContext context) {
         sender.sendMessage("Correct usage: health [set/add] [number]");
     }
 
@@ -57,14 +57,14 @@ public class HealthCommand extends Command {
         }
     }
 
-    private void sendSuggestionMessage(CommandSender sender, Arguments args) {
-        sender.sendMessage("/health " + args.get("mode") + " [Integer]");
+    private void sendSuggestionMessage(CommandSender sender, CommandContext context) {
+        sender.sendMessage("/health " + context.get("mode") + " [Integer]");
     }
 
-    private void onHealthCommand(CommandSender sender, Arguments args) {
+    private void onHealthCommand(CommandSender sender, CommandContext context) {
         final Player player = (Player) sender;
-        final String mode = args.get("mode");
-        final int value = args.get("value");
+        final String mode = context.get("mode");
+        final int value = context.get("value");
 
         switch (mode.toLowerCase()) {
             case "set":

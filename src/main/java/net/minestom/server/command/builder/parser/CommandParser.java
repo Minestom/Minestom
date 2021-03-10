@@ -3,7 +3,6 @@ package net.minestom.server.command.builder.parser;
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
-import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.CommandSyntax;
