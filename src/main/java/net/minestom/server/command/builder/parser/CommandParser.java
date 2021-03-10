@@ -121,7 +121,7 @@ public class CommandParser {
         Int2ObjectRBTreeMap<ArgumentQueryResult> suggestions = new Int2ObjectRBTreeMap<>(Collections.reverseOrder());
 
         for (CommandSyntax syntax : syntaxes) {
-            Argument<?>[] commandArguments = syntax.getArguments();
+            final Argument<?>[] commandArguments = syntax.getArguments();
             int inputIndex = 0;
 
             ArgumentQueryResult maxArg = null;
@@ -129,7 +129,11 @@ public class CommandParser {
             for (int argIndex = 0; argIndex < commandArguments.length; argIndex++) {
                 ArgumentResult argumentResult = validate(commandArguments, argIndex, args, inputIndex);
                 if (argumentResult == null) {
-                    break;
+                    argumentResult = new ArgumentResult();
+                    argumentResult.argument = commandArguments[argIndex];
+                    argumentResult.correct = false;
+                    argumentResult.inputIndex = inputIndex;
+                    argumentResult.rawArg = "";
                 }
 
                 // Update local var
@@ -140,7 +144,6 @@ public class CommandParser {
                     ArgumentQueryResult queryResult = new ArgumentQueryResult();
                     queryResult.argument = argumentResult.argument;
                     queryResult.input = argumentResult.rawArg;
-                    queryResult.start = rawCommandText.length() - argumentResult.rawArg.length();
 
                     maxArg = queryResult;
                     maxArgIndex = argIndex;

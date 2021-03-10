@@ -15,6 +15,7 @@ import net.minestom.server.network.packet.client.play.ClientTabCompletePacket;
 import net.minestom.server.network.packet.server.play.TabCompletePacket;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 public class TabCompleteListener {
@@ -31,10 +32,11 @@ public class TabCompleteListener {
             final CommandDispatcher commandDispatcher = MinecraftServer.getCommandManager().getDispatcher();
             final Command command = commandDispatcher.findCommand(commandName);
 
-            String[] args = new String[split.length - 1];
-            System.arraycopy(split, 1, args, 0, args.length);
+            String args = commandString.replaceFirst(commandName, "");
+            String[] argsSplit = new String[split.length - 1];
+            System.arraycopy(split, 1, argsSplit, 0, argsSplit.length);
 
-            final ArgumentQueryResult queryResult = CommandParser.findSuggestibleArgument(command, args, text);
+            final ArgumentQueryResult queryResult = CommandParser.findSuggestibleArgument(command, argsSplit, text);
             if (queryResult == null) {
                 System.out.println("STOP");
                 return;
@@ -44,11 +46,16 @@ public class TabCompleteListener {
 
             final SuggestionCallback suggestionCallback = argument.suggestionCallback;
             if (suggestionCallback != null) {
-                final int argumentLength = queryResult.input.length();
-                final int start = text.length() - argumentLength;
-                // TODO fix start
-                //Suggestion suggestion = new Suggestion(queryResult.start, queryResult.input.length());
-                Suggestion suggestion = new Suggestion(start, argumentLength);
+                final String input = queryResult.input;
+                final int inputLength = input.length();
+
+                final int commandLength = Arrays.stream(split).map(String::length).reduce(0, Integer::sum) +
+                        StringUtils.countMatches(args, " ");
+                final int trailingSpaces = !input.isEmpty() ? text.length() - text.trim().length() : 0;
+
+                final int start = commandLength - inputLength + 1 - trailingSpaces;
+
+                Suggestion suggestion = new Suggestion(start, inputLength);
                 suggestionCallback.apply(suggestion, commandString);
 
                 TabCompletePacket tabCompletePacket = new TabCompletePacket();

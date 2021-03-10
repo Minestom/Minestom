@@ -15,15 +15,16 @@ public class TestCommand extends Command {
         super("testcmd");
         setDefaultExecutor(this::usage);
 
-        var test1 = Integer("msg").setSuggestionCallback((suggestion, input) -> {
-            suggestion.addEntry(new SuggestionEntry(input, ColoredText.of(ChatColor.RED, "Hover")));
+        var test1 = Word("msg").setSuggestionCallback((suggestion, input) -> {
+            suggestion.addEntry(new SuggestionEntry("sug1", ColoredText.of(ChatColor.RED, "Hover")));
+            suggestion.addEntry(new SuggestionEntry("sug2"));
         });
 
         var test2 = Word("msg2").setSuggestionCallback((suggestion, input) -> {
             suggestion.addEntry(new SuggestionEntry(input, ColoredText.of(ChatColor.BRIGHT_GREEN, "GHRTEG")));
         });
 
-        var test3 = String("msg3");
+        var test3 = Integer("msg3");
 
         addSyntax((sender, args) -> {
             System.out.println("COMMAND SYNTAX");
