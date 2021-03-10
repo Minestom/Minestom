@@ -38,10 +38,11 @@ public class CommandParser {
             if (commandQueryResult.args.length > 0) {
                 final String firstArgument = commandQueryResult.args[0];
                 for (Command subcommand : command.getSubcommands()) {
-                    correct = Command.isValidName(subcommand, firstArgument);
-                    commandQueryResult.command = subcommand;
-                    commandQueryResult.commandName = firstArgument;
-                    commandQueryResult.args = Arrays.copyOfRange(args, 1, args.length);
+                    if ((correct = Command.isValidName(subcommand, firstArgument))) {
+                        commandQueryResult.command = subcommand;
+                        commandQueryResult.commandName = firstArgument;
+                        commandQueryResult.args = Arrays.copyOfRange(args, 1, args.length);
+                    }
                 }
             }
         } while (correct);
