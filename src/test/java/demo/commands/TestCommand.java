@@ -8,7 +8,7 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.suggestion.SuggestionEntry;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
-import static net.minestom.server.command.builder.arguments.ArgumentType.Word;
+import static net.minestom.server.command.builder.arguments.ArgumentType.*;
 
 public class TestCommand extends Command {
 
@@ -18,12 +18,12 @@ public class TestCommand extends Command {
 
         addSubcommand(new Sub());
 
-        var test1 = Word("msg").setSuggestionCallback((sender, context, suggestion) -> {
+        var test1 = String("msg").setSuggestionCallback((sender, context, suggestion) -> {
             suggestion.addEntry(new SuggestionEntry("test"));
         });
 
         addSyntax((sender, context) -> {
-            System.out.println("input: " + context.getInput());
+            System.out.println("input: " + context.get("msg"));
         }, test1);
 
     }
