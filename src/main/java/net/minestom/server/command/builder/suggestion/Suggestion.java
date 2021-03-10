@@ -7,13 +7,20 @@ import java.util.List;
 
 public class Suggestion {
 
+    private final String input;
     private int start;
     private int length;
     private final List<SuggestionEntry> suggestionEntries = new ArrayList<>();
 
-    public Suggestion(int start, int length) {
+    public Suggestion(@NotNull String input, int start, int length) {
+        this.input = input;
         this.start = start;
         this.length = length;
+    }
+
+    @NotNull
+    public String getInput() {
+        return input;
     }
 
     public int getStart() {

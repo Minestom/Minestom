@@ -6,9 +6,9 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.suggestion.SuggestionEntry;
-import org.jetbrains.annotations.NotNull;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.*;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Word;
 
 public class TestCommand extends Command {
 
@@ -23,24 +23,23 @@ public class TestCommand extends Command {
         sender.sendMessage("Incorrect usage");
     }
 
-    private static class Sub extends Command{
+    private static class Sub extends Command {
 
         public Sub() {
             super("sub");
 
-            var test1 = Word("msg").setSuggestionCallback((suggestion, input) -> {
-                suggestion.addEntry(new SuggestionEntry("sug1", ColoredText.of(ChatColor.RED, "Hover")));
-                suggestion.addEntry(new SuggestionEntry("sug2"));
-            });
-
-            var test2 = Word("msg2").setSuggestionCallback((suggestion, input) -> {
-                suggestion.addEntry(new SuggestionEntry(input, ColoredText.of(ChatColor.BRIGHT_GREEN, "GHRTEG")));
+            var test1 = Word("msg").setSuggestionCallback((sender, context, suggestion) -> {
+                final String input = suggestion.getInput();
+                if (!input.isEmpty()) {
+                    int num = Integer.valueOf(input) * 2;
+                    suggestion.addEntry(new SuggestionEntry(String.valueOf(num), ColoredText.of(ChatColor.RED, "Hover")));
+                }
             });
 
             var test3 = Integer("msg3");
 
             addSyntax((sender, context) -> {
-                System.out.println("input: "+context.getInput());
+                System.out.println("input: " + context.getInput());
             }, test3, test1);
         }
     }

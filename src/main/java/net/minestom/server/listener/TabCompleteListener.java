@@ -41,7 +41,7 @@ public class TabCompleteListener {
             }
 
             final ArgumentQueryResult queryResult = CommandParser.findSuggestibleArgument(commandQueryResult.command,
-                    commandQueryResult.args, text);
+                    commandQueryResult.args, commandString);
             if (queryResult == null) {
                 System.out.println("QUERY NOT FOUND");
                 return;
@@ -60,8 +60,8 @@ public class TabCompleteListener {
 
                 final int start = commandLength - inputLength + 1 - trailingSpaces;
 
-                Suggestion suggestion = new Suggestion(start, inputLength);
-                suggestionCallback.apply(suggestion, commandString);
+                Suggestion suggestion = new Suggestion(input, start, inputLength);
+                suggestionCallback.apply(player, queryResult.context, suggestion);
 
                 TabCompletePacket tabCompletePacket = new TabCompletePacket();
                 tabCompletePacket.transactionId = packet.transactionId;
