@@ -132,7 +132,7 @@ public class CommandDispatcher {
         CommandResult result = new CommandResult();
         result.input = commandString;
         // Find the used syntax and fill CommandResult#type and CommandResult#parsedCommand
-        findParsedCommand(command, commandName, args, result);
+        findParsedCommand(command, commandName, args, commandString, result);
 
         // Cache result
         {
@@ -143,7 +143,10 @@ public class CommandDispatcher {
     }
 
     @Nullable
-    private ParsedCommand findParsedCommand(@NotNull Command command, @NotNull String commandName, @NotNull String[] args, @NotNull CommandResult result) {
+    private ParsedCommand findParsedCommand(@NotNull Command command,
+                                            @NotNull String commandName, @NotNull String[] args,
+                                            @NotNull String commandString,
+                                            @NotNull CommandResult result) {
         final boolean hasArgument = args.length > 0;
 
         // Search for subcommand
@@ -151,7 +154,9 @@ public class CommandDispatcher {
             final String firstArgument = args[0];
             for (Command subcommand : command.getSubcommands()) {
                 if (Command.isValidName(subcommand, firstArgument)) {
-                    return findParsedCommand(subcommand, firstArgument, Arrays.copyOfRange(args, 1, args.length), result);
+                    return findParsedCommand(subcommand,
+                            firstArgument, Arrays.copyOfRange(args, 1, args.length),
+                            commandString, result);
                 }
             }
         }
@@ -187,7 +192,7 @@ public class CommandDispatcher {
         Int2ObjectRBTreeMap<CommandSuggestionHolder> syntaxesSuggestions = new Int2ObjectRBTreeMap<>(Collections.reverseOrder());
 
         for (CommandSyntax syntax : syntaxes) {
-            CommandParser.parse(syntax, syntax.getArguments(), args, validSyntaxes, syntaxesSuggestions);
+            CommandParser.parse(syntax, syntax.getArguments(), args, commandString, validSyntaxes, syntaxesSuggestions);
         }
 
         // Check if there is at least one correct syntax

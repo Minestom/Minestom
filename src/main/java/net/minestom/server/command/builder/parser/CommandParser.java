@@ -50,9 +50,10 @@ public class CommandParser {
     }
 
     public static void parse(@Nullable CommandSyntax syntax, @NotNull Argument<?>[] commandArguments, @NotNull String[] inputArguments,
+                             @NotNull String commandString,
                              @Nullable List<ValidSyntaxHolder> validSyntaxes,
                              @Nullable Int2ObjectRBTreeMap<CommandSuggestionHolder> syntaxesSuggestions) {
-        final Map<Argument<?>, Object> argumentValueMap = new HashMap<>();
+        final Map<Argument<?>, ArgumentResult> argumentValueMap = new HashMap<>();
 
         boolean syntaxCorrect = true;
         // The current index in the raw command string arguments
@@ -71,7 +72,7 @@ public class CommandParser {
             inputIndex = argumentResult.inputIndex;
 
             if (argumentResult.correct) {
-                argumentValueMap.put(argumentResult.argument, argumentResult.parsedValue);
+                argumentValueMap.put(argumentResult.argument, argumentResult);
             } else {
                 // Argument is not correct, add it to the syntax suggestion with the number
                 // of correct argument(s) and do not check the next syntax argument
@@ -92,8 +93,9 @@ public class CommandParser {
             if (commandArguments.length == argumentValueMap.size() || useRemaining) {
                 if (validSyntaxes != null) {
                     ValidSyntaxHolder validSyntaxHolder = new ValidSyntaxHolder();
+                    validSyntaxHolder.commandString = commandString;
                     validSyntaxHolder.syntax = syntax;
-                    validSyntaxHolder.argumentsValue = argumentValueMap;
+                    validSyntaxHolder.argumentResults = argumentValueMap;
 
                     validSyntaxes.add(validSyntaxHolder);
                 }
@@ -118,10 +120,10 @@ public class CommandParser {
 
         ValidSyntaxHolder finalSyntax = null;
         int maxArguments = 0;
-        Arguments finalArguments = null;
+        CommandContext finalContext = null;
 
         for (ValidSyntaxHolder validSyntaxHolder : validSyntaxes) {
-            final Map<Argument<?>, Object> argsValues = validSyntaxHolder.argumentsValue;
+            final Map<Argument<?>, ArgumentResult> argsValues = validSyntaxHolder.argumentResults;
 
             final int argsSize = argsValues.size();
 
@@ -131,20 +133,19 @@ public class CommandParser {
                 maxArguments = argsSize;
 
                 // Fill arguments map
-                Arguments syntaxValues = new Arguments();
-                for (Map.Entry<Argument<?>, Object> entry : argsValues.entrySet()) {
+                finalContext = new CommandContext(validSyntaxHolder.commandString);
+                for (Map.Entry<Argument<?>, ArgumentResult> entry : argsValues.entrySet()) {
                     final Argument<?> argument = entry.getKey();
-                    final Object argumentValue = entry.getValue();
+                    final ArgumentResult argumentResult = entry.getValue();
 
-                    syntaxValues.setArg(argument.getId(), argumentValue);
+                    finalContext.setArg(argument.getId(), argumentResult.parsedValue, argumentResult.rawArg);
                 }
-                finalArguments = syntaxValues;
             }
         }
 
         // Get the arguments values
         if (finalSyntax != null) {
-            context.copy(finalArguments);
+            context.copy(finalContext);
         }
 
         return finalSyntax;
@@ -314,7 +315,7 @@ public class CommandParser {
         return argumentResult;
     }
 
-    private static class ArgumentResult {
+    public static class ArgumentResult {
         public Argument<?> argument;
         public boolean correct;
         public int inputIndex;
