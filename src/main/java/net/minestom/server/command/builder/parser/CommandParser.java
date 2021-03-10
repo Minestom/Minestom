@@ -190,7 +190,7 @@ public class CommandParser {
                 // Argument is supposed to take the rest of the command input
                 for (int i = inputIndex; i < inputArguments.length; i++) {
                     final String arg = inputArguments[i];
-                    if (!builder.isEmpty())
+                    if (builder.length() > 0)
                         builder.append(StringUtils.SPACE);
                     builder.append(arg);
                 }
@@ -236,7 +236,7 @@ public class CommandParser {
                         // rawArg should be the remaining
                         for (int j = i + 1; j < inputArguments.length; j++) {
                             final String arg = inputArguments[j];
-                            if (!builder.isEmpty())
+                            if (builder.length() > 0)
                                 builder.append(StringUtils.SPACE);
                             builder.append(arg);
                         }
