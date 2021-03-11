@@ -2,6 +2,9 @@ package net.minestom.server.entity;
 
 import com.google.common.collect.Queues;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
+import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
 import net.minestom.server.chat.JsonMessage;
@@ -47,13 +50,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 /**
  * Could be a player, a monster, or an object.
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler {
+public class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler, HoverEventSource<ShowEntity> {
 
     private static final Map<Integer, Entity> entityById = new ConcurrentHashMap<>();
     private static final Map<UUID, Entity> entityByUuid = new ConcurrentHashMap<>();
@@ -1526,6 +1530,11 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      */
     public void setCustomSynchronizationCooldown(@Nullable UpdateOption cooldown) {
         this.customSynchronizationCooldown = cooldown;
+    }
+
+    @Override
+    public @NotNull HoverEvent<ShowEntity> asHoverEvent(@NotNull UnaryOperator<ShowEntity> op) {
+        return HoverEvent.showEntity(ShowEntity.of(this.entityType, this.uuid));
     }
 
     private UpdateOption getSynchronizationCooldown() {

@@ -3,6 +3,9 @@ package net.minestom.server.item;
 import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.event.HoverEvent.ShowItem;
+import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.data.Data;
@@ -27,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 // TODO should we cache a ByteBuf of this item for faster packet write
@@ -40,7 +44,7 @@ import java.util.stream.Collectors;
  * Here a non-exhaustive list of what you can do to update the item:
  * {@link PlayerInventory#refreshSlot(short)}, {@link Inventory#refreshSlot(short)} or a raw {@link SetSlotPacket}.
  */
-public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
+public class ItemStack implements DataContainer, PublicCloneable<ItemStack>, HoverEventSource<ShowItem> {
 
     public static final OwnershipHandler<Data> DATA_OWNERSHIP = new OwnershipHandler<>();
     public static final String OWNERSHIP_DATA_KEY = "ownership_identifier";
@@ -848,6 +852,11 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack> {
      */
     public ItemDisplay getCustomDisplay(Player player) {
         throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public @NotNull HoverEvent<ShowItem> asHoverEvent(@NotNull UnaryOperator<ShowItem> op) {
+        return HoverEvent.showItem(op.apply(ShowItem.of(this.material, this.amount, NBTUtils.asBinaryTagHolder(this.toNBT().getCompound("tag")))));
     }
 
     // Callback events
