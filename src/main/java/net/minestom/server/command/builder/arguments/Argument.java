@@ -29,7 +29,7 @@ public abstract class Argument<T> {
 
     private T defaultValue;
 
-    public SuggestionCallback suggestionCallback;
+    private SuggestionCallback suggestionCallback;
 
     /**
      * Creates a new argument.

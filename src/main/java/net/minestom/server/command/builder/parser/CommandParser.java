@@ -62,7 +62,8 @@ public class CommandParser {
         boolean useRemaining = false;
         // Check the validity of the arguments...
         for (int argIndex = 0; argIndex < commandArguments.length; argIndex++) {
-            ArgumentResult argumentResult = validate(commandArguments, argIndex, inputArguments, inputIndex);
+            final Argument<?> argument = commandArguments[argIndex];
+            ArgumentResult argumentResult = validate(argument, commandArguments, argIndex, inputArguments, inputIndex);
             if (argumentResult == null) {
                 break;
             }
@@ -170,10 +171,11 @@ public class CommandParser {
             ArgumentQueryResult maxArg = null;
             int maxArgIndex = 0;
             for (int argIndex = 0; argIndex < commandArguments.length; argIndex++) {
-                ArgumentResult argumentResult = validate(commandArguments, argIndex, args, inputIndex);
+                Argument<?> argument = commandArguments[argIndex];
+                ArgumentResult argumentResult = validate(argument, commandArguments, argIndex, args, inputIndex);
                 if (argumentResult == null) {
                     argumentResult = new ArgumentResult();
-                    argumentResult.argument = commandArguments[argIndex];
+                    argumentResult.argument = argument;
                     argumentResult.correct = false;
                     argumentResult.inputIndex = inputIndex;
                     argumentResult.rawArg = "";
@@ -182,7 +184,6 @@ public class CommandParser {
                 // Update local var
                 inputIndex = argumentResult.inputIndex;
 
-                final Argument<?> argument = argumentResult.argument;
                 if (argumentResult.correct) {
                     // Fill context
                     context.setArg(argument.getId(), argumentResult.parsedValue, argumentResult.rawArg);
@@ -218,10 +219,9 @@ public class CommandParser {
     }
 
     @Nullable
-    private static ArgumentResult validate(@NotNull Argument<?>[] arguments, int argIndex,
+    private static ArgumentResult validate(@NotNull Argument<?> argument,
+                                           @NotNull Argument<?>[] arguments, int argIndex,
                                            @NotNull String[] inputArguments, int inputIndex) {
-        final Argument<?> argument = arguments[argIndex];
-
         final boolean end = inputIndex == inputArguments.length;
         if (end) // Stop if there is no input to analyze left
             return null;

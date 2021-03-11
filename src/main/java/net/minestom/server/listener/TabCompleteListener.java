@@ -49,7 +49,7 @@ public class TabCompleteListener {
 
             final Argument<?> argument = queryResult.argument;
 
-            final SuggestionCallback suggestionCallback = argument.suggestionCallback;
+            final SuggestionCallback suggestionCallback = argument.getSuggestionCallback();
             if (suggestionCallback != null) {
                 final String input = queryResult.input;
                 final int inputLength = input.length();
