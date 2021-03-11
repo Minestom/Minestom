@@ -34,7 +34,7 @@ public class Main {
         commandManager.register(new GamemodeCommand());
         commandManager.register(new EntitySelectorCommand());
         commandManager.register(new HealthCommand());
-        commandManager.register(new SimpleCommand());
+        commandManager.register(new LegacyCommand());
         commandManager.register(new DimensionCommand());
         commandManager.register(new ShutdownCommand());
         commandManager.register(new TeleportCommand());

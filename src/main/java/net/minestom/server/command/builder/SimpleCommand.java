@@ -31,9 +31,6 @@ public abstract class SimpleCommand extends Command {
 
     /**
      * Called to know if a player has access to the command.
-     * <p>
-     * Right now it is only used to know if the player should see the command in auto-completion.
-     * Conditions still need to be checked in {@link #process(CommandSender, String, String[])}.
      *
      * @param sender        the command sender to check the access
      * @param commandString the raw command string,
