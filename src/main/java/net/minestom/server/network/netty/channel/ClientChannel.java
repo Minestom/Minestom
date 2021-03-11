@@ -28,6 +28,7 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
     @Override
     public void channelActive(@NotNull ChannelHandlerContext ctx) {
         //System.out.println("CONNECTION");
+        packetProcessor.createPlayerConnection(ctx);
     }
 
     @Override
