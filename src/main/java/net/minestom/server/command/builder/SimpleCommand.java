@@ -9,8 +9,10 @@ public abstract class SimpleCommand extends Command {
     public SimpleCommand(@NotNull String name, @Nullable String... aliases) {
         super(name, aliases);
 
-        setDefaultExecutor((sender, context) -> process(sender, context.getCommandName(), new String[0]));
         setCondition(this::hasAccess);
+
+        setDefaultExecutor((sender, context) ->
+                process(sender, context.getCommandName(), new String[0]));
 
         final var params = ArgumentType.StringArray("params");
         addSyntax((sender, context) ->
