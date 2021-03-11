@@ -55,7 +55,7 @@ public abstract class JsonMessage implements ComponentLike {
 
     @Override
     public @NotNull Component asComponent() {
-        return GsonComponentSerializer.gson().serializer().fromJson(this.getJsonObject(), Component.class);
+        return GsonComponentSerializer.gson().deserializeFromTree(this.getJsonObject());
     }
 
     public static @NotNull JsonMessage fromComponent(@NotNull Component component) {
