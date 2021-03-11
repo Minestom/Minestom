@@ -15,7 +15,8 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * Please be sure to check {@link net.minestom.server.command.builder.Command} as it is likely to be better for your use case.
  *
- * @deprecated use {@link net.minestom.server.command.builder.Command} instead
+ * @deprecated use {@link net.minestom.server.command.builder.Command} or
+ * {@link net.minestom.server.command.builder.SimpleCommand} instead
  */
 @Deprecated
 public interface CommandProcessor {
@@ -80,7 +81,9 @@ public interface CommandProcessor {
      * @param text   the whole player text
      * @return the array containing all the suggestions for the current arg (split SPACE), can be null
      * @see #enableWritingTracking()
+     * @deprecated not called anymore
      */
+    @Deprecated
     @Nullable
     default String[] onWrite(@NotNull CommandSender sender, String text) {
         return null;

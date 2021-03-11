@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder;
 
 import net.minestom.server.command.builder.arguments.Argument;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -18,15 +19,22 @@ import java.util.Map;
 public class CommandContext extends Arguments {
 
     private final String input;
-    private Map<String, String> rawArgs = new HashMap<>();
+    private final String commandName;
+    private final Map<String, String> rawArgs = new HashMap<>();
 
     public CommandContext(@NotNull String input) {
         this.input = input;
+        this.commandName = input.split(StringUtils.SPACE)[0];
     }
 
     @NotNull
     public String getInput() {
         return input;
+    }
+
+    @NotNull
+    public String getCommandName() {
+        return commandName;
     }
 
     @NotNull

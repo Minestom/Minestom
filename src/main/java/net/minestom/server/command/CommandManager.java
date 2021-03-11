@@ -100,7 +100,9 @@ public final class CommandManager {
      *
      * @param commandProcessor the command to register
      * @throws IllegalStateException if a command with the same name already exists
+     * @deprecated use {@link Command} or {@link SimpleCommand} instead
      */
+    @Deprecated
     public synchronized void register(@NotNull CommandProcessor commandProcessor) {
         final String commandName = commandProcessor.getCommandName().toLowerCase();
         Check.stateCondition(commandExists(commandName),
@@ -123,7 +125,9 @@ public final class CommandManager {
      *
      * @param commandName the command name
      * @return the command associated with the name, null if not any
+     * @deprecated use {@link #getCommand(String)} instead
      */
+    @Deprecated
     @Nullable
     public CommandProcessor getCommandProcessor(@NotNull String commandName) {
         return commandProcessorMap.get(commandName.toLowerCase());

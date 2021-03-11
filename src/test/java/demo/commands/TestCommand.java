@@ -19,7 +19,7 @@ public class TestCommand extends Command {
 
         addSyntax((sender, context) -> {
             System.out.println("executed");
-        }, Group("test", test1));
+        }, test1);
 
     }
 
