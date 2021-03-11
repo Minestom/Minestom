@@ -59,7 +59,7 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
 
     @Override
     public void channelInactive(@NotNull ChannelHandlerContext ctx) {
-        PlayerConnection playerConnection = packetProcessor.getPlayerConnection(ctx);
+        PlayerConnection playerConnection = packetProcessor.removePlayerConnection(ctx);
         if (playerConnection != null) {
             // Remove the connection
             playerConnection.refreshOnline(false);
@@ -68,7 +68,6 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
                 player.remove();
                 CONNECTION_MANAGER.removePlayer(playerConnection);
             }
-            packetProcessor.removePlayerConnection(ctx);
 
             // Release tick buffer
             if (playerConnection instanceof NettyPlayerConnection) {

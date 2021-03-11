@@ -124,8 +124,8 @@ public final class PacketProcessor {
         connectionPlayerConnectionMap.put(context, playerConnection);
     }
 
-    public void removePlayerConnection(@NotNull ChannelHandlerContext context) {
-        connectionPlayerConnectionMap.remove(context);
+    public PlayerConnection removePlayerConnection(@NotNull ChannelHandlerContext context) {
+        return connectionPlayerConnectionMap.remove(context);
     }
 
     /**
