@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.Tickable;
 import net.minestom.server.UpdateManager;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
@@ -56,7 +57,7 @@ import java.util.function.Consumer;
  * you need to be sure to signal the {@link UpdateManager} of the changes using
  * {@link UpdateManager#signalChunkLoad(Instance, int, int)} and {@link UpdateManager#signalChunkUnload(Instance, int, int)}.
  */
-public abstract class Instance implements BlockModifier, EventHandler, DataContainer {
+public abstract class Instance implements BlockModifier, Tickable, EventHandler, DataContainer {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
@@ -1034,6 +1035,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param time the tick time in milliseconds
      */
+    @Override
     public void tick(long time) {
         // Scheduled tasks
         if (!nextTick.isEmpty()) {

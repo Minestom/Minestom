@@ -2,6 +2,7 @@ package net.minestom.server.entity;
 
 import com.google.common.collect.Queues;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.collision.BoundingBox;
@@ -52,7 +53,7 @@ import java.util.function.Consumer;
  * <p>
  * To create your own entity you probably want to extends {@link ObjectEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler {
+public class Entity implements Viewable, Tickable, EventHandler, DataContainer, PermissionHandler {
 
     private static final Map<Integer, Entity> entityById = new ConcurrentHashMap<>();
     private static final Map<UUID, Entity> entityByUuid = new ConcurrentHashMap<>();
@@ -426,6 +427,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      *
      * @param time the update time in milliseconds
      */
+    @Override
     public void tick(long time) {
         if (instance == null)
             return;
