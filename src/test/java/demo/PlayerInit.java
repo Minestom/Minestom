@@ -83,9 +83,7 @@ public class PlayerInit {
             final Component footer = Component.text(benchmarkManager.getCpuMonitoringMessage());
 
             {
-                PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket();
-                playerListHeaderAndFooterPacket.header = MinecraftServer.getSerializationManager().serialize(header);
-                playerListHeaderAndFooterPacket.footer = MinecraftServer.getSerializationManager().serialize(footer);
+                PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket(header, footer);
 
                 PacketUtils.sendGroupedPacket(players, playerListHeaderAndFooterPacket);
             }

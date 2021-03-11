@@ -2,7 +2,6 @@ package net.minestom.server.scoreboard;
 
 import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.color.TeamColor;
 import net.minestom.server.entity.Player;
@@ -103,7 +102,7 @@ public class Sidebar implements Scoreboard {
         ScoreboardObjectivePacket scoreboardObjectivePacket = new ScoreboardObjectivePacket();
         scoreboardObjectivePacket.objectiveName = objectiveName;
         scoreboardObjectivePacket.mode = 2; // Update display text
-        scoreboardObjectivePacket.objectiveValue = MinecraftServer.getSerializationManager().serialize(title);
+        scoreboardObjectivePacket.objectiveValue = title;
         scoreboardObjectivePacket.type = ScoreboardObjectivePacket.Type.INTEGER;
 
         sendPacketToViewers(scoreboardObjectivePacket);
@@ -467,13 +466,13 @@ public class Sidebar implements Scoreboard {
             TeamsPacket teamsPacket = new TeamsPacket();
             teamsPacket.teamName = teamName;
             teamsPacket.action = TeamsPacket.Action.CREATE_TEAM;
-            teamsPacket.teamDisplayName = MinecraftServer.getSerializationManager().serialize(teamDisplayName);
+            teamsPacket.teamDisplayName = teamDisplayName;
             teamsPacket.friendlyFlags = friendlyFlags;
             teamsPacket.nameTagVisibility = nameTagVisibility;
             teamsPacket.collisionRule = collisionRule;
             teamsPacket.teamColor = teamColor;
-            teamsPacket.teamPrefix = MinecraftServer.getSerializationManager().serialize(prefix);
-            teamsPacket.teamSuffix = MinecraftServer.getSerializationManager().serialize(suffix);
+            teamsPacket.teamPrefix = prefix;
+            teamsPacket.teamSuffix = suffix;
             teamsPacket.entities = new String[]{entityName};
             return teamsPacket;
         }
@@ -500,13 +499,13 @@ public class Sidebar implements Scoreboard {
             TeamsPacket teamsPacket = new TeamsPacket();
             teamsPacket.teamName = teamName;
             teamsPacket.action = TeamsPacket.Action.UPDATE_TEAM_INFO;
-            teamsPacket.teamDisplayName = MinecraftServer.getSerializationManager().serialize(teamDisplayName);
+            teamsPacket.teamDisplayName = teamDisplayName;
             teamsPacket.friendlyFlags = friendlyFlags;
             teamsPacket.nameTagVisibility = nameTagVisibility;
             teamsPacket.collisionRule = collisionRule;
             teamsPacket.teamColor = teamColor;
-            teamsPacket.teamPrefix = MinecraftServer.getSerializationManager().serialize(prefix);
-            teamsPacket.teamSuffix = MinecraftServer.getSerializationManager().serialize(suffix);
+            teamsPacket.teamPrefix = prefix;
+            teamsPacket.teamSuffix = suffix;
             return teamsPacket;
         }
 

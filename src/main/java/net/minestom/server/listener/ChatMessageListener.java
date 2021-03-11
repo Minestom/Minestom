@@ -1,6 +1,5 @@
 package net.minestom.server.listener;
 
-import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.minestom.server.MinecraftServer;
@@ -54,11 +53,9 @@ public class ChatMessageListener {
 
             final Collection<Player> recipients = playerChatEvent.getRecipients();
             if (!recipients.isEmpty()) {
-                final String jsonMessage = MinecraftServer.getSerializationManager().serialize(textObject);
-
                 // Send the message with the correct player UUID
                 ChatMessagePacket chatMessagePacket =
-                        new ChatMessagePacket(jsonMessage, ChatMessagePacket.Position.CHAT, player.getUuid());
+                        new ChatMessagePacket(textObject, ChatMessagePacket.Position.CHAT, player.getUuid());
 
                 PacketUtils.sendGroupedPacket(recipients, chatMessagePacket);
             }
