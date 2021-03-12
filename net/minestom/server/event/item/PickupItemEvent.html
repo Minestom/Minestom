@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":42,"i2":10,"i3":10,"i4":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -162,8 +162,8 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.LivingEntity,net.minestom.server.item.ItemStack)">PickupItemEvent</a></span>&#8203;(<a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;livingEntity,
-               <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.LivingEntity,net.minestom.server.entity.ItemEntity)">PickupItemEvent</a></span>&#8203;(<a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;livingEntity,
+               <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;itemEntity)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -178,30 +178,39 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getItemStack()">getItemStack</a></span>()</code></th>
+<td class="colFirst"><code><a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getItemEntity()">getItemEntity</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getItemStack()">getItemStack</a></span>()</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">use <a href="#getItemEntity()"><code>getItemEntity()</code></a> and <a href="../../entity/ItemEntity.html#getItemStack()"><code>ItemEntity.getItemStack()</code></a>.</div>
+</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLivingEntity()">getLivingEntity</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isCancelled()">isCancelled</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCancelled(boolean)">setCancelled</a></span>&#8203;(boolean&nbsp;cancel)</code></th>
 <td class="colLast">
@@ -232,7 +241,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.entity.LivingEntity,net.minestom.server.item.ItemStack)">
+<a id="&lt;init&gt;(net.minestom.server.entity.LivingEntity,net.minestom.server.entity.ItemEntity)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -241,7 +250,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <pre>public&nbsp;PickupItemEvent&#8203;(@NotNull
                        <a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;livingEntity,
                        @NotNull
-                       <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
+                       <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;itemEntity)</pre>
 </li>
 </ul>
 </li>
@@ -264,14 +273,28 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 public&nbsp;<a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;getLivingEntity()</pre>
 </li>
 </ul>
+<a id="getItemEntity()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getItemEntity</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;getItemEntity()</pre>
+</li>
+</ul>
 <a id="getItemStack()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getItemStack</h4>
-<pre class="methodSignature">@NotNull
+<pre class="methodSignature">@Deprecated
+@NotNull
 public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getItemStack()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">use <a href="#getItemEntity()"><code>getItemEntity()</code></a> and <a href="../../entity/ItemEntity.html#getItemStack()"><code>ItemEntity.getItemStack()</code></a>.</div>
+</div>
 </li>
 </ul>
 <a id="isCancelled()">
