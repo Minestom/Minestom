@@ -7,7 +7,6 @@ import net.minestom.server.command.builder.arguments.ArgumentDynamicWord;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.condition.CommandCondition;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -134,9 +133,6 @@ public class Command {
     public Collection<CommandSyntax> addSyntax(@Nullable CommandCondition commandCondition,
                                                @NotNull CommandExecutor executor,
                                                @NotNull Argument<?>... args) {
-        Check.argCondition(args.length == 0,
-                "The syntax argument cannot be empty, consider using Command#setDefaultExecutor");
-
         // Check optional argument(s)
         boolean hasOptional = false;
         {

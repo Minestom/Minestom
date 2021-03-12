@@ -5,7 +5,7 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.suggestion.SuggestionEntry;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.*;
+import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
 
 public class TestCommand extends Command {
 
@@ -13,8 +13,12 @@ public class TestCommand extends Command {
         super("testcmd");
         setDefaultExecutor(this::usage);
 
-        var test1 = Word("msg").setSuggestionCallback((sender, context, suggestion) -> {
+        var test1 = Integer("msg").setSuggestionCallback((sender, context, suggestion) -> {
             suggestion.addEntry(new SuggestionEntry("test"));
+        });
+
+        addSyntax((sender, context) -> {
+            sender.sendMessage("no argument syntax");
         });
 
         addSyntax((sender, context) -> {

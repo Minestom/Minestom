@@ -169,14 +169,34 @@ public class CommandDispatcher {
 
         // The default executor should be used if no argument is provided
         {
-            final CommandExecutor defaultExecutor = command.getDefaultExecutor();
-            if (defaultExecutor != null && !hasArgument) {
-                parsedCommand.executor = defaultExecutor;
-                parsedCommand.context = new CommandContext(input);
+            if (!hasArgument) {
+                Optional<CommandSyntax> optionalSyntax = command.getSyntaxes()
+                        .stream()
+                        .filter(syntax -> syntax.getArguments().length == 0)
+                        .findFirst();
 
-                result.type = CommandResult.Type.SUCCESS;
-                result.parsedCommand = parsedCommand;
-                return parsedCommand;
+                if (optionalSyntax.isPresent()) {
+                    // Empty syntax found
+                    final CommandSyntax syntax = optionalSyntax.get();
+
+                    parsedCommand.executor = syntax.getExecutor();
+                    parsedCommand.context = new CommandContext(input);
+
+                    result.type = CommandResult.Type.SUCCESS;
+                    result.parsedCommand = parsedCommand;
+                    return parsedCommand;
+                } else {
+                    // No empty syntax, use default executor if any
+                    final CommandExecutor defaultExecutor = command.getDefaultExecutor();
+                    if (defaultExecutor != null) {
+                        parsedCommand.executor = defaultExecutor;
+                        parsedCommand.context = new CommandContext(input);
+
+                        result.type = CommandResult.Type.SUCCESS;
+                        result.parsedCommand = parsedCommand;
+                        return parsedCommand;
+                    }
+                }
             }
         }
 
