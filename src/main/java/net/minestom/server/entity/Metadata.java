@@ -221,7 +221,7 @@ public class Metadata {
         protected final byte index;
         protected final Value<T> value;
 
-        private Entry(byte index, @NotNull Value<T> value) {
+        public Entry(byte index, @NotNull Value<T> value) {
             this.index = index;
             this.value = value;
         }
@@ -248,7 +248,7 @@ public class Metadata {
         protected final T value;
         protected final Consumer<BinaryWriter> valueWriter;
 
-        private Value(int type, T value, @NotNull Consumer<BinaryWriter> valueWriter) {
+        public Value(int type, T value, @NotNull Consumer<BinaryWriter> valueWriter) {
             this.type = type;
             this.value = value;
             this.valueWriter = valueWriter;
