@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
+import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.TickUtils;
@@ -11,11 +12,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.packet.server.play.TitlePacket.Action.*;
 
-public class TitlePacket implements ServerPacket {
+public class TitlePacket implements ComponentHoldingServerPacket {
 
     public Action action;
 
@@ -88,6 +91,24 @@ public class TitlePacket implements ServerPacket {
     @Override
     public int getId() {
         return ServerPacketIdentifier.TITLE;
+    }
+
+    @Override
+    public @NotNull Collection<Component> components() {
+        if (action == SET_TITLE || action == SET_SUBTITLE || action == SET_ACTION_BAR) {
+            return Collections.singleton(payload);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        if (action == SET_TITLE || action == SET_SUBTITLE || action == SET_ACTION_BAR) {
+            return new TitlePacket(action, operator.apply(payload));
+        } else {
+            return this;
+        }
     }
 
     public enum Action {

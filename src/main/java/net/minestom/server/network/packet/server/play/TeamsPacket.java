@@ -2,15 +2,21 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.color.TeamColor;
+import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.UnaryOperator;
+
 /**
  * The packet creates or updates teams
  */
-public class TeamsPacket implements ServerPacket {
+public class TeamsPacket implements ComponentHoldingServerPacket {
 
     /**
      * The registry name of the team
@@ -98,6 +104,35 @@ public class TeamsPacket implements ServerPacket {
     @Override
     public int getId() {
         return ServerPacketIdentifier.TEAMS;
+    }
+
+    @Override
+    public @NotNull Collection<Component> components() {
+        if (this.action == Action.UPDATE_TEAM_INFO || this.action == Action.CREATE_TEAM) {
+            return List.of(teamDisplayName, teamPrefix, teamSuffix);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        if (this.action == Action.UPDATE_TEAM_INFO || this.action == Action.CREATE_TEAM) {
+            TeamsPacket packet = new TeamsPacket();
+            packet.teamName = teamName;
+            packet.action = action;
+            packet.teamDisplayName = teamDisplayName == null ? null : operator.apply(teamDisplayName);
+            packet.friendlyFlags = friendlyFlags;
+            packet.nameTagVisibility = nameTagVisibility;
+            packet.collisionRule = collisionRule;
+            packet.teamColor = teamColor;
+            packet.teamPrefix = teamPrefix == null ? null : operator.apply(teamPrefix);
+            packet.teamSuffix = teamSuffix == null ? null : operator.apply(teamSuffix);
+            packet.entities = entities;
+            return packet;
+        } else {
+            return this;
+        }
     }
 
     /**

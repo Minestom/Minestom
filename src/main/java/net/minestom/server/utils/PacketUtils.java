@@ -6,6 +6,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.netty.packet.FramedPacket;
+import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
@@ -45,7 +46,14 @@ public final class PacketUtils {
         if (players.isEmpty())
             return;
 
-        if (MinecraftServer.hasGroupedPacket()) {
+        // work out if the packet needs to be sent individually due to server-side translating
+        boolean needsTranslating = false;
+
+        if (packet instanceof ComponentHoldingServerPacket) {
+            needsTranslating = MinecraftServer.getSerializationManager().areAnyTranslatable(((ComponentHoldingServerPacket) packet).components());
+        }
+
+        if (MinecraftServer.hasGroupedPacket() && !needsTranslating) {
             // Send grouped packet...
             final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
             if (success) {

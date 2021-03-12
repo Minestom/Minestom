@@ -508,7 +508,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
             // #buildDeathScreenText can return null, check here
             if (deathText != null) {
-                CombatEventPacket deathPacket = CombatEventPacket.death(this, null, MinecraftServer.getSerializationManager().prepare(deathText, this));
+                CombatEventPacket deathPacket = CombatEventPacket.death(this, null, deathText);
                 playerConnection.sendPacket(deathPacket);
             }
 
@@ -806,7 +806,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
-        ChatMessagePacket chatMessagePacket = new ChatMessagePacket(MinecraftServer.getSerializationManager().prepare(message, this), ChatMessagePacket.Position.fromMessageType(type), source.uuid());
+        ChatMessagePacket chatMessagePacket = new ChatMessagePacket(message, ChatMessagePacket.Position.fromMessageType(type), source.uuid());
         playerConnection.sendPacket(chatMessagePacket);
     }
 
@@ -1009,8 +1009,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void sendPlayerListHeaderAndFooter(@NotNull Component header, @NotNull Component footer) {
-        PlayerListHeaderAndFooterPacket packet
-                = new PlayerListHeaderAndFooterPacket(MinecraftServer.getSerializationManager().prepare(header, this), MinecraftServer.getSerializationManager().prepare(footer, this));
+        PlayerListHeaderAndFooterPacket packet = new PlayerListHeaderAndFooterPacket(header, footer);
         playerConnection.sendPacket(packet);
     }
 
@@ -1084,9 +1083,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void showTitle(@NotNull Title title) {
-        Component preparedTitle = MinecraftServer.getSerializationManager().prepare(title.title(), this),
-                preparedSubtitle = MinecraftServer.getSerializationManager().prepare(title.subtitle(), this);
-        Collection<TitlePacket> packet = TitlePacket.of(Title.title(preparedTitle, preparedSubtitle, title.times()));
+        Collection<TitlePacket> packet = TitlePacket.of(Title.title(title.title(), title.subtitle(), title.times()));
 
         for (TitlePacket titlePacket : packet) {
             playerConnection.sendPacket(titlePacket);
@@ -1095,7 +1092,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void sendActionBar(@NotNull Component message) {
-        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.SET_ACTION_BAR, MinecraftServer.getSerializationManager().prepare(message, this));
+        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.SET_ACTION_BAR, message);
         playerConnection.sendPacket(titlePacket);
     }
 
@@ -1924,9 +1921,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Packet type depends on the current player connection state
         final ServerPacket disconnectPacket;
         if (connectionState == ConnectionState.LOGIN) {
-            disconnectPacket = new LoginDisconnectPacket(MinecraftServer.getSerializationManager().prepare(component, this));
+            disconnectPacket = new LoginDisconnectPacket(component);
         } else {
-            disconnectPacket = new DisconnectPacket(MinecraftServer.getSerializationManager().prepare(component, this));
+            disconnectPacket = new DisconnectPacket(component);
         }
 
         if (playerConnection instanceof NettyPlayerConnection) {

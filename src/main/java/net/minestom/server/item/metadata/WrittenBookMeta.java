@@ -209,8 +209,8 @@ public class WrittenBookMeta extends ItemMeta {
         WrittenBookMeta meta = new WrittenBookMeta();
         meta.resolved = false;
         meta.generation = WrittenBookGeneration.ORIGINAL;
-        meta.author = MinecraftServer.getSerializationManager().prepareAndSerialize(book.author(), localizable);
-        meta.title = MinecraftServer.getSerializationManager().prepareAndSerialize(book.title(), localizable);
+        meta.author = MinecraftServer.getSerializationManager().translateAndSerialize(book.author(), localizable);
+        meta.title = MinecraftServer.getSerializationManager().translateAndSerialize(book.title(), localizable);
         meta.pages = new ArrayList<>();
 
         for (Component page : book.pages()) {

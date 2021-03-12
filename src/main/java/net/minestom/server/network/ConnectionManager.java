@@ -3,12 +3,9 @@ package net.minestom.server.network;
 import io.netty.channel.Channel;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
-import net.kyori.adventure.audience.MessageType;
-import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.adventure.LocalizablePacketSender;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
@@ -155,8 +152,9 @@ public final class ConnectionManager implements ForwardingAudience {
         final Collection<Player> recipients = getRecipients(condition);
 
         if (!recipients.isEmpty()) {
-            final String jsonText = jsonMessage.toString();
-            LocalizablePacketSender.sendGroupedMessage(recipients, Identity.nil(), jsonMessage.asComponent(), MessageType.CHAT);
+            for (Player recipient : recipients) {
+                recipient.sendMessage(jsonMessage);
+            }
         }
     }
 
@@ -489,7 +487,6 @@ public final class ConnectionManager implements ForwardingAudience {
         for (Player player : getOnlinePlayers()) {
             final PlayerConnection playerConnection = player.getPlayerConnection();
             if (playerConnection instanceof NettyPlayerConnection) {
-                disconnectPacket.message = MinecraftServer.getSerializationManager().prepare(disconnectPacket.message, player);
                 final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
                 final Channel channel = nettyPlayerConnection.getChannel();
                 channel.writeAndFlush(disconnectPacket);

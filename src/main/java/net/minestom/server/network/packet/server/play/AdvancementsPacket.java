@@ -3,13 +3,20 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.advancements.FrameType;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
-public class AdvancementsPacket implements ServerPacket {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.UnaryOperator;
+
+public class AdvancementsPacket implements ComponentHoldingServerPacket {
 
     public boolean resetAdvancements;
     public AdvancementMapping[] advancementMappings;
@@ -35,6 +42,32 @@ public class AdvancementsPacket implements ServerPacket {
     @Override
     public int getId() {
         return ServerPacketIdentifier.ADVANCEMENTS;
+    }
+
+    @Override
+    public @NotNull Collection<Component> components() {
+        List<Component> components = new ArrayList<>();
+        for (AdvancementMapping advancementMapping : advancementMappings) {
+            components.add(advancementMapping.value.displayData.title);
+            components.add(advancementMapping.value.displayData.description);
+        }
+        return components;
+    }
+
+    @Override
+    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        AdvancementsPacket packet = new AdvancementsPacket();
+        packet.resetAdvancements = this.resetAdvancements;
+        packet.advancementMappings = Arrays.copyOf(this.advancementMappings, this.advancementMappings.length);
+        packet.identifiersToRemove = Arrays.copyOf(this.identifiersToRemove, this.identifiersToRemove.length);
+        packet.progressMappings = Arrays.copyOf(this.progressMappings, this.progressMappings.length);
+
+        for (AdvancementMapping advancementMapping : packet.advancementMappings) {
+            advancementMapping.value.displayData.title = operator.apply(advancementMapping.value.displayData.title);
+            advancementMapping.value.displayData.description = operator.apply(advancementMapping.value.displayData.title);
+        }
+
+        return packet;
     }
 
     /**

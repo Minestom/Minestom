@@ -8,6 +8,7 @@ import net.kyori.adventure.translation.TranslationRegistry;
 import net.kyori.adventure.translation.Translator;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Function;
@@ -51,7 +52,7 @@ public class SerializationManager {
 
     /**
      * Gets the default locale used to translate {@link TranslatableComponent} if, when
-     * {@link #prepare(Component, Localizable)} is called with a localizable that
+     * {@link #translate(Component, Localizable)} is called with a localizable that
      * does not have a locale.
      *
      * @return the default locale
@@ -62,7 +63,7 @@ public class SerializationManager {
 
     /**
      * Sets the default locale used to translate {@link TranslatableComponent} if, when
-     * {@link #prepare(Component, Localizable)} is called with a localizable that
+     * {@link #translate(Component, Localizable)} is called with a localizable that
      * does not have a locale.
      *
      * @param defaultLocale the new default locale
@@ -90,7 +91,7 @@ public class SerializationManager {
      *
      * @return the prepared component
      */
-    public @NotNull Component prepare(@NotNull Component component, @NotNull Localizable localizable) {
+    public @NotNull Component translate(@NotNull Component component, @NotNull Localizable localizable) {
         return GlobalTranslator.renderer().render(component, Objects.requireNonNullElse(localizable.getLocale(), this.getDefaultLocale()));
     }
 
@@ -103,7 +104,7 @@ public class SerializationManager {
      *
      * @return the prepared component
      */
-    public @NotNull Component prepare(@NotNull Component component, @NotNull Locale locale) {
+    public @NotNull Component translate(@NotNull Component component, @NotNull Locale locale) {
         return GlobalTranslator.renderer().render(component, locale);
     }
 
@@ -126,8 +127,8 @@ public class SerializationManager {
      *
      * @return the string
      */
-    public String prepareAndSerialize(@NotNull Component component, @NotNull Localizable localizable) {
-        return this.prepareAndSerialize(component, Objects.requireNonNullElse(localizable.getLocale(), this.getDefaultLocale()));
+    public String translateAndSerialize(@NotNull Component component, @NotNull Localizable localizable) {
+        return this.translateAndSerialize(component, Objects.requireNonNullElse(localizable.getLocale(), this.getDefaultLocale()));
     }
 
     /**
@@ -138,7 +139,35 @@ public class SerializationManager {
      *
      * @return the string
      */
-    public String prepareAndSerialize(@NotNull Component component, @NotNull Locale locale) {
-        return this.serialize(this.prepare(component, locale));
+    public String translateAndSerialize(@NotNull Component component, @NotNull Locale locale) {
+        return this.serialize(this.translate(component, locale));
+    }
+
+    /**
+     * Checks if a component can be translated server-side. This is done by running the
+     * component through the translator and seeing if the translated component is equal
+     * to the non translated component.
+     * @param component the component
+     * @return {@code true} if the component can be translated server-side,
+     * {@code false} otherwise
+     */
+    public boolean isTranslatable(@NotNull Component component) {
+        return !component.equals(this.translate(component, this.getDefaultLocale()));
+    }
+
+    /**
+     * Checks if any of a series of components are translatable server-side.
+     * @param components the components
+     * @return {@code true} if any of the components can be translated server-side,
+     * {@code false} otherwise
+     */
+    public boolean areAnyTranslatable(@NotNull Collection<Component> components) {
+        for (Component component : components) {
+            if (this.isTranslatable(component)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

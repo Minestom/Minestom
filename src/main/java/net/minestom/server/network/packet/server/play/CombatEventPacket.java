@@ -4,16 +4,21 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.function.UnaryOperator;
+
 /**
  * Packet sent during combat to a {@link Player}.
  * Only death is supported for the moment (other events are ignored anyway as of 1.15.2)
  */
-public class CombatEventPacket implements ServerPacket {
+public class CombatEventPacket implements ComponentHoldingServerPacket {
 
     private EventType type;
     private int duration;
@@ -79,6 +84,29 @@ public class CombatEventPacket implements ServerPacket {
     @Override
     public int getId() {
         return ServerPacketIdentifier.COMBAT_EVENT;
+    }
+
+    @Override
+    public @NotNull Collection<Component> components() {
+        if (this.type == EventType.DEATH) {
+            return Collections.singleton(deathMessage);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        if (this.type == EventType.DEATH) {
+            CombatEventPacket packet = new CombatEventPacket();
+            packet.type = type;
+            packet.playerID = playerID;
+            packet.opponent = opponent;
+            packet.deathMessage = deathMessage;
+            return packet;
+        } else {
+            return this;
+        }
     }
 
     public enum EventType {

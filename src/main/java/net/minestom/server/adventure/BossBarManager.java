@@ -47,10 +47,7 @@ public class BossBarManager implements BossBar.Listener {
         Holder holder = this.getOrCreateHandler(bar);
 
         if (holder.players.add(player.getUuid())) {
-            BossBarPacket packet = holder.createAddPacket();
-            packet.title = MinecraftServer.getSerializationManager().prepare(packet.title, player);
-
-            player.getPlayerConnection().sendPacket(packet);
+            player.getPlayerConnection().sendPacket(holder.createAddPacket());
         }
     }
     /**
@@ -108,27 +105,12 @@ public class BossBarManager implements BossBar.Listener {
     private void updatePlayers(BossBarPacket packet, Set<UUID> players) {
         Iterator<UUID> iterator = players.iterator();
 
-        // check if we need to translate the bossbar
-        Component rawTitle = packet.title;
-        boolean translate = false;
-        if (packet.action == UPDATE_TITLE || packet.action == ADD) {
-            Component rootTitle = MinecraftServer.getSerializationManager().prepare(rawTitle, MinecraftServer.getSerializationManager().getDefaultLocale());
-
-            if (!rawTitle.equals(rootTitle)) {
-                translate = true;
-            }
-        }
-
         while (iterator.hasNext()) {
             Player player = MinecraftServer.getConnectionManager().getPlayer(iterator.next());
 
             if (player == null) {
                 iterator.remove();
             } else {
-                if (translate) {
-                    packet.title = MinecraftServer.getSerializationManager().prepare(rawTitle, player);
-                }
-
                 player.getPlayerConnection().sendPacket(packet);
             }
         }
