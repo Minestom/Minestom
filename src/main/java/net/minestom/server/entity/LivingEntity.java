@@ -15,7 +15,9 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
@@ -484,9 +486,23 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     /**
      * Callback used when an attribute instance has been modified.
      *
-     * @param instance the modified attribute instance
+     * @param attributeInstance the modified attribute instance
      */
-    protected void onAttributeChanged(@NotNull AttributeInstance instance) {
+    protected void onAttributeChanged(@NotNull AttributeInstance attributeInstance) {
+        if (attributeInstance.getAttribute().isShared()) {
+            boolean self = false;
+            if (this instanceof Player) {
+                Player player = (Player) this;
+                PlayerConnection playerConnection = player.playerConnection;
+                // connection null during Player initialization (due to #super call)
+                self = playerConnection != null && playerConnection.getConnectionState() == ConnectionState.PLAY;
+            }
+            if (self) {
+                sendPacketToViewersAndSelf(getPropertiesPacket());
+            } else {
+                sendPacketToViewers(getPropertiesPacket());
+            }
+        }
     }
 
     /**
@@ -532,7 +548,9 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         if (!super.addViewer0(player)) {
             return false;
         }
-        syncEquipments(player.getPlayerConnection());
+        final PlayerConnection playerConnection = player.getPlayerConnection();
+        playerConnection.sendPacket(getEquipmentsPacket());
+        playerConnection.sendPacket(getPropertiesPacket());
         return true;
     }
 

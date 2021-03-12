@@ -1061,15 +1061,6 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     @Override
-    protected void onAttributeChanged(@NotNull final AttributeInstance attributeInstance) {
-        if (attributeInstance.getAttribute().isShared() &&
-                playerConnection != null &&
-                playerConnection.getConnectionState() == ConnectionState.PLAY) {
-            playerConnection.sendPacket(getPropertiesPacket());
-        }
-    }
-
-    @Override
     public void setHealth(float health) {
         super.setHealth(health);
         sendUpdateHealthPacket();
@@ -1403,8 +1394,8 @@ public class Player extends LivingEntity implements CommandSender {
         // Update for viewers
         sendPacketToViewersAndSelf(getVelocityPacket());
         sendPacketToViewersAndSelf(getMetadataPacket());
-        playerConnection.sendPacket(getPropertiesPacket());
-        syncEquipments();
+        sendPacketToViewersAndSelf(getPropertiesPacket());
+        sendPacketToViewersAndSelf(getEquipmentsPacket());
 
         {
             // Send new chunks
@@ -2405,9 +2396,7 @@ public class Player extends LivingEntity implements CommandSender {
         connection.sendPacket(getEntityType().getSpawnType().getSpawnPacket(this));
         connection.sendPacket(getVelocityPacket());
         connection.sendPacket(getMetadataPacket());
-
-        // Equipments synchronization
-        syncEquipments(connection);
+        connection.sendPacket(getEquipmentsPacket());
 
         if (hasPassenger()) {
             connection.sendPacket(getPassengersPacket());

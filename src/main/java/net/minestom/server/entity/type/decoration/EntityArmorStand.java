@@ -56,7 +56,7 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
         if (!super.addViewer0(player)) {
             return false;
         }
-        syncEquipments(player.getPlayerConnection());
+        player.getPlayerConnection().sendPacket(getEquipmentsPacket());
         return true;
     }
 
