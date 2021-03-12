@@ -125,7 +125,7 @@ public class NettyPlayerConnection extends PlayerConnection {
      * @param serverPacket the packet to write
      */
     @Override
-    public void sendPacket(@NotNull ServerPacket serverPacket) {
+    public void sendPacket(@NotNull ServerPacket serverPacket, boolean skipTranslating) {
         if (!channel.isActive())
             return;
 
@@ -138,7 +138,7 @@ public class NettyPlayerConnection extends PlayerConnection {
 
                     if (identifier == null) {
                         // This packet explicitly asks to do not retrieve the cache
-                        write(serverPacket);
+                        write(serverPacket, skipTranslating);
                     } else {
                         final long timestamp = cacheablePacket.getTimestamp();
                         // Try to retrieve the cached buffer
@@ -163,7 +163,7 @@ public class NettyPlayerConnection extends PlayerConnection {
                     }
 
                 } else {
-                    write(serverPacket);
+                    write(serverPacket, skipTranslating);
                 }
             } else {
                 // Player is probably not logged yet
@@ -173,6 +173,10 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     public void write(@NotNull Object message) {
+        this.write(message, false);
+    }
+
+    public void write(@NotNull Object message, boolean skipTranslating) {
         if (message instanceof FramedPacket) {
             final FramedPacket framedPacket = (FramedPacket) message;
             synchronized (tickBuffer) {
@@ -183,7 +187,7 @@ public class NettyPlayerConnection extends PlayerConnection {
         } else if (message instanceof ServerPacket) {
             final ServerPacket serverPacket = (ServerPacket) message;
 
-            if (getPlayer() != null && serverPacket instanceof ComponentHoldingServerPacket) {
+            if (!skipTranslating && getPlayer() != null && serverPacket instanceof ComponentHoldingServerPacket) {
                 serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component -> MinecraftServer.getSerializationManager().translate(component, getPlayer()));
             }
 

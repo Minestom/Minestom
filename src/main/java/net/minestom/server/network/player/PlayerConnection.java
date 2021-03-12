@@ -90,7 +90,19 @@ public abstract class PlayerConnection {
      * @param serverPacket the packet to send
      * @see #shouldSendPacket(ServerPacket)
      */
-    public abstract void sendPacket(@NotNull ServerPacket serverPacket);
+    public void sendPacket(@NotNull ServerPacket serverPacket) {
+        this.sendPacket(serverPacket, false);
+    }
+
+    /**
+     * Serializes the packet and send it to the client, skipping the translation phase.
+     * <p>
+     * Also responsible for executing {@link ConnectionManager#onPacketSend(ServerPacketConsumer)} consumers.
+     *
+     * @param serverPacket the packet to send
+     * @see #shouldSendPacket(ServerPacket)
+     */
+    public abstract void sendPacket(@NotNull ServerPacket serverPacket, boolean skipTranslating);
 
     protected boolean shouldSendPacket(@NotNull ServerPacket serverPacket) {
         return player == null ||
