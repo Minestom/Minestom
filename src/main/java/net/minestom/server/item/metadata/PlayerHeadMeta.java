@@ -126,17 +126,20 @@ public class PlayerHeadMeta extends ItemMeta {
     public void write(@NotNull NBTCompound compound) {
         NBTCompound skullOwnerCompound = new NBTCompound();
         // Sets the identifier for the skull
-        skullOwnerCompound.setIntArray("Id", Utils.uuidToIntArray(this.skullOwner));
+        if (this.skullOwner != null)
+            skullOwnerCompound.setIntArray("Id", Utils.uuidToIntArray(this.skullOwner));
 
-        if (this.playerSkin == null) {
+        if (this.playerSkin == null && this.skullOwner != null) {
             this.playerSkin = PlayerSkin.fromUuid(this.skullOwner.toString());
         }
 
-        NBTList<NBTCompound> textures = new NBTList<>(NBTTypes.TAG_Compound);
-        String value = this.playerSkin.getTextures() == null ? "" : this.playerSkin.getTextures();
-        String signature = this.playerSkin.getSignature() == null ? "" : this.playerSkin.getSignature();
-        textures.add(new NBTCompound().setString("Value", value).setString("Signature", signature));
-        skullOwnerCompound.set("Properties", new NBTCompound().set("textures", textures));
+        if (this.playerSkin != null) {
+            NBTList<NBTCompound> textures = new NBTList<>(NBTTypes.TAG_Compound);
+            String value = this.playerSkin.getTextures() == null ? "" : this.playerSkin.getTextures();
+            String signature = this.playerSkin.getSignature() == null ? "" : this.playerSkin.getSignature();
+            textures.add(new NBTCompound().setString("Value", value).setString("Signature", signature));
+            skullOwnerCompound.set("Properties", new NBTCompound().set("textures", textures));
+        }
 
         compound.set("SkullOwner", skullOwnerCompound);
 
