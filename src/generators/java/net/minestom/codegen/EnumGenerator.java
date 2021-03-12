@@ -1,6 +1,7 @@
 package net.minestom.codegen;
 
 import com.squareup.javapoet.*;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +25,7 @@ public class EnumGenerator implements CodeGenerator {
     private List<Method> methods = new LinkedList<>();
     private List<Field> staticFields = new LinkedList<>();
     private List<Instance> instances = new LinkedList<>();
-    private List<Field> fields = new LinkedList<>();
+    private List<Pair<Field, Boolean>> fields = new LinkedList<>();
     private List<Field> hardcodedFields = new LinkedList<>();
     private List<AnnotationSpec> annotations = new LinkedList<>();
     private String enumPackage;
@@ -125,10 +126,15 @@ public class EnumGenerator implements CodeGenerator {
             }
 
             // normal fields
-            for (Field field : fields) {
-                enumClass.addField(FieldSpec.builder(field.type, field.name)
-                        .addModifiers(Modifier.PRIVATE)
-                        .build());
+            for (Pair<Field, Boolean> field : fields) {
+                FieldSpec.Builder builder = FieldSpec.builder(field.getLeft().type, field.getLeft().name)
+                        .addModifiers(Modifier.PRIVATE);
+
+                if (field.getRight()) {
+                    builder.addModifiers(Modifier.FINAL);
+                }
+
+                enumClass.addField(builder.build());
             }
 
             // constructor
@@ -182,8 +188,8 @@ public class EnumGenerator implements CodeGenerator {
         constructorEnds.add(constructorEnding);
     }
 
-    public void addField(TypeName type, String name) {
-        fields.add(new Field(type, name));
+    public void addField(TypeName type, String name, boolean isFinal) {
+        fields.add(Pair.of(new Field(type, name), isFinal));
     }
 
     public void addHardcodedField(TypeName type, String name, String value) {

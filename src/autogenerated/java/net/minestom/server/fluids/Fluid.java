@@ -24,7 +24,7 @@ public enum Fluid implements Keyed {
 
     private final String namespaceID;
 
-    private Key key;
+    private final Key key;
 
     Fluid(String namespaceID) {
         this.namespaceID = namespaceID;

@@ -1975,7 +1975,7 @@ public enum Material implements Keyed {
     @Nullable
     private final Block correspondingBlock;
 
-    private Key key;
+    private final Key key;
 
     Material(@NotNull String namespaceID, int maxDefaultStackSize,
             @Nullable Block correspondingBlock) {

@@ -100,7 +100,7 @@ public enum PotionType implements Keyed {
 
     private final String namespaceID;
 
-    private Key key;
+    private final Key key;
 
     PotionType(String namespaceID) {
         this.namespaceID = namespaceID;

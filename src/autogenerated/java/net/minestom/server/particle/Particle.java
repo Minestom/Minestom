@@ -158,7 +158,7 @@ public enum Particle implements Keyed {
 
     private final String namespaceID;
 
-    private Key key;
+    private final Key key;
 
     Particle(String namespaceID) {
         this.namespaceID = namespaceID;

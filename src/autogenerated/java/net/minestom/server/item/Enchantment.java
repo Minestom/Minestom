@@ -90,7 +90,7 @@ public enum Enchantment implements Keyed {
 
     private final String namespaceID;
 
-    private Key key;
+    private final Key key;
 
     Enchantment(String namespaceID) {
         this.namespaceID = namespaceID;

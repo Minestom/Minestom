@@ -1998,7 +1998,7 @@ public enum Sound implements Keyed {
 
     private final String namespaceID;
 
-    private Key key;
+    private final Key key;
 
     Sound(String namespaceID) {
         this.namespaceID = namespaceID;

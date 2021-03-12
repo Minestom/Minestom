@@ -2501,7 +2501,7 @@ public enum Block implements Keyed {
 
     private List<BlockAlternative> alternatives = new java.util.ArrayList<>();
 
-    private Key key;
+    private final Key key;
 
     Block(@NotNull String namespaceID, short defaultID, double hardness, double resistance,
             boolean isAir, boolean isSolid, @Nullable NamespaceID blockEntity,

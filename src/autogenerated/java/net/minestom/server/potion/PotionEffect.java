@@ -78,7 +78,7 @@ public enum PotionEffect implements Keyed {
 
     private final String namespaceID;
 
-    private Key key;
+    private final Key key;
 
     PotionEffect(String namespaceID) {
         this.namespaceID = namespaceID;

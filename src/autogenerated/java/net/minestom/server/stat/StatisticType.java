@@ -162,7 +162,7 @@ public enum StatisticType implements Keyed {
 
     private final String namespaceID;
 
-    private Key key;
+    private final Key key;
 
     StatisticType(String namespaceID) {
         this.namespaceID = namespaceID;
