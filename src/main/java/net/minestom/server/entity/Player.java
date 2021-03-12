@@ -3,6 +3,7 @@ package net.minestom.server.entity;
 import com.google.common.collect.Queues;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.sound.SoundStop;
@@ -72,6 +73,7 @@ import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -88,7 +90,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
-public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity> {
+public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified {
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -2695,6 +2697,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public void setLocale(@Nullable Locale locale) {
         settings.locale = locale == null ? null : locale.toLanguageTag();
+    }
+
+    @Override
+    public @NonNull Identity identity() {
+        return Identity.identity(this.uuid);
     }
 
     /**
