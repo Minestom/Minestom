@@ -163,7 +163,8 @@ public class PlayerInit {
             final Entity entity = event.getLivingEntity();
             if (entity instanceof Player) {
                 // Cancel event if player does not have enough inventory space
-                event.setCancelled(!((Player) entity).getInventory().addItemStack(event.getItemStack()));
+                final ItemStack itemStack = event.getItemEntity().getItemStack();
+                event.setCancelled(!((Player) entity).getInventory().addItemStack(itemStack));
             }
         });
 
