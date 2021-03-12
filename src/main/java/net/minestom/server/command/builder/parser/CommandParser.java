@@ -153,7 +153,8 @@ public class CommandParser {
     }
 
     @Nullable
-    public static ArgumentQueryResult findSuggestibleArgument(@NotNull Command command, String[] args, String commandString) {
+    public static ArgumentQueryResult findSuggestibleArgument(@NotNull Command command, String[] args, String commandString,
+                                                              boolean trailingSpace) {
         final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
 
         Int2ObjectRBTreeMap<ArgumentQueryResult> suggestions = new Int2ObjectRBTreeMap<>(Collections.reverseOrder());
@@ -200,9 +201,17 @@ public class CommandParser {
                     maxArgIndex = argIndex;
                 }
 
+                // Don't compute following arguments if the syntax is incorrect
                 if (!argumentResult.correct) {
                     break;
                 }
+
+                // Don't compute unrelated arguments
+                final boolean isLast = inputIndex == args.length;
+                if (isLast && !trailingSpace) {
+                    break;
+                }
+
             }
             if (maxArg != null) {
                 suggestions.put(maxArgIndex, maxArg);

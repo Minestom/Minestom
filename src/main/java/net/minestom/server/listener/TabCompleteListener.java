@@ -34,7 +34,7 @@ public class TabCompleteListener {
         }
 
         final ArgumentQueryResult queryResult = CommandParser.findSuggestibleArgument(commandQueryResult.command,
-                commandQueryResult.args, commandString);
+                commandQueryResult.args, commandString, text.endsWith(StringUtils.SPACE));
         if (queryResult == null) {
             // Suggestible argument not found
             return;

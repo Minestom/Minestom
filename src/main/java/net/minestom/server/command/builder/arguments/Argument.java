@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import com.google.common.annotations.Beta;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
@@ -202,6 +203,7 @@ public abstract class Argument<T> {
         return suggestionCallback;
     }
 
+    @Beta
     public Argument<T> setSuggestionCallback(@NotNull SuggestionCallback suggestionCallback) {
         this.suggestionCallback = suggestionCallback;
         return this;
