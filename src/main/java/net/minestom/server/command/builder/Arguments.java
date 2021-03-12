@@ -23,23 +23,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Class used to retrieve argument data in a {@link CommandExecutor}.
- * <p>
- * All id are the one specified in the {@link net.minestom.server.command.builder.arguments.Argument} constructor.
- * <p>
- * All methods are @{@link NotNull} in the sense that you should not have to verify their validity since if the syntax
- * is called, it means that all of its arguments are correct. Be aware that trying to retrieve an argument not present
- * in the syntax will result in a {@link NullPointerException}.
+ * @deprecated renamed to {@link CommandContext}
  */
-public final class Arguments {
+@Deprecated
+public class Arguments {
 
-    private Map<String, Object> args = new HashMap<>();
+    protected Map<String, Object> args = new HashMap<>();
 
     private CommandData returnData;
 
     @NotNull
     public <T> T get(@NotNull Argument<T> argument) {
-        return (T) getObject(argument.getId());
+        return get(argument.getId());
     }
 
     public <T> T get(@NotNull String identifier) {
@@ -52,7 +47,7 @@ public final class Arguments {
     public boolean has(@NotNull Argument<?> argument) {
         return args.containsKey(argument.getId());
     }
-    
+
     public boolean has(@NotNull String identifier) {
         return args.containsKey(identifier);
     }
@@ -285,6 +280,10 @@ public final class Arguments {
         return args;
     }
 
+    /**
+     * @deprecated use {@link CommandContext#setArg(String, Object, String)}
+     */
+    @Deprecated
     public void setArg(@NotNull String id, Object value) {
         this.args.put(id, value);
     }

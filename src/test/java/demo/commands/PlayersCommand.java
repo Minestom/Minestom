@@ -2,8 +2,8 @@ package demo.commands;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.entity.Player;
 
 import java.util.Collection;
@@ -16,7 +16,7 @@ public class PlayersCommand extends Command {
         setDefaultExecutor(this::usage);
     }
 
-    private void usage(CommandSender sender, Arguments arguments) {
+    private void usage(CommandSender sender, CommandContext context) {
         final Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
         final int playerCount = players.size();
         sender.sendMessage("Total players: " + playerCount);

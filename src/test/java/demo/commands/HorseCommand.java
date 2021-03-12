@@ -1,8 +1,8 @@
 package demo.commands;
 
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityCreature;
@@ -37,7 +37,7 @@ public class HorseCommand extends Command {
         return true;
     }
 
-    private void defaultExecutor(CommandSender sender, Arguments args) {
+    private void defaultExecutor(CommandSender sender, CommandContext context) {
         sender.sendMessage("Correct usage: horse [baby] [marking] [color]");
     }
 
@@ -59,12 +59,12 @@ public class HorseCommand extends Command {
         sender.sendMessage("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by " + values + ".");
     }
 
-    private void onHorseCommand(CommandSender sender, Arguments args) {
+    private void onHorseCommand(CommandSender sender, CommandContext context) {
         var player = (Player) sender;
 
-        boolean baby = args.get("baby");
-        HorseMeta.Marking marking = args.get("marking");
-        HorseMeta.Color color = args.get("color");
+        boolean baby = context.get("baby");
+        HorseMeta.Marking marking = context.get("marking");
+        HorseMeta.Color color = context.get("color");
         var horse = new EntityCreature(EntityType.HORSE);
         var meta = (HorseMeta) horse.getEntityMeta();
         meta.setBaby(baby);

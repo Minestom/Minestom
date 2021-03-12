@@ -7,7 +7,6 @@ import net.minestom.server.command.builder.arguments.ArgumentDynamicWord;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.condition.CommandCondition;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -134,9 +133,6 @@ public class Command {
     public Collection<CommandSyntax> addSyntax(@Nullable CommandCondition commandCondition,
                                                @NotNull CommandExecutor executor,
                                                @NotNull Argument<?>... args) {
-        Check.argCondition(args.length == 0,
-                "The syntax argument cannot be empty, consider using Command#setDefaultExecutor");
-
         // Check optional argument(s)
         boolean hasOptional = false;
         {
@@ -282,11 +278,11 @@ public class Command {
      * <p>
      * Can be used if you wish to still suggest the player syntaxes but want to parse things mostly by yourself.
      *
-     * @param sender    the {@link CommandSender}
-     * @param arguments the UNCHECKED arguments of the command, some can be null even when unexpected
-     * @param command   the raw UNCHECKED received command
+     * @param sender  the {@link CommandSender}
+     * @param context the UNCHECKED context of the command, some can be null even when unexpected
+     * @param command the raw UNCHECKED received command
      */
-    public void globalListener(@NotNull CommandSender sender, @NotNull Arguments arguments, @NotNull String command) {
+    public void globalListener(@NotNull CommandSender sender, @NotNull CommandContext context, @NotNull String command) {
     }
 
     public static boolean isValidName(@NotNull Command command, @NotNull String name) {

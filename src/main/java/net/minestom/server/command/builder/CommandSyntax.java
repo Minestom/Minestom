@@ -6,6 +6,7 @@ import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -20,6 +21,8 @@ public class CommandSyntax {
     private final Map<String, Object> defaultValuesMap;
     private final Argument<?>[] args;
 
+    private final boolean suggestion;
+
     protected CommandSyntax(@Nullable CommandCondition commandCondition,
                             @NotNull CommandExecutor commandExecutor,
                             @Nullable Map<String, Object> defaultValuesMap,
@@ -29,6 +32,8 @@ public class CommandSyntax {
 
         this.defaultValuesMap = defaultValuesMap;
         this.args = args;
+
+        this.suggestion = Arrays.stream(args).anyMatch(Argument::hasSuggestion);
     }
 
     protected CommandSyntax(@Nullable CommandCondition commandCondition,
@@ -94,4 +99,7 @@ public class CommandSyntax {
         return args;
     }
 
+    public boolean hasSuggestion() {
+        return suggestion;
+    }
 }

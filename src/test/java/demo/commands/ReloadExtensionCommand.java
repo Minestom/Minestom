@@ -2,8 +2,8 @@ package demo.commands;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -16,8 +16,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class ReloadExtensionCommand extends Command {
 
@@ -43,12 +41,12 @@ public class ReloadExtensionCommand extends Command {
         addSyntax(this::execute, extension);
     }
 
-    private void usage(CommandSender sender, Arguments arguments) {
+    private void usage(CommandSender sender, CommandContext context) {
         sender.sendMessage("Usage: /reload <extension name>");
     }
 
-    private void execute(CommandSender sender, Arguments arguments) {
-        String name = join(arguments.getStringArray("extensionName"));
+    private void execute(CommandSender sender, CommandContext context) {
+        String name = join(context.getStringArray("extensionName"));
         sender.sendMessage("extensionName = " + name + "....");
 
         ExtensionManager extensionManager = MinecraftServer.getExtensionManager();

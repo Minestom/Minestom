@@ -3,8 +3,8 @@ package demo.commands;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.metadata.WrittenBookMeta;
 
@@ -27,7 +27,7 @@ public class BookCommand extends Command {
         return true;
     }
 
-    private void execute(CommandSender sender, Arguments args) {
+    private void execute(CommandSender sender, CommandContext context) {
         Player player = sender.asPlayer();
 
         final WrittenBookMeta bookMeta = new WrittenBookMeta();

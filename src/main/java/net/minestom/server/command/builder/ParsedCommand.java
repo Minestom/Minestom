@@ -18,7 +18,7 @@ public class ParsedCommand {
     protected CommandSyntax syntax;
 
     protected CommandExecutor executor;
-    protected Arguments arguments;
+    protected CommandContext context;
 
     // Argument Callback
     protected ArgumentCallback callback;
@@ -37,7 +37,7 @@ public class ParsedCommand {
     @Nullable
     public CommandData execute(@NotNull CommandSender source, @NotNull String commandString) {
         // Global listener
-        command.globalListener(source, arguments, commandString);
+        command.globalListener(source, context, commandString);
         // Command condition check
         final CommandCondition condition = command.getCondition();
         if (condition != null) {
@@ -53,12 +53,12 @@ public class ParsedCommand {
                 // The executor is from a syntax
                 final CommandCondition commandCondition = syntax.getCommandCondition();
                 if (commandCondition == null || commandCondition.canUse(source, commandString)) {
-                    arguments.retrieveDefaultValues(syntax.getDefaultValuesMap());
-                    executor.apply(source, arguments);
+                    context.retrieveDefaultValues(syntax.getDefaultValuesMap());
+                    executor.apply(source, context);
                 }
             } else {
                 // The executor is probably the default one
-                executor.apply(source, arguments);
+                executor.apply(source, context);
             }
         } else if (callback != null && argumentSyntaxException != null) {
             // No syntax has been validated but the faulty argument with a callback has been found
@@ -66,20 +66,20 @@ public class ParsedCommand {
             callback.apply(source, argumentSyntaxException);
         }
 
-        if (arguments == null) {
+        if (context == null) {
             // Argument callbacks cannot return data
             return null;
         }
 
-        return arguments.getReturnData();
+        return context.getReturnData();
     }
 
     @NotNull
-    public static ParsedCommand withDefaultExecutor(@NotNull Command command) {
+    public static ParsedCommand withDefaultExecutor(@NotNull Command command, @NotNull String input) {
         ParsedCommand parsedCommand = new ParsedCommand();
         parsedCommand.command = command;
         parsedCommand.executor = command.getDefaultExecutor();
-        parsedCommand.arguments = new Arguments();
+        parsedCommand.context = new CommandContext(input);
         return parsedCommand;
     }
 

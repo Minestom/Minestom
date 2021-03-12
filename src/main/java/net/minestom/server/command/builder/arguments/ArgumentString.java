@@ -42,10 +42,18 @@ public class ArgumentString extends Argument<String> {
 
     @NotNull
     public static String staticParse(@NotNull String input) throws ArgumentSyntaxException {
+
+        // Return if not quoted
+        if (!input.contains(String.valueOf(StringUtil.DOUBLE_QUOTE)) &&
+                !input.contains(String.valueOf(StringUtil.SPACE))) {
+            return input;
+        }
+
         // Check if value start and end with quote
         final char first = input.charAt(0);
         final char last = input.charAt(input.length() - 1);
-        final boolean quote = first == StringUtil.DOUBLE_QUOTE && last == StringUtil.DOUBLE_QUOTE;
+        final boolean quote = input.length() >= 2 &&
+                first == StringUtil.DOUBLE_QUOTE && last == StringUtil.DOUBLE_QUOTE;
         if (!quote)
             throw new ArgumentSyntaxException("String argument needs to start and end with quotes", input, QUOTE_ERROR);
 

@@ -1,8 +1,8 @@
 package demo.commands;
 
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -35,22 +35,22 @@ public class GamemodeCommand extends Command {
         addSyntax(this::executeOnOther, player, mode);
     }
 
-    private void usage(CommandSender sender, Arguments arguments) {
+    private void usage(CommandSender sender, CommandContext context) {
         sender.sendMessage("Usage: /gamemode [player] <gamemode>");
     }
 
-    private void executeOnSelf(CommandSender sender, Arguments arguments) {
+    private void executeOnSelf(CommandSender sender, CommandContext context) {
         Player player = (Player) sender;
 
-        GameMode gamemode = arguments.get("gamemode");
+        GameMode gamemode = context.get("gamemode");
         assert gamemode != null; // mode is not supposed to be null, because gamemodeName will be valid
         player.setGameMode(gamemode);
         player.sendMessage("You are now playing in " + gamemode.toString().toLowerCase());
     }
 
-    private void executeOnOther(CommandSender sender, Arguments arguments) {
-        GameMode gamemode = arguments.get("gamemode");
-        EntityFinder targetFinder = arguments.get("player");
+    private void executeOnOther(CommandSender sender, CommandContext context) {
+        GameMode gamemode = context.get("gamemode");
+        EntityFinder targetFinder = context.get("player");
         Player target = targetFinder.findFirstPlayer(sender);
         assert gamemode != null; // mode is not supposed to be null, because gamemodeName will be valid
         assert target != null;

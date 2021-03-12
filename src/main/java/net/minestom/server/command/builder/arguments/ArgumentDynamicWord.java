@@ -4,6 +4,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.suggestion.SuggestionCallback;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.callback.validator.StringValidator;
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +15,10 @@ import org.jetbrains.annotations.Nullable;
  * Same as {@link ArgumentWord} with the exception
  * that this argument can trigger {@link net.minestom.server.command.builder.Command#onDynamicWrite(CommandSender, String)}
  * when the suggestion type is {@link SuggestionType#ASK_SERVER}, or any other suggestions available in the enum.
+ *
+ * @deprecated Use {@link Argument#setSuggestionCallback(SuggestionCallback)} with any argument type you want
  */
+@Deprecated
 public class ArgumentDynamicWord extends Argument<String> {
 
     public static final int SPACE_ERROR = 1;

@@ -1,10 +1,12 @@
 package net.minestom.server.command.builder.arguments;
 
+import com.google.common.annotations.Beta;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.suggestion.SuggestionCallback;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +29,8 @@ public abstract class Argument<T> {
     private ArgumentCallback callback;
 
     private T defaultValue;
+
+    private SuggestionCallback suggestionCallback;
 
     /**
      * Creates a new argument.
@@ -99,7 +103,7 @@ public abstract class Argument<T> {
 
     /**
      * Gets the ID of the argument, showed in-game above the chat bar
-     * and used to retrieve the data when the command is parsed in {@link net.minestom.server.command.builder.Arguments}.
+     * and used to retrieve the data when the command is parsed in {@link net.minestom.server.command.builder.CommandContext}.
      *
      * @return the argument id
      */
@@ -149,6 +153,15 @@ public abstract class Argument<T> {
     }
 
     /**
+     * Gets if the argument has any error callback.
+     *
+     * @return true if the argument has an error callback, false otherwise
+     */
+    public boolean hasErrorCallback() {
+        return callback != null;
+    }
+
+    /**
      * Gets if this argument is 'optional'.
      * <p>
      * Optional means that this argument can be put at the end of a syntax
@@ -185,13 +198,19 @@ public abstract class Argument<T> {
         return this;
     }
 
-    /**
-     * Gets if the argument has any error callback.
-     *
-     * @return true if the argument has an error callback, false otherwise
-     */
-    public boolean hasErrorCallback() {
-        return callback != null;
+    @Nullable
+    public SuggestionCallback getSuggestionCallback() {
+        return suggestionCallback;
+    }
+
+    @Beta
+    public Argument<T> setSuggestionCallback(@NotNull SuggestionCallback suggestionCallback) {
+        this.suggestionCallback = suggestionCallback;
+        return this;
+    }
+
+    public boolean hasSuggestion() {
+        return suggestionCallback != null;
     }
 
     @Override
