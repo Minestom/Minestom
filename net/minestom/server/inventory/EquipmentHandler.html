@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6,"i2":18,"i3":18,"i4":6,"i5":18,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":18,"i13":6,"i14":6,"i15":6,"i16":18,"i17":18,"i18":18};
+var data = {"i0":6,"i1":6,"i2":18,"i3":18,"i4":6,"i5":18,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":18,"i13":6,"i14":6,"i15":6,"i16":18};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -266,20 +266,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#syncEquipment(net.minestom.server.network.packet.server.play.EntityEquipmentPacket.Slot)">syncEquipment</a></span>&#8203;(<a href="../network/packet/server/play/EntityEquipmentPacket.Slot.html" title="enum in net.minestom.server.network.packet.server.play">EntityEquipmentPacket.Slot</a>&nbsp;slot)</code></th>
 <td class="colLast">
 <div class="block">Sends a specific equipment to viewers.</div>
-</td>
-</tr>
-<tr id="i17" class="rowColor">
-<td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#syncEquipments()">syncEquipments</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Sends all the equipments to all viewers.</div>
-</td>
-</tr>
-<tr id="i18" class="altColor">
-<td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#syncEquipments(net.minestom.server.network.player.PlayerConnection)">syncEquipments</a></span>&#8203;(<a href="../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></th>
-<td class="colLast">
-<div class="block">Sends all the equipments to a <a href="../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player"><code>PlayerConnection</code></a>.</div>
 </td>
 </tr>
 </table>
@@ -531,31 +517,6 @@ default&nbsp;<a href="../item/ItemStack.html" title="class in net.minestom.serve
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the equipment <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a></dd>
 </dl>
-</li>
-</ul>
-<a id="syncEquipments(net.minestom.server.network.player.PlayerConnection)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>syncEquipments</h4>
-<pre class="methodSignature">default&nbsp;void&nbsp;syncEquipments&#8203;(@NotNull
-                            <a href="../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</pre>
-<div class="block">Sends all the equipments to a <a href="../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player"><code>PlayerConnection</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>connection</code> - the connection to send the equipments to</dd>
-</dl>
-</li>
-</ul>
-<a id="syncEquipments()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>syncEquipments</h4>
-<pre class="methodSignature">default&nbsp;void&nbsp;syncEquipments()</pre>
-<div class="block">Sends all the equipments to all viewers.</div>
 </li>
 </ul>
 <a id="syncEquipment(net.minestom.server.network.packet.server.play.EntityEquipmentPacket.Slot)">
