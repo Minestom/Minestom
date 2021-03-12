@@ -16,6 +16,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -68,7 +69,7 @@ public class BinaryWriter extends OutputStream {
      * @param component the component
      */
     public void writeComponent(Component component) {
-        this.writeSizedString(MinecraftServer.getSerializationManager().serialize(component));
+        this.writeSizedString(MinecraftServer.getSerializationManager().serialize(Objects.requireNonNullElseGet(component, Component::empty)));
     }
 
     /**
