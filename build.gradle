@@ -109,11 +109,11 @@ dependencies {
     testCompileOnly "org.mockito:mockito-core:2.28.2"
 
     // Netty
-    api 'io.netty:netty-handler:4.1.60.Final'
-    api 'io.netty:netty-codec:4.1.60.Final'
-    api 'io.netty:netty-transport-native-epoll:4.1.60.Final:linux-x86_64'
-    api 'io.netty:netty-transport-native-kqueue:4.1.60.Final:osx-x86_64'
-    api 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.3.Final:linux-x86_64'
+    api 'io.netty:netty-handler:4.1.59.Final'
+    api 'io.netty:netty-codec:4.1.59.Final'
+    api 'io.netty:netty-transport-native-epoll:4.1.59.Final:linux-x86_64'
+    api 'io.netty:netty-transport-native-kqueue:4.1.59.Final:osx-x86_64'
+    api 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.4.Final:linux-x86_64'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     compile group: 'org.apache.commons', name: 'commons-text', version: '1.9'
