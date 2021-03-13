@@ -95,13 +95,37 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h1 title="Deprecated API" class="title">Deprecated API</h1>
 <h2 title="Contents">Contents</h2>
 <ul>
+<li><a href="#interface">Interfaces</a></li>
 <li><a href="#class">Classes</a></li>
 <li><a href="#field">Fields</a></li>
 <li><a href="#method">Methods</a></li>
 <li><a href="#constructor">Constructors</a></li>
 </ul>
 </div>
-<div class="contentContainer"><a id="class">
+<div class="contentContainer"><a id="interface">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<table class="deprecatedSummary">
+<caption><span>Interfaces</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Interface</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/command/CommandProcessor.html" title="interface in net.minestom.server.command">net.minestom.server.command.CommandProcessor</a></th>
+<td class="colLast">
+<div class="deprecationComment">use <a href="net/minestom/server/command/builder/Command.html" title="class in net.minestom.server.command.builder"><code>Command</code></a> or
+ <a href="net/minestom/server/command/builder/SimpleCommand.html" title="class in net.minestom.server.command.builder"><code>SimpleCommand</code></a> instead</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<a id="class">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -120,2097 +144,2115 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </td>
 </tr>
 <tr class="rowColor">
+<th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/command/builder/Arguments.html" title="class in net.minestom.server.command.builder">net.minestom.server.command.builder.Arguments</a></th>
+<td class="colLast">
+<div class="deprecationComment">renamed to <a href="net/minestom/server/command/builder/CommandContext.html" title="class in net.minestom.server.command.builder"><code>CommandContext</code></a></div>
+</td>
+</tr>
+<tr class="altColor">
+<th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/command/builder/arguments/ArgumentDynamicStringArray.html" title="class in net.minestom.server.command.builder.arguments">net.minestom.server.command.builder.arguments.ArgumentDynamicStringArray</a></th>
+<td class="colLast">
+<div class="deprecationComment">Use <a href="net/minestom/server/command/builder/arguments/Argument.html#setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)"><code>Argument.setSuggestionCallback(SuggestionCallback)</code></a> with any argument type you want</div>
+</td>
+</tr>
+<tr class="rowColor">
+<th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/command/builder/arguments/ArgumentDynamicWord.html" title="class in net.minestom.server.command.builder.arguments">net.minestom.server.command.builder.arguments.ArgumentDynamicWord</a></th>
+<td class="colLast">
+<div class="deprecationComment">Use <a href="net/minestom/server/command/builder/arguments/Argument.html#setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)"><code>Argument.setSuggestionCallback(SuggestionCallback)</code></a> with any argument type you want</div>
+</td>
+</tr>
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/ObjectEntity.html" title="class in net.minestom.server.entity">net.minestom.server.entity.ObjectEntity</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/EntityMeta.html" title="class in net.minestom.server.entity.metadata"><code>EntityMeta</code></a> that inherits
  <a href="net/minestom/server/entity/metadata/ObjectDataProvider.html" title="interface in net.minestom.server.entity.metadata"><code>ObjectDataProvider</code></a> instead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/animal/EntityBee.html" title="class in net.minestom.server.entity.type.animal">net.minestom.server.entity.type.animal.EntityBee</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/animal/BeeMeta.html" title="class in net.minestom.server.entity.metadata.animal"><code>BeeMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/animal/EntityCat.html" title="class in net.minestom.server.entity.type.animal">net.minestom.server.entity.type.animal.EntityCat</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/animal/tameable/CatMeta.html" title="class in net.minestom.server.entity.metadata.animal.tameable"><code>CatMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/animal/EntityChicken.html" title="class in net.minestom.server.entity.type.animal">net.minestom.server.entity.type.animal.EntityChicken</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/animal/ChickenMeta.html" title="class in net.minestom.server.entity.metadata.animal"><code>ChickenMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/animal/EntityCow.html" title="class in net.minestom.server.entity.type.animal">net.minestom.server.entity.type.animal.EntityCow</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/animal/CowMeta.html" title="class in net.minestom.server.entity.metadata.animal"><code>CowMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/animal/EntityDolphin.html" title="class in net.minestom.server.entity.type.animal">net.minestom.server.entity.type.animal.EntityDolphin</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/water/DolphinMeta.html" title="class in net.minestom.server.entity.metadata.water"><code>DolphinMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/animal/EntityFox.html" title="class in net.minestom.server.entity.type.animal">net.minestom.server.entity.type.animal.EntityFox</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/animal/FoxMeta.html" title="class in net.minestom.server.entity.metadata.animal"><code>FoxMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/animal/EntityLlama.html" title="class in net.minestom.server.entity.type.animal">net.minestom.server.entity.type.animal.EntityLlama</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/animal/LlamaMeta.html" title="class in net.minestom.server.entity.metadata.animal"><code>LlamaMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/animal/EntityMooshroom.html" title="class in net.minestom.server.entity.type.animal">net.minestom.server.entity.type.animal.EntityMooshroom</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/animal/MooshroomMeta.html" title="class in net.minestom.server.entity.metadata.animal"><code>MooshroomMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/animal/EntityOcelot.html" title="class in net.minestom.server.entity.type.animal">net.minestom.server.entity.type.animal.EntityOcelot</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/animal/OcelotMeta.html" title="class in net.minestom.server.entity.metadata.animal"><code>OcelotMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/animal/EntityPanda.html" title="class in net.minestom.server.entity.type.animal">net.minestom.server.entity.type.animal.EntityPanda</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/animal/PandaMeta.html" title="class in net.minestom.server.entity.metadata.animal"><code>PandaMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/animal/EntityPig.html" title="class in net.minestom.server.entity.type.animal">net.minestom.server.entity.type.animal.EntityPig</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/animal/PigMeta.html" title="class in net.minestom.server.entity.metadata.animal"><code>PigMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/animal/EntityPolarBear.html" title="class in net.minestom.server.entity.type.animal">net.minestom.server.entity.type.animal.EntityPolarBear</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/animal/PolarBearMeta.html" title="class in net.minestom.server.entity.metadata.animal"><code>PolarBearMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/animal/EntityRabbit.html" title="class in net.minestom.server.entity.type.animal">net.minestom.server.entity.type.animal.EntityRabbit</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/animal/RabbitMeta.html" title="class in net.minestom.server.entity.metadata.animal"><code>RabbitMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/decoration/EntityArmorStand.html" title="class in net.minestom.server.entity.type.decoration">net.minestom.server.entity.type.decoration.EntityArmorStand</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/other/ArmorStandMeta.html" title="class in net.minestom.server.entity.metadata.other"><code>ArmorStandMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/decoration/EntityItemFrame.html" title="class in net.minestom.server.entity.type.decoration">net.minestom.server.entity.type.decoration.EntityItemFrame</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/other/ItemFrameMeta.html" title="class in net.minestom.server.entity.metadata.other"><code>ItemFrameMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/monster/EntityBlaze.html" title="class in net.minestom.server.entity.type.monster">net.minestom.server.entity.type.monster.EntityBlaze</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/monster/BlazeMeta.html" title="class in net.minestom.server.entity.metadata.monster"><code>BlazeMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/monster/EntityCaveSpider.html" title="class in net.minestom.server.entity.type.monster">net.minestom.server.entity.type.monster.EntityCaveSpider</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/monster/SpiderMeta.html" title="class in net.minestom.server.entity.metadata.monster"><code>SpiderMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/monster/EntityCreeper.html" title="class in net.minestom.server.entity.type.monster">net.minestom.server.entity.type.monster.EntityCreeper</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/monster/CreeperMeta.html" title="class in net.minestom.server.entity.metadata.monster"><code>CreeperMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/monster/EntityEndermite.html" title="class in net.minestom.server.entity.type.monster">net.minestom.server.entity.type.monster.EntityEndermite</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/monster/EndermiteMeta.html" title="class in net.minestom.server.entity.metadata.monster"><code>EndermiteMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/monster/EntityGhast.html" title="class in net.minestom.server.entity.type.monster">net.minestom.server.entity.type.monster.EntityGhast</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/flying/GhastMeta.html" title="class in net.minestom.server.entity.metadata.flying"><code>GhastMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/monster/EntityGiant.html" title="class in net.minestom.server.entity.type.monster">net.minestom.server.entity.type.monster.EntityGiant</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/monster/GiantMeta.html" title="class in net.minestom.server.entity.metadata.monster"><code>GiantMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/monster/EntityGuardian.html" title="class in net.minestom.server.entity.type.monster">net.minestom.server.entity.type.monster.EntityGuardian</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/monster/GuardianMeta.html" title="class in net.minestom.server.entity.metadata.monster"><code>GuardianMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/monster/EntityPhantom.html" title="class in net.minestom.server.entity.type.monster">net.minestom.server.entity.type.monster.EntityPhantom</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/flying/PhantomMeta.html" title="class in net.minestom.server.entity.metadata.flying"><code>PhantomMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/monster/EntitySilverfish.html" title="class in net.minestom.server.entity.type.monster">net.minestom.server.entity.type.monster.EntitySilverfish</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/monster/SilverfishMeta.html" title="class in net.minestom.server.entity.metadata.monster"><code>SilverfishMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/monster/EntitySlime.html" title="class in net.minestom.server.entity.type.monster">net.minestom.server.entity.type.monster.EntitySlime</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/other/SlimeMeta.html" title="class in net.minestom.server.entity.metadata.other"><code>SlimeMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/monster/EntitySpider.html" title="class in net.minestom.server.entity.type.monster">net.minestom.server.entity.type.monster.EntitySpider</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/monster/SpiderMeta.html" title="class in net.minestom.server.entity.metadata.monster"><code>SpiderMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/monster/EntityWitch.html" title="class in net.minestom.server.entity.type.monster">net.minestom.server.entity.type.monster.EntityWitch</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/monster/raider/WitchMeta.html" title="class in net.minestom.server.entity.metadata.monster.raider"><code>WitchMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/monster/EntityZombie.html" title="class in net.minestom.server.entity.type.monster">net.minestom.server.entity.type.monster.EntityZombie</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/monster/zombie/ZombieMeta.html" title="class in net.minestom.server.entity.metadata.monster.zombie"><code>ZombieMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/monster/EntityZombifiedPiglin.html" title="class in net.minestom.server.entity.type.monster">net.minestom.server.entity.type.monster.EntityZombifiedPiglin</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/monster/zombie/ZombifiedPiglinMeta.html" title="class in net.minestom.server.entity.metadata.monster.zombie"><code>ZombifiedPiglinMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/other/EntityAreaEffectCloud.html" title="class in net.minestom.server.entity.type.other">net.minestom.server.entity.type.other.EntityAreaEffectCloud</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/other/AreaEffectCloudMeta.html" title="class in net.minestom.server.entity.metadata.other"><code>AreaEffectCloudMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/other/EntityEndCrystal.html" title="class in net.minestom.server.entity.type.other">net.minestom.server.entity.type.other.EntityEndCrystal</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/other/EndCrystalMeta.html" title="class in net.minestom.server.entity.metadata.other"><code>EndCrystalMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/other/EntityIronGolem.html" title="class in net.minestom.server.entity.type.other">net.minestom.server.entity.type.other.EntityIronGolem</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/golem/IronGolemMeta.html" title="class in net.minestom.server.entity.metadata.golem"><code>IronGolemMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/other/EntitySnowman.html" title="class in net.minestom.server.entity.type.other">net.minestom.server.entity.type.other.EntitySnowman</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/golem/SnowGolemMeta.html" title="class in net.minestom.server.entity.metadata.golem"><code>SnowGolemMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/projectile/EntityEyeOfEnder.html" title="class in net.minestom.server.entity.type.projectile">net.minestom.server.entity.type.projectile.EntityEyeOfEnder</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/item/EyeOfEnderMeta.html" title="class in net.minestom.server.entity.metadata.item"><code>EyeOfEnderMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/projectile/EntityPotion.html" title="class in net.minestom.server.entity.type.projectile">net.minestom.server.entity.type.projectile.EntityPotion</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/item/ThrownPotionMeta.html" title="class in net.minestom.server.entity.metadata.item"><code>ThrownPotionMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/entity/type/vehicle/EntityBoat.html" title="class in net.minestom.server.entity.type.vehicle">net.minestom.server.entity.type.vehicle.EntityBoat</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/entity/metadata/other/BoatMeta.html" title="class in net.minestom.server.entity.metadata.other"><code>BoatMeta</code></a> instead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/AcaciaButton.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.AcaciaButton</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/AcaciaDoor.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.AcaciaDoor</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/AcaciaFence.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.AcaciaFence</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/AcaciaFenceGate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.AcaciaFenceGate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/AcaciaLeaves.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.AcaciaLeaves</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/AcaciaLog.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.AcaciaLog</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/AcaciaPressurePlate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.AcaciaPressurePlate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/AcaciaSapling.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.AcaciaSapling</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/AcaciaSign.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.AcaciaSign</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/AcaciaSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.AcaciaSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/AcaciaStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.AcaciaStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/AcaciaTrapdoor.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.AcaciaTrapdoor</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/AcaciaWallSign.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.AcaciaWallSign</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/AcaciaWood.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.AcaciaWood</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/ActivatorRail.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.ActivatorRail</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/AndesiteSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.AndesiteSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/AndesiteStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.AndesiteStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/AndesiteWall.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.AndesiteWall</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Anvil.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Anvil</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/AttachedMelonStem.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.AttachedMelonStem</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/AttachedPumpkinStem.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.AttachedPumpkinStem</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Bamboo.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Bamboo</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Barrel.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Barrel</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Basalt.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Basalt</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Beehive.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Beehive</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BeeNest.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BeeNest</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Beetroots.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Beetroots</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Bell.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Bell</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BirchButton.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BirchButton</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BirchDoor.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BirchDoor</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BirchFence.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BirchFence</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BirchFenceGate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BirchFenceGate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BirchLeaves.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BirchLeaves</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BirchLog.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BirchLog</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BirchPressurePlate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BirchPressurePlate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BirchSapling.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BirchSapling</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BirchSign.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BirchSign</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BirchSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BirchSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BirchStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BirchStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BirchTrapdoor.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BirchTrapdoor</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BirchWallSign.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BirchWallSign</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BirchWood.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BirchWood</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BlackBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BlackBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BlackBed.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BlackBed</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BlackGlazedTerracotta.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BlackGlazedTerracotta</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BlackShulkerBox.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BlackShulkerBox</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BlackStainedGlassPane.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BlackStainedGlassPane</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BlackstoneSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BlackstoneSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BlackstoneStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BlackstoneStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BlackstoneWall.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BlackstoneWall</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BlackWallBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BlackWallBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BlastFurnace.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BlastFurnace</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BlueBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BlueBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BlueBed.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BlueBed</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BlueGlazedTerracotta.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BlueGlazedTerracotta</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BlueShulkerBox.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BlueShulkerBox</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BlueStainedGlassPane.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BlueStainedGlassPane</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BlueWallBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BlueWallBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BoneBlock.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BoneBlock</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BrainCoral.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BrainCoral</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BrainCoralFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BrainCoralFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BrainCoralWallFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BrainCoralWallFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BrewingStand.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BrewingStand</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BrickSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BrickSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BrickStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BrickStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BrickWall.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BrickWall</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BrownBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BrownBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BrownBed.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BrownBed</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BrownGlazedTerracotta.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BrownGlazedTerracotta</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BrownMushroomBlock.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BrownMushroomBlock</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BrownShulkerBox.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BrownShulkerBox</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BrownStainedGlassPane.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BrownStainedGlassPane</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BrownWallBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BrownWallBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BubbleColumn.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BubbleColumn</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BubbleCoral.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BubbleCoral</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BubbleCoralFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BubbleCoralFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/BubbleCoralWallFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.BubbleCoralWallFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Cactus.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Cactus</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Cake.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Cake</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Campfire.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Campfire</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Carrots.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Carrots</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CarvedPumpkin.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CarvedPumpkin</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Cauldron.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Cauldron</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Chain.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Chain</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/ChainCommandBlock.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.ChainCommandBlock</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Chest.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Chest</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/ChippedAnvil.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.ChippedAnvil</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/ChorusFlower.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.ChorusFlower</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/ChorusPlant.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.ChorusPlant</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CobblestoneSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CobblestoneSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CobblestoneStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CobblestoneStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CobblestoneWall.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CobblestoneWall</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Cocoa.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Cocoa</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CommandBlock.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CommandBlock</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Comparator.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Comparator</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Composter.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Composter</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Conduit.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Conduit</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CreeperHead.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CreeperHead</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CreeperWallHead.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CreeperWallHead</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CrimsonButton.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CrimsonButton</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CrimsonDoor.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CrimsonDoor</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CrimsonFence.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CrimsonFence</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CrimsonFenceGate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CrimsonFenceGate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CrimsonHyphae.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CrimsonHyphae</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CrimsonPressurePlate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CrimsonPressurePlate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CrimsonSign.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CrimsonSign</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CrimsonSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CrimsonSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CrimsonStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CrimsonStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CrimsonStem.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CrimsonStem</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CrimsonTrapdoor.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CrimsonTrapdoor</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CrimsonWallSign.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CrimsonWallSign</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CutRedSandstoneSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CutRedSandstoneSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CutSandstoneSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CutSandstoneSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CyanBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CyanBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CyanBed.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CyanBed</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CyanGlazedTerracotta.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CyanGlazedTerracotta</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CyanShulkerBox.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CyanShulkerBox</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CyanStainedGlassPane.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CyanStainedGlassPane</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/CyanWallBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.CyanWallBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DamagedAnvil.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DamagedAnvil</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DarkOakButton.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DarkOakButton</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DarkOakDoor.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DarkOakDoor</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DarkOakFence.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DarkOakFence</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DarkOakFenceGate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DarkOakFenceGate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DarkOakLeaves.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DarkOakLeaves</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DarkOakLog.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DarkOakLog</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DarkOakPressurePlate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DarkOakPressurePlate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DarkOakSapling.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DarkOakSapling</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DarkOakSign.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DarkOakSign</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DarkOakSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DarkOakSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DarkOakStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DarkOakStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DarkOakTrapdoor.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DarkOakTrapdoor</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DarkOakWallSign.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DarkOakWallSign</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DarkOakWood.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DarkOakWood</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DarkPrismarineSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DarkPrismarineSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DarkPrismarineStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DarkPrismarineStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DaylightDetector.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DaylightDetector</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DeadBrainCoral.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DeadBrainCoral</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DeadBrainCoralFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DeadBrainCoralFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DeadBrainCoralWallFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DeadBrainCoralWallFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DeadBubbleCoral.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DeadBubbleCoral</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DeadBubbleCoralFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DeadBubbleCoralFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DeadBubbleCoralWallFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DeadBubbleCoralWallFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DeadFireCoral.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DeadFireCoral</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DeadFireCoralFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DeadFireCoralFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DeadFireCoralWallFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DeadFireCoralWallFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DeadHornCoral.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DeadHornCoral</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DeadHornCoralFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DeadHornCoralFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DeadHornCoralWallFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DeadHornCoralWallFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DeadTubeCoral.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DeadTubeCoral</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DeadTubeCoralFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DeadTubeCoralFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DeadTubeCoralWallFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DeadTubeCoralWallFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DetectorRail.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DetectorRail</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DioriteSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DioriteSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DioriteStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DioriteStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DioriteWall.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DioriteWall</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Dispenser.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Dispenser</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DragonHead.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DragonHead</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/DragonWallHead.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.DragonWallHead</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Dropper.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Dropper</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/EnderChest.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.EnderChest</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/EndPortalFrame.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.EndPortalFrame</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/EndRod.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.EndRod</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/EndStoneBrickSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.EndStoneBrickSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/EndStoneBrickStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.EndStoneBrickStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/EndStoneBrickWall.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.EndStoneBrickWall</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Farmland.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Farmland</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Fire.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Fire</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/FireCoral.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.FireCoral</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/FireCoralFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.FireCoralFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/FireCoralWallFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.FireCoralWallFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/FrostedIce.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.FrostedIce</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Furnace.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Furnace</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/GlassPane.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.GlassPane</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/GraniteSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.GraniteSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/GraniteStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.GraniteStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/GraniteWall.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.GraniteWall</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/GrassBlock.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.GrassBlock</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/GrayBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.GrayBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/GrayBed.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.GrayBed</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/GrayGlazedTerracotta.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.GrayGlazedTerracotta</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/GrayShulkerBox.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.GrayShulkerBox</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/GrayStainedGlassPane.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.GrayStainedGlassPane</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/GrayWallBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.GrayWallBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/GreenBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.GreenBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/GreenBed.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.GreenBed</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/GreenGlazedTerracotta.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.GreenGlazedTerracotta</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/GreenShulkerBox.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.GreenShulkerBox</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/GreenStainedGlassPane.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.GreenStainedGlassPane</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/GreenWallBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.GreenWallBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Grindstone.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Grindstone</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/HayBlock.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.HayBlock</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/HeavyWeightedPressurePlate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.HeavyWeightedPressurePlate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Hopper.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Hopper</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/HornCoral.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.HornCoral</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/HornCoralFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.HornCoralFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/HornCoralWallFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.HornCoralWallFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/IronBars.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.IronBars</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/IronDoor.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.IronDoor</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/IronTrapdoor.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.IronTrapdoor</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/JackOLantern.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.JackOLantern</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Jigsaw.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Jigsaw</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Jukebox.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Jukebox</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/JungleButton.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.JungleButton</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/JungleDoor.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.JungleDoor</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/JungleFence.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.JungleFence</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/JungleFenceGate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.JungleFenceGate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/JungleLeaves.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.JungleLeaves</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/JungleLog.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.JungleLog</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/JunglePressurePlate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.JunglePressurePlate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/JungleSapling.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.JungleSapling</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/JungleSign.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.JungleSign</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/JungleSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.JungleSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/JungleStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.JungleStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/JungleTrapdoor.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.JungleTrapdoor</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/JungleWallSign.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.JungleWallSign</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/JungleWood.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.JungleWood</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Kelp.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Kelp</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Ladder.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Ladder</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Lantern.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Lantern</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LargeFern.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LargeFern</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Lava.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Lava</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Lectern.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Lectern</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Lever.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Lever</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LightBlueBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LightBlueBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LightBlueBed.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LightBlueBed</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LightBlueGlazedTerracotta.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LightBlueGlazedTerracotta</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LightBlueShulkerBox.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LightBlueShulkerBox</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LightBlueStainedGlassPane.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LightBlueStainedGlassPane</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LightBlueWallBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LightBlueWallBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LightGrayBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LightGrayBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LightGrayBed.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LightGrayBed</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LightGrayGlazedTerracotta.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LightGrayGlazedTerracotta</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LightGrayShulkerBox.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LightGrayShulkerBox</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LightGrayStainedGlassPane.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LightGrayStainedGlassPane</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LightGrayWallBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LightGrayWallBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LightWeightedPressurePlate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LightWeightedPressurePlate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Lilac.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Lilac</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LimeBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LimeBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LimeBed.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LimeBed</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LimeGlazedTerracotta.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LimeGlazedTerracotta</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LimeShulkerBox.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LimeShulkerBox</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LimeStainedGlassPane.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LimeStainedGlassPane</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/LimeWallBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.LimeWallBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Loom.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Loom</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/MagentaBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.MagentaBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/MagentaBed.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.MagentaBed</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/MagentaGlazedTerracotta.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.MagentaGlazedTerracotta</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/MagentaShulkerBox.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.MagentaShulkerBox</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/MagentaStainedGlassPane.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.MagentaStainedGlassPane</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/MagentaWallBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.MagentaWallBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/MelonStem.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.MelonStem</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/MossyCobblestoneSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.MossyCobblestoneSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/MossyCobblestoneStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.MossyCobblestoneStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/MossyCobblestoneWall.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.MossyCobblestoneWall</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/MossyStoneBrickSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.MossyStoneBrickSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/MossyStoneBrickStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.MossyStoneBrickStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/MossyStoneBrickWall.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.MossyStoneBrickWall</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/MovingPiston.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.MovingPiston</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/MushroomStem.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.MushroomStem</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Mycelium.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Mycelium</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/NetherBrickFence.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.NetherBrickFence</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/NetherBrickSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.NetherBrickSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/NetherBrickStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.NetherBrickStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/NetherBrickWall.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.NetherBrickWall</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/NetherPortal.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.NetherPortal</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/NetherWart.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.NetherWart</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/NoteBlock.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.NoteBlock</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OakButton.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OakButton</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OakDoor.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OakDoor</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OakFence.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OakFence</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OakFenceGate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OakFenceGate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OakLeaves.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OakLeaves</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OakLog.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OakLog</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OakPressurePlate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OakPressurePlate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OakSapling.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OakSapling</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OakSign.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OakSign</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OakSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OakSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OakStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OakStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OakTrapdoor.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OakTrapdoor</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OakWallSign.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OakWallSign</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OakWood.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OakWood</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Observer.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Observer</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OrangeBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OrangeBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OrangeBed.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OrangeBed</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OrangeGlazedTerracotta.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OrangeGlazedTerracotta</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OrangeShulkerBox.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OrangeShulkerBox</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OrangeStainedGlassPane.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OrangeStainedGlassPane</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/OrangeWallBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.OrangeWallBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Peony.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Peony</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PetrifiedOakSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PetrifiedOakSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PinkBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PinkBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PinkBed.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PinkBed</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PinkGlazedTerracotta.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PinkGlazedTerracotta</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PinkShulkerBox.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PinkShulkerBox</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PinkStainedGlassPane.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PinkStainedGlassPane</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PinkWallBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PinkWallBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Piston.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Piston</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PistonHead.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PistonHead</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PlayerHead.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PlayerHead</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PlayerWallHead.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PlayerWallHead</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Podzol.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Podzol</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PolishedAndesiteSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PolishedAndesiteSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PolishedAndesiteStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PolishedAndesiteStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PolishedBasalt.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PolishedBasalt</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PolishedBlackstoneBrickSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PolishedBlackstoneBrickSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PolishedBlackstoneBrickStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PolishedBlackstoneBrickStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PolishedBlackstoneBrickWall.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PolishedBlackstoneBrickWall</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PolishedBlackstoneButton.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PolishedBlackstoneButton</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PolishedBlackstonePressurePlate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PolishedBlackstonePressurePlate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PolishedBlackstoneSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PolishedBlackstoneSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PolishedBlackstoneStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PolishedBlackstoneStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PolishedBlackstoneWall.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PolishedBlackstoneWall</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PolishedDioriteSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PolishedDioriteSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PolishedDioriteStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PolishedDioriteStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PolishedGraniteSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PolishedGraniteSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PolishedGraniteStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PolishedGraniteStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Potatoes.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Potatoes</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PoweredRail.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PoweredRail</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PrismarineBrickSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PrismarineBrickSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PrismarineBrickStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PrismarineBrickStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PrismarineSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PrismarineSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PrismarineStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PrismarineStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PrismarineWall.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PrismarineWall</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PumpkinStem.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PumpkinStem</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PurpleBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PurpleBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PurpleBed.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PurpleBed</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PurpleGlazedTerracotta.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PurpleGlazedTerracotta</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PurpleShulkerBox.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PurpleShulkerBox</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PurpleStainedGlassPane.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PurpleStainedGlassPane</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PurpleWallBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PurpleWallBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PurpurPillar.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PurpurPillar</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PurpurSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PurpurSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/PurpurStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.PurpurStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/QuartzPillar.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.QuartzPillar</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/QuartzSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.QuartzSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/QuartzStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.QuartzStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Rail.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Rail</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RedBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RedBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RedBed.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RedBed</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RedGlazedTerracotta.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RedGlazedTerracotta</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RedMushroomBlock.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RedMushroomBlock</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RedNetherBrickSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RedNetherBrickSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RedNetherBrickStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RedNetherBrickStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RedNetherBrickWall.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RedNetherBrickWall</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RedSandstoneSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RedSandstoneSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RedSandstoneStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RedSandstoneStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RedSandstoneWall.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RedSandstoneWall</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RedShulkerBox.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RedShulkerBox</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RedStainedGlassPane.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RedStainedGlassPane</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RedstoneLamp.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RedstoneLamp</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RedstoneOre.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RedstoneOre</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RedstoneTorch.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RedstoneTorch</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RedstoneWallTorch.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RedstoneWallTorch</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RedstoneWire.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RedstoneWire</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RedWallBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RedWallBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Repeater.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Repeater</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RepeatingCommandBlock.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RepeatingCommandBlock</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RespawnAnchor.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RespawnAnchor</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/RoseBush.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.RoseBush</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SandstoneSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SandstoneSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SandstoneStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SandstoneStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SandstoneWall.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SandstoneWall</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Scaffolding.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Scaffolding</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SeaPickle.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SeaPickle</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/ShulkerBox.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.ShulkerBox</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SkeletonSkull.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SkeletonSkull</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SkeletonWallSkull.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SkeletonWallSkull</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Smoker.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Smoker</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SmoothQuartzSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SmoothQuartzSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SmoothQuartzStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SmoothQuartzStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SmoothRedSandstoneSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SmoothRedSandstoneSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SmoothRedSandstoneStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SmoothRedSandstoneStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SmoothSandstoneSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SmoothSandstoneSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SmoothSandstoneStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SmoothSandstoneStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SmoothStoneSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SmoothStoneSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Snow.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Snow</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SoulCampfire.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SoulCampfire</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SoulLantern.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SoulLantern</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SoulWallTorch.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SoulWallTorch</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SpruceButton.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SpruceButton</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SpruceDoor.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SpruceDoor</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SpruceFence.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SpruceFence</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SpruceFenceGate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SpruceFenceGate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SpruceLeaves.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SpruceLeaves</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SpruceLog.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SpruceLog</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SprucePressurePlate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SprucePressurePlate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SpruceSapling.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SpruceSapling</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SpruceSign.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SpruceSign</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SpruceSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SpruceSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SpruceStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SpruceStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SpruceTrapdoor.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SpruceTrapdoor</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SpruceWallSign.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SpruceWallSign</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SpruceWood.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SpruceWood</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StickyPiston.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StickyPiston</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StoneBrickSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StoneBrickSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StoneBrickStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StoneBrickStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StoneBrickWall.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StoneBrickWall</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StoneButton.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StoneButton</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Stonecutter.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Stonecutter</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StonePressurePlate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StonePressurePlate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StoneSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StoneSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StoneStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StoneStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StrippedAcaciaLog.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StrippedAcaciaLog</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StrippedAcaciaWood.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StrippedAcaciaWood</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StrippedBirchLog.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StrippedBirchLog</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StrippedBirchWood.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StrippedBirchWood</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StrippedCrimsonHyphae.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StrippedCrimsonHyphae</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StrippedCrimsonStem.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StrippedCrimsonStem</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StrippedDarkOakLog.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StrippedDarkOakLog</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StrippedDarkOakWood.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StrippedDarkOakWood</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StrippedJungleLog.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StrippedJungleLog</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StrippedJungleWood.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StrippedJungleWood</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StrippedOakLog.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StrippedOakLog</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StrippedOakWood.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StrippedOakWood</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StrippedSpruceLog.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StrippedSpruceLog</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StrippedSpruceWood.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StrippedSpruceWood</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StrippedWarpedHyphae.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StrippedWarpedHyphae</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StrippedWarpedStem.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StrippedWarpedStem</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/StructureBlock.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.StructureBlock</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SugarCane.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SugarCane</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Sunflower.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Sunflower</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/SweetBerryBush.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.SweetBerryBush</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/TallGrass.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.TallGrass</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/TallSeagrass.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.TallSeagrass</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Target.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Target</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Tnt.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Tnt</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/TrappedChest.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.TrappedChest</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Tripwire.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Tripwire</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/TripwireHook.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.TripwireHook</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/TubeCoral.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.TubeCoral</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/TubeCoralFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.TubeCoralFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/TubeCoralWallFan.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.TubeCoralWallFan</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/TurtleEgg.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.TurtleEgg</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/TwistingVines.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.TwistingVines</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Vine.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Vine</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WallTorch.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WallTorch</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WarpedButton.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WarpedButton</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WarpedDoor.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WarpedDoor</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WarpedFence.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WarpedFence</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WarpedFenceGate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WarpedFenceGate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WarpedHyphae.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WarpedHyphae</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WarpedPressurePlate.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WarpedPressurePlate</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WarpedSign.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WarpedSign</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WarpedSlab.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WarpedSlab</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WarpedStairs.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WarpedStairs</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WarpedStem.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WarpedStem</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WarpedTrapdoor.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WarpedTrapdoor</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WarpedWallSign.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WarpedWallSign</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Water.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Water</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WeepingVines.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WeepingVines</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/Wheat.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.Wheat</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WhiteBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WhiteBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WhiteBed.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WhiteBed</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WhiteGlazedTerracotta.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WhiteGlazedTerracotta</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WhiteShulkerBox.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WhiteShulkerBox</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WhiteStainedGlassPane.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WhiteStainedGlassPane</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WhiteWallBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WhiteWallBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WitherSkeletonSkull.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WitherSkeletonSkull</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/WitherSkeletonWallSkull.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.WitherSkeletonWallSkull</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/YellowBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.YellowBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/YellowBed.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.YellowBed</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/YellowGlazedTerracotta.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.YellowGlazedTerracotta</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/YellowShulkerBox.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.YellowShulkerBox</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/YellowStainedGlassPane.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.YellowStainedGlassPane</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/YellowWallBanner.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.YellowWallBanner</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/ZombieHead.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.ZombieHead</a></th>
 <td class="colLast"></td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/instance/block/states/ZombieWallHead.html" title="class in net.minestom.server.instance.block.states">net.minestom.server.instance.block.states.ZombieWallHead</a></th>
 <td class="colLast"></td>
 </tr>
@@ -2452,6 +2494,30 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/command/builder/Arguments.html#getWord(java.lang.String)">net.minestom.server.command.builder.Arguments.getWord&#8203;(String)</a></th>
 <td class="colLast">
 <div class="deprecationComment">use <a href="net/minestom/server/command/builder/Arguments.html#get(net.minestom.server.command.builder.arguments.Argument)"><code>Arguments.get(Argument)</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/command/builder/Arguments.html#setArg(java.lang.String,java.lang.Object)">net.minestom.server.command.builder.Arguments.setArg&#8203;(String, Object)</a></th>
+<td class="colLast">
+<div class="deprecationComment">use <a href="net/minestom/server/command/builder/CommandContext.html#setArg(java.lang.String,java.lang.Object,java.lang.String)"><code>CommandContext.setArg(String, Object, String)</code></a></div>
+</td>
+</tr>
+<tr class="rowColor">
+<th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/command/CommandManager.html#getCommandProcessor(java.lang.String)">net.minestom.server.command.CommandManager.getCommandProcessor&#8203;(String)</a></th>
+<td class="colLast">
+<div class="deprecationComment">use <a href="net/minestom/server/command/CommandManager.html#getCommand(java.lang.String)"><code>CommandManager.getCommand(String)</code></a> instead</div>
+</td>
+</tr>
+<tr class="altColor">
+<th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/command/CommandManager.html#register(net.minestom.server.command.CommandProcessor)">net.minestom.server.command.CommandManager.register&#8203;(CommandProcessor)</a></th>
+<td class="colLast">
+<div class="deprecationComment">use <a href="net/minestom/server/command/builder/Command.html" title="class in net.minestom.server.command.builder"><code>Command</code></a> or <a href="net/minestom/server/command/builder/SimpleCommand.html" title="class in net.minestom.server.command.builder"><code>SimpleCommand</code></a> instead</div>
+</td>
+</tr>
+<tr class="rowColor">
+<th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/command/CommandProcessor.html#onWrite(net.minestom.server.command.CommandSender,java.lang.String)">net.minestom.server.command.CommandProcessor.onWrite&#8203;(CommandSender, String)</a></th>
+<td class="colLast">
+<div class="deprecationComment">not called anymore</div>
 </td>
 </tr>
 <tr class="altColor">

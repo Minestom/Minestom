@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":6,"i9":6,"i10":10,"i11":10,"i12":9,"i13":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":6,"i11":6,"i12":10,"i13":10,"i14":10,"i15":9,"i16":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -234,29 +234,39 @@ extends java.lang.Object</pre>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getId()">getId</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the ID of the argument, showed in-game above the chat bar
- and used to retrieve the data when the command is parsed in <a href="../Arguments.html" title="class in net.minestom.server.command.builder"><code>Arguments</code></a>.</div>
+ and used to retrieve the data when the command is parsed in <a href="../CommandContext.html" title="class in net.minestom.server.command.builder"><code>CommandContext</code></a>.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="../suggestion/SuggestionCallback.html" title="interface in net.minestom.server.command.builder.suggestion">SuggestionCallback</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSuggestionCallback()">getSuggestionCallback</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasErrorCallback()">hasErrorCallback</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the argument has any error callback.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasSuggestion()">hasSuggestion</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isOptional()">isOptional</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if this argument is 'optional'.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>abstract <a href="Argument.html" title="type parameter in Argument">T</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(java.lang.String&nbsp;input)</code></th>
 <td class="colLast">
@@ -264,7 +274,7 @@ extends java.lang.Object</pre>
  if the input cannot be convert to <code>T</code></div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></span>&#8203;(<a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
             boolean&nbsp;executable)</code></th>
@@ -272,21 +282,26 @@ extends java.lang.Object</pre>
 <div class="block">Turns the argument into a list of nodes for command dispatching.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a></span>&#8203;(<a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder">ArgumentCallback</a>&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Sets the <a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder"><code>ArgumentCallback</code></a>.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDefaultValue(T)">setDefaultValue</a></span>&#8203;(<a href="Argument.html" title="type parameter in Argument">T</a>&nbsp;defaultValue)</code></th>
 <td class="colLast">
 <div class="block">Sets the default value of the argument.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i14" class="altColor">
+<td class="colFirst"><code><a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)">setSuggestionCallback</a></span>&#8203;(<a href="../suggestion/SuggestionCallback.html" title="interface in net.minestom.server.command.builder.suggestion">SuggestionCallback</a>&nbsp;suggestionCallback)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>protected static <a href="../../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#simpleArgumentNode(net.minestom.server.command.builder.arguments.Argument,boolean,boolean,boolean)">simpleArgumentNode</a></span>&#8203;(<a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&nbsp;argument,
                   boolean&nbsp;executable,
@@ -296,7 +311,7 @@ extends java.lang.Object</pre>
 <div class="block">Builds an argument node.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#useRemaining()">useRemaining</a></span>()</code></th>
 <td class="colLast">
@@ -458,7 +473,7 @@ protected static&nbsp;<a href="../../../network/packet/server/play/DeclareComman
 <pre class="methodSignature">@NotNull
 public&nbsp;java.lang.String&nbsp;getId()</pre>
 <div class="block">Gets the ID of the argument, showed in-game above the chat bar
- and used to retrieve the data when the command is parsed in <a href="../Arguments.html" title="class in net.minestom.server.command.builder"><code>Arguments</code></a>.</div>
+ and used to retrieve the data when the command is parsed in <a href="../CommandContext.html" title="class in net.minestom.server.command.builder"><code>CommandContext</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the argument id</dd>
@@ -526,6 +541,20 @@ public&nbsp;<a href="../ArgumentCallback.html" title="interface in net.minestom.
 </dl>
 </li>
 </ul>
+<a id="hasErrorCallback()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasErrorCallback</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;hasErrorCallback()</pre>
+<div class="block">Gets if the argument has any error callback.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the argument has an error callback, false otherwise</dd>
+</dl>
+</li>
+</ul>
 <a id="isOptional()">
 <!--   -->
 </a>
@@ -581,18 +610,34 @@ public&nbsp;<a href="Argument.html" title="class in net.minestom.server.command.
 </dl>
 </li>
 </ul>
-<a id="hasErrorCallback()">
+<a id="getSuggestionCallback()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>hasErrorCallback</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;hasErrorCallback()</pre>
-<div class="block">Gets if the argument has any error callback.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the argument has an error callback, false otherwise</dd>
-</dl>
+<h4>getSuggestionCallback</h4>
+<pre class="methodSignature">@Nullable
+public&nbsp;<a href="../suggestion/SuggestionCallback.html" title="interface in net.minestom.server.command.builder.suggestion">SuggestionCallback</a>&nbsp;getSuggestionCallback()</pre>
+</li>
+</ul>
+<a id="setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSuggestionCallback</h4>
+<pre class="methodSignature">@Beta
+public&nbsp;<a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;&nbsp;setSuggestionCallback&#8203;(@NotNull
+                                         <a href="../suggestion/SuggestionCallback.html" title="interface in net.minestom.server.command.builder.suggestion">SuggestionCallback</a>&nbsp;suggestionCallback)</pre>
+</li>
+</ul>
+<a id="hasSuggestion()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasSuggestion</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;hasSuggestion()</pre>
 </li>
 </ul>
 <a id="equals(java.lang.Object)">

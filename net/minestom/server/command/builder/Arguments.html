@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":42,"i5":42,"i6":42,"i7":42,"i8":42,"i9":42,"i10":42,"i11":42,"i12":42,"i13":42,"i14":42,"i15":42,"i16":42,"i17":10,"i18":42,"i19":42,"i20":42,"i21":42,"i22":42,"i23":42,"i24":42,"i25":10,"i26":42,"i27":42,"i28":42,"i29":42,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10};
+var data = {"i0":42,"i1":42,"i2":42,"i3":42,"i4":42,"i5":42,"i6":42,"i7":42,"i8":42,"i9":42,"i10":42,"i11":42,"i12":42,"i13":42,"i14":42,"i15":42,"i16":42,"i17":42,"i18":42,"i19":42,"i20":42,"i21":42,"i22":42,"i23":42,"i24":42,"i25":42,"i26":42,"i27":42,"i28":42,"i29":42,"i30":42,"i31":42,"i32":42,"i33":42,"i34":42};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -88,13 +88,13 @@ loadScripts(document, 'script');</script>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -129,22 +129,48 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><code><a href="CommandContext.html" title="class in net.minestom.server.command.builder">CommandContext</a></code></dd>
+</dl>
 <hr>
-<pre>public final class <span class="typeNameLabel">Arguments</span>
+<pre>@Deprecated
+public class <span class="typeNameLabel">Arguments</span>
 extends java.lang.Object</pre>
-<div class="block">Class used to retrieve argument data in a <a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder"><code>CommandExecutor</code></a>.
- <p>
- All id are the one specified in the <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments"><code>Argument</code></a> constructor.
- <p>
- All methods are @<code>NotNull</code> in the sense that you should not have to verify their validity since if the syntax
- is called, it means that all of its arguments are correct. Be aware that trying to retrieve an argument not present
- in the syntax will result in a <code>NullPointerException</code>.</div>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">renamed to <a href="CommandContext.html" title="class in net.minestom.server.command.builder"><code>CommandContext</code></a></div>
+</div>
 </li>
 </ul>
 </div>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="memberSummary">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Field</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#args">args</a></span></code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -160,7 +186,9 @@ extends java.lang.Object</pre>
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">Arguments</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -183,22 +211,30 @@ extends java.lang.Object</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clear()">clear</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copy(net.minestom.server.command.builder.Arguments)">copy</a></span>&#8203;(<a href="Arguments.html" title="class in net.minestom.server.command.builder">Arguments</a>&nbsp;arguments)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#get(java.lang.String)">get</a></span>&#8203;(java.lang.String&nbsp;identifier)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#get(net.minestom.server.command.builder.arguments.Argument)">get</a></span>&#8203;(<a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;T&gt;&nbsp;argument)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../instance/block/Block.html" title="enum in net.minestom.server.instance.block">Block</a></code></td>
@@ -320,7 +356,9 @@ extends java.lang.Object</pre>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMap()">getMap</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i18" class="altColor">
 <td class="colFirst"><code>org.jglrxavpok.hephaistos.nbt.NBT</code></td>
@@ -388,7 +426,9 @@ extends java.lang.Object</pre>
 <tr id="i25" class="rowColor">
 <td class="colFirst"><code><a href="CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getReturnData()">getReturnData</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i26" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
@@ -429,28 +469,40 @@ extends java.lang.Object</pre>
 <tr id="i30" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#has(java.lang.String)">has</a></span>&#8203;(java.lang.String&nbsp;identifier)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i31" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#has(net.minestom.server.command.builder.arguments.Argument)">has</a></span>&#8203;(<a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&nbsp;argument)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i32" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retrieveDefaultValues(java.util.Map)">retrieveDefaultValues</a></span>&#8203;(java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;defaultValuesMap)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i33" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setArg(java.lang.String,java.lang.Object)">setArg</a></span>&#8203;(java.lang.String&nbsp;id,
       java.lang.Object&nbsp;value)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">use <a href="CommandContext.html#setArg(java.lang.String,java.lang.Object,java.lang.String)"><code>CommandContext.setArg(String, Object, String)</code></a></div>
+</div>
+</td>
 </tr>
 <tr id="i34" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setReturnData(net.minestom.server.command.builder.CommandData)">setReturnData</a></span>&#8203;(<a href="CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a>&nbsp;returnData)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -469,6 +521,26 @@ extends java.lang.Object</pre>
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a id="args">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>args</h4>
+<pre>protected&nbsp;java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt; args</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
+</li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <section role="region">
 <ul class="blockList">
@@ -483,6 +555,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>Arguments</h4>
 <pre>public&nbsp;Arguments()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 </li>
@@ -504,6 +577,7 @@ extends java.lang.Object</pre>
 <pre class="methodSignature">@NotNull
 public&nbsp;&lt;T&gt;&nbsp;T&nbsp;get&#8203;(@NotNull
                  <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;T&gt;&nbsp;argument)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="get(java.lang.String)">
@@ -514,6 +588,7 @@ public&nbsp;&lt;T&gt;&nbsp;T&nbsp;get&#8203;(@NotNull
 <h4>get</h4>
 <pre class="methodSignature">public&nbsp;&lt;T&gt;&nbsp;T&nbsp;get&#8203;(@NotNull
                  java.lang.String&nbsp;identifier)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="has(net.minestom.server.command.builder.arguments.Argument)">
@@ -524,6 +599,7 @@ public&nbsp;&lt;T&gt;&nbsp;T&nbsp;get&#8203;(@NotNull
 <h4>has</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;has&#8203;(@NotNull
                    <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&nbsp;argument)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="has(java.lang.String)">
@@ -534,6 +610,7 @@ public&nbsp;&lt;T&gt;&nbsp;T&nbsp;get&#8203;(@NotNull
 <h4>has</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;has&#8203;(@NotNull
                    java.lang.String&nbsp;identifier)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="getBoolean(java.lang.String)">
@@ -899,6 +976,7 @@ public&nbsp;java.lang.Object&nbsp;getObject&#8203;(@NotNull
 <h4>getReturnData</h4>
 <pre class="methodSignature">@Nullable
 public&nbsp;<a href="CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a>&nbsp;getReturnData()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="setReturnData(net.minestom.server.command.builder.CommandData)">
@@ -909,6 +987,7 @@ public&nbsp;<a href="CommandData.html" title="class in net.minestom.server.comma
 <h4>setReturnData</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setReturnData&#8203;(@Nullable
                           <a href="CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a>&nbsp;returnData)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="getMap()">
@@ -919,6 +998,7 @@ public&nbsp;<a href="CommandData.html" title="class in net.minestom.server.comma
 <h4>getMap</h4>
 <pre class="methodSignature">@NotNull
 public&nbsp;java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;getMap()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="setArg(java.lang.String,java.lang.Object)">
@@ -927,9 +1007,13 @@ public&nbsp;java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;g
 <ul class="blockList">
 <li class="blockList">
 <h4>setArg</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setArg&#8203;(@NotNull
+<pre class="methodSignature">@Deprecated
+public&nbsp;void&nbsp;setArg&#8203;(@NotNull
                    java.lang.String&nbsp;id,
                    java.lang.Object&nbsp;value)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">use <a href="CommandContext.html#setArg(java.lang.String,java.lang.Object,java.lang.String)"><code>CommandContext.setArg(String, Object, String)</code></a></div>
+</div>
 </li>
 </ul>
 <a id="copy(net.minestom.server.command.builder.Arguments)">
@@ -940,6 +1024,7 @@ public&nbsp;java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;g
 <h4>copy</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;copy&#8203;(@NotNull
                  <a href="Arguments.html" title="class in net.minestom.server.command.builder">Arguments</a>&nbsp;arguments)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="clear()">
@@ -949,6 +1034,7 @@ public&nbsp;java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;g
 <li class="blockList">
 <h4>clear</h4>
 <pre class="methodSignature">protected&nbsp;void&nbsp;clear()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="retrieveDefaultValues(java.util.Map)">
@@ -959,6 +1045,7 @@ public&nbsp;java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;g
 <h4>retrieveDefaultValues</h4>
 <pre class="methodSignature">protected&nbsp;void&nbsp;retrieveDefaultValues&#8203;(@Nullable
                                      java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;defaultValuesMap)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 </li>
@@ -1013,13 +1100,13 @@ public&nbsp;java.util.Map&lt;java.lang.String,&#8203;java.lang.Object&gt;&nbsp;g
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

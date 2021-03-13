@@ -154,23 +154,23 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="Arguments.html" title="class in net.minestom.server.command.builder">Arguments</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#arguments">arguments</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#argumentSyntaxException">argumentSyntaxException</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="ArgumentCallback.html" title="interface in net.minestom.server.command.builder">ArgumentCallback</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#callback">callback</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="Command.html" title="class in net.minestom.server.command.builder">Command</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#command">command</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="CommandContext.html" title="class in net.minestom.server.command.builder">CommandContext</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#context">context</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -232,7 +232,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static <a href="ParsedCommand.html" title="class in net.minestom.server.command.builder">ParsedCommand</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withDefaultExecutor(net.minestom.server.command.builder.Command)">withDefaultExecutor</a></span>&#8203;(<a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withDefaultExecutor(net.minestom.server.command.builder.Command,java.lang.String)">withDefaultExecutor</a></span>&#8203;(<a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command,
+                   java.lang.String&nbsp;input)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -286,13 +287,13 @@ extends java.lang.Object</pre>
 <pre>protected&nbsp;<a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder">CommandExecutor</a> executor</pre>
 </li>
 </ul>
-<a id="arguments">
+<a id="context">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>arguments</h4>
-<pre>protected&nbsp;<a href="Arguments.html" title="class in net.minestom.server.command.builder">Arguments</a> arguments</pre>
+<h4>context</h4>
+<pre>protected&nbsp;<a href="CommandContext.html" title="class in net.minestom.server.command.builder">CommandContext</a> context</pre>
 </li>
 </ul>
 <a id="callback">
@@ -366,7 +367,7 @@ public&nbsp;<a href="CommandData.html" title="class in net.minestom.server.comma
 </dl>
 </li>
 </ul>
-<a id="withDefaultExecutor(net.minestom.server.command.builder.Command)">
+<a id="withDefaultExecutor(net.minestom.server.command.builder.Command,java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -374,7 +375,9 @@ public&nbsp;<a href="CommandData.html" title="class in net.minestom.server.comma
 <h4>withDefaultExecutor</h4>
 <pre class="methodSignature">@NotNull
 public static&nbsp;<a href="ParsedCommand.html" title="class in net.minestom.server.command.builder">ParsedCommand</a>&nbsp;withDefaultExecutor&#8203;(@NotNull
-                                                <a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</pre>
+                                                <a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command,
+                                                @NotNull
+                                                java.lang.String&nbsp;input)</pre>
 </li>
 </ul>
 </li>

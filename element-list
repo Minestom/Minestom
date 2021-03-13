@@ -16,6 +16,7 @@ net.minestom.server.command.builder.arguments.relative
 net.minestom.server.command.builder.condition
 net.minestom.server.command.builder.exception
 net.minestom.server.command.builder.parser
+net.minestom.server.command.builder.suggestion
 net.minestom.server.data
 net.minestom.server.data.type
 net.minestom.server.data.type.array

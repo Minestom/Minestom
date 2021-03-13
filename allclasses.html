@@ -110,6 +110,7 @@
 <li><a href="net/minestom/server/command/builder/arguments/number/ArgumentNumber.html" title="class in net.minestom.server.command.builder.arguments.number">ArgumentNumber</a></li>
 <li><a href="net/minestom/server/command/builder/arguments/minecraft/registry/ArgumentParticle.html" title="class in net.minestom.server.command.builder.arguments.minecraft.registry">ArgumentParticle</a></li>
 <li><a href="net/minestom/server/command/builder/arguments/minecraft/registry/ArgumentPotionEffect.html" title="class in net.minestom.server.command.builder.arguments.minecraft.registry">ArgumentPotionEffect</a></li>
+<li><a href="net/minestom/server/command/builder/parser/ArgumentQueryResult.html" title="class in net.minestom.server.command.builder.parser">ArgumentQueryResult</a></li>
 <li><a href="net/minestom/server/command/builder/arguments/minecraft/ArgumentRange.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentRange</a></li>
 <li><a href="net/minestom/server/command/builder/arguments/minecraft/registry/ArgumentRegistry.html" title="class in net.minestom.server.command.builder.arguments.minecraft.registry">ArgumentRegistry</a></li>
 <li><a href="net/minestom/server/command/builder/arguments/relative/ArgumentRelative.html" title="class in net.minestom.server.command.builder.arguments.relative">ArgumentRelative</a></li>
@@ -381,12 +382,15 @@
 <li><a href="net/minestom/server/entity/metadata/minecart/CommandBlockMinecartMeta.html" title="class in net.minestom.server.entity.metadata.minecart">CommandBlockMinecartMeta</a></li>
 <li><a href="net/minestom/server/utils/callback/CommandCallback.html" title="interface in net.minestom.server.utils.callback"><span class="interfaceName">CommandCallback</span></a></li>
 <li><a href="net/minestom/server/command/builder/condition/CommandCondition.html" title="interface in net.minestom.server.command.builder.condition"><span class="interfaceName">CommandCondition</span></a></li>
+<li><a href="net/minestom/server/command/builder/CommandContext.html" title="class in net.minestom.server.command.builder">CommandContext</a></li>
 <li><a href="net/minestom/server/command/builder/CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a></li>
 <li><a href="net/minestom/server/command/builder/CommandDispatcher.html" title="class in net.minestom.server.command.builder">CommandDispatcher</a></li>
 <li><a href="net/minestom/server/command/builder/CommandExecutor.html" title="interface in net.minestom.server.command.builder"><span class="interfaceName">CommandExecutor</span></a></li>
 <li><a href="net/minestom/server/command/CommandManager.html" title="class in net.minestom.server.command">CommandManager</a></li>
 <li><a href="net/minestom/server/command/builder/parser/CommandParser.html" title="class in net.minestom.server.command.builder.parser">CommandParser</a></li>
+<li><a href="net/minestom/server/command/builder/parser/CommandParser.ArgumentResult.html" title="class in net.minestom.server.command.builder.parser">CommandParser.ArgumentResult</a></li>
 <li><a href="net/minestom/server/command/CommandProcessor.html" title="interface in net.minestom.server.command"><span class="interfaceName">CommandProcessor</span></a></li>
+<li><a href="net/minestom/server/command/builder/parser/CommandQueryResult.html" title="class in net.minestom.server.command.builder.parser">CommandQueryResult</a></li>
 <li><a href="net/minestom/server/command/builder/CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a></li>
 <li><a href="net/minestom/server/command/builder/CommandResult.Type.html" title="enum in net.minestom.server.command.builder">CommandResult.Type</a></li>
 <li><a href="net/minestom/server/command/CommandSender.html" title="interface in net.minestom.server.command"><span class="interfaceName">CommandSender</span></a></li>
@@ -1242,6 +1246,7 @@
 <li><a href="net/minestom/server/scoreboard/Sidebar.html" title="class in net.minestom.server.scoreboard">Sidebar</a></li>
 <li><a href="net/minestom/server/scoreboard/Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard">Sidebar.ScoreboardLine</a></li>
 <li><a href="net/minestom/server/entity/metadata/monster/SilverfishMeta.html" title="class in net.minestom.server.entity.metadata.monster">SilverfishMeta</a></li>
+<li><a href="net/minestom/server/command/builder/SimpleCommand.html" title="class in net.minestom.server.command.builder">SimpleCommand</a></li>
 <li><a href="net/minestom/server/thread/SingleThreadProvider.html" title="class in net.minestom.server.thread">SingleThreadProvider</a></li>
 <li><a href="net/minestom/server/entity/metadata/animal/SkeletonHorseMeta.html" title="class in net.minestom.server.entity.metadata.animal">SkeletonHorseMeta</a></li>
 <li><a href="net/minestom/server/entity/metadata/monster/skeleton/SkeletonMeta.html" title="class in net.minestom.server.entity.metadata.monster.skeleton">SkeletonMeta</a></li>
@@ -1343,6 +1348,9 @@
 <li><a href="net/minestom/server/instance/block/states/StrippedWarpedStem.html" title="class in net.minestom.server.instance.block.states">StrippedWarpedStem</a></li>
 <li><a href="net/minestom/server/instance/block/states/StructureBlock.html" title="class in net.minestom.server.instance.block.states">StructureBlock</a></li>
 <li><a href="net/minestom/server/instance/block/states/SugarCane.html" title="class in net.minestom.server.instance.block.states">SugarCane</a></li>
+<li><a href="net/minestom/server/command/builder/suggestion/Suggestion.html" title="class in net.minestom.server.command.builder.suggestion">Suggestion</a></li>
+<li><a href="net/minestom/server/command/builder/suggestion/SuggestionCallback.html" title="interface in net.minestom.server.command.builder.suggestion"><span class="interfaceName">SuggestionCallback</span></a></li>
+<li><a href="net/minestom/server/command/builder/suggestion/SuggestionEntry.html" title="class in net.minestom.server.command.builder.suggestion">SuggestionEntry</a></li>
 <li><a href="net/minestom/server/command/builder/arguments/minecraft/SuggestionType.html" title="enum in net.minestom.server.command.builder.arguments.minecraft">SuggestionType</a></li>
 <li><a href="net/minestom/server/instance/block/states/Sunflower.html" title="class in net.minestom.server.instance.block.states">Sunflower</a></li>
 <li><a href="net/minestom/server/gamedata/conditions/SurvivesExplosionCondition.html" title="class in net.minestom.server.gamedata.conditions">SurvivesExplosionCondition</a></li>

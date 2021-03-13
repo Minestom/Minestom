@@ -242,7 +242,7 @@ extends <a href="Argument.html" title="class in net.minestom.server.command.buil
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="ArgumentEnum.html" title="class in net.minestom.server.command.builder.arguments">ArgumentEnum</a></code></td>
+<td class="colFirst"><code><a href="ArgumentEnum.html" title="class in net.minestom.server.command.builder.arguments">ArgumentEnum</a>&lt;<a href="ArgumentEnum.html" title="type parameter in ArgumentEnum">E</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFormat(net.minestom.server.command.builder.arguments.ArgumentEnum.Format)">setFormat</a></span>&#8203;(<a href="ArgumentEnum.Format.html" title="enum in net.minestom.server.command.builder.arguments">ArgumentEnum.Format</a>&nbsp;format)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -252,7 +252,7 @@ extends <a href="Argument.html" title="class in net.minestom.server.command.buil
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.command.builder.arguments.<a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a></h3>
-<code><a href="Argument.html#allowSpace()">allowSpace</a>, <a href="Argument.html#equals(java.lang.Object)">equals</a>, <a href="Argument.html#getCallback()">getCallback</a>, <a href="Argument.html#getDefaultValue()">getDefaultValue</a>, <a href="Argument.html#getId()">getId</a>, <a href="Argument.html#hasErrorCallback()">hasErrorCallback</a>, <a href="Argument.html#hashCode()">hashCode</a>, <a href="Argument.html#isOptional()">isOptional</a>, <a href="Argument.html#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a>, <a href="Argument.html#setDefaultValue(T)">setDefaultValue</a>, <a href="Argument.html#simpleArgumentNode(net.minestom.server.command.builder.arguments.Argument,boolean,boolean,boolean)">simpleArgumentNode</a>, <a href="Argument.html#useRemaining()">useRemaining</a></code></li>
+<code><a href="Argument.html#allowSpace()">allowSpace</a>, <a href="Argument.html#equals(java.lang.Object)">equals</a>, <a href="Argument.html#getCallback()">getCallback</a>, <a href="Argument.html#getDefaultValue()">getDefaultValue</a>, <a href="Argument.html#getId()">getId</a>, <a href="Argument.html#getSuggestionCallback()">getSuggestionCallback</a>, <a href="Argument.html#hasErrorCallback()">hasErrorCallback</a>, <a href="Argument.html#hashCode()">hashCode</a>, <a href="Argument.html#hasSuggestion()">hasSuggestion</a>, <a href="Argument.html#isOptional()">isOptional</a>, <a href="Argument.html#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a>, <a href="Argument.html#setDefaultValue(T)">setDefaultValue</a>, <a href="Argument.html#setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)">setSuggestionCallback</a>, <a href="Argument.html#simpleArgumentNode(net.minestom.server.command.builder.arguments.Argument,boolean,boolean,boolean)">simpleArgumentNode</a>, <a href="Argument.html#useRemaining()">useRemaining</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -327,8 +327,8 @@ extends <a href="Argument.html" title="class in net.minestom.server.command.buil
 <ul class="blockList">
 <li class="blockList">
 <h4>setFormat</h4>
-<pre class="methodSignature">public&nbsp;<a href="ArgumentEnum.html" title="class in net.minestom.server.command.builder.arguments">ArgumentEnum</a>&nbsp;setFormat&#8203;(@NotNull
-                              <a href="ArgumentEnum.Format.html" title="enum in net.minestom.server.command.builder.arguments">ArgumentEnum.Format</a>&nbsp;format)</pre>
+<pre class="methodSignature">public&nbsp;<a href="ArgumentEnum.html" title="class in net.minestom.server.command.builder.arguments">ArgumentEnum</a>&lt;<a href="ArgumentEnum.html" title="type parameter in ArgumentEnum">E</a>&gt;&nbsp;setFormat&#8203;(@NotNull
+                                 <a href="ArgumentEnum.Format.html" title="enum in net.minestom.server.command.builder.arguments">ArgumentEnum.Format</a>&nbsp;format)</pre>
 </li>
 </ul>
 <a id="parse(java.lang.String)">

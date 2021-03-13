@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":18,"i1":6,"i2":6,"i3":6,"i4":18,"i5":6};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
+var data = {"i0":50,"i1":38,"i2":38,"i3":38,"i4":50,"i5":38};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -122,7 +122,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <hr>
-<pre>public interface <span class="typeNameLabel">CommandProcessor</span></pre>
+<pre>@Deprecated
+public interface <span class="typeNameLabel">CommandProcessor</span></pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">use <a href="builder/Command.html" title="class in net.minestom.server.command.builder"><code>Command</code></a> or
+ <a href="builder/SimpleCommand.html" title="class in net.minestom.server.command.builder"><code>SimpleCommand</code></a> instead</div>
+</div>
 <div class="block">Represents a simple command which give you the whole string representation.
  <p>
  <a href="#process(net.minestom.server.command.CommandSender,java.lang.String,java.lang.String%5B%5D)"><code>process(CommandSender, String, String[])</code></a> is called no matter what if a <a href="CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a> sends a command which
@@ -146,7 +151,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t5" class="tableTab"><span><a href="javascript:show(16);">Default Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t5" class="tableTab"><span><a href="javascript:show(16);">Default Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -156,6 +161,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <td class="colFirst"><code>default boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#enableWritingTracking()">enableWritingTracking</a></span>()</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Needed to enable <a href="#onWrite(net.minestom.server.command.CommandSender,java.lang.String)"><code>onWrite(CommandSender, String)</code></a> callback.</div>
 </td>
 </tr>
@@ -163,6 +169,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <td class="colFirst"><code>java.lang.String[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAliases()">getAliases</a></span>()</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the command's aliases.</div>
 </td>
 </tr>
@@ -170,6 +177,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCommandName()">getCommandName</a></span>()</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the main command's name.</div>
 </td>
 </tr>
@@ -177,6 +185,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasAccess(net.minestom.server.entity.Player)">hasAccess</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Called to know if a player has access to the command.</div>
 </td>
 </tr>
@@ -185,7 +194,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onWrite(net.minestom.server.command.CommandSender,java.lang.String)">onWrite</a></span>&#8203;(<a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
        java.lang.String&nbsp;text)</code></th>
 <td class="colLast">
-<div class="block">Allows for tab auto completion, this is called everytime the player press a key in the chat.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">not called anymore</div>
+</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -194,6 +205,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
        java.lang.String&nbsp;command,
        java.lang.String[]&nbsp;args)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Called when the command is executed by a <a href="CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a>.</div>
 </td>
 </tr>
@@ -222,6 +234,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>getCommandName</h4>
 <pre class="methodSignature">@NotNull
 java.lang.String&nbsp;getCommandName()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the main command's name.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -237,6 +250,7 @@ java.lang.String&nbsp;getCommandName()</pre>
 <h4>getAliases</h4>
 <pre class="methodSignature">@Nullable
 java.lang.String[]&nbsp;getAliases()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the command's aliases.
  <p>
  Can be null or empty.</div>
@@ -258,6 +272,7 @@ java.lang.String[]&nbsp;getAliases()</pre>
                 java.lang.String&nbsp;command,
                 @NotNull
                 java.lang.String[]&nbsp;args)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Called when the command is executed by a <a href="CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -277,6 +292,7 @@ java.lang.String[]&nbsp;getAliases()</pre>
 <h4>hasAccess</h4>
 <pre class="methodSignature">boolean&nbsp;hasAccess&#8203;(@NotNull
                   <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Called to know if a player has access to the command.
  <p>
  Right now it is only used to know if the player should see the command in auto-completion.
@@ -296,6 +312,7 @@ java.lang.String[]&nbsp;getAliases()</pre>
 <li class="blockList">
 <h4>enableWritingTracking</h4>
 <pre class="methodSignature">default&nbsp;boolean&nbsp;enableWritingTracking()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Needed to enable <a href="#onWrite(net.minestom.server.command.CommandSender,java.lang.String)"><code>onWrite(CommandSender, String)</code></a> callback.
  <p>
  Be aware that enabling it can cost some performance because of how often it will be called.</div>
@@ -313,10 +330,14 @@ java.lang.String[]&nbsp;getAliases()</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>onWrite</h4>
-<pre class="methodSignature">@Nullable
+<pre class="methodSignature">@Deprecated
+@Nullable
 default&nbsp;java.lang.String[]&nbsp;onWrite&#8203;(@NotNull
                                    <a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
                                    java.lang.String&nbsp;text)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">not called anymore</div>
+</div>
 <div class="block">Allows for tab auto completion, this is called everytime the player press a key in the chat.
  <p>
  WARNING: <a href="#enableWritingTracking()"><code>enableWritingTracking()</code></a> needs to return true, you need to override it by default.</div>

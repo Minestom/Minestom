@@ -153,8 +153,8 @@ public interface <span class="typeNameLabel">CommandExecutor</span></pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(net.minestom.server.command.CommandSender,net.minestom.server.command.builder.Arguments)">apply</a></span>&#8203;(<a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
-     <a href="Arguments.html" title="class in net.minestom.server.command.builder">Arguments</a>&nbsp;args)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(net.minestom.server.command.CommandSender,net.minestom.server.command.builder.CommandContext)">apply</a></span>&#8203;(<a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
+     <a href="CommandContext.html" title="class in net.minestom.server.command.builder">CommandContext</a>&nbsp;context)</code></th>
 <td class="colLast">
 <div class="block">Executes the command callback once the syntax has been called (or the default executor).</div>
 </td>
@@ -176,7 +176,7 @@ public interface <span class="typeNameLabel">CommandExecutor</span></pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="apply(net.minestom.server.command.CommandSender,net.minestom.server.command.builder.Arguments)">
+<a id="apply(net.minestom.server.command.CommandSender,net.minestom.server.command.builder.CommandContext)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -185,13 +185,12 @@ public interface <span class="typeNameLabel">CommandExecutor</span></pre>
 <pre class="methodSignature">void&nbsp;apply&#8203;(@NotNull
            <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
            @NotNull
-           <a href="Arguments.html" title="class in net.minestom.server.command.builder">Arguments</a>&nbsp;args)</pre>
+           <a href="CommandContext.html" title="class in net.minestom.server.command.builder">CommandContext</a>&nbsp;context)</pre>
 <div class="block">Executes the command callback once the syntax has been called (or the default executor).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>sender</code> - the sender of the command</dd>
-<dd><code>args</code> - contains all the parsed arguments,
-               the id is the one initialized when creating the argument object</dd>
+<dd><code>context</code> - the command context, used to retrieve the arguments and various other things</dd>
 </dl>
 </li>
 </ul>

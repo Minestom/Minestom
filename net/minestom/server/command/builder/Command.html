@@ -129,6 +129,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><code><a href="SimpleCommand.html" title="class in net.minestom.server.command.builder">SimpleCommand</a></code></dd>
+</dl>
 <hr>
 <pre>public class <span class="typeNameLabel">Command</span>
 extends java.lang.Object</pre>
@@ -288,8 +292,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#globalListener(net.minestom.server.command.CommandSender,net.minestom.server.command.builder.Arguments,java.lang.String)">globalListener</a></span>&#8203;(<a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
-              <a href="Arguments.html" title="class in net.minestom.server.command.builder">Arguments</a>&nbsp;arguments,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#globalListener(net.minestom.server.command.CommandSender,net.minestom.server.command.builder.CommandContext,java.lang.String)">globalListener</a></span>&#8203;(<a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
+              <a href="CommandContext.html" title="class in net.minestom.server.command.builder">CommandContext</a>&nbsp;context,
               java.lang.String&nbsp;command)</code></th>
 <td class="colLast">
 <div class="block">Called when a <a href="../CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a> executes this command before any syntax callback.</div>
@@ -650,7 +654,7 @@ public&nbsp;java.lang.String[]&nbsp;onDynamicWrite&#8203;(@NotNull
 </dl>
 </li>
 </ul>
-<a id="globalListener(net.minestom.server.command.CommandSender,net.minestom.server.command.builder.Arguments,java.lang.String)">
+<a id="globalListener(net.minestom.server.command.CommandSender,net.minestom.server.command.builder.CommandContext,java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -659,7 +663,7 @@ public&nbsp;java.lang.String[]&nbsp;onDynamicWrite&#8203;(@NotNull
 <pre class="methodSignature">public&nbsp;void&nbsp;globalListener&#8203;(@NotNull
                            <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
                            @NotNull
-                           <a href="Arguments.html" title="class in net.minestom.server.command.builder">Arguments</a>&nbsp;arguments,
+                           <a href="CommandContext.html" title="class in net.minestom.server.command.builder">CommandContext</a>&nbsp;context,
                            @NotNull
                            java.lang.String&nbsp;command)</pre>
 <div class="block">Called when a <a href="../CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a> executes this command before any syntax callback.
@@ -671,7 +675,7 @@ public&nbsp;java.lang.String[]&nbsp;onDynamicWrite&#8203;(@NotNull
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>sender</code> - the <a href="../CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a></dd>
-<dd><code>arguments</code> - the UNCHECKED arguments of the command, some can be null even when unexpected</dd>
+<dd><code>context</code> - the UNCHECKED context of the command, some can be null even when unexpected</dd>
 <dd><code>command</code> - the raw UNCHECKED received command</dd>
 </dl>
 </li>

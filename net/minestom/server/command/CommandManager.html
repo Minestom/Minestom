@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":42,"i6":10,"i7":10,"i8":10,"i9":10,"i10":42,"i11":10,"i12":10,"i13":10,"i14":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -193,7 +193,7 @@ extends java.lang.Object</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -240,7 +240,9 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code><a href="CommandProcessor.html" title="interface in net.minestom.server.command">CommandProcessor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCommandProcessor(java.lang.String)">getCommandProcessor</a></span>&#8203;(java.lang.String&nbsp;commandName)</code></th>
 <td class="colLast">
-<div class="block">Gets the <a href="CommandProcessor.html" title="interface in net.minestom.server.command"><code>CommandProcessor</code></a> registered by <a href="#register(net.minestom.server.command.CommandProcessor)"><code>register(CommandProcessor)</code></a>.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">use <a href="#getCommand(java.lang.String)"><code>getCommand(String)</code></a> instead</div>
+</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -273,7 +275,9 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#register(net.minestom.server.command.CommandProcessor)">register</a></span>&#8203;(<a href="CommandProcessor.html" title="interface in net.minestom.server.command">CommandProcessor</a>&nbsp;commandProcessor)</code></th>
 <td class="colLast">
-<div class="block">Registers a <a href="CommandProcessor.html" title="interface in net.minestom.server.command"><code>CommandProcessor</code></a>.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">use <a href="builder/Command.html" title="class in net.minestom.server.command.builder"><code>Command</code></a> or <a href="builder/SimpleCommand.html" title="class in net.minestom.server.command.builder"><code>SimpleCommand</code></a> instead</div>
+</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
@@ -439,8 +443,12 @@ public&nbsp;<a href="builder/Command.html" title="class in net.minestom.server.c
 <ul class="blockList">
 <li class="blockList">
 <h4>register</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;register&#8203;(@NotNull
+<pre class="methodSignature">@Deprecated
+public&nbsp;void&nbsp;register&#8203;(@NotNull
                      <a href="CommandProcessor.html" title="interface in net.minestom.server.command">CommandProcessor</a>&nbsp;commandProcessor)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">use <a href="builder/Command.html" title="class in net.minestom.server.command.builder"><code>Command</code></a> or <a href="builder/SimpleCommand.html" title="class in net.minestom.server.command.builder"><code>SimpleCommand</code></a> instead</div>
+</div>
 <div class="block">Registers a <a href="CommandProcessor.html" title="interface in net.minestom.server.command"><code>CommandProcessor</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -456,9 +464,13 @@ public&nbsp;<a href="builder/Command.html" title="class in net.minestom.server.c
 <ul class="blockList">
 <li class="blockList">
 <h4>getCommandProcessor</h4>
-<pre class="methodSignature">@Nullable
+<pre class="methodSignature">@Deprecated
+@Nullable
 public&nbsp;<a href="CommandProcessor.html" title="interface in net.minestom.server.command">CommandProcessor</a>&nbsp;getCommandProcessor&#8203;(@NotNull
                                             java.lang.String&nbsp;commandName)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">use <a href="#getCommand(java.lang.String)"><code>getCommand(String)</code></a> instead</div>
+</div>
 <div class="block">Gets the <a href="CommandProcessor.html" title="interface in net.minestom.server.command"><code>CommandProcessor</code></a> registered by <a href="#register(net.minestom.server.command.CommandProcessor)"><code>register(CommandProcessor)</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
