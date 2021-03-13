@@ -581,8 +581,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param callback the optional callback to run when the chunk is loaded
      */
     public void loadChunk(@NotNull Position position, @Nullable ChunkCallback callback) {
-        final int chunkX = ChunkUtils.getChunkCoordinate((int) position.getX());
-        final int chunkZ = ChunkUtils.getChunkCoordinate((int) position.getZ());
+        final int chunkX = ChunkUtils.getChunkCoordinate(position.getX());
+        final int chunkZ = ChunkUtils.getChunkCoordinate(position.getZ());
         loadChunk(chunkX, chunkZ, callback);
     }
 
@@ -594,8 +594,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param callback the optional callback executed when the chunk is loaded (or with a null chunk if not)
      */
     public void loadOptionalChunk(@NotNull Position position, @Nullable ChunkCallback callback) {
-        final int chunkX = ChunkUtils.getChunkCoordinate((int) position.getX());
-        final int chunkZ = ChunkUtils.getChunkCoordinate((int) position.getZ());
+        final int chunkX = ChunkUtils.getChunkCoordinate(position.getX());
+        final int chunkZ = ChunkUtils.getChunkCoordinate(position.getZ());
         loadOptionalChunk(chunkX, chunkZ, callback);
     }
 
@@ -786,8 +786,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      */
     @Nullable
     public Chunk getChunkAt(double x, double z) {
-        final int chunkX = ChunkUtils.getChunkCoordinate((int) Math.floor(x));
-        final int chunkZ = ChunkUtils.getChunkCoordinate((int) Math.floor(z));
+        final int chunkX = ChunkUtils.getChunkCoordinate(x);
+        final int chunkZ = ChunkUtils.getChunkCoordinate(z);
         return getChunk(chunkX, chunkZ);
     }
 

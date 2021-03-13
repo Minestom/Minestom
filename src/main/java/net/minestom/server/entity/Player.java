@@ -646,8 +646,8 @@ public class Player extends LivingEntity implements CommandSender {
 
             final ChunkCallback eachCallback = chunk -> {
                 if (chunk != null) {
-                    final int chunkX = ChunkUtils.getChunkCoordinate((int) spawnPosition.getX());
-                    final int chunkZ = ChunkUtils.getChunkCoordinate((int) spawnPosition.getZ());
+                    final int chunkX = ChunkUtils.getChunkCoordinate(spawnPosition.getX());
+                    final int chunkZ = ChunkUtils.getChunkCoordinate(spawnPosition.getZ());
                     if (chunk.getChunkX() == chunkX &&
                             chunk.getChunkZ() == chunkZ) {
                         updateViewPosition(chunkX, chunkZ);

@@ -268,11 +268,11 @@ public class Position implements PublicCloneable<Position> {
      * @return true if 'this' is in the same chunk as {@code position}
      */
     public boolean inSameChunk(@NotNull Position position) {
-        final int chunkX1 = ChunkUtils.getChunkCoordinate((int) getX());
-        final int chunkZ1 = ChunkUtils.getChunkCoordinate((int) getZ());
+        final int chunkX1 = ChunkUtils.getChunkCoordinate(getX());
+        final int chunkZ1 = ChunkUtils.getChunkCoordinate(getZ());
 
-        final int chunkX2 = ChunkUtils.getChunkCoordinate((int) position.getX());
-        final int chunkZ2 = ChunkUtils.getChunkCoordinate((int) position.getZ());
+        final int chunkX2 = ChunkUtils.getChunkCoordinate(position.getX());
+        final int chunkZ2 = ChunkUtils.getChunkCoordinate(position.getZ());
 
         return chunkX1 == chunkX2 && chunkZ1 == chunkZ2;
     }

@@ -77,8 +77,8 @@ public final class ChunkUtils {
      * @return true if the chunk is loaded, false otherwise
      */
     public static boolean isLoaded(@NotNull Instance instance, double x, double z) {
-        final int chunkX = getChunkCoordinate((int) x);
-        final int chunkZ = getChunkCoordinate((int) z);
+        final int chunkX = getChunkCoordinate(x);
+        final int chunkZ = getChunkCoordinate(z);
 
         final Chunk chunk = instance.getChunk(chunkX, chunkZ);
         return isLoaded(chunk);
@@ -88,9 +88,10 @@ public final class ChunkUtils {
      * @param xz the instance coordinate to convert
      * @return the chunk X or Z based on the argument
      */
-    public static int getChunkCoordinate(int xz) {
+    public static int getChunkCoordinate(double xz) {
+        final int coordinate = (int) Math.floor(xz);
         assert Chunk.CHUNK_SIZE_X == Chunk.CHUNK_SIZE_Z;
-        return Math.floorDiv(xz, Chunk.CHUNK_SIZE_X);
+        return Math.floorDiv(coordinate, Chunk.CHUNK_SIZE_X);
     }
 
     /**
@@ -155,8 +156,8 @@ public final class ChunkUtils {
         int counter = 0;
         for (int x = startLoop; x < endLoop; x++) {
             for (int z = startLoop; z < endLoop; z++) {
-                final int chunkX = getChunkCoordinate((int) (position.getX() + Chunk.CHUNK_SIZE_X * x));
-                final int chunkZ = getChunkCoordinate((int) (position.getZ() + Chunk.CHUNK_SIZE_Z * z));
+                final int chunkX = getChunkCoordinate(position.getX() + Chunk.CHUNK_SIZE_X * x);
+                final int chunkZ = getChunkCoordinate(position.getZ() + Chunk.CHUNK_SIZE_Z * z);
                 visibleChunks[counter++] = getChunkIndex(chunkX, chunkZ);
             }
         }
