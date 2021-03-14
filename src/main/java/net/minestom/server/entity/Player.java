@@ -4,7 +4,6 @@ import com.google.common.collect.Queues;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.attribute.Attribute;
-import net.minestom.server.attribute.AttributeInstance;
 import net.minestom.server.bossbar.BossBar;
 import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
@@ -1726,8 +1725,13 @@ public class Player extends LivingEntity implements CommandSender {
             disconnectPacket = new DisconnectPacket(text);
         }
 
-        playerConnection.sendPacket(disconnectPacket);
-        playerConnection.refreshOnline(false);
+        if (playerConnection instanceof NettyPlayerConnection) {
+            ((NettyPlayerConnection) playerConnection).writeAndFlush(disconnectPacket);
+            playerConnection.disconnect();
+        } else {
+            playerConnection.sendPacket(disconnectPacket);
+            playerConnection.refreshOnline(false);
+        }
     }
 
     /**
