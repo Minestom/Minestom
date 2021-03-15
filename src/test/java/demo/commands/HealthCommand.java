@@ -59,7 +59,7 @@ public class HealthCommand extends Command {
     }
 
     private void sendSuggestionMessage(CommandSender sender, CommandContext context) {
-        sender.sendMessage(Component.text("/health " + args.get("mode") + " [Integer]"));
+        sender.sendMessage(Component.text("/health " + context.get("mode") + " [Integer]"));
     }
 
     private void onHealthCommand(CommandSender sender, CommandContext context) {
