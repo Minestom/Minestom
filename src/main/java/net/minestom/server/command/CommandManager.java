@@ -340,8 +340,8 @@ public final class CommandManager {
             final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command,
                     commandQueryResult.args, input, false, argument -> true);
             if (queryResult == null) {
-                // Invalid argument, return command node
-                int commandNode = commandIdentityMap.get(commandQueryResult.command);
+                // Invalid argument, return command node (default to root)
+                int commandNode = commandIdentityMap.getOrDefault(commandQueryResult.command, 0);
                 request.retrieve(commandNode);
                 continue;
             }
@@ -354,6 +354,9 @@ public final class CommandManager {
                 request.retrieve(node);
                 break;
             }
+
+            // Unexpected issue, redirect to root
+            request.retrieve(0);
         }
 
         // Pair<CommandName,EnabledTracking>
