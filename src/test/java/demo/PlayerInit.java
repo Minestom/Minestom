@@ -113,7 +113,7 @@ public class PlayerInit {
             if (entity instanceof Player) {
                 Player target = (Player) entity;
                 Vector velocity = source.getPosition().clone().getDirection().multiply(4);
-                velocity.setY(3.5f);
+                velocity.setY(5.65f);
                 target.setVelocity(velocity);
                 target.damage(DamageType.fromEntity(source), 5);
             } else {

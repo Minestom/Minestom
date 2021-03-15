@@ -532,9 +532,17 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                 Vector newVelocityOut = new Vector();
 
                 // Gravity force
-                final double gravityY = !hasNoGravity() ? Math.min(
-                        gravityDragPerTick + (gravityAcceleration * (double) gravityTickCount),
-                        gravityTerminalVelocity) : 0;
+                double gravityY;
+                if (hasNoGravity()) {
+                    gravityY = 0;
+                } else {
+//                    if (velocity.getY() == gravityTerminalVelocity) {
+//                        gravityY = gravityAcceleration - gravityDragPerTick;
+//                    } else {
+                    float v = gravityTickCount+1;
+                    gravityY = (gravityAcceleration * v * 1/(gravityDragPerTick * v));
+//                    }
+                }
 
                 final Vector deltaPos = new Vector(
                         getVelocity().getX() / tps,
