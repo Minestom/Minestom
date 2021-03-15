@@ -1,5 +1,6 @@
 package net.minestom.server.command;
 
+import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
@@ -9,6 +10,9 @@ import net.minestom.server.command.builder.*;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.condition.CommandCondition;
+import net.minestom.server.command.builder.parser.ArgumentQueryResult;
+import net.minestom.server.command.builder.parser.CommandParser;
+import net.minestom.server.command.builder.parser.CommandQueryResult;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
@@ -310,9 +314,46 @@ public final class CommandManager {
         rootNode.flags = 0;
         nodes.add(rootNode);
 
+        Map<Command, Integer> commandIdentityMap = new IdentityHashMap<>();
+        Map<Argument<?>, DeclareCommandsPacket.Node[]> argumentIdentityMap = new IdentityHashMap<>();
+
+        List<Pair<String, NodeMaker.Request>> nodeRequests = new ArrayList<>();
+
         // Brigadier-like commands
         for (Command command : dispatcher.getCommands()) {
-            serializeCommand(player, command, nodes, rootChildren);
+            final int commandNodeIndex = serializeCommand(player, command, nodes, rootChildren, commandIdentityMap, argumentIdentityMap, nodeRequests);
+            commandIdentityMap.put(command, commandNodeIndex);
+        }
+
+        // Answer to all node requests
+        for (Pair<String, NodeMaker.Request> pair : nodeRequests) {
+            String input = pair.left();
+            NodeMaker.Request request = pair.right();
+
+            final CommandQueryResult commandQueryResult = CommandParser.findCommand(input);
+            if (commandQueryResult == null) {
+                // Invalid command, return root node
+                request.retrieve(0);
+                continue;
+            }
+
+            final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command,
+                    commandQueryResult.args, input, false, argument -> true);
+            if (queryResult == null) {
+                // Invalid argument, return command node
+                int commandNode = commandIdentityMap.get(commandQueryResult.command);
+                request.retrieve(commandNode);
+                continue;
+            }
+
+            // Retrieve argument node
+            Argument<?> argument = queryResult.argument;
+            DeclareCommandsPacket.Node[] argNodes = argumentIdentityMap.get(argument);
+            for (DeclareCommandsPacket.Node argNode : argNodes) {
+                int node = argNode.children[0];
+                request.retrieve(node);
+                break;
+            }
         }
 
         // Pair<CommandName,EnabledTracking>
@@ -371,7 +412,10 @@ public final class CommandManager {
 
     private int serializeCommand(CommandSender sender, Command command,
                                  List<DeclareCommandsPacket.Node> nodes,
-                                 IntList rootChildren) {
+                                 IntList rootChildren,
+                                 Map<Command, Integer> commandIdentityMap,
+                                 Map<Argument<?>, DeclareCommandsPacket.Node[]> argumentIdentityMap,
+                                 List<Pair<String, NodeMaker.Request>> nodeRequests) {
         // Check if player should see this command
         final CommandCondition commandCondition = command.getCondition();
         if (commandCondition != null) {
@@ -386,15 +430,16 @@ public final class CommandManager {
         final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
 
         // Create command for main name
-        final DeclareCommandsPacket.Node mainNode = createCommand(sender, nodes, cmdChildren,
-                command.getName(), syntaxes, rootChildren);
+        final DeclareCommandsPacket.Node mainNode = createCommandNodes(sender, nodes, cmdChildren,
+                command.getName(), syntaxes, rootChildren, argumentIdentityMap, nodeRequests);
         final int mainNodeIndex = nodes.indexOf(mainNode);
 
         // Serialize all the subcommands
         for (Command subcommand : command.getSubcommands()) {
-            final int subNodeIndex = serializeCommand(sender, subcommand, nodes, cmdChildren);
+            final int subNodeIndex = serializeCommand(sender, subcommand, nodes, cmdChildren, commandIdentityMap, argumentIdentityMap, nodeRequests);
             if (subNodeIndex != -1) {
                 mainNode.children = ArrayUtils.concatenateIntArrays(mainNode.children, new int[]{subNodeIndex});
+                commandIdentityMap.put(subcommand, subNodeIndex);
             }
         }
 
@@ -426,12 +471,14 @@ public final class CommandManager {
      * @param rootChildren the children of the main node (all commands name)
      * @return The index of the main node for alias redirection
      */
-    private DeclareCommandsPacket.Node createCommand(@NotNull CommandSender sender,
-                                                     @NotNull List<DeclareCommandsPacket.Node> nodes,
-                                                     @NotNull IntList cmdChildren,
-                                                     @NotNull String name,
-                                                     @NotNull Collection<CommandSyntax> syntaxes,
-                                                     @NotNull IntList rootChildren) {
+    private DeclareCommandsPacket.Node createCommandNodes(@NotNull CommandSender sender,
+                                                          @NotNull List<DeclareCommandsPacket.Node> nodes,
+                                                          @NotNull IntList cmdChildren,
+                                                          @NotNull String name,
+                                                          @NotNull Collection<CommandSyntax> syntaxes,
+                                                          @NotNull IntList rootChildren,
+                                                          @NotNull Map<Argument<?>, DeclareCommandsPacket.Node[]> argumentIdentityMap,
+                                                          @NotNull List<Pair<String, NodeMaker.Request>> nodeRequests) {
 
         DeclareCommandsPacket.Node literalNode = createMainNode(name, syntaxes.isEmpty());
 
@@ -465,7 +512,7 @@ public final class CommandManager {
                 final Argument<?> argument = arguments[i];
                 final boolean isLast = i == arguments.length - 1;
 
-                // Search previously parsed syntaxes to find identical part in order to create a node between those
+                // Search previously parsed syntaxes to find identical part in order to create a link between those
                 {
                     // Find shared part
                     boolean foundSharedPart = false;
@@ -536,8 +583,13 @@ public final class CommandManager {
                     lastArgumentNodeIndex = nodesLayer.size();
                 }
             }
+
+            nodeRequests.addAll(nodeMaker.getNodeRequests());
+
             syntaxesArguments.add(arguments);
         }
+
+        storedArgumentsNodes.forEach((argument, nodes1) -> argumentIdentityMap.put(argument, nodes1.get(0)));
 
         literalNode.children = ArrayUtils.toArray(cmdChildren);
         return literalNode;

@@ -118,21 +118,17 @@ public class CommandDispatcher {
         final String[] parts = commandString.split(StringUtils.SPACE);
         final String commandName = parts[0];
 
-        String[] args = new String[parts.length - 1];
-        System.arraycopy(parts, 1, args, 0, args.length);
-
-        final CommandQueryResult commandQueryResult = CommandParser.findCommand(commandName, args);
+        final CommandQueryResult commandQueryResult = CommandParser.findCommand(commandString);
         // Check if the command exists
         if (commandQueryResult == null) {
             return CommandResult.of(CommandResult.Type.UNKNOWN, commandName);
         }
         final Command command = commandQueryResult.command;
-        args = commandQueryResult.args;
 
         CommandResult result = new CommandResult();
         result.input = commandString;
         // Find the used syntax and fill CommandResult#type and CommandResult#parsedCommand
-        findParsedCommand(command, commandName, args, commandString, result);
+        findParsedCommand(command, commandName, commandQueryResult.args, commandString, result);
 
         // Cache result
         {

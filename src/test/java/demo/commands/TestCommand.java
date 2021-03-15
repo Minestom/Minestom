@@ -6,7 +6,7 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.suggestion.SuggestionEntry;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
-import static net.minestom.server.command.builder.arguments.ArgumentType.Word;
+import static net.minestom.server.command.builder.arguments.ArgumentType.*;
 
 public class TestCommand extends Command {
 
@@ -24,7 +24,11 @@ public class TestCommand extends Command {
 
         addSyntax((sender, context) -> {
             System.out.println("executed");
-        }, test1, test2);
+        }, Literal("test"), test1, test2);
+
+        addSyntax((sender, context) -> {
+            System.out.println("cmd syntax");
+        }, Literal("debug"), Command("cmd"));
 
     }
 

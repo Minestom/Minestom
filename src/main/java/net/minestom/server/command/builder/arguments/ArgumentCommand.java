@@ -6,11 +6,14 @@ import net.minestom.server.command.builder.CommandResult;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class ArgumentCommand extends Argument<CommandResult> {
 
     public static final int INVALID_COMMAND_ERROR = 1;
+
+    private String shortcut = "";
 
     public ArgumentCommand(@NotNull String id) {
         super(id, true, true);
@@ -19,8 +22,11 @@ public class ArgumentCommand extends Argument<CommandResult> {
     @NotNull
     @Override
     public CommandResult parse(@NotNull String input) throws ArgumentSyntaxException {
+        final String commandString = !shortcut.isEmpty() ?
+                shortcut + StringUtils.SPACE + input
+                : input;
         CommandDispatcher dispatcher = MinecraftServer.getCommandManager().getDispatcher();
-        CommandResult result = dispatcher.parse(input);
+        CommandResult result = dispatcher.parse(commandString);
 
         if (result.getType() != CommandResult.Type.SUCCESS)
             throw new ArgumentSyntaxException("Invalid command", input, INVALID_COMMAND_ERROR);
@@ -32,10 +38,28 @@ public class ArgumentCommand extends Argument<CommandResult> {
     public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
         final DeclareCommandsPacket.Node[] lastNodes = nodeMaker.getLatestNodes();
 
-        // FIXME check if lastNodes is null
-        for (DeclareCommandsPacket.Node node : lastNodes) {
-            node.flags |= 0x08; // Redirection mask
-            node.redirectedNode = 0; // Redirect to root
+        if (!shortcut.isEmpty()) {
+            nodeMaker.request(shortcut, (id) -> {
+                for (DeclareCommandsPacket.Node node : lastNodes) {
+                    node.flags |= 0x08; // Redirection mask
+                    node.redirectedNode = id;
+                }
+            });
+        } else {
+            for (DeclareCommandsPacket.Node node : lastNodes) {
+                node.flags |= 0x08; // Redirection mask
+                node.redirectedNode = 0; // Redirect to root
+            }
         }
+    }
+
+    @NotNull
+    public String getShortcut() {
+        return shortcut;
+    }
+
+    public ArgumentCommand setShortcut(@NotNull String shortcut) {
+        this.shortcut = shortcut;
+        return this;
     }
 }

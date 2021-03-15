@@ -24,17 +24,15 @@ public class TabCompleteListener {
         String commandName = split[0];
 
         String args = commandString.replaceFirst(commandName, "");
-        String[] argsSplit = new String[split.length - 1];
-        System.arraycopy(split, 1, argsSplit, 0, argsSplit.length);
 
-        final CommandQueryResult commandQueryResult = CommandParser.findCommand(commandName, argsSplit);
+        final CommandQueryResult commandQueryResult = CommandParser.findCommand(commandString);
         if (commandQueryResult == null) {
             // Command not found
             return;
         }
 
-        final ArgumentQueryResult queryResult = CommandParser.findSuggestibleArgument(commandQueryResult.command,
-                commandQueryResult.args, commandString, text.endsWith(StringUtils.SPACE));
+        final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command,
+                commandQueryResult.args, commandString, text.endsWith(StringUtils.SPACE), Argument::hasSuggestion);
         if (queryResult == null) {
             // Suggestible argument not found
             return;

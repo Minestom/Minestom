@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Function;
 
 public class CommandParser {
 
@@ -47,6 +48,16 @@ public class CommandParser {
         } while (correct);
 
         return commandQueryResult;
+    }
+
+    @Nullable
+    public static CommandQueryResult findCommand(@NotNull String input) {
+        final String[] parts = input.split(StringUtils.SPACE);
+        final String commandName = parts[0];
+
+        String[] args = new String[parts.length - 1];
+        System.arraycopy(parts, 1, args, 0, args.length);
+        return CommandParser.findCommand(commandName, args);
     }
 
     public static void parse(@Nullable CommandSyntax syntax, @NotNull Argument<?>[] commandArguments, @NotNull String[] inputArguments,
@@ -153,8 +164,8 @@ public class CommandParser {
     }
 
     @Nullable
-    public static ArgumentQueryResult findSuggestibleArgument(@NotNull Command command, String[] args, String commandString,
-                                                              boolean trailingSpace) {
+    public static ArgumentQueryResult findEligibleArgument(@NotNull Command command, String[] args, String commandString,
+                                                           boolean trailingSpace, Function<Argument<?>, Boolean> eligibilityFunction) {
         final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
 
         Int2ObjectRBTreeMap<ArgumentQueryResult> suggestions = new Int2ObjectRBTreeMap<>(Collections.reverseOrder());
@@ -190,7 +201,8 @@ public class CommandParser {
                     context.setArg(argument.getId(), argumentResult.parsedValue, argumentResult.rawArg);
                 }
 
-                if (argument.hasSuggestion()) {
+                // Save result
+                if (eligibilityFunction.apply(argument)) {
                     ArgumentQueryResult queryResult = new ArgumentQueryResult();
                     queryResult.syntax = syntax;
                     queryResult.argument = argument;
