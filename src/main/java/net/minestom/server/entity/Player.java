@@ -2327,7 +2327,7 @@ public class Player extends LivingEntity implements CommandSender {
             // In this case we send the smallest amount of chunks possible
             // Will be updated in PlayerSettings#refresh.
             // Non-compliant clients might also be stuck with this view
-            return 1;
+            return 3;
         } else {
             final int serverRange = MinecraftServer.getChunkViewDistance();
             return Math.min(playerRange, serverRange);
