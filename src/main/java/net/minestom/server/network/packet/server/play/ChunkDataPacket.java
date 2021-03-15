@@ -172,27 +172,29 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
             }
 
             // Data
-            this.paletteStorage = new PaletteStorage(15, 1);
+            // TODO don't hardcode bitsPerEntry (use packet field instead)
+            this.paletteStorage = new PaletteStorage(8, 1);
             int blockArrayLength = reader.readVarInt();
             for (int section = 0; section < CHUNK_SECTION_COUNT; section++) {
-                int test = mask & 1 << section;
-                if (test != 0) {
-                    short blockCount = reader.readShort();
-                    byte bitsPerEntry = reader.readByte();
-                    if (bitsPerEntry < 9) {
-                        int paletteSize = reader.readVarInt();
-                        for (int i = 0; i < paletteSize; i++) {
-                            // TODO fill palette
-                            int paletteValue = reader.readVarInt();
-                        }
+                boolean hasSection = (mask & 1 << section) != 0;
+                if (!hasSection)
+                    continue;
+                short blockCount = reader.readShort();
+                byte bitsPerEntry = reader.readByte();
+                if (bitsPerEntry < 9) {
+                    int paletteSize = reader.readVarInt();
+                    for (int i = 0; i < paletteSize; i++) {
+                        final int paletteValue = reader.readVarInt();
+                        paletteStorage.getSections()[section].getPaletteBlockMap().put((short) i, (short) paletteValue);
+                        paletteStorage.getSections()[section].getBlockPaletteMap().put((short) paletteValue, (short) i);
                     }
+                }
 
-                    int dataLength = reader.readVarInt();
-                    long[] data = new long[dataLength];
-                    for (int i = 0; i < dataLength; i++) {
-                        data[i] = reader.readLong();
-                    }
-                    paletteStorage.getSectionBlocks()[section] = data;
+                int dataLength = reader.readVarInt();
+                paletteStorage.getSections()[section].resize(bitsPerEntry);
+                long[] data = paletteStorage.getSections()[section].getBlocks();
+                for (int i = 0; i < dataLength; i++) {
+                    data[i] = reader.readLong();
                 }
             }
 
