@@ -124,7 +124,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
         blocks.release();
 
         // Block entities
-        if(blockEntities == null) {
+        if (blockEntities == null) {
             writer.writeVarInt(0);
         } else {
             writer.writeVarInt(blockEntities.size());
@@ -162,26 +162,47 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
             // unused at the moment
             NBT heightmaps = reader.readTag();
 
-            if(fullChunk) {
+            // Biomes
+            if (fullChunk) {
                 int[] biomesIds = reader.readVarIntArray();
-                biomes = new Biome[biomesIds.length];
+                this.biomes = new Biome[biomesIds.length];
                 for (int i = 0; i < biomesIds.length; i++) {
-                    biomes[i] = MinecraftServer.getBiomeManager().getById(biomesIds[i]);
+                    this.biomes[i] = MinecraftServer.getBiomeManager().getById(biomesIds[i]);
                 }
             }
 
+            // Data
+            this.paletteStorage = new PaletteStorage(15, 1);
             int blockArrayLength = reader.readVarInt();
-            byte[] blockArray = reader.readBytes(blockArrayLength);
-            // TODO: read blocks
+            for (int section = 0; section < CHUNK_SECTION_COUNT; section++) {
+                int test = mask & 1 << section;
+                if (test != 0) {
+                    short blockCount = reader.readShort();
+                    byte bitsPerEntry = reader.readByte();
+                    if (bitsPerEntry < 9) {
+                        int paletteSize = reader.readVarInt();
+                        for (int i = 0; i < paletteSize; i++) {
+                            // TODO fill palette
+                            int paletteValue = reader.readVarInt();
+                        }
+                    }
 
+                    int dataLength = reader.readVarInt();
+                    long[] data = new long[dataLength];
+                    for (int i = 0; i < dataLength; i++) {
+                        data[i] = reader.readLong();
+                    }
+                    paletteStorage.getSectionBlocks()[section] = data;
+                }
+            }
+
+            // Block entities
             int blockEntityCount = reader.readVarInt();
             blockEntities = new IntOpenHashSet();
             for (int i = 0; i < blockEntityCount; i++) {
                 NBTCompound tag = (NBTCompound) reader.readTag();
-
+                // TODO
             }
-
-            // TODO
         } catch (IOException | NBTException e) {
             MinecraftServer.getExceptionManager().handleException(e);
             // TODO: should we throw to avoid an invalid packet?
