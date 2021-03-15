@@ -18,7 +18,7 @@ public class TestCommand extends Command {
             suggestion.addEntry(new SuggestionEntry("test"));
         });
 
-        var test2 = Word("msg2").setSuggestionCallback((sender, context, suggestion) -> {
+        var test2 = String("msg2").setSuggestionCallback((sender, context, suggestion) -> {
             suggestion.addEntry(new SuggestionEntry("greer"));
         });
 
@@ -28,7 +28,7 @@ public class TestCommand extends Command {
 
         addSyntax((sender, context) -> {
             System.out.println("cmd syntax");
-        }, Literal("debug"), Command("cmd"));
+        }, Literal("debug"), Command("cmd").setShortcut("testcmd test a"));
 
     }
 

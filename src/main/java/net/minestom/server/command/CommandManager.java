@@ -338,7 +338,7 @@ public final class CommandManager {
             }
 
             final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command,
-                    commandQueryResult.args, input, false, argument -> true);
+                    commandQueryResult.args, input, true, argument -> true);
             if (queryResult == null) {
                 // Invalid argument, return command node (default to root)
                 int commandNode = commandIdentityMap.getOrDefault(commandQueryResult.command, 0);
@@ -350,13 +350,13 @@ public final class CommandManager {
             Argument<?> argument = queryResult.argument;
             DeclareCommandsPacket.Node[] argNodes = argumentIdentityMap.get(argument);
             for (DeclareCommandsPacket.Node argNode : argNodes) {
-                int node = argNode.children[0];
+                final int node = nodes.indexOf(argNode);
                 request.retrieve(node);
                 break;
             }
 
             // Unexpected issue, redirect to root
-            request.retrieve(0);
+            //request.retrieve(0);
         }
 
         // Pair<CommandName,EnabledTracking>
@@ -541,7 +541,7 @@ public final class CommandManager {
 
                     // Each node array represent a layer
                     final List<DeclareCommandsPacket.Node[]> nodesLayer = nodeMaker.getNodes();
-                    storedArgumentsNodes.put(argument, nodesLayer);
+                    storedArgumentsNodes.put(argument, new ArrayList<>(nodesLayer));
                     for (int nodeIndex = lastArgumentNodeIndex; nodeIndex < nodesLayer.size(); nodeIndex++) {
                         final NodeMaker.ConfiguredNodes configuredNodes = nodeMaker.getConfiguredNodes().get(nodeIndex);
                         final NodeMaker.Options options = configuredNodes.getOptions();
@@ -592,7 +592,8 @@ public final class CommandManager {
             syntaxesArguments.add(arguments);
         }
 
-        storedArgumentsNodes.forEach((argument, nodes1) -> argumentIdentityMap.put(argument, nodes1.get(0)));
+        storedArgumentsNodes.forEach((argument, nodes1) ->
+                argumentIdentityMap.put(argument, nodes1.get(nodes1.size() - 2)));
 
         literalNode.children = ArrayUtils.toArray(cmdChildren);
         return literalNode;
