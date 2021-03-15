@@ -3,6 +3,7 @@ package net.minestom.server.utils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.SerializationManager;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.netty.packet.FramedPacket;
@@ -49,7 +50,7 @@ public final class PacketUtils {
         // work out if the packet needs to be sent individually due to server-side translating
         boolean needsTranslating = false;
 
-        if (packet instanceof ComponentHoldingServerPacket) {
+        if (SerializationManager.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ComponentHoldingServerPacket) {
             needsTranslating = MinecraftServer.getSerializationManager().areAnyTranslatable(((ComponentHoldingServerPacket) packet).components());
         }
 
@@ -75,7 +76,7 @@ public final class PacketUtils {
                     final PlayerConnection playerConnection = player.getPlayerConnection();
                     if (playerConnection instanceof NettyPlayerConnection) {
                         final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
-                        nettyPlayerConnection.write(framedPacket);
+                        nettyPlayerConnection.write(framedPacket, true);
                     } else {
                         playerConnection.sendPacket(packet);
                     }
@@ -93,7 +94,7 @@ public final class PacketUtils {
                     continue;
 
                 final PlayerConnection playerConnection = player.getPlayerConnection();
-                playerConnection.sendPacket(packet);
+                playerConnection.sendPacket(packet, false);
             }
         }
     }

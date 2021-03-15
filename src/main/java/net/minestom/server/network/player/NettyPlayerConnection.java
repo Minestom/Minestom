@@ -5,6 +5,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.socket.SocketChannel;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.SerializationManager;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.extras.mojangAuth.Decrypter;
 import net.minestom.server.extras.mojangAuth.Encrypter;
@@ -187,7 +188,7 @@ public class NettyPlayerConnection extends PlayerConnection {
         } else if (message instanceof ServerPacket) {
             final ServerPacket serverPacket = (ServerPacket) message;
 
-            if (!skipTranslating && getPlayer() != null && serverPacket instanceof ComponentHoldingServerPacket) {
+            if ((SerializationManager.AUTOMATIC_COMPONENT_TRANSLATION && !skipTranslating) && getPlayer() != null && serverPacket instanceof ComponentHoldingServerPacket) {
                 serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component -> MinecraftServer.getSerializationManager().translate(component, getPlayer()));
             }
 

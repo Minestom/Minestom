@@ -27,6 +27,11 @@ import java.util.function.Function;
  * {@link TranslationRegistry} or your own implementation of {@link Translator}.
  */
 public class SerializationManager {
+    /**
+     * If components should be automatically translated in outgoing packets.
+     */
+    public static final boolean AUTOMATIC_COMPONENT_TRANSLATION = false;
+
     protected static final Localizable NULL_LOCALIZABLE = () -> null;
 
     private Function<Component, String> serializer = component -> GsonComponentSerializer.gson().serialize(component);
