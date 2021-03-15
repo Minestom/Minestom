@@ -178,6 +178,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     // Tick related
     private final PlayerTickEvent playerTickEvent = new PlayerTickEvent(this);
 
+    // Adventure
+    private Identity identity;
+
     public Player(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
         super(EntityType.PLAYER, uuid);
         this.username = username;
@@ -202,6 +205,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // FakePlayer init its connection there
         playerConnectionInit();
+
+        this.identity = Identity.identity(uuid);
     }
 
     /**
@@ -2700,7 +2705,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public @NotNull Identity identity() {
-        return Identity.identity(this.uuid);
+        return this.identity;
+    }
+
+    @Override
+    public void setUuid(@NotNull UUID uuid) {
+        super.setUuid(uuid);
+        // update identity
+        this.identity = Identity.identity(uuid);
     }
 
     /**
