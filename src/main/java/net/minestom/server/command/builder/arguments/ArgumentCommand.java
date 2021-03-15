@@ -13,6 +13,7 @@ public class ArgumentCommand extends Argument<CommandResult> {
 
     public static final int INVALID_COMMAND_ERROR = 1;
 
+    private boolean onlyCorrect;
     private String shortcut = "";
 
     public ArgumentCommand(@NotNull String id) {
@@ -28,7 +29,7 @@ public class ArgumentCommand extends Argument<CommandResult> {
         CommandDispatcher dispatcher = MinecraftServer.getCommandManager().getDispatcher();
         CommandResult result = dispatcher.parse(commandString);
 
-        if (result.getType() != CommandResult.Type.SUCCESS)
+        if (onlyCorrect && result.getType() != CommandResult.Type.SUCCESS)
             throw new ArgumentSyntaxException("Invalid command", input, INVALID_COMMAND_ERROR);
 
         return result;
@@ -51,6 +52,15 @@ public class ArgumentCommand extends Argument<CommandResult> {
                 node.redirectedNode = 0; // Redirect to root
             }
         }
+    }
+
+    public boolean isOnlyCorrect() {
+        return onlyCorrect;
+    }
+
+    public ArgumentCommand setOnlyCorrect(boolean onlyCorrect) {
+        this.onlyCorrect = onlyCorrect;
+        return this;
     }
 
     @NotNull
