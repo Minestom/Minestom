@@ -172,7 +172,6 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
             }
 
             // Data
-            // TODO don't hardcode bitsPerEntry (use packet field instead)
             this.paletteStorage = new PaletteStorage(8, 1);
             int blockArrayLength = reader.readVarInt();
             for (int section = 0; section < CHUNK_SECTION_COUNT; section++) {
@@ -181,6 +180,13 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
                     continue;
                 short blockCount = reader.readShort();
                 byte bitsPerEntry = reader.readByte();
+
+                // Resize palette if necessary
+                if (bitsPerEntry > paletteStorage.getSections()[section].getBitsPerEntry()) {
+                    paletteStorage.getSections()[section].resize(bitsPerEntry);
+                }
+
+                // Retrieve palette values
                 if (bitsPerEntry < 9) {
                     int paletteSize = reader.readVarInt();
                     for (int i = 0; i < paletteSize; i++) {
@@ -190,8 +196,8 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
                     }
                 }
 
+                // Read blocks
                 int dataLength = reader.readVarInt();
-                paletteStorage.getSections()[section].resize(bitsPerEntry);
                 long[] data = paletteStorage.getSections()[section].getBlocks();
                 for (int i = 0; i < dataLength; i++) {
                     data[i] = reader.readLong();
