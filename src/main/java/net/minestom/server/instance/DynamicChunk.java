@@ -69,8 +69,8 @@ public class DynamicChunk extends Chunk {
 
     public DynamicChunk(@Nullable Biome[] biomes, int chunkX, int chunkZ) {
         this(biomes, chunkX, chunkZ,
-                new PaletteStorage(15, 2),
-                new PaletteStorage(15, 2));
+                new PaletteStorage(8, 2),
+                new PaletteStorage(8, 2));
     }
 
     @Override
