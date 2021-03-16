@@ -46,7 +46,7 @@ public class EntityProjectile extends Entity {
         if (getEntityMeta() instanceof ProjectileMeta) {
             ((ProjectileMeta) getEntityMeta()).setShooter(this.shooter);
         }
-        setGravity(0.02f, 0.04f, 1.96f);
+        setGravity(0.02f, 0.04f);
     }
 
     @Nullable

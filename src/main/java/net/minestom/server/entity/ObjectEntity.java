@@ -12,7 +12,7 @@ public abstract class ObjectEntity extends Entity {
 
     public ObjectEntity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
         super(entityType, spawnPosition);
-        setGravity(0.02f, 0.04f, 1.96f);
+        setGravity(0.02f, 0.04f);
     }
 
     /**

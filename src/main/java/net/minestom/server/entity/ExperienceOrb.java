@@ -17,7 +17,7 @@ public class ExperienceOrb extends Entity {
 
     public ExperienceOrb(short experienceCount, @NotNull Position spawnPosition) {
         super(EntityType.EXPERIENCE_ORB, spawnPosition);
-        setGravity(0.02f, 0.04f, 1.96f);
+        setGravity(0.02f, 0.04f);
         setBoundingBox(0.5f, 0.5f, 0.5f);
         //todo vanilla sets random velocity here?
         this.experienceCount = experienceCount;
