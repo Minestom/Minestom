@@ -1270,18 +1270,13 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
         final Instance instance = getInstance();
         if (instance != null) {
-
-            // Needed to refresh the client chunks when connecting for the first time
-            final boolean forceUpdate = this instanceof Player && ((Player) this).getViewableChunks().isEmpty();
-
             final Chunk lastChunk = instance.getChunkAt(lastX, lastZ);
             final Chunk newChunk = instance.getChunkAt(x, z);
 
             Check.notNull(lastChunk, "The entity " + getEntityId() + " was in an unloaded chunk at " + lastX + ";" + lastZ);
             Check.notNull(newChunk, "The entity " + getEntityId() + " tried to move in an unloaded chunk at " + x + ";" + z);
 
-            final boolean chunkChange = lastChunk != newChunk;
-            if (forceUpdate || chunkChange) {
+            if (lastChunk != newChunk) {
                 instance.switchEntityChunk(this, lastChunk, newChunk);
                 if (this instanceof Player) {
                     // Refresh player view
