@@ -57,53 +57,68 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     private static final Map<Integer, Entity> entityById = new ConcurrentHashMap<>();
     private static final Map<UUID, Entity> entityByUuid = new ConcurrentHashMap<>();
     private static final AtomicInteger lastEntityId = new AtomicInteger();
-    // Network synchronization, send the absolute position of the entity each X milliseconds
-    private static final UpdateOption SYNCHRONIZATION_COOLDOWN = new UpdateOption(1500, TimeUnit.MILLISECOND);
-    protected final Position position;
-    protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
-    // list of scheduled tasks to be executed during the next entity tick
-    protected final Queue<Consumer<Entity>> nextTick = Queues.newConcurrentLinkedQueue();
-    private final int id;
-    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
-    private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
-    private final Set<Entity> passengers = new CopyOnWriteArraySet<>();
-    // Events
-    private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
-    private final Map<String, Collection<EventCallback<?>>> extensionCallbacks = new ConcurrentHashMap<>();
-    private final List<TimedPotion> effects = new CopyOnWriteArrayList<>();
-    private final EntityTickEvent tickEvent = new EntityTickEvent(this);
-    /**
-     * Lock used to support #switchEntityType
-     */
-    private final Object entityTypeLock = new Object();
+
     protected Instance instance;
+    protected final Position position;
     protected double lastX, lastY, lastZ;
     protected double cacheX, cacheY, cacheZ; // Used to synchronize with #getPosition
     protected float lastYaw, lastPitch;
     protected float cacheYaw, cachePitch;
     protected boolean onGround;
+
+    private BoundingBox boundingBox;
+
     protected Entity vehicle;
+
     // Velocity
     protected Vector velocity = new Vector(); // Movement in block per second
     protected boolean hasPhysics = true;
+
     protected double gravityDragPerTick;
     protected double gravityAcceleration;
     protected int gravityTickCount; // Number of tick where gravity tick was applied
-    protected UUID uuid;
-    protected EntityType entityType; // UNSAFE to change, modify at your own risk
-    protected Metadata metadata = new Metadata(this);
-    protected EntityMeta entityMeta;
-    private BoundingBox boundingBox;
+
     private boolean autoViewable;
+    private final int id;
+    protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
     private Data data;
+    private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
+
+    protected UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
     private boolean removed;
     private boolean shouldRemove;
     private long scheduledRemoveTime;
+
+    private final Set<Entity> passengers = new CopyOnWriteArraySet<>();
+    protected EntityType entityType; // UNSAFE to change, modify at your own risk
+
+    // Network synchronization, send the absolute position of the entity each X milliseconds
+    private static final UpdateOption SYNCHRONIZATION_COOLDOWN = new UpdateOption(1500, TimeUnit.MILLISECOND);
     private UpdateOption customSynchronizationCooldown;
     private long lastAbsoluteSynchronizationTime;
+
+    // Events
+    private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
+    private final Map<String, Collection<EventCallback<?>>> extensionCallbacks = new ConcurrentHashMap<>();
+
+    protected Metadata metadata = new Metadata(this);
+    protected EntityMeta entityMeta;
+
+    private final List<TimedPotion> effects = new CopyOnWriteArrayList<>();
+
+    // list of scheduled tasks to be executed during the next entity tick
+    protected final Queue<Consumer<Entity>> nextTick = Queues.newConcurrentLinkedQueue();
+
     // Tick related
     private long ticks;
+    private final EntityTickEvent tickEvent = new EntityTickEvent(this);
+
+    /**
+     * Lock used to support #switchEntityType
+     */
+    private final Object entityTypeLock = new Object();
 
     public Entity(@NotNull EntityType entityType, @NotNull UUID uuid) {
         this.id = generateId();
@@ -218,6 +233,16 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     }
 
     /**
+     * Schedules a task to be run during the next entity tick.
+     * It ensures that the task will be executed in the same thread as the entity (depending of the {@link ThreadProvider}).
+     *
+     * @param callback the task to execute during the next entity tick
+     */
+    public void scheduleNextTick(@NotNull Consumer<Entity> callback) {
+        this.nextTick.add(callback);
+    }
+
+    /**
      * Gets an entity based on its id (from {@link #getEntityId()}).
      * <p>
      * Entity id are unique server-wide.
@@ -241,6 +266,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         return Entity.entityByUuid.getOrDefault(uuid, null);
     }
 
+
     /**
      * Generate and return a new unique entity id.
      * <p>
@@ -250,16 +276,6 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      */
     public static int generateId() {
         return lastEntityId.incrementAndGet();
-    }
-
-    /**
-     * Schedules a task to be run during the next entity tick.
-     * It ensures that the task will be executed in the same thread as the entity (depending of the {@link ThreadProvider}).
-     *
-     * @param callback the task to execute during the next entity tick
-     */
-    public void scheduleNextTick(@NotNull Consumer<Entity> callback) {
-        this.nextTick.add(callback);
     }
 
     /**
@@ -845,10 +861,12 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      * <p>
      * WARNING: this does not change the entity hit-box which is client-side.
      *
-     * @param boundingBox the new bounding box
+     * @param x the bounding box X size
+     * @param y the bounding box Y size
+     * @param z the bounding box Z size
      */
-    public void setBoundingBox(BoundingBox boundingBox) {
-        this.boundingBox = boundingBox;
+    public void setBoundingBox(double x, double y, double z) {
+        this.boundingBox = new BoundingBox(this, x, y, z);
     }
 
     /**
@@ -856,12 +874,10 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      * <p>
      * WARNING: this does not change the entity hit-box which is client-side.
      *
-     * @param x the bounding box X size
-     * @param y the bounding box Y size
-     * @param z the bounding box Z size
+     * @param boundingBox the new bounding box
      */
-    public void setBoundingBox(double x, double y, double z) {
-        this.boundingBox = new BoundingBox(this, x, y, z);
+    public void setBoundingBox(BoundingBox boundingBox) {
+        this.boundingBox = boundingBox;
     }
 
     /**
@@ -882,17 +898,6 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     @Nullable
     public Instance getInstance() {
         return instance;
-    }
-
-    /**
-     * Changes the entity instance.
-     *
-     * @param instance the new instance of the entity
-     * @throws NullPointerException  if {@code instance} is null
-     * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
-     */
-    public void setInstance(@NotNull Instance instance) {
-        setInstance(instance, this.position);
     }
 
     /**
@@ -923,6 +928,17 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         spawn();
         EntitySpawnEvent entitySpawnEvent = new EntitySpawnEvent(this, instance);
         callEvent(EntitySpawnEvent.class, entitySpawnEvent);
+    }
+
+    /**
+     * Changes the entity instance.
+     *
+     * @param instance the new instance of the entity
+     * @throws NullPointerException  if {@code instance} is null
+     * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
+     */
+    public void setInstance(@NotNull Instance instance) {
+        setInstance(instance, this.position);
     }
 
     /**
@@ -1563,10 +1579,6 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         return SYNCHRONIZATION_COOLDOWN;
     }
 
-    protected boolean shouldRemove() {
-        return shouldRemove;
-    }
-
     public enum Pose {
         STANDING,
         FALL_FLYING,
@@ -1575,5 +1587,9 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         SPIN_ATTACK,
         SNEAKING,
         DYING
+    }
+
+    protected boolean shouldRemove() {
+        return shouldRemove;
     }
 }
