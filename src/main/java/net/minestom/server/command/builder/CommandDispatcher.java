@@ -91,7 +91,7 @@ public class CommandDispatcher {
         CommandResult commandResult = parse(commandString);
         ParsedCommand parsedCommand = commandResult.parsedCommand;
         if (parsedCommand != null) {
-            commandResult.commandData = parsedCommand.execute(source, commandString);
+            commandResult.commandData = parsedCommand.execute(source);
         }
         return commandResult;
     }
@@ -162,6 +162,7 @@ public class CommandDispatcher {
 
         ParsedCommand parsedCommand = new ParsedCommand();
         parsedCommand.command = command;
+        parsedCommand.commandString = commandString;
 
         // The default executor should be used if no argument is provided
         {
