@@ -315,7 +315,7 @@ public final class CommandManager {
         nodes.add(rootNode);
 
         Map<Command, Integer> commandIdentityMap = new IdentityHashMap<>();
-        Map<Argument<?>, DeclareCommandsPacket.Node[]> argumentIdentityMap = new IdentityHashMap<>();
+        Map<Argument<?>, Integer> argumentIdentityMap = new IdentityHashMap<>();
 
         List<Pair<String, NodeMaker.Request>> nodeRequests = new ArrayList<>();
 
@@ -338,25 +338,18 @@ public final class CommandManager {
             }
 
             final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command,
-                    commandQueryResult.args, input, true, argument -> true);
+                    commandQueryResult.args, input, false, true, syntax -> true, argument -> true);
             if (queryResult == null) {
                 // Invalid argument, return command node (default to root)
-                int commandNode = commandIdentityMap.getOrDefault(commandQueryResult.command, 0);
+                final int commandNode = commandIdentityMap.getOrDefault(commandQueryResult.command, 0);
                 request.retrieve(commandNode);
                 continue;
             }
 
             // Retrieve argument node
-            Argument<?> argument = queryResult.argument;
-            DeclareCommandsPacket.Node[] argNodes = argumentIdentityMap.get(argument);
-            for (DeclareCommandsPacket.Node argNode : argNodes) {
-                final int node = nodes.indexOf(argNode);
-                request.retrieve(node);
-                break;
-            }
-
-            // Unexpected issue, redirect to root
-            //request.retrieve(0);
+            final Argument<?> argument = queryResult.argument;
+            final int argumentNode = argumentIdentityMap.getOrDefault(argument, 0);
+            request.retrieve(argumentNode);
         }
 
         // Pair<CommandName,EnabledTracking>
@@ -417,7 +410,7 @@ public final class CommandManager {
                                  List<DeclareCommandsPacket.Node> nodes,
                                  IntList rootChildren,
                                  Map<Command, Integer> commandIdentityMap,
-                                 Map<Argument<?>, DeclareCommandsPacket.Node[]> argumentIdentityMap,
+                                 Map<Argument<?>, Integer> argumentIdentityMap,
                                  List<Pair<String, NodeMaker.Request>> nodeRequests) {
         // Check if player should see this command
         final CommandCondition commandCondition = command.getCondition();
@@ -480,7 +473,7 @@ public final class CommandManager {
                                                           @NotNull String name,
                                                           @NotNull Collection<CommandSyntax> syntaxes,
                                                           @NotNull IntList rootChildren,
-                                                          @NotNull Map<Argument<?>, DeclareCommandsPacket.Node[]> argumentIdentityMap,
+                                                          @NotNull Map<Argument<?>, Integer> argumentIdentityMap,
                                                           @NotNull List<Pair<String, NodeMaker.Request>> nodeRequests) {
 
         DeclareCommandsPacket.Node literalNode = createMainNode(name, syntaxes.isEmpty());
@@ -592,8 +585,15 @@ public final class CommandManager {
             syntaxesArguments.add(arguments);
         }
 
-        storedArgumentsNodes.forEach((argument, nodes1) ->
-                argumentIdentityMap.put(argument, nodes1.get(nodes1.size() - 2)));
+        storedArgumentsNodes.forEach((argument, argNodes) -> {
+            int value = 0;
+            for (DeclareCommandsPacket.Node[] n1 : argNodes) {
+                for (DeclareCommandsPacket.Node n2 : n1) {
+                    value = nodes.indexOf(n2);
+                }
+            }
+            argumentIdentityMap.put(argument, value);
+        });
 
         literalNode.children = ArrayUtils.toArray(cmdChildren);
         return literalNode;

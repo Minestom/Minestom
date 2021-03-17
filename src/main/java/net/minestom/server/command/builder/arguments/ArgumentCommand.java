@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import com.google.common.annotations.Beta;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.CommandDispatcher;
 import net.minestom.server.command.builder.CommandResult;
@@ -68,6 +69,7 @@ public class ArgumentCommand extends Argument<CommandResult> {
         return shortcut;
     }
 
+    @Beta
     public ArgumentCommand setShortcut(@NotNull String shortcut) {
         this.shortcut = shortcut;
         return this;

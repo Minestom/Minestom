@@ -28,7 +28,7 @@ public class TestCommand extends Command {
 
         addSyntax((sender, context) -> {
             System.out.println("cmd syntax");
-        }, Literal("debug"), Command("cmd").setShortcut("testcmd test a"));
+        }, Literal("debug"), Command("cmd").setShortcut("testcmd test"));
 
     }
 

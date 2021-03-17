@@ -1,6 +1,7 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.parser.ArgumentQueryResult;
 import net.minestom.server.command.builder.parser.CommandParser;
@@ -32,7 +33,8 @@ public class TabCompleteListener {
         }
 
         final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command,
-                commandQueryResult.args, commandString, text.endsWith(StringUtils.SPACE), Argument::hasSuggestion);
+                commandQueryResult.args, commandString, text.endsWith(StringUtils.SPACE), false,
+                CommandSyntax::hasSuggestion, Argument::hasSuggestion);
         if (queryResult == null) {
             // Suggestible argument not found
             return;

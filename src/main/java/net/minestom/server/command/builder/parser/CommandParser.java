@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class CommandParser {
 
@@ -165,13 +165,15 @@ public class CommandParser {
 
     @Nullable
     public static ArgumentQueryResult findEligibleArgument(@NotNull Command command, String[] args, String commandString,
-                                                           boolean trailingSpace, Function<Argument<?>, Boolean> eligibilityFunction) {
+                                                           boolean trailingSpace, boolean forceCorrect,
+                                                           Predicate<CommandSyntax> syntaxPredicate,
+                                                           Predicate<Argument<?>> argumentPredicate) {
         final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
 
         Int2ObjectRBTreeMap<ArgumentQueryResult> suggestions = new Int2ObjectRBTreeMap<>(Collections.reverseOrder());
 
         for (CommandSyntax syntax : syntaxes) {
-            if (!syntax.hasSuggestion()) {
+            if (!syntaxPredicate.test(syntax)) {
                 continue;
             }
 
@@ -202,7 +204,8 @@ public class CommandParser {
                 }
 
                 // Save result
-                if (eligibilityFunction.apply(argument)) {
+                if ((!forceCorrect || argumentResult.correct) &&
+                        argumentPredicate.test(argument)) {
                     ArgumentQueryResult queryResult = new ArgumentQueryResult();
                     queryResult.syntax = syntax;
                     queryResult.argument = argument;
