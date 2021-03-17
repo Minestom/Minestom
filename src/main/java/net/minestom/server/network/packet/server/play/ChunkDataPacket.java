@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 public class ChunkDataPacket implements ServerPacket, CacheablePacket {
@@ -69,11 +70,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
                 if (section.length > 0) { // section contains at least one block
                     mask |= 1 << i;
                     Utils.writeBlocks(blocks, paletteStorage.getPalette(i), section, paletteStorage.getBitsPerEntry());
-                } else {
-                    mask |= 0;
                 }
-            } else {
-                mask |= 0;
             }
         }
 

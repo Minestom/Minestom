@@ -89,6 +89,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     private DimensionType dimensionType;
     private GameMode gameMode;
+    // Chunks that the player can view
     protected final Set<Chunk> viewableChunks = new CopyOnWriteArraySet<>();
 
     private final AtomicInteger teleportId = new AtomicInteger();
@@ -1507,10 +1508,12 @@ public class Player extends LivingEntity implements CommandSender {
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
 
-            UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
+            // TODO prevent the client from getting lag spikes when re-loading large chunks
+            // Probably by having a distinction between visible and loaded (cache) chunks
+            /*UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
             unloadChunkPacket.chunkX = chunkX;
             unloadChunkPacket.chunkZ = chunkZ;
-            playerConnection.sendPacket(unloadChunkPacket);
+            playerConnection.sendPacket(unloadChunkPacket);*/
 
             final Chunk chunk = instance.getChunk(chunkX, chunkZ);
             if (chunk != null)
@@ -2327,7 +2330,7 @@ public class Player extends LivingEntity implements CommandSender {
             // In this case we send the smallest amount of chunks possible
             // Will be updated in PlayerSettings#refresh.
             // Non-compliant clients might also be stuck with this view
-            return 1;
+            return 3;
         } else {
             final int serverRange = MinecraftServer.getChunkViewDistance();
             return Math.min(playerRange, serverRange);

@@ -228,7 +228,6 @@ public class PaletteStorage implements PublicCloneable<PaletteStorage> {
      * @param newBitsPerEntry the new bits per entry count
      */
     private void resize(int newBitsPerEntry) {
-        // FIXME: artifacts when resizing
         newBitsPerEntry = fixBitsPerEntry(newBitsPerEntry);
 
         PaletteStorage paletteStorageCache = new PaletteStorage(newBitsPerEntry, bitsIncrement);
@@ -275,7 +274,7 @@ public class PaletteStorage implements PublicCloneable<PaletteStorage> {
 
         final int section = ChunkUtils.getSectionAt(y);
 
-        final int valuesPerLong = paletteStorage.valuesPerLong;
+        int valuesPerLong = paletteStorage.valuesPerLong;
 
         if (paletteStorage.sectionBlocks[section].length == 0) {
             if (blockId == 0) {
@@ -293,6 +292,9 @@ public class PaletteStorage implements PublicCloneable<PaletteStorage> {
 
         // Change to palette value
         blockId = paletteStorage.getPaletteIndex(section, blockId);
+
+        // The storage could have been resized
+        valuesPerLong = paletteStorage.valuesPerLong;
 
         final int sectionIndex = getSectionIndex(x, y, z);
 
