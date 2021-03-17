@@ -169,16 +169,21 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#commandString">commandString</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="CommandContext.html" title="class in net.minestom.server.command.builder">CommandContext</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#context">context</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder">CommandExecutor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#executor">executor</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#syntax">syntax</a></span></code></th>
 <td class="colLast">&nbsp;</td>
@@ -224,8 +229,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#execute(net.minestom.server.command.CommandSender,java.lang.String)">execute</a></span>&#8203;(<a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
-       java.lang.String&nbsp;commandString)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#execute(net.minestom.server.command.CommandSender)">execute</a></span>&#8203;(<a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source)</code></th>
 <td class="colLast">
 <div class="block">Executes the command for the given source.</div>
 </td>
@@ -267,6 +271,15 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>command</h4>
 <pre>protected&nbsp;<a href="Command.html" title="class in net.minestom.server.command.builder">Command</a> command</pre>
+</li>
+</ul>
+<a id="commandString">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>commandString</h4>
+<pre>protected&nbsp;java.lang.String commandString</pre>
 </li>
 </ul>
 <a id="syntax">
@@ -343,7 +356,7 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="execute(net.minestom.server.command.CommandSender,java.lang.String)">
+<a id="execute(net.minestom.server.command.CommandSender)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -351,9 +364,7 @@ extends java.lang.Object</pre>
 <h4>execute</h4>
 <pre class="methodSignature">@Nullable
 public&nbsp;<a href="CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a>&nbsp;execute&#8203;(@NotNull
-                           <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
-                           @NotNull
-                           java.lang.String&nbsp;commandString)</pre>
+                           <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source)</pre>
 <div class="block">Executes the command for the given source.
  <p>
  The command will not be executed if <a href="Command.html#getCondition()"><code>Command.getCondition()</code></a>
@@ -361,7 +372,6 @@ public&nbsp;<a href="CommandData.html" title="class in net.minestom.server.comma
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>source</code> - the command source</dd>
-<dd><code>commandString</code> - the command string</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the command data, null if none</dd>
 </dl>
