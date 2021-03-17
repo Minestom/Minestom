@@ -101,7 +101,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
         super(entityType, uuid, spawnPosition);
         setupAttributes();
-        setGravity(0.02, 0.0784000015258789);
         initEquipments();
     }
 
