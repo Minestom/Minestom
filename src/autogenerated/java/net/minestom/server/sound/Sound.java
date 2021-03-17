@@ -11,7 +11,7 @@ import net.minestom.server.utils.NamespaceID;
  * //==============================
  */
 @SuppressWarnings({"deprecation"})
-public enum Sound implements Keyed {
+public enum Sound implements Keyed, net.kyori.adventure.sound.Sound.Type {
     AMBIENT_CAVE("minecraft:ambient.cave"),
 
     AMBIENT_BASALT_DELTAS_ADDITIONS("minecraft:ambient.basalt_deltas.additions"),

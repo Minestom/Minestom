@@ -1,7 +1,9 @@
 package net.minestom.codegen.sounds;
 
+import com.squareup.javapoet.ClassName;
+import net.kyori.adventure.sound.Sound;
 import net.minestom.codegen.BasicEnumGenerator;
-import net.minestom.codegen.stats.StatsEnumGenerator;
+import net.minestom.codegen.EnumGenerator;
 import net.minestom.server.registry.ResourceGatherer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +45,14 @@ public class SoundEnumGenerator extends BasicEnumGenerator {
 
     private SoundEnumGenerator(File targetFolder) throws IOException {
         super(targetFolder);
+    }
+
+    @Override
+    protected void prepare(EnumGenerator generator) {
+        super.prepare(generator);
+
+        // implement type as well
+        generator.addSuperinterface(ClassName.get(Sound.Type.class));
     }
 
     @Override
