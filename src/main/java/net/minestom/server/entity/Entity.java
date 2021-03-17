@@ -597,8 +597,12 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                 if (hasNoGravity()) {
                     gravityY = 0;
                 } else {
-                    final float v = gravityTickCount + 1;
-                    gravityY = gravityAcceleration * 2 * v / (gravityDragPerTick * v);
+                    final double v = gravityDragPerTick * gravityTickCount;
+                    gravityY = gravityAcceleration * 2 * gravityTickCount;
+                    // Check for zero, since dividing by it causes the client to freeze
+                    if (v != 0) {
+                        gravityY /= v;
+                    }
                 }
 
                 final Vector deltaPos = new Vector(
