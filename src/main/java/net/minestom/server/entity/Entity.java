@@ -614,7 +614,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                     gravityY = 0;
                 } else {
                     final double v = gravityDragPerTick * gravityTickCount;
-                    gravityY = gravityAcceleration * 2 * gravityTickCount;
+                    gravityY = gravityAcceleration * gravityTickCount;
                     // Check for zero, since dividing by it causes the client to freeze
                     if (v != 0) {
                         gravityY /= v;
@@ -1011,7 +1011,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      */
     public void setGravity(double gravityDragPerTick, double gravityAcceleration) {
         this.gravityDragPerTick = gravityDragPerTick;
-        this.gravityAcceleration = gravityAcceleration;
+        this.gravityAcceleration = gravityAcceleration * 2;
     }
 
     /**
