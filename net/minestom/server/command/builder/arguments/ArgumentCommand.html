@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -202,6 +202,16 @@ extends <a href="Argument.html" title="class in net.minestom.server.command.buil
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getShortcut()">getShortcut</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isOnlyCorrect()">isOnlyCorrect</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(java.lang.String&nbsp;input)</code></th>
 <td class="colLast">
@@ -209,13 +219,23 @@ extends <a href="Argument.html" title="class in net.minestom.server.command.buil
  if the input cannot be convert to <code>T</code></div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></span>&#8203;(<a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
             boolean&nbsp;executable)</code></th>
 <td class="colLast">
 <div class="block">Turns the argument into a list of nodes for command dispatching.</div>
 </td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="ArgumentCommand.html" title="class in net.minestom.server.command.builder.arguments">ArgumentCommand</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setOnlyCorrect(boolean)">setOnlyCorrect</a></span>&#8203;(boolean&nbsp;onlyCorrect)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="ArgumentCommand.html" title="class in net.minestom.server.command.builder.arguments">ArgumentCommand</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setShortcut(java.lang.String)">setShortcut</a></span>&#8203;(java.lang.String&nbsp;shortcut)</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -319,7 +339,7 @@ public&nbsp;<a href="../CommandResult.html" title="class in net.minestom.server.
 <a id="processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>processNodes</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;processNodes&#8203;(@NotNull
@@ -334,6 +354,45 @@ public&nbsp;<a href="../CommandResult.html" title="class in net.minestom.server.
 <dd><code>nodeMaker</code> - helper object used to create and modify nodes</dd>
 <dd><code>executable</code> - true if this will be the last argument, false otherwise</dd>
 </dl>
+</li>
+</ul>
+<a id="isOnlyCorrect()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isOnlyCorrect</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isOnlyCorrect()</pre>
+</li>
+</ul>
+<a id="setOnlyCorrect(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setOnlyCorrect</h4>
+<pre class="methodSignature">public&nbsp;<a href="ArgumentCommand.html" title="class in net.minestom.server.command.builder.arguments">ArgumentCommand</a>&nbsp;setOnlyCorrect&#8203;(boolean&nbsp;onlyCorrect)</pre>
+</li>
+</ul>
+<a id="getShortcut()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getShortcut</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;java.lang.String&nbsp;getShortcut()</pre>
+</li>
+</ul>
+<a id="setShortcut(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setShortcut</h4>
+<pre class="methodSignature">@Beta
+public&nbsp;<a href="ArgumentCommand.html" title="class in net.minestom.server.command.builder.arguments">ArgumentCommand</a>&nbsp;setShortcut&#8203;(@NotNull
+                                   java.lang.String&nbsp;shortcut)</pre>
 </li>
 </ul>
 </li>

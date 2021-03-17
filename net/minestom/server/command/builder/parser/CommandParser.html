@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -198,11 +198,27 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static <a href="CommandQueryResult.html" title="class in net.minestom.server.command.builder.parser">CommandQueryResult</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findCommand(java.lang.String)">findCommand</a></span>&#8203;(java.lang.String&nbsp;input)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>static <a href="CommandQueryResult.html" title="class in net.minestom.server.command.builder.parser">CommandQueryResult</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findCommand(java.lang.String,java.lang.String%5B%5D)">findCommand</a></span>&#8203;(java.lang.String&nbsp;commandName,
            java.lang.String[]&nbsp;args)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>static <a href="ArgumentQueryResult.html" title="class in net.minestom.server.command.builder.parser">ArgumentQueryResult</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findEligibleArgument(net.minestom.server.command.builder.Command,java.lang.String%5B%5D,java.lang.String,boolean,boolean,java.util.function.Predicate,java.util.function.Predicate)">findEligibleArgument</a></span>&#8203;(<a href="../Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command,
+                    java.lang.String[]&nbsp;args,
+                    java.lang.String&nbsp;commandString,
+                    boolean&nbsp;trailingSpace,
+                    boolean&nbsp;forceCorrect,
+                    java.util.function.Predicate&lt;<a href="../CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a>&gt;&nbsp;syntaxPredicate,
+                    java.util.function.Predicate&lt;<a href="../arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&gt;&nbsp;argumentPredicate)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static <a href="ValidSyntaxHolder.html" title="class in net.minestom.server.command.builder.parser">ValidSyntaxHolder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findMostCorrectSyntax(java.util.List,net.minestom.server.command.builder.CommandContext)">findMostCorrectSyntax</a></span>&#8203;(java.util.List&lt;<a href="ValidSyntaxHolder.html" title="class in net.minestom.server.command.builder.parser">ValidSyntaxHolder</a>&gt;&nbsp;validSyntaxes,
                      <a href="../CommandContext.html" title="class in net.minestom.server.command.builder">CommandContext</a>&nbsp;context)</code></th>
@@ -211,15 +227,7 @@ extends java.lang.Object</pre>
  valid arguments.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>static <a href="ArgumentQueryResult.html" title="class in net.minestom.server.command.builder.parser">ArgumentQueryResult</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findSuggestibleArgument(net.minestom.server.command.builder.Command,java.lang.String%5B%5D,java.lang.String,boolean)">findSuggestibleArgument</a></span>&#8203;(<a href="../Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command,
-                       java.lang.String[]&nbsp;args,
-                       java.lang.String&nbsp;commandString,
-                       boolean&nbsp;trailingSpace)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(net.minestom.server.command.builder.CommandSyntax,net.minestom.server.command.builder.arguments.Argument%5B%5D,java.lang.String%5B%5D,java.lang.String,java.util.List,it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap)">parse</a></span>&#8203;(<a href="../CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a>&nbsp;syntax,
      <a href="../arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;[]&nbsp;commandArguments,
@@ -285,6 +293,17 @@ public static&nbsp;<a href="CommandQueryResult.html" title="class in net.minesto
                                              java.lang.String[]&nbsp;args)</pre>
 </li>
 </ul>
+<a id="findCommand(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findCommand</h4>
+<pre class="methodSignature">@Nullable
+public static&nbsp;<a href="CommandQueryResult.html" title="class in net.minestom.server.command.builder.parser">CommandQueryResult</a>&nbsp;findCommand&#8203;(@NotNull
+                                             java.lang.String&nbsp;input)</pre>
+</li>
+</ul>
 <a id="parse(net.minestom.server.command.builder.CommandSyntax,net.minestom.server.command.builder.arguments.Argument[],java.lang.String[],java.lang.String,java.util.List,it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap)">
 <!--   -->
 </a>
@@ -327,18 +346,21 @@ public static&nbsp;<a href="ValidSyntaxHolder.html" title="class in net.minestom
 </dl>
 </li>
 </ul>
-<a id="findSuggestibleArgument(net.minestom.server.command.builder.Command,java.lang.String[],java.lang.String,boolean)">
+<a id="findEligibleArgument(net.minestom.server.command.builder.Command,java.lang.String[],java.lang.String,boolean,boolean,java.util.function.Predicate,java.util.function.Predicate)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>findSuggestibleArgument</h4>
+<h4>findEligibleArgument</h4>
 <pre class="methodSignature">@Nullable
-public static&nbsp;<a href="ArgumentQueryResult.html" title="class in net.minestom.server.command.builder.parser">ArgumentQueryResult</a>&nbsp;findSuggestibleArgument&#8203;(@NotNull
-                                                          <a href="../Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command,
-                                                          java.lang.String[]&nbsp;args,
-                                                          java.lang.String&nbsp;commandString,
-                                                          boolean&nbsp;trailingSpace)</pre>
+public static&nbsp;<a href="ArgumentQueryResult.html" title="class in net.minestom.server.command.builder.parser">ArgumentQueryResult</a>&nbsp;findEligibleArgument&#8203;(@NotNull
+                                                       <a href="../Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command,
+                                                       java.lang.String[]&nbsp;args,
+                                                       java.lang.String&nbsp;commandString,
+                                                       boolean&nbsp;trailingSpace,
+                                                       boolean&nbsp;forceCorrect,
+                                                       java.util.function.Predicate&lt;<a href="../CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a>&gt;&nbsp;syntaxPredicate,
+                                                       java.util.function.Predicate&lt;<a href="../arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&gt;&nbsp;argumentPredicate)</pre>
 </li>
 </ul>
 </li>
