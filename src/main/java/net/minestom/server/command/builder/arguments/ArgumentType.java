@@ -107,32 +107,10 @@ public class ArgumentType {
     // Minecraft specific arguments
 
     /**
-     * @deprecated Use {@link ArgumentTextColor} for colors, {@link ArgumentTextDecoration} for styles, {@link ArgumentColor} for raw colors,
-     * {@link ArgumentDyeColor} for dye colors and {@link ArgumentTeamColor} for team formats
+     * @see ArgumentColor
      */
-    @Deprecated
-    public static ArgumentChatColor ChatColor(@NotNull String id) {
-        return new ArgumentChatColor(id);
-    }
-
-    public static ArgumentTextColor TextColor(@NotNull String id) {
-        return new ArgumentTextColor(id);
-    }
-
-    public static ArgumentTextDecoration TextDecoration(@NotNull String id) {
-        return new ArgumentTextDecoration(id);
-    }
-
     public static ArgumentColor Color(@NotNull String id) {
         return new ArgumentColor(id);
-    }
-
-    public static ArgumentDyeColor DyeColor(@NotNull String id) {
-        return new ArgumentDyeColor(id);
-    }
-
-    public static ArgumentTeamColor TeamColor(@NotNull String id) {
-        return new ArgumentTeamColor(id);
     }
 
     /**
