@@ -136,6 +136,9 @@ dependencies {
     // SLF4J is the base logger for most libraries, therefore we can hook it into log4j2.
     api 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.0'
 
+    // https://mvnrepository.com/artifact/org.jline/jline
+    implementation group: 'org.jline', name: 'jline', version: '3.19.0'
+
     // Guava 21.0+ required for Mixin, but Authlib imports 17.0
     api 'com.google.guava:guava:21.0'
     api 'com.mojang:authlib:1.5.21'
