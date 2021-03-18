@@ -613,12 +613,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                 if (hasNoGravity()) {
                     gravityY = 0;
                 } else {
-                    final double v = gravityDragPerTick * gravityTickCount;
-                    gravityY = gravityAcceleration * gravityTickCount;
-                    // Check for zero, since dividing by it causes the client to freeze
-                    if (v != 0) {
-                        gravityY /= v;
-                    }
+                    gravityY = getGravityValue();
                 }
 
                 final Vector deltaPos = new Vector(
@@ -761,6 +756,21 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         if (shouldRemove() && !MinecraftServer.isStopping()) {
             remove();
         }
+    }
+
+    /**
+     * Used to calculate the entity's vertical velocity resulting from the gravity
+     * @return the current vertical velocity
+     */
+    protected double getGravityValue() {
+        double gravityY;
+        final double v = gravityDragPerTick * gravityTickCount;
+        gravityY = gravityAcceleration * gravityTickCount;
+        // Check for zero, since dividing by it causes the client to freeze
+        if (v != 0) {
+            gravityY /= v;
+        }
+        return gravityY;
     }
 
     /**
