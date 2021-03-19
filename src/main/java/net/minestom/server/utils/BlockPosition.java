@@ -264,19 +264,19 @@ public class BlockPosition implements PublicCloneable<BlockPosition> {
      */
     @NotNull
     public BlockPosition getRelative(BlockFace face) {
-        switch(face) {
-        case BOTTOM:
-            return new BlockPosition(getX(), getY() - 1, getZ());
-        case TOP:
-            return new BlockPosition(getX(), getY() + 1, getZ());
-        case NORTH:
-            return new BlockPosition(getX(), getY(), getZ() - 1);
-        case SOUTH:
-            return new BlockPosition(getX(), getY(), getZ() + 1);
-        case WEST:
-            return new BlockPosition(getX() - 1, getY(), getZ());
-        case EAST:
-            return new BlockPosition(getX() + 1, getY(), getZ());
+        switch (face) {
+            case BOTTOM:
+                return new BlockPosition(getX(), getY() - 1, getZ());
+            case TOP:
+                return new BlockPosition(getX(), getY() + 1, getZ());
+            case NORTH:
+                return new BlockPosition(getX(), getY(), getZ() - 1);
+            case SOUTH:
+                return new BlockPosition(getX(), getY(), getZ() + 1);
+            case WEST:
+                return new BlockPosition(getX() - 1, getY(), getZ());
+            case EAST:
+                return new BlockPosition(getX() + 1, getY(), getZ());
         }
         return new BlockPosition(getX(), getY(), getZ()); // should never be called
     }

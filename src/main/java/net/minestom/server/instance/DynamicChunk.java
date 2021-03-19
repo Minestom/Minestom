@@ -9,7 +9,6 @@ import net.minestom.server.data.Data;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.data.SerializableDataImpl;
 import net.minestom.server.entity.pathfinding.PFBlockDescription;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.palette.PaletteStorage;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
