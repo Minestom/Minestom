@@ -1,6 +1,8 @@
 package net.minestom.server.utils;
 
 import io.netty.buffer.ByteBuf;
+import it.unimi.dsi.fastutil.shorts.Short2ShortLinkedOpenHashMap;
+import net.minestom.server.instance.palette.Section;
 import net.minestom.server.utils.binary.BinaryWriter;
 
 import java.util.UUID;
@@ -92,27 +94,32 @@ public final class Utils {
         return new UUID(uuidMost, uuidLeast);
     }
 
-    public static void writeBlocks(ByteBuf buffer, short[] palette, long[] blocksId, int bitsPerEntry) {
+    public static void writeSectionBlocks(ByteBuf buffer, Section section) {
         /*short count = 0;
         for (short id : blocksId)
             if (id != 0)
                 count++;*/
 
+        final int bitsPerEntry = section.getBitsPerEntry();
+
         //buffer.writeShort(count);
+        // TODO count blocks
         buffer.writeShort(200);
         buffer.writeByte((byte) bitsPerEntry);
 
         // Palette
         if (bitsPerEntry < 9) {
             // Palette has to exist
-            writeVarIntBuf(buffer, palette.length);
-            for (short paletteValue : palette) {
+            final Short2ShortLinkedOpenHashMap paletteBlockMap = section.getPaletteBlockMap();
+            writeVarIntBuf(buffer, paletteBlockMap.size());
+            for (short paletteValue : paletteBlockMap.values()) {
                 writeVarIntBuf(buffer, paletteValue);
             }
         }
 
-        writeVarIntBuf(buffer, blocksId.length);
-        for (long datum : blocksId) {
+        final long[] blocks = section.getBlocks();
+        writeVarIntBuf(buffer, blocks.length);
+        for (long datum : blocks) {
             buffer.writeLong(datum);
         }
     }
