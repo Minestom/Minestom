@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * Represents options for {@link Batch}s.
  */
 public class BatchOption {
+
     private boolean fullChunk = false;
     private boolean calculateInverse = false;
     private boolean unsafeApply = false;
@@ -49,7 +50,7 @@ public class BatchOption {
      * If set, the batch may not be ready, or it may be partially ready which will cause an undefined result.
      * {@link Batch#isReady()} and {@link Batch#awaitReady()} may be used to check if it is ready and block
      * until it is ready.
-     *
+     * <p>
      * The default implementations of {@link ChunkBatch}, {@link AbsoluteBlockBatch}, and {@link RelativeBlockBatch}
      * are always ready unless they are an inverse batch. This is not a safe assumption, and may change in the future.
      * <p>

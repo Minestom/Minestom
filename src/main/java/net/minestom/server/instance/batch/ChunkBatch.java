@@ -36,8 +36,8 @@ import java.util.concurrent.CountDownLatch;
  * @see Batch
  */
 public class ChunkBatch implements Batch<ChunkCallback> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChunkBatch.class);
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChunkBatch.class);
 
     // Need to be synchronized manually
     // Format: blockIndex/blockStateId/customBlockId (32/16/16 bits)
@@ -178,8 +178,8 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     protected ChunkBatch apply(@NotNull Instance instance,
-                         @NotNull Chunk chunk, @Nullable ChunkCallback callback,
-                         boolean safeCallback) {
+                               @NotNull Chunk chunk, @Nullable ChunkCallback callback,
+                               boolean safeCallback) {
         if (!this.options.isUnsafeApply()) this.awaitReady();
 
         final ChunkBatch inverse = this.options.shouldCalculateInverse() ? new ChunkBatch(new LongArrayList(), new Int2ObjectOpenHashMap<>(), options, false) : null;

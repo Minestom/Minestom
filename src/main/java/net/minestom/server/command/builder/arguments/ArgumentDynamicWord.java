@@ -84,6 +84,7 @@ public class ArgumentDynamicWord extends Argument<String> {
      * @param dynamicRestriction the dynamic restriction, can be null to disable
      * @return 'this' for chaining
      */
+    @NotNull
     public ArgumentDynamicWord fromRestrictions(@Nullable StringValidator dynamicRestriction) {
         this.dynamicRestriction = dynamicRestriction;
         return this;
