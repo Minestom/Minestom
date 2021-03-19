@@ -24,6 +24,8 @@ public class EntityTypeContainer implements Comparable<EntityTypeContainer> {
     private double height;
     private Class<?> metaClass;
     private EntitySpawnType spawnType;
+    double gravityAcceleration;
+    double gravityDrag;
 
     public EntityTypeContainer(int id, NamespaceID name, double width, double height) {
         this.id = id;
@@ -66,6 +68,81 @@ public class EntityTypeContainer implements Comparable<EntityTypeContainer> {
         } else {
             this.spawnType = EntitySpawnType.BASE;
         }
+
+        // Default gravity values
+        // according to https://minecraft.gamepedia.com/Entity#Motion_of_entities
+        switch (name.getPath()) {
+            // 0
+            case "item_frame":
+                this.gravityAcceleration = 0;
+                break;
+            // 0.03
+            case "egg":
+            case "fishing_bobber":
+            case "experience_orb":
+            case "ender_pearl":
+            case "potion":
+            case "snowball":
+                this.gravityAcceleration = 0.03;
+                break;
+            // 0.04
+            case "boat":
+            case "tnt":
+            case "falling_block":
+            case "item":
+            case "minecart":
+                this.gravityAcceleration = 0.04;
+                break;
+            // 0.05
+            case "arrow":
+            case "spectral_arrow":
+            case "trident":
+                this.gravityAcceleration = 0.05;
+                break;
+            // 0.06
+            case "llama_spit":
+                this.gravityAcceleration = 0.06;
+                break;
+            // 0.1
+            case "fireball":
+            case "wither_skull":
+            case "dragon_fireball":
+                this.gravityAcceleration = 0.1;
+                break;
+            // 0.0784000015258789
+            default:
+                this.gravityAcceleration = 0.0784000015258789;
+                break;
+        }
+        switch (name.getPath()) {
+            // 0
+            case "boat":
+                this.gravityDrag = 0;
+                break;
+            // 0.01
+            case "llama_spit":
+            case "ender_pearl":
+            case "potion":
+            case "snowball":
+            case "egg":
+            case "trident":
+            case "spectral_arrow":
+            case "arrow":
+                this.gravityDrag = 0.01;
+                break;
+            // 0.05
+            case "minecart":
+                this.gravityDrag = 0.05;
+                break;
+            // 0.08
+            case "fishing_bobber":
+                this.gravityDrag = 0.08;
+                break;
+            // 0.02
+            default:
+                this.gravityDrag = 0.02;
+                break;
+        }
     }
 
     public int getId() {
@@ -90,6 +167,14 @@ public class EntityTypeContainer implements Comparable<EntityTypeContainer> {
 
     public EntitySpawnType getSpawnType() {
         return spawnType;
+    }
+
+    public double getGravityAcceleration() {
+        return gravityAcceleration;
+    }
+
+    public double getGravityDrag() {
+        return gravityDrag;
     }
 
     @Override

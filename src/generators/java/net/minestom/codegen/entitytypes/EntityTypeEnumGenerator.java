@@ -138,7 +138,9 @@ public class EntityTypeEnumGenerator extends MinestomEnumGenerator<EntityTypeCon
                         Metadata.class,
                         EntityMeta.class
                 ), "metaConstructor").addAnnotation(NotNull.class).build(),
-                ParameterSpec.builder(EntitySpawnType.class, "spawnType").addAnnotation(NotNull.class).build()
+                ParameterSpec.builder(EntitySpawnType.class, "spawnType").addAnnotation(NotNull.class).build(),
+                ParameterSpec.builder(TypeName.DOUBLE, "gravityAcceleration").build(),
+                ParameterSpec.builder(TypeName.DOUBLE, "gravityDrag").build()
         );
         generator.appendToConstructor(code -> {
             code.addStatement("$T.$N.put($T.from(namespaceID), this)", Registries.class, "entityTypes", NamespaceID.class);
@@ -155,6 +157,12 @@ public class EntityTypeEnumGenerator extends MinestomEnumGenerator<EntityTypeCon
         });
         generator.addMethod("getHeight", new ParameterSpec[0], TypeName.DOUBLE, code -> {
             code.addStatement("return this.height");
+        });
+        generator.addMethod("getGravityAcceleration", new ParameterSpec[0], TypeName.DOUBLE, code -> {
+            code.addStatement("return this.gravityAcceleration");
+        });
+        generator.addMethod("getGravityDrag", new ParameterSpec[0], TypeName.DOUBLE, code -> {
+            code.addStatement("return this.gravityDrag");
         });
         generator.addMethod("getMetaConstructor", new ParameterSpec[0],
                 ParameterizedTypeName.get(
@@ -187,7 +195,9 @@ public class EntityTypeEnumGenerator extends MinestomEnumGenerator<EntityTypeCon
                 type.getWidth(),
                 type.getHeight(),
                 new ConstructorLambda(ClassName.get(type.getMetaClass())),
-                "EntitySpawnType." + type.getSpawnType().name()
+                "EntitySpawnType." + type.getSpawnType().name(),
+                type.getGravityAcceleration(),
+                type.getGravityDrag()
         );
     }
 

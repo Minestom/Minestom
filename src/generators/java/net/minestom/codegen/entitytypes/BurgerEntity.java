@@ -5,4 +5,6 @@ public class BurgerEntity {
     String name;
     double width;
     double height;
+    double gravityAcceleration;
+    double gravityDrag;
 }
