@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -253,13 +253,6 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="batch/BlockBatch.html" title="class in net.minestom.server.instance.batch">BlockBatch</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createBlockBatch()">createBlockBatch</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Creates a new <a href="batch/BlockBatch.html" title="class in net.minestom.server.instance.batch"><code>BlockBatch</code></a> linked to this instance.</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createChunk(int,int,net.minestom.server.utils.chunk.ChunkCallback)">createChunk</a></span>&#8203;(int&nbsp;chunkX,
            int&nbsp;chunkZ,
@@ -268,21 +261,14 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <div class="block">Called to generated a new <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> from scratch.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code><a href="batch/ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createChunkBatch(net.minestom.server.instance.Chunk)">createChunkBatch</a></span>&#8203;(<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
-<td class="colLast">
-<div class="block">Creates a new <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> batch linked to this instance and the specified chunk.</div>
-</td>
-</tr>
-<tr id="i7" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#enableAutoChunkLoad(boolean)">enableAutoChunkLoad</a></span>&#8203;(boolean&nbsp;enable)</code></th>
 <td class="colLast">
 <div class="block">When set to true, chunks will load automatically when requested.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChunk(int,int)">getChunk</a></span>&#8203;(int&nbsp;chunkX,
         int&nbsp;chunkZ)</code></th>
@@ -290,84 +276,84 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <div class="block">Gets the loaded <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> at a position.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="ChunkGenerator.html" title="interface in net.minestom.server.instance">ChunkGenerator</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChunkGenerator()">getChunkGenerator</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the instance <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a>.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="IChunkLoader.html" title="interface in net.minestom.server.instance">IChunkLoader</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChunkLoader()">getChunkLoader</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="IChunkLoader.html" title="interface in net.minestom.server.instance"><code>IChunkLoader</code></a> of this instance.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>java.util.Collection&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChunks()">getChunks</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the instance chunks.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../utils/chunk/ChunkSupplier.html" title="interface in net.minestom.server.utils.chunk">ChunkSupplier</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChunkSupplier()">getChunkSupplier</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the current <a href="../utils/chunk/ChunkSupplier.html" title="interface in net.minestom.server.utils.chunk"><code>ChunkSupplier</code></a>.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLastBlockChangeTime()">getLastBlockChangeTime</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the last time at which a block changed.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>java.util.List&lt;<a href="SharedInstance.html" title="class in net.minestom.server.instance">SharedInstance</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSharedInstances()">getSharedInstances</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the <a href="SharedInstance.html" title="class in net.minestom.server.instance"><code>SharedInstance</code></a> linked to this container.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSrcInstance()">getSrcInstance</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the instance from which this one has been copied.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="../storage/StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStorageLocation()">getStorageLocation</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the instance <a href="../storage/StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a>.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasEnabledAutoChunkLoad()">hasEnabledAutoChunkLoad</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the instance should auto load chunks.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasSharedInstances()">hasSharedInstances</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if this instance has <a href="SharedInstance.html" title="class in net.minestom.server.instance"><code>SharedInstance</code></a> linked to it.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInVoid(net.minestom.server.utils.Position)">isInVoid</a></span>&#8203;(<a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
 <td class="colLast">
 <div class="block">Determines whether a position in the void.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadChunk(int,int,net.minestom.server.utils.chunk.ChunkCallback)">loadChunk</a></span>&#8203;(int&nbsp;chunkX,
          int&nbsp;chunkZ,
@@ -376,7 +362,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <div class="block">Forces the generation of a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>, even if no file and <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a> are defined.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadOptionalChunk(int,int,net.minestom.server.utils.chunk.ChunkCallback)">loadOptionalChunk</a></span>&#8203;(int&nbsp;chunkX,
                  int&nbsp;chunkZ,
@@ -386,7 +372,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
  <a href="Instance.html#hasEnabledAutoChunkLoad()"><code>Instance.hasEnabledAutoChunkLoad()</code></a> returns true.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshBlockStateId(net.minestom.server.utils.BlockPosition,short)">refreshBlockStateId</a></span>&#8203;(<a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                    short&nbsp;blockStateId)</code></th>
@@ -394,14 +380,14 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <div class="block">Used to change the id of the block in a specific <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils"><code>BlockPosition</code></a>.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshLastBlockChangeTime()">refreshLastBlockChangeTime</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Signals the instance that a block changed.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retrieveChunk(int,int,net.minestom.server.utils.chunk.ChunkCallback)">retrieveChunk</a></span>&#8203;(int&nbsp;chunkX,
              int&nbsp;chunkZ,
@@ -410,14 +396,14 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <div class="block">Used when a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> is not currently loaded in memory and need to be retrieved from somewhere else.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveChunksToStorage(java.lang.Runnable)">saveChunksToStorage</a></span>&#8203;(java.lang.Runnable&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Saves multiple chunks to permanent storage.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveChunkToStorage(net.minestom.server.instance.Chunk,java.lang.Runnable)">saveChunkToStorage</a></span>&#8203;(<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                   java.lang.Runnable&nbsp;callback)</code></th>
@@ -425,21 +411,21 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <div class="block">Saves a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> to permanent storage.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveInstance()">saveInstance</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Saves the instance without callback.</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveInstance(java.lang.Runnable)">saveInstance</a></span>&#8203;(java.lang.Runnable&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Saves the instance (<a href="Instance.html#getUniqueId()"><code>Instance.getUniqueId()</code></a> <a href="Instance.html#getData()"><code>Instance.getData()</code></a>) and call <a href="#saveChunksToStorage(java.lang.Runnable)"><code>saveChunksToStorage(Runnable)</code></a>.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#scheduleUpdate(int,net.minestom.server.utils.time.TimeUnit,net.minestom.server.utils.BlockPosition)">scheduleUpdate</a></span>&#8203;(int&nbsp;time,
               <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit,
@@ -448,7 +434,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <div class="block">Schedules a block update at a given <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils"><code>BlockPosition</code></a>.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlockStateId(int,int,int,short,net.minestom.server.data.Data)">setBlockStateId</a></span>&#8203;(int&nbsp;x,
                int&nbsp;y,
@@ -459,28 +445,28 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <div class="block">Sets a block at a position.</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChunkGenerator(net.minestom.server.instance.ChunkGenerator)">setChunkGenerator</a></span>&#8203;(<a href="ChunkGenerator.html" title="interface in net.minestom.server.instance">ChunkGenerator</a>&nbsp;chunkGenerator)</code></th>
 <td class="colLast">
 <div class="block">Changes the instance <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a>.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChunkLoader(net.minestom.server.instance.IChunkLoader)">setChunkLoader</a></span>&#8203;(<a href="IChunkLoader.html" title="interface in net.minestom.server.instance">IChunkLoader</a>&nbsp;chunkLoader)</code></th>
 <td class="colLast">
 <div class="block">Changes the <a href="IChunkLoader.html" title="interface in net.minestom.server.instance"><code>IChunkLoader</code></a> of this instance (to change how chunks are retrieved when not already loaded).</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChunkSupplier(net.minestom.server.utils.chunk.ChunkSupplier)">setChunkSupplier</a></span>&#8203;(<a href="../utils/chunk/ChunkSupplier.html" title="interface in net.minestom.server.utils.chunk">ChunkSupplier</a>&nbsp;chunkSupplier)</code></th>
 <td class="colLast">
 <div class="block">Changes which type of <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> implementation to use once one needs to be loaded.</div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCustomBlock(int,int,int,short,net.minestom.server.data.Data)">setCustomBlock</a></span>&#8203;(int&nbsp;x,
               int&nbsp;y,
@@ -491,7 +477,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <div class="block">Sets a <a href="block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> at a position.</div>
 </td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSeparateBlocks(int,int,int,short,short,net.minestom.server.data.Data)">setSeparateBlocks</a></span>&#8203;(int&nbsp;x,
                  int&nbsp;y,
@@ -503,28 +489,28 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <div class="block">Sets a <a href="block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> at a position with a custom state id.</div>
 </td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStorageLocation(net.minestom.server.storage.StorageLocation)">setStorageLocation</a></span>&#8203;(<a href="../storage/StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a>&nbsp;storageLocation)</code></th>
 <td class="colLast">
 <div class="block">Changes the instance <a href="../storage/StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a>.</div>
 </td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#tick(long)">tick</a></span>&#8203;(long&nbsp;time)</code></th>
 <td class="colLast">
 <div class="block">Performs a single tick in the instance, including scheduled tasks from <a href="Instance.html#scheduleNextTick(java.util.function.Consumer)"><code>Instance.scheduleNextTick(Consumer)</code></a>.</div>
 </td>
 </tr>
-<tr id="i38" class="altColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unloadChunk(net.minestom.server.instance.Chunk)">unloadChunk</a></span>&#8203;(<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">
 <div class="block">Schedules the removal of a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>, this method does not promise when it will be done.</div>
 </td>
 </tr>
-<tr id="i39" class="rowColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#UNSAFE_unloadChunks()">UNSAFE_unloadChunks</a></span>()</code></th>
 <td class="colLast">
@@ -921,43 +907,6 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <dd><code><a href="Instance.html#saveChunksToStorage(java.lang.Runnable)">saveChunksToStorage</a></code>&nbsp;in class&nbsp;<code><a href="Instance.html" title="class in net.minestom.server.instance">Instance</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>callback</code> - optional callback called when the chunks are done saving</dd>
-</dl>
-</li>
-</ul>
-<a id="createBlockBatch()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>createBlockBatch</h4>
-<pre class="methodSignature">public&nbsp;<a href="batch/BlockBatch.html" title="class in net.minestom.server.instance.batch">BlockBatch</a>&nbsp;createBlockBatch()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Instance.html#createBlockBatch()">Instance</a></code></span></div>
-<div class="block">Creates a new <a href="batch/BlockBatch.html" title="class in net.minestom.server.instance.batch"><code>BlockBatch</code></a> linked to this instance.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Instance.html#createBlockBatch()">createBlockBatch</a></code>&nbsp;in class&nbsp;<code><a href="Instance.html" title="class in net.minestom.server.instance">Instance</a></code></dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a <a href="batch/BlockBatch.html" title="class in net.minestom.server.instance.batch"><code>BlockBatch</code></a> linked to the instance</dd>
-</dl>
-</li>
-</ul>
-<a id="createChunkBatch(net.minestom.server.instance.Chunk)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>createChunkBatch</h4>
-<pre class="methodSignature">public&nbsp;<a href="batch/ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a>&nbsp;createChunkBatch&#8203;(@NotNull
-                                   <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Instance.html#createChunkBatch(net.minestom.server.instance.Chunk)">Instance</a></code></span></div>
-<div class="block">Creates a new <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> batch linked to this instance and the specified chunk.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Instance.html#createChunkBatch(net.minestom.server.instance.Chunk)">createChunkBatch</a></code>&nbsp;in class&nbsp;<code><a href="Instance.html" title="class in net.minestom.server.instance">Instance</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>chunk</code> - the chunk to modify</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a ChunkBatch linked to <code>chunk</code></dd>
 </dl>
 </li>
 </ul>

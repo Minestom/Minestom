@@ -871,7 +871,7 @@ protected final&nbsp;<a href="../world/biomes/Biome.html" title="class in net.mi
  <p>
  This is used when the previous block has to be destroyed/replaced, meaning that it clears the previous data and update method.
  <p>
- WARNING: this method is not thread-safe (in order to bring performance improvement with <a href="batch/ChunkBatch.html" title="class in net.minestom.server.instance.batch"><code>ChunkBatch</code></a> and <a href="batch/BlockBatch.html" title="class in net.minestom.server.instance.batch"><code>BlockBatch</code></a>)
+ WARNING: this method is not thread-safe (in order to bring performance improvement with <a href="batch/Batch.html" title="interface in net.minestom.server.instance.batch"><code>Batch</code></a>s)
  The thread-safe version is <a href="InstanceContainer.html#setSeparateBlocks(int,int,int,short,short,net.minestom.server.data.Data)"><code>InstanceContainer.setSeparateBlocks(int, int, int, short, short, Data)</code></a> (or any similar instance methods)
  Otherwise, you can simply do not forget to have this chunk synchronized when this is called.</div>
 <dl>
@@ -1146,9 +1146,7 @@ public abstract&nbsp;<a href="Chunk.html" title="class in net.minestom.server.in
 <li class="blockList">
 <h4>reset</h4>
 <pre class="methodSignature">public abstract&nbsp;void&nbsp;reset()</pre>
-<div class="block">Resets the chunk, this means clearing all the data making it empty.
- <p>
- Used for <a href="batch/BatchOption.html#isFullChunk()"><code>BatchOption.isFullChunk()</code></a>.</div>
+<div class="block">Resets the chunk, this means clearing all the data making it empty.</div>
 </li>
 </ul>
 <a id="getCustomBlock(int,int,int)">

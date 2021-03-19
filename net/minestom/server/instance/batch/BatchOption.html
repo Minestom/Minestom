@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -132,6 +132,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public class <span class="typeNameLabel">BatchOption</span>
 extends java.lang.Object</pre>
+<div class="block">Represents options for <a href="Batch.html" title="interface in net.minestom.server.instance.batch"><code>Batch</code></a>s.</div>
 </li>
 </ul>
 </div>
@@ -181,9 +182,33 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isUnsafeApply()">isUnsafeApply</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets if the batch will wait ignore whether it is ready or not when applying it.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="BatchOption.html" title="class in net.minestom.server.instance.batch">BatchOption</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCalculateInverse(boolean)">setCalculateInverse</a></span>&#8203;(boolean&nbsp;calculateInverse)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="BatchOption.html" title="class in net.minestom.server.instance.batch">BatchOption</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFullChunk(boolean)">setFullChunk</a></span>&#8203;(boolean&nbsp;fullChunk)</code></th>
 <td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="BatchOption.html" title="class in net.minestom.server.instance.batch">BatchOption</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUnsafeApply(boolean)">setUnsafeApply</a></span>&#8203;(boolean&nbsp;unsafeApply)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shouldCalculateInverse()">shouldCalculateInverse</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets if the batch will calculate the inverse of the batch when it is applied for an 'undo' behavior.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -237,20 +262,67 @@ extends java.lang.Object</pre>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isFullChunk()</pre>
 <div class="block">Gets if the batch is responsible for composing the whole chunk.
  <p>
- Having it to true means that the batch will clear the chunk data before placing the blocks.</div>
+ Having it to true means that the batch will clear the chunk data before placing the blocks.
+ <p>
+ Defaults to false.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the batch is responsible for all the chunk</dd>
 </dl>
 </li>
 </ul>
+<a id="shouldCalculateInverse()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>shouldCalculateInverse</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;shouldCalculateInverse()</pre>
+<div class="block">Gets if the batch will calculate the inverse of the batch when it is applied for an 'undo' behavior.
+ <p>
+ This flag will determine the return value of <a href="Batch.html#apply(net.minestom.server.instance.Instance,C)"><code>Batch.apply(Instance, Object)</code></a> (and other variants).
+ If true, a <a href="Batch.html" title="interface in net.minestom.server.instance.batch"><code>Batch</code></a> will be returned. Otherwise null will be returned.
+ <p>
+ Defaults to false.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the batch will calculate its inverse on application</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#isUnsafeApply()"><code>isUnsafeApply()</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="isUnsafeApply()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isUnsafeApply</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isUnsafeApply()</pre>
+<div class="block">Gets if the batch will wait ignore whether it is ready or not when applying it.
+ <p>
+ If set, the batch may not be ready, or it may be partially ready which will cause an undefined result.
+ <a href="Batch.html#isReady()"><code>Batch.isReady()</code></a> and <a href="Batch.html#awaitReady()"><code>Batch.awaitReady()</code></a> may be used to check if it is ready and block
+ until it is ready.
+
+ The default implementations of <a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch"><code>ChunkBatch</code></a>, <a href="AbsoluteBlockBatch.html" title="class in net.minestom.server.instance.batch"><code>AbsoluteBlockBatch</code></a>, and <a href="RelativeBlockBatch.html" title="class in net.minestom.server.instance.batch"><code>RelativeBlockBatch</code></a>
+ are always ready unless they are an inverse batch. This is not a safe assumption, and may change in the future.
+ <p>
+ Defaults to false.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the batch will immediately</dd>
+</dl>
+</li>
+</ul>
 <a id="setFullChunk(boolean)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setFullChunk</h4>
 <pre class="methodSignature">@NotNull
+@Contract("_ -&gt; this")
 public&nbsp;<a href="BatchOption.html" title="class in net.minestom.server.instance.batch">BatchOption</a>&nbsp;setFullChunk&#8203;(boolean&nbsp;fullChunk)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -259,6 +331,45 @@ public&nbsp;<a href="BatchOption.html" title="class in net.minestom.server.insta
 <dd>'this' for chaining</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="#isFullChunk()"><code>isFullChunk()</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="setCalculateInverse(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setCalculateInverse</h4>
+<pre class="methodSignature">@NotNull
+@Contract("_ -&gt; this")
+public&nbsp;<a href="BatchOption.html" title="class in net.minestom.server.instance.batch">BatchOption</a>&nbsp;setCalculateInverse&#8203;(boolean&nbsp;calculateInverse)</pre>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>calculateInverse</code> - true to make this batch calculate the inverse on application</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>'this' for chaining</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#shouldCalculateInverse()"><code>shouldCalculateInverse()</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="setUnsafeApply(boolean)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setUnsafeApply</h4>
+<pre class="methodSignature">@NotNull
+@Contract("_ -&gt; this")
+public&nbsp;<a href="BatchOption.html" title="class in net.minestom.server.instance.batch">BatchOption</a>&nbsp;setUnsafeApply&#8203;(boolean&nbsp;unsafeApply)</pre>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>unsafeApply</code> - true to make this batch apply without checking if it is ready to apply.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>'this' for chaining</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#isUnsafeApply()"><code>isUnsafeApply()</code></a>, 
+<a href="Batch.html#isReady()"><code>Batch.isReady()</code></a></dd>
 </dl>
 </li>
 </ul>

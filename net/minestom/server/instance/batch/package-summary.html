@@ -105,9 +105,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tbody>
 <tr class="altColor">
-<th class="colFirst" scope="row"><a href="InstanceBatch.html" title="interface in net.minestom.server.instance.batch">InstanceBatch</a></th>
+<th class="colFirst" scope="row"><a href="Batch.html" title="interface in net.minestom.server.instance.batch">Batch</a>&lt;C&gt;</th>
 <td class="colLast">
-<div class="block">A Batch is a tool used to cache a list of blocks to place and flush it whenever you want.</div>
+<div class="block">A Batch is a tool used to cache a list of block changes, and apply the changes whenever you want.</div>
 </td>
 </tr>
 </tbody>
@@ -122,21 +122,33 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tbody>
 <tr class="altColor">
-<th class="colFirst" scope="row"><a href="BatchOption.html" title="class in net.minestom.server.instance.batch">BatchOption</a></th>
-<td class="colLast">&nbsp;</td>
+<th class="colFirst" scope="row"><a href="AbsoluteBlockBatch.html" title="class in net.minestom.server.instance.batch">AbsoluteBlockBatch</a></th>
+<td class="colLast">
+<div class="block">A <a href="Batch.html" title="interface in net.minestom.server.instance.batch"><code>Batch</code></a> which can be used when changes are required across chunk borders,
+ but the changes do not need any translation.</div>
+</td>
 </tr>
 <tr class="rowColor">
-<th class="colFirst" scope="row"><a href="BlockBatch.html" title="class in net.minestom.server.instance.batch">BlockBatch</a></th>
+<th class="colFirst" scope="row"><a href="BatchOption.html" title="class in net.minestom.server.instance.batch">BatchOption</a></th>
 <td class="colLast">
-<div class="block">Used when the blocks you want to place need to be divided in multiple chunks,
- use a <a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch"><code>ChunkBatch</code></a> instead otherwise.</div>
+<div class="block">Represents options for <a href="Batch.html" title="interface in net.minestom.server.instance.batch"><code>Batch</code></a>s.</div>
 </td>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a></th>
 <td class="colLast">
-<div class="block">Used when all the blocks you want to place can be contained within only one <a href="../Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>,
- use a <a href="BlockBatch.html" title="class in net.minestom.server.instance.batch"><code>BlockBatch</code></a> instead otherwise.</div>
+<div class="block">A Batch used when all of the block changed are contained inside a single chunk.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<th class="colFirst" scope="row"><a href="ChunkGenerationBatch.html" title="class in net.minestom.server.instance.batch">ChunkGenerationBatch</a></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<th class="colFirst" scope="row"><a href="RelativeBlockBatch.html" title="class in net.minestom.server.instance.batch">RelativeBlockBatch</a></th>
+<td class="colLast">
+<div class="block">A <a href="Batch.html" title="interface in net.minestom.server.instance.batch"><code>Batch</code></a> which can be used when changes are required across chunk borders, and
+ are going to be reused in different places.</div>
 </td>
 </tr>
 </tbody>

@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -131,20 +131,27 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="InstanceBatch.html" title="interface in net.minestom.server.instance.batch">InstanceBatch</a></code>, <code><a href="../BlockModifier.html" title="interface in net.minestom.server.instance">BlockModifier</a></code></dd>
+<dd><code><a href="Batch.html" title="interface in net.minestom.server.instance.batch">Batch</a>&lt;<a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&gt;</code>, <code><a href="../BlockModifier.html" title="interface in net.minestom.server.instance">BlockModifier</a></code></dd>
+</dl>
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><code><a href="ChunkGenerationBatch.html" title="class in net.minestom.server.instance.batch">ChunkGenerationBatch</a></code></dd>
 </dl>
 <hr>
 <pre>public class <span class="typeNameLabel">ChunkBatch</span>
 extends java.lang.Object
-implements <a href="InstanceBatch.html" title="interface in net.minestom.server.instance.batch">InstanceBatch</a></pre>
-<div class="block">Used when all the blocks you want to place can be contained within only one <a href="../Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>,
- use a <a href="BlockBatch.html" title="class in net.minestom.server.instance.batch"><code>BlockBatch</code></a> instead otherwise.
- Can be created using <a href="../Instance.html#createChunkBatch(net.minestom.server.instance.Chunk)"><code>Instance.createChunkBatch(Chunk)</code></a>, and executed with <a href="#flush(net.minestom.server.utils.chunk.ChunkCallback)"><code>flush(ChunkCallback)</code></a>.
+implements <a href="Batch.html" title="interface in net.minestom.server.instance.batch">Batch</a>&lt;<a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&gt;</pre>
+<div class="block">A Batch used when all of the block changed are contained inside a single chunk.
+ If more than one chunk is needed, use an <a href="AbsoluteBlockBatch.html" title="class in net.minestom.server.instance.batch"><code>AbsoluteBlockBatch</code></a> instead.
  <p>
- Uses chunk coordinate (0-15) instead of world's.</div>
+ The batch can be placed in any chunk in any instance, however it will always remain
+ aligned to a chunk border. If completely translatable block changes are needed, use a
+ <a href="RelativeBlockBatch.html" title="class in net.minestom.server.instance.batch"><code>RelativeBlockBatch</code></a> instead.
+ <p>
+ Coordinates are relative to the chunk (0-15) instead of world coordinates.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="InstanceBatch.html" title="interface in net.minestom.server.instance.batch"><code>InstanceBatch</code></a></dd>
+<dd><a href="Batch.html" title="interface in net.minestom.server.instance.batch"><code>Batch</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -159,19 +166,32 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <!--   -->
 </a>
 <h3>Field Summary</h3>
+<table class="memberSummary">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Field</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected java.util.concurrent.CountDownLatch</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readyLatch">readyLatch</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.instance.batch.Batch">
+<!--   -->
+</a>
+<h3>Fields inherited from interface&nbsp;net.minestom.server.instance.batch.<a href="Batch.html" title="interface in net.minestom.server.instance.batch">Batch</a></h3>
+<code><a href="Batch.html#BLOCK_BATCH_POOL">BLOCK_BATCH_POOL</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.instance.BlockModifier">
 <!--   -->
 </a>
 <h3>Fields inherited from interface&nbsp;net.minestom.server.instance.<a href="../BlockModifier.html" title="interface in net.minestom.server.instance">BlockModifier</a></h3>
 <code><a href="../BlockModifier.html#BLOCK_MANAGER">BLOCK_MANAGER</a></code></li>
-</ul>
-<ul class="blockList">
-<li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.instance.batch.InstanceBatch">
-<!--   -->
-</a>
-<h3>Fields inherited from interface&nbsp;net.minestom.server.instance.batch.<a href="InstanceBatch.html" title="interface in net.minestom.server.instance.batch">InstanceBatch</a></h3>
-<code><a href="InstanceBatch.html#BLOCK_BATCH_POOL">BLOCK_BATCH_POOL</a></code></li>
 </ul>
 </li>
 </ul>
@@ -186,20 +206,25 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <table class="memberSummary">
 <caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
-<th class="colFirst" scope="col">Constructor</th>
+<th class="colFirst" scope="col">Modifier</th>
+<th class="colSecond" scope="col">Constructor</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.InstanceContainer,net.minestom.server.instance.Chunk,boolean)">ChunkBatch</a></span>&#8203;(<a href="../InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instance,
-          <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
-          boolean&nbsp;generationBatch)</code></th>
+<td class="colFirst"><code>&nbsp;</code></td>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">ChunkBatch</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.InstanceContainer,net.minestom.server.instance.Chunk,net.minestom.server.instance.batch.BatchOption,boolean)">ChunkBatch</a></span>&#8203;(<a href="../InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instance,
-          <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
-          <a href="BatchOption.html" title="class in net.minestom.server.instance.batch">BatchOption</a>&nbsp;batchOption,
-          boolean&nbsp;generationBatch)</code></th>
+<td class="colFirst"><code>protected </code></td>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(it.unimi.dsi.fastutil.longs.LongList,it.unimi.dsi.fastutil.ints.Int2ObjectMap,net.minestom.server.instance.batch.BatchOption)">ChunkBatch</a></span>&#8203;(it.unimi.dsi.fastutil.longs.LongList&nbsp;blocks,
+          it.unimi.dsi.fastutil.ints.Int2ObjectMap&lt;<a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&gt;&nbsp;blockDataMap,
+          <a href="BatchOption.html" title="class in net.minestom.server.instance.batch">BatchOption</a>&nbsp;options)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&nbsp;</code></td>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.batch.BatchOption)">ChunkBatch</a></span>&#8203;(<a href="BatchOption.html" title="class in net.minestom.server.instance.batch">BatchOption</a>&nbsp;options)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -221,58 +246,64 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clearData()">clearData</a></span>()</code></th>
+<td class="colFirst"><code><a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(net.minestom.server.instance.Instance,int,int,net.minestom.server.utils.chunk.ChunkCallback)">apply</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+     int&nbsp;chunkX,
+     int&nbsp;chunkZ,
+     <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
 <td class="colLast">
-<div class="block">Resets the chunk batch by removing all the entries.</div>
+<div class="block">Apply this batch to the given chunk.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flush(net.minestom.server.utils.chunk.ChunkCallback)">flush</a></span>&#8203;(<a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
+<td class="colFirst"><code><a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.utils.chunk.ChunkCallback)">apply</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+     <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+     <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
 <td class="colLast">
-<div class="block">Executes the batch in the dedicated pool and run the callback during the next instance update when blocks are placed
- (which means that the callback can be called 50ms after, but in a determinable thread).</div>
+<div class="block">Apply this batch to the given chunk.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flushChunkGenerator(net.minestom.server.instance.ChunkGenerator,net.minestom.server.utils.chunk.ChunkCallback)">flushChunkGenerator</a></span>&#8203;(<a href="../ChunkGenerator.html" title="interface in net.minestom.server.instance">ChunkGenerator</a>&nbsp;chunkGenerator,
-                   <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
+<td class="colFirst"><code>protected <a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.utils.chunk.ChunkCallback,boolean)">apply</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+     <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+     <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback,
+     boolean&nbsp;safeCallback)</code></th>
 <td class="colLast">
-<div class="block">Called to fill the chunk batch.</div>
+<div class="block">Apply this batch to the given chunk, and execute the callback depending on safeCallback.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isGenerationBatch()">isGenerationBatch</a></span>()</code></th>
+<td class="colFirst"><code><a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(net.minestom.server.instance.Instance,net.minestom.server.utils.chunk.ChunkCallback)">apply</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+     <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
 <td class="colLast">
-<div class="block">Gets if this chunk batch is part of a chunk generation.</div>
+<div class="block">Apply this batch to chunk (0, 0).</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlockStateId(int,int,int,short,net.minestom.server.data.Data)">setBlockStateId</a></span>&#8203;(int&nbsp;x,
-               int&nbsp;y,
-               int&nbsp;z,
-               short&nbsp;blockStateId,
-               <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#awaitReady()">awaitReady</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Sets a block at a position.</div>
+<div class="block">Blocks the current thread until the batch is ready to be applied.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCustomBlock(int,int,int,short,net.minestom.server.data.Data)">setCustomBlock</a></span>&#8203;(int&nbsp;x,
-              int&nbsp;y,
-              int&nbsp;z,
-              short&nbsp;customBlockId,
-              <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clear()">clear</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Sets a <a href="../block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> at a position.</div>
+<div class="block">Removes all block data from this batch.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isReady()">isReady</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets if the batch is ready to be applied to an instance.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSeparateBlocks(int,int,int,short,short,net.minestom.server.data.Data)">setSeparateBlocks</a></span>&#8203;(int&nbsp;x,
                  int&nbsp;y,
@@ -284,11 +315,14 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <div class="block">Sets a <a href="../block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> at a position with a custom state id.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unsafeFlush(net.minestom.server.utils.chunk.ChunkCallback)">unsafeFlush</a></span>&#8203;(<a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code><a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unsafeApply(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.utils.chunk.ChunkCallback)">unsafeApply</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+           <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+           <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
 <td class="colLast">
-<div class="block">Executes the batch in the dedicated pool and run the callback once blocks are placed (in the block batch pool).</div>
+<div class="block">Apply this batch to the given chunk, and execute the callback
+ immediately when the blocks have been applied, in an unknown thread.</div>
 </td>
 </tr>
 </table>
@@ -298,6 +332,13 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
 <code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.instance.batch.Batch">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.minestom.server.instance.batch.<a href="Batch.html" title="interface in net.minestom.server.instance.batch">Batch</a></h3>
+<code><a href="Batch.html#setBlockStateId(int,int,int,short,net.minestom.server.data.Data)">setBlockStateId</a>, <a href="Batch.html#setCustomBlock(int,int,int,short,net.minestom.server.data.Data)">setCustomBlock</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.instance.BlockModifier">
@@ -315,6 +356,25 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a id="readyLatch">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>readyLatch</h4>
+<pre>protected final&nbsp;java.util.concurrent.CountDownLatch readyLatch</pre>
+</li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <section role="region">
 <ul class="blockList">
@@ -322,32 +382,33 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.instance.InstanceContainer,net.minestom.server.instance.Chunk,net.minestom.server.instance.batch.BatchOption,boolean)">
+<a id="&lt;init&gt;()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>ChunkBatch</h4>
-<pre>public&nbsp;ChunkBatch&#8203;(@NotNull
-                  <a href="../InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instance,
-                  @NotNull
-                  <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
-                  @NotNull
-                  <a href="BatchOption.html" title="class in net.minestom.server.instance.batch">BatchOption</a>&nbsp;batchOption,
-                  boolean&nbsp;generationBatch)</pre>
+<pre>public&nbsp;ChunkBatch()</pre>
 </li>
 </ul>
-<a id="&lt;init&gt;(net.minestom.server.instance.InstanceContainer,net.minestom.server.instance.Chunk,boolean)">
+<a id="&lt;init&gt;(net.minestom.server.instance.batch.BatchOption)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ChunkBatch</h4>
+<pre>public&nbsp;ChunkBatch&#8203;(<a href="BatchOption.html" title="class in net.minestom.server.instance.batch">BatchOption</a>&nbsp;options)</pre>
+</li>
+</ul>
+<a id="&lt;init&gt;(it.unimi.dsi.fastutil.longs.LongList,it.unimi.dsi.fastutil.ints.Int2ObjectMap,net.minestom.server.instance.batch.BatchOption)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ChunkBatch</h4>
-<pre>public&nbsp;ChunkBatch&#8203;(@NotNull
-                  <a href="../InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instance,
-                  @NotNull
-                  <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
-                  boolean&nbsp;generationBatch)</pre>
+<pre>protected&nbsp;ChunkBatch&#8203;(it.unimi.dsi.fastutil.longs.LongList&nbsp;blocks,
+                     it.unimi.dsi.fastutil.ints.Int2ObjectMap&lt;<a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&gt;&nbsp;blockDataMap,
+                     <a href="BatchOption.html" title="class in net.minestom.server.instance.batch">BatchOption</a>&nbsp;options)</pre>
 </li>
 </ul>
 </li>
@@ -360,62 +421,6 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="setBlockStateId(int,int,int,short,net.minestom.server.data.Data)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setBlockStateId</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setBlockStateId&#8203;(int&nbsp;x,
-                            int&nbsp;y,
-                            int&nbsp;z,
-                            short&nbsp;blockStateId,
-                            @Nullable
-                            <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../BlockModifier.html#setBlockStateId(int,int,int,short,net.minestom.server.data.Data)">BlockModifier</a></code></span></div>
-<div class="block">Sets a block at a position.
- <p>
- You can use <a href="../BlockModifier.html#setBlock(int,int,int,net.minestom.server.instance.block.Block)"><code>BlockModifier.setBlock(int, int, int, Block)</code></a> if you want it to be more explicit.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../BlockModifier.html#setBlockStateId(int,int,int,short,net.minestom.server.data.Data)">setBlockStateId</a></code>&nbsp;in interface&nbsp;<code><a href="../BlockModifier.html" title="interface in net.minestom.server.instance">BlockModifier</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - the block X</dd>
-<dd><code>y</code> - the block Y</dd>
-<dd><code>z</code> - the block Z</dd>
-<dd><code>blockStateId</code> - the block state id</dd>
-<dd><code>data</code> - the block <a href="../../data/Data.html" title="class in net.minestom.server.data"><code>Data</code></a>, can be null</dd>
-</dl>
-</li>
-</ul>
-<a id="setCustomBlock(int,int,int,short,net.minestom.server.data.Data)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setCustomBlock</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setCustomBlock&#8203;(int&nbsp;x,
-                           int&nbsp;y,
-                           int&nbsp;z,
-                           short&nbsp;customBlockId,
-                           @Nullable
-                           <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../BlockModifier.html#setCustomBlock(int,int,int,short,net.minestom.server.data.Data)">BlockModifier</a></code></span></div>
-<div class="block">Sets a <a href="../block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> at a position.
- <p>
- The custom block id should be the one returned by <a href="../block/CustomBlock.html#getCustomBlockId()"><code>CustomBlock.getCustomBlockId()</code></a>.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../BlockModifier.html#setCustomBlock(int,int,int,short,net.minestom.server.data.Data)">setCustomBlock</a></code>&nbsp;in interface&nbsp;<code><a href="../BlockModifier.html" title="interface in net.minestom.server.instance">BlockModifier</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - the block X</dd>
-<dd><code>y</code> - the block Y</dd>
-<dd><code>z</code> - the block Z</dd>
-<dd><code>customBlockId</code> - the custom block id</dd>
-<dd><code>data</code> - the block <a href="../../data/Data.html" title="class in net.minestom.server.data"><code>Data</code></a>, can be null</dd>
-</dl>
-</li>
-</ul>
 <a id="setSeparateBlocks(int,int,int,short,short,net.minestom.server.data.Data)">
 <!--   -->
 </a>
@@ -436,6 +441,8 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
  and the block state id can be anything you want, state id can be retrieved using <a href="../block/Block.html#getBlockId()"><code>Block.getBlockId()</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Batch.html#setSeparateBlocks(int,int,int,short,short,net.minestom.server.data.Data)">setSeparateBlocks</a></code>&nbsp;in interface&nbsp;<code><a href="Batch.html" title="interface in net.minestom.server.instance.batch">Batch</a>&lt;<a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&gt;</code></dd>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../BlockModifier.html#setSeparateBlocks(int,int,int,short,short,net.minestom.server.data.Data)">setSeparateBlocks</a></code>&nbsp;in interface&nbsp;<code><a href="../BlockModifier.html" title="interface in net.minestom.server.instance">BlockModifier</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x</code> - the block X</dd>
@@ -447,83 +454,172 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 </dl>
 </li>
 </ul>
-<a id="isGenerationBatch()">
+<a id="clear()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>isGenerationBatch</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;isGenerationBatch()</pre>
-<div class="block">Gets if this chunk batch is part of a chunk generation.
- <p>
- Being a generation batch mean that blocks set are not being stored
- but are immediately placed on the chunks. Using less memory
- and CPU cycles.</div>
+<h4>clear</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;clear()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Batch.html#clear()">Batch</a></code></span></div>
+<div class="block">Removes all block data from this batch.</div>
 <dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Batch.html#clear()">clear</a></code>&nbsp;in interface&nbsp;<code><a href="Batch.html" title="interface in net.minestom.server.instance.batch">Batch</a>&lt;<a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a id="isReady()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isReady</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isReady()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Batch.html#isReady()">Batch</a></code></span></div>
+<div class="block">Gets if the batch is ready to be applied to an instance.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Batch.html#isReady()">isReady</a></code>&nbsp;in interface&nbsp;<code><a href="Batch.html" title="interface in net.minestom.server.instance.batch">Batch</a>&lt;<a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if this batch is part of a chunk generation</dd>
+<dd>true if the batch is ready to apply</dd>
 </dl>
 </li>
 </ul>
-<a id="flushChunkGenerator(net.minestom.server.instance.ChunkGenerator,net.minestom.server.utils.chunk.ChunkCallback)">
+<a id="awaitReady()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>flushChunkGenerator</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;flushChunkGenerator&#8203;(@NotNull
-                                <a href="../ChunkGenerator.html" title="interface in net.minestom.server.instance">ChunkGenerator</a>&nbsp;chunkGenerator,
-                                @Nullable
-                                <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
-<div class="block">Called to fill the chunk batch.</div>
+<h4>awaitReady</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;awaitReady()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="Batch.html#awaitReady()">Batch</a></code></span></div>
+<div class="block">Blocks the current thread until the batch is ready to be applied.</div>
 <dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>chunkGenerator</code> - the chunk generator</dd>
-<dd><code>callback</code> - the optional callback executed once the batch is done</dd>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Batch.html#awaitReady()">awaitReady</a></code>&nbsp;in interface&nbsp;<code><a href="Batch.html" title="interface in net.minestom.server.instance.batch">Batch</a>&lt;<a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&gt;</code></dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="Batch.html#isReady()"><code>for a non-blocking way to determine if the batch is ready</code></a></dd>
 </dl>
 </li>
 </ul>
-<a id="flush(net.minestom.server.utils.chunk.ChunkCallback)">
+<a id="apply(net.minestom.server.instance.Instance,net.minestom.server.utils.chunk.ChunkCallback)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>flush</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;flush&#8203;(@Nullable
-                  <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
-<div class="block">Executes the batch in the dedicated pool and run the callback during the next instance update when blocks are placed
- (which means that the callback can be called 50ms after, but in a determinable thread).</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>callback</code> - the callback to execute once the blocks are placed</dd>
-</dl>
-</li>
-</ul>
-<a id="unsafeFlush(net.minestom.server.utils.chunk.ChunkCallback)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>unsafeFlush</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;unsafeFlush&#8203;(@Nullable
+<h4>apply</h4>
+<pre class="methodSignature">public&nbsp;<a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a>&nbsp;apply&#8203;(@NotNull
+                        <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                        @Nullable
                         <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
-<div class="block">Executes the batch in the dedicated pool and run the callback once blocks are placed (in the block batch pool).
- <p>
- So the callback is executed in an unexpected thread, but you are sure that it will be called immediately.</div>
+<div class="block">Apply this batch to chunk (0, 0).</div>
 <dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="Batch.html#apply(net.minestom.server.instance.Instance,C)">apply</a></code>&nbsp;in interface&nbsp;<code><a href="Batch.html" title="interface in net.minestom.server.instance.batch">Batch</a>&lt;<a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>callback</code> - the callback to execute once the blocks are placed</dd>
+<dd><code>instance</code> - The instance in which the batch should be applied</dd>
+<dd><code>callback</code> - The callback to be executed when the batch is applied</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The inverse of this batch, if inverse is enabled in the <a href="BatchOption.html" title="class in net.minestom.server.instance.batch"><code>BatchOption</code></a></dd>
 </dl>
 </li>
 </ul>
-<a id="clearData()">
+<a id="apply(net.minestom.server.instance.Instance,int,int,net.minestom.server.utils.chunk.ChunkCallback)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>apply</h4>
+<pre class="methodSignature">public&nbsp;<a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a>&nbsp;apply&#8203;(@NotNull
+                        <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                        int&nbsp;chunkX,
+                        int&nbsp;chunkZ,
+                        @Nullable
+                        <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
+<div class="block">Apply this batch to the given chunk.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>instance</code> - The instance in which the batch should be applied</dd>
+<dd><code>chunkX</code> - The x chunk coordinate of the target chunk</dd>
+<dd><code>chunkZ</code> - The z chunk coordinate of the target chunk</dd>
+<dd><code>callback</code> - The callback to be executed when the batch is applied.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The inverse of this batch, if inverse is enabled in the <a href="BatchOption.html" title="class in net.minestom.server.instance.batch"><code>BatchOption</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="apply(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.utils.chunk.ChunkCallback)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>apply</h4>
+<pre class="methodSignature">public&nbsp;<a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a>&nbsp;apply&#8203;(@NotNull
+                        <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                        @NotNull
+                        <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+                        @Nullable
+                        <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
+<div class="block">Apply this batch to the given chunk.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>instance</code> - The instance in which the batch should be applied</dd>
+<dd><code>chunk</code> - The target chunk</dd>
+<dd><code>callback</code> - The callback to be executed when the batch is applied</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The inverse of this batch, if inverse is enabled in the <a href="BatchOption.html" title="class in net.minestom.server.instance.batch"><code>BatchOption</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="unsafeApply(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.utils.chunk.ChunkCallback)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>unsafeApply</h4>
+<pre class="methodSignature">public&nbsp;<a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a>&nbsp;unsafeApply&#8203;(@NotNull
+                              <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                              @NotNull
+                              <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+                              @Nullable
+                              <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
+<div class="block">Apply this batch to the given chunk, and execute the callback
+ immediately when the blocks have been applied, in an unknown thread.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>instance</code> - The instance in which the batch should be applied</dd>
+<dd><code>chunk</code> - The target chunk</dd>
+<dd><code>callback</code> - The callback to be executed when the batch is applied</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The inverse of this batch, if inverse is enabled in the <a href="BatchOption.html" title="class in net.minestom.server.instance.batch"><code>BatchOption</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="apply(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.utils.chunk.ChunkCallback,boolean)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>clearData</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;clearData()</pre>
-<div class="block">Resets the chunk batch by removing all the entries.</div>
+<h4>apply</h4>
+<pre class="methodSignature">protected&nbsp;<a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a>&nbsp;apply&#8203;(@NotNull
+                           <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                           @NotNull
+                           <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+                           @Nullable
+                           <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback,
+                           boolean&nbsp;safeCallback)</pre>
+<div class="block">Apply this batch to the given chunk, and execute the callback depending on safeCallback.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>instance</code> - The instance in which the batch should be applied</dd>
+<dd><code>chunk</code> - The target chunk</dd>
+<dd><code>callback</code> - The callback to be executed when the batch is applied</dd>
+<dd><code>safeCallback</code> - If true, the callback will be executed in the next instance update.
+                     Otherwise it will be executed immediately upon completion</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The inverse of this batch, if inverse is enabled in the <a href="BatchOption.html" title="class in net.minestom.server.instance.batch"><code>BatchOption</code></a></dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -584,7 +680,7 @@ implements <a href="InstanceBatch.html" title="interface in net.minestom.server.
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
