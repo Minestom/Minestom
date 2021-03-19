@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9};
+var data = {"i0":9,"i1":9,"i2":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -177,12 +177,18 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static &lt;T extends <a href="PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&gt;<br>java.util.concurrent.CopyOnWriteArrayList</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#cloneCopyOnWriteArrayList(java.util.List)">cloneCopyOnWriteArrayList</a></span>&#8203;(java.util.List&lt;T&gt;&nbsp;list)</code></th>
+<td class="colFirst"><code>static &lt;T extends <a href="PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&lt;T&gt;&gt;<br>T[]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#cloneArray(T%5B%5D,java.util.function.IntFunction)">cloneArray</a></span>&#8203;(T[]&nbsp;array,
+          java.util.function.IntFunction&lt;T[]&gt;&nbsp;arraySupplier)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>static &lt;T extends <a href="PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&gt;<br>T</code></td>
+<td class="colFirst"><code>static &lt;T extends <a href="PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&lt;T&gt;&gt;<br>java.util.concurrent.CopyOnWriteArrayList&lt;T&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#cloneCopyOnWriteArrayList(java.util.List)">cloneCopyOnWriteArrayList</a></span>&#8203;(java.util.List&lt;T&gt;&nbsp;list)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>static &lt;T extends <a href="PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&lt;T&gt;&gt;<br>T</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#optionalClone(T)">optionalClone</a></span>&#8203;(T&nbsp;object)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -238,19 +244,32 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>optionalClone</h4>
 <pre class="methodSignature">@Nullable
-public static&nbsp;&lt;T extends <a href="PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&gt;&nbsp;T&nbsp;optionalClone&#8203;(@Nullable
-                                                          T&nbsp;object)</pre>
+public static&nbsp;&lt;T extends <a href="PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&lt;T&gt;&gt;&nbsp;T&nbsp;optionalClone&#8203;(@Nullable
+                                                             T&nbsp;object)</pre>
 </li>
 </ul>
 <a id="cloneCopyOnWriteArrayList(java.util.List)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>cloneCopyOnWriteArrayList</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;&lt;T extends <a href="PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&gt;&nbsp;java.util.concurrent.CopyOnWriteArrayList&nbsp;cloneCopyOnWriteArrayList&#8203;(@NotNull
-                                                                                                              java.util.List&lt;T&gt;&nbsp;list)</pre>
+public static&nbsp;&lt;T extends <a href="PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&lt;T&gt;&gt;&nbsp;java.util.concurrent.CopyOnWriteArrayList&lt;T&gt;&nbsp;cloneCopyOnWriteArrayList&#8203;(@NotNull
+                                                                                                                    java.util.List&lt;T&gt;&nbsp;list)</pre>
+</li>
+</ul>
+<a id="cloneArray(net.minestom.server.utils.clone.PublicCloneable[],java.util.function.IntFunction)">
+<!--   -->
+</a><a id="cloneArray(T[],java.util.function.IntFunction)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>cloneArray</h4>
+<pre class="methodSignature">public static&nbsp;&lt;T extends <a href="PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&lt;T&gt;&gt;&nbsp;T[]&nbsp;cloneArray&#8203;(@NotNull
+                                                            T[]&nbsp;array,
+                                                            java.util.function.IntFunction&lt;T[]&gt;&nbsp;arraySupplier)</pre>
 </li>
 </ul>
 </li>
