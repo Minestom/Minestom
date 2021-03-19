@@ -304,7 +304,7 @@ extends java.lang.Object</pre>
  If set, the batch may not be ready, or it may be partially ready which will cause an undefined result.
  <a href="Batch.html#isReady()"><code>Batch.isReady()</code></a> and <a href="Batch.html#awaitReady()"><code>Batch.awaitReady()</code></a> may be used to check if it is ready and block
  until it is ready.
-
+ <p>
  The default implementations of <a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch"><code>ChunkBatch</code></a>, <a href="AbsoluteBlockBatch.html" title="class in net.minestom.server.instance.batch"><code>AbsoluteBlockBatch</code></a>, and <a href="RelativeBlockBatch.html" title="class in net.minestom.server.instance.batch"><code>RelativeBlockBatch</code></a>
  are always ready unless they are an inverse batch. This is not a safe assumption, and may change in the future.
  <p>
