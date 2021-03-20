@@ -81,7 +81,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
     private boolean autoViewable;
     private final int id;
-    protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    protected final Set<Player> viewers = ConcurrentHashMap.newKeySet();
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
     private Data data;
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
