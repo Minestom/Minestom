@@ -16,6 +16,7 @@ import net.minestom.server.network.netty.codec.PacketCompressor;
 import net.minestom.server.network.netty.packet.FramedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
+import net.minestom.server.utils.BufUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.cache.CacheablePacket;
 import net.minestom.server.utils.cache.TemporaryCache;
@@ -61,7 +62,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     private PlayerSkin bungeeSkin;
 
     private static final int FLUSH_SIZE = 20000;
-    private final ByteBuf tickBuffer = Unpooled.directBuffer();
+    private final ByteBuf tickBuffer = BufUtils.getBuffer(true);
 
     public NettyPlayerConnection(@NotNull SocketChannel channel) {
         super();
