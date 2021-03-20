@@ -1,7 +1,6 @@
 package net.minestom.server.network.player;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.socket.SocketChannel;
@@ -153,10 +152,13 @@ public class NettyPlayerConnection extends PlayerConnection {
                         write(new FramedPacket(timedBuffer.getBuffer()));
                     }
 
-                } else
+                } else {
                     write(serverPacket);
-            } else
+                }
+            } else {
+                // Player is probably not logged yet
                 writeAndFlush(serverPacket);
+            }
         }
     }
 

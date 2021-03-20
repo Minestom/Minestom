@@ -49,7 +49,7 @@ public final class PacketUtils {
             // Send grouped packet...
             final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
             if (success) {
-                final ByteBuf finalBuffer = createFramedPacket(packet, false);
+                final ByteBuf finalBuffer = createFramedPacket(packet, true);
                 final FramedPacket framedPacket = new FramedPacket(finalBuffer);
 
                 // Send packet to all players
@@ -62,6 +62,8 @@ public final class PacketUtils {
                     if (playerValidator != null && !playerValidator.isValid(player))
                         continue;
 
+                    finalBuffer.retain();
+
                     final PlayerConnection playerConnection = player.getPlayerConnection();
                     if (playerConnection instanceof NettyPlayerConnection) {
                         final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
@@ -69,7 +71,10 @@ public final class PacketUtils {
                     } else {
                         playerConnection.sendPacket(packet);
                     }
+
+                    finalBuffer.release();
                 }
+                finalBuffer.release(); // Release last reference
             }
         } else {
             // Write the same packet for each individual players
