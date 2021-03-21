@@ -1,14 +1,14 @@
 package net.minestom.server.instance;
 
 import com.google.common.collect.Queues;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.UpdateManager;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
-import net.minestom.server.entity.*;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.entity.ExperienceOrb;
+import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFInstanceSpace;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
@@ -40,7 +40,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
 /**
@@ -81,14 +80,13 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     private final Map<String, Collection<EventCallback<?>>> extensionCallbacks = new ConcurrentHashMap<>();
 
     // Entities present in this instance
-    protected final Set<Entity> entities = new CopyOnWriteArraySet<>();
-    protected final Set<Player> players = new CopyOnWriteArraySet<>();
-    protected final Set<EntityCreature> creatures = new CopyOnWriteArraySet<>();
-    protected final Set<ObjectEntity> objectEntities = new CopyOnWriteArraySet<>();
-    protected final Set<ExperienceOrb> experienceOrbs = new CopyOnWriteArraySet<>();
+    protected final Set<Entity> entities = ConcurrentHashMap.newKeySet();
+    protected final Set<Player> players = ConcurrentHashMap.newKeySet();
+    protected final Set<EntityCreature> creatures = ConcurrentHashMap.newKeySet();
+    protected final Set<ExperienceOrb> experienceOrbs = ConcurrentHashMap.newKeySet();
     // Entities per chunk
-    protected final Long2ObjectMap<Set<Entity>> chunkEntities = Long2ObjectMaps.synchronize(new Long2ObjectOpenHashMap<>());
-    private Object entitiesLock = new Object(); // Lock used to prevent the entities Set and Map to be subject to race condition
+    protected final Map<Long, Set<Entity>> chunkEntities = new ConcurrentHashMap<>();
+    private final Object entitiesLock = new Object(); // Lock used to prevent the entities Set and Map to be subject to race condition
 
     // the uuid of this instance
     protected UUID uniqueId;
@@ -465,16 +463,6 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     @NotNull
     public Set<EntityCreature> getCreatures() {
         return Collections.unmodifiableSet(creatures);
-    }
-
-    /**
-     * Gets the object entities in the instance;
-     *
-     * @return an unmodifiable {@link Set} containing all the object entities in the instance
-     */
-    @NotNull
-    public Set<ObjectEntity> getObjectEntities() {
-        return Collections.unmodifiableSet(objectEntities);
     }
 
     /**
@@ -957,8 +945,6 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
                 this.players.add((Player) entity);
             } else if (entity instanceof EntityCreature) {
                 this.creatures.add((EntityCreature) entity);
-            } else if (entity instanceof ObjectEntity) {
-                this.objectEntities.add((ObjectEntity) entity);
             } else if (entity instanceof ExperienceOrb) {
                 this.experienceOrbs.add((ExperienceOrb) entity);
             }
@@ -984,8 +970,6 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
                 this.players.remove(entity);
             } else if (entity instanceof EntityCreature) {
                 this.creatures.remove(entity);
-            } else if (entity instanceof ObjectEntity) {
-                this.objectEntities.remove(entity);
             } else if (entity instanceof ExperienceOrb) {
                 this.experienceOrbs.remove(entity);
             }
@@ -994,7 +978,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     @NotNull
     private Set<Entity> getEntitiesInChunk(long index) {
-        return chunkEntities.computeIfAbsent(index, i -> new CopyOnWriteArraySet<>());
+        return chunkEntities.computeIfAbsent(index, i -> ConcurrentHashMap.newKeySet());
     }
 
     /**
