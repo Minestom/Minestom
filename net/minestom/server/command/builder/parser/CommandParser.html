@@ -203,7 +203,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static <a href="CommandQueryResult.html" title="class in net.minestom.server.command.builder.parser">CommandQueryResult</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findCommand(java.lang.String,java.lang.String%5B%5D)">findCommand</a></span>&#8203;(java.lang.String&nbsp;commandName,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findCommand(net.minestom.server.command.builder.Command,java.lang.String,java.lang.String%5B%5D)">findCommand</a></span>&#8203;(<a href="../Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;parentCommand,
+           java.lang.String&nbsp;commandName,
            java.lang.String[]&nbsp;args)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -280,14 +281,16 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="findCommand(java.lang.String,java.lang.String[])">
+<a id="findCommand(net.minestom.server.command.builder.Command,java.lang.String,java.lang.String[])">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>findCommand</h4>
 <pre class="methodSignature">@Nullable
-public static&nbsp;<a href="CommandQueryResult.html" title="class in net.minestom.server.command.builder.parser">CommandQueryResult</a>&nbsp;findCommand&#8203;(@NotNull
+public static&nbsp;<a href="CommandQueryResult.html" title="class in net.minestom.server.command.builder.parser">CommandQueryResult</a>&nbsp;findCommand&#8203;(@Nullable
+                                             <a href="../Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;parentCommand,
+                                             @NotNull
                                              java.lang.String&nbsp;commandName,
                                              @NotNull
                                              java.lang.String[]&nbsp;args)</pre>
