@@ -880,9 +880,11 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
                 }
             });
 
-            final Chunk chunk = getChunkAt(entityPosition);
-            Check.notNull(chunk, "You tried to spawn an entity in an unloaded chunk, " + entityPosition);
-            addEntityToChunk(entity, chunk);
+            // Load the chunk if not already (or throw an error if auto chunk load is disabled)
+            loadOptionalChunk(entityPosition, chunk -> {
+                Check.notNull(chunk, "You tried to spawn an entity in an unloaded chunk, " + entityPosition);
+                addEntityToChunk(entity, chunk);
+            });
         });
     }
 
