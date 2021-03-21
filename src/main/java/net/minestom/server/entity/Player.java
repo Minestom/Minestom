@@ -57,7 +57,7 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
-import net.minestom.server.sound.Sound;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.stat.PlayerStatistic;
 import net.minestom.server.utils.*;
@@ -826,7 +826,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Plays a sound from the {@link Sound} enum.
+     * Plays a sound from the {@link SoundEvent} enum.
      *
      * @param sound         the sound to play
      * @param soundCategory the sound category
@@ -838,7 +838,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
      */
     @Deprecated
-    public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
+    public void playSound(@NotNull SoundEvent sound, @NotNull SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
         SoundEffectPacket soundEffectPacket = new SoundEffectPacket();
         soundEffectPacket.soundId = sound.getId();
         soundEffectPacket.soundSource = soundCategory.asSource();
@@ -851,13 +851,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Plays a sound from the {@link Sound} enum.
+     * Plays a sound from the {@link SoundEvent} enum.
      *
-     * @see #playSound(Sound, SoundCategory, int, int, int, float, float)
+     * @see #playSound(SoundEvent, SoundCategory, int, int, int, float, float)
      * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
      */
     @Deprecated
-    public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
+    public void playSound(@NotNull SoundEvent sound, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
         playSound(sound, soundCategory, position.getX(), position.getY(), position.getZ(), volume, pitch);
     }
 
@@ -907,7 +907,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound)}
      */
     @Deprecated
-    public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, float volume, float pitch) {
+    public void playSound(@NotNull SoundEvent sound, @NotNull SoundCategory soundCategory, float volume, float pitch) {
         EntitySoundEffectPacket entitySoundEffectPacket = new EntitySoundEffectPacket();
         entitySoundEffectPacket.entityId = getEntityId();
         entitySoundEffectPacket.soundId = sound.getId();
@@ -924,7 +924,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void playSound(net.kyori.adventure.sound.@NotNull Sound sound, double x, double y, double z) {
-        Sound minestomSound = Registries.getSound(sound.name());
+        SoundEvent minestomSound = Registries.getSoundEvent(sound.name());
 
         if (minestomSound == null) {
             NamedSoundEffectPacket packet = new NamedSoundEffectPacket();

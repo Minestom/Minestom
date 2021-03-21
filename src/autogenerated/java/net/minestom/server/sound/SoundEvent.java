@@ -2,6 +2,7 @@ package net.minestom.server.sound;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
+import net.kyori.adventure.sound.Sound;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
@@ -11,7 +12,7 @@ import net.minestom.server.utils.NamespaceID;
  * //==============================
  */
 @SuppressWarnings({"deprecation"})
-public enum Sound implements Keyed, net.kyori.adventure.sound.Sound.Type {
+public enum SoundEvent implements Keyed, Sound.Type {
     AMBIENT_CAVE("minecraft:ambient.cave"),
 
     AMBIENT_BASALT_DELTAS_ADDITIONS("minecraft:ambient.basalt_deltas.additions"),
@@ -2000,9 +2001,9 @@ public enum Sound implements Keyed, net.kyori.adventure.sound.Sound.Type {
 
     private final Key key;
 
-    Sound(String namespaceID) {
+    SoundEvent(String namespaceID) {
         this.namespaceID = namespaceID;
-        Registries.sounds.put(NamespaceID.from(namespaceID), this);
+        Registries.soundEvents.put(NamespaceID.from(namespaceID), this);
         this.key = Key.key(this.namespaceID);
     }
 
@@ -2018,7 +2019,7 @@ public enum Sound implements Keyed, net.kyori.adventure.sound.Sound.Type {
         return this.key;
     }
 
-    public static Sound fromId(int id) {
+    public static SoundEvent fromId(int id) {
         if (id >= 0 && id < values().length) {
             return values()[id];
         }

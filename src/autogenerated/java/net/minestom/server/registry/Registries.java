@@ -11,7 +11,7 @@ import net.minestom.server.item.Material;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
-import net.minestom.server.sound.Sound;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.StatisticType;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
@@ -67,7 +67,7 @@ public final class Registries {
      * Should only be used for internal code, please use the get* methods.
      */
     @Deprecated
-    public static final HashMap<NamespaceID, Sound> sounds = new HashMap<>();
+    public static final HashMap<NamespaceID, SoundEvent> soundEvents = new HashMap<>();
 
     /**
      * Should only be used for internal code, please use the get* methods.
@@ -250,27 +250,27 @@ public final class Registries {
     }
 
     /**
-     * Returns the corresponding Sound matching the given id. Returns null if none match.
+     * Returns the corresponding SoundEvent matching the given id. Returns null if none match.
      */
     @Nullable
-    public static Sound getSound(String id) {
-        return getSound(NamespaceID.from(id));
+    public static SoundEvent getSoundEvent(String id) {
+        return getSoundEvent(NamespaceID.from(id));
     }
 
     /**
-     * Returns the corresponding Sound matching the given id. Returns null if none match.
+     * Returns the corresponding SoundEvent matching the given id. Returns null if none match.
      */
     @Nullable
-    public static Sound getSound(NamespaceID id) {
-        return sounds.get(id);
+    public static SoundEvent getSoundEvent(NamespaceID id) {
+        return soundEvents.get(id);
     }
 
     /**
-     * Returns the corresponding Sound matching the given key. Returns null if none match.
+     * Returns the corresponding SoundEvent matching the given key. Returns null if none match.
      */
     @Nullable
-    public static Sound getSound(Key key) {
-        return getSound(NamespaceID.from(key));
+    public static SoundEvent getSoundEvent(Key key) {
+        return getSoundEvent(NamespaceID.from(key));
     }
 
     /**

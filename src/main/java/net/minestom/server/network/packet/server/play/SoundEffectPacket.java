@@ -4,7 +4,7 @@ import net.kyori.adventure.sound.Sound.Source;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.sound.Sound;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -27,12 +27,12 @@ public class SoundEffectPacket implements ServerPacket {
      * @deprecated Use variables
      */
     @Deprecated
-    public static SoundEffectPacket create(SoundCategory category, Sound sound, Position position, float volume, float pitch) {
+    public static SoundEffectPacket create(SoundCategory category, SoundEvent sound, Position position, float volume, float pitch) {
         return create(category.asSource(), sound, position, volume, pitch);
     }
 
     @NotNull
-    public static SoundEffectPacket create(Source category, Sound sound, Position position, float volume, float pitch) {
+    public static SoundEffectPacket create(Source category, SoundEvent sound, Position position, float volume, float pitch) {
         SoundEffectPacket packet = new SoundEffectPacket();
         packet.soundId = sound.getId();
         packet.soundSource = category;

@@ -11,7 +11,7 @@ import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.registry.ResourceGatherer;
-import net.minestom.server.sound.Sound;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.StatisticType;
 import net.minestom.server.utils.NamespaceID;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -45,7 +45,7 @@ public class RegistriesGenerator implements CodeGenerator {
             new ImmutablePair<>(Particle.class.getCanonicalName(), null),
             new ImmutablePair<>(PotionType.class.getCanonicalName(), null),
             new ImmutablePair<>(PotionEffect.class.getCanonicalName(), null),
-            new ImmutablePair<>(Sound.class.getCanonicalName(), null),
+            new ImmutablePair<>(SoundEvent.class.getCanonicalName(), null),
             new ImmutablePair<>(StatisticType.class.getCanonicalName(), null),
             new ImmutablePair<>(Fluid.class.getCanonicalName(), "EMPTY"),
     };

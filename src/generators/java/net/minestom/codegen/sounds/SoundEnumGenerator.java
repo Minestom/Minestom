@@ -67,7 +67,7 @@ public class SoundEnumGenerator extends BasicEnumGenerator {
 
     @Override
     public String getClassName() {
-        return "Sound";
+        return "SoundEvent";
     }
 
     @Override

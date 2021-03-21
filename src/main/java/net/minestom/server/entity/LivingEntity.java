@@ -20,7 +20,7 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.scoreboard.Team;
-import net.minestom.server.sound.Sound;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -386,7 +386,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             setHealth(getHealth() - remainingDamage);
 
             // play damage sound
-            final Sound sound = type.getSound(this);
+            final SoundEvent sound = type.getSound(this);
             if (sound != null) {
                 Source soundCategory;
                 if (this instanceof Player) {

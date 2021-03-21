@@ -41,7 +41,7 @@ import net.minestom.server.potion.PotionType;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.scoreboard.TeamManager;
-import net.minestom.server.sound.Sound;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.StatisticType;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.storage.StorageManager;
@@ -166,7 +166,7 @@ public final class MinecraftServer implements ForwardingAudience {
         PotionEffect.values();
         Enchantment.values();
         EntityType.values();
-        Sound.values();
+        SoundEvent.values();
         Particle.values();
         StatisticType.values();
         Fluid.values();
