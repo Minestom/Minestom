@@ -31,8 +31,9 @@ public class CommandParser {
         commandQueryResult.commandName = commandName;
         commandQueryResult.args = args;
 
-        if (commandQueryResult.args.length > 0) {
-            final String subCommandName = commandQueryResult.args[0];
+        // Search for subcommand
+        if (args.length > 0) {
+            final String subCommandName = args[0];
             for (Command subcommand : command.getSubcommands()) {
                 if (Command.isValidName(subcommand, subCommandName)) {
                     final String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
