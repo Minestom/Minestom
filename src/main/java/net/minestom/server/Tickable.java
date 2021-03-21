@@ -3,7 +3,7 @@ package net.minestom.server;
 import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Represents an element which is ticked at a regular interval.
@@ -24,10 +24,10 @@ public interface Tickable {
     /**
      * Gets all the tickable elements linked to this.
      *
-     * @return a modifiable {@link Collection} containing the linked tickable elements
+     * @return a modifiable {@link List} containing the linked tickable elements
      */
     @NotNull
-    Collection<Tickable> getTickableElements();
+    List<Tickable> getTickableElements();
 
     /**
      * Gets the current tick rate of this element
