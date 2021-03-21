@@ -186,7 +186,7 @@ public class NettyPlayerConnection extends PlayerConnection {
             }
             return;
         } else if (message instanceof ServerPacket) {
-            final ServerPacket serverPacket = (ServerPacket) message;
+            ServerPacket serverPacket = (ServerPacket) message;
 
             if ((SerializationManager.AUTOMATIC_COMPONENT_TRANSLATION && !skipTranslating) && getPlayer() != null && serverPacket instanceof ComponentHoldingServerPacket) {
                 serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component -> MinecraftServer.getSerializationManager().translate(component, getPlayer()));
