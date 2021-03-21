@@ -922,8 +922,8 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshVisibleEntities(net.minestom.server.instance.Chunk)">refreshVisibleEntities</a></span>&#8203;(<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;newChunk)</code></th>
 <td class="colLast">
-<div class="block">Refreshes the list of entities that the player should be able to see based on <a href="../MinecraftServer.html#getEntityViewDistance()"><code>MinecraftServer.getEntityViewDistance()</code></a>
- and <a href="Entity.html#isAutoViewable()"><code>Entity.isAutoViewable()</code></a>.</div>
+<div class="block">Refreshes the list of entities that the player should be able to see based
+ on <a href="../MinecraftServer.html#getEntityViewDistance()"><code>MinecraftServer.getEntityViewDistance()</code></a> and <a href="Entity.html#isAutoViewable()"><code>Entity.isAutoViewable()</code></a>.</div>
 </td>
 </tr>
 <tr id="i87" class="rowColor">
@@ -2295,7 +2295,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>foodSaturation</code> - the food saturation</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.IllegalArgumentException</code> - if <code>foodSaturation</code> is not between 0 and 5</dd>
+<dd><code>java.lang.IllegalArgumentException</code> - if <code>foodSaturation</code> is not between 0 and 20</dd>
 </dl>
 </li>
 </ul>
@@ -2732,8 +2732,8 @@ public&nbsp;<a href="../utils/Position.html" title="class in net.minestom.server
 <h4>refreshVisibleEntities</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;refreshVisibleEntities&#8203;(@NotNull
                                    <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;newChunk)</pre>
-<div class="block">Refreshes the list of entities that the player should be able to see based on <a href="../MinecraftServer.html#getEntityViewDistance()"><code>MinecraftServer.getEntityViewDistance()</code></a>
- and <a href="Entity.html#isAutoViewable()"><code>Entity.isAutoViewable()</code></a>.</div>
+<div class="block">Refreshes the list of entities that the player should be able to see based
+ on <a href="../MinecraftServer.html#getEntityViewDistance()"><code>MinecraftServer.getEntityViewDistance()</code></a> and <a href="Entity.html#isAutoViewable()"><code>Entity.isAutoViewable()</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>newChunk</code> - the new chunk of the player (can be the current one)</dd>
