@@ -60,7 +60,6 @@ public class NettyPlayerConnection extends PlayerConnection {
     private UUID bungeeUuid;
     private PlayerSkin bungeeSkin;
 
-    private static final int FLUSH_SIZE = 20000;
     private final ByteBuf tickBuffer = BufUtils.getBuffer(true);
 
     public NettyPlayerConnection(@NotNull SocketChannel channel) {
@@ -146,9 +145,9 @@ public class NettyPlayerConnection extends PlayerConnection {
                         if (shouldUpdate) {
                             final ByteBuf buffer = PacketUtils.createFramedPacket(serverPacket, false);
                             timedBuffer = new TimedBuffer(buffer, timestamp);
+                            temporaryCache.cache(identifier, timedBuffer);
                         }
 
-                        temporaryCache.cache(identifier, timedBuffer);
                         write(new FramedPacket(timedBuffer.getBuffer()));
                     }
 
@@ -168,7 +167,6 @@ public class NettyPlayerConnection extends PlayerConnection {
             synchronized (tickBuffer) {
                 final ByteBuf body = framedPacket.getBody();
                 tickBuffer.writeBytes(body, body.readerIndex(), body.readableBytes());
-                preventiveWrite();
             }
             return;
         } else if (message instanceof ServerPacket) {
@@ -176,14 +174,12 @@ public class NettyPlayerConnection extends PlayerConnection {
             final ByteBuf buffer = PacketUtils.createFramedPacket(serverPacket, true);
             synchronized (tickBuffer) {
                 tickBuffer.writeBytes(buffer);
-                preventiveWrite();
             }
             buffer.release();
             return;
         } else if (message instanceof ByteBuf) {
             synchronized (tickBuffer) {
                 tickBuffer.writeBytes((ByteBuf) message);
-                preventiveWrite();
             }
             return;
         }
@@ -200,12 +196,6 @@ public class NettyPlayerConnection extends PlayerConnection {
                     MinecraftServer.getExceptionManager().handleException(future.cause());
                 }
             });
-        }
-    }
-
-    private void preventiveWrite() {
-        if (tickBuffer.writerIndex() > FLUSH_SIZE) {
-            writeWaitingPackets();
         }
     }
 

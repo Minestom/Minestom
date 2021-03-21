@@ -25,11 +25,12 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class ChunkDataPacket implements ServerPacket, CacheablePacket {
 
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
-    private static final TemporaryCache<TimedBuffer> CACHE = new TemporaryCache<>(30000L);
+    private static final TemporaryCache<TimedBuffer> CACHE = new TemporaryCache<>(5, TimeUnit.MINUTES);
 
     public boolean fullChunk;
     public Biome[] biomes;
