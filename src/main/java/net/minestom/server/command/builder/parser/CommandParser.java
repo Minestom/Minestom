@@ -20,8 +20,8 @@ public class CommandParser {
     private static final CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();
 
     @Nullable
-    public static CommandQueryResult findCommand(@NotNull String commandName, @NotNull String[] args) {
-        Command command = COMMAND_MANAGER.getDispatcher().findCommand(commandName);
+    public static CommandQueryResult findCommand(@Nullable Command parentCommand, @NotNull String commandName, @NotNull String[] args) {
+        Command command = parentCommand == null ? COMMAND_MANAGER.getDispatcher().findCommand(commandName) : parentCommand;
         if (command == null) {
             return null;
         }
@@ -31,21 +31,18 @@ public class CommandParser {
         commandQueryResult.commandName = commandName;
         commandQueryResult.args = args;
 
-        boolean correct;
-        do {
-            correct = false;
-
-            if (commandQueryResult.args.length > 0) {
-                final String firstArgument = commandQueryResult.args[0];
-                for (Command subcommand : command.getSubcommands()) {
-                    if ((correct = Command.isValidName(subcommand, firstArgument))) {
-                        commandQueryResult.command = subcommand;
-                        commandQueryResult.commandName = firstArgument;
-                        commandQueryResult.args = Arrays.copyOfRange(args, 1, args.length);
-                    }
+        if (commandQueryResult.args.length > 0) {
+            final String subCommandName = commandQueryResult.args[0];
+            for (Command subcommand : command.getSubcommands()) {
+                if (Command.isValidName(subcommand, subCommandName)) {
+                    final String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
+                    commandQueryResult.command = subcommand;
+                    commandQueryResult.commandName = subCommandName;
+                    commandQueryResult.args = subArgs;
+                    return findCommand(subcommand, subCommandName, subArgs);
                 }
             }
-        } while (correct);
+        }
 
         return commandQueryResult;
     }
@@ -57,7 +54,7 @@ public class CommandParser {
 
         String[] args = new String[parts.length - 1];
         System.arraycopy(parts, 1, args, 0, args.length);
-        return CommandParser.findCommand(commandName, args);
+        return CommandParser.findCommand(null, commandName, args);
     }
 
     public static void parse(@Nullable CommandSyntax syntax, @NotNull Argument<?>[] commandArguments, @NotNull String[] inputArguments,
