@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10};
+var data = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -157,7 +157,8 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(long)">TemporaryCache</a></span>&#8203;(long&nbsp;keepTime)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(long,java.util.concurrent.TimeUnit)">TemporaryCache</a></span>&#8203;(long&nbsp;duration,
+              java.util.concurrent.TimeUnit&nbsp;timeUnit)</code></th>
 <td class="colLast">
 <div class="block">Creates a new temporary cache.</div>
 </td>
@@ -189,13 +190,6 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>long</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getKeepTime()">getKeepTime</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the time an object will be kept without being retrieved.</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="TemporaryCache.html" title="type parameter in TemporaryCache">T</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retrieve(java.util.UUID)">retrieve</a></span>&#8203;(java.util.UUID&nbsp;identifier)</code></th>
 <td class="colLast">
@@ -226,19 +220,18 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(long)">
+<a id="&lt;init&gt;(long,java.util.concurrent.TimeUnit)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>TemporaryCache</h4>
-<pre>public&nbsp;TemporaryCache&#8203;(long&nbsp;keepTime)</pre>
+<pre>public&nbsp;TemporaryCache&#8203;(long&nbsp;duration,
+                      java.util.concurrent.TimeUnit&nbsp;timeUnit)</pre>
 <div class="block">Creates a new temporary cache.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>keepTime</code> - the time before considering an object unused in milliseconds</dd>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="#getKeepTime()"><code>getKeepTime()</code></a></dd>
+<dd><code>duration</code> - the time before considering an object unused</dd>
 </dl>
 </li>
 </ul>
@@ -274,7 +267,7 @@ extends java.lang.Object</pre>
 <a id="retrieve(java.util.UUID)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>retrieve</h4>
 <pre class="methodSignature">@Nullable
@@ -286,20 +279,6 @@ public&nbsp;<a href="TemporaryCache.html" title="type parameter in TemporaryCach
 <dd><code>identifier</code> - the object identifier</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the retrieved object or null if not found</dd>
-</dl>
-</li>
-</ul>
-<a id="getKeepTime()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>getKeepTime</h4>
-<pre class="methodSignature">public&nbsp;long&nbsp;getKeepTime()</pre>
-<div class="block">Gets the time an object will be kept without being retrieved.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the keep time in milliseconds</dd>
 </dl>
 </li>
 </ul>
