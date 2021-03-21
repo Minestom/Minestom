@@ -229,40 +229,38 @@ public final class PacketUtils {
     }
 
     /**
-     * Creates a "framed packet" (packet which can be send and understood by a Minecraft client)
-     * from a server packet.
+     * Writes a "framed packet" (packet which can be send and understood by a Minecraft client)
+     * from a server packet, directly into an output buffer.
      * <p>
      * Can be used if you want to store a raw buffer and send it later without the additional writing cost.
      * Compression is applied if {@link MinecraftServer#getCompressionThreshold()} is greater than 0.
      *
      * @param serverPacket the server packet to write
-     * @return the framed packet from the server one
      */
-    @NotNull
-    public static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket, boolean directBuffer) {
+    public static void createFramedPacket(@NotNull ServerPacket serverPacket, boolean directBuffer, ByteBuf output) {
         ByteBuf packetBuf = writePacket(serverPacket);
 
         if (MinecraftServer.getCompressionThreshold() > 0) {
             ByteBuf compressedBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
-            ByteBuf framedBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
 
             final Deflater deflater = DEFLATER.get();
             compressBuffer(deflater, null, packetBuf, compressedBuf);
 
             packetBuf.release();
 
-            frameBuffer(compressedBuf, framedBuf);
+            frameBuffer(compressedBuf, output);
             compressedBuf.release();
-
-            return framedBuf;
         } else {
-            ByteBuf framedBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
-            frameBuffer(packetBuf, framedBuf);
+            frameBuffer(packetBuf, output);
             packetBuf.release();
-
-            return framedBuf;
         }
+    }
 
+    @NotNull
+    public static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket, boolean directBuffer) {
+        ByteBuf framedBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
+        createFramedPacket(serverPacket, directBuffer, framedBuf);
+        return framedBuf;
     }
 
 }
