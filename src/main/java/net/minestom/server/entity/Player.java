@@ -1824,7 +1824,7 @@ public class Player extends LivingEntity implements CommandSender {
         callCancellableEvent(InventoryOpenEvent.class, inventoryOpenEvent, () -> {
 
             if (getOpenInventory() != null) {
-                closeInventory();
+                getOpenInventory().removeViewer(this);
             }
 
             Inventory newInventory = inventoryOpenEvent.getInventory();
