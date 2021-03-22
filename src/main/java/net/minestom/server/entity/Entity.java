@@ -71,7 +71,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     protected Entity vehicle;
 
     // Velocity
-    protected Vector velocity = new Vector(); // Movement in block per second
+    protected Vector velocity = new Vector(); // Movement velocity in blocks per tick
     protected boolean hasPhysics = true;
 
     protected double gravityDragPerTick;
@@ -523,32 +523,13 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
             applyVelocity |= isNettyClient && hasVelocity();
 
             if (applyVelocity) {
-                final float tps = MinecraftServer.TICK_PER_SECOND;
-                final double newX = position.getX() + velocity.getX() / tps;
-                final double newY = position.getY() + velocity.getY() / tps;
-                final double newZ = position.getZ() + velocity.getZ() / tps;
+                final double newX = position.getX() + velocity.getX();
+                final double newY = position.getY() + velocity.getY();
+                final double newZ = position.getZ() + velocity.getZ();
                 Position newPosition = new Position(newX, newY, newZ);
 
-                Vector newVelocityOut = new Vector();
-
-                // Gravity force
-                double gravityY;
-                if (hasNoGravity()) {
-                    gravityY = 0;
-                } else {
-                    gravityY = getGravityValue();
-                }
-
-                final Vector deltaPos = new Vector(
-                        getVelocity().getX() / tps,
-                        (getVelocity().getY() - gravityY) / tps,
-                        getVelocity().getZ() / tps
-                );
-
                 if (this.hasPhysics) {
-                    this.onGround = CollisionUtils.handlePhysics(this, deltaPos, newPosition, newVelocityOut);
-                } else {
-                    newVelocityOut = deltaPos;
+                    this.onGround = CollisionUtils.handlePhysics(this, velocity.clone(), newPosition, velocity);
                 }
 
                 // World border collision
@@ -565,11 +546,9 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                     refreshPosition(finalVelocityPosition);
                 }
 
-
                 // Update velocity
-                if (hasVelocity() || !newVelocityOut.isZero()) {
-                    this.velocity.copy(newVelocityOut);
-                    this.velocity.multiply(tps);
+                if (hasVelocity()) {
+                    this.velocity.setY(velocity.getY() - gravityAcceleration);
 
                     float drag;
                     if (onGround) {
@@ -594,10 +573,13 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                         drag = 0.98f; // air drag
                     }
 
+                    // Apply drag
+                    final double gravityDrag = 1 - gravityDragPerTick;
                     this.velocity.setX(velocity.getX() * drag);
+                    this.velocity.setY(velocity.getY() * gravityDrag);
                     this.velocity.setZ(velocity.getZ() * drag);
 
-                    if (velocity.equals(new Vector())) {
+                    if (velocity.epsilonIsZero()) {
                         this.velocity.zero();
                     }
                 }
@@ -682,18 +664,23 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     }
 
     /**
-     * Used to calculate the entity's vertical velocity resulting from the gravity
-     * @return the current vertical velocity
+     * Applies knockback to the entity
+     * @param strength the strength of the knockback, 0.4 is the vanilla value for a bare hand hit
+     * @param x knockback on x axle, vanilla server calculates this value using <code>sin(attacker.yaw * 0.017453292)</code>
+     * @param z knockback on z axle, vanilla server calculates this value using <code>-cos(attacker.yaw * 0.017453292)</code>
      */
-    protected double getGravityValue() {
-        double gravityY;
-        final double v = gravityDragPerTick * gravityTickCount;
-        gravityY = gravityAcceleration * gravityTickCount;
-        // Check for zero, since dividing by it causes the client to freeze
-        if (v != 0) {
-            gravityY /= v;
+    public void takeKnockback(float strength, final double x, final double z) {
+        //TODO take into account the knockback resistance
+        if (strength > 0) {
+            final Vector currentVelocity = this.getVelocity();
+            if (Math.abs(currentVelocity.getY()) < Vector.getEpsilon()) {
+                currentVelocity.setY(-gravityAcceleration);
+            }
+            final Vector velocityModifier = (new Vector(x, 0d, z)).normalize().multiply((double)strength);
+            this.getVelocity().setX(currentVelocity.getX() / 2d - velocityModifier.getX());
+            this.getVelocity().setY(this.onGround ? Math.min(.4d, currentVelocity.getY() / 2d + (double)strength) : currentVelocity.getY());
+            this.getVelocity().setZ(currentVelocity.getZ() / 2d - velocityModifier.getZ());
         }
-        return gravityY;
     }
 
     /**
@@ -944,7 +931,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      */
     public void setGravity(double gravityDragPerTick, double gravityAcceleration) {
         this.gravityDragPerTick = gravityDragPerTick;
-        this.gravityAcceleration = gravityAcceleration * 2;
+        this.gravityAcceleration = gravityAcceleration;
     }
 
     /**
@@ -1454,7 +1441,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
     @NotNull
     protected Vector getVelocityForPacket() {
-        return this.velocity.clone().multiply(8000f / MinecraftServer.TICK_PER_SECOND);
+        return this.velocity.clone().multiply(8000);
     }
 
     @NotNull
