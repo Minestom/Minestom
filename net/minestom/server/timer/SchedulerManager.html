@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -252,48 +252,62 @@ implements <a href="../extensions/IExtensionObserver.html" title="interface in n
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="Task.html" title="class in net.minestom.server.timer">Task</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getShutdownTask(int)">getShutdownTask</a></span>&#8203;(int&nbsp;id)</code></th>
+<td class="colLast">
+<div class="block">Returns the shutdown task associated with this task id</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>it.unimi.dsi.fastutil.objects.ObjectCollection&lt;<a href="Task.html" title="class in net.minestom.server.timer">Task</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getShutdownTasks()">getShutdownTasks</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets a <code>Collection</code> with all the registered shutdown <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code><a href="Task.html" title="class in net.minestom.server.timer">Task</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTask(int)">getTask</a></span>&#8203;(int&nbsp;id)</code></th>
+<td class="colLast">
+<div class="block">Returns the task associated with this task id</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>it.unimi.dsi.fastutil.objects.ObjectCollection&lt;<a href="Task.html" title="class in net.minestom.server.timer">Task</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTasks()">getTasks</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets a <code>Collection</code> with all the registered <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>java.util.concurrent.ScheduledExecutorService</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTimerExecutionService()">getTimerExecutionService</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the scheduled execution service for all the registered <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onExtensionUnload(java.lang.String)">onExtensionUnload</a></span>&#8203;(java.lang.String&nbsp;extensionName)</code></th>
 <td class="colLast">
 <div class="block">Called before unloading an extension (that is, right after Extension#terminate and right before Extension#unload)</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeExtensionTasksOnUnload(java.lang.String)">removeExtensionTasksOnUnload</a></span>&#8203;(java.lang.String&nbsp;extension)</code></th>
 <td class="colLast">
 <div class="block">Unschedules all non-transient tasks (<a href="Task.html#isTransient()"><code>Task.isTransient()</code></a>) from this scheduler.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeTask(net.minestom.server.timer.Task)">removeTask</a></span>&#8203;(<a href="Task.html" title="class in net.minestom.server.timer">Task</a>&nbsp;task)</code></th>
 <td class="colLast">
 <div class="block">Removes/Forces the end of a <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shutdown()">shutdown</a></span>()</code></th>
 <td class="colLast">
@@ -480,6 +494,22 @@ public&nbsp;it.unimi.dsi.fastutil.objects.ObjectCollection&lt;<a href="Task.html
 </dl>
 </li>
 </ul>
+<a id="getTask(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTask</h4>
+<pre class="methodSignature">public&nbsp;<a href="Task.html" title="class in net.minestom.server.timer">Task</a>&nbsp;getTask&#8203;(int&nbsp;id)</pre>
+<div class="block">Returns the task associated with this task id</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>id</code> - the id of the task</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>task the task itself</dd>
+</dl>
+</li>
+</ul>
 <a id="getShutdownTasks()">
 <!--   -->
 </a>
@@ -492,6 +522,22 @@ public&nbsp;it.unimi.dsi.fastutil.objects.ObjectCollection&lt;<a href="Task.html
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a <code>Collection</code> with all the registered shutdown <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="getShutdownTask(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getShutdownTask</h4>
+<pre class="methodSignature">public&nbsp;<a href="Task.html" title="class in net.minestom.server.timer">Task</a>&nbsp;getShutdownTask&#8203;(int&nbsp;id)</pre>
+<div class="block">Returns the shutdown task associated with this task id</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>id</code> - the id of the task</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>task the shutdown task itself</dd>
 </dl>
 </li>
 </ul>
