@@ -19,11 +19,6 @@ public class SoundEffectPacket implements ServerPacket {
     public float pitch;
 
     /**
-     * @deprecated Use {@link #soundSource}
-     */
-    @Deprecated public SoundCategory soundCategory;
-
-    /**
      * @deprecated Use variables
      */
     @Deprecated
