@@ -109,9 +109,9 @@ public class EntityTypeContainer implements Comparable<EntityTypeContainer> {
             case "dragon_fireball":
                 this.gravityAcceleration = 0.1;
                 break;
-            // 0.0784000015258789
+            // 0.08
             default:
-                this.gravityAcceleration = 0.0784000015258789;
+                this.gravityAcceleration = 0.08;
                 break;
         }
         switch (name.getPath()) {
