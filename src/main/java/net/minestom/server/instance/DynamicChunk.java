@@ -47,15 +47,15 @@ public class DynamicChunk extends Chunk {
 
     // Used to get all blocks with data (no null)
     // Key is still chunk coordinates (see #getBlockIndex)
-    protected final Int2ObjectMap<Data> blocksData = new Int2ObjectOpenHashMap<>();
+    protected final Int2ObjectOpenHashMap<Data> blocksData = new Int2ObjectOpenHashMap<>();
 
     // Contains CustomBlocks' block index which are updatable
-    protected final IntSet updatableBlocks = new IntOpenHashSet();
+    protected final IntOpenHashSet updatableBlocks = new IntOpenHashSet();
     // (block index)/(last update in ms)
     protected final Int2LongMap updatableBlocksLastUpdate = new Int2LongOpenHashMap();
 
     // Block entities
-    protected final IntSet blockEntities = new IntOpenHashSet();
+    protected final IntOpenHashSet blockEntities = new IntOpenHashSet();
 
     private long lastChangeTime;
 
@@ -389,8 +389,8 @@ public class DynamicChunk extends Chunk {
         fullDataPacket.chunkZ = chunkZ;
         fullDataPacket.paletteStorage = blockPalette.clone();
         fullDataPacket.customBlockPaletteStorage = customBlockPalette.clone();
-        fullDataPacket.blockEntities = new IntOpenHashSet(blockEntities);
-        fullDataPacket.blocksData = new Int2ObjectOpenHashMap<>(blocksData);
+        fullDataPacket.blockEntities = blockEntities.clone();
+        fullDataPacket.blocksData = blocksData.clone();
         return fullDataPacket;
     }
 
