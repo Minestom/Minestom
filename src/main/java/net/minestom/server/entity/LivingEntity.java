@@ -552,6 +552,11 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         final PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getEquipmentsPacket());
         playerConnection.sendPacket(getPropertiesPacket());
+
+        if (getTeam() != null){
+            playerConnection.sendPacket(getTeam().createTeamsCreationPacket());
+        }
+
         return true;
     }
 

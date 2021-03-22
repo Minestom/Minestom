@@ -348,8 +348,17 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         playerConnection.sendPacket(getVelocityPacket());
         playerConnection.sendPacket(getMetadataPacket());
 
+        // Passenger
         if (hasPassenger()) {
             playerConnection.sendPacket(getPassengersPacket());
+        }
+
+        // Head position
+        {
+            EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
+            entityHeadLookPacket.entityId = getEntityId();
+            entityHeadLookPacket.yaw = position.getYaw();
+            playerConnection.sendPacket(entityHeadLookPacket);
         }
 
         return true;

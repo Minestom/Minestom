@@ -593,13 +593,12 @@ public class Player extends LivingEntity implements CommandSender {
 
     @Override
     public boolean addViewer0(@NotNull Player player) {
-        if (player == this || !super.addViewer0(player)) {
+        if (player == this) {
             return false;
         }
-
         PlayerConnection viewerConnection = player.getPlayerConnection();
-        showPlayer(viewerConnection);
-        return true;
+        viewerConnection.sendPacket(getAddPlayerToList());
+        return super.addViewer0(player);
     }
 
     @Override
