@@ -19,6 +19,7 @@ import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.instance.lighting.ChunkLightEngine;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.storage.StorageLocation;
@@ -222,6 +223,21 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param chunkGenerator the new {@link ChunkGenerator} of the instance
      */
     public abstract void setChunkGenerator(@Nullable ChunkGenerator chunkGenerator);
+
+    /**
+     * Gets the instance {@link ChunkLightEngine}
+     * 
+     * @return the {@link ChunkLightEngine} of the instance
+     */
+    @Nullable
+    public abstract ChunkLightEngine getChunkLightEngine();
+
+    /**
+     * Changes the instance {@link ChunkLightEngine}
+     * 
+     * @param chunkLightEngine the new {@link ChunkLightEngine} of the instance
+     */
+    public abstract void setChunkLightEngine(@Nullable ChunkLightEngine chunkLightEngine);
 
     /**
      * Gets all the instance's loaded chunks.

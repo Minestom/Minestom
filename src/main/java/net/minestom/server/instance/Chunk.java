@@ -11,6 +11,9 @@ import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.instance.lighting.ChunkLight;
+import net.minestom.server.instance.lighting.ChunkLightEngine;
+import net.minestom.server.instance.lighting.DefaultChunkLightEngine;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -81,11 +84,15 @@ public abstract class Chunk implements Viewable, DataContainer {
     // Data
     protected Data data;
 
+    // Generators
+    protected ChunkLightEngine chunkLightEngine;
+
     public Chunk(@Nullable Biome[] biomes, int chunkX, int chunkZ, boolean shouldGenerate) {
         this.identifier = UUID.randomUUID();
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.shouldGenerate = shouldGenerate;
+        this.chunkLightEngine = new DefaultChunkLightEngine();
 
         if (biomes != null && biomes.length == BIOME_COUNT) {
             this.biomes = biomes;
@@ -399,28 +406,19 @@ public abstract class Chunk implements Viewable, DataContainer {
      */
     @NotNull
     public UpdateLightPacket getLightPacket() {
-        // TODO do not hardcode light
-        UpdateLightPacket updateLightPacket = new UpdateLightPacket(getIdentifier(), getLastChangeTime());
-        updateLightPacket.chunkX = getChunkX();
-        updateLightPacket.chunkZ = getChunkZ();
-        updateLightPacket.skyLightMask = 0x3FFF0;
-        updateLightPacket.blockLightMask = 0x3F;
-        updateLightPacket.emptySkyLightMask = 0x0F;
-        updateLightPacket.emptyBlockLightMask = 0x3FFC0;
-        byte[] bytes = new byte[2048];
-        Arrays.fill(bytes, (byte) 0xFF);
-        List<byte[]> temp = new ArrayList<>(14);
-        List<byte[]> temp2 = new ArrayList<>(6);
-        for (int i = 0; i < 14; ++i) {
-            temp.add(bytes);
-        }
-        for (int i = 0; i < 6; ++i) {
-            temp2.add(bytes);
-        }
-        updateLightPacket.skyLight = temp;
-        updateLightPacket.blockLight = temp2;
+        ChunkLight lightData = new ChunkLight(this);
+        chunkLightEngine.lightChunk(lightData);
+        return lightData.convertDataIntoPacket();
+    }
 
-        return updateLightPacket;
+    /**
+     * Sets the chunk light engine
+     * 
+     * @param chunkLightEngine The ChunkLightEngine implementation
+     */
+    @NotNull
+    public void setChunkLightEngine(@Nullable ChunkLightEngine chunkLightEngine) {
+        this.chunkLightEngine = chunkLightEngine;
     }
 
     /**

@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.data.Data;
 import net.minestom.server.entity.Player;
+import net.minestom.server.instance.lighting.ChunkLightEngine;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
@@ -74,6 +75,16 @@ public class SharedInstance extends Instance {
     @Override
     public ChunkGenerator getChunkGenerator() {
         return instanceContainer.getChunkGenerator();
+    }
+
+    @Override
+    public void setChunkLightEngine(ChunkLightEngine chunkLightEngine) {
+       this.instanceContainer.setChunkLightEngine(chunkLightEngine);
+    }
+
+    @Override
+    public ChunkLightEngine getChunkLightEngine() {
+        return instanceContainer.getChunkLightEngine();
     }
 
     @NotNull
