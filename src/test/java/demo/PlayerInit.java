@@ -110,18 +110,13 @@ public class PlayerInit {
         globalEventHandler.addEventCallback(EntityAttackEvent.class, event -> {
             final Entity source = event.getEntity();
             final Entity entity = event.getTarget();
-            // Not sure what to call this number, so for now it will be v
-            final double v = 7.2168789471904422009771121898302;
+
             if (entity instanceof Player) {
                 Player target = (Player) entity;
-                Vector velocity = source.getPosition().clone().getDirection().multiply(4);
-                velocity.setY(v);
-                target.setVelocity(velocity);
+                target.takeKnockback(0.4F, Math.sin(source.getPosition().getYaw() * 0.017453292), -Math.cos(source.getPosition().getYaw() * 0.017453292));
                 target.damage(DamageType.fromEntity(source), 5);
             } else {
-                Vector velocity = source.getPosition().clone().getDirection().multiply(3);
-                velocity.setY(v);
-                entity.setVelocity(velocity);
+                entity.takeKnockback(0.4F, Math.sin(source.getPosition().getYaw() * 0.017453292), -Math.cos(source.getPosition().getYaw() * 0.017453292));
             }
 
             if (source instanceof Player) {
