@@ -88,7 +88,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid) {
         this(entityType, uuid, new Position());
-        setupAttributes();
         setGravity(0.02f, 0.08f, 3.92f);
         initEquipments();
     }
@@ -103,7 +102,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     @Deprecated
     public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
         super(entityType, uuid, spawnPosition);
-        setupAttributes();
         setGravity(0.02f, 0.08f, 3.92f);
         initEquipments();
     }
@@ -639,16 +637,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
         propertiesPacket.properties = properties;
         return propertiesPacket;
-    }
-
-    /**
-     * Sets all the attributes to {@link Attribute#getDefaultValue()}
-     */
-    private void setupAttributes() {
-        for (Attribute attribute : Attribute.values()) {
-            final AttributeInstance attributeInstance = new AttributeInstance(attribute, this::onAttributeChanged);
-            this.attributeModifiers.put(attribute.getKey(), attributeInstance);
-        }
     }
 
     @Override
