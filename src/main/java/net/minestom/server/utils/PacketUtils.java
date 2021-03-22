@@ -203,20 +203,22 @@ public final class PacketUtils {
         final int dataLength = packetBuf.readableBytes();
 
         final int compressionThreshold = MinecraftServer.getCompressionThreshold();
-        final boolean compression = compressionThreshold > 0 && dataLength >= compressionThreshold;
+        final boolean compression = compressionThreshold > 0;
 
         if (compression) {
-            // Compression
-            ByteBuf compressedBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
-            Utils.writeVarIntBuf(compressedBuf, dataLength);
-            final Deflater deflater = DEFLATER.get();
-            compress(deflater, null, packetBuf, compressedBuf);
-            packetBuf = compressedBuf;
-        } else {
-            // No compression
-            ByteBuf uncompressedLengthBuffer = Unpooled.buffer();
-            Utils.writeVarIntBuf(uncompressedLengthBuffer, 0);
-            packetBuf = Unpooled.wrappedBuffer(uncompressedLengthBuffer, packetBuf);
+            if (dataLength >= compressionThreshold) {
+                // Packet large enough
+                ByteBuf compressedBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
+                Utils.writeVarIntBuf(compressedBuf, dataLength);
+                final Deflater deflater = DEFLATER.get();
+                compress(deflater, null, packetBuf, compressedBuf);
+                packetBuf = compressedBuf;
+            } else {
+                // Packet too small
+                ByteBuf uncompressedLengthBuffer = Unpooled.buffer();
+                Utils.writeVarIntBuf(uncompressedLengthBuffer, 0);
+                packetBuf = Unpooled.wrappedBuffer(uncompressedLengthBuffer, packetBuf);
+            }
         }
 
         // Write the final length of the packet
