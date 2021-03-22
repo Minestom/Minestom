@@ -296,6 +296,12 @@ public class Vector implements PublicCloneable<Vector> {
         return this;
     }
 
+    public boolean epsilonIsZero() {
+        return Math.abs(x) < epsilon &&
+                Math.abs(y) < epsilon &&
+                Math.abs(z) < epsilon;
+    }
+
     public boolean isZero() {
         return getX() == 0 &&
                 getY() == 0 &&
