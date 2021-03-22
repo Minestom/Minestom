@@ -172,7 +172,8 @@ public class NettyPlayerConnection extends PlayerConnection {
         } else if (message instanceof ServerPacket) {
             final ServerPacket serverPacket = (ServerPacket) message;
             synchronized (tickBuffer) {
-                PacketUtils.createFramedPacket(serverPacket, true, tickBuffer);
+                final ByteBuf framedPacket = PacketUtils.createFramedPacket(serverPacket, false);
+                tickBuffer.writeBytes(framedPacket);
             }
             return;
         } else if (message instanceof ByteBuf) {
