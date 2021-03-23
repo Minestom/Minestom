@@ -72,7 +72,7 @@ public class UnloadCallbacksExtension extends Extension {
 
         MinecraftServer.getSchedulerManager().buildTask(() -> {
             // unload self
-            MinecraftServer.getExtensionManager().unloadExtension(getDescription().getName());
+            MinecraftServer.getExtensionManager().unloadExtension(getOrigin().getName());
         }).delay(1L, TimeUnit.SECOND).schedule();
     }
 

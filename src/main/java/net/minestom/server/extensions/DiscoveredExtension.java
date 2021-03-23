@@ -10,7 +10,7 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
-final class DiscoveredExtension {
+public final class DiscoveredExtension {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(DiscoveredExtension.class);
 
@@ -23,7 +23,7 @@ final class DiscoveredExtension {
     private String[] codeModifiers;
     private String[] dependencies;
     private ExternalDependencies externalDependencies;
-    private List<String> missingCodeModifiers = new LinkedList<>();
+    private final List<String> missingCodeModifiers = new LinkedList<>();
     private boolean failedToLoadMixin = false;
     transient List<URL> files = new LinkedList<>();
     transient LoadStatus loadStatus = LoadStatus.LOAD_SUCCESS;
@@ -77,7 +77,7 @@ final class DiscoveredExtension {
     }
 
     @Nullable
-    File getOriginalJar() {
+    public File getOriginalJar() {
         return originalJar;
     }
 

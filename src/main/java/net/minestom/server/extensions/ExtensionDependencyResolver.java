@@ -37,11 +37,13 @@ public class ExtensionDependencyResolver implements DependencyResolver {
             // B depends on A (A<-B)
             // When loading B, with no deep conversion, Ext will not be added to the list of dependencies (because it is not a direct dependency)
             // But when trying to call/access code from extension A, the parts dependent on Ext won't be inside B's dependencies, triggering a ClassNotFoundException
-            List<ResolvedDependency> deps = new LinkedList<>();
-            for (URL u : ext.files) {
-                deps.add(new ResolvedDependency(u.toExternalForm(), u.toExternalForm(), "", u, new LinkedList<>()));
+            List<ResolvedDependency> dependencies = new LinkedList<>();
+
+            for (URL url : ext.files) {
+                dependencies.add(new ResolvedDependency(url.toExternalForm(), url.toExternalForm(), "", url, new LinkedList<>()));
             }
-            return new ResolvedDependency(ext.getName(), ext.getName(), ext.getVersion(), ext.files.get(0), deps);
+
+            return new ResolvedDependency(ext.getName(), ext.getName(), ext.getVersion(), ext.files.get(0), dependencies);
         }
         throw new UnresolvedDependencyException("No extension named " + extensionName);
     }
