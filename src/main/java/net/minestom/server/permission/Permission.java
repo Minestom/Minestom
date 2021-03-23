@@ -1,10 +1,14 @@
 package net.minestom.server.permission;
 
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.permission.verifier.PermissionVerifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Objects;
 
 /**
@@ -70,5 +74,19 @@ public class Permission {
     @Override
     public int hashCode() {
         return Objects.hash(permissionName, data);
+    }
+
+    public boolean isValid(PermissionVerifier... verifiers) {
+
+        boolean isValid = false;
+
+        for (PermissionVerifier verifier : verifiers) {
+            if (verifier.isValid(this, new HashSet<>(Collections.singletonList(this)))) {
+                isValid = true;
+            }
+        }
+
+        return isValid;
+
     }
 }

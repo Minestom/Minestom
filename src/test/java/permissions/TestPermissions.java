@@ -3,6 +3,7 @@ package permissions;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.permission.Permission;
+import net.minestom.server.permission.verifier.PermissionVerifier;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,14 +66,23 @@ public class TestPermissions {
     public void hasPermissionNameNbt() {
         player.addPermission(permission1);
         assertTrue(player.hasPermission("perm.name"));
-        assertTrue(player.hasPermission("perm.name",
-                nbtCompound -> {
-                    final String name = nbtCompound != null ? nbtCompound.getString("name") : null;
+
+        assertTrue(PermissionVerifier.verifierValid(
+                (permission, otherPermissions) -> {
+                    if (!otherPermissions.contains(permission)) return false;
+                    final String name = permission.getNBTData() != null ? permission.getNBTData().getString("name") : null;
                     return Objects.equals(name, "Minestom");
-                }));
+                }, new Permission("perm.name",
+                        new NBTCompound()
+                                .setString("name", "Minestom")
+                                .setInt("amount", 5)), player.getAllPermissions()));
 
         player.addPermission(permission2);
-        assertFalse(player.hasPermission("perm.name2", Objects::nonNull));
+        assertFalse(PermissionVerifier.verifierValid(
+                (permission, otherPermissions) -> {
+                    if (!otherPermissions.contains(permission)) return false;
+                    return Objects.nonNull(permission.getNBTData());
+                }, new Permission("perm.name"), player.getAllPermissions()));
     }
 
     @AfterEach

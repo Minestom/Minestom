@@ -24,4 +24,20 @@ public interface PermissionVerifier {
      * should return true if this permission is valid, false otherwise
      */
     boolean isValid(@NotNull Permission permission, @NotNull Set<Permission> currentPermissions);
+
+    /**
+     * Shorthand for using a permission verifier lambda to check against a permission.
+     *
+     * @param verifier The verifier to check against.
+     * @param permission         the permission to check for
+     * @param currentPermissions the permissions this PermissionHandler currently has.
+     * @return true if {@link PermissionHandler#hasPermission(String)}
+     * should return true if this permission is valid, false otherwise
+     */
+    static boolean verifierValid(
+            @NotNull PermissionVerifier verifier,
+            @NotNull Permission permission,
+            @NotNull Set<Permission> currentPermissions) {
+        return verifier.isValid(permission, currentPermissions);
+    }
 }
