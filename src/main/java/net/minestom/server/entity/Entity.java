@@ -22,6 +22,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.permission.PermissionHandler;
 import net.minestom.server.permission.verifier.PermissionVerifier;
+import net.minestom.server.permission.verifier.WildcardPermissionVerifier;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
@@ -151,6 +152,9 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         this.lastX = spawnPosition.getX();
         this.lastY = spawnPosition.getY();
         this.lastZ = spawnPosition.getZ();
+
+        // Add wildcard verifier
+        addVerifier(new WildcardPermissionVerifier());
     }
 
     @Deprecated
