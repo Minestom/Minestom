@@ -20,6 +20,7 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.*;
@@ -49,7 +50,8 @@ public final class NBTUtils {
      * @param tag the tag, if any
      * @return the binary tag holder, or {@code null} if the tag was null
      */
-    public static @Nullable BinaryTagHolder asBinaryTagHolder(@Nullable NBTCompound tag) {
+    @Contract("null -> null; !null -> !null")
+    public static BinaryTagHolder asBinaryTagHolder(@Nullable NBTCompound tag) {
         if (tag == null) {
             return null;
         }
