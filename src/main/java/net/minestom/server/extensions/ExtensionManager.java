@@ -80,6 +80,7 @@ public class ExtensionManager {
         Check.stateCondition(loaded, "Extensions are already loaded!");
         this.loaded = true;
 
+        // Make extensions folder if necessary
         if (!extensionFolder.exists()) {
             if (!extensionFolder.mkdirs()) {
                 LOGGER.error("Could not find or create the extension folder, extensions will not be loaded!");
@@ -87,6 +88,7 @@ public class ExtensionManager {
             }
         }
 
+        // Make dependencies folder if necessary
         if (!dependenciesFolder.exists()) {
             if (!dependenciesFolder.mkdirs()) {
                 LOGGER.error("Could not find nor create the extension dependencies folder, extensions will not be loaded!");
@@ -242,15 +244,23 @@ public class ExtensionManager {
     @NotNull
     private List<DiscoveredExtension> discoverExtensions() {
         List<DiscoveredExtension> extensions = new LinkedList<>();
+
         File[] fileList = extensionFolder.listFiles();
-        if(fileList != null) {
+
+        if (fileList != null) {
+            // Loop through all files in extension folder
             for (File file : fileList) {
+
+                // Ignore folders
                 if (file.isDirectory()) {
                     continue;
                 }
+
+                // Ignore non .jar files
                 if (!file.getName().endsWith(".jar")) {
                     continue;
                 }
+
                 DiscoveredExtension extension = discoverFromJar(file);
                 if (extension != null && extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
                     extensions.add(extension);
@@ -281,7 +291,8 @@ public class ExtensionManager {
         return extensions;
     }
 
-    private DiscoveredExtension discoverFromJar(File file) {
+    @Nullable
+    private DiscoveredExtension discoverFromJar(@NotNull File file) {
         try (ZipFile f = new ZipFile(file);
              InputStreamReader reader = new InputStreamReader(f.getInputStream(f.getEntry("extension.json")))) {
 
@@ -309,34 +320,37 @@ public class ExtensionManager {
             extensionMap.put(discoveredExtension.getName().toLowerCase(), discoveredExtension);
         }
 
+        allExtensions: // label the loop
         for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
 
-            List<DiscoveredExtension> dependencies = Arrays.stream(discoveredExtension.getDependencies())
-                    .map(dependencyName -> {
-                        DiscoveredExtension dependencyExtension = extensionMap.get(dependencyName.toLowerCase());
-                        // Specifies an extension we don't have.
-                        if (dependencyExtension == null) {
-                            // attempt to see if it is not already loaded (happens with dynamic (re)loading)
-                            if (extensions.containsKey(dependencyName.toLowerCase())) {
-                                return extensions.get(dependencyName.toLowerCase()).getOrigin();
-                            } else {
-                                LOGGER.error("Extension {} requires an extension called {}.", discoveredExtension.getName(), dependencyName);
-                                LOGGER.error("However the extension {} could not be found.", dependencyName);
-                                LOGGER.error("Therefore {} will not be loaded.", discoveredExtension.getName());
-                                discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.MISSING_DEPENDENCIES;
-                            }
-                        }
-                        // This will return null for an unknown-extension
-                        return extensionMap.get(dependencyName.toLowerCase());
-                    }).collect(Collectors.toList());
+            List<DiscoveredExtension> dependencies = new ArrayList<>(discoveredExtension.getDependencies().length);
 
-            // If the list contains null ignore it.
-            if (!dependencies.contains(null)) {
-                dependencyMap.put(
-                        discoveredExtension,
-                        dependencies
-                );
+            // Map the dependencies into DiscoveredExtensions.
+            for (String dependencyName : discoveredExtension.getDependencies()) {
+                DiscoveredExtension dependencyExtension = extensionMap.get(dependencyName.toLowerCase());
+                // Specifies an extension we don't have.
+                if (dependencyExtension == null) {
+                    // attempt to see if it is not already loaded (happens with dynamic (re)loading)
+                    if (extensions.containsKey(dependencyName.toLowerCase())) {
+                        dependencies.add(extensions.get(dependencyName.toLowerCase()).getOrigin());
+                        continue; // Go to the next loop in this dependency loop, this iteration is done.
+                    } else {
+                        LOGGER.error("Extension {} requires an extension called {}.", discoveredExtension.getName(), dependencyName);
+                        LOGGER.error("However the extension {} could not be found.", dependencyName);
+                        LOGGER.error("Therefore {} will not be loaded.", discoveredExtension.getName());
+                        discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.MISSING_DEPENDENCIES;
+                        continue allExtensions; // the above labeled loop will go to the next extension as this dependency is invalid.
+                    }
+                }
+                // This will add null for an unknown-extension
+                dependencies.add(dependencyExtension);
             }
+
+            dependencyMap.put(
+                    discoveredExtension,
+                    dependencies
+            );
+
         }
 
         // List containing the real load order.
