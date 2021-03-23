@@ -735,7 +735,7 @@ public class ExtensionManager {
      */
     public static void loadCodeModifiersEarly() {
         // allow users to disable early code modifier load
-        if("true".equalsIgnoreCase(System.getProperty(DISABLE_EARLY_LOAD_SYSTEM_KEY))) {
+        if ("true".equalsIgnoreCase(System.getProperty(DISABLE_EARLY_LOAD_SYSTEM_KEY))) {
             return;
         }
         LOGGER.info("Early load of code modifiers from extensions.");
@@ -765,8 +765,8 @@ public class ExtensionManager {
     public void unloadAllExtensions() {
         // copy names, as the extensions map will be modified via the calls to unload
         Set<String> extensionNames = new HashSet<>(extensions.keySet());
-        for(String ext : extensionNames) {
-            if(extensions.containsKey(ext)) { // is still loaded? Because extensions can depend on one another, it might have already been unloaded
+        for (String ext : extensionNames) {
+            if (extensions.containsKey(ext)) { // is still loaded? Because extensions can depend on one another, it might have already been unloaded
                 unloadExtension(ext);
             }
         }

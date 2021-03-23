@@ -95,6 +95,7 @@ public final class DiscoveredExtension {
             extension.name = extension.loadStatus.name();
             return;
         }
+
         if (!extension.name.matches(NAME_REGEX)) {
             LOGGER.error("Extension '{}' specified an invalid name.", extension.name);
             LOGGER.error("Extension '{}' will not be loaded.", extension.name);
@@ -104,6 +105,7 @@ public final class DiscoveredExtension {
             extension.name = extension.loadStatus.name();
             return;
         }
+
         if (extension.entrypoint == null) {
             LOGGER.error("Extension '{}' did not specify an entry point (via 'entrypoint').", extension.name);
             LOGGER.error("Extension '{}' will not be loaded.", extension.name);
@@ -113,6 +115,7 @@ public final class DiscoveredExtension {
             extension.entrypoint = extension.loadStatus.name();
             return;
         }
+
         // Handle defaults
         // If we reach this code, then the extension will most likely be loaded:
         if (extension.version == null) {
@@ -120,19 +123,24 @@ public final class DiscoveredExtension {
             LOGGER.warn("Extension '{}' will continue to load but should specify a plugin version.", extension.name);
             extension.version = "Unspecified";
         }
+
         if (extension.mixinConfig == null) {
             extension.mixinConfig = "";
         }
+
         if (extension.authors == null) {
             extension.authors = new String[0];
         }
+
         if (extension.codeModifiers == null) {
             extension.codeModifiers = new String[0];
         }
+
         // No dependencies were specified
         if (extension.dependencies == null) {
             extension.dependencies = new String[0];
         }
+
         // No external dependencies were specified;
         if (extension.externalDependencies == null) {
             extension.externalDependencies = new ExternalDependencies();
@@ -177,11 +185,11 @@ public final class DiscoveredExtension {
         }
     }
 
-    static final class ExternalDependencies {
+    public static final class ExternalDependencies {
         Repository[] repositories = new Repository[0];
         String[] artifacts = new String[0];
 
-        static class Repository {
+        public static class Repository {
             String name = "";
             String url = "";
         }
