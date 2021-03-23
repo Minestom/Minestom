@@ -1,5 +1,6 @@
 package net.minestom.server.permission;
 
+import net.minestom.server.permission.verifier.PermissionVerifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -18,6 +19,7 @@ import java.util.Set;
  */
 public interface PermissionHandler {
 
+
     /**
      * Returns all permissions associated to this handler.
      * The returned collection should be modified only by subclasses.
@@ -26,6 +28,14 @@ public interface PermissionHandler {
      */
     @NotNull
     Set<Permission> getAllPermissions();
+
+    /**
+     * Returns all verifiers in this permission handler.
+     *
+     * @return The verifiers of this handler.
+     */
+    @NotNull
+    Set<PermissionVerifier> getVerifiers();
 
     /**
      * Adds a {@link Permission} to this handler.
@@ -63,12 +73,16 @@ public interface PermissionHandler {
      * @return true if the handler has the permission, false otherwise
      */
     default boolean hasPermission(@NotNull Permission permission) {
-        for (Permission permissionLoop : getAllPermissions()) {
-            if (permissionLoop.equals(permission)) {
-                return true;
+        boolean isValid = false;
+
+        for (PermissionVerifier verifier : getVerifiers()) {
+            if (verifier.isValid(permission, getAllPermissions())) {
+                isValid = true;
             }
         }
-        return false;
+
+        return isValid;
+
     }
 
     /**
@@ -91,32 +105,41 @@ public interface PermissionHandler {
     }
 
     /**
-     * Gets if this handler has the permission with the name {@code permissionName} and which verify the optional
-     * {@link PermissionVerifier}.
+     * Gets if this handler has the permission with the name {@code permissionName}
      *
      * @param permissionName     the permission name
-     * @param permissionVerifier the optional verifier,
      *                           null means that only the permission name will be used
      * @return true if the handler has the permission, false otherwise
      */
-    default boolean hasPermission(@NotNull String permissionName, @Nullable PermissionVerifier permissionVerifier) {
-        final Permission permission = getPermission(permissionName);
-
-        if (permission != null) {
-            // Verify using the permission verifier
-            return permissionVerifier == null || permissionVerifier.isValid(permission.getNBTData());
-        }
-        return false;
+    default boolean hasPermission(@NotNull String permissionName) {
+        return hasPermission(new Permission(permissionName));
     }
 
     /**
-     * Gets if this handler has the permission with the name {@code permissionName}.
+     * Adds a verifier to this permission handler.
      *
-     * @param permissionName the permission name
-     * @return true if the handler has the permission, false otherwise
+     * @param permissionVerifier the verifier to add.
      */
-    default boolean hasPermission(@NotNull String permissionName) {
-        return hasPermission(permissionName, null);
+    default void addVerifier(@NotNull PermissionVerifier permissionVerifier) {
+        getVerifiers().add(permissionVerifier);
+    }
+
+    /**
+     * Removes a verifier from this permission handler.
+     *
+     * @param permissionVerifier the verifier to remove.
+     */
+    default void removeVerifier(@NotNull PermissionVerifier permissionVerifier) {
+        getVerifiers().remove(permissionVerifier);
+    }
+
+    /**
+     * Checks if this PermissionHandler has a permission verifier
+     *
+     * @param permissionVerifier the verifier to check for.
+     */
+    default boolean hasVerifier(@NotNull PermissionVerifier permissionVerifier) {
+        return getVerifiers().contains(permissionVerifier);
     }
 
 }

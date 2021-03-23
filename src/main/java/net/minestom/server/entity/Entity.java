@@ -21,6 +21,7 @@ import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.permission.PermissionHandler;
+import net.minestom.server.permission.verifier.PermissionVerifier;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
@@ -84,7 +85,9 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     protected final Set<Player> viewers = ConcurrentHashMap.newKeySet();
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
     private Data data;
+
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
+    private final Set<PermissionVerifier> permissionVerifiers = new CopyOnWriteArraySet<>();
 
     protected UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
@@ -426,6 +429,12 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     @Override
     public Set<Permission> getAllPermissions() {
         return permissions;
+    }
+
+    @NotNull
+    @Override
+    public Set<PermissionVerifier> getVerifiers() {
+        return permissionVerifiers;
     }
 
     /**

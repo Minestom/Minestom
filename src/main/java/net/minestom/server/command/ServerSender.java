@@ -2,6 +2,7 @@ package net.minestom.server.command;
 
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.permission.Permission;
+import net.minestom.server.permission.verifier.PermissionVerifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -17,6 +18,7 @@ import java.util.Set;
 public class ServerSender implements CommandSender {
 
     private final Set<Permission> permissions = Collections.unmodifiableSet(new HashSet<>());
+    private final Set<PermissionVerifier> permissionVerifiers = Collections.unmodifiableSet(new HashSet<>());
 
     @Override
     public void sendMessage(@NotNull String message) {
@@ -27,5 +29,11 @@ public class ServerSender implements CommandSender {
     @Override
     public Set<Permission> getAllPermissions() {
         return permissions;
+    }
+
+    @NotNull
+    @Override
+    public Set<PermissionVerifier> getVerifiers() {
+        return permissionVerifiers;
     }
 }
