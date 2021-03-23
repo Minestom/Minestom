@@ -127,7 +127,7 @@ public class ExtensionManager {
 
         // periodically cleanup observers
         MinecraftServer.getSchedulerManager().buildTask(() -> {
-            for(Extension ext : extensionList) {
+            for (Extension ext : extensionList) {
                 ext.cleanupObservers();
             }
         }).repeat(1L, TimeUnit.MINUTE).schedule();
@@ -448,9 +448,9 @@ public class ExtensionManager {
         LOGGER.trace("Added dependency {} to extension {} classpath", location.toExternalForm(), extension.getName());
 
         // recurse to add full dependency tree
-        if(!dependency.getSubdependencies().isEmpty()) {
+        if (!dependency.getSubdependencies().isEmpty()) {
             LOGGER.trace("Dependency {} has subdependencies, adding...", location.toExternalForm());
-            for(ResolvedDependency sub : dependency.getSubdependencies()) {
+            for (ResolvedDependency sub : dependency.getSubdependencies()) {
                 addDependencyFile(sub, extension);
             }
             LOGGER.trace("Dependency {} has had its subdependencies added.", location.toExternalForm());
