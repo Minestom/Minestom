@@ -10,7 +10,6 @@ import org.objectweb.asm.tree.ClassNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -220,9 +219,8 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
         return originalBytes;
     }
 
-    public byte[] loadBytesWithChildren(String name, boolean transform) throws IOException, ClassNotFoundException {
-        if (name == null)
-            throw new ClassNotFoundException();
+    public byte[] loadBytesWithChildren(@NotNull String name, boolean transform) throws IOException, ClassNotFoundException {
+
         String path = name.replace(".", "/") + ".class";
         InputStream input = getResourceAsStreamWithChildren(path);
         if (input == null) {
@@ -298,11 +296,7 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
             }
             return true;
         } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
-            if(MinecraftServer.getExceptionManager() != null) {
-                MinecraftServer.getExceptionManager().handleException(e);
-            } else {
-                e.printStackTrace();
-            }
+            MinecraftServer.getExceptionManager().handleException(e);
         }
         return false;
     }
@@ -336,7 +330,7 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
     @Nullable
     public static String findExtensionObjectOwner(@NotNull Object obj) {
         ClassLoader cl = obj.getClass().getClassLoader();
-        if(cl instanceof MinestomExtensionClassLoader) {
+        if (cl instanceof MinestomExtensionClassLoader) {
             return ((MinestomExtensionClassLoader) cl).getExtensionName();
         }
         return null;
