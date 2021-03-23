@@ -79,16 +79,16 @@ public class NamespaceID implements CharSequence, Keyed {
             this.path = path.substring(index + 1);
         }
         this.full = toString();
-        this.key = Key.key(this.domain, this.path);
         validate();
+        this.key = Key.key(this.domain, this.path);
     }
 
     private NamespaceID(String domain, String path) {
         this.domain = domain;
         this.path = path;
         this.full = toString();
-        this.key = Key.key(domain, path);
         validate();
+        this.key = Key.key(this.domain, this.path);
     }
 
     private void validate() {
