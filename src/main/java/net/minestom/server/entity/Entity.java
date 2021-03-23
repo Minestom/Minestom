@@ -562,7 +562,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                             drag = customBlock.getDrag(instance, blockPosition);
                         } else {
                             // Default ground drag
-                            drag = 0.5f;
+                            drag = 0.546f;
                         }
 
                         // Stop player velocity
@@ -570,13 +570,12 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                             this.velocity.zero();
                         }
                     } else {
-                        drag = 0.98f; // air drag
+                        drag = 0.91f; // air drag
                     }
 
                     // Apply drag
-                    final double gravityDrag = 1 - gravityDragPerTick;
                     this.velocity.setX(velocity.getX() * drag);
-                    this.velocity.setY(velocity.getY() * gravityDrag);
+                    this.velocity.setY(velocity.getY() * (1 - gravityDragPerTick));
                     this.velocity.setZ(velocity.getZ() * drag);
 
                     if (velocity.epsilonIsZero()) {
@@ -666,16 +665,13 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     /**
      * Applies knockback to the entity
      * @param strength the strength of the knockback, 0.4 is the vanilla value for a bare hand hit
-     * @param x knockback on x axle, vanilla server calculates this value using <code>sin(attacker.yaw * 0.017453292)</code>
-     * @param z knockback on z axle, vanilla server calculates this value using <code>-cos(attacker.yaw * 0.017453292)</code>
+     * @param x knockback on x axle, vanilla server calculates this value using: <pre>sin(attacker.yaw * 0.017453292)</pre>
+     * @param z knockback on z axle, vanilla server calculates this value using: <pre>-cos(attacker.yaw * 0.017453292)</pre>
      */
     public void takeKnockback(float strength, final double x, final double z) {
         //TODO take into account the knockback resistance
         if (strength > 0) {
             final Vector currentVelocity = this.getVelocity();
-            if (Math.abs(currentVelocity.getY()) < Vector.getEpsilon()) {
-                currentVelocity.setY(-gravityAcceleration);
-            }
             final Vector velocityModifier = (new Vector(x, 0d, z)).normalize().multiply((double)strength);
             this.getVelocity().setX(currentVelocity.getX() / 2d - velocityModifier.getX());
             this.getVelocity().setY(this.onGround ? Math.min(.4d, currentVelocity.getY() / 2d + (double)strength) : currentVelocity.getY());
