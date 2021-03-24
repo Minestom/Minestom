@@ -73,7 +73,7 @@ public abstract class Extension {
      * @return The logger for the extension
      */
     @NotNull
-    protected Logger getLogger() {
+    public Logger getLogger() {
         return logger;
     }
 
