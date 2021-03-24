@@ -1,7 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
@@ -41,14 +40,6 @@ public class CombatEventPacket implements ComponentHoldingServerPacket {
         packet.duration = durationInTicks;
         packet.opponent = opponent != null ? opponent.getEntityId() : -1;
         return packet;
-    }
-
-    /**
-     * @deprecated Use {@link #death(Player, Entity, Component)}
-     */
-    @Deprecated
-    public static CombatEventPacket death(Player player, Entity killer, JsonMessage message) {
-        return death(player, killer, message.asComponent());
     }
 
     public static CombatEventPacket death(Player player, Entity killer, Component message) {

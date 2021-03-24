@@ -5,7 +5,6 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
@@ -17,14 +16,6 @@ public class SoundEffectPacket implements ServerPacket {
     public int x, y, z;
     public float volume;
     public float pitch;
-
-    /**
-     * @deprecated Use variables
-     */
-    @Deprecated
-    public static SoundEffectPacket create(SoundCategory category, SoundEvent sound, Position position, float volume, float pitch) {
-        return create(category.asSource(), sound, position, volume, pitch);
-    }
 
     @NotNull
     public static SoundEffectPacket create(Source category, SoundEvent sound, Position position, float volume, float pitch) {

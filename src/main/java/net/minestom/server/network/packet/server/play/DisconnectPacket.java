@@ -1,7 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -21,14 +20,6 @@ public class DisconnectPacket implements ComponentHoldingServerPacket {
      */
     public DisconnectPacket(@NotNull Component message) {
         this.message = message;
-    }
-
-    /**
-     * @deprecated Use {@link #DisconnectPacket(Component)}
-     */
-    @Deprecated
-    public DisconnectPacket(@NotNull JsonMessage message){
-        this(message.asComponent());
     }
 
     @Override

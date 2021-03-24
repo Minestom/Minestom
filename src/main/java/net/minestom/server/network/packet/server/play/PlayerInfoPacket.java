@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.adventure.ComponentHolder;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -218,14 +217,6 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
     public static class UpdateDisplayName extends PlayerInfo implements ComponentHolder<UpdateDisplayName> {
 
         public Component displayName;
-
-        /**
-         * @deprecated Use {@link #UpdateDisplayName(UUID, Component)}
-         */
-        @Deprecated
-        public UpdateDisplayName(UUID uuid, JsonMessage displayName) {
-            this(uuid, displayName.asComponent());
-        }
 
         public UpdateDisplayName(UUID uuid, Component displayName) {
             super(uuid);
