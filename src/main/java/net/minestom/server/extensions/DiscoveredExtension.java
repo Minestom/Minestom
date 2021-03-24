@@ -11,24 +11,59 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Represents an extension from an `extension.json` that is capable of powering an Extension object.
+ *
+ * This has no constructor as its properties are set via GSON.
+ */
 public final class DiscoveredExtension {
 
-    public final static Logger LOGGER = LoggerFactory.getLogger(DiscoveredExtension.class);
+    /** Static logger for this class. */
+    public static final Logger LOGGER = LoggerFactory.getLogger(DiscoveredExtension.class);
 
+    /** The regex that this name must pass. If it doesn't, it will not be accepted. */
     public static final String NAME_REGEX = "[A-Za-z][_A-Za-z0-9]+";
+
+    /** Name of the DiscoveredExtension. Unique for all extensions. */
     private String name;
+
+    /** Main class of this DiscoveredExtension, must extend Extension. */
     private String entrypoint;
+
+    /** Version of this extension, highly reccomended to set it. */
     private String version;
+
+    /** Points to sponge mixin config in resources folder. */
     private String mixinConfig;
+
+    /** People who have made this extension. */
     private String[] authors;
+
+    /** All code modifiers (the classes they point to) */
     private String[] codeModifiers;
+
+    /** List of extension names that this depends on. */
     private String[] dependencies;
+
+    /** List of Repositories and URLs that this depends on. */
     private ExternalDependencies externalDependencies;
+
+    /** A list of any missing code modifiers to be used for logging. */
     private final List<String> missingCodeModifiers = new LinkedList<>();
+
+    /** If this extension couldn't load its mixin configuration. */
     private boolean failedToLoadMixin = false;
+
+    /** All files of this extension */
     transient List<URL> files = new LinkedList<>();
+
+    /** The load status of this extension -- LOAD_SUCCESS is the only good one. */
     transient LoadStatus loadStatus = LoadStatus.LOAD_SUCCESS;
+
+    /** The original jar this is from. */
     transient private File originalJar;
+
+    /** The class loader that powers it. */
     transient private MinestomExtensionClassLoader minestomExtensionClassLoader;
 
     @NotNull
@@ -74,7 +109,7 @@ public final class DiscoveredExtension {
         return externalDependencies;
     }
 
-    void setOriginalJar(@Nullable File file) {
+    public void setOriginalJar(@Nullable File file) {
         originalJar = file;
     }
 
@@ -83,13 +118,13 @@ public final class DiscoveredExtension {
         return originalJar;
     }
 
-    MinestomExtensionClassLoader removeMinestomExtensionClassLoader() {
+    public MinestomExtensionClassLoader removeMinestomExtensionClassLoader() {
         MinestomExtensionClassLoader oldClassLoader = getMinestomExtensionClassLoader();
         setMinestomExtensionClassLoader(null);
         return oldClassLoader;
     }
 
-    void setMinestomExtensionClassLoader(@Nullable MinestomExtensionClassLoader minestomExtensionClassLoader) {
+    public void setMinestomExtensionClassLoader(@Nullable MinestomExtensionClassLoader minestomExtensionClassLoader) {
         this.minestomExtensionClassLoader = minestomExtensionClassLoader;
     }
 
@@ -98,7 +133,14 @@ public final class DiscoveredExtension {
         return this.minestomExtensionClassLoader;
     }
 
-    static void verifyIntegrity(@NotNull DiscoveredExtension extension) {
+    /**
+     * Ensures that all properties of this extension are properly set if they aren't
+     *
+     * TODO this is an impure function.
+     *
+     * @param extension The extension to verify
+     */
+    public static void verifyIntegrity(@NotNull DiscoveredExtension extension) {
         if (extension.name == null) {
             StringBuilder fileList = new StringBuilder();
             for (URL f : extension.files) {
@@ -181,6 +223,11 @@ public final class DiscoveredExtension {
         return failedToLoadMixin;
     }
 
+    /**
+     * The status this extension has, all are breakpoints.
+     *
+     * LOAD_SUCCESS is the only valid one.
+     */
     enum LoadStatus {
         LOAD_SUCCESS("Actually, it did not fail. This message should not have been printed."),
         MISSING_DEPENDENCIES("Missing dependencies, check your logs."),
