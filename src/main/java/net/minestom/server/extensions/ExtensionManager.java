@@ -140,7 +140,7 @@ public class ExtensionManager {
             // set class loaders for all extensions.
             for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
                 try {
-                    setupClassLoader(discoveredExtension);
+                    discoveredExtension.setMinestomExtensionClassLoader(discoveredExtension.makeClassLoader());
                 } catch (Exception e) {
                     discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.FAILED_TO_SETUP_CLASSLOADER;
                     MinecraftServer.getExceptionManager().handleException(e);
@@ -171,18 +171,6 @@ public class ExtensionManager {
                 ext.cleanupObservers();
             }
         }).repeat(1L, TimeUnit.MINUTE).schedule();
-    }
-
-    /**
-     * Initializes the class loader for this extension
-     *
-     * @param discoveredExtension The extension to initialize said extension's class loader.
-     */
-    private void setupClassLoader(@NotNull DiscoveredExtension discoveredExtension) {
-        final URL[] urls = discoveredExtension.files.toArray(new URL[0]);
-        final MinestomExtensionClassLoader loader = newClassLoader(discoveredExtension, urls);
-
-        discoveredExtension.setMinestomExtensionClassLoader(loader);
     }
 
     /**
@@ -248,7 +236,7 @@ public class ExtensionManager {
             return null;
         }
 
-        // Set extension description
+        // Set extension origin to its DiscoveredExtension
         try {
             Field originField = Extension.class.getDeclaredField("origin");
             originField.setAccessible(true);
@@ -274,12 +262,12 @@ public class ExtensionManager {
         }
 
         // add dependents to pre-existing extensions, so that they can easily be found during reloading
-        for (String dependency : discoveredExtension.getDependencies()) {
-            Extension dep = extensions.get(dependency.toLowerCase());
-            if (dep == null) {
-                LOGGER.warn("Dependency {} of {} is null? This means the extension has been loaded without its dependency, which could cause issues later.", dependency, discoveredExtension.getName());
+        for (String dependencyName : discoveredExtension.getDependencies()) {
+            Extension dependency = extensions.get(dependencyName.toLowerCase());
+            if (dependency == null) {
+                LOGGER.warn("Dependency {} of {} is null? This means the extension has been loaded without its dependency, which could cause issues later.", dependencyName, discoveredExtension.getName());
             } else {
-                dep.getDependents().add(discoveredExtension.getName());
+                dependency.getDependents().add(discoveredExtension.getName());
             }
         }
 
@@ -559,35 +547,6 @@ public class ExtensionManager {
         }
     }
 
-    /**
-     * Creates a new class loader for the given extension.
-     * Will add the new loader as a child of all its dependencies' loaders.
-     *
-     * @param urls {@link URL} (usually a JAR) that should be loaded.
-     */
-    @NotNull
-    public MinestomExtensionClassLoader newClassLoader(@NotNull DiscoveredExtension extension, @NotNull URL[] urls) {
-        MinestomRootClassLoader root = MinestomRootClassLoader.getInstance();
-        MinestomExtensionClassLoader loader = new MinestomExtensionClassLoader(extension.getName(), extension.getEntrypoint(), urls, root);
-        if (extension.getDependencies().length == 0) {
-            // orphaned extension, we can insert it directly
-            root.addChild(loader);
-        } else {
-            // add children to the dependencies
-            for (String dependency : extension.getDependencies()) {
-                if (extensions.containsKey(dependency.toLowerCase())) {
-                    MinestomExtensionClassLoader parentLoader = extensions.get(dependency.toLowerCase()).getOrigin().getMinestomExtensionClassLoader();
-
-                    // TODO should never happen but replace with better throws error.
-                    assert parentLoader != null;
-
-                    parentLoader.addChild(loader);
-                }
-            }
-        }
-        return loader;
-    }
-
     @NotNull
     public File getExtensionFolder() {
         return extensionFolder;
@@ -601,6 +560,10 @@ public class ExtensionManager {
     @Nullable
     public Extension getExtension(@NotNull String name) {
         return extensions.get(name.toLowerCase());
+    }
+
+    public boolean hasExtension(@NotNull String name) {
+        return extensions.containsKey(name);
     }
 
     /**
@@ -763,7 +726,7 @@ public class ExtensionManager {
         // setup new classloaders for the extensions to reload
         for (DiscoveredExtension toReload : extensionsToLoad) {
             LOGGER.debug("Setting up classloader for extension {}", toReload.getName());
-            setupClassLoader(toReload);
+            toReload.setMinestomExtensionClassLoader(toReload.makeClassLoader());
         }
 
         // setup code modifiers for these extensions
@@ -840,7 +803,7 @@ public class ExtensionManager {
 
         // setup extension class loaders, so that Mixin can load the json configuration file correctly
         for (DiscoveredExtension e : discovered) {
-            manager.setupClassLoader(e);
+            e.setMinestomExtensionClassLoader(e.makeClassLoader());
         }
 
         // setup code modifiers and mixins

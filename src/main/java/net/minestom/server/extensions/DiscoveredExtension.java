@@ -1,6 +1,8 @@
 package net.minestom.server.extensions;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
+import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -136,8 +138,6 @@ public final class DiscoveredExtension {
     /**
      * Ensures that all properties of this extension are properly set if they aren't
      *
-     * TODO this is an impure function.
-     *
      * @param extension The extension to verify
      */
     public static void verifyIntegrity(@NotNull DiscoveredExtension extension) {
@@ -221,6 +221,33 @@ public final class DiscoveredExtension {
 
     public boolean hasFailedToLoadMixin() {
         return failedToLoadMixin;
+    }
+
+    public MinestomExtensionClassLoader makeClassLoader() {
+        final URL[] urls = this.files.toArray(new URL[0]);
+
+        MinestomRootClassLoader root = MinestomRootClassLoader.getInstance();
+
+        MinestomExtensionClassLoader loader = new MinestomExtensionClassLoader(this.getName(), this.getEntrypoint(), urls, root);
+
+        if (this.getDependencies().length == 0) {
+            // orphaned extension, we can insert it directly
+            root.addChild(loader);
+        } else {
+            // add children to the dependencies
+            for (String dependency : this.getDependencies()) {
+                if (MinecraftServer.getExtensionManager().hasExtension(dependency.toLowerCase())) {
+                    MinestomExtensionClassLoader parentLoader = MinecraftServer.getExtensionManager().getExtension(dependency.toLowerCase()).getOrigin().getMinestomExtensionClassLoader();
+
+                    // TODO should never happen but replace with better throws error.
+                    assert parentLoader != null;
+
+                    parentLoader.addChild(loader);
+                }
+            }
+        }
+
+        return loader;
     }
 
     /**
