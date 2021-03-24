@@ -198,6 +198,13 @@ public class ArgumentType {
     }
 
     /**
+     * @see ArgumentUUID
+     */
+    public static ArgumentUUID UUID(@NotNull String id) {
+        return new ArgumentUUID(id);
+    }
+
+    /**
      * @see ArgumentNbtTag
      */
     public static ArgumentNbtTag NBT(@NotNull String id) {
