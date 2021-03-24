@@ -90,7 +90,17 @@ public interface Viewable {
      *
      * @return the audience
      */
+    default @NotNull Audience getViewersAsAudience() {
+        return Audience.audience(this.getViewersAsAudiences());
+    }
+
+    /**
+     * Gets the result of {@link #getViewers()} as an {@link Iterable} of Adventure
+     * {@link Audience}s.
+     *
+     * @return the audiences
+     */
     default @NotNull Iterable<? extends Audience> getViewersAsAudiences() {
-        return Collections.unmodifiableSet(this.getViewers());
+        return this.getViewers();
     }
 }
