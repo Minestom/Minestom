@@ -127,10 +127,21 @@ public class ExtensionManager {
             }
         }
 
+        // Periodically cleanup observers
+        MinecraftServer.getSchedulerManager().buildTask(() -> {
+            for (Extension ext : extensions.values()) {
+                ext.cleanupObservers();
+            }
+        }).repeat(1L, TimeUnit.MINUTE).schedule();
+
         // Load extensions
         {
             // Get all extensions and order them accordingly.
             List<DiscoveredExtension> discoveredExtensions = discoverExtensions();
+
+            // Don't waste resources on doing extra actions if there is nothing to do.
+            if (discoveredExtensions.isEmpty()) return;
+
             discoveredExtensions = generateLoadOrder(discoveredExtensions);
             loadDependencies(discoveredExtensions);
 
@@ -164,13 +175,6 @@ public class ExtensionManager {
                 }
             }
         }
-
-        // periodically cleanup observers
-        MinecraftServer.getSchedulerManager().buildTask(() -> {
-            for (Extension ext : extensions.values()) {
-                ext.cleanupObservers();
-            }
-        }).repeat(1L, TimeUnit.MINUTE).schedule();
     }
 
     /**
