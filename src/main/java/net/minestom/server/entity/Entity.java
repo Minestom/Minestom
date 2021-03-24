@@ -72,6 +72,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
     // Velocity
     protected Vector velocity = new Vector(); // Movement velocity in blocks per tick
+    private boolean isVelocityDirty = false;
     protected boolean hasPhysics = true;
 
     protected double gravityDragPerTick;
@@ -570,6 +571,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                         // Stop player velocity
                         if (isNettyClient) {
                             this.velocity.zero();
+                            this.isVelocityDirty = true;
                         }
                     } else {
                         drag = 0.91f; // air drag
@@ -582,6 +584,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
                     if (velocity.epsilonIsZero()) {
                         this.velocity.zero();
+                        this.isVelocityDirty = true;
                     }
                 }
 
@@ -589,8 +592,10 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                 if (!isNettyClient) {
                     sendSynchronization();
                 }
-                // Verify if velocity packet has to be sent
-                if (hasVelocity() || (!isNettyClient && gravityTickCount > 0)) {
+
+                // Send velocity update if it was changed (excluding drag)
+                if (isVelocityDirty) {
+                    this.isVelocityDirty = false;
                     sendPacketToViewersAndSelf(getVelocityPacket());
                 }
             }
@@ -678,6 +683,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
             this.getVelocity().setX(currentVelocity.getX() / 2d - velocityModifier.getX());
             this.getVelocity().setY(this.onGround ? Math.min(.4d, currentVelocity.getY() / 2d + (double)strength) : currentVelocity.getY());
             this.getVelocity().setZ(currentVelocity.getZ() / 2d - velocityModifier.getZ());
+            this.isVelocityDirty = true;
         }
     }
 
