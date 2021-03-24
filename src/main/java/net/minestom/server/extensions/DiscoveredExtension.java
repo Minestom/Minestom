@@ -120,13 +120,13 @@ public final class DiscoveredExtension {
         return originalJar;
     }
 
-    public MinestomExtensionClassLoader removeMinestomExtensionClassLoader() {
+    MinestomExtensionClassLoader removeMinestomExtensionClassLoader() {
         MinestomExtensionClassLoader oldClassLoader = getMinestomExtensionClassLoader();
         setMinestomExtensionClassLoader(null);
         return oldClassLoader;
     }
 
-    public void setMinestomExtensionClassLoader(@Nullable MinestomExtensionClassLoader minestomExtensionClassLoader) {
+    void setMinestomExtensionClassLoader(@Nullable MinestomExtensionClassLoader minestomExtensionClassLoader) {
         this.minestomExtensionClassLoader = minestomExtensionClassLoader;
     }
 

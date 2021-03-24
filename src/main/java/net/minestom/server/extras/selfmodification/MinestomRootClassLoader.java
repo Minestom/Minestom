@@ -296,7 +296,11 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
             }
             return true;
         } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
+            if (MinecraftServer.getExceptionManager() != null) {
+                MinecraftServer.getExceptionManager().handleException(e);
+            } else {
+                e.printStackTrace();
+            }
         }
         return false;
     }
