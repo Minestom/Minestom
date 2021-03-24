@@ -548,7 +548,9 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
                 // Update velocity
                 if (hasVelocity()) {
-                    this.velocity.setY(velocity.getY() - gravityAcceleration);
+                    if (!hasNoGravity()) {
+                        this.velocity.setY(velocity.getY() - gravityAcceleration);
+                    }
 
                     float drag;
                     if (onGround) {
@@ -575,7 +577,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
                     // Apply drag
                     this.velocity.setX(velocity.getX() * drag);
-                    this.velocity.setY(velocity.getY() * (1 - gravityDragPerTick));
+                    this.velocity.setY(velocity.getY() * (1 - (hasNoGravity() ? 0 : gravityDragPerTick)));
                     this.velocity.setZ(velocity.getZ() * drag);
 
                     if (velocity.epsilonIsZero()) {
