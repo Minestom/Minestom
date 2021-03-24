@@ -25,7 +25,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
 
@@ -40,15 +39,12 @@ public class ExtensionManager {
     private final static Gson GSON = new Gson();
 
     // Not too much concurrency is done through extension managers.
-    private final Map<String, Extension> extensions = new Hashtable<>();
+    private final Map<String, Extension> extensions = new LinkedHashMap<>();
+    private final Map<String, Extension> immutableExtensions = Collections.unmodifiableMap(extensions);
 
-    
     private final File extensionFolder = new File("extensions");
     private final File dependenciesFolder = new File(extensionFolder, ".libs");
     private boolean loaded;
-
-    private final List<Extension> extensionList = new CopyOnWriteArrayList<>();
-    private final List<Extension> immutableExtensionListView = Collections.unmodifiableList(extensionList);
 
     // Option
     private boolean loadOnStartup = true;
@@ -131,15 +127,13 @@ public class ExtensionManager {
 
         // periodically cleanup observers
         MinecraftServer.getSchedulerManager().buildTask(() -> {
-            for (Extension ext : extensionList) {
+            for (Extension ext : extensions.values()) {
                 ext.cleanupObservers();
             }
         }).repeat(1L, TimeUnit.MINUTE).schedule();
     }
 
     private void setupClassLoader(@NotNull DiscoveredExtension discoveredExtension) {
-        final String extensionName = discoveredExtension.getName();
-
         final URL[] urls = discoveredExtension.files.toArray(new URL[0]);
         final MinestomExtensionClassLoader loader = newClassLoader(discoveredExtension, urls);
 
@@ -149,7 +143,7 @@ public class ExtensionManager {
     @Nullable
     private Extension attemptSingleLoad(@NotNull DiscoveredExtension discoveredExtension) {
         // Create ExtensionDescription (authors, version etc.)
-        final String extensionName = discoveredExtension.getName();
+        String extensionName = discoveredExtension.getName();
         String mainClass = discoveredExtension.getEntrypoint();
 
         MinestomExtensionClassLoader loader = discoveredExtension.getMinestomExtensionClassLoader();
@@ -237,7 +231,7 @@ public class ExtensionManager {
             }
         }
 
-        extensionList.add(extension); // add to a list, as lists preserve order
+        // add to a linked hash map, as lists preserve order
         extensions.put(extensionName.toLowerCase(), extension);
 
         return extension;
@@ -421,7 +415,7 @@ public class ExtensionManager {
     private void loadDependencies(List<DiscoveredExtension> extensions) {
         List<DiscoveredExtension> allLoadedExtensions = new LinkedList<>(extensions);
 
-        for (Extension extension : extensionList)
+        for (Extension extension : immutableExtensions.values())
             allLoadedExtensions.add(extension.getOrigin());
 
         ExtensionDependencyResolver extensionDependencyResolver = new ExtensionDependencyResolver(allLoadedExtensions);
@@ -525,8 +519,8 @@ public class ExtensionManager {
     }
 
     @NotNull
-    public List<Extension> getExtensions() {
-        return immutableExtensionListView;
+    public Collection<Extension> getExtensions() {
+        return immutableExtensions.values();
     }
 
     @Nullable
@@ -603,14 +597,13 @@ public class ExtensionManager {
 
         // remove as dependent of other extensions
         // this avoids issues where a dependent extension fails to reload, and prevents the base extension to reload too
-        for (Extension e : extensionList) {
+        for (Extension e : extensions.values()) {
             e.getDependents().remove(ext.getOrigin().getName());
         }
 
         String id = ext.getOrigin().getName().toLowerCase();
         // remove from loaded extensions
         extensions.remove(id);
-        extensionList.remove(ext);
 
         // remove class loader, required to reload the classes
         MinestomExtensionClassLoader classloader = ext.getOrigin().removeMinestomExtensionClassLoader();
