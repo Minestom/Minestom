@@ -78,6 +78,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     protected double gravityDragPerTick;
     protected double gravityAcceleration;
     protected int gravityTickCount; // Number of tick where gravity tick was applied
+    private boolean hasVanillaGravity = false;
 
     private boolean autoViewable;
     private final int id;
@@ -508,6 +509,11 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
         // Entity tick
         {
+            // Send velocity update if it was changed (excluding default drag)
+            if (isVelocityDirty) {
+                this.isVelocityDirty = false;
+                sendPacketToViewersAndSelf(getVelocityPacket());
+            }
 
             // Cache the number of "gravity tick"
             if (!onGround) {
@@ -548,12 +554,16 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                 }
 
                 // Update velocity
-                if (hasVelocity()) {
+                {
                     if (!hasNoGravity()) {
                         this.velocity.setY(velocity.getY() - gravityAcceleration);
                     }
 
                     float drag;
+                    // set to true if it's not vanilla drag, in that case
+                    // we should send velocity updates, otherwise it's
+                    // handled on client side
+                    final boolean notVanillaDrag;
                     if (onGround) {
                         final BlockPosition blockPosition = position.toBlockPosition();
                         final CustomBlock customBlock = finalChunk.getCustomBlock(
@@ -563,18 +573,30 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                         if (customBlock != null) {
                             // Custom drag
                             drag = customBlock.getDrag(instance, blockPosition);
+                            notVanillaDrag = true;
                         } else {
                             // Default ground drag
                             drag = 0.546f;
-                        }
-
-                        // Stop player velocity
-                        if (isNettyClient) {
-                            this.velocity.zero();
-                            this.isVelocityDirty = true;
+                            notVanillaDrag = false;
                         }
                     } else {
                         drag = 0.91f; // air drag
+                        notVanillaDrag = false;
+                    }
+
+                    if (ticks % 20 == 0) {
+                        if (velocity.getX() != 0 && Math.abs(velocity.getX()) < Vector.getEpsilon()) {
+                            this.velocity.setX(0);
+                            this.isVelocityDirty = true;
+                        }
+                        if (velocity.getY() != 0 && Math.abs(velocity.getY()) < Vector.getEpsilon()) {
+                            this.velocity.setY(0);
+                            this.isVelocityDirty = true;
+                        }
+                        if (velocity.getZ() != 0 && Math.abs(velocity.getZ()) < Vector.getEpsilon()) {
+                            this.velocity.setZ(0);
+                            this.isVelocityDirty = true;
+                        }
                     }
 
                     // Apply drag
@@ -582,8 +604,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                     this.velocity.setY(velocity.getY() * (1 - (hasNoGravity() ? 0 : gravityDragPerTick)));
                     this.velocity.setZ(velocity.getZ() * drag);
 
-                    if (velocity.epsilonIsZero()) {
-                        this.velocity.zero();
+                    if (notVanillaDrag || !hasVanillaGravity) {
                         this.isVelocityDirty = true;
                     }
                 }
@@ -591,12 +612,6 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                 // Synchronization and packets...
                 if (!isNettyClient) {
                     sendSynchronization();
-                }
-
-                // Send velocity update if it was changed (excluding drag)
-                if (isVelocityDirty) {
-                    this.isVelocityDirty = false;
-                    sendPacketToViewersAndSelf(getVelocityPacket());
                 }
             }
 
@@ -672,17 +687,16 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     /**
      * Applies knockback to the entity
      * @param strength the strength of the knockback, 0.4 is the vanilla value for a bare hand hit
-     * @param x knockback on x axle, vanilla server calculates this value using: <pre>sin(attacker.yaw * 0.017453292)</pre>
-     * @param z knockback on z axle, vanilla server calculates this value using: <pre>-cos(attacker.yaw * 0.017453292)</pre>
+     * @param x knockback on x axle, for default knockback use the following formula <pre>sin(attacker.yaw * 0.017453292)</pre>
+     * @param z knockback on z axle, for default knockback use the following formula <pre>-cos(attacker.yaw * 0.017453292)</pre>
      */
     public void takeKnockback(float strength, final double x, final double z) {
         //TODO take into account the knockback resistance
         if (strength > 0) {
-            final Vector currentVelocity = this.getVelocity();
-            final Vector velocityModifier = (new Vector(x, 0d, z)).normalize().multiply((double)strength);
-            this.getVelocity().setX(currentVelocity.getX() / 2d - velocityModifier.getX());
-            this.getVelocity().setY(this.onGround ? Math.min(.4d, currentVelocity.getY() / 2d + (double)strength) : currentVelocity.getY());
-            this.getVelocity().setZ(currentVelocity.getZ() / 2d - velocityModifier.getZ());
+            final Vector velocityModifier = new Vector(x, 0d, z).normalize().multiply(strength);
+            this.velocity.setX(velocity.getX() / 2d - velocityModifier.getX());
+            this.velocity.setY(onGround ? Math.min(.4d, velocity.getY() / 2d + strength) : velocity.getY());
+            this.velocity.setZ(velocity.getZ() / 2d - velocityModifier.getZ());
             this.isVelocityDirty = true;
         }
     }
@@ -936,6 +950,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     public void setGravity(double gravityDragPerTick, double gravityAcceleration) {
         this.gravityDragPerTick = gravityDragPerTick;
         this.gravityAcceleration = gravityAcceleration;
+        this.hasVanillaGravity = entityType.getGravityAcceleration() == gravityAcceleration &&
+                entityType.getGravityDrag() == gravityDragPerTick;
     }
 
     /**
