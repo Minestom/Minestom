@@ -312,19 +312,19 @@ public class ExtensionManager {
 
     @NotNull
     private List<DiscoveredExtension> generateLoadOrder(@NotNull List<DiscoveredExtension> discoveredExtensions) {
-        // Do some mapping so we can map strings to extensions.
+        // Extension --> Extensions it depends on.
         Map<DiscoveredExtension, List<DiscoveredExtension>> dependencyMap = new HashMap<>();
 
         // Put dependencies in dependency map
         {
             Map<String, DiscoveredExtension> extensionMap = new HashMap<>();
 
+            // go through all the discovered extensions and assign their name in a map.
             for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
                 extensionMap.put(discoveredExtension.getName().toLowerCase(), discoveredExtension);
             }
 
-            allExtensions:
-            // label the loop
+            allExtensions: // go through all the discovered extensions and get their dependencies as extensions
             for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
 
                 List<DiscoveredExtension> dependencies = new ArrayList<>(discoveredExtension.getDependencies().length);
@@ -366,29 +366,32 @@ public class ExtensionManager {
             }
         }
 
-        // List containing the real load order.
+        // List containing the load order.
         LinkedList<DiscoveredExtension> sortedList = new LinkedList<>();
 
-        // entries with empty lists
-        List<Map.Entry<DiscoveredExtension, List<DiscoveredExtension>>> loadableExtensions;
+        // TODO actually have to read this
+        {
+            // entries with empty lists
+            List<Map.Entry<DiscoveredExtension, List<DiscoveredExtension>>> loadableExtensions;
 
-        // While there are entries with no more elements (no more dependencies)
-        while (!(
-                loadableExtensions = dependencyMap.entrySet().stream().filter(entry -> areAllDependenciesLoaded(entry.getValue())).collect(Collectors.toList())
-        ).isEmpty()
-        ) {
-            // Get all "loadable" (not actually being loaded!) extensions and put them in the sorted list.
-            for (Map.Entry<DiscoveredExtension, List<DiscoveredExtension>> entry : loadableExtensions) {
+            // While there are entries with no more elements (no more dependencies)
+            while (!(
+                    loadableExtensions = dependencyMap.entrySet().stream().filter(entry -> areAllDependenciesLoaded(entry.getValue())).collect(Collectors.toList())
+            ).isEmpty()
+            ) {
+                // Get all "loadable" (not actually being loaded!) extensions and put them in the sorted list.
+                for (Map.Entry<DiscoveredExtension, List<DiscoveredExtension>> entry : loadableExtensions) {
 
-                // Add to sorted list.
-                sortedList.add(entry.getKey());
+                    // Add to sorted list.
+                    sortedList.add(entry.getKey());
 
-                // Remove to make the next iterations a little bit quicker (hopefully) and to find cyclic dependencies.
-                dependencyMap.remove(entry.getKey());
+                    // Remove to make the next iterations a little bit quicker (hopefully) and to find cyclic dependencies.
+                    dependencyMap.remove(entry.getKey());
 
-                // Remove this dependency from all the lists (if they include it) to make way for next level of extensions.
-                for (var dependencies : dependencyMap.values()) {
-                    dependencies.remove(entry.getKey());
+                    // Remove this dependency from all the lists (if they include it) to make way for next level of extensions.
+                    for (var dependencies : dependencyMap.values()) {
+                        dependencies.remove(entry.getKey());
+                    }
                 }
             }
         }
