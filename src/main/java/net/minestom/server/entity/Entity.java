@@ -72,7 +72,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
     // Velocity
     protected Vector velocity = new Vector(); // Movement velocity in blocks per tick
-    private boolean isVelocityDirty = false;
+    protected boolean isVelocityDirty = false;
     protected boolean hasPhysics = true;
 
     protected double gravityDragPerTick;
