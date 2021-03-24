@@ -85,9 +85,10 @@ public class ExtensionManager {
      * Turns its extension.json into a DiscoveredExtension object.
      * Verifies that all properties of extension.json are correctly set.
      *
-     * It then sorts all those jars depending on its load order (extensions can have dependencies)
+     * It then sorts all those jars by their load order (making sure that an extension's dependencies load before it)
+     * Note: Cyclic dependencies will stop both extensions from being loaded.
      *
-     * Afterwards, it loads all external dependencies (sort of an outsourced dynamic shadowJar)
+     * Afterwards, it loads all external dependencies and adds them to the extension's files
      *
      * Then removes any invalid extensions (Invalid being its Load Status isn't SUCCESS)
      *
@@ -100,7 +101,7 @@ public class ExtensionManager {
      *
      * If the extension successfully loads, add it to the global extension Map (Name to Extension)
      *
-     * Then makes a scheduler to clean observers per extension.
+     * And finally make a scheduler to clean observers per extension.
      *
      */
     public void loadExtensions() {
