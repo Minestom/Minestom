@@ -38,7 +38,7 @@ public class ExtensionManager {
     public final static String INDEV_RESOURCES_FOLDER = "minestom.extension.indevfolder.resources";
     private final static Gson GSON = new Gson();
 
-    // Not too much concurrency is done through extension managers.
+    // LinkedHashMaps are HashMaps that preserve order
     private final Map<String, Extension> extensions = new LinkedHashMap<>();
     private final Map<String, Extension> immutableExtensions = Collections.unmodifiableMap(extensions);
 
@@ -198,7 +198,7 @@ public class ExtensionManager {
      */
     @Nullable
     private Extension loadExtension(@NotNull DiscoveredExtension discoveredExtension) {
-        // Create ExtensionDescription (authors, version etc.)
+        // Create Extension (authors, version etc.)
         String extensionName = discoveredExtension.getName();
         String mainClass = discoveredExtension.getEntrypoint();
 
@@ -287,7 +287,7 @@ public class ExtensionManager {
             }
         }
 
-        // add to a linked hash map, as lists preserve order
+        // add to a linked hash map, as they preserve order
         extensions.put(extensionName.toLowerCase(), extension);
 
         return extension;
