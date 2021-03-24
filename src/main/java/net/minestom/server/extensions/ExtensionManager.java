@@ -313,44 +313,57 @@ public class ExtensionManager {
     @NotNull
     private List<DiscoveredExtension> generateLoadOrder(@NotNull List<DiscoveredExtension> discoveredExtensions) {
         // Do some mapping so we can map strings to extensions.
-        Map<String, DiscoveredExtension> extensionMap = new HashMap<>();
         Map<DiscoveredExtension, List<DiscoveredExtension>> dependencyMap = new HashMap<>();
 
-        for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
-            extensionMap.put(discoveredExtension.getName().toLowerCase(), discoveredExtension);
-        }
+        // Put dependencies in dependency map
+        {
+            Map<String, DiscoveredExtension> extensionMap = new HashMap<>();
 
-        allExtensions: // label the loop
-        for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
-
-            List<DiscoveredExtension> dependencies = new ArrayList<>(discoveredExtension.getDependencies().length);
-
-            // Map the dependencies into DiscoveredExtensions.
-            for (String dependencyName : discoveredExtension.getDependencies()) {
-                DiscoveredExtension dependencyExtension = extensionMap.get(dependencyName.toLowerCase());
-                // Specifies an extension we don't have.
-                if (dependencyExtension == null) {
-                    // attempt to see if it is not already loaded (happens with dynamic (re)loading)
-                    if (extensions.containsKey(dependencyName.toLowerCase())) {
-                        dependencies.add(extensions.get(dependencyName.toLowerCase()).getOrigin());
-                        continue; // Go to the next loop in this dependency loop, this iteration is done.
-                    } else {
-                        LOGGER.error("Extension {} requires an extension called {}.", discoveredExtension.getName(), dependencyName);
-                        LOGGER.error("However the extension {} could not be found.", dependencyName);
-                        LOGGER.error("Therefore {} will not be loaded.", discoveredExtension.getName());
-                        discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.MISSING_DEPENDENCIES;
-                        continue allExtensions; // the above labeled loop will go to the next extension as this dependency is invalid.
-                    }
-                }
-                // This will add null for an unknown-extension
-                dependencies.add(dependencyExtension);
+            for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
+                extensionMap.put(discoveredExtension.getName().toLowerCase(), discoveredExtension);
             }
 
-            dependencyMap.put(
-                    discoveredExtension,
-                    dependencies
-            );
+            allExtensions:
+            // label the loop
+            for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
 
+                List<DiscoveredExtension> dependencies = new ArrayList<>(discoveredExtension.getDependencies().length);
+
+                // Map the dependencies into DiscoveredExtensions.
+                for (String dependencyName : discoveredExtension.getDependencies()) {
+
+                    DiscoveredExtension dependencyExtension = extensionMap.get(dependencyName.toLowerCase());
+                    // Specifies an extension we don't have.
+                    if (dependencyExtension == null) {
+
+                        // attempt to see if it is not already loaded (happens with dynamic (re)loading)
+                        if (extensions.containsKey(dependencyName.toLowerCase())) {
+
+                            dependencies.add(extensions.get(dependencyName.toLowerCase()).getOrigin());
+                            continue; // Go to the next loop in this dependency loop, this iteration is done.
+
+                        } else {
+
+                            // dependency isn't loaded, move on.
+                            LOGGER.error("Extension {} requires an extension called {}.", discoveredExtension.getName(), dependencyName);
+                            LOGGER.error("However the extension {} could not be found.", dependencyName);
+                            LOGGER.error("Therefore {} will not be loaded.", discoveredExtension.getName());
+                            discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.MISSING_DEPENDENCIES;
+                            continue allExtensions; // the above labeled loop will go to the next extension as this dependency is invalid.
+
+                        }
+                    }
+                    // This will add null for an unknown-extension
+                    dependencies.add(dependencyExtension);
+
+                }
+
+                dependencyMap.put(
+                        discoveredExtension,
+                        dependencies
+                );
+
+            }
         }
 
         // List containing the real load order.
@@ -358,6 +371,7 @@ public class ExtensionManager {
 
         // entries with empty lists
         List<Map.Entry<DiscoveredExtension, List<DiscoveredExtension>>> loadableExtensions;
+
         // While there are entries with no more elements (no more dependencies)
         while (!(
                 loadableExtensions = dependencyMap.entrySet().stream().filter(entry -> areAllDependenciesLoaded(entry.getValue())).collect(Collectors.toList())
