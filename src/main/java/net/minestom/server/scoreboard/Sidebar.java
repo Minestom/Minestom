@@ -2,8 +2,8 @@ package net.minestom.server.scoreboard;
 
 import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.chat.JsonMessage;
-import net.minestom.server.color.TeamColor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
@@ -439,7 +439,7 @@ public class Sidebar implements Scoreboard {
         private final byte friendlyFlags = 0x00;
         private final TeamsPacket.NameTagVisibility nameTagVisibility = TeamsPacket.NameTagVisibility.NEVER;
         private final TeamsPacket.CollisionRule collisionRule = TeamsPacket.CollisionRule.NEVER;
-        private final TeamColor teamColor = TeamColor.DARK_GREEN;
+        private final NamedTextColor teamColor = NamedTextColor.DARK_GREEN;
 
 
         /**

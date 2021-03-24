@@ -1,9 +1,9 @@
 package net.minestom.server.scoreboard;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.JsonMessage;
-import net.minestom.server.color.TeamColor;
 import net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule;
 import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility;
 
@@ -87,11 +87,11 @@ public class TeamBuilder {
      *
      * @param color The new color
      * @return this builder, for chaining
-     * @deprecated Use {@link #updateTeamColor(TeamColor)}
+     * @deprecated Use {@link #updateTeamColor(NamedTextColor)}
      */
     @Deprecated
     public TeamBuilder updateTeamColor(ChatColor color) {
-        return this.updateTeamColor(color.asTeamColor());
+        return this.updateTeamColor(NamedTextColor.nearestTo(color.asTextColor()));
     }
 
     /**
@@ -100,7 +100,7 @@ public class TeamBuilder {
      * @param color The new color
      * @return this builder, for chaining
      */
-    public TeamBuilder updateTeamColor(TeamColor color) {
+    public TeamBuilder updateTeamColor(NamedTextColor color) {
         this.team.updateTeamColor(color);
         return this;
     }
@@ -315,11 +315,11 @@ public class TeamBuilder {
      *
      * @param color The new team color
      * @return this builder, for chaining
-     * @deprecated Use {@link #teamColor(TeamColor)}
+     * @deprecated Use {@link #teamColor(NamedTextColor)}
      */
     @Deprecated
     public TeamBuilder teamColor(ChatColor color) {
-        return this.teamColor(color.asTeamColor());
+        return this.teamColor(NamedTextColor.nearestTo(color.asTextColor()));
     }
 
     /**
@@ -330,7 +330,7 @@ public class TeamBuilder {
      * @param color The new team color
      * @return this builder, for chaining
      */
-    public TeamBuilder teamColor(TeamColor color) {
+    public TeamBuilder teamColor(NamedTextColor color) {
         this.team.setTeamColor(color);
         return this;
     }

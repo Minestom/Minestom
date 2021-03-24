@@ -1,7 +1,8 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.color.TeamColor;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -46,7 +47,7 @@ public class TeamsPacket implements ComponentHoldingServerPacket {
     /**
      * The color of the team
      */
-    public TeamColor teamColor;
+    public NamedTextColor teamColor;
     /**
      * The prefix of the team
      */
@@ -77,7 +78,7 @@ public class TeamsPacket implements ComponentHoldingServerPacket {
                 writer.writeByte(this.friendlyFlags);
                 writer.writeSizedString(this.nameTagVisibility.getIdentifier());
                 writer.writeSizedString(this.collisionRule.getIdentifier());
-                writer.writeVarInt(this.teamColor.getId());
+                writer.writeVarInt(AdventurePacketConvertor.getNamedTextColorValue(this.teamColor));
                 writer.writeComponent(this.teamPrefix);
                 writer.writeComponent(this.teamSuffix);
                 break;
