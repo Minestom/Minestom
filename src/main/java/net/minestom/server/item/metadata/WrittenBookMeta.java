@@ -2,6 +2,7 @@ package net.minestom.server.item.metadata;
 
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.Localizable;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +20,7 @@ public class WrittenBookMeta extends ItemMeta {
     private WrittenBookGeneration generation;
     private String author;
     private String title;
-    private List<String> pages = new ArrayList<>();
+    private List<Component> pages = new ArrayList<>();
 
     /**
      * Gets if the book is resolved.
@@ -97,11 +98,12 @@ public class WrittenBookMeta extends ItemMeta {
     /**
      * Gets an {@link ArrayList} containing all the pages.
      * <p>
-     * The list is modifiable.
+     * The list is not modifiable as it is .
      *
      * @return a modifiable {@link ArrayList} with the pages of the book
      */
-    public List<String> getPages() {
+    @Deprecated
+    public List<Component> getPagesJson() {
         return pages;
     }
 
@@ -110,7 +112,7 @@ public class WrittenBookMeta extends ItemMeta {
      *
      * @param pages the array list containing the book pages
      */
-    public void setPages(List<String> pages) {
+    public void setPages(List<Component> pages) {
         this.pages = pages;
     }
 
@@ -150,7 +152,7 @@ public class WrittenBookMeta extends ItemMeta {
         if (compound.containsKey("pages")) {
             final NBTList<NBTString> list = compound.getList("pages");
             for (NBTString page : list) {
-                this.pages.add(page.getValue());
+                this.pages.add(GsonComponentSerializer.gson().deserialize(page.getValue()));
             }
         }
     }
@@ -171,8 +173,8 @@ public class WrittenBookMeta extends ItemMeta {
         }
         if (!pages.isEmpty()) {
             NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-            for (String page : pages) {
-                list.add(new NBTString(page));
+            for (Component page : pages) {
+                list.add(new NBTString(MinecraftServer.getSerializationManager().serialize(page)));
             }
             compound.set("pages", list);
         }
@@ -212,10 +214,7 @@ public class WrittenBookMeta extends ItemMeta {
         meta.author = MinecraftServer.getSerializationManager().translateAndSerialize(book.author(), localizable);
         meta.title = MinecraftServer.getSerializationManager().translateAndSerialize(book.title(), localizable);
         meta.pages = new ArrayList<>();
-
-        for (Component page : book.pages()) {
-            meta.pages.add(MinecraftServer.getSerializationManager().serialize(page));
-        }
+        meta.pages.addAll(book.pages());
 
         return meta;
     }
