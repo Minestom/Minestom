@@ -3,6 +3,8 @@ package net.minestom.server.color;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.util.RGBLike;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -34,21 +36,21 @@ public enum TeamColor implements RGBLike {
     }
 
     /**
-     * Gets the text color equivalent to this team color, if any.
+     * Gets the text color equivalent to this team color.
      *
      * @return the text color
      */
-    public @Nullable TextColor getTextColor() {
+    public @NotNull TextColor getTextColor() {
         return this.color;
     }
 
     /**
-     * Gets the color equivalent to this team color, if any.
+     * Gets the color equivalent to this team color.
      *
      * @return the color
      */
-    public @Nullable Color getColor() {
-        return this.color == null ? null : new Color(this.color);
+    public @NotNull Color getColor() {
+        return new Color(this.color);
     }
 
     /**

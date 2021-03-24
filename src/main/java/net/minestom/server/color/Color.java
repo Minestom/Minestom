@@ -124,23 +124,6 @@ public class Color implements RGBLike {
     }
 
     /**
-     * Shorthand method for {@link #mixWith(Color...)}. This method converts each dye
-     * color to a color and then mixes this color with the new colors.
-     *
-     * @param dyeColors the dye colors
-     */
-    public void mixWith(@NotNull DyeColor... dyeColors) {
-        Validate.noNullElements(dyeColors, "Colors cannot be null");
-
-        Color[] colors = new Color[dyeColors.length];
-        for (int i = 0; i < colors.length; i++) {
-            colors[i] = dyeColors[i].getColor();
-        }
-
-        this.mixWith(colors);
-    }
-
-    /**
      * Mixes this color with a series of other colors, as if they were combined in a
      * crafting table. This function works out the average of each RGB component and then
      * multiplies the components by a scale factor that is calculated from the average
@@ -149,18 +132,18 @@ public class Color implements RGBLike {
      *
      * @param colors the colors
      */
-    public void mixWith(@NotNull Color... colors) {
+    public void mixWith(@NotNull RGBLike... colors) {
         Validate.noNullElements(colors, "Colors cannot be null");
 
         // store the current highest component
         int max = Math.max(Math.max(this.red, this.green), this.blue);
 
         // now combine all of the color components, adding to the max
-        for (Color color : colors) {
-            this.red += color.getRed();
-            this.green += color.getGreen();
-            this.blue += color.getBlue();
-            max += Math.max(Math.max(color.getRed(), color.getGreen()), color.getBlue());
+        for (RGBLike color : colors) {
+            this.red += color.red();
+            this.green += color.green();
+            this.blue += color.blue();
+            max += Math.max(Math.max(color.red(), color.green()), color.blue());
         }
 
         // work out the averages
