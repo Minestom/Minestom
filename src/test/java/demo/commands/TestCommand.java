@@ -14,22 +14,11 @@ public class TestCommand extends Command {
         super("testcmd");
         setDefaultExecutor(this::usage);
 
-        var test1 = Word("msg").setSuggestionCallback((sender, context, suggestion) -> {
-            suggestion.addEntry(new SuggestionEntry("test"));
-        });
-
-        var test2 = String("msg2").setSuggestionCallback((sender, context, suggestion) -> {
-            suggestion.addEntry(new SuggestionEntry("greer"));
-        });
+        var test = ResourceLocation("msg");
 
         addSyntax((sender, context) -> {
             System.out.println("executed");
-        }, Literal("test"), test1, test2);
-
-        addSyntax((sender, context) -> {
-            System.out.println("cmd syntax");
-        }, Literal("debug"), Command("cmd").setShortcut("testcmd test"));
-
+        },test);
     }
 
     private void usage(CommandSender sender, CommandContext context) {
