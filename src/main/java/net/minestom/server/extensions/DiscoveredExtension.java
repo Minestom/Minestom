@@ -1,5 +1,6 @@
 package net.minestom.server.extensions;
 
+import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ public final class DiscoveredExtension {
     transient List<URL> files = new LinkedList<>();
     transient LoadStatus loadStatus = LoadStatus.LOAD_SUCCESS;
     transient private File originalJar;
+    transient private MinestomExtensionClassLoader minestomExtensionClassLoader;
 
     @NotNull
     public String getName() {
@@ -79,6 +81,21 @@ public final class DiscoveredExtension {
     @Nullable
     public File getOriginalJar() {
         return originalJar;
+    }
+
+    MinestomExtensionClassLoader removeMinestomExtensionClassLoader() {
+        MinestomExtensionClassLoader oldClassLoader = getMinestomExtensionClassLoader();
+        setMinestomExtensionClassLoader(null);
+        return oldClassLoader;
+    }
+
+    void setMinestomExtensionClassLoader(@Nullable MinestomExtensionClassLoader minestomExtensionClassLoader) {
+        this.minestomExtensionClassLoader = minestomExtensionClassLoader;
+    }
+
+    @Nullable
+    public MinestomExtensionClassLoader getMinestomExtensionClassLoader() {
+        return this.minestomExtensionClassLoader;
     }
 
     static void verifyIntegrity(@NotNull DiscoveredExtension extension) {

@@ -28,7 +28,7 @@ public class MixinIntoMinestomCoreWithJava9ModuleOnClasspath extends Extension {
         System.out.println(c.toString());
         try {
             Assertions.assertTrue(MixinIntoMinestomCore.success, "InstanceContainer must have been mixed in with improveextensions.InstanceContainerMixin");
-            Assertions.assertEquals(1, MinecraftServer.getExtensionManager().getExtensionLoaders().size(), "Only one extension classloader (this extension's) must be active.");
+            Assertions.assertEquals(1, MinecraftServer.getExtensionManager().getExtensions().stream().map(extension -> extension.getOrigin().getMinestomExtensionClassLoader()).toArray().length, "Only one extension classloader (this extension's) must be active.");
             Assertions.assertEquals("Test", mockedList.get(0));
         } catch (AssertionFailedError e) {
             e.printStackTrace();

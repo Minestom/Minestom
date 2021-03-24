@@ -39,8 +39,10 @@ public class ExtensionManager {
     public final static String INDEV_RESOURCES_FOLDER = "minestom.extension.indevfolder.resources";
     private final static Gson GSON = new Gson();
 
-    private final Map<String, MinestomExtensionClassLoader> extensionLoaders = new HashMap<>();
-    private final Map<String, Extension> extensions = new HashMap<>();
+    // Not too much concurrency is done through extension managers.
+    private final Map<String, Extension> extensions = new Hashtable<>();
+
+    
     private final File extensionFolder = new File("extensions");
     private final File dependenciesFolder = new File(extensionFolder, ".libs");
     private boolean loaded;
@@ -141,7 +143,7 @@ public class ExtensionManager {
         final URL[] urls = discoveredExtension.files.toArray(new URL[0]);
         final MinestomExtensionClassLoader loader = newClassLoader(discoveredExtension, urls);
 
-        extensionLoaders.put(extensionName.toLowerCase(), loader);
+        discoveredExtension.setMinestomExtensionClassLoader(loader);
     }
 
     @Nullable
@@ -150,7 +152,7 @@ public class ExtensionManager {
         final String extensionName = discoveredExtension.getName();
         String mainClass = discoveredExtension.getEntrypoint();
 
-        MinestomExtensionClassLoader loader = extensionLoaders.get(extensionName.toLowerCase());
+        MinestomExtensionClassLoader loader = discoveredExtension.getMinestomExtensionClassLoader();
 
         if (extensions.containsKey(extensionName.toLowerCase())) {
             LOGGER.error("An extension called '{}' has already been registered.", extensionName);
@@ -502,20 +504,16 @@ public class ExtensionManager {
             // orphaned extension, we can insert it directly
             root.addChild(loader);
         } else {
-            // we need to keep track that it has actually been inserted
-            // even though it should always be (due to the order in which extensions are loaders), it is an additional layer of """security"""
-            boolean foundOne = false;
+            // add children to the dependencies
             for (String dependency : extension.getDependencies()) {
-                if (extensionLoaders.containsKey(dependency.toLowerCase())) {
-                    MinestomExtensionClassLoader parentLoader = extensionLoaders.get(dependency.toLowerCase());
-                    parentLoader.addChild(loader);
-                    foundOne = true;
-                }
-            }
+                if (extensions.containsKey(dependency.toLowerCase())) {
+                    MinestomExtensionClassLoader parentLoader = extensions.get(dependency.toLowerCase()).getOrigin().getMinestomExtensionClassLoader();
 
-            if (!foundOne) {
-                LOGGER.error("Could not load extension {}, could not find any parent inside classloader hierarchy.", extension.getName());
-                throw new RuntimeException("Could not load extension " + extension.getName() + ", could not find any parent inside classloader hierarchy.");
+                    // TODO should never happen but replace with better throws error.
+                    assert parentLoader != null;
+
+                    parentLoader.addChild(loader);
+                }
             }
         }
         return loader;
@@ -534,11 +532,6 @@ public class ExtensionManager {
     @Nullable
     public Extension getExtension(@NotNull String name) {
         return extensions.get(name.toLowerCase());
-    }
-
-    @NotNull
-    public Map<String, MinestomExtensionClassLoader> getExtensionLoaders() {
-        return new HashMap<>(extensionLoaders);
     }
 
     /**
@@ -620,7 +613,7 @@ public class ExtensionManager {
         extensionList.remove(ext);
 
         // remove class loader, required to reload the classes
-        MinestomExtensionClassLoader classloader = extensionLoaders.remove(id);
+        MinestomExtensionClassLoader classloader = ext.getOrigin().removeMinestomExtensionClassLoader();
         try {
             // close resources
             classloader.close();
@@ -784,8 +777,8 @@ public class ExtensionManager {
         manager.setupCodeModifiers(discovered, MinestomRootClassLoader.getInstance());
 
         // setup is done, remove all extension classloaders
-        for (MinestomExtensionClassLoader extensionLoader : manager.getExtensionLoaders().values()) {
-            MinestomRootClassLoader.getInstance().removeChildInHierarchy(extensionLoader);
+        for (Extension extension : manager.getExtensions()) {
+            MinestomRootClassLoader.getInstance().removeChildInHierarchy(extension.getOrigin().getMinestomExtensionClassLoader());
         }
         LOGGER.info("Early load of code modifiers from extensions done!");
     }
