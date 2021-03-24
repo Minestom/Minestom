@@ -74,54 +74,93 @@ public class ExtensionManager {
         this.loadOnStartup = loadOnStartup;
     }
 
+    /**
+     * Loads all extensions in the extension folder into this server.
+     *
+     * Pipeline:
+     *
+     * Finds all .jar files in the extensions folder.
+     *
+     * Per each jar:
+     * Turns its extension.json into a DiscoveredExtension object.
+     * Verifies that all properties of extension.json are correctly set.
+     *
+     * It then sorts all those jars depending on its load order (extensions can have dependencies)
+     *
+     * Afterwards, it loads all external dependencies (sort of an outsourced dynamic shadowJar)
+     *
+     * Then removes any invalid extensions (Invalid being its Load Status isn't SUCCESS)
+     *
+     * After that, it set its classloaders so each extension is self-contained,
+     *
+     * Removes invalid extensions again,
+     *
+     * and loads all of those extensions into Minestom
+     * (Extension fields are set via reflection after each extension is verified, then loaded.)
+     *
+     * If the extension successfully loads, add it to the global extension Map (Name to Extension)
+     *
+     * Then makes a scheduler to clean observers per extension.
+     *
+     */
     public void loadExtensions() {
         Check.stateCondition(loaded, "Extensions are already loaded!");
         this.loaded = true;
 
-        // Make extensions folder if necessary
-        if (!extensionFolder.exists()) {
-            if (!extensionFolder.mkdirs()) {
-                LOGGER.error("Could not find or create the extension folder, extensions will not be loaded!");
-                return;
+        // Initialize folders
+        {
+            // Make extensions folder if necessary
+            if (!extensionFolder.exists()) {
+                if (!extensionFolder.mkdirs()) {
+                    LOGGER.error("Could not find or create the extension folder, extensions will not be loaded!");
+                    return;
+                }
+            }
+
+            // Make dependencies folder if necessary
+            if (!dependenciesFolder.exists()) {
+                if (!dependenciesFolder.mkdirs()) {
+                    LOGGER.error("Could not find nor create the extension dependencies folder, extensions will not be loaded!");
+                    return;
+                }
             }
         }
 
-        // Make dependencies folder if necessary
-        if (!dependenciesFolder.exists()) {
-            if (!dependenciesFolder.mkdirs()) {
-                LOGGER.error("Could not find nor create the extension dependencies folder, extensions will not be loaded!");
-                return;
+        // Load extensions
+        {
+            // Get all extensions and order them accordingly.
+            List<DiscoveredExtension> discoveredExtensions = discoverExtensions();
+            discoveredExtensions = generateLoadOrder(discoveredExtensions);
+            loadDependencies(discoveredExtensions);
+
+            // remove invalid extensions
+            discoveredExtensions.removeIf(ext -> ext.loadStatus != DiscoveredExtension.LoadStatus.LOAD_SUCCESS);
+
+            // set class loaders for all extensions.
+            for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
+                try {
+                    setupClassLoader(discoveredExtension);
+                } catch (Exception e) {
+                    discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.FAILED_TO_SETUP_CLASSLOADER;
+                    MinecraftServer.getExceptionManager().handleException(e);
+                    LOGGER.error("Failed to load extension {}", discoveredExtension.getName());
+                    LOGGER.error("Failed to load extension", e);
+                }
             }
-        }
 
-        List<DiscoveredExtension> discoveredExtensions = discoverExtensions();
-        discoveredExtensions = generateLoadOrder(discoveredExtensions);
-        loadDependencies(discoveredExtensions);
-        // remove invalid extensions
-        discoveredExtensions.removeIf(ext -> ext.loadStatus != DiscoveredExtension.LoadStatus.LOAD_SUCCESS);
+            // remove invalid extensions
+            discoveredExtensions.removeIf(ext -> ext.loadStatus != DiscoveredExtension.LoadStatus.LOAD_SUCCESS);
+            setupCodeModifiers(discoveredExtensions);
 
-        for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
-            try {
-                setupClassLoader(discoveredExtension);
-            } catch (Exception e) {
-                discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.FAILED_TO_SETUP_CLASSLOADER;
-                MinecraftServer.getExceptionManager().handleException(e);
-                LOGGER.error("Failed to load extension {}", discoveredExtension.getName());
-                LOGGER.error("Failed to load extension", e);
-            }
-        }
-
-        // remove invalid extensions
-        discoveredExtensions.removeIf(ext -> ext.loadStatus != DiscoveredExtension.LoadStatus.LOAD_SUCCESS);
-        setupCodeModifiers(discoveredExtensions);
-
-        for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
-            try {
-                attemptSingleLoad(discoveredExtension);
-            } catch (Exception e) {
-                discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.LOAD_FAILED;
-                LOGGER.error("Failed to load extension {}", discoveredExtension.getName());
-                MinecraftServer.getExceptionManager().handleException(e);
+            // Load the extensions
+            for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
+                try {
+                    loadExtension(discoveredExtension);
+                } catch (Exception e) {
+                    discoveredExtension.loadStatus = DiscoveredExtension.LoadStatus.LOAD_FAILED;
+                    LOGGER.error("Failed to load extension {}", discoveredExtension.getName());
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
             }
         }
 
@@ -133,6 +172,11 @@ public class ExtensionManager {
         }).repeat(1L, TimeUnit.MINUTE).schedule();
     }
 
+    /**
+     * Initializes the class loader for this extension
+     *
+     * @param discoveredExtension The extension to initialize said extension's class loader.
+     */
     private void setupClassLoader(@NotNull DiscoveredExtension discoveredExtension) {
         final URL[] urls = discoveredExtension.files.toArray(new URL[0]);
         final MinestomExtensionClassLoader loader = newClassLoader(discoveredExtension, urls);
@@ -140,8 +184,15 @@ public class ExtensionManager {
         discoveredExtension.setMinestomExtensionClassLoader(loader);
     }
 
+    /**
+     * Loads an extension into Minestom.
+     *
+     * @param discoveredExtension The extension. Make sure to verify its integrity, set its class loader, and its files.
+     *
+     * @return An extension object made from this DiscoveredExtension
+     */
     @Nullable
-    private Extension attemptSingleLoad(@NotNull DiscoveredExtension discoveredExtension) {
+    private Extension loadExtension(@NotNull DiscoveredExtension discoveredExtension) {
         // Create ExtensionDescription (authors, version etc.)
         String extensionName = discoveredExtension.getName();
         String mainClass = discoveredExtension.getEntrypoint();
@@ -237,6 +288,13 @@ public class ExtensionManager {
         return extension;
     }
 
+    /**
+     * Get all extensions from the extensions folder and make them discovered.
+     *
+     * It skims the extension folder, discovers and verifies each extension, and returns those created DiscoveredExtensions.
+     *
+     * @return A list of discovered extensions from this folder.
+     */
     @NotNull
     private List<DiscoveredExtension> discoverExtensions() {
         List<DiscoveredExtension> extensions = new LinkedList<>();
@@ -287,11 +345,19 @@ public class ExtensionManager {
         return extensions;
     }
 
+    /**
+     * Grabs a discovered extension from a jar.
+     *
+     * @param file The jar to grab it from (a .jar is a formatted .zip file)
+     *
+     * @return The created DiscoveredExtension.
+     */
     @Nullable
     private DiscoveredExtension discoverFromJar(@NotNull File file) {
         try (ZipFile f = new ZipFile(file);
              InputStreamReader reader = new InputStreamReader(f.getInputStream(f.getEntry("extension.json")))) {
 
+            // Initialize DiscoveredExtension from GSON.
             DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
             extension.setOriginalJar(file);
             extension.files.add(file.toURI().toURL());
@@ -372,7 +438,7 @@ public class ExtensionManager {
 
             // While there are entries with no more elements (no more dependencies)
             while (!(
-                    loadableExtensions = dependencyMap.entrySet().stream().filter(entry -> areAllDependenciesLoaded(entry.getValue())).collect(Collectors.toList())
+                    loadableExtensions = dependencyMap.entrySet().stream().filter(entry -> isLoaded(entry.getValue())).collect(Collectors.toList())
             ).isEmpty()
             ) {
                 // Get all "loadable" (not actually being loaded!) extensions and put them in the sorted list.
@@ -408,8 +474,16 @@ public class ExtensionManager {
         return sortedList;
     }
 
-    private boolean areAllDependenciesLoaded(@NotNull List<DiscoveredExtension> dependencies) {
-        return dependencies.isEmpty() || dependencies.stream().allMatch(ext -> extensions.containsKey(ext.getName().toLowerCase()));
+    /**
+     * Checks if this list of extensions are loaded
+     * @param extensions The list of extensions to check against.
+     * @return If all of these extensions are loaded.
+     */
+    private boolean isLoaded(@NotNull List<DiscoveredExtension> extensions) {
+        return
+                extensions.isEmpty() // Don't waste CPU on checking an empty array
+                        // Make sure the internal extensions list contains all of these.
+                        || extensions.stream().allMatch(ext -> this.extensions.containsKey(ext.getName().toLowerCase()));
     }
 
     private void loadDependencies(List<DiscoveredExtension> extensions) {
@@ -699,7 +773,7 @@ public class ExtensionManager {
         for (DiscoveredExtension toReload : extensionsToLoad) {
             // reload extensions
             LOGGER.info("Actually load extension {}", toReload.getName());
-            Extension loadedExtension = attemptSingleLoad(toReload);
+            Extension loadedExtension = loadExtension(toReload);
             if (loadedExtension != null) {
                 newExtensions.add(loadedExtension);
             }
@@ -720,9 +794,11 @@ public class ExtensionManager {
 
     public void unloadExtension(String extensionName) {
         Extension ext = extensions.get(extensionName.toLowerCase());
+
         if (ext == null) {
             throw new IllegalArgumentException("Extension " + extensionName + " is not currently loaded.");
         }
+
         List<String> dependents = new LinkedList<>(ext.getDependents()); // copy dependents list
 
         for (String dependentID : dependents) {
