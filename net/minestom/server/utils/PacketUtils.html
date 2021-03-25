@@ -156,8 +156,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#compressBuffer(java.util.zip.Deflater,byte%5B%5D,io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">compressBuffer</a></span>&#8203;(java.util.zip.Deflater&nbsp;deflater,
-              byte[]&nbsp;buffer,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#compressBuffer(java.util.zip.Deflater,io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">compressBuffer</a></span>&#8203;(java.util.zip.Deflater&nbsp;deflater,
               io.netty.buffer.ByteBuf&nbsp;packetBuffer,
               io.netty.buffer.ByteBuf&nbsp;compressionTarget)</code></th>
 <td class="colLast">
@@ -311,7 +310,7 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="compressBuffer(java.util.zip.Deflater,byte[],io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">
+<a id="compressBuffer(java.util.zip.Deflater,io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -319,8 +318,6 @@ extends java.lang.Object</pre>
 <h4>compressBuffer</h4>
 <pre class="methodSignature">public static&nbsp;void&nbsp;compressBuffer&#8203;(@NotNull
                                   java.util.zip.Deflater&nbsp;deflater,
-                                  @Nullable
-                                  byte[]&nbsp;buffer,
                                   @NotNull
                                   io.netty.buffer.ByteBuf&nbsp;packetBuffer,
                                   @NotNull
@@ -331,8 +328,6 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>deflater</code> - the deflater for zlib compression</dd>
-<dd><code>buffer</code> - a cached buffer which will be used to store temporary the deflater output,
-                          null if you prefer the buffer to be allocated dynamically when required</dd>
 <dd><code>packetBuffer</code> - the buffer containing all the packet fields</dd>
 <dd><code>compressionTarget</code> - the buffer which will receive the compressed version of <code>packetBuffer</code></dd>
 </dl>
