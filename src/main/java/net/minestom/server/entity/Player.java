@@ -654,6 +654,12 @@ public class Player extends LivingEntity implements CommandSender {
         return result;
     }
 
+    @Override
+    public void sendPacketToViewersAndSelf(@NotNull ServerPacket packet) {
+        this.playerConnection.sendPacket(packet);
+        super.sendPacketToViewersAndSelf(packet);
+    }
+
     /**
      * Changes the player instance and load surrounding chunks if needed.
      * <p>

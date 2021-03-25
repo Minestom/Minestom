@@ -80,9 +80,6 @@ public interface Viewable {
      * @param packet the packet to send
      */
     default void sendPacketToViewersAndSelf(@NotNull ServerPacket packet) {
-        if (this instanceof Player) {
-            ((Player) this).getPlayerConnection().sendPacket(packet);
-        }
         sendPacketToViewers(packet);
     }
 }
