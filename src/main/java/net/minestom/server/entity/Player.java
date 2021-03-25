@@ -1083,8 +1083,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     /**
      * Hides the previous title.
-     * @deprecated Use {@link #clearTitle()}. Note this title cannot be shown again. This
-     * is expected behavior and will be the case in 1.17.
+     * @deprecated Use {@link #clearTitle()}
      */
     @Deprecated
     public void hideTitle() {
@@ -1100,7 +1099,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void clearTitle() {
-        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.RESET);
+        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.HIDE);
         playerConnection.sendPacket(titlePacket);
     }
 
