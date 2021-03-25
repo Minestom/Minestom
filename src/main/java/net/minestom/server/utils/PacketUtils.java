@@ -214,14 +214,14 @@ public final class PacketUtils {
                 packetBuf = compressedBuf;
             } else {
                 // Packet too small
-                ByteBuf uncompressedLengthBuffer = directBuffer ? BufUtils.getBuffer(true, 1) : Unpooled.buffer();
+                ByteBuf uncompressedLengthBuffer = Unpooled.buffer();
                 Utils.writeVarIntBuf(uncompressedLengthBuffer, 0);
                 packetBuf = Unpooled.wrappedBuffer(uncompressedLengthBuffer, packetBuf);
             }
         }
 
         // Write the final length of the packet
-        ByteBuf packetLengthBuffer = directBuffer ? BufUtils.getBuffer(true, 5) : Unpooled.buffer();
+        ByteBuf packetLengthBuffer = Unpooled.buffer();
         Utils.writeVarIntBuf(packetLengthBuffer, packetBuf.readableBytes());
 
         return Unpooled.wrappedBuffer(packetLengthBuffer, packetBuf);
