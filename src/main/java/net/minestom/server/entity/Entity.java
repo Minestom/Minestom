@@ -78,6 +78,11 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     protected double gravityDragPerTick;
     protected double gravityAcceleration;
     protected int gravityTickCount; // Number of tick where gravity tick was applied
+    /*
+    true if the gravity values are the same as in vanilla,
+    in that case we don't send velocity change packets every
+    tick since the client should be aware of it
+     */
     private boolean hasVanillaGravity = false;
 
     private boolean autoViewable;
@@ -585,6 +590,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                         notVanillaDrag = false;
                     }
 
+                    // Prevent infinitely decreasing velocity, check it every 20 tick
                     if (ticks % 20 == 0) {
                         if (velocity.getX() != 0 && Math.abs(velocity.getX()) < Vector.getEpsilon()) {
                             this.velocity.setX(0);
