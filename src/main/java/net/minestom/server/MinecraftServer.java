@@ -1,7 +1,7 @@
 package net.minestom.server;
 
 import net.minestom.server.advancements.AdvancementManager;
-import net.minestom.server.adventure.BossBarManager;
+import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.adventure.SerializationManager;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.benchmark.BenchmarkManager;
