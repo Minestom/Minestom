@@ -924,47 +924,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void playSound(net.kyori.adventure.sound.@NotNull Sound sound, double x, double y, double z) {
-        SoundEvent minestomSound = Registries.getSoundEvent(sound.name());
-
-        if (minestomSound == null) {
-            NamedSoundEffectPacket packet = new NamedSoundEffectPacket();
-            packet.soundName = sound.name().asString();
-            packet.soundSource = sound.source();
-            packet.x = (int) x;
-            packet.y = (int) y;
-            packet.z = (int) z;
-            packet.volume = sound.volume();
-            packet.pitch = sound.pitch();
-            playerConnection.sendPacket(packet);
-        } else {
-            SoundEffectPacket packet = new SoundEffectPacket();
-            packet.soundId = minestomSound.getId();
-            packet.soundSource = sound.source();
-            packet.x = (int) x;
-            packet.y = (int) y;
-            packet.z = (int) z;
-            packet.volume = sound.volume();
-            packet.pitch = sound.pitch();
-            playerConnection.sendPacket(packet);
-        }
+        playerConnection.sendPacket(AdventurePacketConvertor.createSoundPacket(sound, x, y, z));
     }
 
     @Override
     public void stopSound(@NotNull SoundStop stop) {
-        StopSoundPacket packet = new StopSoundPacket();
-        packet.flags = 0x0;
-
-        if (stop.source() != null) {
-            packet.flags |= 0x1;
-            packet.source = AdventurePacketConvertor.getSoundSourceValue(stop.source());
-        }
-
-        if (stop.sound() != null) {
-            packet.flags |= 0x2;
-            packet.sound = stop.sound().asString();
-        }
-
-        this.playerConnection.sendPacket(packet);
+        playerConnection.sendPacket(AdventurePacketConvertor.createSoundStopPacket(stop));
     }
 
     /**
