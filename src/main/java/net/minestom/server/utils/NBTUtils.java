@@ -317,7 +317,7 @@ public final class NBTUtils {
         if (hasDisplayName || hasLore) {
             NBTCompound displayNBT = new NBTCompound();
             if (hasDisplayName) {
-                final String name = itemStack.getDisplayName().toString();
+                final String name = MinecraftServer.getSerializationManager().serialize(itemStack.getDisplayName());
                 displayNBT.setString("Name", name);
             }
 
