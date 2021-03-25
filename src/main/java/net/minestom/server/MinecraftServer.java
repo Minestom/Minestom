@@ -3,6 +3,7 @@ package net.minestom.server;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.BossBarManager;
 import net.minestom.server.adventure.SerializationManager;
+import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
@@ -119,6 +120,7 @@ public final class MinecraftServer {
     private static AdvancementManager advancementManager;
     private static SerializationManager serializationManager;
     private static BossBarManager bossBarManager;
+    private static Audiences audiences;
 
     private static ExtensionManager extensionManager;
 
@@ -186,6 +188,7 @@ public final class MinecraftServer {
         advancementManager = new AdvancementManager();
         serializationManager = new SerializationManager();
         bossBarManager = new BossBarManager();
+        audiences = new Audiences();
 
         updateManager = new UpdateManager();
 
@@ -451,6 +454,16 @@ public final class MinecraftServer {
     public static BossBarManager getBossBarManager() {
         checkInitStatus(bossBarManager);
         return bossBarManager;
+    }
+
+    /**
+     * Gets the audiences instance.
+     *
+     * @return the audiences instance
+     */
+    public static Audiences getAudiences() {
+        checkInitStatus(audiences);
+        return audiences;
     }
 
     /**
