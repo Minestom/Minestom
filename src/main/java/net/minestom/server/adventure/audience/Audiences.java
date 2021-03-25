@@ -32,17 +32,17 @@ public class Audiences implements AudienceProvider<Audience> {
 
     @Override
     public @NotNull Audience all() {
-        return Audience.audience(this.collection().all());
+        return Audience.audience(this.players(), this.console(), this.custom());
     }
 
     @Override
     public @NotNull Audience players() {
-        return Audience.audience(this.collection().players());
+        return PacketGroupingAudience.of(this.collection().players());
     }
 
     @Override
     public @NotNull Audience players(@NotNull Predicate<Player> filter) {
-        return Audience.audience(this.collection().players(filter));
+        return PacketGroupingAudience.of(this.collection().players(filter));
     }
 
     @Override
@@ -52,7 +52,7 @@ public class Audiences implements AudienceProvider<Audience> {
 
     @Override
     public @NotNull Audience server() {
-        return Audience.audience(this.collection().server());
+        return Audience.audience(this.players(), this.console());
     }
 
     @Override

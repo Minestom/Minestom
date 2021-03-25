@@ -29,12 +29,12 @@ public final class CollectionAudienceProvider implements AudienceProvider<Iterab
     }
 
     @Override
-    public @NotNull Iterable<? extends Audience> players() {
+    public @NotNull Iterable<Player> players() {
         return MinecraftServer.getConnectionManager().getOnlinePlayers();
     }
 
     @Override
-    public @NotNull Iterable<? extends Audience> players(@NotNull Predicate<Player> filter) {
+    public @NotNull Iterable<Player> players(@NotNull Predicate<Player> filter) {
         return MinecraftServer.getConnectionManager().getOnlinePlayers().stream().filter(filter).collect(Collectors.toList());
     }
 
