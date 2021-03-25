@@ -87,7 +87,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
     private boolean autoViewable;
     private final int id;
-    protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    protected final Set<Player> viewers = ConcurrentHashMap.newKeySet();
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
     private Data data;
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
@@ -355,8 +355,17 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         playerConnection.sendPacket(getVelocityPacket());
         playerConnection.sendPacket(getMetadataPacket());
 
+        // Passenger
         if (hasPassenger()) {
             playerConnection.sendPacket(getPassengersPacket());
+        }
+
+        // Head position
+        {
+            EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
+            entityHeadLookPacket.entityId = getEntityId();
+            entityHeadLookPacket.yaw = position.getYaw();
+            playerConnection.sendPacket(entityHeadLookPacket);
         }
 
         return true;
@@ -1290,18 +1299,13 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
         final Instance instance = getInstance();
         if (instance != null) {
-
-            // Needed to refresh the client chunks when connecting for the first time
-            final boolean forceUpdate = this instanceof Player && ((Player) this).getViewableChunks().isEmpty();
-
             final Chunk lastChunk = instance.getChunkAt(lastX, lastZ);
             final Chunk newChunk = instance.getChunkAt(x, z);
 
             Check.notNull(lastChunk, "The entity " + getEntityId() + " was in an unloaded chunk at " + lastX + ";" + lastZ);
             Check.notNull(newChunk, "The entity " + getEntityId() + " tried to move in an unloaded chunk at " + x + ";" + z);
 
-            final boolean chunkChange = lastChunk != newChunk;
-            if (forceUpdate || chunkChange) {
+            if (lastChunk != newChunk) {
                 instance.switchEntityChunk(this, lastChunk, newChunk);
                 if (this instanceof Player) {
                     // Refresh player view

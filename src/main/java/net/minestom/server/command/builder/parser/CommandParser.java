@@ -13,14 +13,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 public class CommandParser {
 
     private static final CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();
 
     @Nullable
-    public static CommandQueryResult findCommand(@NotNull String commandName, @NotNull String[] args) {
-        Command command = COMMAND_MANAGER.getDispatcher().findCommand(commandName);
+    public static CommandQueryResult findCommand(@Nullable Command parentCommand, @NotNull String commandName, @NotNull String[] args) {
+        Command command = parentCommand == null ? COMMAND_MANAGER.getDispatcher().findCommand(commandName) : parentCommand;
         if (command == null) {
             return null;
         }
@@ -30,23 +31,31 @@ public class CommandParser {
         commandQueryResult.commandName = commandName;
         commandQueryResult.args = args;
 
-        boolean correct;
-        do {
-            correct = false;
-
-            if (commandQueryResult.args.length > 0) {
-                final String firstArgument = commandQueryResult.args[0];
-                for (Command subcommand : command.getSubcommands()) {
-                    if ((correct = Command.isValidName(subcommand, firstArgument))) {
-                        commandQueryResult.command = subcommand;
-                        commandQueryResult.commandName = firstArgument;
-                        commandQueryResult.args = Arrays.copyOfRange(args, 1, args.length);
-                    }
+        // Search for subcommand
+        if (args.length > 0) {
+            final String subCommandName = args[0];
+            for (Command subcommand : command.getSubcommands()) {
+                if (Command.isValidName(subcommand, subCommandName)) {
+                    final String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
+                    commandQueryResult.command = subcommand;
+                    commandQueryResult.commandName = subCommandName;
+                    commandQueryResult.args = subArgs;
+                    return findCommand(subcommand, subCommandName, subArgs);
                 }
             }
-        } while (correct);
+        }
 
         return commandQueryResult;
+    }
+
+    @Nullable
+    public static CommandQueryResult findCommand(@NotNull String input) {
+        final String[] parts = input.split(StringUtils.SPACE);
+        final String commandName = parts[0];
+
+        String[] args = new String[parts.length - 1];
+        System.arraycopy(parts, 1, args, 0, args.length);
+        return CommandParser.findCommand(null, commandName, args);
     }
 
     public static void parse(@Nullable CommandSyntax syntax, @NotNull Argument<?>[] commandArguments, @NotNull String[] inputArguments,
@@ -153,14 +162,16 @@ public class CommandParser {
     }
 
     @Nullable
-    public static ArgumentQueryResult findSuggestibleArgument(@NotNull Command command, String[] args, String commandString,
-                                                              boolean trailingSpace) {
+    public static ArgumentQueryResult findEligibleArgument(@NotNull Command command, String[] args, String commandString,
+                                                           boolean trailingSpace, boolean forceCorrect,
+                                                           Predicate<CommandSyntax> syntaxPredicate,
+                                                           Predicate<Argument<?>> argumentPredicate) {
         final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
 
         Int2ObjectRBTreeMap<ArgumentQueryResult> suggestions = new Int2ObjectRBTreeMap<>(Collections.reverseOrder());
 
         for (CommandSyntax syntax : syntaxes) {
-            if (!syntax.hasSuggestion()) {
+            if (!syntaxPredicate.test(syntax)) {
                 continue;
             }
 
@@ -190,7 +201,9 @@ public class CommandParser {
                     context.setArg(argument.getId(), argumentResult.parsedValue, argumentResult.rawArg);
                 }
 
-                if (argument.hasSuggestion()) {
+                // Save result
+                if ((!forceCorrect || argumentResult.correct) &&
+                        argumentPredicate.test(argument)) {
                     ArgumentQueryResult queryResult = new ArgumentQueryResult();
                     queryResult.syntax = syntax;
                     queryResult.argument = argument;

@@ -167,7 +167,8 @@ public final class NettyServer {
 
                 ChannelPipeline pipeline = ch.pipeline();
 
-                pipeline.addLast(TRAFFIC_LIMITER_HANDLER_NAME, globalTrafficHandler);
+                // TODO enable when properly implemented (dynamic limit based on the number of clients)
+                //pipeline.addLast(TRAFFIC_LIMITER_HANDLER_NAME, globalTrafficHandler);
 
                 // First check should verify if the packet is a legacy ping (from 1.6 version and earlier)
                 // Removed from the pipeline later in LegacyPingHandler if unnecessary (>1.6)

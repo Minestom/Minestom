@@ -89,6 +89,7 @@ public class Player extends LivingEntity implements CommandSender {
 
     private DimensionType dimensionType;
     private GameMode gameMode;
+    // Chunks that the player can view
     protected final Set<Chunk> viewableChunks = new CopyOnWriteArraySet<>();
 
     private final AtomicInteger teleportId = new AtomicInteger();
@@ -122,10 +123,14 @@ public class Player extends LivingEntity implements CommandSender {
     // CustomBlock break delay
     private CustomBlock targetCustomBlock;
     private BlockPosition targetBlockPosition;
-    private long targetBreakDelay; // The last break delay requested
-    private long targetBlockBreakCount; // Number of tick since the last stage change
-    private byte targetStage; // The current stage of the target block, only if multi player breaking is disabled
-    private final Set<Player> targetBreakers = Collections.singleton(this); // Only used if multi player breaking is disabled, contains only this player
+    // The last break delay requested
+    private long targetBreakDelay;
+    // Number of tick since the last stage change
+    private long targetBlockBreakCount;
+    // The current stage of the target block, only if multi player breaking is disabled
+    private byte targetStage;
+    // Only used if multi player breaking is disabled, contains only this player
+    private final Set<Player> targetBreakers = Collections.singleton(this);
 
     // Position synchronization with viewers
     private long lastPlayerSynchronizationTime;
@@ -318,7 +323,7 @@ public class Player extends LivingEntity implements CommandSender {
                 // Should increment the target block stage
                 if (targetCustomBlock.enableMultiPlayerBreaking()) {
                     // Let the custom block object manages the breaking
-                    final boolean canContinue = this.targetCustomBlock.processStage(instance, targetBlockPosition, this, stageIncrease);
+                    final boolean canContinue = targetCustomBlock.processStage(instance, targetBlockPosition, this, stageIncrease);
                     if (canContinue) {
                         final Set<Player> breakers = targetCustomBlock.getBreakers(instance, targetBlockPosition);
                         refreshBreakDelay(breakers);
@@ -588,13 +593,12 @@ public class Player extends LivingEntity implements CommandSender {
 
     @Override
     public boolean addViewer0(@NotNull Player player) {
-        if (player == this || !super.addViewer0(player)) {
+        if (player == this) {
             return false;
         }
-
         PlayerConnection viewerConnection = player.getPlayerConnection();
-        showPlayer(viewerConnection);
-        return true;
+        viewerConnection.sendPacket(getAddPlayerToList());
+        return super.addViewer0(player);
     }
 
     @Override
@@ -631,7 +635,8 @@ public class Player extends LivingEntity implements CommandSender {
                 !spawnPosition.inSameChunk(this.position);
 
         if (needWorldRefresh) {
-            final boolean firstSpawn = this.instance == null; // TODO: Handle player reconnections, must be false in that case too
+            // TODO: Handle player reconnections, must be false in that case too
+            final boolean firstSpawn = this.instance == null;
 
             // Send the new dimension if player isn't in any instance or if the dimension is different
             final DimensionType instanceDimensionType = instance.getDimensionType();
@@ -810,7 +815,8 @@ public class Player extends LivingEntity implements CommandSender {
      * @param volume        the volume of the sound (1 is 100%)
      * @param pitch         the pitch of the sound, between 0.5 and 2.0
      */
-    public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
+    public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory,
+                          int x, int y, int z, float volume, float pitch) {
         SoundEffectPacket soundEffectPacket = new SoundEffectPacket();
         soundEffectPacket.soundId = sound.getId();
         soundEffectPacket.soundCategory = soundCategory;
@@ -827,7 +833,8 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @see #playSound(Sound, SoundCategory, int, int, int, float, float)
      */
-    public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
+    public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory,
+                          BlockPosition position, float volume, float pitch) {
         playSound(sound, soundCategory, position.getX(), position.getY(), position.getZ(), volume, pitch);
     }
 
@@ -842,7 +849,8 @@ public class Player extends LivingEntity implements CommandSender {
      * @param volume        the volume of the sound (1 is 100%)
      * @param pitch         the pitch of the sound, between 0.5 and 2.0
      */
-    public void playSound(@NotNull String identifier, @NotNull SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
+    public void playSound(@NotNull String identifier, @NotNull SoundCategory soundCategory,
+                          int x, int y, int z, float volume, float pitch) {
         NamedSoundEffectPacket namedSoundEffectPacket = new NamedSoundEffectPacket();
         namedSoundEffectPacket.soundName = identifier;
         namedSoundEffectPacket.soundCategory = soundCategory;
@@ -1099,7 +1107,8 @@ public class Player extends LivingEntity implements CommandSender {
      * @throws IllegalArgumentException if {@code food} is not between 0 and 20
      */
     public void setFood(int food) {
-        Check.argCondition(!MathUtils.isBetween(food, 0, 20), "Food has to be between 0 and 20");
+        Check.argCondition(!MathUtils.isBetween(food, 0, 20),
+                "Food has to be between 0 and 20");
         this.food = food;
         sendUpdateHealthPacket();
     }
@@ -1112,10 +1121,11 @@ public class Player extends LivingEntity implements CommandSender {
      * Sets and refresh client food saturation.
      *
      * @param foodSaturation the food saturation
-     * @throws IllegalArgumentException if {@code foodSaturation} is not between 0 and 5
+     * @throws IllegalArgumentException if {@code foodSaturation} is not between 0 and 20
      */
     public void setFoodSaturation(float foodSaturation) {
-        Check.argCondition(!MathUtils.isBetween(foodSaturation, 0, 5), "Food saturation has to be between 0 and 5");
+        Check.argCondition(!MathUtils.isBetween(foodSaturation, 0, 20),
+                "Food saturation has to be between 0 and 20");
         this.foodSaturation = foodSaturation;
         sendUpdateHealthPacket();
     }
@@ -1507,10 +1517,12 @@ public class Player extends LivingEntity implements CommandSender {
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
 
-            UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
+            // TODO prevent the client from getting lag spikes when re-loading large chunks
+            // Probably by having a distinction between visible and loaded (cache) chunks
+            /*UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
             unloadChunkPacket.chunkX = chunkX;
             unloadChunkPacket.chunkZ = chunkZ;
-            playerConnection.sendPacket(unloadChunkPacket);
+            playerConnection.sendPacket(unloadChunkPacket);*/
 
             final Chunk chunk = instance.getChunk(chunkX, chunkZ);
             if (chunk != null)
@@ -1544,8 +1556,8 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Refreshes the list of entities that the player should be able to see based on {@link MinecraftServer#getEntityViewDistance()}
-     * and {@link Entity#isAutoViewable()}.
+     * Refreshes the list of entities that the player should be able to see based
+     * on {@link MinecraftServer#getEntityViewDistance()} and {@link Entity#isAutoViewable()}.
      *
      * @param newChunk the new chunk of the player (can be the current one)
      */
@@ -1699,7 +1711,8 @@ public class Player extends LivingEntity implements CommandSender {
      * @param dimensionType the new player dimension
      */
     protected void sendDimension(@NotNull DimensionType dimensionType) {
-        Check.argCondition(dimensionType.equals(getDimensionType()), "The dimension needs to be different than the current one!");
+        Check.argCondition(dimensionType.equals(getDimensionType()),
+                "The dimension needs to be different than the current one!");
 
         this.dimensionType = dimensionType;
         RespawnPacket respawnPacket = new RespawnPacket();
@@ -1769,8 +1782,10 @@ public class Player extends LivingEntity implements CommandSender {
 
     public void setTeam(Team team) {
         super.setTeam(team);
-        if (team != null)
-            PacketUtils.sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), team.createTeamsCreationPacket());
+        if (team != null) {
+            var players = MinecraftServer.getConnectionManager().getOnlinePlayers();
+            PacketUtils.sendGroupedPacket(players, team.createTeamsCreationPacket());
+        }
     }
 
     /**
@@ -1821,7 +1836,7 @@ public class Player extends LivingEntity implements CommandSender {
         callCancellableEvent(InventoryOpenEvent.class, inventoryOpenEvent, () -> {
 
             if (getOpenInventory() != null) {
-                closeInventory();
+                getOpenInventory().removeViewer(this);
             }
 
             Inventory newInventory = inventoryOpenEvent.getInventory();
@@ -2327,7 +2342,7 @@ public class Player extends LivingEntity implements CommandSender {
             // In this case we send the smallest amount of chunks possible
             // Will be updated in PlayerSettings#refresh.
             // Non-compliant clients might also be stuck with this view
-            return 1;
+            return 3;
         } else {
             final int serverRange = MinecraftServer.getChunkViewDistance();
             return Math.min(playerRange, serverRange);

@@ -1,7 +1,6 @@
 package net.minestom.server.network.player;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.socket.SocketChannel;
@@ -16,6 +15,7 @@ import net.minestom.server.network.netty.codec.PacketCompressor;
 import net.minestom.server.network.netty.packet.FramedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
+import net.minestom.server.utils.BufUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.cache.CacheablePacket;
 import net.minestom.server.utils.cache.TemporaryCache;
@@ -60,7 +60,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     private UUID bungeeUuid;
     private PlayerSkin bungeeSkin;
 
-    private final ByteBuf tickBuffer = Unpooled.directBuffer();
+    private final ByteBuf tickBuffer = BufUtils.getBuffer(true);
 
     public NettyPlayerConnection(@NotNull SocketChannel channel) {
         super();
@@ -145,16 +145,19 @@ public class NettyPlayerConnection extends PlayerConnection {
                         if (shouldUpdate) {
                             final ByteBuf buffer = PacketUtils.createFramedPacket(serverPacket, false);
                             timedBuffer = new TimedBuffer(buffer, timestamp);
+                            temporaryCache.cache(identifier, timedBuffer);
                         }
 
-                        temporaryCache.cache(identifier, timedBuffer);
                         write(new FramedPacket(timedBuffer.getBuffer()));
                     }
 
-                } else
+                } else {
                     write(serverPacket);
-            } else
+                }
+            } else {
+                // Player is probably not logged yet
                 writeAndFlush(serverPacket);
+            }
         }
     }
 
@@ -168,11 +171,10 @@ public class NettyPlayerConnection extends PlayerConnection {
             return;
         } else if (message instanceof ServerPacket) {
             final ServerPacket serverPacket = (ServerPacket) message;
-            final ByteBuf buffer = PacketUtils.createFramedPacket(serverPacket, true);
             synchronized (tickBuffer) {
-                tickBuffer.writeBytes(buffer);
+                final ByteBuf framedPacket = PacketUtils.createFramedPacket(serverPacket, false);
+                tickBuffer.writeBytes(framedPacket);
             }
-            buffer.release();
             return;
         } else if (message instanceof ByteBuf) {
             synchronized (tickBuffer) {

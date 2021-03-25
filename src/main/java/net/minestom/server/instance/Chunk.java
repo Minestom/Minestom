@@ -8,9 +8,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.event.player.PlayerChunkLoadEvent;
 import net.minestom.server.event.player.PlayerChunkUnloadEvent;
-import net.minestom.server.instance.batch.BatchOption;
-import net.minestom.server.instance.batch.BlockBatch;
-import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
@@ -32,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ConcurrentHashMap;
 
 // TODO light data & API
 
@@ -75,7 +72,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     private boolean readOnly;
 
     protected volatile boolean loaded = true;
-    protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    protected final Set<Player> viewers = ConcurrentHashMap.newKeySet();
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
 
     // Path finding
@@ -102,7 +99,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * <p>
      * This is used when the previous block has to be destroyed/replaced, meaning that it clears the previous data and update method.
      * <p>
-     * WARNING: this method is not thread-safe (in order to bring performance improvement with {@link ChunkBatch} and {@link BlockBatch})
+     * WARNING: this method is not thread-safe (in order to bring performance improvement with {@link net.minestom.server.instance.batch.Batch}s)
      * The thread-safe version is {@link InstanceContainer#setSeparateBlocks(int, int, int, short, short, Data)} (or any similar instance methods)
      * Otherwise, you can simply do not forget to have this chunk synchronized when this is called.
      *
@@ -253,8 +250,6 @@ public abstract class Chunk implements Viewable, DataContainer {
 
     /**
      * Resets the chunk, this means clearing all the data making it empty.
-     * <p>
-     * Used for {@link BatchOption#isFullChunk()}.
      */
     public abstract void reset();
 

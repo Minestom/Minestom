@@ -100,7 +100,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     @Deprecated
     public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
         super(entityType, uuid, spawnPosition);
-        setupAttributes();
         initEquipments();
     }
 
@@ -560,6 +559,11 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         final PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getEquipmentsPacket());
         playerConnection.sendPacket(getPropertiesPacket());
+
+        if (getTeam() != null){
+            playerConnection.sendPacket(getTeam().createTeamsCreationPacket());
+        }
+
         return true;
     }
 
@@ -642,16 +646,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
         propertiesPacket.properties = properties;
         return propertiesPacket;
-    }
-
-    /**
-     * Sets all the attributes to {@link Attribute#getDefaultValue()}
-     */
-    private void setupAttributes() {
-        for (Attribute attribute : Attribute.values()) {
-            final AttributeInstance attributeInstance = new AttributeInstance(attribute, this::onAttributeChanged);
-            this.attributeModifiers.put(attribute.getKey(), attributeInstance);
-        }
     }
 
     @Override

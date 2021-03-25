@@ -3,6 +3,7 @@ package net.minestom.server.listener;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
@@ -122,9 +123,11 @@ public class BlockPlacementListener {
                 // Check if the player is trying to place a block in an entity
                 boolean intersect = player.getBoundingBox().intersect(blockPosition);
                 if (!intersect && block.isSolid()) {
+                    // TODO push entities too close to the position
                     for (Entity entity : entities) {
                         // 'player' has already been checked
-                        if (entity == player)
+                        if (entity == player ||
+                                entity.getEntityType() == EntityType.ITEM)
                             continue;
 
                         intersect = entity.getBoundingBox().intersect(blockPosition);

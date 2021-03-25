@@ -303,6 +303,17 @@ public final class ConnectionManager {
     }
 
     /**
+     * Removes an existing player initialization consumer.
+     * <p>
+     * Removal of player initializations should be done by reference, and not cloning.
+     *
+     * @param playerInitialization the {@link Player} initialization consumer
+     */
+    public void removePlayerInitialization(@NotNull Consumer<Player> playerInitialization) {
+        this.playerInitializations.remove(playerInitialization);
+    }
+
+    /**
      * Gets the kick reason when the server is shutdown using {@link MinecraftServer#stopCleanly()}.
      *
      * @return the kick reason in case on a shutdown

@@ -13,6 +13,7 @@ public class ParsedCommand {
 
     // Command
     protected Command command;
+    protected String commandString;
 
     // Command Executor
     protected CommandSyntax syntax;
@@ -30,12 +31,11 @@ public class ParsedCommand {
      * The command will not be executed if {@link Command#getCondition()}
      * is not validated.
      *
-     * @param source        the command source
-     * @param commandString the command string
+     * @param source the command source
      * @return the command data, null if none
      */
     @Nullable
-    public CommandData execute(@NotNull CommandSender source, @NotNull String commandString) {
+    public CommandData execute(@NotNull CommandSender source) {
         // Global listener
         command.globalListener(source, context, commandString);
         // Command condition check
@@ -78,6 +78,7 @@ public class ParsedCommand {
     public static ParsedCommand withDefaultExecutor(@NotNull Command command, @NotNull String input) {
         ParsedCommand parsedCommand = new ParsedCommand();
         parsedCommand.command = command;
+        parsedCommand.commandString = input;
         parsedCommand.executor = command.getDefaultExecutor();
         parsedCommand.context = new CommandContext(input);
         return parsedCommand;

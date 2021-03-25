@@ -11,10 +11,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class UpdateLightPacket implements ServerPacket, CacheablePacket {
 
-    private static final TemporaryCache<TimedBuffer> CACHE = new TemporaryCache<>(30000L);
+    private static final TemporaryCache<TimedBuffer> CACHE = new TemporaryCache<>(5, TimeUnit.MINUTES);
 
     public int chunkX;
     public int chunkZ;
