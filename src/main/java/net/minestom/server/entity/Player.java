@@ -627,7 +627,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @param spawnPosition the new position of the player
      */
     @Override
-    public void setInstance(@NotNull Instance instance, @NotNull Position spawnPosition) {
+    public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Position spawnPosition) {
         Check.argCondition(this.instance == instance, "Instance should be different than the current one");
 
         // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (eg SharedInstance)
@@ -660,18 +660,19 @@ public class Player extends LivingEntity implements CommandSender {
             };
 
             // Chunk 0;0 always needs to be loaded
-            instance.loadChunk(0, 0).thenAccept(chunk -> {
-                // Load all the required chunks
-                ChunkUtils.optionalLoadAll(instance, visibleChunks, eachCallback).thenRun(() -> {
-                    // This is the last chunk to be loaded , spawn player
-                    spawnPlayer(instance, spawnPosition, firstSpawn, true, dimensionChange);
-                });
-            });
+            return instance.loadChunk(0, 0)
+                    .thenCompose(chunk -> {
+                        // Load all the required chunks
+                        return ChunkUtils.optionalLoadAll(instance, visibleChunks, eachCallback);
+                    }).thenCompose(unused -> {
+                        // This is the last chunk to be loaded , spawn player
+                        return spawnPlayer(instance, spawnPosition, firstSpawn, true, dimensionChange);
+                    });
 
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
-            spawnPlayer(instance, spawnPosition, false, false, false);
+            return spawnPlayer(instance, spawnPosition, false, false, false);
         }
     }
 
@@ -697,8 +698,8 @@ public class Player extends LivingEntity implements CommandSender {
      * @param spawnPosition the position to teleport the player
      * @param firstSpawn    true if this is the player first spawn
      */
-    private void spawnPlayer(@NotNull Instance instance, @NotNull Position spawnPosition,
-                             boolean firstSpawn, boolean updateChunks, boolean dimensionChange) {
+    private CompletableFuture<Void> spawnPlayer(@NotNull Instance instance, @NotNull Position spawnPosition,
+                                                boolean firstSpawn, boolean updateChunks, boolean dimensionChange) {
         // Clear previous instance elements
         if (!firstSpawn) {
             this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
@@ -709,7 +710,7 @@ public class Player extends LivingEntity implements CommandSender {
 
         if (!position.isSimilar(spawnPosition) && !firstSpawn) {
             // Player changed instance at a different position
-            teleport(spawnPosition);
+            return teleport(spawnPosition);
         } else if (updateChunks) {
             // Send newly visible chunks to player once spawned in the instance
             refreshVisibleChunks();
@@ -722,6 +723,7 @@ public class Player extends LivingEntity implements CommandSender {
 
         PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
         callEvent(PlayerSpawnEvent.class, spawnEvent);
+        return CompletableFuture.completedFuture(null); // FIXME: wait for chunks to be loaded
     }
 
     /**
