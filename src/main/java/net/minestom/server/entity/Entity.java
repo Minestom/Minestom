@@ -463,6 +463,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         }
 
         final boolean isNettyClient = PlayerUtils.isNettyClient(this);
+        final Position posAtTickStart = position.clone();
 
         // Synchronization with updated fields in #getPosition()
         {
@@ -610,7 +611,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                 }
 
                 // Synchronization and packets...
-                if (!isNettyClient) {
+                if (!isNettyClient && !posAtTickStart.equals(position)) {
                     sendSynchronization();
                 }
             }
