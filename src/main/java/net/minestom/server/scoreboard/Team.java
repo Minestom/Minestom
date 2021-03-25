@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.AdventurePacketConvertor;
+import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.LivingEntity;
@@ -18,6 +19,7 @@ import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibil
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -25,7 +27,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 /**
  * This object represents a team on a scoreboard that has a common display theme and other properties.
  */
-public class Team implements ForwardingAudience {
+public class Team implements PacketGroupingAudience {
 
     private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 
@@ -570,7 +572,7 @@ public class Team implements ForwardingAudience {
     }
 
     @Override
-    public @NotNull Iterable<? extends Audience> audiences() {
+    public @NotNull Collection<Player> getPlayers() {
         if (!this.isPlayerMembersUpToDate) {
             this.playerMembers.clear();
 

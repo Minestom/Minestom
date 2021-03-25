@@ -4,16 +4,19 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
+import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
 import net.minestom.server.network.packet.server.play.UpdateScorePacket;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+
 /**
  * This interface represents all scoreboard of Minecraft.
  */
-public interface Scoreboard extends Viewable, ForwardingAudience {
+public interface Scoreboard extends Viewable, PacketGroupingAudience {
 
     /**
      * Creates a creation objective packet.
@@ -101,7 +104,7 @@ public interface Scoreboard extends Viewable, ForwardingAudience {
     String getObjectiveName();
 
     @Override
-    @NotNull default Iterable<? extends Audience> audiences() {
+    @NotNull default Collection<Player> getPlayers() {
         return this.getViewers();
     }
 }

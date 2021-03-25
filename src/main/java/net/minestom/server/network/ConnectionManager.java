@@ -6,6 +6,8 @@ import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.audience.Audiences;
+import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
@@ -33,11 +35,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * Manages the connected clients.
  */
-public final class ConnectionManager implements ForwardingAudience {
+public final class ConnectionManager implements PacketGroupingAudience {
 
     private static final long KEEP_ALIVE_DELAY = 10_000;
     private static final long KEEP_ALIVE_KICK = 30_000;
@@ -145,7 +148,7 @@ public final class ConnectionManager implements ForwardingAudience {
      * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
      * @param condition   the condition to receive the message
      *
-     * @deprecated Use {@link Audience#sendMessage(Component)} on {@link #audiences(PlayerValidator)}
+     * @deprecated Use {@link Audiences#players(Predicate)}
      */
     @Deprecated
     public void broadcastMessage(@NotNull JsonMessage jsonMessage, @Nullable PlayerValidator condition) {
@@ -554,30 +557,7 @@ public final class ConnectionManager implements ForwardingAudience {
     }
 
     @Override
-    public @NotNull Iterable<? extends Audience> audiences() {
+    public @NotNull Collection<Player> getPlayers() {
         return this.getOnlinePlayers();
-    }
-
-    /**
-     * Gets the audiences of players who match a given validator.
-     *
-     * @param validator the validator
-     *
-     * @return the audience
-     */
-    public @NotNull Iterable<? extends Audience> audiences(@Nullable PlayerValidator validator) {
-        if (validator == null) {
-            return this.audiences();
-        }
-
-        List<Player> validatedPlayers = new ArrayList<>();
-
-        for (Player onlinePlayer : this.getOnlinePlayers()) {
-            if (validator.isValid(onlinePlayer)) {
-                validatedPlayers.add(onlinePlayer);
-            }
-        }
-
-        return validatedPlayers;
     }
 }

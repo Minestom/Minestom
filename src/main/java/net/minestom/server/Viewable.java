@@ -1,6 +1,7 @@
 package net.minestom.server;
 
 import net.kyori.adventure.audience.Audience;
+import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.PacketUtils;
@@ -91,7 +92,7 @@ public interface Viewable {
      * @return the audience
      */
     default @NotNull Audience getViewersAsAudience() {
-        return Audience.audience(this.getViewersAsAudiences());
+        return PacketGroupingAudience.of(this.getViewers());
     }
 
     /**

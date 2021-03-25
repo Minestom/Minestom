@@ -10,10 +10,12 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.network.packet.server.play.BossBarPacket;
+import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static net.minestom.server.network.packet.server.play.BossBarPacket.Action.*;
 
@@ -50,18 +52,61 @@ public class BossBarManager implements BossBar.Listener {
             player.getPlayerConnection().sendPacket(holder.createAddPacket());
         }
     }
+
     /**
      * Removes the specified player from the boss bar's viewers and despawns the boss bar.
      *
      * @param player the intended viewer
      * @param bar the boss bar to hide
      */
-
     public void removeBossBar(@NotNull Player player, @NotNull BossBar bar) {
         Holder holder = this.getOrCreateHandler(bar);
 
         if (holder.players.remove(player.getUuid())) {
             player.getPlayerConnection().sendPacket(holder.createRemovePacket());
+        }
+    }
+
+    /**
+     * Adds the specified players to the boss bar's viewers and spawns the boss bar, registering the
+     * boss bar if needed.
+     *
+     * @param players the players
+     * @param bar the boss bar
+     */
+    public void addBossBar(@NotNull Collection<Player> players, @NotNull BossBar bar) {
+        Holder holder = this.getOrCreateHandler(bar);
+        Collection<Player> addedPlayers = new ArrayList<>();
+
+        for (Player player : players) {
+            if (holder.players.add(player.getUuid())) {
+                addedPlayers.add(player);
+            }
+        }
+
+        if (!addedPlayers.isEmpty()) {
+            PacketUtils.sendGroupedPacket(players, holder.createAddPacket());
+        }
+    }
+
+    /**
+     * Removes the specified players from the boss bar's viewers and despawns the boss bar.
+     *
+     * @param players the intended viewers
+     * @param bar the boss bar to hide
+     */
+    public void removeBossBar(@NotNull Collection<Player> players, @NotNull BossBar bar) {
+        Holder holder = this.getOrCreateHandler(bar);
+        Collection<Player> removedPlayers = new ArrayList<>();
+
+        for (Player player : players) {
+            if (holder.players.remove(player.getUuid())) {
+                removedPlayers.add(player);
+            }
+        }
+
+        if (!removedPlayers.isEmpty()) {
+            PacketUtils.sendGroupedPacket(players, holder.createRemovePacket());
         }
     }
 
@@ -100,10 +145,11 @@ public class BossBarManager implements BossBar.Listener {
      * in the connection manager.
      *
      * @param packet the packet
-     * @param players the players
+     * @param uuids the players
      */
-    private void updatePlayers(BossBarPacket packet, Set<UUID> players) {
-        Iterator<UUID> iterator = players.iterator();
+    private void updatePlayers(BossBarPacket packet, Set<UUID> uuids) {
+        Iterator<UUID> iterator = uuids.iterator();
+        Collection<Player> players = new ArrayList<>();
 
         while (iterator.hasNext()) {
             Player player = MinecraftServer.getConnectionManager().getPlayer(iterator.next());
@@ -111,9 +157,11 @@ public class BossBarManager implements BossBar.Listener {
             if (player == null) {
                 iterator.remove();
             } else {
-                player.getPlayerConnection().sendPacket(packet);
+                players.add(player);
             }
         }
+
+        PacketUtils.sendGroupedPacket(players, packet);
     }
 
     /**
