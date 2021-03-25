@@ -14,6 +14,7 @@ import net.minestom.server.utils.callback.validator.PlayerValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.zip.Deflater;
 
@@ -153,8 +154,6 @@ public final class PacketUtils {
      * {@code packetBuffer} needs to be the packet content without any header (if you want to use it to write a Minecraft packet).
      *
      * @param deflater          the deflater for zlib compression
-     * @param buffer            a cached buffer which will be used to store temporary the deflater output,
-     *                          null if you prefer the buffer to be allocated dynamically when required
      * @param packetBuffer      the buffer containing all the packet fields
      * @param compressionTarget the buffer which will receive the compressed version of {@code packetBuffer}
      */
@@ -170,15 +169,12 @@ public final class PacketUtils {
     }
 
     private static void compress(@NotNull Deflater deflater, @NotNull ByteBuf uncompressed, @NotNull ByteBuf compressed) {
-
         deflater.setInput(uncompressed.nioBuffer());
         deflater.finish();
 
         while (!deflater.finished()) {
-            compressed.writerIndex(
-                    deflater.deflate(compressed.nioBuffer(compressed.writerIndex(), compressed.writableBytes()))
-                            + compressed.writerIndex()
-            );
+            ByteBuffer nioBuffer = compressed.nioBuffer(compressed.writerIndex(), compressed.writableBytes());
+            compressed.writerIndex(deflater.deflate(nioBuffer) + compressed.writerIndex());
 
             if (compressed.writableBytes() == 0) {
                 compressed.ensureWritable(8192);
