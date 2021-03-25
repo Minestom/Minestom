@@ -911,7 +911,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         EntitySoundEffectPacket entitySoundEffectPacket = new EntitySoundEffectPacket();
         entitySoundEffectPacket.entityId = getEntityId();
         entitySoundEffectPacket.soundId = sound.getId();
-        entitySoundEffectPacket.soundCategory = soundCategory;
+        entitySoundEffectPacket.soundSource = soundCategory.asSource();
         entitySoundEffectPacket.volume = volume;
         entitySoundEffectPacket.pitch = pitch;
         playerConnection.sendPacket(entitySoundEffectPacket);
