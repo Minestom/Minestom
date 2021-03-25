@@ -143,9 +143,13 @@ public class NettyPlayerConnection extends PlayerConnection {
                                 timestamp > timedBuffer.getTimestamp();
 
                         if (shouldUpdate) {
-                            final ByteBuf buffer = PacketUtils.createFramedPacket(serverPacket, false);
+                            final ByteBuf buffer = PacketUtils.createFramedPacket(serverPacket, true);
+                            TimedBuffer oldBuffer = timedBuffer;
                             timedBuffer = new TimedBuffer(buffer, timestamp);
                             temporaryCache.cache(identifier, timedBuffer);
+                            if (oldBuffer != null) {
+                                oldBuffer.getBuffer().release();
+                            }
                         }
 
                         write(new FramedPacket(timedBuffer.getBuffer()));
@@ -172,8 +176,9 @@ public class NettyPlayerConnection extends PlayerConnection {
         } else if (message instanceof ServerPacket) {
             final ServerPacket serverPacket = (ServerPacket) message;
             synchronized (tickBuffer) {
-                final ByteBuf framedPacket = PacketUtils.createFramedPacket(serverPacket, false);
+                final ByteBuf framedPacket = PacketUtils.createFramedPacket(serverPacket, true);
                 tickBuffer.writeBytes(framedPacket);
+                framedPacket.release();
             }
             return;
         } else if (message instanceof ByteBuf) {

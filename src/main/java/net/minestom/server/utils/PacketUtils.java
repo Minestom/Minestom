@@ -158,29 +158,31 @@ public final class PacketUtils {
      * @param packetBuffer      the buffer containing all the packet fields
      * @param compressionTarget the buffer which will receive the compressed version of {@code packetBuffer}
      */
-    public static void compressBuffer(@NotNull Deflater deflater, @Nullable byte[] buffer,
-                                      @NotNull ByteBuf packetBuffer, @NotNull ByteBuf compressionTarget) {
+    public static void compressBuffer(@NotNull Deflater deflater, @NotNull ByteBuf packetBuffer, @NotNull ByteBuf compressionTarget) {
         final int packetLength = packetBuffer.readableBytes();
         final boolean compression = packetLength > MinecraftServer.getCompressionThreshold();
         Utils.writeVarIntBuf(compressionTarget, compression ? packetLength : 0);
         if (compression) {
-            compress(deflater, buffer, packetBuffer, compressionTarget);
+            compress(deflater, packetBuffer, compressionTarget);
         } else {
             compressionTarget.writeBytes(packetBuffer);
         }
     }
 
-    private static void compress(@NotNull Deflater deflater, @Nullable byte[] buffer,
-                                 @NotNull ByteBuf uncompressed, @NotNull ByteBuf compressed) {
-        // Allocate buffer if not already
-        byte[] output = buffer != null ? buffer : new byte[8192];
+    private static void compress(@NotNull Deflater deflater, @NotNull ByteBuf uncompressed, @NotNull ByteBuf compressed) {
 
         deflater.setInput(uncompressed.nioBuffer());
         deflater.finish();
 
         while (!deflater.finished()) {
-            final int length = deflater.deflate(output);
-            compressed.writeBytes(output, 0, length);
+            compressed.writerIndex(
+                    deflater.deflate(compressed.nioBuffer(compressed.writerIndex(), compressed.writableBytes()))
+                            + compressed.writerIndex()
+            );
+
+            if (compressed.writableBytes() == 0) {
+                compressed.ensureWritable(8192);
+            }
         }
 
         deflater.reset();
@@ -197,7 +199,7 @@ public final class PacketUtils {
      */
     @NotNull
     public static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket, boolean directBuffer) {
-        ByteBuf packetBuf = Unpooled.buffer();
+        ByteBuf packetBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
         writePacket(packetBuf, serverPacket);
 
         final int dataLength = packetBuf.readableBytes();
@@ -211,18 +213,19 @@ public final class PacketUtils {
                 ByteBuf compressedBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
                 Utils.writeVarIntBuf(compressedBuf, dataLength);
                 final Deflater deflater = DEFLATER.get();
-                compress(deflater, null, packetBuf, compressedBuf);
+                compress(deflater, packetBuf, compressedBuf);
+                packetBuf.release();
                 packetBuf = compressedBuf;
             } else {
                 // Packet too small
-                ByteBuf uncompressedLengthBuffer = Unpooled.buffer();
+                ByteBuf uncompressedLengthBuffer = directBuffer ? BufUtils.getBuffer(true, 1) : Unpooled.buffer();
                 Utils.writeVarIntBuf(uncompressedLengthBuffer, 0);
                 packetBuf = Unpooled.wrappedBuffer(uncompressedLengthBuffer, packetBuf);
             }
         }
 
         // Write the final length of the packet
-        ByteBuf packetLengthBuffer = Unpooled.buffer();
+        ByteBuf packetLengthBuffer = directBuffer ? BufUtils.getBuffer(true, 5) : Unpooled.buffer();
         Utils.writeVarIntBuf(packetLengthBuffer, packetBuf.readableBytes());
 
         return Unpooled.wrappedBuffer(packetLengthBuffer, packetBuf);
