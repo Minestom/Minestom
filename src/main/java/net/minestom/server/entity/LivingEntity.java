@@ -406,6 +406,18 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
+     * Applies knockback to the entity
+     * @param strength the strength of the knockback, 0.4 is the vanilla value for a bare hand hit
+     * @param x knockback on x axle, for default knockback use the following formula <pre>sin(attacker.yaw * 0.017453292)</pre>
+     * @param z knockback on z axle, for default knockback use the following formula <pre>-cos(attacker.yaw * 0.017453292)</pre>
+     */
+    @Override
+    public void takeKnockback(float strength, final double x, final double z) {
+        strength *= 1 - attributeModifiers.get(Attribute.KNOCKBACK_RESISTANCE.getKey()).getValue();
+        super.takeKnockback(strength, x, z);
+    }
+
+    /**
      * Is this entity immune to the given type of damage?
      *
      * @param type the type of damage

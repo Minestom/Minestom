@@ -691,8 +691,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      * @param x knockback on x axle, for default knockback use the following formula <pre>sin(attacker.yaw * 0.017453292)</pre>
      * @param z knockback on z axle, for default knockback use the following formula <pre>-cos(attacker.yaw * 0.017453292)</pre>
      */
-    public void takeKnockback(float strength, final double x, final double z) {
-        //TODO take into account the knockback resistance
+    public void takeKnockback(final float strength, final double x, final double z) {
         if (strength > 0) {
             final Vector velocityModifier = new Vector(x, 0d, z).normalize().multiply(strength);
             this.velocity.setX(velocity.getX() / 2d - velocityModifier.getX());
