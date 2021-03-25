@@ -1,7 +1,5 @@
 package net.minestom.server;
 
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.audience.ForwardingAudience;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.BossBarManager;
 import net.minestom.server.adventure.SerializationManager;
@@ -59,8 +57,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
 
 /**
  * The main server class used to start the server and retrieve all the managers.
@@ -68,7 +64,7 @@ import java.util.HashSet;
  * The server needs to be initialized with {@link #init()} and started with {@link #start(String, int)}.
  * You should register all of your dimensions, biomes, commands, events, etc... in-between.
  */
-public final class MinecraftServer implements ForwardingAudience {
+public final class MinecraftServer {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
@@ -831,12 +827,5 @@ public final class MinecraftServer implements ForwardingAudience {
         /*Check.stateCondition(Objects.isNull(object),
                 "You cannot access the manager before MinecraftServer#init, " +
                         "if you are developing an extension be sure to retrieve them at least after Extension#preInitialize");*/
-    }
-
-    @Override
-    public @NotNull Iterable<? extends Audience> audiences() {
-        HashSet<Audience> audiences = new HashSet<>(getConnectionManager().getOnlinePlayers());
-        audiences.add(getCommandManager().getConsoleSender());
-        return Collections.unmodifiableSet(audiences);
     }
 }
