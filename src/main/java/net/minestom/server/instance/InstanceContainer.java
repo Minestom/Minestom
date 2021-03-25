@@ -22,8 +22,6 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.block.CustomBlockUtils;
-import net.minestom.server.utils.callback.OptionalCallback;
-import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.TimeUnit;
@@ -34,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -146,7 +145,7 @@ public class InstanceContainer extends Instance {
                     "Tried to set a block to an unloaded chunk with auto chunk load disabled");
             final int chunkX = ChunkUtils.getChunkCoordinate(x);
             final int chunkZ = ChunkUtils.getChunkCoordinate(z);
-            loadChunk(chunkX, chunkZ, c -> UNSAFE_setBlock(c, x, y, z, blockStateId, customBlock, data));
+            loadChunk(chunkX, chunkZ).thenAccept(c -> UNSAFE_setBlock(c, x, y, z, blockStateId, customBlock, data));
         }
     }
 
@@ -415,30 +414,30 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void loadChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
+    public CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
         final Chunk chunk = getChunk(chunkX, chunkZ);
         if (chunk != null) {
             // Chunk already loaded
-            OptionalCallback.execute(callback, chunk);
+            return CompletableFuture.completedFuture(chunk);
         } else {
             // Retrieve chunk from somewhere else (file or create a new one using the ChunkGenerator)
-            retrieveChunk(chunkX, chunkZ, callback);
+            return retrieveChunk(chunkX, chunkZ);
         }
     }
 
     @Override
-    public void loadOptionalChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
+    public CompletableFuture<Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
         final Chunk chunk = getChunk(chunkX, chunkZ);
         if (chunk != null) {
             // Chunk already loaded
-            OptionalCallback.execute(callback, chunk);
+            return CompletableFuture.completedFuture(chunk);
         } else {
             if (hasEnabledAutoChunkLoad()) {
                 // Load chunk from StorageLocation or with ChunkGenerator
-                retrieveChunk(chunkX, chunkZ, callback);
+                return retrieveChunk(chunkX, chunkZ);
             } else {
                 // Chunk not loaded, return null
-                OptionalCallback.execute(callback, null);
+                return CompletableFuture.completedFuture(null);
             }
         }
     }
@@ -463,13 +462,13 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Saves the instance ({@link #getUniqueId()} {@link #getData()}) and call {@link #saveChunksToStorage(Runnable)}.
+     * Saves the instance ({@link #getUniqueId()} {@link #getData()}) and call {@link #saveChunksToStorage()}.
      * <p>
      * WARNING: {@link #getData()} needs to be a {@link SerializableData} in order to be saved.
      *
      * @param callback the optional callback once the saving is done
      */
-    public void saveInstance(@Nullable Runnable callback) {
+    public CompletableFuture<Void> saveInstance() {
         Check.notNull(getStorageLocation(), "You cannot save the instance if no StorageLocation has been defined");
 
         this.storageLocation.set(UUID_KEY, getUniqueId(), UUID.class);
@@ -481,49 +480,49 @@ public class InstanceContainer extends Instance {
             this.storageLocation.set(DATA_KEY, (SerializableData) getData(), SerializableData.class);
         }
 
-        saveChunksToStorage(callback);
-    }
-
-    /**
-     * Saves the instance without callback.
-     *
-     * @see #saveInstance(Runnable)
-     */
-    public void saveInstance() {
-        saveInstance(null);
+        return saveChunksToStorage();
     }
 
     @Override
-    public void saveChunkToStorage(@NotNull Chunk chunk, Runnable callback) {
-        this.chunkLoader.saveChunk(chunk, callback);
+    public CompletableFuture<Void> saveChunkToStorage(@NotNull Chunk chunk) {
+        return chunkLoader.saveChunk(chunk);
     }
 
     @Override
-    public void saveChunksToStorage(@Nullable Runnable callback) {
+    public CompletableFuture<Void> saveChunksToStorage() {
         Collection<Chunk> chunksCollection = chunks.values();
-        this.chunkLoader.saveChunks(chunksCollection, callback);
+        return chunkLoader.saveChunks(chunksCollection);
     }
 
+    @NotNull
     @Override
-    protected void retrieveChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
-        final boolean loaded = chunkLoader.loadChunk(this, chunkX, chunkZ, chunk -> {
-            cacheChunk(chunk);
-            UPDATE_MANAGER.signalChunkLoad(this, chunkX, chunkZ);
-            // Execute callback and event in the instance thread
-            scheduleNextTick(instance -> {
-                callChunkLoadEvent(chunkX, chunkZ);
-                OptionalCallback.execute(callback, chunk);
-            });
-        });
+    protected CompletableFuture<Chunk> retrieveChunk(int chunkX, int chunkZ) {
+        CompletableFuture<Chunk> completableFuture = new CompletableFuture<>();
+        chunkLoader.loadChunk(this, chunkX, chunkZ)
+                .whenComplete((chunk, throwable) -> {
+                    if (chunk != null) {
+                        // Successfully loaded
+                        cacheChunk(chunk);
+                        UPDATE_MANAGER.signalChunkLoad(this, chunkX, chunkZ);
+                        // Execute callback and event in the instance thread
+                        scheduleNextTick(instance -> {
+                            callChunkLoadEvent(chunkX, chunkZ);
+                            completableFuture.complete(chunk);
+                        });
+                    } else {
+                        // Not present
+                        createChunk(chunkX, chunkZ).whenComplete((c, t) ->
+                                completableFuture.complete(c));
+                    }
+                });
 
-        if (!loaded) {
-            // Not found, create a new chunk
-            createChunk(chunkX, chunkZ, callback);
-        }
+        // Chunk is being loaded
+        return completableFuture;
     }
 
+    @NotNull
     @Override
-    protected void createChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
+    protected CompletableFuture<Chunk> createChunk(int chunkX, int chunkZ) {
         Biome[] biomes = new Biome[Chunk.BIOME_COUNT];
         if (chunkGenerator == null) {
             Arrays.fill(biomes, MinecraftServer.getBiomeManager().getById(0));
@@ -536,18 +535,22 @@ public class InstanceContainer extends Instance {
 
         cacheChunk(chunk);
 
+        final Runnable chunkRegisterCallback = () -> {
+            UPDATE_MANAGER.signalChunkLoad(this, chunkX, chunkZ);
+            callChunkLoadEvent(chunkX, chunkZ);
+        };
+
         if (chunkGenerator != null && chunk.shouldGenerate()) {
             // Execute the chunk generator to populate the chunk
             final ChunkGenerationBatch chunkBatch = new ChunkGenerationBatch(this, chunk);
 
-            chunkBatch.generate(chunkGenerator, callback);
+            return chunkBatch.generate(chunkGenerator)
+                    .whenComplete((c, t) -> chunkRegisterCallback.run());
         } else {
             // No chunk generator, execute the callback with the empty chunk
-            OptionalCallback.execute(callback, chunk);
+            return CompletableFuture.completedFuture(chunk)
+                    .whenComplete((c, t) -> chunkRegisterCallback.run());
         }
-
-        UPDATE_MANAGER.signalChunkLoad(this, chunkX, chunkZ);
-        callChunkLoadEvent(chunkX, chunkZ);
     }
 
     @Override
@@ -572,7 +575,7 @@ public class InstanceContainer extends Instance {
      * Uses {@link DynamicChunk} by default.
      * <p>
      * WARNING: if you need to save this instance's chunks later,
-     * the code needs to be predictable for {@link IChunkLoader#loadChunk(Instance, int, int, ChunkCallback)}
+     * the code needs to be predictable for {@link IChunkLoader#loadChunk(Instance, int, int)}
      * to create the correct type of {@link Chunk}. tl;dr: Need chunk save = no random type.
      *
      * @param chunkSupplier the new {@link ChunkSupplier} of this instance, chunks need to be non-null

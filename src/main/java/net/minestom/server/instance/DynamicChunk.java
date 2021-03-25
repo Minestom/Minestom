@@ -16,8 +16,6 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.block.CustomBlockUtils;
-import net.minestom.server.utils.callback.OptionalCallback;
-import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.CooldownUtils;
 import net.minestom.server.utils.time.UpdateOption;
@@ -27,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
@@ -203,7 +202,7 @@ public class DynamicChunk extends Chunk {
     }
 
     /**
-     * Serialize this {@link Chunk} based on {@link #readChunk(BinaryReader, ChunkCallback)}
+     * Serialize this {@link Chunk} based on {@link #readChunk(BinaryReader)}
      * <p>
      * It is also used by the default {@link IChunkLoader} which is {@link MinestomBasicChunkLoader}
      *
@@ -297,7 +296,8 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void readChunk(@NotNull BinaryReader reader, ChunkCallback callback) {
+    public CompletableFuture<Chunk> readChunk(@NotNull BinaryReader reader) {
+        CompletableFuture<Chunk> completableFuture = new CompletableFuture<>();
         // Check the buffer length
         final int length = reader.available();
         Check.argCondition(length == 0, "The length of the buffer must be > 0");
@@ -375,9 +375,11 @@ public class DynamicChunk extends Chunk {
                 }
 
                 // Finished reading
-                OptionalCallback.execute(callback, this);
+                completableFuture.complete(this);
             }
         }).schedule();
+
+        return completableFuture;
     }
 
     @NotNull

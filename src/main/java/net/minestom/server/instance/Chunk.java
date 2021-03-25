@@ -18,7 +18,6 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.player.PlayerUtils;
@@ -29,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 // TODO light data & API
@@ -38,7 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Should contains all the blocks located at those positions and manage their tick updates.
  * Be aware that implementations do not need to be thread-safe, all chunks are guarded by their own instance ('this').
  * <p>
- * Chunks can be serialized using {@link #getSerializedData()} and deserialized back with {@link #readChunk(BinaryReader, ChunkCallback)},
+ * Chunks can be serialized using {@link #getSerializedData()} and deserialized back with {@link #readChunk(BinaryReader)},
  * allowing you to implement your own storage solution if needed.
  * <p>
  * You can create your own implementation of this class by extending it
@@ -210,7 +210,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * Serializes the chunk into bytes.
      *
      * @return the serialized chunk, can be null if this chunk cannot be serialized
-     * @see #readChunk(BinaryReader, ChunkCallback) which should be able to read what is written in this method
+     * @see #readChunk(BinaryReader) which should be able to read what is written in this method
      */
     public abstract byte[] getSerializedData();
 
@@ -219,14 +219,14 @@ public abstract class Chunk implements Viewable, DataContainer {
      * <p>
      * Used if the chunk is loaded from file.
      *
-     * @param reader   the data reader
-     *                 WARNING: the data will not necessary be read directly in the same thread,
-     *                 be sure that the data is only used for this reading.
-     * @param callback the optional callback to execute once the chunk is done reading
-     *                 WARNING: this need to be called to notify the instance.
+     * @param reader the data reader
+     *               WARNING: the data will not necessary be read directly in the same thread,
+     *               be sure that the data is only used for this reading.
+     * @return a {@link CompletableFuture} executed once the chunk is done reading
+     * WARNING: this need to be called to notify the instance.
      * @see #getSerializedData() which is responsible for the serialized data given
      */
-    public abstract void readChunk(@NotNull BinaryReader reader, @Nullable ChunkCallback callback);
+    public abstract CompletableFuture<Chunk> readChunk(@NotNull BinaryReader reader);
 
     /**
      * Creates a {@link ChunkDataPacket} with this chunk data ready to be written.

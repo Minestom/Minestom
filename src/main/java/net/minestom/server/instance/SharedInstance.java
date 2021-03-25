@@ -5,13 +5,13 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * The {@link SharedInstance} is an instance that shares the same chunks as its linked {@link InstanceContainer},
@@ -37,13 +37,13 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void loadChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
-        this.instanceContainer.loadChunk(chunkX, chunkZ, callback);
+    public CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
+        return instanceContainer.loadChunk(chunkX, chunkZ);
     }
 
     @Override
-    public void loadOptionalChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
-        this.instanceContainer.loadOptionalChunk(chunkX, chunkZ, callback);
+    public CompletableFuture<Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
+        return instanceContainer.loadOptionalChunk(chunkX, chunkZ);
     }
 
     @Override
@@ -57,13 +57,13 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void saveChunkToStorage(@NotNull Chunk chunk, @Nullable Runnable callback) {
-        this.instanceContainer.saveChunkToStorage(chunk, callback);
+    public CompletableFuture<Void> saveChunkToStorage(@NotNull Chunk chunk) {
+        return instanceContainer.saveChunkToStorage(chunk);
     }
 
     @Override
-    public void saveChunksToStorage(@Nullable Runnable callback) {
-        instanceContainer.saveChunksToStorage(callback);
+    public CompletableFuture<Void> saveChunksToStorage() {
+        return instanceContainer.saveChunksToStorage();
     }
 
     @Override
@@ -93,13 +93,14 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void retrieveChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
-        this.instanceContainer.retrieveChunk(chunkX, chunkZ, callback);
+    public CompletableFuture<Chunk> retrieveChunk(int chunkX, int chunkZ) {
+        return instanceContainer.retrieveChunk(chunkX, chunkZ);
     }
 
+    @NotNull
     @Override
-    protected void createChunk(int chunkX, int chunkZ, ChunkCallback callback) {
-        this.instanceContainer.createChunk(chunkX, chunkZ, callback);
+    protected CompletableFuture<Chunk> createChunk(int chunkX, int chunkZ) {
+        return instanceContainer.createChunk(chunkX, chunkZ);
     }
 
     @Override

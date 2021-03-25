@@ -49,7 +49,6 @@ import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.stat.PlayerStatistic;
 import net.minestom.server.utils.*;
-import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
@@ -64,6 +63,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -530,7 +530,7 @@ public class Player extends LivingEntity implements CommandSender {
         refreshIsDead(false);
 
         // Runnable called when teleportation is successful (after loading and sending necessary chunk)
-        teleport(respawnEvent.getRespawnPosition(), this::refreshAfterTeleport);
+        teleport(respawnEvent.getRespawnPosition()).thenRun(this::refreshAfterTeleport);
     }
 
     @Override
@@ -659,15 +659,14 @@ public class Player extends LivingEntity implements CommandSender {
                 }
             };
 
-            final ChunkCallback endCallback = chunk -> {
-                // This is the last chunk to be loaded , spawn player
-                spawnPlayer(instance, spawnPosition, firstSpawn, true, dimensionChange);
-            };
-
             // Chunk 0;0 always needs to be loaded
-            instance.loadChunk(0, 0, chunk ->
-                    // Load all the required chunks
-                    ChunkUtils.optionalLoadAll(instance, visibleChunks, eachCallback, endCallback));
+            instance.loadChunk(0, 0).thenAccept(chunk -> {
+                // Load all the required chunks
+                ChunkUtils.optionalLoadAll(instance, visibleChunks, eachCallback).thenRun(() -> {
+                    // This is the last chunk to be loaded , spawn player
+                    spawnPlayer(instance, spawnPosition, firstSpawn, true, dimensionChange);
+                });
+            });
 
         } else {
             // The player already has the good version of all the chunks.
@@ -1525,8 +1524,9 @@ public class Player extends LivingEntity implements CommandSender {
             playerConnection.sendPacket(unloadChunkPacket);*/
 
             final Chunk chunk = instance.getChunk(chunkX, chunkZ);
-            if (chunk != null)
+            if (chunk != null) {
                 chunk.removeViewer(this);
+            }
         }
 
         // Update client render distance
@@ -1538,13 +1538,14 @@ public class Player extends LivingEntity implements CommandSender {
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
 
-            this.instance.loadOptionalChunk(chunkX, chunkZ, chunk -> {
-                if (chunk == null) {
-                    // Cannot load chunk (auto load is not enabled)
-                    return;
-                }
-                chunk.addViewer(this);
-            });
+            this.instance.loadOptionalChunk(chunkX, chunkZ)
+                    .thenAccept(chunk -> {
+                        if (chunk == null) {
+                            // Cannot load chunk (auto load is not enabled)
+                            return;
+                        }
+                        chunk.addViewer(this);
+                    });
         }
     }
 
@@ -1593,24 +1594,18 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     @Override
-    public void teleport(@NotNull Position position, @Nullable long[] chunks, @Nullable Runnable callback) {
-        super.teleport(position, chunks, () -> {
+    public CompletableFuture<Void> teleport(@NotNull Position position, @Nullable long[] chunks) {
+        return super.teleport(position, chunks).whenComplete((unused, throwable) -> {
             updatePlayerPosition();
-            OptionalCallback.execute(callback);
         });
     }
 
     @Override
-    public void teleport(@NotNull Position position, @Nullable Runnable callback) {
+    public CompletableFuture<Void> teleport(@NotNull Position position) {
         final boolean sameChunk = getPosition().inSameChunk(position);
         final long[] chunks = sameChunk ? null :
                 ChunkUtils.getChunksInRange(position, getChunkRange());
-        teleport(position, chunks, callback);
-    }
-
-    @Override
-    public void teleport(@NotNull Position position) {
-        teleport(position, null);
+        return teleport(position, chunks);
     }
 
     /**

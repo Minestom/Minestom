@@ -28,8 +28,6 @@ import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
-import net.minestom.server.utils.callback.OptionalCallback;
-import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
@@ -41,6 +39,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -243,33 +242,34 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      * @param callback the optional callback executed, even if auto chunk is not enabled
      * @throws IllegalStateException if you try to teleport an entity before settings its instance
      */
-    public void teleport(@NotNull Position position, @Nullable long[] chunks, @Nullable Runnable callback) {
+    @NotNull
+    public CompletableFuture<Void> teleport(@NotNull Position position, @Nullable long[] chunks) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
 
         final Position teleportPosition = position.clone(); // Prevent synchronization issue
 
-        final ChunkCallback endCallback = (chunk) -> {
+        CompletableFuture<Void> completableFuture = new CompletableFuture<>();
+        final Runnable endCallback = () -> {
             refreshPosition(teleportPosition);
             refreshView(teleportPosition.getYaw(), teleportPosition.getPitch());
 
             sendSynchronization();
 
-            OptionalCallback.execute(callback);
+            completableFuture.complete(null);
         };
 
         if (chunks == null || chunks.length == 0) {
-            instance.loadOptionalChunk(teleportPosition, endCallback);
+            instance.loadOptionalChunk(teleportPosition).thenRun(endCallback);
         } else {
-            ChunkUtils.optionalLoadAll(instance, chunks, null, endCallback);
+            ChunkUtils.optionalLoadAll(instance, chunks, null).thenRun(endCallback);
         }
+
+        return completableFuture;
     }
 
-    public void teleport(@NotNull Position position, @Nullable Runnable callback) {
-        teleport(position, null, callback);
-    }
-
-    public void teleport(@NotNull Position position) {
-        teleport(position, null);
+    @NotNull
+    public CompletableFuture<Void> teleport(@NotNull Position position) {
+        return teleport(position, null);
     }
 
     /**
