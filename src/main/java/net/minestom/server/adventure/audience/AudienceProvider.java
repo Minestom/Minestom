@@ -82,4 +82,10 @@ public interface AudienceProvider<A> {
      * @return all matching audience members
      */
     @NotNull A of(@NotNull Predicate<Audience> filter);
+
+    /**
+     * Gets the audience registry used to register custom audiences.
+     * @return the registry
+     */
+    @NotNull AudienceRegistry registry();
 }

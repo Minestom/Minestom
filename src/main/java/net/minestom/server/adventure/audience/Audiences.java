@@ -12,7 +12,7 @@ import java.util.function.Predicate;
  * Utility class to access Adventure audiences.
  */
 public class Audiences implements AudienceProvider<Audience> {
-    private final CollectionAudienceProvider collection = new CollectionAudienceProvider();
+    private final IterableAudienceProvider collection = new IterableAudienceProvider();
 
     /**
      * Short-hand method for {@link MinecraftServer#getAudiences()}.
@@ -23,10 +23,10 @@ public class Audiences implements AudienceProvider<Audience> {
     }
 
     /**
-     * Gets the {@link CollectionAudienceProvider} instance.
+     * Gets the {@link IterableAudienceProvider} instance.
      * @return the instance
      */
-    public @NotNull CollectionAudienceProvider collection() {
+    public @NotNull IterableAudienceProvider iterable() {
         return this.collection;
     }
 
@@ -37,12 +37,12 @@ public class Audiences implements AudienceProvider<Audience> {
 
     @Override
     public @NotNull Audience players() {
-        return PacketGroupingAudience.of(this.collection().players());
+        return PacketGroupingAudience.of(this.iterable().players());
     }
 
     @Override
     public @NotNull Audience players(@NotNull Predicate<Player> filter) {
-        return PacketGroupingAudience.of(this.collection().players(filter));
+        return PacketGroupingAudience.of(this.iterable().players(filter));
     }
 
     @Override
@@ -57,21 +57,26 @@ public class Audiences implements AudienceProvider<Audience> {
 
     @Override
     public @NotNull Audience custom() {
-        return Audience.audience(this.collection().custom());
+        return Audience.audience(this.iterable().custom());
     }
 
     @Override
     public @NotNull Audience custom(@NotNull Key key) {
-        return Audience.audience(this.collection().custom(key));
+        return Audience.audience(this.iterable().custom(key));
     }
 
     @Override
     public @NotNull Audience custom(@NotNull Predicate<Audience> filter) {
-        return Audience.audience(this.collection().custom(filter));
+        return Audience.audience(this.iterable().custom(filter));
     }
 
     @Override
     public @NotNull Audience of(@NotNull Predicate<Audience> filter) {
-        return Audience.audience(this.collection().of(filter));
+        return Audience.audience(this.iterable().of(filter));
+    }
+
+    @Override
+    public @NotNull AudienceRegistry registry() {
+        return this.iterable().registry();
     }
 }

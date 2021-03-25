@@ -19,7 +19,7 @@ import java.util.stream.StreamSupport;
 /**
  * A provider of iterable audiences.
  */
-public final class CollectionAudienceProvider implements AudienceProvider<Iterable<? extends Audience>> {
+public final class IterableAudienceProvider implements AudienceProvider<Iterable<? extends Audience>> {
     private final Collection<ConsoleSender> console = Collections.singleton(MinecraftServer.getCommandManager().getConsoleSender());
     private final AudienceRegistry registry = new AudienceRegistry(new ConcurrentHashMap<>(), CopyOnWriteArrayList::new);
 
@@ -66,5 +66,10 @@ public final class CollectionAudienceProvider implements AudienceProvider<Iterab
     @Override
     public @NotNull Iterable<? extends Audience> of(@NotNull Predicate<Audience> filter) {
         return StreamSupport.stream(this.all().spliterator(), false).filter(filter).collect(Collectors.toList());
+    }
+
+    @Override
+    public @NotNull AudienceRegistry registry() {
+        return this.registry;
     }
 }
