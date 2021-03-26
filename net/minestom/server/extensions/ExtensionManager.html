@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -222,13 +222,13 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>java.util.Map&lt;java.lang.String,&#8203;<a href="../extras/selfmodification/MinestomExtensionClassLoader.html" title="class in net.minestom.server.extras.selfmodification">MinestomExtensionClassLoader</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getExtensionLoaders()">getExtensionLoaders</a></span>()</code></th>
+<td class="colFirst"><code>java.util.Collection&lt;<a href="Extension.html" title="class in net.minestom.server.extensions">Extension</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getExtensions()">getExtensions</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="Extension.html" title="class in net.minestom.server.extensions">Extension</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getExtensions()">getExtensions</a></span>()</code></th>
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasExtension(java.lang.String)">hasExtension</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
@@ -246,50 +246,44 @@ extends java.lang.Object</pre>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadExtensions()">loadExtensions</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code><a href="../extras/selfmodification/MinestomExtensionClassLoader.html" title="class in net.minestom.server.extras.selfmodification">MinestomExtensionClassLoader</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#newClassLoader(net.minestom.server.extensions.DiscoveredExtension,java.net.URL%5B%5D)">newClassLoader</a></span>&#8203;(net.minestom.server.extensions.DiscoveredExtension&nbsp;extension,
-              java.net.URL[]&nbsp;urls)</code></th>
 <td class="colLast">
-<div class="block">Creates a new class loader for the given extension.</div>
+<div class="block">Loads all extensions in the extension folder into this server.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>void</code></td>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#reload(java.lang.String)">reload</a></span>&#8203;(java.lang.String&nbsp;extensionName)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLoadOnStartup(boolean)">setLoadOnStartup</a></span>&#8203;(boolean&nbsp;loadOnStartup)</code></th>
 <td class="colLast">
 <div class="block">Used to specify if you want extensions to be loaded and initialized during startup.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shouldLoadOnStartup()">shouldLoadOnStartup</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the extensions should be loaded during startup.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shutdown()">shutdown</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Shutdowns all the extensions by unloading them.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unloadAllExtensions()">unloadAllExtensions</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Unloads all extensions</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unloadExtension(java.lang.String)">unloadExtension</a></span>&#8203;(java.lang.String&nbsp;extensionName)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -434,25 +428,46 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>loadExtensions</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;loadExtensions()</pre>
-</li>
-</ul>
-<a id="newClassLoader(net.minestom.server.extensions.DiscoveredExtension,java.net.URL[])">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>newClassLoader</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;<a href="../extras/selfmodification/MinestomExtensionClassLoader.html" title="class in net.minestom.server.extras.selfmodification">MinestomExtensionClassLoader</a>&nbsp;newClassLoader&#8203;(@NotNull
-                                                   net.minestom.server.extensions.DiscoveredExtension&nbsp;extension,
-                                                   @NotNull
-                                                   java.net.URL[]&nbsp;urls)</pre>
-<div class="block">Creates a new class loader for the given extension.
- Will add the new loader as a child of all its dependencies' loaders.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>urls</code> - <code>URL</code> (usually a JAR) that should be loaded.</dd>
-</dl>
+<div class="block">Loads all extensions in the extension folder into this server.
+ <br><br>
+
+ Pipeline:
+ <br>
+ Finds all .jar files in the extensions folder.
+ <br>
+ Per each jar:
+ <br>
+ Turns its extension.json into a DiscoveredExtension object.
+ <br>
+ Verifies that all properties of extension.json are correctly set.
+ <br><br>
+
+ It then sorts all those jars by their load order (making sure that an extension's dependencies load before it)
+ <br>
+ Note: Cyclic dependencies will stop both extensions from being loaded.
+ <br><br>
+
+ Afterwards, it loads all external dependencies and adds them to the extension's files
+ <br><br>
+
+ Then removes any invalid extensions (Invalid being its Load Status isn't SUCCESS)
+ <br><br>
+
+ After that, it set its classloaders so each extension is self-contained,
+ <br><br>
+
+ Removes invalid extensions again,
+ <br><br>
+
+ and loads all of those extensions into Minestom
+ <br>
+ (Extension fields are set via reflection after each extension is verified, then loaded.)
+ <br><br>
+
+ If the extension successfully loads, add it to the global extension Map (Name to Extension)
+ <br><br>
+
+ And finally make a scheduler to clean observers per extension.</div>
 </li>
 </ul>
 <a id="getExtensionFolder()">
@@ -472,7 +487,7 @@ public&nbsp;java.io.File&nbsp;getExtensionFolder()</pre>
 <li class="blockList">
 <h4>getExtensions</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.List&lt;<a href="Extension.html" title="class in net.minestom.server.extensions">Extension</a>&gt;&nbsp;getExtensions()</pre>
+public&nbsp;java.util.Collection&lt;<a href="Extension.html" title="class in net.minestom.server.extensions">Extension</a>&gt;&nbsp;getExtensions()</pre>
 </li>
 </ul>
 <a id="getExtension(java.lang.String)">
@@ -486,14 +501,14 @@ public&nbsp;<a href="Extension.html" title="class in net.minestom.server.extensi
                               java.lang.String&nbsp;name)</pre>
 </li>
 </ul>
-<a id="getExtensionLoaders()">
+<a id="hasExtension(java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getExtensionLoaders</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;java.util.Map&lt;java.lang.String,&#8203;<a href="../extras/selfmodification/MinestomExtensionClassLoader.html" title="class in net.minestom.server.extras.selfmodification">MinestomExtensionClassLoader</a>&gt;&nbsp;getExtensionLoaders()</pre>
+<h4>hasExtension</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;hasExtension&#8203;(@NotNull
+                            java.lang.String&nbsp;name)</pre>
 </li>
 </ul>
 <a id="reload(java.lang.String)">
@@ -502,7 +517,8 @@ public&nbsp;java.util.Map&lt;java.lang.String,&#8203;<a href="../extras/selfmodi
 <ul class="blockList">
 <li class="blockList">
 <h4>reload</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;reload&#8203;(java.lang.String&nbsp;extensionName)</pre>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;reload&#8203;(@NotNull
+                      java.lang.String&nbsp;extensionName)</pre>
 </li>
 </ul>
 <a id="loadDynamicExtension(java.io.File)">
@@ -511,7 +527,8 @@ public&nbsp;java.util.Map&lt;java.lang.String,&#8203;<a href="../extras/selfmodi
 <ul class="blockList">
 <li class="blockList">
 <h4>loadDynamicExtension</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;loadDynamicExtension&#8203;(java.io.File&nbsp;jarFile)
+<pre class="methodSignature">public&nbsp;boolean&nbsp;loadDynamicExtension&#8203;(@NotNull
+                                    java.io.File&nbsp;jarFile)
                              throws java.io.FileNotFoundException</pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -525,7 +542,8 @@ public&nbsp;java.util.Map&lt;java.lang.String,&#8203;<a href="../extras/selfmodi
 <ul class="blockList">
 <li class="blockList">
 <h4>unloadExtension</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;unloadExtension&#8203;(java.lang.String&nbsp;extensionName)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;unloadExtension&#8203;(@NotNull
+                            java.lang.String&nbsp;extensionName)</pre>
 </li>
 </ul>
 <a id="shutdown()">
