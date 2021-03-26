@@ -40,7 +40,7 @@ import java.util.function.Predicate;
 /**
  * Manages the connected clients.
  */
-public final class ConnectionManager implements PacketGroupingAudience {
+public final class ConnectionManager {
 
     private static final long KEEP_ALIVE_DELAY = 10_000;
     private static final long KEEP_ALIVE_KICK = 30_000;
@@ -152,12 +152,10 @@ public final class ConnectionManager implements PacketGroupingAudience {
      */
     @Deprecated
     public void broadcastMessage(@NotNull JsonMessage jsonMessage, @Nullable PlayerValidator condition) {
-        final Collection<Player> recipients = getRecipients(condition);
-
-        if (!recipients.isEmpty()) {
-            for (Player recipient : recipients) {
-                recipient.sendMessage(jsonMessage);
-            }
+        if (condition == null) {
+            Audiences.audiences().players().sendMessage(jsonMessage);
+        } else {
+            Audiences.audiences().players(condition).sendMessage(jsonMessage);
         }
     }
 
@@ -165,11 +163,11 @@ public final class ConnectionManager implements PacketGroupingAudience {
      * Sends a {@link JsonMessage} to all online players.
      *
      * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
-     * @deprecated Use {@link #sendMessage(Component)}
+     * @deprecated Use {@link Audience#sendMessage(Component)} on {@link Audiences#players()}
      */
     @Deprecated
     public void broadcastMessage(@NotNull JsonMessage jsonMessage) {
-        this.sendMessage(jsonMessage);
+        this.broadcastMessage(jsonMessage, null);
     }
 
     private Collection<Player> getRecipients(@Nullable PlayerValidator condition) {
@@ -554,10 +552,5 @@ public final class ConnectionManager implements PacketGroupingAudience {
      */
     public void addWaitingPlayer(@NotNull Player player) {
         this.waitingPlayers.add(player);
-    }
-
-    @Override
-    public @NotNull Collection<Player> getPlayers() {
-        return this.getOnlinePlayers();
     }
 }
