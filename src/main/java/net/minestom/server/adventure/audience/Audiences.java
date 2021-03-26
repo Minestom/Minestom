@@ -44,7 +44,7 @@ public class Audiences implements AudienceProvider<Audience> {
 
     @Override
     public @NotNull Audience all() {
-        return Audience.audience(this.server, this.custom());
+        return Audience.audience(this.server, this.customs());
     }
 
     @Override
@@ -68,8 +68,8 @@ public class Audiences implements AudienceProvider<Audience> {
     }
 
     @Override
-    public @NotNull Audience custom() {
-        return Audience.audience(this.iterable().custom());
+    public @NotNull Audience customs() {
+        return Audience.audience(this.iterable().customs());
     }
 
     @Override
@@ -78,13 +78,18 @@ public class Audiences implements AudienceProvider<Audience> {
     }
 
     @Override
-    public @NotNull Audience custom(@NotNull Predicate<Audience> filter) {
-        return Audience.audience(this.iterable().custom(filter));
+    public @NotNull Audience custom(@NotNull Key key, Predicate<Audience> filter) {
+        return Audience.audience(this.iterable().custom(key, filter));
     }
 
     @Override
-    public @NotNull Audience of(@NotNull Predicate<Audience> filter) {
-        return Audience.audience(this.iterable().of(filter));
+    public @NotNull Audience customs(@NotNull Predicate<Audience> filter) {
+        return Audience.audience(this.iterable().customs(filter));
+    }
+
+    @Override
+    public @NotNull Audience all(@NotNull Predicate<Audience> filter) {
+        return Audience.audience(this.iterable().all(filter));
     }
 
     @Override

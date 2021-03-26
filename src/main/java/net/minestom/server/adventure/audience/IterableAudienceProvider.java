@@ -25,7 +25,7 @@ public final class IterableAudienceProvider implements AudienceProvider<Iterable
 
     @Override
     public @NotNull Iterable<? extends Audience> all() {
-        return Iterables.concat(this.players(), this.console(), this.custom());
+        return Iterables.concat(this.players(), this.console(), this.customs());
     }
 
     @Override
@@ -49,7 +49,7 @@ public final class IterableAudienceProvider implements AudienceProvider<Iterable
     }
 
     @Override
-    public @NotNull Iterable<? extends Audience> custom() {
+    public @NotNull Iterable<? extends Audience> customs() {
         return this.registry.all();
     }
 
@@ -59,12 +59,17 @@ public final class IterableAudienceProvider implements AudienceProvider<Iterable
     }
 
     @Override
-    public @NotNull Iterable<? extends Audience> custom(@NotNull Predicate<Audience> filter) {
+    public @NotNull Iterable<? extends Audience> custom(@NotNull Key key, Predicate<Audience> filter) {
+        return StreamSupport.stream(this.registry.of(key).spliterator(), false).filter(filter).collect(Collectors.toList());
+    }
+
+    @Override
+    public @NotNull Iterable<? extends Audience> customs(@NotNull Predicate<Audience> filter) {
         return this.registry.of(filter);
     }
 
     @Override
-    public @NotNull Iterable<? extends Audience> of(@NotNull Predicate<Audience> filter) {
+    public @NotNull Iterable<? extends Audience> all(@NotNull Predicate<Audience> filter) {
         return StreamSupport.stream(this.all().spliterator(), false).filter(filter).collect(Collectors.toList());
     }
 
