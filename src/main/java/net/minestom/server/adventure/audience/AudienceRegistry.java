@@ -18,12 +18,14 @@ import java.util.stream.Collectors;
  * Holder of custom audiences.
  */
 public class AudienceRegistry {
+
     private final Map<Key, Collection<Audience>> registry;
     private final Function<Key, Collection<Audience>> provider;
 
     /**
      * Creates a new audience registrar with a given backing map.
-     * @param backingMap the backing map
+     *
+     * @param backingMap        the backing map
      * @param backingCollection a provider for the backing collection
      */
     public AudienceRegistry(@NotNull Map<Key, Collection<Audience>> backingMap, @NotNull Supplier<Collection<Audience>> backingCollection) {
@@ -33,6 +35,7 @@ public class AudienceRegistry {
 
     /**
      * Checks if this registry is empty.
+     *
      * @return {@code true} if it is, {@code false} otherwise
      */
     public boolean isEmpty() {
@@ -41,7 +44,8 @@ public class AudienceRegistry {
 
     /**
      * Adds some audiences to the registry.
-     * @param keyed the provider of the key
+     *
+     * @param keyed     the provider of the key
      * @param audiences the audiences
      */
     public void register(@NotNull Keyed keyed, @NotNull Audience... audiences) {
@@ -50,7 +54,8 @@ public class AudienceRegistry {
 
     /**
      * Adds some audiences to the registry.
-     * @param keyed the provider of the key
+     *
+     * @param keyed     the provider of the key
      * @param audiences the audiences
      */
     public void register(@NotNull Keyed keyed, @NotNull Collection<Audience> audiences) {
@@ -59,7 +64,8 @@ public class AudienceRegistry {
 
     /**
      * Adds some audiences to the registry.
-     * @param key the key to store the audiences under
+     *
+     * @param key       the key to store the audiences under
      * @param audiences the audiences
      */
     public void register(@NotNull Key key, @NotNull Audience... audiences) {
@@ -72,7 +78,8 @@ public class AudienceRegistry {
 
     /**
      * Adds some audiences to the registry.
-     * @param key the key to store the audiences under
+     *
+     * @param key       the key to store the audiences under
      * @param audiences the audiences
      */
     public void register(@NotNull Key key, @NotNull Collection<Audience> audiences) {
@@ -83,6 +90,7 @@ public class AudienceRegistry {
 
     /**
      * Gets every audience in the registry.
+     *
      * @return an iterable containing every audience member
      */
     public @NotNull Iterable<? extends Audience> all() {
@@ -95,6 +103,7 @@ public class AudienceRegistry {
 
     /**
      * Gets every audience in the registry under a specific key.
+     *
      * @param keyed the key provider
      * @return an iterable containing the audience members
      */
@@ -104,6 +113,7 @@ public class AudienceRegistry {
 
     /**
      * Gets every audience in the registry under a specific key.
+     *
      * @param key the key
      * @return an iterable containing the audience members
      */
@@ -113,6 +123,7 @@ public class AudienceRegistry {
 
     /**
      * Gets every audience member in the registry who matches a given predicate.
+     *
      * @param filter the predicate
      * @return the matching audience members
      */

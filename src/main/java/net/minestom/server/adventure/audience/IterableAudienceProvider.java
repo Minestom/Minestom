@@ -20,12 +20,11 @@ import java.util.stream.StreamSupport;
  * A provider of iterable audiences.
  */
 class IterableAudienceProvider implements AudienceProvider<Iterable<? extends Audience>> {
-    private final Collection<ConsoleSender> console;
-    private final AudienceRegistry registry;
 
-    IterableAudienceProvider() {
-        this.console = Collections.singleton(MinecraftServer.getCommandManager().getConsoleSender());
-        this.registry = new AudienceRegistry(new ConcurrentHashMap<>(), CopyOnWriteArrayList::new);
+    private final Collection<ConsoleSender> console = Collections.singleton(MinecraftServer.getCommandManager().getConsoleSender());
+    private final AudienceRegistry registry = new AudienceRegistry(new ConcurrentHashMap<>(), CopyOnWriteArrayList::new);
+
+    protected IterableAudienceProvider() {
     }
 
     @Override

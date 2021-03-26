@@ -1,20 +1,14 @@
 package net.minestom.server.adventure.bossbar;
 
-import com.google.common.collect.MapMaker;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
-import net.kyori.adventure.bossbar.BossBar.Color;
-import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.player.PlayerDisconnectEvent;
-import net.minestom.server.network.packet.server.play.BossBarPacket;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Manages all boss bars known to this Minestom instance. Although this class can be used
@@ -29,17 +23,16 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * @see Audience#hideBossBar(BossBar)
  */
 public class BossBarManager {
-    private final BossBarListener listener;
-    private final Map<UUID, Set<BossBarHolder>> playerBars;
-    final Map<BossBar, BossBarHolder> bars;
+    private final BossBarListener listener = new BossBarListener(this);
+    private final Map<UUID, Set<BossBarHolder>> playerBars = new ConcurrentHashMap<>();
+    final Map<BossBar, BossBarHolder> bars = new ConcurrentHashMap<>();
 
     /**
      * Creates a new boss bar manager.
+     *
+     * @see MinecraftServer#getBossBarManager()
      */
     public BossBarManager() {
-        this.listener = new BossBarListener(this);
-        this.playerBars = new ConcurrentHashMap<>();
-        this.bars = new ConcurrentHashMap<>();
     }
 
     /**
@@ -47,7 +40,7 @@ public class BossBarManager {
      * boss bar if needed.
      *
      * @param player the intended viewer
-     * @param bar the boss bar to show
+     * @param bar    the boss bar to show
      */
     public void addBossBar(@NotNull Player player, @NotNull BossBar bar) {
         BossBarHolder holder = this.getOrCreateHandler(bar);
@@ -62,7 +55,7 @@ public class BossBarManager {
      * Removes the specified player from the boss bar's viewers and despawns the boss bar.
      *
      * @param player the intended viewer
-     * @param bar the boss bar to hide
+     * @param bar    the boss bar to hide
      */
     public void removeBossBar(@NotNull Player player, @NotNull BossBar bar) {
         BossBarHolder holder = this.getOrCreateHandler(bar);
@@ -78,7 +71,7 @@ public class BossBarManager {
      * boss bar if needed.
      *
      * @param players the players
-     * @param bar the boss bar
+     * @param bar     the boss bar
      */
     public void addBossBar(@NotNull Collection<Player> players, @NotNull BossBar bar) {
         BossBarHolder holder = this.getOrCreateHandler(bar);
@@ -100,7 +93,7 @@ public class BossBarManager {
      * Removes the specified players from the boss bar's viewers and despawns the boss bar.
      *
      * @param players the intended viewers
-     * @param bar the boss bar to hide
+     * @param bar     the boss bar to hide
      */
     public void removeBossBar(@NotNull Collection<Player> players, @NotNull BossBar bar) {
         BossBarHolder holder = this.getOrCreateHandler(bar);
@@ -156,7 +149,6 @@ public class BossBarManager {
      * Gets or creates a handler for this bar.
      *
      * @param bar the bar
-     *
      * @return the handler
      */
     private @NotNull BossBarHolder getOrCreateHandler(@NotNull BossBar bar) {

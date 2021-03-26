@@ -1,6 +1,5 @@
 package net.minestom.server.adventure.audience;
 
-import com.google.common.collect.ImmutableList;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.audience.MessageType;
@@ -30,6 +29,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
      * Creates a packet grouping audience that copies an iterable of players. The
      * underlying collection is not copied, so changes to the collection will be
      * reflected in the audience.
+     *
      * @param players the players
      * @return the audience
      */
@@ -39,6 +39,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
 
     /**
      * Gets an iterable of the players this audience contains.
+     *
      * @return the connections
      */
     @NotNull Collection<Player> getPlayers();

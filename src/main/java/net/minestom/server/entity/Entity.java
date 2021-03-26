@@ -59,9 +59,9 @@ import java.util.function.UnaryOperator;
  */
 public class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler, HoverEventSource<ShowEntity> {
 
-    private static final Map<Integer, Entity> entityById = new ConcurrentHashMap<>();
-    private static final Map<UUID, Entity> entityByUuid = new ConcurrentHashMap<>();
-    private static final AtomicInteger lastEntityId = new AtomicInteger();
+    private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
+    private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
+    private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
 
     protected Instance instance;
     protected final Position position;
@@ -138,8 +138,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
         setAutoViewable(true);
 
-        Entity.entityById.put(id, this);
-        Entity.entityByUuid.put(uuid, this);
+        Entity.ENTITY_BY_ID.put(id, this);
+        Entity.ENTITY_BY_UUID.put(uuid, this);
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -180,7 +180,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      */
     @Nullable
     public static Entity getEntity(int id) {
-        return Entity.entityById.getOrDefault(id, null);
+        return Entity.ENTITY_BY_ID.getOrDefault(id, null);
     }
 
     /**
@@ -191,7 +191,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      */
     @Nullable
     public static Entity getEntity(@NotNull UUID uuid) {
-        return Entity.entityByUuid.getOrDefault(uuid, null);
+        return Entity.ENTITY_BY_UUID.getOrDefault(uuid, null);
     }
 
 
@@ -203,7 +203,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      * @return a newly generated entity id
      */
     public static int generateId() {
-        return lastEntityId.incrementAndGet();
+        return LAST_ENTITY_ID.incrementAndGet();
     }
 
     /**
@@ -762,8 +762,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      */
     public void setUuid(@NotNull UUID uuid) {
         // Refresh internal map
-        Entity.entityByUuid.remove(this.uuid);
-        Entity.entityByUuid.put(uuid, this);
+        Entity.ENTITY_BY_UUID.remove(this.uuid);
+        Entity.ENTITY_BY_UUID.put(uuid, this);
 
         this.uuid = uuid;
     }
@@ -1440,8 +1440,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     public void remove() {
         this.removed = true;
         this.shouldRemove = true;
-        Entity.entityById.remove(id);
-        Entity.entityByUuid.remove(uuid);
+        Entity.ENTITY_BY_ID.remove(id);
+        Entity.ENTITY_BY_UUID.remove(uuid);
         if (instance != null)
             instance.UNSAFE_removeEntity(this);
     }

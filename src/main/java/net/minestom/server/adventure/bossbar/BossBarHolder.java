@@ -21,20 +21,20 @@ import static net.minestom.server.network.packet.server.play.BossBarPacket.Actio
  * use {@link BossBarManager} to manage boss bars for players.
  */
 final class BossBarHolder implements Viewable {
-    final UUID uuid;
-    final BossBar bar;
-    final Set<Player> players;
-    boolean registered;
+
+    protected final UUID uuid = UUID.randomUUID();
+    protected final Set<Player> players = new CopyOnWriteArraySet<>();
+    protected final BossBar bar;
+    protected boolean registered;
 
     BossBarHolder(@NotNull BossBar bar) {
-        this.uuid = UUID.randomUUID();
         this.bar = bar;
-        this.players = new CopyOnWriteArraySet<>();
         this.registered = false;
     }
 
     @NotNull BossBarPacket createRemovePacket() {
-        return this.createGenericPacket(REMOVE, packet -> {});
+        return this.createGenericPacket(REMOVE, packet -> {
+        });
     }
 
     @NotNull BossBarPacket createAddPacket() {

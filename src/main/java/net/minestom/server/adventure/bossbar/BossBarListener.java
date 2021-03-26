@@ -20,6 +20,7 @@ class BossBarListener implements BossBar.Listener {
 
     /**
      * Creates a new boss bar listener.
+     *
      * @param manager the manager instance
      */
     BossBarListener(BossBarManager manager) {

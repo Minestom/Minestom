@@ -14,17 +14,17 @@ import java.util.stream.Collectors;
  * {@link IterableAudienceProvider}.
  */
 class SingleAudienceProvider implements AudienceProvider<Audience> {
-    final IterableAudienceProvider collection;
-    final Audience players, server;
 
-    SingleAudienceProvider() {
-        this.collection = new IterableAudienceProvider();
-        this.players = PacketGroupingAudience.of(MinecraftServer.getConnectionManager().getOnlinePlayers());
-        this.server = Audience.audience(this.players, MinecraftServer.getCommandManager().getConsoleSender());
+    protected final IterableAudienceProvider collection = new IterableAudienceProvider();
+    protected final Audience players = PacketGroupingAudience.of(MinecraftServer.getConnectionManager().getOnlinePlayers());
+    protected final Audience server = Audience.audience(this.players, MinecraftServer.getCommandManager().getConsoleSender());
+
+    protected SingleAudienceProvider() {
     }
 
     /**
      * Gets the {@link IterableAudienceProvider} instance.
+     *
      * @return the instance
      */
     public @NotNull IterableAudienceProvider iterable() {
