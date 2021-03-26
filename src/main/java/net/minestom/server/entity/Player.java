@@ -134,7 +134,6 @@ public class Player extends LivingEntity implements CommandSender {
     private final Set<Player> targetBreakers = Collections.singleton(this);
 
     // Position synchronization with viewers
-    private long lastPlayerSynchronizationTime;
     private double lastPlayerSyncX, lastPlayerSyncY, lastPlayerSyncZ;
     private float lastPlayerSyncYaw, lastPlayerSyncPitch;
 
@@ -407,8 +406,6 @@ public class Player extends LivingEntity implements CommandSender {
 
         // Multiplayer sync
         if (!viewers.isEmpty()) {
-            this.lastPlayerSynchronizationTime = time;
-
             final boolean positionChanged = position.getX() != lastPlayerSyncX ||
                     position.getY() != lastPlayerSyncY ||
                     position.getZ() != lastPlayerSyncZ;
