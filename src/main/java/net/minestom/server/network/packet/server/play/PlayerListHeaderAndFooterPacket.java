@@ -25,8 +25,8 @@ public class PlayerListHeaderAndFooterPacket implements ComponentHoldingServerPa
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeComponent(Objects.requireNonNullElse(header, Component.empty()));
-        writer.writeComponent(Objects.requireNonNullElse(footer, Component.empty()));
+        writer.writeComponent(Objects.requireNonNullElseGet(header, Component::empty));
+        writer.writeComponent(Objects.requireNonNullElseGet(footer, Component::empty));
     }
 
     @Override
