@@ -71,10 +71,12 @@ public class NettyPlayerConnection extends PlayerConnection {
     @Override
     public void update() {
         // Flush
-        if (channel.isActive()) {
-            writeWaitingPackets();
-            this.channel.flush();
-        }
+        this.channel.eventLoop().submit(() -> {
+            if (channel.isActive()) {
+                writeWaitingPackets();
+                this.channel.flush();
+            }
+        });
         // Network stats
         super.update();
     }
