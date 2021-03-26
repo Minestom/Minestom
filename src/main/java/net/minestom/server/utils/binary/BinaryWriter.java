@@ -69,8 +69,8 @@ public class BinaryWriter extends OutputStream {
      *
      * @param component the component
      */
-    public void writeComponent(Component component) {
-        this.writeSizedString(AdventureSerializer.serialize(Objects.requireNonNullElseGet(component, Component::empty)));
+    public void writeComponent(@NotNull Component component) {
+        this.writeSizedString(AdventureSerializer.serialize(component));
     }
 
     /**

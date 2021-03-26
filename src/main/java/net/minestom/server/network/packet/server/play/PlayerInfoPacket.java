@@ -10,6 +10,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.UnaryOperator;
 
 public class PlayerInfoPacket implements ComponentHoldingServerPacket {
@@ -19,7 +20,7 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
 
     public PlayerInfoPacket(Action action) {
         this.action = action;
-        this.playerInfos = new ArrayList<>();
+        this.playerInfos = new CopyOnWriteArrayList<>();
     }
 
     @Override
