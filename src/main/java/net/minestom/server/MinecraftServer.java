@@ -750,7 +750,6 @@ public final class MinecraftServer {
             // Load extensions
             extensionManager.loadExtensions();
             // Init extensions
-            // TODO: Extensions should handle depending on each other and have a load-order.
             extensionManager.getExtensions().forEach(Extension::preInitialize);
             extensionManager.getExtensions().forEach(Extension::initialize);
             extensionManager.getExtensions().forEach(Extension::postInitialize);

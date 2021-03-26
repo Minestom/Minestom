@@ -25,7 +25,7 @@ public class ReloadExtensionCommand extends Command {
     static {
         ReloadExtensionCommand.extensionsName = MinecraftServer.getExtensionManager().getExtensions()
                 .stream()
-                .map(extension -> extension.getDescription().getName())
+                .map(extension -> extension.getOrigin().getName())
                 .toArray(String[]::new);
     }
 
