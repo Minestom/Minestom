@@ -230,7 +230,7 @@ public final class DiscoveredExtension {
 
         MinestomExtensionClassLoader loader = new MinestomExtensionClassLoader(this.getName(), this.getEntrypoint(), urls, root);
 
-        if (this.getDependencies().length == 0) {
+        if (this.getDependencies().length == 0 || MinecraftServer.getExtensionManager() == null) {
             // orphaned extension, we can insert it directly
             root.addChild(loader);
         } else {
