@@ -11,6 +11,7 @@ import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.storage.systems.FileStorageSystem;
+import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 
@@ -21,6 +22,7 @@ public class Main {
         MinecraftServer minecraftServer = MinecraftServer.init();
 
         // MinecraftServer.setShouldProcessNettyErrors(true);
+        MinecraftServer.setCompressionThreshold(0);
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerCustomBlock(new CustomBlockSample());

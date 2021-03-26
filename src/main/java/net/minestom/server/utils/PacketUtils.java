@@ -7,14 +7,17 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.netty.packet.FramedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
+import net.minestom.server.utils.debug.DebugUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.zip.Deflater;
 
@@ -184,21 +187,12 @@ public final class PacketUtils {
         deflater.reset();
     }
 
-    /**
-     * Creates a "framed packet" (packet which can be send and understood by a Minecraft client)
-     * from a server packet, directly into an output buffer.
-     * <p>
-     * Can be used if you want to store a raw buffer and send it later without the additional writing cost.
-     * Compression is applied if {@link MinecraftServer#getCompressionThreshold()} is greater than 0.
-     *
-     * @param serverPacket the server packet to write
-     */
-    @NotNull
-    public static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket, boolean directBuffer) {
-        ByteBuf packetBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
-        writePacket(packetBuf, serverPacket);
+    public static void writeFramedPacket(@NotNull ByteBuf buffer,
+                                            @NotNull ServerPacket serverPacket, boolean directBuffer) {
+        ByteBuf packetBuf = null;//directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
+        //writePacket(packetBuf, serverPacket);
 
-        final int dataLength = packetBuf.readableBytes();
+        final int dataLength = 0;//packetBuf.readableBytes();
 
         final int compressionThreshold = MinecraftServer.getCompressionThreshold();
         final boolean compression = compressionThreshold > 0;
@@ -212,19 +206,60 @@ public final class PacketUtils {
                 compress(deflater, packetBuf, compressedBuf);
                 packetBuf.release();
                 packetBuf = compressedBuf;
+
+                // Write the final length of the packet
+                Utils.writeVarIntBuf(buffer, packetBuf.readableBytes());
+                buffer.writeBytes(packetBuf);
             } else {
                 // Packet too small
-                ByteBuf uncompressedLengthBuffer = Unpooled.buffer();
-                Utils.writeVarIntBuf(uncompressedLengthBuffer, 0);
-                packetBuf = Unpooled.wrappedBuffer(uncompressedLengthBuffer, packetBuf);
+                Utils.writeVarIntBuf(buffer, packetBuf.readableBytes()+1); // +1 for the 0 varint
+                Utils.writeVarIntBuf(buffer, 0);
+                buffer.writeBytes(packetBuf);
             }
+        }else{
+            // No compression
+            final int hardcodedSize = 3;
+            final int index = buffer.writerIndex();
+            for(int i=0;i<hardcodedSize;i++){
+                buffer.writeByte(0b10000000);
+            }
+
+            writePacket(buffer, serverPacket);
+            final int afterIndex = buffer.writerIndex();
+
+            final int packetSize = (afterIndex-index)-hardcodedSize;
+            {
+                ByteBuf test = Unpooled.buffer();
+                Utils.writeVarIntBuf(test, packetSize);
+                int offset = hardcodedSize-test.readableBytes();
+                System.out.println("test "+offset);
+                buffer.setBytes(index, test);
+            }
+
+            if(index == 0){
+                //System.out.println("test "+ Utils.readVarInt(buffer)+" "+packetSize);
+            }
+
+            //System.out.println("test "+packetSize+" "+serverPacket.getClass().getSimpleName()+" "+varintSize);
+            //Utils.writeVarIntBuf(buffer, packetBuf.readableBytes());
+            //buffer.writeBytes(packetBuf);
         }
+    }
 
-        // Write the final length of the packet
-        ByteBuf packetLengthBuffer = Unpooled.buffer();
-        Utils.writeVarIntBuf(packetLengthBuffer, packetBuf.readableBytes());
-
-        return Unpooled.wrappedBuffer(packetLengthBuffer, packetBuf);
+    /**
+     * Creates a "framed packet" (packet which can be send and understood by a Minecraft client)
+     * from a server packet, directly into an output buffer.
+     * <p>
+     * Can be used if you want to store a raw buffer and send it later without the additional writing cost.
+     * Compression is applied if {@link MinecraftServer#getCompressionThreshold()} is greater than 0.
+     *
+     * @param serverPacket the server packet to write
+     */
+    @NotNull
+    public static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket, boolean directBuffer) {
+        ByteBuf packetBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
+        writeFramedPacket(packetBuf, serverPacket, directBuffer);
+        return packetBuf;
     }
 
 }
