@@ -119,7 +119,6 @@ public final class MinecraftServer {
     private static BiomeManager biomeManager;
     private static AdvancementManager advancementManager;
     private static BossBarManager bossBarManager;
-    private static Audiences audiences;
 
     private static ExtensionManager extensionManager;
 
@@ -186,7 +185,6 @@ public final class MinecraftServer {
         biomeManager = new BiomeManager();
         advancementManager = new AdvancementManager();
         bossBarManager = new BossBarManager();
-        audiences = new Audiences();
 
         updateManager = new UpdateManager();
 
@@ -442,16 +440,6 @@ public final class MinecraftServer {
     public static BossBarManager getBossBarManager() {
         checkInitStatus(bossBarManager);
         return bossBarManager;
-    }
-
-    /**
-     * Gets the audiences instance.
-     *
-     * @return the audiences instance
-     */
-    public static Audiences getAudiences() {
-        checkInitStatus(audiences);
-        return audiences;
     }
 
     /**
