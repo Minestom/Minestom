@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.MessageFormat;
 import java.util.Objects;
 
 /**
@@ -19,6 +20,13 @@ public final class Check {
     public static void notNull(@Nullable Object object, @NotNull String reason) {
         if (Objects.isNull(object)) {
             throw new NullPointerException(reason);
+        }
+    }
+
+    @Contract("null, _, _ -> fail")
+    public static void notNull(@Nullable Object object, @NotNull String reason, Object... arguments) {
+        if (Objects.isNull(object)) {
+            throw new NullPointerException(MessageFormat.format(reason, arguments));
         }
     }
 
