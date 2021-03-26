@@ -7,6 +7,7 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
@@ -19,7 +20,7 @@ public class GamemodeCommand extends Command {
     public GamemodeCommand() {
         super("gamemode", "g", "gm");
 
-        setCondition(this::isAllowed);
+        setCondition(Conditions::playerOnly);
 
         setDefaultExecutor(this::usage);
 
@@ -68,13 +69,5 @@ public class GamemodeCommand extends Command {
 
     private void gameModeCallback(CommandSender sender, ArgumentSyntaxException exception) {
         sender.sendMessage(Component.text("'" + exception.getInput() + "' is not a valid gamemode!"));
-    }
-
-    private boolean isAllowed(CommandSender sender, String commandString) {
-        if (!sender.isPlayer()) {
-            sender.sendMessage(Component.text("The command is only available for player"));
-            return false;
-        }
-        return true;
     }
 }

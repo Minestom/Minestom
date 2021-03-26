@@ -1,35 +1,22 @@
 package demo.commands;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.CommandProcessor;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.entity.Player;
+import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandContext;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * A simple shutdown command.
  */
-public class ShutdownCommand implements CommandProcessor {
+public class ShutdownCommand extends Command {
 
-    @NotNull
-    @Override
-    public String getCommandName() {
-        return "shutdown";
+    public ShutdownCommand() {
+        super("shutdown");
+        addSyntax(this::execute);
     }
 
-    @Override
-    public String[] getAliases() {
-        return new String[0];
-    }
-
-    @Override
-    public boolean process(@NotNull CommandSender sender, @NotNull String command, @NotNull String[] args) {
+    private void execute(@NotNull CommandSender commandSender, @NotNull CommandContext commandContext) {
         MinecraftServer.stopCleanly();
-        return true;
-    }
-
-    @Override
-    public boolean hasAccess(@NotNull Player player) {
-        return true;
     }
 }

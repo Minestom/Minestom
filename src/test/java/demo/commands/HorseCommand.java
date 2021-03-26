@@ -5,6 +5,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
@@ -19,7 +20,7 @@ public class HorseCommand extends Command {
 
     public HorseCommand() {
         super("horse");
-        setCondition(this::condition);
+        setCondition(Conditions::playerOnly);
         setDefaultExecutor(this::defaultExecutor);
         var babyArg = ArgumentType.Boolean("baby");
         var markingArg = ArgumentType.Enum("marking", HorseMeta.Marking.class);
@@ -30,16 +31,8 @@ public class HorseCommand extends Command {
         addSyntax(this::onHorseCommand, babyArg, markingArg, colorArg);
     }
 
-    private boolean condition(CommandSender sender, String commandString) {
-        if (!sender.isPlayer()) {
-            sender.sendMessage(Component.text("The command is only available for player"));
-            return false;
-        }
-        return true;
-    }
-
     private void defaultExecutor(CommandSender sender, CommandContext context) {
-        sender.sendMessage("Correct usage: horse [baby] [marking] [color]");
+        sender.sendMessage(Component.text("Correct usage: /horse <baby> <marking> <color>"));
     }
 
     private void onBabyError(CommandSender sender, ArgumentSyntaxException exception) {
@@ -70,6 +63,7 @@ public class HorseCommand extends Command {
         var meta = (HorseMeta) horse.getEntityMeta();
         meta.setBaby(baby);
         meta.setVariant(new HorseMeta.Variant(marking, color));
+        //noinspection ConstantConditions - It should be impossible to execute a command without being in an instance
         horse.setInstance(player.getInstance(), player.getPosition());
     }
 

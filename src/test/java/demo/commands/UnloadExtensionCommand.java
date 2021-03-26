@@ -6,6 +6,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.extensions.Extension;
@@ -18,16 +19,19 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
 public class UnloadExtensionCommand extends Command {
+
+    private final ArgumentString extensionName;
+
     public UnloadExtensionCommand() {
         super("unload");
 
         setDefaultExecutor(this::usage);
 
-        Argument extension = ArgumentType.DynamicStringArray("extensionName");
+        extensionName = ArgumentType.String("extensionName");
 
-        setArgumentCallback(this::extensionCallback, extension);
+        setArgumentCallback(this::extensionCallback, extensionName);
 
-        addSyntax(this::execute, extension);
+        addSyntax(this::execute, extensionName);
     }
 
     private void usage(CommandSender sender, CommandContext context) {
@@ -35,7 +39,7 @@ public class UnloadExtensionCommand extends Command {
     }
 
     private void execute(CommandSender sender, CommandContext context) {
-        String name = join(context.getStringArray("extensionName"));
+        final String name = context.get(extensionName);
         sender.sendMessage(Component.text("extensionName = " + name + "...."));
 
         ExtensionManager extensionManager = MinecraftServer.getExtensionManager();
@@ -51,7 +55,7 @@ public class UnloadExtensionCommand extends Command {
                     baos.flush();
                     baos.close();
                     String contents = baos.toString(StandardCharsets.UTF_8);
-                    contents.lines().forEach(sender::sendMessage);
+                    contents.lines().map(Component::text).forEach(sender::sendMessage);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -63,17 +67,5 @@ public class UnloadExtensionCommand extends Command {
 
     private void extensionCallback(CommandSender sender, ArgumentSyntaxException exception) {
         sender.sendMessage(Component.text("'" + exception.getInput() + "' is not a valid extension name!"));
-    }
-
-    private String join(String[] extensionNameParts) {
-        StringBuilder b = new StringBuilder();
-        for (int i = 0; i < extensionNameParts.length; i++) {
-            String s = extensionNameParts[i];
-            if (i != 0) {
-                b.append(StringUtils.SPACE);
-            }
-            b.append(s);
-        }
-        return b.toString();
     }
 }
