@@ -50,7 +50,7 @@ import java.util.function.Consumer;
 /**
  * Could be a player, a monster, or an object.
  * <p>
- * To create your own entity you probably want to extends {@link ObjectEntity} or {@link EntityCreature} instead.
+ * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
 public class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler {
 
