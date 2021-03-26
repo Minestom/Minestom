@@ -345,7 +345,9 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
         PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getEntityType().getSpawnType().getSpawnPacket(this));
-        playerConnection.sendPacket(getVelocityPacket());
+        if (hasVelocity()) {
+            playerConnection.sendPacket(getVelocityPacket());
+        }
         playerConnection.sendPacket(getMetadataPacket());
 
         // Passenger
