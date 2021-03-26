@@ -27,7 +27,9 @@ import java.util.Collection;
 public interface PacketGroupingAudience extends ForwardingAudience {
 
     /**
-     * Creates a packet grouping audience that wraps a collection of players.
+     * Creates a packet grouping audience that copies an iterable of players. The
+     * underlying collection is not copied, so changes to the collection will be
+     * reflected in the audience.
      * @param players the players
      * @return the audience
      */
@@ -36,16 +38,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
     }
 
     /**
-     * Creates a packet grouping audience that copies an iterable of players.
-     * @param players the players
-     * @return the audience
-     */
-    static PacketGroupingAudience of(Iterable<Player> players) {
-        return () -> ImmutableList.copyOf(players);
-    }
-
-    /**
-     * Gets an collection of players this audience contains.
+     * Gets an iterable of the players this audience contains.
      * @return the connections
      */
     @NotNull Collection<Player> getPlayers();
