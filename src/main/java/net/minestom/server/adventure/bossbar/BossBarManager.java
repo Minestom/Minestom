@@ -92,7 +92,7 @@ public class BossBarManager {
         }
 
         if (!addedPlayers.isEmpty()) {
-            PacketUtils.sendGroupedPacket(players, holder.createAddPacket());
+            PacketUtils.sendGroupedPacket(addedPlayers, holder.createAddPacket());
         }
     }
 
@@ -114,7 +114,7 @@ public class BossBarManager {
         }
 
         if (!removedPlayers.isEmpty()) {
-            PacketUtils.sendGroupedPacket(players, holder.createRemovePacket());
+            PacketUtils.sendGroupedPacket(removedPlayers, holder.createRemovePacket());
         }
     }
 
