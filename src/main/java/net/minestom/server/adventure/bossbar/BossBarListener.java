@@ -3,9 +3,11 @@ package net.minestom.server.adventure.bossbar;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * A listener for boss bar updates. This class is not intended for public use and it is
@@ -26,31 +28,35 @@ class BossBarListener implements BossBar.Listener {
 
     @Override
     public void bossBarNameChanged(@NotNull BossBar bar, @NotNull Component oldName, @NotNull Component newName) {
-        BossBarHolder holder = this.manager.bars.get(bar);
-        this.manager.updatePlayers(holder.createTitleUpdate(newName), holder.players);
+        this.doIfRegistered(bar, holder -> PacketUtils.sendGroupedPacket(holder.players, holder.createTitleUpdate(newName)));
     }
 
     @Override
     public void bossBarProgressChanged(@NotNull BossBar bar, float oldProgress, float newProgress) {
-        BossBarHolder holder = this.manager.bars.get(bar);
-        this.manager.updatePlayers(holder.createPercentUpdate(newProgress), holder.players);
+        this.doIfRegistered(bar, holder -> PacketUtils.sendGroupedPacket(holder.players, holder.createPercentUpdate(newProgress)));
+
     }
 
     @Override
     public void bossBarColorChanged(@NotNull BossBar bar, @NotNull BossBar.Color oldColor, @NotNull BossBar.Color newColor) {
-        BossBarHolder holder = this.manager.bars.get(bar);
-        this.manager.updatePlayers(holder.createColorUpdate(newColor), holder.players);
+        this.doIfRegistered(bar, holder -> PacketUtils.sendGroupedPacket(holder.players, holder.createColorUpdate(newColor)));
     }
 
     @Override
     public void bossBarOverlayChanged(@NotNull BossBar bar, BossBar.@NotNull Overlay oldOverlay, BossBar.@NotNull Overlay newOverlay) {
-        BossBarHolder holder = this.manager.bars.get(bar);
-        this.manager.updatePlayers(holder.createOverlayUpdate(newOverlay), holder.players);
+        this.doIfRegistered(bar, holder -> PacketUtils.sendGroupedPacket(holder.players, holder.createOverlayUpdate(newOverlay)));
     }
 
     @Override
     public void bossBarFlagsChanged(@NotNull BossBar bar, @NotNull Set<BossBar.Flag> flagsAdded, @NotNull Set<BossBar.Flag> flagsRemoved) {
+        this.doIfRegistered(bar, holder -> PacketUtils.sendGroupedPacket(holder.players, holder.createFlagsUpdate()));
+    }
+
+    private void doIfRegistered(@NotNull BossBar bar, @NotNull Consumer<BossBarHolder> consumer) {
         BossBarHolder holder = this.manager.bars.get(bar);
-        this.manager.updatePlayers(holder.createFlagsUpdate(), holder.players);
+
+        if (holder != null && holder.registered) {
+            consumer.accept(holder);
+        }
     }
 }

@@ -13,6 +13,8 @@ import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Manages all boss bars known to this Minestom instance. Although this class can be used
@@ -27,9 +29,8 @@ import java.util.*;
  * @see Audience#hideBossBar(BossBar)
  */
 public class BossBarManager {
-    private static final int CONCURRENCY_LEVEL = 4;
-
     private final BossBarListener listener;
+    private final Map<UUID, Set<BossBarHolder>> playerBars;
     final Map<BossBar, BossBarHolder> bars;
 
     /**
@@ -37,9 +38,8 @@ public class BossBarManager {
      */
     public BossBarManager() {
         this.listener = new BossBarListener(this);
-        this.bars = new MapMaker().concurrencyLevel(CONCURRENCY_LEVEL).weakKeys().makeMap();
-
-        MinecraftServer.getGlobalEventHandler().addEventCallback(PlayerDisconnectEvent.class, this::onDisconnect);
+        this.playerBars = new ConcurrentHashMap<>();
+        this.bars = new ConcurrentHashMap<>();
     }
 
     /**
@@ -54,6 +54,7 @@ public class BossBarManager {
 
         if (holder.addViewer(player)) {
             player.getPlayerConnection().sendPacket(holder.createAddPacket());
+            this.playerBars.computeIfAbsent(player.getUuid(), uuid -> new HashSet<>()).add(holder);
         }
     }
 
@@ -68,6 +69,7 @@ public class BossBarManager {
 
         if (holder.removeViewer(player)) {
             player.getPlayerConnection().sendPacket(holder.createRemovePacket());
+            this.removePlayer(player, holder);
         }
     }
 
@@ -85,6 +87,7 @@ public class BossBarManager {
         for (Player player : players) {
             if (holder.addViewer(player)) {
                 addedPlayers.add(player);
+                this.playerBars.computeIfAbsent(player.getUuid(), uuid -> new HashSet<>()).add(holder);
             }
         }
 
@@ -106,6 +109,7 @@ public class BossBarManager {
         for (Player player : players) {
             if (holder.removeViewer(player)) {
                 removedPlayers.add(player);
+                this.removePlayer(player, holder);
             }
         }
 
@@ -115,27 +119,37 @@ public class BossBarManager {
     }
 
     /**
-     * Sends the packet to all players in the set, removing them if they no longer exist
-     * in the connection manager.
+     * Completely destroys a boss bar, removing it from all players.
      *
-     * @param packet the packet
-     * @param uuids the players
+     * @param bossBar the boss bar
      */
-    void updatePlayers(BossBarPacket packet, Set<UUID> uuids) {
-        Iterator<UUID> iterator = uuids.iterator();
-        Collection<Player> players = new ArrayList<>();
+    public void destroyBossBar(@NotNull BossBar bossBar) {
+        BossBarHolder holder = this.bars.remove(bossBar);
 
-        while (iterator.hasNext()) {
-            Player player = MinecraftServer.getConnectionManager().getPlayer(iterator.next());
+        if (holder != null) {
+            PacketUtils.sendGroupedPacket(holder.players, holder.createRemovePacket());
 
-            if (player == null) {
-                iterator.remove();
-            } else {
-                players.add(player);
+            for (Player player : holder.players) {
+                this.removePlayer(player, holder);
             }
         }
+    }
 
-        PacketUtils.sendGroupedPacket(players, packet);
+    /**
+     * Removes a player from all of their boss bars. Note that this method does not
+     * send any removal packets to the player. It is meant to be used when a player is
+     * disconnecting from the server.
+     *
+     * @param player the player
+     */
+    public void removeAllBossBars(@NotNull Player player) {
+        Set<BossBarHolder> holders = this.playerBars.remove(player.getUuid());
+
+        if (holders != null) {
+            for (BossBarHolder holder : holders) {
+                holder.removeViewer(player);
+            }
+        }
     }
 
     /**
@@ -146,25 +160,22 @@ public class BossBarManager {
      * @return the handler
      */
     private @NotNull BossBarHolder getOrCreateHandler(@NotNull BossBar bar) {
-        BossBarHolder holder = this.bars.computeIfAbsent(bar, BossBarHolder::new);
-
-        if (!holder.registered) {
+        return this.bars.computeIfAbsent(bar, key -> {
+            BossBarHolder holder = new BossBarHolder(key);
             bar.addListener(this.listener);
-            holder.registered = true;
-        }
-
-        return holder;
+            return holder;
+        });
     }
 
-    /**
-     * Called when a player disconnects. This removes the player from any boss bars they
-     * may be subscribed to.
-     *
-     * @param event the event
-     */
-    private void onDisconnect(@NotNull PlayerDisconnectEvent event) {
-        for (BossBarHolder holder : this.bars.values()) {
-            holder.players.remove(event.getPlayer().getUuid());
+    private void removePlayer(Player player, BossBarHolder holder) {
+        Set<BossBarHolder> holders = this.playerBars.get(player.getUuid());
+
+        if (holders != null) {
+            holders.remove(holder);
+
+            if (holders.isEmpty()) {
+                this.playerBars.remove(player.getUuid());
+            }
         }
     }
 }

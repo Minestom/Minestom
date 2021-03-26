@@ -2,17 +2,16 @@ package net.minestom.server.adventure.bossbar;
 
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.BossBarPacket;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
 import static net.minestom.server.network.packet.server.play.BossBarPacket.Action.*;
@@ -24,13 +23,13 @@ import static net.minestom.server.network.packet.server.play.BossBarPacket.Actio
 final class BossBarHolder implements Viewable {
     final UUID uuid;
     final BossBar bar;
-    final Set<UUID> players;
+    final Set<Player> players;
     boolean registered;
 
     BossBarHolder(@NotNull BossBar bar) {
         this.uuid = UUID.randomUUID();
         this.bar = bar;
-        this.players = ConcurrentHashMap.newKeySet();
+        this.players = new CopyOnWriteArraySet<>();
         this.registered = false;
     }
 
@@ -88,26 +87,16 @@ final class BossBarHolder implements Viewable {
 
     @Override
     public boolean addViewer(@NotNull Player player) {
-        return this.players.add(player.getUuid());
+        return this.players.add(player);
     }
 
     @Override
     public boolean removeViewer(@NotNull Player player) {
-        return this.players.remove(player.getUuid());
+        return this.players.remove(player);
     }
 
     @Override
     public @NotNull Set<Player> getViewers() {
-        Set<Player> playerList = new HashSet<>();
-
-        for (UUID uuid : this.players) {
-            Player player = MinecraftServer.getConnectionManager().getPlayer(uuid);
-
-            if (player != null) {
-                playerList.add(player);
-            }
-        }
-
-        return playerList;
+        return Collections.unmodifiableSet(this.players);
     }
 }

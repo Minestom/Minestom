@@ -54,7 +54,6 @@ import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
-import net.minestom.server.registry.Registries;
 import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
@@ -578,6 +577,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 }
             }
         }
+
+        MinecraftServer.getBossBarManager().removeAllBossBars(this);
 
         // Advancement tabs cache
         {
