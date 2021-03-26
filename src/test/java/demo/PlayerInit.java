@@ -4,6 +4,7 @@ import demo.generator.ChunkGeneratorDemo;
 import demo.generator.NoiseTestGenerator;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Entity;
@@ -28,9 +29,7 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterPacket;
 import net.minestom.server.ping.ResponseDataConsumer;
-import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
@@ -80,13 +79,8 @@ public class PlayerInit {
             ramUsage /= 1e6; // bytes to MB
 
             final Component header = Component.text("RAM USAGE: " + ramUsage + " MB");
-            final Component footer = Component.text(benchmarkManager.getCpuMonitoringMessage());
-
-            {
-                PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket(header, footer);
-
-                PacketUtils.sendGroupedPacket(players, playerListHeaderAndFooterPacket);
-            }
+            final Component footer = benchmarkManager.getCpuMonitoringMessage();
+            Audiences.audiences().players().sendPlayerListHeaderAndFooter(header, footer);
 
         }).repeat(10, TimeUnit.TICK).schedule();
 

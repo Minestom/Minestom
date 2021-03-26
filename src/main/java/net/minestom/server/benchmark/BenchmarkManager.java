@@ -107,7 +107,7 @@ public final class BenchmarkManager {
     }
 
     @NotNull
-    public String getCpuMonitoringMessage() {
+    public Component getCpuMonitoringMessage() {
         Check.stateCondition(!enabled, "CPU monitoring is only possible when the benchmark manager is enabled.");
         TextComponent.Builder benchmarkMessage = Component.text();
         for (Map.Entry<String, ThreadResult> resultEntry : resultMap.entrySet()) {
@@ -127,7 +127,7 @@ public final class BenchmarkManager {
             benchmarkMessage.append(Component.newline());
         }
 
-        return AdventureSerializer.serialize(benchmarkMessage.build());
+        return benchmarkMessage.build();
     }
 
     private void refreshData() {
