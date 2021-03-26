@@ -192,6 +192,7 @@ public final class PacketUtils {
         final int hardcodedVarIntSize = 3;
 
         if (compression) {
+            // Dummy varint
             final int packetLengthIndex = Utils.writeEmptyVarInt(buffer, hardcodedVarIntSize);
             final int dataLengthIndex = Utils.writeEmptyVarInt(buffer, hardcodedVarIntSize);
 
@@ -199,7 +200,6 @@ public final class PacketUtils {
             final int contentIndex = buffer.writerIndex();
             writePacket(buffer, serverPacket);
             final int afterIndex = buffer.writerIndex();
-            //System.out.println("test "+contentIndex+" "+afterIndex);
             final int packetSize = (afterIndex - dataLengthIndex) - hardcodedVarIntSize;
 
             if (packetSize >= compressionThreshold) {
@@ -217,6 +217,7 @@ public final class PacketUtils {
                 buffer.writerIndex(contentIndex + compressedBuf.writerIndex());
                 compressedBuf.release();
 
+                // Update header values
                 Utils.overrideVarInt(buffer, packetLengthIndex, hardcodedVarIntSize, totalPacketLength);
                 Utils.overrideVarInt(buffer, dataLengthIndex, hardcodedVarIntSize, packetSize);
             } else {
