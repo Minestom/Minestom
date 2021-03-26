@@ -156,15 +156,15 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.timer.SchedulerManager,java.lang.Runnable)">TaskBuilder</a></span>&#8203;(<a href="SchedulerManager.html" title="class in net.minestom.server.timer">SchedulerManager</a>&nbsp;schedulerManager,
-           java.lang.Runnable&nbsp;runnable)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.timer.SchedulerManager,java.lang.Runnable)">TaskBuilder</a></span>&#8203;(@NotNull <a href="SchedulerManager.html" title="class in net.minestom.server.timer">SchedulerManager</a>&nbsp;schedulerManager,
+           @NotNull java.lang.Runnable&nbsp;runnable)</code></th>
 <td class="colLast">
 <div class="block">Creates a task builder.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.timer.SchedulerManager,java.lang.Runnable,boolean)">TaskBuilder</a></span>&#8203;(<a href="SchedulerManager.html" title="class in net.minestom.server.timer">SchedulerManager</a>&nbsp;schedulerManager,
-           java.lang.Runnable&nbsp;runnable,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.timer.SchedulerManager,java.lang.Runnable,boolean)">TaskBuilder</a></span>&#8203;(@NotNull <a href="SchedulerManager.html" title="class in net.minestom.server.timer">SchedulerManager</a>&nbsp;schedulerManager,
+           @NotNull java.lang.Runnable&nbsp;runnable,
            boolean&nbsp;shutdown)</code></th>
 <td class="colLast">
 <div class="block">Creates a task builder.</div>
@@ -189,23 +189,23 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clearDelay()">clearDelay</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Clears the delay interval of the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clearRepeat()">clearRepeat</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Clears the repeat interval of the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#delay(long,net.minestom.server.utils.time.TimeUnit)">delay</a></span>&#8203;(long&nbsp;time,
-     <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit)</code></th>
+     @NotNull <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit)</code></th>
 <td class="colLast">
 <div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should delay its execution by the specified amount of time.</div>
 </td>
@@ -220,15 +220,15 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#repeat(long,net.minestom.server.utils.time.TimeUnit)">repeat</a></span>&#8203;(long&nbsp;time,
-      <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit)</code></th>
+      @NotNull <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit)</code></th>
 <td class="colLast">
 <div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should continue to run after waiting for the specified value until it is terminated.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code><a href="Task.html" title="class in net.minestom.server.timer">Task</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="Task.html" title="class in net.minestom.server.timer">Task</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#schedule()">schedule</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Schedules this <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> for execution.</div>
@@ -265,9 +265,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>TaskBuilder</h4>
 <pre>public&nbsp;TaskBuilder&#8203;(@NotNull
-                   <a href="SchedulerManager.html" title="class in net.minestom.server.timer">SchedulerManager</a>&nbsp;schedulerManager,
+                   @NotNull <a href="SchedulerManager.html" title="class in net.minestom.server.timer">SchedulerManager</a>&nbsp;schedulerManager,
                    @NotNull
-                   java.lang.Runnable&nbsp;runnable)</pre>
+                   @NotNull java.lang.Runnable&nbsp;runnable)</pre>
 <div class="block">Creates a task builder.
  <br>
  <b>Note:</b> The task builder creates a normal task.</div>
@@ -285,9 +285,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>TaskBuilder</h4>
 <pre>public&nbsp;TaskBuilder&#8203;(@NotNull
-                   <a href="SchedulerManager.html" title="class in net.minestom.server.timer">SchedulerManager</a>&nbsp;schedulerManager,
+                   @NotNull <a href="SchedulerManager.html" title="class in net.minestom.server.timer">SchedulerManager</a>&nbsp;schedulerManager,
                    @NotNull
-                   java.lang.Runnable&nbsp;runnable,
+                   @NotNull java.lang.Runnable&nbsp;runnable,
                    boolean&nbsp;shutdown)</pre>
 <div class="block">Creates a task builder.</div>
 <dl>
@@ -315,9 +315,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>delay</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;delay&#8203;(long&nbsp;time,
-                         @NotNull
-                         <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit)</pre>
+public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;delay&#8203;(long&nbsp;time,
+                                  @NotNull
+                                  @NotNull <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit)</pre>
 <div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should delay its execution by the specified amount of time.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -335,9 +335,9 @@ public&nbsp;<a href="TaskBuilder.html" title="class in net.minestom.server.timer
 <li class="blockList">
 <h4>repeat</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;repeat&#8203;(long&nbsp;time,
-                          @NotNull
-                          <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit)</pre>
+public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;repeat&#8203;(long&nbsp;time,
+                                   @NotNull
+                                   @NotNull <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit)</pre>
 <div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should continue to run after waiting for the specified value until it is terminated.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -355,7 +355,7 @@ public&nbsp;<a href="TaskBuilder.html" title="class in net.minestom.server.timer
 <li class="blockList">
 <h4>clearDelay</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;clearDelay()</pre>
+public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;clearDelay()</pre>
 <div class="block">Clears the delay interval of the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -370,7 +370,7 @@ public&nbsp;<a href="TaskBuilder.html" title="class in net.minestom.server.timer
 <li class="blockList">
 <h4>clearRepeat</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;clearRepeat()</pre>
+public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;clearRepeat()</pre>
 <div class="block">Clears the repeat interval of the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -397,7 +397,7 @@ public&nbsp;<a href="TaskBuilder.html" title="class in net.minestom.server.timer
 <li class="blockList">
 <h4>schedule</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="Task.html" title="class in net.minestom.server.timer">Task</a>&nbsp;schedule()</pre>
+public&nbsp;@NotNull <a href="Task.html" title="class in net.minestom.server.timer">Task</a>&nbsp;schedule()</pre>
 <div class="block">Schedules this <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> for execution.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

@@ -217,14 +217,14 @@ extends <a href="Argument.html" title="class in net.minestom.server.command.buil
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="ArgumentWord.html" title="class in net.minestom.server.command.builder.arguments">ArgumentWord</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#from(java.lang.String...)">from</a></span>&#8203;(java.lang.String...&nbsp;restrictions)</code></th>
+<td class="colFirst"><code>@NotNull <a href="ArgumentWord.html" title="class in net.minestom.server.command.builder.arguments">ArgumentWord</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#from(java.lang.String...)">from</a></span>&#8203;(@Nullable java.lang.String...&nbsp;restrictions)</code></th>
 <td class="colLast">
 <div class="block">Used to force the use of a few precise words instead of complete freedom.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>java.lang.String[]</code></td>
+<td class="colFirst"><code>@Nullable java.lang.String[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRestrictions()">getRestrictions</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the word restrictions.</div>
@@ -238,8 +238,8 @@ extends <a href="Argument.html" title="class in net.minestom.server.command.buil
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>java.lang.String</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(java.lang.String&nbsp;input)</code></th>
+<td class="colFirst"><code>@NotNull java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(@NotNull java.lang.String&nbsp;input)</code></th>
 <td class="colLast">
 <div class="block">Parses the given input, and throw an <a href="../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
  if the input cannot be convert to <code>T</code></div>
@@ -247,7 +247,7 @@ extends <a href="Argument.html" title="class in net.minestom.server.command.buil
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></span>&#8203;(<a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></span>&#8203;(@NotNull <a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
             boolean&nbsp;executable)</code></th>
 <td class="colLast">
 <div class="block">Turns the argument into a list of nodes for command dispatching.</div>
@@ -355,8 +355,8 @@ extends <a href="Argument.html" title="class in net.minestom.server.command.buil
 <li class="blockList">
 <h4>from</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="ArgumentWord.html" title="class in net.minestom.server.command.builder.arguments">ArgumentWord</a>&nbsp;from&#8203;(@Nullable
-                         java.lang.String...&nbsp;restrictions)</pre>
+public&nbsp;@NotNull <a href="ArgumentWord.html" title="class in net.minestom.server.command.builder.arguments">ArgumentWord</a>&nbsp;from&#8203;(@Nullable
+                                  @Nullable java.lang.String...&nbsp;restrictions)</pre>
 <div class="block">Used to force the use of a few precise words instead of complete freedom.
  <p>
  WARNING: having an array too long would result in a packet too big or the client being stuck during login.</div>
@@ -379,9 +379,9 @@ public&nbsp;<a href="ArgumentWord.html" title="class in net.minestom.server.comm
 <li class="blockList">
 <h4>parse</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.lang.String&nbsp;parse&#8203;(@NotNull
-                              java.lang.String&nbsp;input)
-                       throws <a href="../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></pre>
+public&nbsp;@NotNull java.lang.String&nbsp;parse&#8203;(@NotNull
+                                       @NotNull java.lang.String&nbsp;input)
+                                throws <a href="../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Argument.html#parse(java.lang.String)">Argument</a></code></span></div>
 <div class="block">Parses the given input, and throw an <a href="../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
  if the input cannot be convert to <code>T</code></div>
@@ -404,7 +404,7 @@ public&nbsp;java.lang.String&nbsp;parse&#8203;(@NotNull
 <li class="blockList">
 <h4>processNodes</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;processNodes&#8203;(@NotNull
-                         <a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
+                         @NotNull <a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
                          boolean&nbsp;executable)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Argument.html#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">Argument</a></code></span></div>
 <div class="block">Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.</div>
@@ -438,7 +438,7 @@ public&nbsp;java.lang.String&nbsp;parse&#8203;(@NotNull
 <li class="blockList">
 <h4>getRestrictions</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;java.lang.String[]&nbsp;getRestrictions()</pre>
+public&nbsp;@Nullable java.lang.String[]&nbsp;getRestrictions()</pre>
 <div class="block">Gets all the word restrictions.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

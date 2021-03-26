@@ -158,6 +158,18 @@ extends java.lang.Object</pre>
               <a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;color,
               <a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;fadeColor)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#%3Cinit%3E(boolean,boolean,net.minestom.server.item.firework.FireworkEffectType,net.minestom.server.color.Color,net.minestom.server.color.Color)"><code>FireworkEffect(boolean, boolean, FireworkEffectType, Color, Color)</code></a></div>
+</div>
+</td>
+</tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(boolean,boolean,net.minestom.server.item.firework.FireworkEffectType,net.minestom.server.color.Color,net.minestom.server.color.Color)">FireworkEffect</a></span>&#8203;(boolean&nbsp;flicker,
+              boolean&nbsp;trail,
+              <a href="FireworkEffectType.html" title="enum in net.minestom.server.item.firework">FireworkEffectType</a>&nbsp;type,
+              <a href="../../color/Color.html" title="class in net.minestom.server.color">Color</a>&nbsp;color,
+              <a href="../../color/Color.html" title="class in net.minestom.server.color">Color</a>&nbsp;fadeColor)</code></th>
+<td class="colLast">
 <div class="block">Initializes a new firework effect.</div>
 </td>
 </tr>
@@ -192,7 +204,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="FireworkEffect.html" title="class in net.minestom.server.item.firework">FireworkEffect</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromCompound(org.jglrxavpok.hephaistos.nbt.NBTCompound)">fromCompound</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromCompound(org.jglrxavpok.hephaistos.nbt.NBTCompound)">fromCompound</a></span>&#8203;(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
 <div class="block">Retrieves a firework effect from the given <code>compound</code>.</div>
 </td>
@@ -263,14 +275,40 @@ extends java.lang.Object</pre>
 <a id="&lt;init&gt;(boolean,boolean,net.minestom.server.item.firework.FireworkEffectType,net.minestom.server.chat.ChatColor,net.minestom.server.chat.ChatColor)">
 <!--   -->
 </a>
+<ul class="blockList">
+<li class="blockList">
+<h4>FireworkEffect</h4>
+<pre>@Deprecated
+public&nbsp;FireworkEffect&#8203;(boolean&nbsp;flicker,
+                      boolean&nbsp;trail,
+                      <a href="FireworkEffectType.html" title="enum in net.minestom.server.item.firework">FireworkEffectType</a>&nbsp;type,
+                      <a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;color,
+                      <a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;fadeColor)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#%3Cinit%3E(boolean,boolean,net.minestom.server.item.firework.FireworkEffectType,net.minestom.server.color.Color,net.minestom.server.color.Color)"><code>FireworkEffect(boolean, boolean, FireworkEffectType, Color, Color)</code></a></div>
+</div>
+<div class="block">Initializes a new firework effect.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>flicker</code> - <code>true</code> if this explosion has the Twinkle effect (glowstone dust), otherwise <code>false</code>.</dd>
+<dd><code>trail</code> - <code>true</code> if this explosion hsa the Trail effect (diamond), otherwise <code>false</code>.</dd>
+<dd><code>type</code> - The shape of this firework's explosion.</dd>
+<dd><code>color</code> - The primary color of this firework effect.</dd>
+<dd><code>fadeColor</code> - The secondary color of this firework effect.</dd>
+</dl>
+</li>
+</ul>
+<a id="&lt;init&gt;(boolean,boolean,net.minestom.server.item.firework.FireworkEffectType,net.minestom.server.color.Color,net.minestom.server.color.Color)">
+<!--   -->
+</a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>FireworkEffect</h4>
 <pre>public&nbsp;FireworkEffect&#8203;(boolean&nbsp;flicker,
                       boolean&nbsp;trail,
                       <a href="FireworkEffectType.html" title="enum in net.minestom.server.item.firework">FireworkEffectType</a>&nbsp;type,
-                      <a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;color,
-                      <a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;fadeColor)</pre>
+                      <a href="../../color/Color.html" title="class in net.minestom.server.color">Color</a>&nbsp;color,
+                      <a href="../../color/Color.html" title="class in net.minestom.server.color">Color</a>&nbsp;fadeColor)</pre>
 <div class="block">Initializes a new firework effect.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -299,7 +337,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>fromCompound</h4>
 <pre class="methodSignature">public static&nbsp;<a href="FireworkEffect.html" title="class in net.minestom.server.item.firework">FireworkEffect</a>&nbsp;fromCompound&#8203;(@NotNull
-                                          org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
+                                          @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
 <div class="block">Retrieves a firework effect from the given <code>compound</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

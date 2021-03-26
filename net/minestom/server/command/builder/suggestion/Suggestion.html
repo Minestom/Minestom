@@ -152,7 +152,7 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,int,int)">Suggestion</a></span>&#8203;(java.lang.String&nbsp;input,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,int,int)">Suggestion</a></span>&#8203;(@NotNull java.lang.String&nbsp;input,
           int&nbsp;start,
           int&nbsp;length)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -177,16 +177,16 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addEntry(net.minestom.server.command.builder.suggestion.SuggestionEntry)">addEntry</a></span>&#8203;(<a href="SuggestionEntry.html" title="class in net.minestom.server.command.builder.suggestion">SuggestionEntry</a>&nbsp;entry)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addEntry(net.minestom.server.command.builder.suggestion.SuggestionEntry)">addEntry</a></span>&#8203;(@NotNull <a href="SuggestionEntry.html" title="class in net.minestom.server.command.builder.suggestion">SuggestionEntry</a>&nbsp;entry)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="SuggestionEntry.html" title="class in net.minestom.server.command.builder.suggestion">SuggestionEntry</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.List&lt;<a href="SuggestionEntry.html" title="class in net.minestom.server.command.builder.suggestion">SuggestionEntry</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntries()">getEntries</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colFirst"><code>@NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInput()">getInput</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -241,7 +241,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>Suggestion</h4>
 <pre>public&nbsp;Suggestion&#8203;(@NotNull
-                  java.lang.String&nbsp;input,
+                  @NotNull java.lang.String&nbsp;input,
                   int&nbsp;start,
                   int&nbsp;length)</pre>
 </li>
@@ -263,7 +263,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getInput</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.lang.String&nbsp;getInput()</pre>
+public&nbsp;@NotNull java.lang.String&nbsp;getInput()</pre>
 </li>
 </ul>
 <a id="getStart()">
@@ -309,7 +309,7 @@ public&nbsp;java.lang.String&nbsp;getInput()</pre>
 <li class="blockList">
 <h4>getEntries</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.List&lt;<a href="SuggestionEntry.html" title="class in net.minestom.server.command.builder.suggestion">SuggestionEntry</a>&gt;&nbsp;getEntries()</pre>
+public&nbsp;@NotNull java.util.List&lt;<a href="SuggestionEntry.html" title="class in net.minestom.server.command.builder.suggestion">SuggestionEntry</a>&gt;&nbsp;getEntries()</pre>
 </li>
 </ul>
 <a id="addEntry(net.minestom.server.command.builder.suggestion.SuggestionEntry)">
@@ -319,7 +319,7 @@ public&nbsp;java.util.List&lt;<a href="SuggestionEntry.html" title="class in net
 <li class="blockList">
 <h4>addEntry</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;addEntry&#8203;(@NotNull
-                     <a href="SuggestionEntry.html" title="class in net.minestom.server.command.builder.suggestion">SuggestionEntry</a>&nbsp;entry)</pre>
+                     @NotNull <a href="SuggestionEntry.html" title="class in net.minestom.server.command.builder.suggestion">SuggestionEntry</a>&nbsp;entry)</pre>
 </li>
 </ul>
 </li>

@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":18,"i1":18,"i2":18,"i3":6,"i4":18};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
+var data = {"i0":50,"i1":18,"i2":18,"i3":18,"i4":6,"i5":18,"i6":18};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
@@ -123,7 +123,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
+<dd><code>net.kyori.adventure.audience.Audience</code>, <code>net.kyori.adventure.audience.ForwardingAudience</code>, <code><a href="../adventure/audience/PacketGroupingAudience.html" title="interface in net.minestom.server.adventure.audience">PacketGroupingAudience</a></code>, <code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
@@ -131,7 +131,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <hr>
 <pre>public interface <span class="typeNameLabel">Scoreboard</span>
-extends <a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></pre>
+extends <a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a>, <a href="../adventure/audience/PacketGroupingAudience.html" title="interface in net.minestom.server.adventure.audience">PacketGroupingAudience</a></pre>
 <div class="block">This interface represents all scoreboard of Minecraft.</div>
 </li>
 </ul>
@@ -139,6 +139,23 @@ extends <a href="../Viewable.html" title="interface in net.minestom.server">View
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="nested.class.summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a id="nested.classes.inherited.from.class.net.kyori.adventure.audience.ForwardingAudience">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from interface&nbsp;net.kyori.adventure.audience.ForwardingAudience</h3>
+<code>net.kyori.adventure.audience.ForwardingAudience.Single</code></li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ========== METHOD SUMMARY =========== -->
 <section role="region">
 <ul class="blockList">
@@ -147,42 +164,59 @@ extends <a href="../Viewable.html" title="interface in net.minestom.server">View
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t5" class="tableTab"><span><a href="javascript:show(16);">Default Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t5" class="tableTab"><span><a href="javascript:show(16);">Default Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>default <a href="../network/packet/server/play/ScoreboardObjectivePacket.html" title="class in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket</a></code></td>
+<td class="colFirst"><code>default @NotNull <a href="../network/packet/server/play/ScoreboardObjectivePacket.html" title="class in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCreationObjectivePacket(java.lang.String,net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket.Type)">getCreationObjectivePacket</a></span>&#8203;(java.lang.String&nbsp;value,
+                          <a href="../network/packet/server/play/ScoreboardObjectivePacket.Type.html" title="enum in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket.Type</a>&nbsp;type)</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#getCreationObjectivePacket(net.kyori.adventure.text.Component,net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket.Type)"><code>getCreationObjectivePacket(Component, ScoreboardObjectivePacket.Type)</code></a></div>
+</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>default @NotNull <a href="../network/packet/server/play/ScoreboardObjectivePacket.html" title="class in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCreationObjectivePacket(net.kyori.adventure.text.Component,net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket.Type)">getCreationObjectivePacket</a></span>&#8203;(net.kyori.adventure.text.Component&nbsp;value,
                           <a href="../network/packet/server/play/ScoreboardObjectivePacket.Type.html" title="enum in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket.Type</a>&nbsp;type)</code></th>
 <td class="colLast">
 <div class="block">Creates a creation objective packet.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>default <a href="../network/packet/server/play/ScoreboardObjectivePacket.html" title="class in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket</a></code></td>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>default @NotNull <a href="../network/packet/server/play/ScoreboardObjectivePacket.html" title="class in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDestructionObjectivePacket()">getDestructionObjectivePacket</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Creates the destruction objective packet.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>default <a href="../network/packet/server/play/DisplayScoreboardPacket.html" title="class in net.minestom.server.network.packet.server.play">DisplayScoreboardPacket</a></code></td>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>default @NotNull <a href="../network/packet/server/play/DisplayScoreboardPacket.html" title="class in net.minestom.server.network.packet.server.play">DisplayScoreboardPacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDisplayScoreboardPacket(byte)">getDisplayScoreboardPacket</a></span>&#8203;(byte&nbsp;position)</code></th>
 <td class="colLast">
 <div class="block">Creates the <a href="../network/packet/server/play/DisplayScoreboardPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>DisplayScoreboardPacket</code></a>.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>java.lang.String</code></td>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>@NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getObjectiveName()">getObjectiveName</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the objective name of the scoreboard.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>default @NotNull java.util.Collection&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayers()">getPlayers</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets an iterable of the players this audience contains.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>default void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateScore(net.minestom.server.entity.Player,int)">updateScore</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
            int&nbsp;score)</code></th>
@@ -192,11 +226,32 @@ extends <a href="../Viewable.html" title="interface in net.minestom.server">View
 </tr>
 </table>
 <ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.kyori.adventure.audience.Audience">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.kyori.adventure.audience.Audience</h3>
+<code>openBook, sendActionBar, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendPlayerListFooter, sendPlayerListHeader, sendPlayerListHeaderAndFooter</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.kyori.adventure.audience.ForwardingAudience">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.kyori.adventure.audience.ForwardingAudience</h3>
+<code>openBook, playSound, sendMessage, sendPlayerListFooter, sendPlayerListHeader</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.adventure.audience.PacketGroupingAudience">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.minestom.server.adventure.audience.<a href="../adventure/audience/PacketGroupingAudience.html" title="interface in net.minestom.server.adventure.audience">PacketGroupingAudience</a></h3>
+<code><a href="../adventure/audience/PacketGroupingAudience.html#audiences()">audiences</a>, <a href="../adventure/audience/PacketGroupingAudience.html#clearTitle()">clearTitle</a>, <a href="../adventure/audience/PacketGroupingAudience.html#hideBossBar(net.kyori.adventure.bossbar.BossBar)">hideBossBar</a>, <a href="../adventure/audience/PacketGroupingAudience.html#playSound(net.kyori.adventure.sound.Sound,double,double,double)">playSound</a>, <a href="../adventure/audience/PacketGroupingAudience.html#resetTitle()">resetTitle</a>, <a href="../adventure/audience/PacketGroupingAudience.html#sendActionBar(net.kyori.adventure.text.Component)">sendActionBar</a>, <a href="../adventure/audience/PacketGroupingAudience.html#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)">sendMessage</a>, <a href="../adventure/audience/PacketGroupingAudience.html#sendPlayerListHeaderAndFooter(net.kyori.adventure.text.Component,net.kyori.adventure.text.Component)">sendPlayerListHeaderAndFooter</a>, <a href="../adventure/audience/PacketGroupingAudience.html#showBossBar(net.kyori.adventure.bossbar.BossBar)">showBossBar</a>, <a href="../adventure/audience/PacketGroupingAudience.html#showTitle(net.kyori.adventure.title.Title)">showTitle</a>, <a href="../adventure/audience/PacketGroupingAudience.html#stopSound(net.kyori.adventure.sound.SoundStop)">stopSound</a></code></li>
+</ul>
+<ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.Viewable">
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;net.minestom.server.<a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></h3>
-<code><a href="../Viewable.html#addViewer(net.minestom.server.entity.Player)">addViewer</a>, <a href="../Viewable.html#getViewers()">getViewers</a>, <a href="../Viewable.html#isViewer(net.minestom.server.entity.Player)">isViewer</a>, <a href="../Viewable.html#removeViewer(net.minestom.server.entity.Player)">removeViewer</a>, <a href="../Viewable.html#sendPacketsToViewers(net.minestom.server.network.packet.server.ServerPacket...)">sendPacketsToViewers</a>, <a href="../Viewable.html#sendPacketToViewers(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewers</a>, <a href="../Viewable.html#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewersAndSelf</a></code></li>
+<code><a href="../Viewable.html#addViewer(net.minestom.server.entity.Player)">addViewer</a>, <a href="../Viewable.html#getViewers()">getViewers</a>, <a href="../Viewable.html#getViewersAsAudience()">getViewersAsAudience</a>, <a href="../Viewable.html#getViewersAsAudiences()">getViewersAsAudiences</a>, <a href="../Viewable.html#isViewer(net.minestom.server.entity.Player)">isViewer</a>, <a href="../Viewable.html#removeViewer(net.minestom.server.entity.Player)">removeViewer</a>, <a href="../Viewable.html#sendPacketsToViewers(net.minestom.server.network.packet.server.ServerPacket...)">sendPacketsToViewers</a>, <a href="../Viewable.html#sendPacketToViewers(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewers</a>, <a href="../Viewable.html#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewersAndSelf</a></code></li>
 </ul>
 </li>
 </ul>
@@ -220,9 +275,32 @@ extends <a href="../Viewable.html" title="interface in net.minestom.server">View
 <ul class="blockList">
 <li class="blockList">
 <h4>getCreationObjectivePacket</h4>
+<pre class="methodSignature">@Deprecated
+@NotNull
+default&nbsp;@NotNull <a href="../network/packet/server/play/ScoreboardObjectivePacket.html" title="class in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket</a>&nbsp;getCreationObjectivePacket&#8203;(java.lang.String&nbsp;value,
+                                                                      <a href="../network/packet/server/play/ScoreboardObjectivePacket.Type.html" title="enum in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket.Type</a>&nbsp;type)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#getCreationObjectivePacket(net.kyori.adventure.text.Component,net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket.Type)"><code>getCreationObjectivePacket(Component, ScoreboardObjectivePacket.Type)</code></a></div>
+</div>
+<div class="block">Creates a creation objective packet.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>value</code> - The value for the objective</dd>
+<dd><code>type</code> - The type for the objective</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the creation objective packet</dd>
+</dl>
+</li>
+</ul>
+<a id="getCreationObjectivePacket(net.kyori.adventure.text.Component,net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket.Type)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCreationObjectivePacket</h4>
 <pre class="methodSignature">@NotNull
-default&nbsp;<a href="../network/packet/server/play/ScoreboardObjectivePacket.html" title="class in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket</a>&nbsp;getCreationObjectivePacket&#8203;(java.lang.String&nbsp;value,
-                                                             <a href="../network/packet/server/play/ScoreboardObjectivePacket.Type.html" title="enum in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket.Type</a>&nbsp;type)</pre>
+default&nbsp;@NotNull <a href="../network/packet/server/play/ScoreboardObjectivePacket.html" title="class in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket</a>&nbsp;getCreationObjectivePacket&#8203;(net.kyori.adventure.text.Component&nbsp;value,
+                                                                      <a href="../network/packet/server/play/ScoreboardObjectivePacket.Type.html" title="enum in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket.Type</a>&nbsp;type)</pre>
 <div class="block">Creates a creation objective packet.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -240,7 +318,7 @@ default&nbsp;<a href="../network/packet/server/play/ScoreboardObjectivePacket.ht
 <li class="blockList">
 <h4>getDestructionObjectivePacket</h4>
 <pre class="methodSignature">@NotNull
-default&nbsp;<a href="../network/packet/server/play/ScoreboardObjectivePacket.html" title="class in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket</a>&nbsp;getDestructionObjectivePacket()</pre>
+default&nbsp;@NotNull <a href="../network/packet/server/play/ScoreboardObjectivePacket.html" title="class in net.minestom.server.network.packet.server.play">ScoreboardObjectivePacket</a>&nbsp;getDestructionObjectivePacket()</pre>
 <div class="block">Creates the destruction objective packet.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -255,7 +333,7 @@ default&nbsp;<a href="../network/packet/server/play/ScoreboardObjectivePacket.ht
 <li class="blockList">
 <h4>getDisplayScoreboardPacket</h4>
 <pre class="methodSignature">@NotNull
-default&nbsp;<a href="../network/packet/server/play/DisplayScoreboardPacket.html" title="class in net.minestom.server.network.packet.server.play">DisplayScoreboardPacket</a>&nbsp;getDisplayScoreboardPacket&#8203;(byte&nbsp;position)</pre>
+default&nbsp;@NotNull <a href="../network/packet/server/play/DisplayScoreboardPacket.html" title="class in net.minestom.server.network.packet.server.play">DisplayScoreboardPacket</a>&nbsp;getDisplayScoreboardPacket&#8203;(byte&nbsp;position)</pre>
 <div class="block">Creates the <a href="../network/packet/server/play/DisplayScoreboardPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>DisplayScoreboardPacket</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -284,15 +362,33 @@ default&nbsp;<a href="../network/packet/server/play/DisplayScoreboardPacket.html
 <a id="getObjectiveName()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getObjectiveName</h4>
 <pre class="methodSignature">@NotNull
-java.lang.String&nbsp;getObjectiveName()</pre>
+@NotNull java.lang.String&nbsp;getObjectiveName()</pre>
 <div class="block">Gets the objective name of the scoreboard.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the objective name</dd>
+</dl>
+</li>
+</ul>
+<a id="getPlayers()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getPlayers</h4>
+<pre class="methodSignature">@NotNull
+default&nbsp;@NotNull java.util.Collection&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;getPlayers()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../adventure/audience/PacketGroupingAudience.html#getPlayers()">PacketGroupingAudience</a></code></span></div>
+<div class="block">Gets an iterable of the players this audience contains.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../adventure/audience/PacketGroupingAudience.html#getPlayers()">getPlayers</a></code>&nbsp;in interface&nbsp;<code><a href="../adventure/audience/PacketGroupingAudience.html" title="interface in net.minestom.server.adventure.audience">PacketGroupingAudience</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the connections</dd>
 </dl>
 </li>
 </ul>
@@ -347,7 +443,7 @@ java.lang.String&nbsp;getObjectiveName()</pre>
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>

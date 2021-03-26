@@ -185,8 +185,8 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,net.minestom.server.utils.Vector)">EntityVelocityEvent</a></span>&#8203;(<a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
-                   <a href="../../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;velocity)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,net.minestom.server.utils.Vector)">EntityVelocityEvent</a></span>&#8203;(@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+                   @NotNull <a href="../../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;velocity)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -208,14 +208,14 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntity()">getEntity</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the enity who will be affected by <a href="#getVelocity()"><code>getVelocity()</code></a>.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getVelocity()">getVelocity</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the velocity which will be applied.</div>
@@ -237,7 +237,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setVelocity(net.minestom.server.utils.Vector)">setVelocity</a></span>&#8203;(<a href="../../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;velocity)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setVelocity(net.minestom.server.utils.Vector)">setVelocity</a></span>&#8203;(@NotNull <a href="../../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;velocity)</code></th>
 <td class="colLast">
 <div class="block">Changes the applied velocity.</div>
 </td>
@@ -273,9 +273,9 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>EntityVelocityEvent</h4>
 <pre>public&nbsp;EntityVelocityEvent&#8203;(@NotNull
-                           <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+                           @NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
                            @NotNull
-                           <a href="../../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;velocity)</pre>
+                           @NotNull <a href="../../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;velocity)</pre>
 </li>
 </ul>
 </li>
@@ -295,7 +295,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>getEntity</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;getEntity()</pre>
+public&nbsp;@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;getEntity()</pre>
 <div class="block">Gets the enity who will be affected by <a href="#getVelocity()"><code>getVelocity()</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
@@ -312,7 +312,7 @@ public&nbsp;<a href="../../entity/Entity.html" title="class in net.minestom.serv
 <li class="blockList">
 <h4>getVelocity</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;getVelocity()</pre>
+public&nbsp;@NotNull <a href="../../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;getVelocity()</pre>
 <div class="block">Gets the velocity which will be applied.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -327,7 +327,7 @@ public&nbsp;<a href="../../utils/Vector.html" title="class in net.minestom.serve
 <li class="blockList">
 <h4>setVelocity</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setVelocity&#8203;(@NotNull
-                        <a href="../../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;velocity)</pre>
+                        @NotNull <a href="../../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;velocity)</pre>
 <div class="block">Changes the applied velocity.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

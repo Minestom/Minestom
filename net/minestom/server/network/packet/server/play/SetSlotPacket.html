@@ -212,8 +212,8 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static <a href="SetSlotPacket.html" title="class in net.minestom.server.network.packet.server.play">SetSlotPacket</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createCursorPacket(net.minestom.server.item.ItemStack)">createCursorPacket</a></span>&#8203;(<a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursorItem)</code></th>
+<td class="colFirst"><code>static @NotNull <a href="SetSlotPacket.html" title="class in net.minestom.server.network.packet.server.play">SetSlotPacket</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createCursorPacket(net.minestom.server.item.ItemStack)">createCursorPacket</a></span>&#8203;(@NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursorItem)</code></th>
 <td class="colLast">
 <div class="block">Returns a <a href="SetSlotPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>SetSlotPacket</code></a> used to change a player cursor item.</div>
 </td>
@@ -227,7 +227,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(<a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(@NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
 <td class="colLast">
 <div class="block">Writes the packet to a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
 </td>
@@ -319,7 +319,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <li class="blockList">
 <h4>write</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
-                  <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</pre>
+                  @NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../ServerPacket.html#write(net.minestom.server.utils.binary.BinaryWriter)">ServerPacket</a></code></span></div>
 <div class="block">Writes the packet to a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
 <dl>
@@ -358,8 +358,8 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <li class="blockList">
 <h4>createCursorPacket</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="SetSlotPacket.html" title="class in net.minestom.server.network.packet.server.play">SetSlotPacket</a>&nbsp;createCursorPacket&#8203;(@NotNull
-                                               <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursorItem)</pre>
+public static&nbsp;@NotNull <a href="SetSlotPacket.html" title="class in net.minestom.server.network.packet.server.play">SetSlotPacket</a>&nbsp;createCursorPacket&#8203;(@NotNull
+                                                        @NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursorItem)</pre>
 <div class="block">Returns a <a href="SetSlotPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>SetSlotPacket</code></a> used to change a player cursor item.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

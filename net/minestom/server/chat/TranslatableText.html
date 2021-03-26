@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":10};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":41,"i1":41,"i2":42};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -130,8 +130,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <hr>
-<pre>public class <span class="typeNameLabel">TranslatableText</span>
+<pre>@Deprecated
+public class <span class="typeNameLabel">TranslatableText</span>
 extends java.lang.Object</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Represents a translatable component which can be used in <a href="ColoredText.html" title="class in net.minestom.server.chat"><code>ColoredText</code></a>.</div>
 </li>
 </ul>
@@ -147,31 +149,35 @@ extends java.lang.Object</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static <a href="TranslatableText.html" title="class in net.minestom.server.chat">TranslatableText</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#of(java.lang.String)">of</a></span>&#8203;(java.lang.String&nbsp;code)</code></th>
+<td class="colFirst"><code>static @NotNull <a href="TranslatableText.html" title="class in net.minestom.server.chat">TranslatableText</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#of(java.lang.String)">of</a></span>&#8203;(@NotNull java.lang.String&nbsp;code)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the translatable component of the specific code.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>static <a href="TranslatableText.html" title="class in net.minestom.server.chat">TranslatableText</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#of(java.lang.String,java.lang.String...)">of</a></span>&#8203;(java.lang.String&nbsp;code,
-  java.lang.String...&nbsp;arguments)</code></th>
+<td class="colFirst"><code>static @NotNull <a href="TranslatableText.html" title="class in net.minestom.server.chat">TranslatableText</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#of(java.lang.String,java.lang.String...)">of</a></span>&#8203;(@NotNull java.lang.String&nbsp;code,
+  @NotNull java.lang.String...&nbsp;arguments)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the translatable component and the specific code with arguments.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -204,8 +210,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>of</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="TranslatableText.html" title="class in net.minestom.server.chat">TranslatableText</a>&nbsp;of&#8203;(@NotNull
-                                  java.lang.String&nbsp;code)</pre>
+public static&nbsp;@NotNull <a href="TranslatableText.html" title="class in net.minestom.server.chat">TranslatableText</a>&nbsp;of&#8203;(@NotNull
+                                           @NotNull java.lang.String&nbsp;code)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the translatable component of the specific code.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -222,10 +229,11 @@ public static&nbsp;<a href="TranslatableText.html" title="class in net.minestom.
 <li class="blockList">
 <h4>of</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="TranslatableText.html" title="class in net.minestom.server.chat">TranslatableText</a>&nbsp;of&#8203;(@NotNull
-                                  java.lang.String&nbsp;code,
-                                  @NotNull
-                                  java.lang.String...&nbsp;arguments)</pre>
+public static&nbsp;@NotNull <a href="TranslatableText.html" title="class in net.minestom.server.chat">TranslatableText</a>&nbsp;of&#8203;(@NotNull
+                                           @NotNull java.lang.String&nbsp;code,
+                                           @NotNull
+                                           @NotNull java.lang.String...&nbsp;arguments)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the translatable component and the specific code with arguments.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -243,6 +251,7 @@ public static&nbsp;<a href="TranslatableText.html" title="class in net.minestom.
 <li class="blockList">
 <h4>toString</h4>
 <pre class="methodSignature">public&nbsp;java.lang.String&nbsp;toString()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>toString</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>

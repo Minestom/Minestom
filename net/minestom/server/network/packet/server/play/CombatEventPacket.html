@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":10,"i4":10};
+var data = {"i0":10,"i1":10,"i2":9,"i3":9,"i4":9,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -131,12 +131,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
+<dd><code><a href="../../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a>&lt;<a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;</code>, <code><a href="../ComponentHoldingServerPacket.html" title="interface in net.minestom.server.network.packet.server">ComponentHoldingServerPacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 </dl>
 <hr>
 <pre>public class <span class="typeNameLabel">CombatEventPacket</span>
 extends java.lang.Object
-implements <a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></pre>
+implements <a href="../ComponentHoldingServerPacket.html" title="interface in net.minestom.server.network.packet.server">ComponentHoldingServerPacket</a></pre>
 <div class="block">Packet sent during combat to a <a href="../../../../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a>.
  Only death is supported for the moment (other events are ignored anyway as of 1.15.2)</div>
 </li>
@@ -183,33 +183,47 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static <a href="CombatEventPacket.html" title="class in net.minestom.server.network.packet.server.play">CombatEventPacket</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#death(net.minestom.server.entity.Player,net.minestom.server.entity.Entity,net.minestom.server.chat.JsonMessage)">death</a></span>&#8203;(<a href="../../../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-     <a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;killer,
-     <a href="../../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;message)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colFirst"><code>@NotNull java.util.Collection&lt;net.kyori.adventure.text.Component&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#components()">components</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the components held by this object.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>@NotNull <a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copyWithOperator(java.util.function.UnaryOperator)">copyWithOperator</a></span>&#8203;(@NotNull java.util.function.UnaryOperator&lt;net.kyori.adventure.text.Component&gt;&nbsp;operator)</code></th>
+<td class="colLast">
+<div class="block">Returns a copy of this object.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>static <a href="CombatEventPacket.html" title="class in net.minestom.server.network.packet.server.play">CombatEventPacket</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#death(net.minestom.server.entity.Player,net.minestom.server.entity.Entity,net.kyori.adventure.text.Component)">death</a></span>&#8203;(<a href="../../../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+     <a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;killer,
+     net.kyori.adventure.text.Component&nbsp;message)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static <a href="CombatEventPacket.html" title="class in net.minestom.server.network.packet.server.play">CombatEventPacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#end(int,net.minestom.server.entity.Entity)">end</a></span>&#8203;(int&nbsp;durationInTicks,
    <a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;opponent)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static <a href="CombatEventPacket.html" title="class in net.minestom.server.network.packet.server.play">CombatEventPacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#enter()">enter</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getId()">getId</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the id of this packet.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(<a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(@NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
 <td class="colLast">
 <div class="block">Writes the packet to a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
 </td>
@@ -221,6 +235,13 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
 <code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.adventure.ComponentHolder">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.minestom.server.adventure.<a href="../../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a></h3>
+<code><a href="../../../../adventure/ComponentHolder.html#visitComponents(java.util.function.Consumer)">visitComponents</a></code></li>
 </ul>
 </li>
 </ul>
@@ -257,7 +278,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
                                     <a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;opponent)</pre>
 </li>
 </ul>
-<a id="death(net.minestom.server.entity.Player,net.minestom.server.entity.Entity,net.minestom.server.chat.JsonMessage)">
+<a id="death(net.minestom.server.entity.Player,net.minestom.server.entity.Entity,net.kyori.adventure.text.Component)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -265,7 +286,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <h4>death</h4>
 <pre class="methodSignature">public static&nbsp;<a href="CombatEventPacket.html" title="class in net.minestom.server.network.packet.server.play">CombatEventPacket</a>&nbsp;death&#8203;(<a href="../../../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                                       <a href="../../../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;killer,
-                                      <a href="../../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;message)</pre>
+                                      net.kyori.adventure.text.Component&nbsp;message)</pre>
 </li>
 </ul>
 <a id="write(net.minestom.server.utils.binary.BinaryWriter)">
@@ -275,7 +296,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <li class="blockList">
 <h4>write</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
-                  <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</pre>
+                  @NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../ServerPacket.html#write(net.minestom.server.utils.binary.BinaryWriter)">ServerPacket</a></code></span></div>
 <div class="block">Writes the packet to a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
 <dl>
@@ -291,7 +312,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <a id="getId()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getId</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;getId()</pre>
@@ -304,6 +325,46 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <dd><code><a href="../ServerPacket.html#getId()">getId</a></code>&nbsp;in interface&nbsp;<code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the id of this packet</dd>
+</dl>
+</li>
+</ul>
+<a id="components()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>components</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull java.util.Collection&lt;net.kyori.adventure.text.Component&gt;&nbsp;components()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../adventure/ComponentHolder.html#components()">ComponentHolder</a></code></span></div>
+<div class="block">Gets the components held by this object.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../adventure/ComponentHolder.html#components()">components</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a>&lt;<a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the components</dd>
+</dl>
+</li>
+</ul>
+<a id="copyWithOperator(java.util.function.UnaryOperator)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>copyWithOperator</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;copyWithOperator&#8203;(@NotNull
+                                              @NotNull java.util.function.UnaryOperator&lt;net.kyori.adventure.text.Component&gt;&nbsp;operator)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../adventure/ComponentHolder.html#copyWithOperator(java.util.function.UnaryOperator)">ComponentHolder</a></code></span></div>
+<div class="block">Returns a copy of this object. For each component this object holds, the operator
+ is applied to the copy before returning.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../adventure/ComponentHolder.html#copyWithOperator(java.util.function.UnaryOperator)">copyWithOperator</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a>&lt;<a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>operator</code> - the operator</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the copy</dd>
 </dl>
 </li>
 </ul>

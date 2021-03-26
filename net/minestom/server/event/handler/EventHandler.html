@@ -155,52 +155,52 @@ extends <a href="../../extensions/IExtensionObserver.html" title="interface in n
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>default &lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;<br>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addEventCallback(java.lang.Class,net.minestom.server.event.EventCallback)">addEventCallback</a></span>&#8203;(java.lang.Class&lt;E&gt;&nbsp;eventClass,
-                <a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;E&gt;&nbsp;eventCallback)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addEventCallback(java.lang.Class,net.minestom.server.event.EventCallback)">addEventCallback</a></span>&#8203;(@NotNull java.lang.Class&lt;E&gt;&nbsp;eventClass,
+                @NotNull <a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;E&gt;&nbsp;eventCallback)</code></th>
 <td class="colLast">
 <div class="block">Adds a new event callback for the specified type <code>eventClass</code>.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>default &lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a> &amp; <a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a>&gt;<br>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#callCancellableEvent(java.lang.Class,E,java.lang.Runnable)">callCancellableEvent</a></span>&#8203;(java.lang.Class&lt;E&gt;&nbsp;eventClass,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#callCancellableEvent(java.lang.Class,E,java.lang.Runnable)">callCancellableEvent</a></span>&#8203;(@NotNull java.lang.Class&lt;E&gt;&nbsp;eventClass,
                     E&nbsp;event,
-                    java.lang.Runnable&nbsp;successCallback)</code></th>
+                    @NotNull java.lang.Runnable&nbsp;successCallback)</code></th>
 <td class="colLast">
 <div class="block">Calls a <a href="../CancellableEvent.html" title="interface in net.minestom.server.event"><code>CancellableEvent</code></a> and execute <code>successCallback</code> if the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> is not cancelled.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>default &lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;<br>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#callEvent(java.lang.Class,E)">callEvent</a></span>&#8203;(java.lang.Class&lt;E&gt;&nbsp;eventClass,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#callEvent(java.lang.Class,E)">callEvent</a></span>&#8203;(@NotNull java.lang.Class&lt;E&gt;&nbsp;eventClass,
          E&nbsp;event)</code></th>
 <td class="colLast">
 <div class="block">Calls the specified <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> with all the assigned <a href="../EventCallback.html" title="interface in net.minestom.server.event"><code>EventCallback</code></a>.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>default java.util.stream.Stream&lt;<a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&gt;</code></td>
+<td class="colFirst"><code>default @NotNull java.util.stream.Stream&lt;<a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEventCallbacks()">getEventCallbacks</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets a <code>Stream</code> containing all the <a href="../EventCallback.html" title="interface in net.minestom.server.event"><code>EventCallback</code></a>, no matter to which <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> they are linked.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>default &lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;<br>java.util.Collection&lt;<a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEventCallbacks(java.lang.Class)">getEventCallbacks</a></span>&#8203;(java.lang.Class&lt;E&gt;&nbsp;eventClass)</code></th>
+<td class="colFirst"><code>default &lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;<br>@NotNull java.util.Collection&lt;<a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEventCallbacks(java.lang.Class)">getEventCallbacks</a></span>&#8203;(@NotNull java.lang.Class&lt;E&gt;&nbsp;eventClass)</code></th>
 <td class="colLast">
 <div class="block">Gets the event callbacks of a specific event type.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code>java.util.Map&lt;java.lang.Class&lt;? extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;,&#8203;java.util.Collection&lt;<a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&gt;&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.Map&lt;java.lang.Class&lt;? extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;,&#8203;java.util.Collection&lt;<a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEventCallbacksMap()">getEventCallbacksMap</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets a <code>Map</code> containing all the listeners assigned to a specific <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> type.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>java.util.Collection&lt;<a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;?&gt;&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.Collection&lt;<a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;?&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getExtensionCallbacks(java.lang.String)">getExtensionCallbacks</a></span>&#8203;(java.lang.String&nbsp;extension)</code></th>
 <td class="colLast">
 <div class="block">Gets a <code>Collection</code> containing all the listeners assigned to a specific extension (represented by its name).</div>
@@ -222,8 +222,8 @@ extends <a href="../../extensions/IExtensionObserver.html" title="interface in n
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>default &lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;<br>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeEventCallback(java.lang.Class,net.minestom.server.event.EventCallback)">removeEventCallback</a></span>&#8203;(java.lang.Class&lt;E&gt;&nbsp;eventClass,
-                   <a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;E&gt;&nbsp;eventCallback)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeEventCallback(java.lang.Class,net.minestom.server.event.EventCallback)">removeEventCallback</a></span>&#8203;(@NotNull java.lang.Class&lt;E&gt;&nbsp;eventClass,
+                   @NotNull <a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;E&gt;&nbsp;eventCallback)</code></th>
 <td class="colLast">
 <div class="block">Removes an event callback.</div>
 </td>
@@ -252,7 +252,7 @@ extends <a href="../../extensions/IExtensionObserver.html" title="interface in n
 <li class="blockList">
 <h4>getEventCallbacksMap</h4>
 <pre class="methodSignature">@NotNull
-java.util.Map&lt;java.lang.Class&lt;? extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;,&#8203;java.util.Collection&lt;<a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&gt;&gt;&nbsp;getEventCallbacksMap()</pre>
+@NotNull java.util.Map&lt;java.lang.Class&lt;? extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;,&#8203;java.util.Collection&lt;<a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&gt;&gt;&nbsp;getEventCallbacksMap()</pre>
 <div class="block">Gets a <code>Map</code> containing all the listeners assigned to a specific <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> type.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -267,7 +267,7 @@ java.util.Map&lt;java.lang.Class&lt;? extends <a href="../Event.html" title="cla
 <li class="blockList">
 <h4>getExtensionCallbacks</h4>
 <pre class="methodSignature">@NotNull
-java.util.Collection&lt;<a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;?&gt;&gt;&nbsp;getExtensionCallbacks&#8203;(java.lang.String&nbsp;extension)</pre>
+@NotNull java.util.Collection&lt;<a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;?&gt;&gt;&nbsp;getExtensionCallbacks&#8203;(java.lang.String&nbsp;extension)</pre>
 <div class="block">Gets a <code>Collection</code> containing all the listeners assigned to a specific extension (represented by its name).
  Used to unload all callbacks when the extension is unloaded</div>
 <dl>
@@ -283,9 +283,9 @@ java.util.Collection&lt;<a href="../EventCallback.html" title="interface in net.
 <li class="blockList">
 <h4>addEventCallback</h4>
 <pre class="methodSignature">default&nbsp;&lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;&nbsp;boolean&nbsp;addEventCallback&#8203;(@NotNull
-                                                   java.lang.Class&lt;E&gt;&nbsp;eventClass,
+                                                   @NotNull java.lang.Class&lt;E&gt;&nbsp;eventClass,
                                                    @NotNull
-                                                   <a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;E&gt;&nbsp;eventCallback)</pre>
+                                                   @NotNull <a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;E&gt;&nbsp;eventCallback)</pre>
 <div class="block">Adds a new event callback for the specified type <code>eventClass</code>.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
@@ -305,9 +305,9 @@ java.util.Collection&lt;<a href="../EventCallback.html" title="interface in net.
 <li class="blockList">
 <h4>removeEventCallback</h4>
 <pre class="methodSignature">default&nbsp;&lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;&nbsp;boolean&nbsp;removeEventCallback&#8203;(@NotNull
-                                                      java.lang.Class&lt;E&gt;&nbsp;eventClass,
+                                                      @NotNull java.lang.Class&lt;E&gt;&nbsp;eventClass,
                                                       @NotNull
-                                                      <a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;E&gt;&nbsp;eventCallback)</pre>
+                                                      @NotNull <a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;E&gt;&nbsp;eventCallback)</pre>
 <div class="block">Removes an event callback.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
@@ -327,8 +327,8 @@ java.util.Collection&lt;<a href="../EventCallback.html" title="interface in net.
 <li class="blockList">
 <h4>getEventCallbacks</h4>
 <pre class="methodSignature">@NotNull
-default&nbsp;&lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;&nbsp;java.util.Collection&lt;<a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&gt;&nbsp;getEventCallbacks&#8203;(@NotNull
-                                                                                java.lang.Class&lt;E&gt;&nbsp;eventClass)</pre>
+default&nbsp;&lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;&nbsp;@NotNull java.util.Collection&lt;<a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&gt;&nbsp;getEventCallbacks&#8203;(@NotNull
+                                                                                         @NotNull java.lang.Class&lt;E&gt;&nbsp;eventClass)</pre>
 <div class="block">Gets the event callbacks of a specific event type.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
@@ -347,7 +347,7 @@ default&nbsp;&lt;E extends <a href="../Event.html" title="class in net.minestom.
 <li class="blockList">
 <h4>getEventCallbacks</h4>
 <pre class="methodSignature">@NotNull
-default&nbsp;java.util.stream.Stream&lt;<a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&gt;&nbsp;getEventCallbacks()</pre>
+default&nbsp;@NotNull java.util.stream.Stream&lt;<a href="../EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&gt;&nbsp;getEventCallbacks()</pre>
 <div class="block">Gets a <code>Stream</code> containing all the <a href="../EventCallback.html" title="interface in net.minestom.server.event"><code>EventCallback</code></a>, no matter to which <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> they are linked.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -364,7 +364,7 @@ default&nbsp;java.util.stream.Stream&lt;<a href="../EventCallback.html" title="i
 <li class="blockList">
 <h4>callEvent</h4>
 <pre class="methodSignature">default&nbsp;&lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>&gt;&nbsp;void&nbsp;callEvent&#8203;(@NotNull
-                                         java.lang.Class&lt;E&gt;&nbsp;eventClass,
+                                         @NotNull java.lang.Class&lt;E&gt;&nbsp;eventClass,
                                          @NotNull
                                          E&nbsp;event)</pre>
 <div class="block">Calls the specified <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> with all the assigned <a href="../EventCallback.html" title="interface in net.minestom.server.event"><code>EventCallback</code></a>.
@@ -388,11 +388,11 @@ default&nbsp;java.util.stream.Stream&lt;<a href="../EventCallback.html" title="i
 <li class="blockList">
 <h4>callCancellableEvent</h4>
 <pre class="methodSignature">default&nbsp;&lt;E extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a> &amp; <a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a>&gt;&nbsp;void&nbsp;callCancellableEvent&#8203;(@NotNull
-                                                                       java.lang.Class&lt;E&gt;&nbsp;eventClass,
+                                                                       @NotNull java.lang.Class&lt;E&gt;&nbsp;eventClass,
                                                                        @NotNull
                                                                        E&nbsp;event,
                                                                        @NotNull
-                                                                       java.lang.Runnable&nbsp;successCallback)</pre>
+                                                                       @NotNull java.lang.Runnable&nbsp;successCallback)</pre>
 <div class="block">Calls a <a href="../CancellableEvent.html" title="interface in net.minestom.server.event"><code>CancellableEvent</code></a> and execute <code>successCallback</code> if the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> is not cancelled.
  <p>
  Does call <a href="#callEvent(java.lang.Class,E)"><code>callEvent(Class, Event)</code></a> internally.</div>

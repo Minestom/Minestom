@@ -181,9 +181,9 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.advancements.AdvancementAction,java.lang.String)">AdvancementTabEvent</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                   <a href="../../advancements/AdvancementAction.html" title="enum in net.minestom.server.advancements">AdvancementAction</a>&nbsp;action,
-                   java.lang.String&nbsp;tabId)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.advancements.AdvancementAction,java.lang.String)">AdvancementTabEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                   @NotNull <a href="../../advancements/AdvancementAction.html" title="enum in net.minestom.server.advancements">AdvancementAction</a>&nbsp;action,
+                   @NotNull java.lang.String&nbsp;tabId)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -205,14 +205,14 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../advancements/AdvancementAction.html" title="enum in net.minestom.server.advancements">AdvancementAction</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../advancements/AdvancementAction.html" title="enum in net.minestom.server.advancements">AdvancementAction</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAction()">getAction</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the action.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colFirst"><code>@NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTabId()">getTabId</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the tab id.</div>
@@ -256,11 +256,11 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <li class="blockList">
 <h4>AdvancementTabEvent</h4>
 <pre>public&nbsp;AdvancementTabEvent&#8203;(@NotNull
-                           <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                           @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                            @NotNull
-                           <a href="../../advancements/AdvancementAction.html" title="enum in net.minestom.server.advancements">AdvancementAction</a>&nbsp;action,
+                           @NotNull <a href="../../advancements/AdvancementAction.html" title="enum in net.minestom.server.advancements">AdvancementAction</a>&nbsp;action,
                            @NotNull
-                           java.lang.String&nbsp;tabId)</pre>
+                           @NotNull java.lang.String&nbsp;tabId)</pre>
 </li>
 </ul>
 </li>
@@ -280,7 +280,7 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <li class="blockList">
 <h4>getAction</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../advancements/AdvancementAction.html" title="enum in net.minestom.server.advancements">AdvancementAction</a>&nbsp;getAction()</pre>
+public&nbsp;@NotNull <a href="../../advancements/AdvancementAction.html" title="enum in net.minestom.server.advancements">AdvancementAction</a>&nbsp;getAction()</pre>
 <div class="block">Gets the action.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -295,7 +295,7 @@ public&nbsp;<a href="../../advancements/AdvancementAction.html" title="enum in n
 <li class="blockList">
 <h4>getTabId</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.lang.String&nbsp;getTabId()</pre>
+public&nbsp;@NotNull java.lang.String&nbsp;getTabId()</pre>
 <div class="block">Gets the tab id.
  <p>
  Not null ony if <a href="#getAction()"><code>getAction()</code></a> is equal to <a href="../../advancements/AdvancementAction.html#OPENED_TAB"><code>AdvancementAction.OPENED_TAB</code></a>.</div>

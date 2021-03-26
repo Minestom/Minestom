@@ -180,8 +180,8 @@ extends <a href="../EntityEvent.html" title="class in net.minestom.server.event"
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,net.minestom.server.instance.Instance)">EntitySpawnEvent</a></span>&#8203;(<a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
-                <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;spawnInstance)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,net.minestom.server.instance.Instance)">EntitySpawnEvent</a></span>&#8203;(@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+                @NotNull <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;spawnInstance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -203,14 +203,14 @@ extends <a href="../EntityEvent.html" title="class in net.minestom.server.event"
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntity()">getEntity</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the entity who spawned in the instance.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSpawnInstance()">getSpawnInstance</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the entity new instance.</div>
@@ -247,9 +247,9 @@ extends <a href="../EntityEvent.html" title="class in net.minestom.server.event"
 <li class="blockList">
 <h4>EntitySpawnEvent</h4>
 <pre>public&nbsp;EntitySpawnEvent&#8203;(@NotNull
-                        <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+                        @NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
                         @NotNull
-                        <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;spawnInstance)</pre>
+                        @NotNull <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;spawnInstance)</pre>
 </li>
 </ul>
 </li>
@@ -269,7 +269,7 @@ extends <a href="../EntityEvent.html" title="class in net.minestom.server.event"
 <li class="blockList">
 <h4>getEntity</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;getEntity()</pre>
+public&nbsp;@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;getEntity()</pre>
 <div class="block">Gets the entity who spawned in the instance.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
@@ -286,7 +286,7 @@ public&nbsp;<a href="../../entity/Entity.html" title="class in net.minestom.serv
 <li class="blockList">
 <h4>getSpawnInstance</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;getSpawnInstance()</pre>
+public&nbsp;@NotNull <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;getSpawnInstance()</pre>
 <div class="block">Gets the entity new instance.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

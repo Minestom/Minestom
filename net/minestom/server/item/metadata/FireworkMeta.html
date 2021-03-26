@@ -205,7 +205,7 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Creates and returns a copy of this object.</div>
@@ -248,14 +248,14 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSimilar(net.minestom.server.item.metadata.ItemMeta)">isSimilar</a></span>&#8203;(<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSimilar(net.minestom.server.item.metadata.ItemMeta)">isSimilar</a></span>&#8203;(@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</code></th>
 <td class="colLast">
 <div class="block">Gets if the two ItemMeta are similar.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">read</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">read</a></span>&#8203;(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
 <div class="block">Reads nbt data from a compound.</div>
 </td>
@@ -283,7 +283,7 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">write</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">write</a></span>&#8203;(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
 <div class="block">Writes nbt data to a compound.</div>
 </td>
@@ -493,7 +493,7 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <li class="blockList">
 <h4>isSimilar</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isSimilar&#8203;(@NotNull
-                         <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</pre>
+                         @NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</pre>
 <div class="block">Gets if the two ItemMeta are similar.
  <p>
  It is used by <a href="../ItemStack.html#isSimilar(net.minestom.server.item.ItemStack)"><code>ItemStack.isSimilar(ItemStack)</code></a>.</div>
@@ -514,7 +514,7 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <li class="blockList">
 <h4>read</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;read&#8203;(@NotNull
-                 org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
+                 @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
 <div class="block">Reads nbt data from a compound.
  <p>
  WARNING: it is possible that it contains no useful data,
@@ -534,7 +534,7 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <li class="blockList">
 <h4>write</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
-                  org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
+                  @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
 <div class="block">Writes nbt data to a compound.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -551,7 +551,7 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <li class="blockList">
 <h4>clone</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;clone()</pre>
+public&nbsp;@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;clone()</pre>
 <div class="block">Creates and returns a copy of this object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>

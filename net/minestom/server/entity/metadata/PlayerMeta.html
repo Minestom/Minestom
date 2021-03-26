@@ -179,8 +179,8 @@ extends <a href="LivingEntityMeta.html" title="class in net.minestom.server.enti
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,net.minestom.server.entity.Metadata)">PlayerMeta</a></span>&#8203;(<a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
-          <a href="../Metadata.html" title="class in net.minestom.server.entity">Metadata</a>&nbsp;metadata)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,net.minestom.server.entity.Metadata)">PlayerMeta</a></span>&#8203;(@NotNull <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+          @NotNull <a href="../Metadata.html" title="class in net.minestom.server.entity">Metadata</a>&nbsp;metadata)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -207,12 +207,12 @@ extends <a href="LivingEntityMeta.html" title="class in net.minestom.server.enti
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>org.jglrxavpok.hephaistos.nbt.NBT</code></td>
+<td class="colFirst"><code>@Nullable org.jglrxavpok.hephaistos.nbt.NBT</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLeftShoulderEntityData()">getLeftShoulderEntityData</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>org.jglrxavpok.hephaistos.nbt.NBT</code></td>
+<td class="colFirst"><code>@Nullable org.jglrxavpok.hephaistos.nbt.NBT</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRightShoulderEntityData()">getRightShoulderEntityData</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -288,7 +288,7 @@ extends <a href="LivingEntityMeta.html" title="class in net.minestom.server.enti
 </tr>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLeftShoulderEntityData(org.jglrxavpok.hephaistos.nbt.NBT)">setLeftShoulderEntityData</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBT&nbsp;value)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLeftShoulderEntityData(org.jglrxavpok.hephaistos.nbt.NBT)">setLeftShoulderEntityData</a></span>&#8203;(@Nullable org.jglrxavpok.hephaistos.nbt.NBT&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i18" class="altColor">
@@ -308,7 +308,7 @@ extends <a href="LivingEntityMeta.html" title="class in net.minestom.server.enti
 </tr>
 <tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRightShoulderEntityData(org.jglrxavpok.hephaistos.nbt.NBT)">setRightShoulderEntityData</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBT&nbsp;value)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRightShoulderEntityData(org.jglrxavpok.hephaistos.nbt.NBT)">setRightShoulderEntityData</a></span>&#8203;(@Nullable org.jglrxavpok.hephaistos.nbt.NBT&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i22" class="altColor">
@@ -334,7 +334,7 @@ extends <a href="LivingEntityMeta.html" title="class in net.minestom.server.enti
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.entity.metadata.<a href="EntityMeta.html" title="class in net.minestom.server.entity.metadata">EntityMeta</a></h3>
-<code><a href="EntityMeta.html#getAirTicks()">getAirTicks</a>, <a href="EntityMeta.html#getCustomName()">getCustomName</a>, <a href="EntityMeta.html#getMask(byte)">getMask</a>, <a href="EntityMeta.html#getMaskBit(byte,byte)">getMaskBit</a>, <a href="EntityMeta.html#getPose()">getPose</a>, <a href="EntityMeta.html#isCustomNameVisible()">isCustomNameVisible</a>, <a href="EntityMeta.html#isFlyingWithElytra()">isFlyingWithElytra</a>, <a href="EntityMeta.html#isHasGlowingEffect()">isHasGlowingEffect</a>, <a href="EntityMeta.html#isHasNoGravity()">isHasNoGravity</a>, <a href="EntityMeta.html#isInvisible()">isInvisible</a>, <a href="EntityMeta.html#isOnFire()">isOnFire</a>, <a href="EntityMeta.html#isSilent()">isSilent</a>, <a href="EntityMeta.html#isSneaking()">isSneaking</a>, <a href="EntityMeta.html#isSprinting()">isSprinting</a>, <a href="EntityMeta.html#isSwimming()">isSwimming</a>, <a href="EntityMeta.html#setAirTicks(int)">setAirTicks</a>, <a href="EntityMeta.html#setBoundingBox(double,double)">setBoundingBox</a>, <a href="EntityMeta.html#setBoundingBox(double,double,double)">setBoundingBox</a>, <a href="EntityMeta.html#setCustomName(net.minestom.server.chat.JsonMessage)">setCustomName</a>, <a href="EntityMeta.html#setCustomNameVisible(boolean)">setCustomNameVisible</a>, <a href="EntityMeta.html#setFlyingWithElytra(boolean)">setFlyingWithElytra</a>, <a href="EntityMeta.html#setHasGlowingEffect(boolean)">setHasGlowingEffect</a>, <a href="EntityMeta.html#setHasNoGravity(boolean)">setHasNoGravity</a>, <a href="EntityMeta.html#setInvisible(boolean)">setInvisible</a>, <a href="EntityMeta.html#setMask(byte,byte)">setMask</a>, <a href="EntityMeta.html#setMaskBit(byte,byte,boolean)">setMaskBit</a>, <a href="EntityMeta.html#setNotifyAboutChanges(boolean)">setNotifyAboutChanges</a>, <a href="EntityMeta.html#setOnFire(boolean)">setOnFire</a>, <a href="EntityMeta.html#setPose(net.minestom.server.entity.Entity.Pose)">setPose</a>, <a href="EntityMeta.html#setSilent(boolean)">setSilent</a>, <a href="EntityMeta.html#setSneaking(boolean)">setSneaking</a>, <a href="EntityMeta.html#setSprinting(boolean)">setSprinting</a>, <a href="EntityMeta.html#setSwimming(boolean)">setSwimming</a></code></li>
+<code><a href="EntityMeta.html#getAirTicks()">getAirTicks</a>, <a href="EntityMeta.html#getCustomName()">getCustomName</a>, <a href="EntityMeta.html#getCustomNameJson()">getCustomNameJson</a>, <a href="EntityMeta.html#getMask(byte)">getMask</a>, <a href="EntityMeta.html#getMaskBit(byte,byte)">getMaskBit</a>, <a href="EntityMeta.html#getPose()">getPose</a>, <a href="EntityMeta.html#isCustomNameVisible()">isCustomNameVisible</a>, <a href="EntityMeta.html#isFlyingWithElytra()">isFlyingWithElytra</a>, <a href="EntityMeta.html#isHasGlowingEffect()">isHasGlowingEffect</a>, <a href="EntityMeta.html#isHasNoGravity()">isHasNoGravity</a>, <a href="EntityMeta.html#isInvisible()">isInvisible</a>, <a href="EntityMeta.html#isOnFire()">isOnFire</a>, <a href="EntityMeta.html#isSilent()">isSilent</a>, <a href="EntityMeta.html#isSneaking()">isSneaking</a>, <a href="EntityMeta.html#isSprinting()">isSprinting</a>, <a href="EntityMeta.html#isSwimming()">isSwimming</a>, <a href="EntityMeta.html#setAirTicks(int)">setAirTicks</a>, <a href="EntityMeta.html#setBoundingBox(double,double)">setBoundingBox</a>, <a href="EntityMeta.html#setBoundingBox(double,double,double)">setBoundingBox</a>, <a href="EntityMeta.html#setCustomName(net.kyori.adventure.text.Component)">setCustomName</a>, <a href="EntityMeta.html#setCustomName(net.minestom.server.chat.JsonMessage)">setCustomName</a>, <a href="EntityMeta.html#setCustomNameVisible(boolean)">setCustomNameVisible</a>, <a href="EntityMeta.html#setFlyingWithElytra(boolean)">setFlyingWithElytra</a>, <a href="EntityMeta.html#setHasGlowingEffect(boolean)">setHasGlowingEffect</a>, <a href="EntityMeta.html#setHasNoGravity(boolean)">setHasNoGravity</a>, <a href="EntityMeta.html#setInvisible(boolean)">setInvisible</a>, <a href="EntityMeta.html#setMask(byte,byte)">setMask</a>, <a href="EntityMeta.html#setMaskBit(byte,byte,boolean)">setMaskBit</a>, <a href="EntityMeta.html#setNotifyAboutChanges(boolean)">setNotifyAboutChanges</a>, <a href="EntityMeta.html#setOnFire(boolean)">setOnFire</a>, <a href="EntityMeta.html#setPose(net.minestom.server.entity.Entity.Pose)">setPose</a>, <a href="EntityMeta.html#setSilent(boolean)">setSilent</a>, <a href="EntityMeta.html#setSneaking(boolean)">setSneaking</a>, <a href="EntityMeta.html#setSprinting(boolean)">setSprinting</a>, <a href="EntityMeta.html#setSwimming(boolean)">setSwimming</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -366,9 +366,9 @@ extends <a href="LivingEntityMeta.html" title="class in net.minestom.server.enti
 <li class="blockList">
 <h4>PlayerMeta</h4>
 <pre>public&nbsp;PlayerMeta&#8203;(@NotNull
-                  <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+                  @NotNull <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
                   @NotNull
-                  <a href="../Metadata.html" title="class in net.minestom.server.entity">Metadata</a>&nbsp;metadata)</pre>
+                  @NotNull <a href="../Metadata.html" title="class in net.minestom.server.entity">Metadata</a>&nbsp;metadata)</pre>
 </li>
 </ul>
 </li>
@@ -568,7 +568,7 @@ extends <a href="LivingEntityMeta.html" title="class in net.minestom.server.enti
 <li class="blockList">
 <h4>getLeftShoulderEntityData</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;org.jglrxavpok.hephaistos.nbt.NBT&nbsp;getLeftShoulderEntityData()</pre>
+public&nbsp;@Nullable org.jglrxavpok.hephaistos.nbt.NBT&nbsp;getLeftShoulderEntityData()</pre>
 </li>
 </ul>
 <a id="setLeftShoulderEntityData(org.jglrxavpok.hephaistos.nbt.NBT)">
@@ -578,7 +578,7 @@ public&nbsp;org.jglrxavpok.hephaistos.nbt.NBT&nbsp;getLeftShoulderEntityData()</
 <li class="blockList">
 <h4>setLeftShoulderEntityData</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setLeftShoulderEntityData&#8203;(@Nullable
-                                      org.jglrxavpok.hephaistos.nbt.NBT&nbsp;value)</pre>
+                                      @Nullable org.jglrxavpok.hephaistos.nbt.NBT&nbsp;value)</pre>
 </li>
 </ul>
 <a id="getRightShoulderEntityData()">
@@ -588,7 +588,7 @@ public&nbsp;org.jglrxavpok.hephaistos.nbt.NBT&nbsp;getLeftShoulderEntityData()</
 <li class="blockList">
 <h4>getRightShoulderEntityData</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;org.jglrxavpok.hephaistos.nbt.NBT&nbsp;getRightShoulderEntityData()</pre>
+public&nbsp;@Nullable org.jglrxavpok.hephaistos.nbt.NBT&nbsp;getRightShoulderEntityData()</pre>
 </li>
 </ul>
 <a id="setRightShoulderEntityData(org.jglrxavpok.hephaistos.nbt.NBT)">
@@ -598,7 +598,7 @@ public&nbsp;org.jglrxavpok.hephaistos.nbt.NBT&nbsp;getRightShoulderEntityData()<
 <li class="blockList">
 <h4>setRightShoulderEntityData</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setRightShoulderEntityData&#8203;(@Nullable
-                                       org.jglrxavpok.hephaistos.nbt.NBT&nbsp;value)</pre>
+                                       @Nullable org.jglrxavpok.hephaistos.nbt.NBT&nbsp;value)</pre>
 </li>
 </ul>
 </li>

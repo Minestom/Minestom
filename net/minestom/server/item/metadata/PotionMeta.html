@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":42,"i8":10,"i9":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -181,28 +181,28 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Creates and returns a copy of this object.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="../../potion/CustomPotionEffect.html" title="class in net.minestom.server.potion">CustomPotionEffect</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.List&lt;<a href="../../potion/CustomPotionEffect.html" title="class in net.minestom.server.potion">CustomPotionEffect</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCustomPotionEffects()">getCustomPotionEffects</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get a list of <a href="../../potion/CustomPotionEffect.html" title="class in net.minestom.server.potion"><code>CustomPotionEffect</code></a>.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../potion/PotionType.html" title="enum in net.minestom.server.potion">PotionType</a></code></td>
+<td class="colFirst"><code>@Nullable <a href="../../potion/PotionType.html" title="enum in net.minestom.server.potion">PotionType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPotionType()">getPotionType</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the potion type.</div>
@@ -217,35 +217,44 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSimilar(net.minestom.server.item.metadata.ItemMeta)">isSimilar</a></span>&#8203;(<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSimilar(net.minestom.server.item.metadata.ItemMeta)">isSimilar</a></span>&#8203;(@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</code></th>
 <td class="colLast">
 <div class="block">Gets if the two ItemMeta are similar.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">read</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">read</a></span>&#8203;(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
 <div class="block">Reads nbt data from a compound.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setColor(net.minestom.server.chat.ChatColor)">setColor</a></span>&#8203;(<a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;color)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setColor(net.minestom.server.color.Color)">setColor</a></span>&#8203;(@Nullable <a href="../../color/Color.html" title="class in net.minestom.server.color">Color</a>&nbsp;color)</code></th>
 <td class="colLast">
 <div class="block">Changes the color of the potion.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPotionType(net.minestom.server.potion.PotionType)">setPotionType</a></span>&#8203;(<a href="../../potion/PotionType.html" title="enum in net.minestom.server.potion">PotionType</a>&nbsp;potionType)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setColor(net.minestom.server.chat.ChatColor)">setColor</a></span>&#8203;(<a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;color)</code></th>
 <td class="colLast">
-<div class="block">Changes the potion type.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#setColor(net.minestom.server.color.Color)"><code>setColor(Color)</code></a></div>
+</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">write</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPotionType(net.minestom.server.potion.PotionType)">setPotionType</a></span>&#8203;(@Nullable <a href="../../potion/PotionType.html" title="enum in net.minestom.server.potion">PotionType</a>&nbsp;potionType)</code></th>
+<td class="colLast">
+<div class="block">Changes the potion type.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">write</a></span>&#8203;(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
 <div class="block">Writes nbt data to a compound.</div>
 </td>
@@ -300,7 +309,7 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <li class="blockList">
 <h4>getPotionType</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="../../potion/PotionType.html" title="enum in net.minestom.server.potion">PotionType</a>&nbsp;getPotionType()</pre>
+public&nbsp;@Nullable <a href="../../potion/PotionType.html" title="enum in net.minestom.server.potion">PotionType</a>&nbsp;getPotionType()</pre>
 <div class="block">Gets the potion type.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -315,7 +324,7 @@ public&nbsp;<a href="../../potion/PotionType.html" title="enum in net.minestom.s
 <li class="blockList">
 <h4>setPotionType</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setPotionType&#8203;(@Nullable
-                          <a href="../../potion/PotionType.html" title="enum in net.minestom.server.potion">PotionType</a>&nbsp;potionType)</pre>
+                          @Nullable <a href="../../potion/PotionType.html" title="enum in net.minestom.server.potion">PotionType</a>&nbsp;potionType)</pre>
 <div class="block">Changes the potion type.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -330,7 +339,7 @@ public&nbsp;<a href="../../potion/PotionType.html" title="enum in net.minestom.s
 <li class="blockList">
 <h4>getCustomPotionEffects</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.List&lt;<a href="../../potion/CustomPotionEffect.html" title="class in net.minestom.server.potion">CustomPotionEffect</a>&gt;&nbsp;getCustomPotionEffects()</pre>
+public&nbsp;@NotNull java.util.List&lt;<a href="../../potion/CustomPotionEffect.html" title="class in net.minestom.server.potion">CustomPotionEffect</a>&gt;&nbsp;getCustomPotionEffects()</pre>
 <div class="block">Get a list of <a href="../../potion/CustomPotionEffect.html" title="class in net.minestom.server.potion"><code>CustomPotionEffect</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -344,7 +353,26 @@ public&nbsp;java.util.List&lt;<a href="../../potion/CustomPotionEffect.html" tit
 <ul class="blockList">
 <li class="blockList">
 <h4>setColor</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setColor&#8203;(<a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;color)</pre>
+<pre class="methodSignature">@Deprecated
+public&nbsp;void&nbsp;setColor&#8203;(<a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;color)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#setColor(net.minestom.server.color.Color)"><code>setColor(Color)</code></a></div>
+</div>
+<div class="block">Changes the color of the potion.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>color</code> - the new color of the potion</dd>
+</dl>
+</li>
+</ul>
+<a id="setColor(net.minestom.server.color.Color)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setColor</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setColor&#8203;(@Nullable
+                     @Nullable <a href="../../color/Color.html" title="class in net.minestom.server.color">Color</a>&nbsp;color)</pre>
 <div class="block">Changes the color of the potion.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -376,7 +404,7 @@ public&nbsp;java.util.List&lt;<a href="../../potion/CustomPotionEffect.html" tit
 <li class="blockList">
 <h4>isSimilar</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isSimilar&#8203;(@NotNull
-                         <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</pre>
+                         @NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#isSimilar(net.minestom.server.item.metadata.ItemMeta)">ItemMeta</a></code></span></div>
 <div class="block">Gets if the two ItemMeta are similar.
  <p>
@@ -398,7 +426,7 @@ public&nbsp;java.util.List&lt;<a href="../../potion/CustomPotionEffect.html" tit
 <li class="blockList">
 <h4>read</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;read&#8203;(@NotNull
-                 org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
+                 @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">ItemMeta</a></code></span></div>
 <div class="block">Reads nbt data from a compound.
  <p>
@@ -419,7 +447,7 @@ public&nbsp;java.util.List&lt;<a href="../../potion/CustomPotionEffect.html" tit
 <li class="blockList">
 <h4>write</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
-                  org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
+                  @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">ItemMeta</a></code></span></div>
 <div class="block">Writes nbt data to a compound.</div>
 <dl>
@@ -437,7 +465,7 @@ public&nbsp;java.util.List&lt;<a href="../../potion/CustomPotionEffect.html" tit
 <li class="blockList">
 <h4>clone</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;clone()</pre>
+public&nbsp;@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;clone()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#clone()">ItemMeta</a></code></span></div>
 <div class="block">Creates and returns a copy of this object.</div>
 <dl>

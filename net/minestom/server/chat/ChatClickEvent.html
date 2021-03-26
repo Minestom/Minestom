@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":10,"i2":10,"i3":9,"i4":9,"i5":9};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":41,"i1":42,"i2":42,"i3":41,"i4":41,"i5":41};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -130,8 +130,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <hr>
-<pre>public class <span class="typeNameLabel">ChatClickEvent</span>
+<pre>@Deprecated
+public class <span class="typeNameLabel">ChatClickEvent</span>
 extends java.lang.Object</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Represents a click event for a specific portion of the message.</div>
 </li>
 </ul>
@@ -147,45 +149,54 @@ extends java.lang.Object</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static <a href="ChatClickEvent.html" title="class in net.minestom.server.chat">ChatClickEvent</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copyToClipboard(java.lang.String)">copyToClipboard</a></span>&#8203;(java.lang.String&nbsp;text)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colFirst"><code>static @NotNull <a href="ChatClickEvent.html" title="class in net.minestom.server.chat">ChatClickEvent</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copyToClipboard(java.lang.String)">copyToClipboard</a></span>&#8203;(@NotNull java.lang.String&nbsp;text)</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>protected java.lang.String</code></td>
+<td class="colFirst"><code>protected @NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAction()">getAction</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>protected java.lang.String</code></td>
+<td class="colFirst"><code>protected @NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getValue()">getValue</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>static <a href="ChatClickEvent.html" title="class in net.minestom.server.chat">ChatClickEvent</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openUrl(java.lang.String)">openUrl</a></span>&#8203;(java.lang.String&nbsp;url)</code></th>
+<td class="colFirst"><code>static @NotNull <a href="ChatClickEvent.html" title="class in net.minestom.server.chat">ChatClickEvent</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openUrl(java.lang.String)">openUrl</a></span>&#8203;(@NotNull java.lang.String&nbsp;url)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Opens an URL when clicked.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>static <a href="ChatClickEvent.html" title="class in net.minestom.server.chat">ChatClickEvent</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#runCommand(java.lang.String)">runCommand</a></span>&#8203;(java.lang.String&nbsp;command)</code></th>
+<td class="colFirst"><code>static @NotNull <a href="ChatClickEvent.html" title="class in net.minestom.server.chat">ChatClickEvent</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#runCommand(java.lang.String)">runCommand</a></span>&#8203;(@NotNull java.lang.String&nbsp;command)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Runs a command when clicked.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code>static <a href="ChatClickEvent.html" title="class in net.minestom.server.chat">ChatClickEvent</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#suggestCommand(java.lang.String)">suggestCommand</a></span>&#8203;(java.lang.String&nbsp;command)</code></th>
+<td class="colFirst"><code>static @NotNull <a href="ChatClickEvent.html" title="class in net.minestom.server.chat">ChatClickEvent</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#suggestCommand(java.lang.String)">suggestCommand</a></span>&#8203;(@NotNull java.lang.String&nbsp;command)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Writes a string in the player's chat when clicked.</div>
 </td>
 </tr>
@@ -220,8 +231,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>openUrl</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="ChatClickEvent.html" title="class in net.minestom.server.chat">ChatClickEvent</a>&nbsp;openUrl&#8203;(@NotNull
-                                     java.lang.String&nbsp;url)</pre>
+public static&nbsp;@NotNull <a href="ChatClickEvent.html" title="class in net.minestom.server.chat">ChatClickEvent</a>&nbsp;openUrl&#8203;(@NotNull
+                                              @NotNull java.lang.String&nbsp;url)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Opens an URL when clicked.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -238,8 +250,9 @@ public static&nbsp;<a href="ChatClickEvent.html" title="class in net.minestom.se
 <li class="blockList">
 <h4>runCommand</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="ChatClickEvent.html" title="class in net.minestom.server.chat">ChatClickEvent</a>&nbsp;runCommand&#8203;(@NotNull
-                                        java.lang.String&nbsp;command)</pre>
+public static&nbsp;@NotNull <a href="ChatClickEvent.html" title="class in net.minestom.server.chat">ChatClickEvent</a>&nbsp;runCommand&#8203;(@NotNull
+                                                 @NotNull java.lang.String&nbsp;command)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Runs a command when clicked.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -256,8 +269,9 @@ public static&nbsp;<a href="ChatClickEvent.html" title="class in net.minestom.se
 <li class="blockList">
 <h4>suggestCommand</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="ChatClickEvent.html" title="class in net.minestom.server.chat">ChatClickEvent</a>&nbsp;suggestCommand&#8203;(@NotNull
-                                            java.lang.String&nbsp;command)</pre>
+public static&nbsp;@NotNull <a href="ChatClickEvent.html" title="class in net.minestom.server.chat">ChatClickEvent</a>&nbsp;suggestCommand&#8203;(@NotNull
+                                                     @NotNull java.lang.String&nbsp;command)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Writes a string in the player's chat when clicked.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -274,8 +288,9 @@ public static&nbsp;<a href="ChatClickEvent.html" title="class in net.minestom.se
 <li class="blockList">
 <h4>copyToClipboard</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="ChatClickEvent.html" title="class in net.minestom.server.chat">ChatClickEvent</a>&nbsp;copyToClipboard&#8203;(@NotNull
-                                             java.lang.String&nbsp;text)</pre>
+public static&nbsp;@NotNull <a href="ChatClickEvent.html" title="class in net.minestom.server.chat">ChatClickEvent</a>&nbsp;copyToClipboard&#8203;(@NotNull
+                                                      @NotNull java.lang.String&nbsp;text)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="getAction()">
@@ -285,7 +300,8 @@ public static&nbsp;<a href="ChatClickEvent.html" title="class in net.minestom.se
 <li class="blockList">
 <h4>getAction</h4>
 <pre class="methodSignature">@NotNull
-protected&nbsp;java.lang.String&nbsp;getAction()</pre>
+protected&nbsp;@NotNull java.lang.String&nbsp;getAction()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="getValue()">
@@ -295,7 +311,8 @@ protected&nbsp;java.lang.String&nbsp;getAction()</pre>
 <li class="blockList">
 <h4>getValue</h4>
 <pre class="methodSignature">@NotNull
-protected&nbsp;java.lang.String&nbsp;getValue()</pre>
+protected&nbsp;@NotNull java.lang.String&nbsp;getValue()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 </li>

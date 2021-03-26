@@ -185,12 +185,12 @@ extends java.lang.Object</pre>
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(short,java.lang.String)">CustomBlock</a></span>&#8203;(short&nbsp;defaultBlockStateId,
-           java.lang.String&nbsp;identifier)</code></th>
+           @NotNull java.lang.String&nbsp;identifier)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.block.Block,java.lang.String)">CustomBlock</a></span>&#8203;(<a href="Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block,
-           java.lang.String&nbsp;identifier)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.block.Block,java.lang.String)">CustomBlock</a></span>&#8203;(@NotNull <a href="Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block,
+           @NotNull java.lang.String&nbsp;identifier)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -212,10 +212,10 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createData(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data)">createData</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-          <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
-          <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
+<td class="colFirst"><code>@Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createData(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data)">createData</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+          @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+          @Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
 <td class="colLast">
 <div class="block">Initialises data for this block.</div>
 </td>
@@ -238,8 +238,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBreakDelay(net.minestom.server.entity.Player,net.minestom.server.utils.BlockPosition,byte,java.util.Set)">getBreakDelay</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-             <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBreakDelay(net.minestom.server.entity.Player,net.minestom.server.utils.BlockPosition,byte,java.util.Set)">getBreakDelay</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+             @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
              byte&nbsp;stage,
              java.util.Set&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;breakers)</code></th>
 <td class="colLast">
@@ -252,17 +252,17 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code>java.util.Set&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBreakers(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition)">getBreakers</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-           <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</code></th>
+<td class="colFirst"><code>@Nullable java.util.Set&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBreakers(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition)">getBreakers</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+           @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</code></th>
 <td class="colLast">
 <div class="block">Gets all the breakers of a block, only if <a href="#enableMultiPlayerBreaking()"><code>enableMultiPlayerBreaking()</code></a> is enabled.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBreakStage(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition)">getBreakStage</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-             <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBreakStage(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition)">getBreakStage</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+             @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</code></th>
 <td class="colLast">
 <div class="block">Gets the block break stage at a position,
  only work if <a href="#enableMultiPlayerBreaking()"><code>enableMultiPlayerBreaking()</code></a> is enabled.</div>
@@ -287,14 +287,14 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>float</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDrag(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition)">getDrag</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-       <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDrag(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition)">getDrag</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+       @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</code></th>
 <td class="colLast">
 <div class="block">Gets the drag of this block.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colFirst"><code>@NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getIdentifier()">getIdentifier</a></span>()</code></th>
 <td class="colLast">
 <div class="block">The custom block identifier, used to retrieve the custom block object with
@@ -302,14 +302,14 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
-<td class="colFirst"><code><a href="../../gamedata/loottables/LootTable.html" title="class in net.minestom.server.gamedata.loottables">LootTable</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLootTable(net.minestom.server.gamedata.loottables.LootTableManager)">getLootTable</a></span>&#8203;(<a href="../../gamedata/loottables/LootTableManager.html" title="class in net.minestom.server.gamedata.loottables">LootTableManager</a>&nbsp;tableManager)</code></th>
+<td class="colFirst"><code>@Nullable <a href="../../gamedata/loottables/LootTable.html" title="class in net.minestom.server.gamedata.loottables">LootTable</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLootTable(net.minestom.server.gamedata.loottables.LootTableManager)">getLootTable</a></span>&#8203;(@NotNull <a href="../../gamedata/loottables/LootTableManager.html" title="class in net.minestom.server.gamedata.loottables">LootTableManager</a>&nbsp;tableManager)</code></th>
 <td class="colLast">
 <div class="block">Returns the loot table associated to this block.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
-<td class="colFirst"><code><a href="../../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a></code></td>
+<td class="colFirst"><code>@Nullable <a href="../../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getUpdateOption()">getUpdateOption</a></span>()</code></th>
 <td class="colLast">
 <div class="block">The update option is used to define the delay between two
@@ -318,9 +318,9 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#handleContact(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Entity)">handleContact</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-             <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
-             <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;touching)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#handleContact(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Entity)">handleContact</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+             @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
+             @NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;touching)</code></th>
 <td class="colLast">
 <div class="block">Defines custom behaviour for entities touching this block.</div>
 </td>
@@ -334,17 +334,17 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>abstract void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onDestroy(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data)">onDestroy</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-         <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
-         <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onDestroy(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data)">onDestroy</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+         @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+         @Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
 <td class="colLast">
 <div class="block">Called when a custom block has been destroyed or replaced.</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onExplode(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data)">onExplode</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-         <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onExplode(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data)">onExplode</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+         @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
          <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;lootTableArguments)</code></th>
 <td class="colLast">
 <div class="block">Called when an explosion wants to destroy this block.</div>
@@ -352,28 +352,28 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>abstract boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onInteract(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data)">onInteract</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onInteract(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data)">onInteract</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
           <a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
-          <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
-          <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
+          @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+          @Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
 <td class="colLast">
 <div class="block">Handles interactions with this block.</div>
 </td>
 </tr>
 <tr id="i18" class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onPlace(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data)">onPlace</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-       <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
-       <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onPlace(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data)">onPlace</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+       @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+       @Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
 <td class="colLast">
 <div class="block">Called when a custom block has been placed.</div>
 </td>
 </tr>
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processStage(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Player,byte)">processStage</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-            <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
-            <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processStage(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Player,byte)">processStage</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+            @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+            @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
             byte&nbsp;stageIncrease)</code></th>
 <td class="colLast">
 <div class="block">Process one stage on the block, break it if it excess <a href="#MAX_STAGE"><code>MAX_STAGE</code></a>,
@@ -382,24 +382,24 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeDiggingInformation(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition)">removeDiggingInformation</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                        <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeDiggingInformation(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition)">removeDiggingInformation</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                        @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#scheduledUpdate(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data)">scheduledUpdate</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-               <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
-               <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;blockData)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#scheduledUpdate(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data)">scheduledUpdate</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+               @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
+               @Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;blockData)</code></th>
 <td class="colLast">
 <div class="block">Called when a scheduled update on this block happens.</div>
 </td>
 </tr>
 <tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#startDigging(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Player)">startDigging</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-            <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
-            <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#startDigging(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Player)">startDigging</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+            @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+            @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">Called when a player start digging this custom block,
  process all necessary data if <a href="#enableMultiPlayerBreaking()"><code>enableMultiPlayerBreaking()</code></a> is enabled.</div>
@@ -407,9 +407,9 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stopDigging(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Player)">stopDigging</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-           <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
-           <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stopDigging(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Player)">stopDigging</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+           @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+           @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">Called when a player stop digging a block,
  does remove the block break animation if he was the only breaker.</div>
@@ -417,18 +417,18 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i24" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data)">update</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-      <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
-      <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data)">update</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+      @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+      @Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
 <td class="colLast">
 <div class="block">Calling delay depends on <a href="#getUpdateOption()"><code>getUpdateOption()</code></a> which should be overridden.</div>
 </td>
 </tr>
 <tr id="i25" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateFromNeighbor(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.utils.BlockPosition,boolean)">updateFromNeighbor</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                  <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;thisPosition,
-                  <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;neighborPosition,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateFromNeighbor(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.utils.BlockPosition,boolean)">updateFromNeighbor</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                  @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;thisPosition,
+                  @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;neighborPosition,
                   boolean&nbsp;directNeighbor)</code></th>
 <td class="colLast">
 <div class="block">Updates this block from a neighbor.</div>
@@ -436,9 +436,9 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i26" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeBlockEntity(net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data,org.jglrxavpok.hephaistos.nbt.NBTCompound)">writeBlockEntity</a></span>&#8203;(<a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
-                <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;blockData,
-                org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbt)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeBlockEntity(net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data,org.jglrxavpok.hephaistos.nbt.NBTCompound)">writeBlockEntity</a></span>&#8203;(@NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
+                @Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;blockData,
+                @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbt)</code></th>
 <td class="colLast">
 <div class="block">Allows custom block to write block entity data to a given NBT compound.</div>
 </td>
@@ -498,7 +498,7 @@ extends java.lang.Object</pre>
 <h4>CustomBlock</h4>
 <pre>public&nbsp;CustomBlock&#8203;(short&nbsp;defaultBlockStateId,
                    @NotNull
-                   java.lang.String&nbsp;identifier)</pre>
+                   @NotNull java.lang.String&nbsp;identifier)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>defaultBlockStateId</code> - the default block state id</dd>
@@ -513,9 +513,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>CustomBlock</h4>
 <pre>public&nbsp;CustomBlock&#8203;(@NotNull
-                   <a href="Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block,
+                   @NotNull <a href="Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block,
                    @NotNull
-                   java.lang.String&nbsp;identifier)</pre>
+                   @NotNull java.lang.String&nbsp;identifier)</pre>
 </li>
 </ul>
 </li>
@@ -544,11 +544,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>update</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;update&#8203;(@NotNull
-                   <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                   @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                    @NotNull
-                   <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                   @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                    @Nullable
-                   <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
+                   @Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
 <div class="block">Calling delay depends on <a href="#getUpdateOption()"><code>getUpdateOption()</code></a> which should be overridden.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -568,7 +568,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getUpdateOption</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="../../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;getUpdateOption()</pre>
+public&nbsp;@Nullable <a href="../../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;getUpdateOption()</pre>
 <div class="block">The update option is used to define the delay between two
  <a href="#update(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data)"><code>update(Instance, BlockPosition, Data)</code></a> execution.
  <p>
@@ -587,11 +587,11 @@ public&nbsp;<a href="../../utils/time/UpdateOption.html" title="class in net.min
 <li class="blockList">
 <h4>onPlace</h4>
 <pre class="methodSignature">public abstract&nbsp;void&nbsp;onPlace&#8203;(@NotNull
-                             <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                             @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                              @NotNull
-                             <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                             @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                              @Nullable
-                             <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
+                             @Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
 <div class="block">Called when a custom block has been placed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -608,11 +608,11 @@ public&nbsp;<a href="../../utils/time/UpdateOption.html" title="class in net.min
 <li class="blockList">
 <h4>onDestroy</h4>
 <pre class="methodSignature">public abstract&nbsp;void&nbsp;onDestroy&#8203;(@NotNull
-                               <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                               @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                                @NotNull
-                               <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                               @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                                @Nullable
-                               <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
+                               @Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
 <div class="block">Called when a custom block has been destroyed or replaced.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -629,13 +629,13 @@ public&nbsp;<a href="../../utils/time/UpdateOption.html" title="class in net.min
 <li class="blockList">
 <h4>onInteract</h4>
 <pre class="methodSignature">public abstract&nbsp;boolean&nbsp;onInteract&#8203;(@NotNull
-                                   <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                                   @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                                    @NotNull
                                    <a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
                                    @NotNull
-                                   <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                                   @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                                    @Nullable
-                                   <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
+                                   @Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
 <div class="block">Handles interactions with this block. Can also block normal item use (containers should block when opening the
  menu, this prevents the player from placing a block when opening it for instance).</div>
 <dl>
@@ -671,9 +671,9 @@ public&nbsp;<a href="../../utils/time/UpdateOption.html" title="class in net.min
 <li class="blockList">
 <h4>getBreakDelay</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;getBreakDelay&#8203;(@NotNull
-                         <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                         @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                          @NotNull
-                         <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
+                         @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
                          byte&nbsp;stage,
                          java.util.Set&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;breakers)</pre>
 <div class="block">Called when the player requests the next stage break delay</div>
@@ -744,11 +744,11 @@ public&nbsp;<a href="../../utils/time/UpdateOption.html" title="class in net.min
 <li class="blockList">
 <h4>handleContact</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;handleContact&#8203;(@NotNull
-                          <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                          @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                           @NotNull
-                          <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
+                          @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
                           @NotNull
-                          <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;touching)</pre>
+                          @NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;touching)</pre>
 <div class="block">Defines custom behaviour for entities touching this block.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -783,7 +783,7 @@ public&nbsp;<a href="../../utils/time/UpdateOption.html" title="class in net.min
 <li class="blockList">
 <h4>getIdentifier</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.lang.String&nbsp;getIdentifier()</pre>
+public&nbsp;@NotNull java.lang.String&nbsp;getIdentifier()</pre>
 <div class="block">The custom block identifier, used to retrieve the custom block object with
  <a href="BlockManager.html#getCustomBlock(java.lang.String)"><code>BlockManager.getCustomBlock(String)</code></a> and to set custom block in the instance.</div>
 <dl>
@@ -799,12 +799,12 @@ public&nbsp;java.lang.String&nbsp;getIdentifier()</pre>
 <li class="blockList">
 <h4>createData</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;createData&#8203;(@NotNull
-                       <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                       @NotNull
-                       <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
-                       @Nullable
-                       <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
+public&nbsp;@Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;createData&#8203;(@NotNull
+                                 @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                                 @NotNull
+                                 @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                                 @Nullable
+                                 @Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
 <div class="block">Initialises data for this block.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -822,11 +822,11 @@ public&nbsp;<a href="../../data/Data.html" title="class in net.minestom.server.d
 <li class="blockList">
 <h4>updateFromNeighbor</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;updateFromNeighbor&#8203;(@NotNull
-                               <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                               @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                                @NotNull
-                               <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;thisPosition,
+                               @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;thisPosition,
                                @NotNull
-                               <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;neighborPosition,
+                               @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;neighborPosition,
                                boolean&nbsp;directNeighbor)</pre>
 <div class="block">Updates this block from a neighbor. By default calls 'update' if directNeighbor is true.</div>
 <dl>
@@ -845,11 +845,11 @@ public&nbsp;<a href="../../data/Data.html" title="class in net.minestom.server.d
 <li class="blockList">
 <h4>scheduledUpdate</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;scheduledUpdate&#8203;(@NotNull
-                            <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                            @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                             @NotNull
-                            <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
+                            @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
                             @Nullable
-                            <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;blockData)</pre>
+                            @Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;blockData)</pre>
 <div class="block">Called when a scheduled update on this block happens. By default, calls 'update'.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -866,9 +866,9 @@ public&nbsp;<a href="../../data/Data.html" title="class in net.minestom.server.d
 <li class="blockList">
 <h4>getDrag</h4>
 <pre class="methodSignature">public&nbsp;float&nbsp;getDrag&#8203;(@NotNull
-                     <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                     @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                      @NotNull
-                     <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</pre>
+                     @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</pre>
 <div class="block">Gets the drag of this block.
  <p>
  It has to be between 0 and 1.</div>
@@ -885,11 +885,11 @@ public&nbsp;<a href="../../data/Data.html" title="class in net.minestom.server.d
 <li class="blockList">
 <h4>writeBlockEntity</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;writeBlockEntity&#8203;(@NotNull
-                             <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
+                             @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
                              @Nullable
-                             <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;blockData,
+                             @Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;blockData,
                              @NotNull
-                             org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbt)</pre>
+                             @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbt)</pre>
 <div class="block">Allows custom block to write block entity data to a given NBT compound.
  Used to send block entity data to the client over the network.
  Can also be used to save block entity data on disk for compatible chunk savers.</div>
@@ -908,9 +908,9 @@ public&nbsp;<a href="../../data/Data.html" title="class in net.minestom.server.d
 <li class="blockList">
 <h4>onExplode</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;onExplode&#8203;(@NotNull
-                         <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                         @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                          @NotNull
-                         <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
+                         @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
                          <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;lootTableArguments)</pre>
 <div class="block">Called when an explosion wants to destroy this block.</div>
 <dl>
@@ -930,8 +930,8 @@ public&nbsp;<a href="../../data/Data.html" title="class in net.minestom.server.d
 <li class="blockList">
 <h4>getLootTable</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="../../gamedata/loottables/LootTable.html" title="class in net.minestom.server.gamedata.loottables">LootTable</a>&nbsp;getLootTable&#8203;(@NotNull
-                              <a href="../../gamedata/loottables/LootTableManager.html" title="class in net.minestom.server.gamedata.loottables">LootTableManager</a>&nbsp;tableManager)</pre>
+public&nbsp;@Nullable <a href="../../gamedata/loottables/LootTable.html" title="class in net.minestom.server.gamedata.loottables">LootTable</a>&nbsp;getLootTable&#8203;(@NotNull
+                                        @NotNull <a href="../../gamedata/loottables/LootTableManager.html" title="class in net.minestom.server.gamedata.loottables">LootTableManager</a>&nbsp;tableManager)</pre>
 <div class="block">Returns the loot table associated to this block. Return null to use vanilla behavior.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -948,11 +948,11 @@ public&nbsp;<a href="../../gamedata/loottables/LootTable.html" title="class in n
 <li class="blockList">
 <h4>startDigging</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;startDigging&#8203;(@NotNull
-                         <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                         @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                          @NotNull
-                         <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                         @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                          @NotNull
-                         <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+                         @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 <div class="block">Called when a player start digging this custom block,
  process all necessary data if <a href="#enableMultiPlayerBreaking()"><code>enableMultiPlayerBreaking()</code></a> is enabled.</div>
 <dl>
@@ -970,11 +970,11 @@ public&nbsp;<a href="../../gamedata/loottables/LootTable.html" title="class in n
 <li class="blockList">
 <h4>stopDigging</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;stopDigging&#8203;(@NotNull
-                        <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                        @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                         @NotNull
-                        <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                        @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                         @NotNull
-                        <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+                        @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 <div class="block">Called when a player stop digging a block,
  does remove the block break animation if he was the only breaker.</div>
 <dl>
@@ -992,11 +992,11 @@ public&nbsp;<a href="../../gamedata/loottables/LootTable.html" title="class in n
 <li class="blockList">
 <h4>processStage</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;processStage&#8203;(@NotNull
-                            <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                            @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                             @NotNull
-                            <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                            @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                             @NotNull
-                            <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                            @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                             byte&nbsp;stageIncrease)</pre>
 <div class="block">Process one stage on the block, break it if it excess <a href="#MAX_STAGE"><code>MAX_STAGE</code></a>,
  only if <a href="#enableMultiPlayerBreaking()"><code>enableMultiPlayerBreaking()</code></a> is enabled.</div>
@@ -1020,9 +1020,9 @@ public&nbsp;<a href="../../gamedata/loottables/LootTable.html" title="class in n
 <li class="blockList">
 <h4>removeDiggingInformation</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;removeDiggingInformation&#8203;(@NotNull
-                                     <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                                     @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                                      @NotNull
-                                     <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</pre>
+                                     @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</pre>
 </li>
 </ul>
 <a id="getBreakers(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition)">
@@ -1032,10 +1032,10 @@ public&nbsp;<a href="../../gamedata/loottables/LootTable.html" title="class in n
 <li class="blockList">
 <h4>getBreakers</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;java.util.Set&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;getBreakers&#8203;(@NotNull
-                                         <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                                         @NotNull
-                                         <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</pre>
+public&nbsp;@Nullable java.util.Set&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;getBreakers&#8203;(@NotNull
+                                                   @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                                                   @NotNull
+                                                   @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</pre>
 <div class="block">Gets all the breakers of a block, only if <a href="#enableMultiPlayerBreaking()"><code>enableMultiPlayerBreaking()</code></a> is enabled.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1055,9 +1055,9 @@ public&nbsp;java.util.Set&lt;<a href="../../entity/Player.html" title="class in 
 <li class="blockList">
 <h4>getBreakStage</h4>
 <pre class="methodSignature">public&nbsp;byte&nbsp;getBreakStage&#8203;(@NotNull
-                          <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                          @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                           @NotNull
-                          <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</pre>
+                          @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</pre>
 <div class="block">Gets the block break stage at a position,
  only work if <a href="#enableMultiPlayerBreaking()"><code>enableMultiPlayerBreaking()</code></a> is enabled.</div>
 <dl>

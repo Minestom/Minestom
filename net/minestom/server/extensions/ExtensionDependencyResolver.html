@@ -158,7 +158,7 @@ implements net.minestom.dependencies.DependencyResolver</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.List)">ExtensionDependencyResolver</a></span>&#8203;(java.util.List&lt;<a href="DiscoveredExtension.html" title="class in net.minestom.server.extensions">DiscoveredExtension</a>&gt;&nbsp;extensions)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.List)">ExtensionDependencyResolver</a></span>&#8203;(@NotNull java.util.List&lt;<a href="DiscoveredExtension.html" title="class in net.minestom.server.extensions">DiscoveredExtension</a>&gt;&nbsp;extensions)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -180,9 +180,9 @@ implements net.minestom.dependencies.DependencyResolver</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>net.minestom.dependencies.ResolvedDependency</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resolve(java.lang.String,java.io.File)">resolve</a></span>&#8203;(java.lang.String&nbsp;extensionName,
-       java.io.File&nbsp;file)</code></th>
+<td class="colFirst"><code>@NotNull net.minestom.dependencies.ResolvedDependency</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resolve(java.lang.String,java.io.File)">resolve</a></span>&#8203;(@NotNull java.lang.String&nbsp;extensionName,
+       @NotNull java.io.File&nbsp;file)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -221,7 +221,7 @@ implements net.minestom.dependencies.DependencyResolver</pre>
 <li class="blockList">
 <h4>ExtensionDependencyResolver</h4>
 <pre>public&nbsp;ExtensionDependencyResolver&#8203;(@NotNull
-                                   java.util.List&lt;<a href="DiscoveredExtension.html" title="class in net.minestom.server.extensions">DiscoveredExtension</a>&gt;&nbsp;extensions)</pre>
+                                   @NotNull java.util.List&lt;<a href="DiscoveredExtension.html" title="class in net.minestom.server.extensions">DiscoveredExtension</a>&gt;&nbsp;extensions)</pre>
 </li>
 </ul>
 </li>
@@ -241,11 +241,11 @@ implements net.minestom.dependencies.DependencyResolver</pre>
 <li class="blockList">
 <h4>resolve</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;net.minestom.dependencies.ResolvedDependency&nbsp;resolve&#8203;(@NotNull
-                                                            java.lang.String&nbsp;extensionName,
-                                                            @NotNull
-                                                            java.io.File&nbsp;file)
-                                                     throws net.minestom.dependencies.UnresolvedDependencyException</pre>
+public&nbsp;@NotNull net.minestom.dependencies.ResolvedDependency&nbsp;resolve&#8203;(@NotNull
+                                                                     @NotNull java.lang.String&nbsp;extensionName,
+                                                                     @NotNull
+                                                                     @NotNull java.io.File&nbsp;file)
+                                                              throws net.minestom.dependencies.UnresolvedDependencyException</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>resolve</code>&nbsp;in interface&nbsp;<code>net.minestom.dependencies.DependencyResolver</code></dd>

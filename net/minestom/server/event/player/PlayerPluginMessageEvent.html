@@ -180,9 +180,9 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,java.lang.String,byte%5B%5D)">PlayerPluginMessageEvent</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                        java.lang.String&nbsp;identifier,
-                        byte[]&nbsp;message)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,java.lang.String,@org.jetbrains.annotations.NotNullbyte%5B%5D)">PlayerPluginMessageEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                        @NotNull java.lang.String&nbsp;identifier,
+                        @org.jetbrains.annotations.NotNull byte[]&nbsp;message)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -204,21 +204,21 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colFirst"><code>@NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getIdentifier()">getIdentifier</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the message identifier.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>byte[]</code></td>
+<td class="colFirst"><code>@org.jetbrains.annotations.NotNull byte[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMessage()">getMessage</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the message data as a byte array.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colFirst"><code>@NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMessageString()">getMessageString</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the message data as a String.</div>
@@ -255,18 +255,18 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.entity.Player,java.lang.String,byte[])">
+<a id="&lt;init&gt;(net.minestom.server.entity.Player,java.lang.String,@org.jetbrains.annotations.NotNullbyte[])">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>PlayerPluginMessageEvent</h4>
 <pre>public&nbsp;PlayerPluginMessageEvent&#8203;(@NotNull
-                                <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                                @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                                 @NotNull
-                                java.lang.String&nbsp;identifier,
+                                @NotNull java.lang.String&nbsp;identifier,
                                 @NotNull
-                                byte[]&nbsp;message)</pre>
+                                @org.jetbrains.annotations.NotNull byte[]&nbsp;message)</pre>
 </li>
 </ul>
 </li>
@@ -286,7 +286,7 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <li class="blockList">
 <h4>getIdentifier</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.lang.String&nbsp;getIdentifier()</pre>
+public&nbsp;@NotNull java.lang.String&nbsp;getIdentifier()</pre>
 <div class="block">Gets the message identifier.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -301,7 +301,7 @@ public&nbsp;java.lang.String&nbsp;getIdentifier()</pre>
 <li class="blockList">
 <h4>getMessage</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;byte[]&nbsp;getMessage()</pre>
+public&nbsp;@org.jetbrains.annotations.NotNull byte[]&nbsp;getMessage()</pre>
 <div class="block">Gets the message data as a byte array.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -316,7 +316,7 @@ public&nbsp;byte[]&nbsp;getMessage()</pre>
 <li class="blockList">
 <h4>getMessageString</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.lang.String&nbsp;getMessageString()</pre>
+public&nbsp;@NotNull java.lang.String&nbsp;getMessageString()</pre>
 <div class="block">Gets the message data as a String.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

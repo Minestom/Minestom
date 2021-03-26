@@ -209,7 +209,7 @@ implements <a href="../utils/clone/PublicCloneable.html" title="interface in net
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="Data.html" title="class in net.minestom.server.data">Data</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="Data.html" title="class in net.minestom.server.data">Data</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Creates and returns a copy of this object.</div>
@@ -217,13 +217,13 @@ implements <a href="../utils/clone/PublicCloneable.html" title="interface in net
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>abstract &lt;T&gt;&nbsp;T</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#get(java.lang.String)">get</a></span>&#8203;(java.lang.String&nbsp;key)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#get(java.lang.String)">get</a></span>&#8203;(@NotNull java.lang.String&nbsp;key)</code></th>
 <td class="colLast">
 <div class="block">Retrieves a value based on its key.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>abstract java.util.Set&lt;java.lang.String&gt;</code></td>
+<td class="colFirst"><code>abstract @NotNull java.util.Set&lt;java.lang.String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getKeys()">getKeys</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the list of data keys.</div>
@@ -231,7 +231,7 @@ implements <a href="../utils/clone/PublicCloneable.html" title="interface in net
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>abstract &lt;T&gt;&nbsp;T</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOrDefault(java.lang.String,T)">getOrDefault</a></span>&#8203;(java.lang.String&nbsp;key,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOrDefault(java.lang.String,T)">getOrDefault</a></span>&#8203;(@NotNull java.lang.String&nbsp;key,
             T&nbsp;defaultValue)</code></th>
 <td class="colLast">
 <div class="block">Retrieves a value based on its key, give a default value if not found.</div>
@@ -239,7 +239,7 @@ implements <a href="../utils/clone/PublicCloneable.html" title="interface in net
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>abstract boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasKey(java.lang.String)">hasKey</a></span>&#8203;(java.lang.String&nbsp;key)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasKey(java.lang.String)">hasKey</a></span>&#8203;(@NotNull java.lang.String&nbsp;key)</code></th>
 <td class="colLast">
 <div class="block">Gets if the data has a key.</div>
 </td>
@@ -253,7 +253,7 @@ implements <a href="../utils/clone/PublicCloneable.html" title="interface in net
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(java.lang.String,T)">set</a></span>&#8203;(java.lang.String&nbsp;key,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(java.lang.String,T)">set</a></span>&#8203;(@NotNull java.lang.String&nbsp;key,
    T&nbsp;value)</code></th>
 <td class="colLast">
 <div class="block">Assigns a value to a specific key.</div>
@@ -261,9 +261,9 @@ implements <a href="../utils/clone/PublicCloneable.html" title="interface in net
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>abstract &lt;T&gt;&nbsp;void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(java.lang.String,T,java.lang.Class)">set</a></span>&#8203;(java.lang.String&nbsp;key,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(java.lang.String,T,java.lang.Class)">set</a></span>&#8203;(@NotNull java.lang.String&nbsp;key,
    T&nbsp;value,
-   java.lang.Class&lt;T&gt;&nbsp;type)</code></th>
+   @Nullable java.lang.Class&lt;T&gt;&nbsp;type)</code></th>
 <td class="colLast">
 <div class="block">Assigns a value to a specific key.</div>
 </td>
@@ -339,11 +339,11 @@ implements <a href="../utils/clone/PublicCloneable.html" title="interface in net
 <li class="blockList">
 <h4>set</h4>
 <pre class="methodSignature">public abstract&nbsp;&lt;T&gt;&nbsp;void&nbsp;set&#8203;(@NotNull
-                             java.lang.String&nbsp;key,
+                             @NotNull java.lang.String&nbsp;key,
                              @Nullable
                              T&nbsp;value,
                              @Nullable
-                             java.lang.Class&lt;T&gt;&nbsp;type)</pre>
+                             @Nullable java.lang.Class&lt;T&gt;&nbsp;type)</pre>
 <div class="block">Assigns a value to a specific key.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
@@ -365,7 +365,7 @@ implements <a href="../utils/clone/PublicCloneable.html" title="interface in net
 <li class="blockList">
 <h4>set</h4>
 <pre class="methodSignature">public&nbsp;&lt;T&gt;&nbsp;void&nbsp;set&#8203;(@NotNull
-                    java.lang.String&nbsp;key,
+                    @NotNull java.lang.String&nbsp;key,
                     @Nullable
                     T&nbsp;value)</pre>
 <div class="block">Assigns a value to a specific key.
@@ -388,7 +388,7 @@ implements <a href="../utils/clone/PublicCloneable.html" title="interface in net
 <h4>get</h4>
 <pre class="methodSignature">@Nullable
 public abstract&nbsp;&lt;T&gt;&nbsp;T&nbsp;get&#8203;(@NotNull
-                          java.lang.String&nbsp;key)</pre>
+                          @NotNull java.lang.String&nbsp;key)</pre>
 <div class="block">Retrieves a value based on its key.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
@@ -410,7 +410,7 @@ public abstract&nbsp;&lt;T&gt;&nbsp;T&nbsp;get&#8203;(@NotNull
 <h4>getOrDefault</h4>
 <pre class="methodSignature">@Nullable
 public abstract&nbsp;&lt;T&gt;&nbsp;T&nbsp;getOrDefault&#8203;(@NotNull
-                                   java.lang.String&nbsp;key,
+                                   @NotNull java.lang.String&nbsp;key,
                                    @Nullable
                                    T&nbsp;defaultValue)</pre>
 <div class="block">Retrieves a value based on its key, give a default value if not found.</div>
@@ -432,7 +432,7 @@ public abstract&nbsp;&lt;T&gt;&nbsp;T&nbsp;getOrDefault&#8203;(@NotNull
 <li class="blockList">
 <h4>hasKey</h4>
 <pre class="methodSignature">public abstract&nbsp;boolean&nbsp;hasKey&#8203;(@NotNull
-                               java.lang.String&nbsp;key)</pre>
+                               @NotNull java.lang.String&nbsp;key)</pre>
 <div class="block">Gets if the data has a key.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -449,7 +449,7 @@ public abstract&nbsp;&lt;T&gt;&nbsp;T&nbsp;getOrDefault&#8203;(@NotNull
 <li class="blockList">
 <h4>getKeys</h4>
 <pre class="methodSignature">@NotNull
-public abstract&nbsp;java.util.Set&lt;java.lang.String&gt;&nbsp;getKeys()</pre>
+public abstract&nbsp;@NotNull java.util.Set&lt;java.lang.String&gt;&nbsp;getKeys()</pre>
 <div class="block">Gets the list of data keys.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -478,7 +478,7 @@ public abstract&nbsp;java.util.Set&lt;java.lang.String&gt;&nbsp;getKeys()</pre>
 <li class="blockList">
 <h4>clone</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;clone()</pre>
+public&nbsp;@NotNull <a href="Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;clone()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../utils/clone/PublicCloneable.html#clone()">PublicCloneable</a></code></span></div>
 <div class="block">Creates and returns a copy of this object.</div>
 <dl>

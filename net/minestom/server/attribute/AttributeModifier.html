@@ -153,18 +153,18 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,float,net.minestom.server.attribute.AttributeOperation)">AttributeModifier</a></span>&#8203;(java.lang.String&nbsp;name,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,float,net.minestom.server.attribute.AttributeOperation)">AttributeModifier</a></span>&#8203;(@NotNull java.lang.String&nbsp;name,
                  float&nbsp;amount,
-                 <a href="AttributeOperation.html" title="enum in net.minestom.server.attribute">AttributeOperation</a>&nbsp;operation)</code></th>
+                 @NotNull <a href="AttributeOperation.html" title="enum in net.minestom.server.attribute">AttributeOperation</a>&nbsp;operation)</code></th>
 <td class="colLast">
 <div class="block">Creates a new modifier with a random id.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.UUID,java.lang.String,float,net.minestom.server.attribute.AttributeOperation)">AttributeModifier</a></span>&#8203;(java.util.UUID&nbsp;id,
-                 java.lang.String&nbsp;name,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.UUID,java.lang.String,float,net.minestom.server.attribute.AttributeOperation)">AttributeModifier</a></span>&#8203;(@NotNull java.util.UUID&nbsp;id,
+                 @NotNull java.lang.String&nbsp;name,
                  float&nbsp;amount,
-                 <a href="AttributeOperation.html" title="enum in net.minestom.server.attribute">AttributeOperation</a>&nbsp;operation)</code></th>
+                 @NotNull <a href="AttributeOperation.html" title="enum in net.minestom.server.attribute">AttributeOperation</a>&nbsp;operation)</code></th>
 <td class="colLast">
 <div class="block">Creates a new modifier.</div>
 </td>
@@ -195,21 +195,21 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>java.util.UUID</code></td>
+<td class="colFirst"><code>@NotNull java.util.UUID</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getId()">getId</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the id of this modifier.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colFirst"><code>@NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getName()">getName</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the name of this modifier.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="AttributeOperation.html" title="enum in net.minestom.server.attribute">AttributeOperation</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="AttributeOperation.html" title="enum in net.minestom.server.attribute">AttributeOperation</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOperation()">getOperation</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the operation of this modifier.</div>
@@ -246,10 +246,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>AttributeModifier</h4>
 <pre>public&nbsp;AttributeModifier&#8203;(@NotNull
-                         java.lang.String&nbsp;name,
+                         @NotNull java.lang.String&nbsp;name,
                          float&nbsp;amount,
                          @NotNull
-                         <a href="AttributeOperation.html" title="enum in net.minestom.server.attribute">AttributeOperation</a>&nbsp;operation)</pre>
+                         @NotNull <a href="AttributeOperation.html" title="enum in net.minestom.server.attribute">AttributeOperation</a>&nbsp;operation)</pre>
 <div class="block">Creates a new modifier with a random id.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -266,12 +266,12 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>AttributeModifier</h4>
 <pre>public&nbsp;AttributeModifier&#8203;(@NotNull
-                         java.util.UUID&nbsp;id,
+                         @NotNull java.util.UUID&nbsp;id,
                          @NotNull
-                         java.lang.String&nbsp;name,
+                         @NotNull java.lang.String&nbsp;name,
                          float&nbsp;amount,
                          @NotNull
-                         <a href="AttributeOperation.html" title="enum in net.minestom.server.attribute">AttributeOperation</a>&nbsp;operation)</pre>
+                         @NotNull <a href="AttributeOperation.html" title="enum in net.minestom.server.attribute">AttributeOperation</a>&nbsp;operation)</pre>
 <div class="block">Creates a new modifier.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -299,7 +299,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getId</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.UUID&nbsp;getId()</pre>
+public&nbsp;@NotNull java.util.UUID&nbsp;getId()</pre>
 <div class="block">Gets the id of this modifier.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -314,7 +314,7 @@ public&nbsp;java.util.UUID&nbsp;getId()</pre>
 <li class="blockList">
 <h4>getName</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.lang.String&nbsp;getName()</pre>
+public&nbsp;@NotNull java.lang.String&nbsp;getName()</pre>
 <div class="block">Gets the name of this modifier.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -343,7 +343,7 @@ public&nbsp;java.lang.String&nbsp;getName()</pre>
 <li class="blockList">
 <h4>getOperation</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="AttributeOperation.html" title="enum in net.minestom.server.attribute">AttributeOperation</a>&nbsp;getOperation()</pre>
+public&nbsp;@NotNull <a href="AttributeOperation.html" title="enum in net.minestom.server.attribute">AttributeOperation</a>&nbsp;getOperation()</pre>
 <div class="block">Gets the operation of this modifier.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

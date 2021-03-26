@@ -220,7 +220,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.UUID,long)">UpdateLightPacket</a></span>&#8203;(java.util.UUID&nbsp;identifier,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.UUID,long)">UpdateLightPacket</a></span>&#8203;(@Nullable java.util.UUID&nbsp;identifier,
                  long&nbsp;timestamp)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -243,7 +243,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../utils/cache/TemporaryCache.html" title="class in net.minestom.server.utils.cache">TemporaryCache</a>&lt;<a href="../../../../utils/cache/TimedBuffer.html" title="class in net.minestom.server.utils.cache">TimedBuffer</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull <a href="../../../../utils/cache/TemporaryCache.html" title="class in net.minestom.server.utils.cache">TemporaryCache</a>&lt;<a href="../../../../utils/cache/TimedBuffer.html" title="class in net.minestom.server.utils.cache">TimedBuffer</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCache()">getCache</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the cache linked to this packet.</div>
@@ -272,7 +272,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(<a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(@NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
 <td class="colLast">
 <div class="block">Writes the packet to a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
 </td>
@@ -399,7 +399,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <li class="blockList">
 <h4>UpdateLightPacket</h4>
 <pre>public&nbsp;UpdateLightPacket&#8203;(@Nullable
-                         java.util.UUID&nbsp;identifier,
+                         @Nullable java.util.UUID&nbsp;identifier,
                          long&nbsp;timestamp)</pre>
 </li>
 </ul>
@@ -420,7 +420,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <li class="blockList">
 <h4>write</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
-                  <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</pre>
+                  @NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../ServerPacket.html#write(net.minestom.server.utils.binary.BinaryWriter)">ServerPacket</a></code></span></div>
 <div class="block">Writes the packet to a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
 <dl>
@@ -459,7 +459,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <li class="blockList">
 <h4>getCache</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../../../utils/cache/TemporaryCache.html" title="class in net.minestom.server.utils.cache">TemporaryCache</a>&lt;<a href="../../../../utils/cache/TimedBuffer.html" title="class in net.minestom.server.utils.cache">TimedBuffer</a>&gt;&nbsp;getCache()</pre>
+public&nbsp;@NotNull <a href="../../../../utils/cache/TemporaryCache.html" title="class in net.minestom.server.utils.cache">TemporaryCache</a>&lt;<a href="../../../../utils/cache/TimedBuffer.html" title="class in net.minestom.server.utils.cache">TimedBuffer</a>&gt;&nbsp;getCache()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../utils/cache/CacheablePacket.html#getCache()">CacheablePacket</a></code></span></div>
 <div class="block">Gets the cache linked to this packet.
  <p>

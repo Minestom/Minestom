@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6,"i2":18,"i3":6,"i4":18,"i5":18,"i6":18};
+var data = {"i0":6,"i1":6,"i2":18,"i3":18,"i4":18,"i5":6,"i6":18,"i7":18,"i8":18};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -154,49 +154,64 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addViewer(net.minestom.server.entity.Player)">addViewer</a></span>&#8203;(<a href="entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addViewer(net.minestom.server.entity.Player)">addViewer</a></span>&#8203;(@NotNull <a href="entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">Adds a viewer.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>java.util.Set&lt;<a href="entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.Set&lt;<a href="entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getViewers()">getViewers</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the viewers of this viewable element.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>default @NotNull net.kyori.adventure.audience.Audience</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getViewersAsAudience()">getViewersAsAudience</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the result of <a href="#getViewers()"><code>getViewers()</code></a> as an Adventure Audience.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>default @NotNull java.lang.Iterable&lt;? extends net.kyori.adventure.audience.Audience&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getViewersAsAudiences()">getViewersAsAudiences</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the result of <a href="#getViewers()"><code>getViewers()</code></a> as an <code>Iterable</code> of Adventure
+ <code>Audience</code>s.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>default boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isViewer(net.minestom.server.entity.Player)">isViewer</a></span>&#8203;(<a href="entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isViewer(net.minestom.server.entity.Player)">isViewer</a></span>&#8203;(@NotNull <a href="entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">Gets if a player is seeing this viewable object.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeViewer(net.minestom.server.entity.Player)">removeViewer</a></span>&#8203;(<a href="entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeViewer(net.minestom.server.entity.Player)">removeViewer</a></span>&#8203;(@NotNull <a href="entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">Removes a viewer.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacketsToViewers(net.minestom.server.network.packet.server.ServerPacket...)">sendPacketsToViewers</a></span>&#8203;(<a href="network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>...&nbsp;packets)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacketsToViewers(net.minestom.server.network.packet.server.ServerPacket...)">sendPacketsToViewers</a></span>&#8203;(@NotNull <a href="network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>...&nbsp;packets)</code></th>
 <td class="colLast">
 <div class="block">Sends multiple packets to all viewers.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacketToViewers(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewers</a></span>&#8203;(<a href="network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacketToViewers(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewers</a></span>&#8203;(@NotNull <a href="network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
 <td class="colLast">
 <div class="block">Sends a packet to all viewers.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewersAndSelf</a></span>&#8203;(<a href="network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewersAndSelf</a></span>&#8203;(@NotNull <a href="network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
 <td class="colLast">
 <div class="block">Sends a packet to all viewers and the viewable element if it is a player.</div>
 </td>
@@ -225,7 +240,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>addViewer</h4>
 <pre class="methodSignature">boolean&nbsp;addViewer&#8203;(@NotNull
-                  <a href="entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+                  @NotNull <a href="entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 <div class="block">Adds a viewer.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -242,7 +257,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>removeViewer</h4>
 <pre class="methodSignature">boolean&nbsp;removeViewer&#8203;(@NotNull
-                     <a href="entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+                     @NotNull <a href="entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 <div class="block">Removes a viewer.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -259,7 +274,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>getViewers</h4>
 <pre class="methodSignature">@NotNull
-java.util.Set&lt;<a href="entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;getViewers()</pre>
+@NotNull java.util.Set&lt;<a href="entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;getViewers()</pre>
 <div class="block">Gets all the viewers of this viewable element.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -274,7 +289,7 @@ java.util.Set&lt;<a href="entity/Player.html" title="class in net.minestom.serve
 <li class="blockList">
 <h4>isViewer</h4>
 <pre class="methodSignature">default&nbsp;boolean&nbsp;isViewer&#8203;(@NotNull
-                         <a href="entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+                         @NotNull <a href="entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 <div class="block">Gets if a player is seeing this viewable object.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -291,7 +306,7 @@ java.util.Set&lt;<a href="entity/Player.html" title="class in net.minestom.serve
 <li class="blockList">
 <h4>sendPacketToViewers</h4>
 <pre class="methodSignature">default&nbsp;void&nbsp;sendPacketToViewers&#8203;(@NotNull
-                                 <a href="network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</pre>
+                                 @NotNull <a href="network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</pre>
 <div class="block">Sends a packet to all viewers.
  <p>
  It is better than looping through the viewers
@@ -309,7 +324,7 @@ java.util.Set&lt;<a href="entity/Player.html" title="class in net.minestom.serve
 <li class="blockList">
 <h4>sendPacketsToViewers</h4>
 <pre class="methodSignature">default&nbsp;void&nbsp;sendPacketsToViewers&#8203;(@NotNull
-                                  <a href="network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>...&nbsp;packets)</pre>
+                                  @NotNull <a href="network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>...&nbsp;packets)</pre>
 <div class="block">Sends multiple packets to all viewers.
  <p>
  It is better than looping through the viewers
@@ -323,17 +338,48 @@ java.util.Set&lt;<a href="entity/Player.html" title="class in net.minestom.serve
 <a id="sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.ServerPacket)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>sendPacketToViewersAndSelf</h4>
 <pre class="methodSignature">default&nbsp;void&nbsp;sendPacketToViewersAndSelf&#8203;(@NotNull
-                                        <a href="network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</pre>
+                                        @NotNull <a href="network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</pre>
 <div class="block">Sends a packet to all viewers and the viewable element if it is a player.
  <p>
  If 'this' isn't a player, then only <a href="#sendPacketToViewers(net.minestom.server.network.packet.server.ServerPacket)"><code>sendPacketToViewers(ServerPacket)</code></a> is called.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>packet</code> - the packet to send</dd>
+</dl>
+</li>
+</ul>
+<a id="getViewersAsAudience()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getViewersAsAudience</h4>
+<pre class="methodSignature">@NotNull
+default&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;getViewersAsAudience()</pre>
+<div class="block">Gets the result of <a href="#getViewers()"><code>getViewers()</code></a> as an Adventure Audience.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the audience</dd>
+</dl>
+</li>
+</ul>
+<a id="getViewersAsAudiences()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getViewersAsAudiences</h4>
+<pre class="methodSignature">@NotNull
+default&nbsp;@NotNull java.lang.Iterable&lt;? extends net.kyori.adventure.audience.Audience&gt;&nbsp;getViewersAsAudiences()</pre>
+<div class="block">Gets the result of <a href="#getViewers()"><code>getViewers()</code></a> as an <code>Iterable</code> of Adventure
+ <code>Audience</code>s.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the audiences</dd>
 </dl>
 </li>
 </ul>

@@ -185,8 +185,8 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,java.lang.String)">PlayerCommandEvent</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                  java.lang.String&nbsp;command)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,java.lang.String)">PlayerCommandEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                  @NotNull java.lang.String&nbsp;command)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -208,7 +208,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colFirst"><code>@NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCommand()">getCommand</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the command used (command name + arguments).</div>
@@ -230,7 +230,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCommand(java.lang.String)">setCommand</a></span>&#8203;(java.lang.String&nbsp;command)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCommand(java.lang.String)">setCommand</a></span>&#8203;(@NotNull java.lang.String&nbsp;command)</code></th>
 <td class="colLast">
 <div class="block">Changes the command to execute.</div>
 </td>
@@ -273,9 +273,9 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>PlayerCommandEvent</h4>
 <pre>public&nbsp;PlayerCommandEvent&#8203;(@NotNull
-                          <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                          @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                           @NotNull
-                          java.lang.String&nbsp;command)</pre>
+                          @NotNull java.lang.String&nbsp;command)</pre>
 </li>
 </ul>
 </li>
@@ -295,7 +295,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>getCommand</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.lang.String&nbsp;getCommand()</pre>
+public&nbsp;@NotNull java.lang.String&nbsp;getCommand()</pre>
 <div class="block">Gets the command used (command name + arguments).</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -310,7 +310,7 @@ public&nbsp;java.lang.String&nbsp;getCommand()</pre>
 <li class="blockList">
 <h4>setCommand</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setCommand&#8203;(@NotNull
-                       java.lang.String&nbsp;command)</pre>
+                       @NotNull java.lang.String&nbsp;command)</pre>
 <div class="block">Changes the command to execute.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

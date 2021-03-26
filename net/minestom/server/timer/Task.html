@@ -160,13 +160,13 @@ implements java.lang.Runnable</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.timer.SchedulerManager,java.lang.Runnable,boolean,long,long,boolean,java.lang.String)">Task</a></span>&#8203;(<a href="SchedulerManager.html" title="class in net.minestom.server.timer">SchedulerManager</a>&nbsp;schedulerManager,
-    java.lang.Runnable&nbsp;runnable,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.timer.SchedulerManager,java.lang.Runnable,boolean,long,long,boolean,java.lang.String)">Task</a></span>&#8203;(@NotNull <a href="SchedulerManager.html" title="class in net.minestom.server.timer">SchedulerManager</a>&nbsp;schedulerManager,
+    @NotNull java.lang.Runnable&nbsp;runnable,
     boolean&nbsp;shutdown,
     long&nbsp;delay,
     long&nbsp;repeat,
     boolean&nbsp;isTransient,
-    java.lang.String&nbsp;owningExtension)</code></th>
+    @Nullable java.lang.String&nbsp;owningExtension)</code></th>
 <td class="colLast">
 <div class="block">Creates a task.</div>
 </td>
@@ -216,7 +216,7 @@ implements java.lang.Runnable</pre>
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="TaskStatus.html" title="enum in net.minestom.server.timer">TaskStatus</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="TaskStatus.html" title="enum in net.minestom.server.timer">TaskStatus</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStatus()">getStatus</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the current status of the task.</div>
@@ -288,15 +288,15 @@ implements java.lang.Runnable</pre>
 <li class="blockList">
 <h4>Task</h4>
 <pre>public&nbsp;Task&#8203;(@NotNull
-            <a href="SchedulerManager.html" title="class in net.minestom.server.timer">SchedulerManager</a>&nbsp;schedulerManager,
+            @NotNull <a href="SchedulerManager.html" title="class in net.minestom.server.timer">SchedulerManager</a>&nbsp;schedulerManager,
             @NotNull
-            java.lang.Runnable&nbsp;runnable,
+            @NotNull java.lang.Runnable&nbsp;runnable,
             boolean&nbsp;shutdown,
             long&nbsp;delay,
             long&nbsp;repeat,
             boolean&nbsp;isTransient,
             @Nullable
-            java.lang.String&nbsp;owningExtension)</pre>
+            @Nullable java.lang.String&nbsp;owningExtension)</pre>
 <div class="block">Creates a task.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -361,7 +361,7 @@ implements java.lang.Runnable</pre>
 <li class="blockList">
 <h4>getStatus</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="TaskStatus.html" title="enum in net.minestom.server.timer">TaskStatus</a>&nbsp;getStatus()</pre>
+public&nbsp;@NotNull <a href="TaskStatus.html" title="enum in net.minestom.server.timer">TaskStatus</a>&nbsp;getStatus()</pre>
 <div class="block">Gets the current status of the task.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

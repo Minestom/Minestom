@@ -188,7 +188,7 @@ extends io.netty.channel.SimpleChannelInboundHandler&lt;<a href="../packet/Inbou
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.network.PacketProcessor)">ClientChannel</a></span>&#8203;(<a href="../../PacketProcessor.html" title="class in net.minestom.server.network">PacketProcessor</a>&nbsp;packetProcessor)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.network.PacketProcessor)">ClientChannel</a></span>&#8203;(@NotNull <a href="../../PacketProcessor.html" title="class in net.minestom.server.network">PacketProcessor</a>&nbsp;packetProcessor)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -211,12 +211,12 @@ extends io.netty.channel.SimpleChannelInboundHandler&lt;<a href="../packet/Inbou
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#channelActive(io.netty.channel.ChannelHandlerContext)">channelActive</a></span>&#8203;(io.netty.channel.ChannelHandlerContext&nbsp;ctx)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#channelActive(io.netty.channel.ChannelHandlerContext)">channelActive</a></span>&#8203;(@NotNull io.netty.channel.ChannelHandlerContext&nbsp;ctx)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#channelInactive(io.netty.channel.ChannelHandlerContext)">channelInactive</a></span>&#8203;(io.netty.channel.ChannelHandlerContext&nbsp;ctx)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#channelInactive(io.netty.channel.ChannelHandlerContext)">channelInactive</a></span>&#8203;(@NotNull io.netty.channel.ChannelHandlerContext&nbsp;ctx)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
@@ -290,7 +290,7 @@ extends io.netty.channel.SimpleChannelInboundHandler&lt;<a href="../packet/Inbou
 <li class="blockList">
 <h4>ClientChannel</h4>
 <pre>public&nbsp;ClientChannel&#8203;(@NotNull
-                     <a href="../../PacketProcessor.html" title="class in net.minestom.server.network">PacketProcessor</a>&nbsp;packetProcessor)</pre>
+                     @NotNull <a href="../../PacketProcessor.html" title="class in net.minestom.server.network">PacketProcessor</a>&nbsp;packetProcessor)</pre>
 </li>
 </ul>
 </li>
@@ -310,7 +310,7 @@ extends io.netty.channel.SimpleChannelInboundHandler&lt;<a href="../packet/Inbou
 <li class="blockList">
 <h4>channelActive</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;channelActive&#8203;(@NotNull
-                          io.netty.channel.ChannelHandlerContext&nbsp;ctx)</pre>
+                          @NotNull io.netty.channel.ChannelHandlerContext&nbsp;ctx)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>channelActive</code>&nbsp;in interface&nbsp;<code>io.netty.channel.ChannelInboundHandler</code></dd>
@@ -340,7 +340,7 @@ extends io.netty.channel.SimpleChannelInboundHandler&lt;<a href="../packet/Inbou
 <li class="blockList">
 <h4>channelInactive</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;channelInactive&#8203;(@NotNull
-                            io.netty.channel.ChannelHandlerContext&nbsp;ctx)</pre>
+                            @NotNull io.netty.channel.ChannelHandlerContext&nbsp;ctx)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>channelInactive</code>&nbsp;in interface&nbsp;<code>io.netty.channel.ChannelInboundHandler</code></dd>

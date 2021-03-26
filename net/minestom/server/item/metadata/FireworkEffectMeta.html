@@ -183,14 +183,14 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Creates and returns a copy of this object.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../firework/FireworkEffect.html" title="class in net.minestom.server.item.firework">FireworkEffect</a></code></td>
+<td class="colFirst"><code>@Nullable <a href="../firework/FireworkEffect.html" title="class in net.minestom.server.item.firework">FireworkEffect</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFireworkEffect()">getFireworkEffect</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Retrieves the firework effect for this meta.</div>
@@ -212,28 +212,28 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSimilar(net.minestom.server.item.metadata.ItemMeta)">isSimilar</a></span>&#8203;(<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSimilar(net.minestom.server.item.metadata.ItemMeta)">isSimilar</a></span>&#8203;(@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</code></th>
 <td class="colLast">
 <div class="block">Gets if the two ItemMeta are similar.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">read</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">read</a></span>&#8203;(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
 <div class="block">Reads nbt data from a compound.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFireworkEffect(net.minestom.server.item.firework.FireworkEffect)">setFireworkEffect</a></span>&#8203;(<a href="../firework/FireworkEffect.html" title="class in net.minestom.server.item.firework">FireworkEffect</a>&nbsp;fireworkEffect)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFireworkEffect(net.minestom.server.item.firework.FireworkEffect)">setFireworkEffect</a></span>&#8203;(@Nullable <a href="../firework/FireworkEffect.html" title="class in net.minestom.server.item.firework">FireworkEffect</a>&nbsp;fireworkEffect)</code></th>
 <td class="colLast">
 <div class="block">Changes the <a href="../firework/FireworkEffect.html" title="class in net.minestom.server.item.firework"><code>FireworkEffect</code></a> for this item meta.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">write</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">write</a></span>&#8203;(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
 <div class="block">Writes nbt data to a compound.</div>
 </td>
@@ -288,7 +288,7 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <li class="blockList">
 <h4>getFireworkEffect</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="../firework/FireworkEffect.html" title="class in net.minestom.server.item.firework">FireworkEffect</a>&nbsp;getFireworkEffect()</pre>
+public&nbsp;@Nullable <a href="../firework/FireworkEffect.html" title="class in net.minestom.server.item.firework">FireworkEffect</a>&nbsp;getFireworkEffect()</pre>
 <div class="block">Retrieves the firework effect for this meta.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -303,7 +303,7 @@ public&nbsp;<a href="../firework/FireworkEffect.html" title="class in net.minest
 <li class="blockList">
 <h4>setFireworkEffect</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setFireworkEffect&#8203;(@Nullable
-                              <a href="../firework/FireworkEffect.html" title="class in net.minestom.server.item.firework">FireworkEffect</a>&nbsp;fireworkEffect)</pre>
+                              @Nullable <a href="../firework/FireworkEffect.html" title="class in net.minestom.server.item.firework">FireworkEffect</a>&nbsp;fireworkEffect)</pre>
 <div class="block">Changes the <a href="../firework/FireworkEffect.html" title="class in net.minestom.server.item.firework"><code>FireworkEffect</code></a> for this item meta.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -348,7 +348,7 @@ public&nbsp;<a href="../firework/FireworkEffect.html" title="class in net.minest
 <li class="blockList">
 <h4>isSimilar</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isSimilar&#8203;(@NotNull
-                         <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</pre>
+                         @NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</pre>
 <div class="block">Gets if the two ItemMeta are similar.
  <p>
  It is used by <a href="../ItemStack.html#isSimilar(net.minestom.server.item.ItemStack)"><code>ItemStack.isSimilar(ItemStack)</code></a>.</div>
@@ -369,7 +369,7 @@ public&nbsp;<a href="../firework/FireworkEffect.html" title="class in net.minest
 <li class="blockList">
 <h4>read</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;read&#8203;(@NotNull
-                 org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
+                 @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
 <div class="block">Reads nbt data from a compound.
  <p>
  WARNING: it is possible that it contains no useful data,
@@ -389,7 +389,7 @@ public&nbsp;<a href="../firework/FireworkEffect.html" title="class in net.minest
 <li class="blockList">
 <h4>write</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
-                  org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
+                  @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
 <div class="block">Writes nbt data to a compound.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -406,7 +406,7 @@ public&nbsp;<a href="../firework/FireworkEffect.html" title="class in net.minest
 <li class="blockList">
 <h4>clone</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;clone()</pre>
+public&nbsp;@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;clone()</pre>
 <div class="block">Creates and returns a copy of this object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>

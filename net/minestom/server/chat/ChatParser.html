@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":41};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -130,8 +130,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <hr>
-<pre>public final class <span class="typeNameLabel">ChatParser</span>
+<pre>@Deprecated
+public final class <span class="typeNameLabel">ChatParser</span>
 extends java.lang.Object</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Class used to convert JSON string to proper chat message representation.</div>
 </li>
 </ul>
@@ -156,7 +158,9 @@ extends java.lang.Object</pre>
 <tr class="altColor">
 <td class="colFirst"><code>static char</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#COLOR_CHAR">COLOR_CHAR</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -177,7 +181,9 @@ extends java.lang.Object</pre>
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">ChatParser</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -191,16 +197,17 @@ extends java.lang.Object</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static <a href="ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toColoredText(java.lang.String)">toColoredText</a></span>&#8203;(java.lang.String&nbsp;json)</code></th>
+<td class="colFirst"><code>static @NotNull <a href="ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toColoredText(java.lang.String)">toColoredText</a></span>&#8203;(@NotNull java.lang.String&nbsp;json)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Converts a simple colored message json (text/color) to a <a href="ColoredText.html" title="class in net.minestom.server.chat"><code>ColoredText</code></a>.</div>
 </td>
 </tr>
@@ -235,6 +242,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>COLOR_CHAR</h4>
 <pre>public static final&nbsp;char COLOR_CHAR</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../constant-values.html#net.minestom.server.chat.ChatParser.COLOR_CHAR">Constant Field Values</a></dd>
@@ -258,6 +266,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>ChatParser</h4>
 <pre>public&nbsp;ChatParser()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 </li>
@@ -277,8 +286,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>toColoredText</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;toColoredText&#8203;(@NotNull
-                                        java.lang.String&nbsp;json)</pre>
+public static&nbsp;@NotNull <a href="ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a>&nbsp;toColoredText&#8203;(@NotNull
+                                                 @NotNull java.lang.String&nbsp;json)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Converts a simple colored message json (text/color) to a <a href="ColoredText.html" title="class in net.minestom.server.chat"><code>ColoredText</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

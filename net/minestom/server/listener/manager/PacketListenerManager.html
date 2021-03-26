@@ -199,23 +199,23 @@ extends java.lang.Object</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>&lt;T extends <a href="../../network/packet/client/ClientPlayPacket.html" title="class in net.minestom.server.network.packet.client">ClientPlayPacket</a>&gt;<br>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processClientPacket(T,net.minestom.server.entity.Player)">processClientPacket</a></span>&#8203;(T&nbsp;packet,
-                   <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+                   @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">Processes a packet by getting its <a href="PacketListenerConsumer.html" title="interface in net.minestom.server.listener.manager"><code>PacketListenerConsumer</code></a> and calling all the packet listeners.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processServerPacket(net.minestom.server.network.packet.server.ServerPacket,java.util.Collection)">processServerPacket</a></span>&#8203;(<a href="../../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
-                   java.util.Collection&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processServerPacket(net.minestom.server.network.packet.server.ServerPacket,java.util.Collection)">processServerPacket</a></span>&#8203;(@NotNull <a href="../../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
+                   @NotNull java.util.Collection&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players)</code></th>
 <td class="colLast">
 <div class="block">Executes the consumers from <a href="../../network/ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)"><code>ConnectionManager.onPacketSend(ServerPacketConsumer)</code></a>.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>&lt;T extends <a href="../../network/packet/client/ClientPlayPacket.html" title="class in net.minestom.server.network.packet.client">ClientPlayPacket</a>&gt;<br>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setListener(java.lang.Class,net.minestom.server.listener.manager.PacketListenerConsumer)">setListener</a></span>&#8203;(java.lang.Class&lt;T&gt;&nbsp;packetClass,
-           <a href="PacketListenerConsumer.html" title="interface in net.minestom.server.listener.manager">PacketListenerConsumer</a>&lt;T&gt;&nbsp;consumer)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setListener(java.lang.Class,net.minestom.server.listener.manager.PacketListenerConsumer)">setListener</a></span>&#8203;(@NotNull java.lang.Class&lt;T&gt;&nbsp;packetClass,
+           @NotNull <a href="PacketListenerConsumer.html" title="interface in net.minestom.server.listener.manager">PacketListenerConsumer</a>&lt;T&gt;&nbsp;consumer)</code></th>
 <td class="colLast">
 <div class="block">Sets the listener of a packet.</div>
 </td>
@@ -293,7 +293,7 @@ extends java.lang.Object</pre>
 <pre class="methodSignature">public&nbsp;&lt;T extends <a href="../../network/packet/client/ClientPlayPacket.html" title="class in net.minestom.server.network.packet.client">ClientPlayPacket</a>&gt;&nbsp;void&nbsp;processClientPacket&#8203;(@NotNull
                                                              T&nbsp;packet,
                                                              @NotNull
-                                                             <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+                                                             @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 <div class="block">Processes a packet by getting its <a href="PacketListenerConsumer.html" title="interface in net.minestom.server.listener.manager"><code>PacketListenerConsumer</code></a> and calling all the packet listeners.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
@@ -311,9 +311,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>processServerPacket</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;processServerPacket&#8203;(@NotNull
-                                   <a href="../../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
+                                   @NotNull <a href="../../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
                                    @NotNull
-                                   java.util.Collection&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players)</pre>
+                                   @NotNull java.util.Collection&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players)</pre>
 <div class="block">Executes the consumers from <a href="../../network/ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)"><code>ConnectionManager.onPacketSend(ServerPacketConsumer)</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -331,9 +331,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>setListener</h4>
 <pre class="methodSignature">public&nbsp;&lt;T extends <a href="../../network/packet/client/ClientPlayPacket.html" title="class in net.minestom.server.network.packet.client">ClientPlayPacket</a>&gt;&nbsp;void&nbsp;setListener&#8203;(@NotNull
-                                                     java.lang.Class&lt;T&gt;&nbsp;packetClass,
+                                                     @NotNull java.lang.Class&lt;T&gt;&nbsp;packetClass,
                                                      @NotNull
-                                                     <a href="PacketListenerConsumer.html" title="interface in net.minestom.server.listener.manager">PacketListenerConsumer</a>&lt;T&gt;&nbsp;consumer)</pre>
+                                                     @NotNull <a href="PacketListenerConsumer.html" title="interface in net.minestom.server.listener.manager">PacketListenerConsumer</a>&lt;T&gt;&nbsp;consumer)</pre>
 <div class="block">Sets the listener of a packet.
  <p>
  WARNING: this will overwrite the default minestom listener, this is not reversible.</div>

@@ -181,9 +181,9 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,java.lang.String,java.util.UUID)">AsyncPlayerPreLoginEvent</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                        java.lang.String&nbsp;username,
-                        java.util.UUID&nbsp;playerUuid)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,java.lang.String,java.util.UUID)">AsyncPlayerPreLoginEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                        @NotNull java.lang.String&nbsp;username,
+                        @NotNull java.util.UUID&nbsp;playerUuid)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -205,14 +205,14 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>java.util.UUID</code></td>
+<td class="colFirst"><code>@NotNull java.util.UUID</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayerUuid()">getPlayerUuid</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player uuid.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colFirst"><code>@NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getUsername()">getUsername</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player username.</div>
@@ -220,14 +220,14 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPlayerUuid(java.util.UUID)">setPlayerUuid</a></span>&#8203;(java.util.UUID&nbsp;playerUuid)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPlayerUuid(java.util.UUID)">setPlayerUuid</a></span>&#8203;(@NotNull java.util.UUID&nbsp;playerUuid)</code></th>
 <td class="colLast">
 <div class="block">Changes the player uuid.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUsername(java.lang.String)">setUsername</a></span>&#8203;(java.lang.String&nbsp;username)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUsername(java.lang.String)">setUsername</a></span>&#8203;(@NotNull java.lang.String&nbsp;username)</code></th>
 <td class="colLast">
 <div class="block">Changes the player username.</div>
 </td>
@@ -270,11 +270,11 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <li class="blockList">
 <h4>AsyncPlayerPreLoginEvent</h4>
 <pre>public&nbsp;AsyncPlayerPreLoginEvent&#8203;(@NotNull
-                                <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                                @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                                 @NotNull
-                                java.lang.String&nbsp;username,
+                                @NotNull java.lang.String&nbsp;username,
                                 @NotNull
-                                java.util.UUID&nbsp;playerUuid)</pre>
+                                @NotNull java.util.UUID&nbsp;playerUuid)</pre>
 </li>
 </ul>
 </li>
@@ -294,7 +294,7 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <li class="blockList">
 <h4>getUsername</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.lang.String&nbsp;getUsername()</pre>
+public&nbsp;@NotNull java.lang.String&nbsp;getUsername()</pre>
 <div class="block">Gets the player username.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -309,7 +309,7 @@ public&nbsp;java.lang.String&nbsp;getUsername()</pre>
 <li class="blockList">
 <h4>setUsername</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setUsername&#8203;(@NotNull
-                        java.lang.String&nbsp;username)</pre>
+                        @NotNull java.lang.String&nbsp;username)</pre>
 <div class="block">Changes the player username.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -324,7 +324,7 @@ public&nbsp;java.lang.String&nbsp;getUsername()</pre>
 <li class="blockList">
 <h4>getPlayerUuid</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.UUID&nbsp;getPlayerUuid()</pre>
+public&nbsp;@NotNull java.util.UUID&nbsp;getPlayerUuid()</pre>
 <div class="block">Gets the player uuid.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -339,7 +339,7 @@ public&nbsp;java.util.UUID&nbsp;getPlayerUuid()</pre>
 <li class="blockList">
 <h4>setPlayerUuid</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setPlayerUuid&#8203;(@NotNull
-                          java.util.UUID&nbsp;playerUuid)</pre>
+                          @NotNull java.util.UUID&nbsp;playerUuid)</pre>
 <div class="block">Changes the player uuid.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

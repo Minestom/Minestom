@@ -182,13 +182,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlock(int,int,int,net.minestom.server.instance.block.Block)">setBlock</a></span>&#8203;(int&nbsp;x,
         int&nbsp;y,
         int&nbsp;z,
-        <a href="block/Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block)</code></th>
+        @NotNull <a href="block/Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlock(net.minestom.server.utils.BlockPosition,net.minestom.server.instance.block.Block)">setBlock</a></span>&#8203;(<a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
-        <a href="block/Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlock(net.minestom.server.utils.BlockPosition,net.minestom.server.instance.block.Block)">setBlock</a></span>&#8203;(@NotNull <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+        @NotNull <a href="block/Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
@@ -205,14 +205,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
                int&nbsp;y,
                int&nbsp;z,
                short&nbsp;blockStateId,
-               <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
+               @Nullable <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
 <td class="colLast">
 <div class="block">Sets a block at a position.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlockStateId(net.minestom.server.utils.BlockPosition,short)">setBlockStateId</a></span>&#8203;(<a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlockStateId(net.minestom.server.utils.BlockPosition,short)">setBlockStateId</a></span>&#8203;(@NotNull <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                short&nbsp;blockStateId)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -230,7 +230,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
               int&nbsp;y,
               int&nbsp;z,
               short&nbsp;customBlockId,
-              <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
+              @Nullable <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
 <td class="colLast">
 <div class="block">Sets a <a href="block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> at a position.</div>
 </td>
@@ -240,7 +240,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCustomBlock(int,int,int,java.lang.String)">setCustomBlock</a></span>&#8203;(int&nbsp;x,
               int&nbsp;y,
               int&nbsp;z,
-              java.lang.String&nbsp;customBlockId)</code></th>
+              @NotNull java.lang.String&nbsp;customBlockId)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
@@ -248,14 +248,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCustomBlock(int,int,int,java.lang.String,net.minestom.server.data.Data)">setCustomBlock</a></span>&#8203;(int&nbsp;x,
               int&nbsp;y,
               int&nbsp;z,
-              java.lang.String&nbsp;customBlockId,
-              <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
+              @NotNull java.lang.String&nbsp;customBlockId,
+              @Nullable <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCustomBlock(net.minestom.server.utils.BlockPosition,java.lang.String)">setCustomBlock</a></span>&#8203;(<a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
-              java.lang.String&nbsp;customBlockId)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCustomBlock(net.minestom.server.utils.BlockPosition,java.lang.String)">setCustomBlock</a></span>&#8203;(@NotNull <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+              @NotNull java.lang.String&nbsp;customBlockId)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
@@ -274,14 +274,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
                  int&nbsp;z,
                  short&nbsp;blockStateId,
                  short&nbsp;customBlockId,
-                 <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
+                 @Nullable <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
 <td class="colLast">
 <div class="block">Sets a <a href="block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> at a position with a custom state id.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSeparateBlocks(net.minestom.server.utils.BlockPosition,short,short)">setSeparateBlocks</a></span>&#8203;(<a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSeparateBlocks(net.minestom.server.utils.BlockPosition,short,short)">setSeparateBlocks</a></span>&#8203;(@NotNull <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                  short&nbsp;blockStateId,
                  short&nbsp;customBlockId)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -333,7 +333,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
                      int&nbsp;z,
                      short&nbsp;blockStateId,
                      @Nullable
-                     <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
+                     @Nullable <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
 <div class="block">Sets a block at a position.
  <p>
  You can use <a href="#setBlock(int,int,int,net.minestom.server.instance.block.Block)"><code>setBlock(int, int, int, Block)</code></a> if you want it to be more explicit.</div>
@@ -358,7 +358,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
                     int&nbsp;z,
                     short&nbsp;customBlockId,
                     @Nullable
-                    <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
+                    @Nullable <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
 <div class="block">Sets a <a href="block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> at a position.
  <p>
  The custom block id should be the one returned by <a href="block/CustomBlock.html#getCustomBlockId()"><code>CustomBlock.getCustomBlockId()</code></a>.</div>
@@ -384,7 +384,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
                        short&nbsp;blockStateId,
                        short&nbsp;customBlockId,
                        @Nullable
-                       <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
+                       @Nullable <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
 <div class="block">Sets a <a href="block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> at a position with a custom state id.
  <p>
  The custom block id should be the one returned by <a href="block/CustomBlock.html#getCustomBlockId()"><code>CustomBlock.getCustomBlockId()</code></a>,
@@ -422,7 +422,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
                       int&nbsp;y,
                       int&nbsp;z,
                       @NotNull
-                      <a href="block/Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block)</pre>
+                      @NotNull <a href="block/Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block)</pre>
 </li>
 </ul>
 <a id="setBlock(net.minestom.server.utils.BlockPosition,net.minestom.server.instance.block.Block)">
@@ -432,9 +432,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>setBlock</h4>
 <pre class="methodSignature">default&nbsp;void&nbsp;setBlock&#8203;(@NotNull
-                      <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                      @NotNull <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                       @NotNull
-                      <a href="block/Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block)</pre>
+                      @NotNull <a href="block/Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block)</pre>
 </li>
 </ul>
 <a id="setBlockStateId(net.minestom.server.utils.BlockPosition,short)">
@@ -444,7 +444,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>setBlockStateId</h4>
 <pre class="methodSignature">default&nbsp;void&nbsp;setBlockStateId&#8203;(@NotNull
-                             <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                             @NotNull <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                              short&nbsp;blockStateId)</pre>
 </li>
 </ul>
@@ -470,9 +470,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
                             int&nbsp;y,
                             int&nbsp;z,
                             @NotNull
-                            java.lang.String&nbsp;customBlockId,
+                            @NotNull java.lang.String&nbsp;customBlockId,
                             @Nullable
-                            <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
+                            @Nullable <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
 </li>
 </ul>
 <a id="setCustomBlock(int,int,int,java.lang.String)">
@@ -485,7 +485,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
                             int&nbsp;y,
                             int&nbsp;z,
                             @NotNull
-                            java.lang.String&nbsp;customBlockId)</pre>
+                            @NotNull java.lang.String&nbsp;customBlockId)</pre>
 </li>
 </ul>
 <a id="setCustomBlock(net.minestom.server.utils.BlockPosition,java.lang.String)">
@@ -495,9 +495,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>setCustomBlock</h4>
 <pre class="methodSignature">default&nbsp;void&nbsp;setCustomBlock&#8203;(@NotNull
-                            <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                            @NotNull <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                             @NotNull
-                            java.lang.String&nbsp;customBlockId)</pre>
+                            @NotNull java.lang.String&nbsp;customBlockId)</pre>
 </li>
 </ul>
 <a id="setSeparateBlocks(int,int,int,short,short)">
@@ -520,7 +520,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>setSeparateBlocks</h4>
 <pre class="methodSignature">default&nbsp;void&nbsp;setSeparateBlocks&#8203;(@NotNull
-                               <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                               @NotNull <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                                short&nbsp;blockStateId,
                                short&nbsp;customBlockId)</pre>
 </li>

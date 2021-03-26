@@ -180,7 +180,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clearCache(java.util.UUID)">clearCache</a></span>&#8203;(java.util.UUID&nbsp;identifier)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clearCache(java.util.UUID)">clearCache</a></span>&#8203;(@NotNull java.util.UUID&nbsp;identifier)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -192,14 +192,14 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="OwnershipHandler.html" title="type parameter in OwnershipHandler">T</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOwnObject(java.util.UUID)">getOwnObject</a></span>&#8203;(java.util.UUID&nbsp;identifier)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOwnObject(java.util.UUID)">getOwnObject</a></span>&#8203;(@NotNull java.util.UUID&nbsp;identifier)</code></th>
 <td class="colLast">
 <div class="block">Retrieves the owned object based on its identifier.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveOwnObject(java.util.UUID,T)">saveOwnObject</a></span>&#8203;(java.util.UUID&nbsp;identifier,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveOwnObject(java.util.UUID,T)">saveOwnObject</a></span>&#8203;(@NotNull java.util.UUID&nbsp;identifier,
              <a href="OwnershipHandler.html" title="type parameter in OwnershipHandler">T</a>&nbsp;value)</code></th>
 <td class="colLast">
 <div class="block">Saves, replace or remove the own object of an identifier.</div>
@@ -272,7 +272,7 @@ extends java.lang.Object</pre>
 <h4>getOwnObject</h4>
 <pre class="methodSignature">@Nullable
 public&nbsp;<a href="OwnershipHandler.html" title="type parameter in OwnershipHandler">T</a>&nbsp;getOwnObject&#8203;(@NotNull
-                      java.util.UUID&nbsp;identifier)</pre>
+                      @NotNull java.util.UUID&nbsp;identifier)</pre>
 <div class="block">Retrieves the owned object based on its identifier.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -291,7 +291,7 @@ public&nbsp;<a href="OwnershipHandler.html" title="type parameter in OwnershipHa
 <li class="blockList">
 <h4>saveOwnObject</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;saveOwnObject&#8203;(@NotNull
-                          java.util.UUID&nbsp;identifier,
+                          @NotNull java.util.UUID&nbsp;identifier,
                           @Nullable
                           <a href="OwnershipHandler.html" title="type parameter in OwnershipHandler">T</a>&nbsp;value)</pre>
 <div class="block">Saves, replace or remove the own object of an identifier.</div>
@@ -309,7 +309,7 @@ public&nbsp;<a href="OwnershipHandler.html" title="type parameter in OwnershipHa
 <li class="blockList">
 <h4>clearCache</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;clearCache&#8203;(@NotNull
-                       java.util.UUID&nbsp;identifier)</pre>
+                       @NotNull java.util.UUID&nbsp;identifier)</pre>
 </li>
 </ul>
 </li>

@@ -160,36 +160,36 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addPermission(net.minestom.server.permission.Permission)">addPermission</a></span>&#8203;(<a href="Permission.html" title="class in net.minestom.server.permission">Permission</a>&nbsp;permission)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addPermission(net.minestom.server.permission.Permission)">addPermission</a></span>&#8203;(@NotNull <a href="Permission.html" title="class in net.minestom.server.permission">Permission</a>&nbsp;permission)</code></th>
 <td class="colLast">
 <div class="block">Adds a <a href="Permission.html" title="class in net.minestom.server.permission"><code>Permission</code></a> to this handler.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>java.util.Set&lt;<a href="Permission.html" title="class in net.minestom.server.permission">Permission</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.Set&lt;<a href="Permission.html" title="class in net.minestom.server.permission">Permission</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAllPermissions()">getAllPermissions</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns all permissions associated to this handler.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>default <a href="Permission.html" title="class in net.minestom.server.permission">Permission</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPermission(java.lang.String)">getPermission</a></span>&#8203;(java.lang.String&nbsp;permissionName)</code></th>
+<td class="colFirst"><code>default @Nullable <a href="Permission.html" title="class in net.minestom.server.permission">Permission</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPermission(java.lang.String)">getPermission</a></span>&#8203;(@NotNull java.lang.String&nbsp;permissionName)</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="Permission.html" title="class in net.minestom.server.permission"><code>Permission</code></a> with the name <code>permissionName</code>.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>default boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasPermission(java.lang.String)">hasPermission</a></span>&#8203;(java.lang.String&nbsp;permissionName)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasPermission(java.lang.String)">hasPermission</a></span>&#8203;(@NotNull java.lang.String&nbsp;permissionName)</code></th>
 <td class="colLast">
 <div class="block">Gets if this handler has the permission with the name <code>permissionName</code>.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>default boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasPermission(java.lang.String,net.minestom.server.permission.PermissionVerifier)">hasPermission</a></span>&#8203;(java.lang.String&nbsp;permissionName,
-             <a href="PermissionVerifier.html" title="interface in net.minestom.server.permission">PermissionVerifier</a>&nbsp;permissionVerifier)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasPermission(java.lang.String,net.minestom.server.permission.PermissionVerifier)">hasPermission</a></span>&#8203;(@NotNull java.lang.String&nbsp;permissionName,
+             @Nullable <a href="PermissionVerifier.html" title="interface in net.minestom.server.permission">PermissionVerifier</a>&nbsp;permissionVerifier)</code></th>
 <td class="colLast">
 <div class="block">Gets if this handler has the permission with the name <code>permissionName</code> and which verify the optional
  <a href="PermissionVerifier.html" title="interface in net.minestom.server.permission"><code>PermissionVerifier</code></a>.</div>
@@ -197,21 +197,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>default boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasPermission(net.minestom.server.permission.Permission)">hasPermission</a></span>&#8203;(<a href="Permission.html" title="class in net.minestom.server.permission">Permission</a>&nbsp;permission)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasPermission(net.minestom.server.permission.Permission)">hasPermission</a></span>&#8203;(@NotNull <a href="Permission.html" title="class in net.minestom.server.permission">Permission</a>&nbsp;permission)</code></th>
 <td class="colLast">
 <div class="block">Gets if this handler has the permission <code>permission</code>.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removePermission(java.lang.String)">removePermission</a></span>&#8203;(java.lang.String&nbsp;permissionName)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removePermission(java.lang.String)">removePermission</a></span>&#8203;(@NotNull java.lang.String&nbsp;permissionName)</code></th>
 <td class="colLast">
 <div class="block">Removes a <a href="Permission.html" title="class in net.minestom.server.permission"><code>Permission</code></a> based on its string identifier.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removePermission(net.minestom.server.permission.Permission)">removePermission</a></span>&#8203;(<a href="Permission.html" title="class in net.minestom.server.permission">Permission</a>&nbsp;permission)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removePermission(net.minestom.server.permission.Permission)">removePermission</a></span>&#8203;(@NotNull <a href="Permission.html" title="class in net.minestom.server.permission">Permission</a>&nbsp;permission)</code></th>
 <td class="colLast">
 <div class="block">Removes a <a href="Permission.html" title="class in net.minestom.server.permission"><code>Permission</code></a> from this handler.</div>
 </td>
@@ -240,7 +240,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>getAllPermissions</h4>
 <pre class="methodSignature">@NotNull
-java.util.Set&lt;<a href="Permission.html" title="class in net.minestom.server.permission">Permission</a>&gt;&nbsp;getAllPermissions()</pre>
+@NotNull java.util.Set&lt;<a href="Permission.html" title="class in net.minestom.server.permission">Permission</a>&gt;&nbsp;getAllPermissions()</pre>
 <div class="block">Returns all permissions associated to this handler.
  The returned collection should be modified only by subclasses.</div>
 <dl>
@@ -256,7 +256,7 @@ java.util.Set&lt;<a href="Permission.html" title="class in net.minestom.server.p
 <li class="blockList">
 <h4>addPermission</h4>
 <pre class="methodSignature">default&nbsp;void&nbsp;addPermission&#8203;(@NotNull
-                           <a href="Permission.html" title="class in net.minestom.server.permission">Permission</a>&nbsp;permission)</pre>
+                           @NotNull <a href="Permission.html" title="class in net.minestom.server.permission">Permission</a>&nbsp;permission)</pre>
 <div class="block">Adds a <a href="Permission.html" title="class in net.minestom.server.permission"><code>Permission</code></a> to this handler.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -271,7 +271,7 @@ java.util.Set&lt;<a href="Permission.html" title="class in net.minestom.server.p
 <li class="blockList">
 <h4>removePermission</h4>
 <pre class="methodSignature">default&nbsp;void&nbsp;removePermission&#8203;(@NotNull
-                              <a href="Permission.html" title="class in net.minestom.server.permission">Permission</a>&nbsp;permission)</pre>
+                              @NotNull <a href="Permission.html" title="class in net.minestom.server.permission">Permission</a>&nbsp;permission)</pre>
 <div class="block">Removes a <a href="Permission.html" title="class in net.minestom.server.permission"><code>Permission</code></a> from this handler.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -286,7 +286,7 @@ java.util.Set&lt;<a href="Permission.html" title="class in net.minestom.server.p
 <li class="blockList">
 <h4>removePermission</h4>
 <pre class="methodSignature">default&nbsp;void&nbsp;removePermission&#8203;(@NotNull
-                              java.lang.String&nbsp;permissionName)</pre>
+                              @NotNull java.lang.String&nbsp;permissionName)</pre>
 <div class="block">Removes a <a href="Permission.html" title="class in net.minestom.server.permission"><code>Permission</code></a> based on its string identifier.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -301,7 +301,7 @@ java.util.Set&lt;<a href="Permission.html" title="class in net.minestom.server.p
 <li class="blockList">
 <h4>hasPermission</h4>
 <pre class="methodSignature">default&nbsp;boolean&nbsp;hasPermission&#8203;(@NotNull
-                              <a href="Permission.html" title="class in net.minestom.server.permission">Permission</a>&nbsp;permission)</pre>
+                              @NotNull <a href="Permission.html" title="class in net.minestom.server.permission">Permission</a>&nbsp;permission)</pre>
 <div class="block">Gets if this handler has the permission <code>permission</code>.
  <p>
  Uses <a href="Permission.html#equals(java.lang.Object)"><code>Permission.equals(Object)</code></a> internally.</div>
@@ -320,8 +320,8 @@ java.util.Set&lt;<a href="Permission.html" title="class in net.minestom.server.p
 <li class="blockList">
 <h4>getPermission</h4>
 <pre class="methodSignature">@Nullable
-default&nbsp;<a href="Permission.html" title="class in net.minestom.server.permission">Permission</a>&nbsp;getPermission&#8203;(@NotNull
-                                 java.lang.String&nbsp;permissionName)</pre>
+default&nbsp;@Nullable <a href="Permission.html" title="class in net.minestom.server.permission">Permission</a>&nbsp;getPermission&#8203;(@NotNull
+                                           @NotNull java.lang.String&nbsp;permissionName)</pre>
 <div class="block">Gets the <a href="Permission.html" title="class in net.minestom.server.permission"><code>Permission</code></a> with the name <code>permissionName</code>.
  <p>
  Useful if you want to retrieve the permission data.</div>
@@ -340,9 +340,9 @@ default&nbsp;<a href="Permission.html" title="class in net.minestom.server.permi
 <li class="blockList">
 <h4>hasPermission</h4>
 <pre class="methodSignature">default&nbsp;boolean&nbsp;hasPermission&#8203;(@NotNull
-                              java.lang.String&nbsp;permissionName,
+                              @NotNull java.lang.String&nbsp;permissionName,
                               @Nullable
-                              <a href="PermissionVerifier.html" title="interface in net.minestom.server.permission">PermissionVerifier</a>&nbsp;permissionVerifier)</pre>
+                              @Nullable <a href="PermissionVerifier.html" title="interface in net.minestom.server.permission">PermissionVerifier</a>&nbsp;permissionVerifier)</pre>
 <div class="block">Gets if this handler has the permission with the name <code>permissionName</code> and which verify the optional
  <a href="PermissionVerifier.html" title="interface in net.minestom.server.permission"><code>PermissionVerifier</code></a>.</div>
 <dl>
@@ -362,7 +362,7 @@ default&nbsp;<a href="Permission.html" title="class in net.minestom.server.permi
 <li class="blockList">
 <h4>hasPermission</h4>
 <pre class="methodSignature">default&nbsp;boolean&nbsp;hasPermission&#8203;(@NotNull
-                              java.lang.String&nbsp;permissionName)</pre>
+                              @NotNull java.lang.String&nbsp;permissionName)</pre>
 <div class="block">Gets if this handler has the permission with the name <code>permissionName</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

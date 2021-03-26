@@ -210,8 +210,8 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(java.lang.String&nbsp;input)</code></th>
+<td class="colFirst"><code>@NotNull <a href="../../../../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(@NotNull java.lang.String&nbsp;input)</code></th>
 <td class="colLast">
 <div class="block">Parses the given input, and throw an <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
  if the input cannot be convert to <code>T</code></div>
@@ -219,7 +219,7 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></span>&#8203;(<a href="../../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></span>&#8203;(@NotNull <a href="../../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
             boolean&nbsp;executable)</code></th>
 <td class="colLast">
 <div class="block">Turns the argument into a list of nodes for command dispatching.</div>
@@ -318,9 +318,9 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <li class="blockList">
 <h4>parse</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../../../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;parse&#8203;(@NotNull
-                          java.lang.String&nbsp;input)
-                   throws <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></pre>
+public&nbsp;@NotNull <a href="../../../../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;parse&#8203;(@NotNull
+                                   @NotNull java.lang.String&nbsp;input)
+                            throws <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../Argument.html#parse(java.lang.String)">Argument</a></code></span></div>
 <div class="block">Parses the given input, and throw an <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
  if the input cannot be convert to <code>T</code></div>
@@ -343,7 +343,7 @@ public&nbsp;<a href="../../../../utils/time/UpdateOption.html" title="class in n
 <li class="blockList">
 <h4>processNodes</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;processNodes&#8203;(@NotNull
-                         <a href="../../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
+                         @NotNull <a href="../../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
                          boolean&nbsp;executable)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../Argument.html#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">Argument</a></code></span></div>
 <div class="block">Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.</div>

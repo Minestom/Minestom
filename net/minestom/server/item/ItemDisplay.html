@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":42,"i2":10,"i3":42};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -152,9 +152,18 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.kyori.adventure.text.Component,net.kyori.adventure.text.Component%5B%5D)">ItemDisplay</a></span>&#8203;(net.kyori.adventure.text.Component&nbsp;displayName,
+           net.kyori.adventure.text.Component[]&nbsp;lore)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage%5B%5D)">ItemDisplay</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;displayName,
            <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>[]&nbsp;lore)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#%3Cinit%3E(net.kyori.adventure.text.Component,net.kyori.adventure.text.Component%5B%5D)"><code>ItemDisplay(Component, Component[])</code></a></div>
+</div>
+</td>
 </tr>
 </table>
 </li>
@@ -168,24 +177,42 @@ extends java.lang.Object</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
+<td class="colFirst"><code>net.kyori.adventure.text.Component</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDisplayName()">getDisplayName</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the item display name.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>[]</code></td>
+<td class="colFirst"><code><a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDisplayNameJson()">getDisplayNameJson</a></span>()</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#getDisplayName()"><code>getDisplayName()</code></a></div>
+</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>net.kyori.adventure.text.Component[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLore()">getLore</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the item lore.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>[]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLoreJson()">getLoreJson</a></span>()</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#getLore()"><code>getLore()</code></a></div>
+</div>
 </td>
 </tr>
 </table>
@@ -215,11 +242,25 @@ extends java.lang.Object</pre>
 <a id="&lt;init&gt;(net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage[])">
 <!--   -->
 </a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ItemDisplay</h4>
+<pre>@Deprecated
+public&nbsp;ItemDisplay&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;displayName,
+                   <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>[]&nbsp;lore)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#%3Cinit%3E(net.kyori.adventure.text.Component,net.kyori.adventure.text.Component%5B%5D)"><code>ItemDisplay(Component, Component[])</code></a></div>
+</div>
+</li>
+</ul>
+<a id="&lt;init&gt;(net.kyori.adventure.text.Component,net.kyori.adventure.text.Component[])">
+<!--   -->
+</a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ItemDisplay</h4>
-<pre>public&nbsp;ItemDisplay&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;displayName,
-                   <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>[]&nbsp;lore)</pre>
+<pre>public&nbsp;ItemDisplay&#8203;(net.kyori.adventure.text.Component&nbsp;displayName,
+                   net.kyori.adventure.text.Component[]&nbsp;lore)</pre>
 </li>
 </ul>
 </li>
@@ -232,13 +273,49 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="getDisplayNameJson()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDisplayNameJson</h4>
+<pre class="methodSignature">@Deprecated
+public&nbsp;<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getDisplayNameJson()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#getDisplayName()"><code>getDisplayName()</code></a></div>
+</div>
+<div class="block">Gets the item display name.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the item display name</dd>
+</dl>
+</li>
+</ul>
+<a id="getLoreJson()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLoreJson</h4>
+<pre class="methodSignature">@Deprecated
+public&nbsp;<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>[]&nbsp;getLoreJson()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#getLore()"><code>getLore()</code></a></div>
+</div>
+<div class="block">Gets the item lore.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the item lore</dd>
+</dl>
+</li>
+</ul>
 <a id="getDisplayName()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDisplayName</h4>
-<pre class="methodSignature">public&nbsp;<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getDisplayName()</pre>
+<pre class="methodSignature">public&nbsp;net.kyori.adventure.text.Component&nbsp;getDisplayName()</pre>
 <div class="block">Gets the item display name.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -252,7 +329,7 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getLore</h4>
-<pre class="methodSignature">public&nbsp;<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>[]&nbsp;getLore()</pre>
+<pre class="methodSignature">public&nbsp;net.kyori.adventure.text.Component[]&nbsp;getLore()</pre>
 <div class="block">Gets the item lore.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

@@ -152,10 +152,10 @@ public interface <span class="typeNameLabel">PlayerProvider</span></pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createPlayer(java.util.UUID,java.lang.String,net.minestom.server.network.player.PlayerConnection)">createPlayer</a></span>&#8203;(java.util.UUID&nbsp;uuid,
-            java.lang.String&nbsp;username,
-            <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></th>
+<td class="colFirst"><code>@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createPlayer(java.util.UUID,java.lang.String,net.minestom.server.network.player.PlayerConnection)">createPlayer</a></span>&#8203;(@NotNull java.util.UUID&nbsp;uuid,
+            @NotNull java.lang.String&nbsp;username,
+            @NotNull <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></th>
 <td class="colLast">
 <div class="block">Creates a new <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> object based on his connection data.</div>
 </td>
@@ -184,12 +184,12 @@ public interface <span class="typeNameLabel">PlayerProvider</span></pre>
 <li class="blockList">
 <h4>createPlayer</h4>
 <pre class="methodSignature">@NotNull
-<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;createPlayer&#8203;(@NotNull
-                    java.util.UUID&nbsp;uuid,
-                    @NotNull
-                    java.lang.String&nbsp;username,
-                    @NotNull
-                    <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</pre>
+@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;createPlayer&#8203;(@NotNull
+                             @NotNull java.util.UUID&nbsp;uuid,
+                             @NotNull
+                             @NotNull java.lang.String&nbsp;username,
+                             @NotNull
+                             @NotNull <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</pre>
 <div class="block">Creates a new <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> object based on his connection data.
  <p>
  Called once a client want to join the server and need to have an assigned player object.</div>

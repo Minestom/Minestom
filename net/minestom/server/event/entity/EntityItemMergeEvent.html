@@ -185,9 +185,9 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.ItemEntity,net.minestom.server.entity.ItemEntity,net.minestom.server.item.ItemStack)">EntityItemMergeEvent</a></span>&#8203;(<a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;source,
-                    <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;merged,
-                    <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.ItemEntity,net.minestom.server.entity.ItemEntity,net.minestom.server.item.ItemStack)">EntityItemMergeEvent</a></span>&#8203;(@NotNull <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;source,
+                    @NotNull <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;merged,
+                    @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -209,21 +209,21 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntity()">getEntity</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity"><code>ItemEntity</code></a> who is receiving <a href="#getMerged()"><code>getMerged()</code></a>.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMerged()">getMerged</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the entity who will be merged.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getResult()">getResult</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the final item stack on the ground.</div>
@@ -245,7 +245,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResult(net.minestom.server.item.ItemStack)">setResult</a></span>&#8203;(<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResult(net.minestom.server.item.ItemStack)">setResult</a></span>&#8203;(@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result)</code></th>
 <td class="colLast">
 <div class="block">Changes the item stack which will appear on the ground.</div>
 </td>
@@ -281,11 +281,11 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>EntityItemMergeEvent</h4>
 <pre>public&nbsp;EntityItemMergeEvent&#8203;(@NotNull
-                            <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;source,
+                            @NotNull <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;source,
                             @NotNull
-                            <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;merged,
+                            @NotNull <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;merged,
                             @NotNull
-                            <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result)</pre>
+                            @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result)</pre>
 </li>
 </ul>
 </li>
@@ -305,7 +305,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>getEntity</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;getEntity()</pre>
+public&nbsp;@NotNull <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;getEntity()</pre>
 <div class="block">Gets the <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity"><code>ItemEntity</code></a> who is receiving <a href="#getMerged()"><code>getMerged()</code></a>.
  <p>
  This can be used to get the final ItemEntity position.</div>
@@ -324,7 +324,7 @@ public&nbsp;<a href="../../entity/ItemEntity.html" title="class in net.minestom.
 <li class="blockList">
 <h4>getMerged</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;getMerged()</pre>
+public&nbsp;@NotNull <a href="../../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a>&nbsp;getMerged()</pre>
 <div class="block">Gets the entity who will be merged.
  <p>
  This entity will be removed after the event.</div>
@@ -341,7 +341,7 @@ public&nbsp;<a href="../../entity/ItemEntity.html" title="class in net.minestom.
 <li class="blockList">
 <h4>getResult</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getResult()</pre>
+public&nbsp;@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getResult()</pre>
 <div class="block">Gets the final item stack on the ground.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -356,7 +356,7 @@ public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.ser
 <li class="blockList">
 <h4>setResult</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setResult&#8203;(@NotNull
-                      <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result)</pre>
+                      @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result)</pre>
 <div class="block">Changes the item stack which will appear on the ground.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

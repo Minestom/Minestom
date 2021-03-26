@@ -200,7 +200,7 @@ extends <a href="ThreadProvider.html" title="class in net.minestom.server.thread
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onChunkLoad(net.minestom.server.instance.Instance,int,int)">onChunkLoad</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onChunkLoad(net.minestom.server.instance.Instance,int,int)">onChunkLoad</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
            int&nbsp;chunkX,
            int&nbsp;chunkZ)</code></th>
 <td class="colLast">
@@ -209,7 +209,7 @@ extends <a href="ThreadProvider.html" title="class in net.minestom.server.thread
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onChunkUnload(net.minestom.server.instance.Instance,int,int)">onChunkUnload</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onChunkUnload(net.minestom.server.instance.Instance,int,int)">onChunkUnload</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
              int&nbsp;chunkX,
              int&nbsp;chunkZ)</code></th>
 <td class="colLast">
@@ -218,20 +218,20 @@ extends <a href="ThreadProvider.html" title="class in net.minestom.server.thread
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onInstanceCreate(net.minestom.server.instance.Instance)">onInstanceCreate</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onInstanceCreate(net.minestom.server.instance.Instance)">onInstanceCreate</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
 <td class="colLast">
 <div class="block">Called when an <a href="../instance/Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> is registered.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onInstanceDelete(net.minestom.server.instance.Instance)">onInstanceDelete</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onInstanceDelete(net.minestom.server.instance.Instance)">onInstanceDelete</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
 <td class="colLast">
 <div class="block">Called when an <a href="../instance/Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> is unregistered.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>java.util.List&lt;java.util.concurrent.Future&lt;?&gt;&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.List&lt;java.util.concurrent.Future&lt;?&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update(long)">update</a></span>&#8203;(long&nbsp;time)</code></th>
 <td class="colLast">
 <div class="block">Performs a server tick for all chunks based on their linked thread.</div>
@@ -294,7 +294,7 @@ extends <a href="ThreadProvider.html" title="class in net.minestom.server.thread
 <li class="blockList">
 <h4>onInstanceCreate</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;onInstanceCreate&#8203;(@NotNull
-                             <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</pre>
+                             @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ThreadProvider.html#onInstanceCreate(net.minestom.server.instance.Instance)">ThreadProvider</a></code></span></div>
 <div class="block">Called when an <a href="../instance/Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> is registered.</div>
 <dl>
@@ -312,7 +312,7 @@ extends <a href="ThreadProvider.html" title="class in net.minestom.server.thread
 <li class="blockList">
 <h4>onInstanceDelete</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;onInstanceDelete&#8203;(@NotNull
-                             <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</pre>
+                             @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ThreadProvider.html#onInstanceDelete(net.minestom.server.instance.Instance)">ThreadProvider</a></code></span></div>
 <div class="block">Called when an <a href="../instance/Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> is unregistered.</div>
 <dl>
@@ -330,7 +330,7 @@ extends <a href="ThreadProvider.html" title="class in net.minestom.server.thread
 <li class="blockList">
 <h4>onChunkLoad</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;onChunkLoad&#8203;(@NotNull
-                        <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                        @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                         int&nbsp;chunkX,
                         int&nbsp;chunkZ)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ThreadProvider.html#onChunkLoad(net.minestom.server.instance.Instance,int,int)">ThreadProvider</a></code></span></div>
@@ -354,7 +354,7 @@ extends <a href="ThreadProvider.html" title="class in net.minestom.server.thread
 <li class="blockList">
 <h4>onChunkUnload</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;onChunkUnload&#8203;(@NotNull
-                          <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                          @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                           int&nbsp;chunkX,
                           int&nbsp;chunkZ)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ThreadProvider.html#onChunkUnload(net.minestom.server.instance.Instance,int,int)">ThreadProvider</a></code></span></div>
@@ -376,7 +376,7 @@ extends <a href="ThreadProvider.html" title="class in net.minestom.server.thread
 <li class="blockList">
 <h4>update</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.List&lt;java.util.concurrent.Future&lt;?&gt;&gt;&nbsp;update&#8203;(long&nbsp;time)</pre>
+public&nbsp;@NotNull java.util.List&lt;java.util.concurrent.Future&lt;?&gt;&gt;&nbsp;update&#8203;(long&nbsp;time)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ThreadProvider.html#update(long)">ThreadProvider</a></code></span></div>
 <div class="block">Performs a server tick for all chunks based on their linked thread.</div>
 <dl>

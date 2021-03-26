@@ -224,7 +224,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>static <a href="TagsPacket.html" title="class in net.minestom.server.network.packet.server.play">TagsPacket</a></code></td>
+<td class="colFirst"><code>static @NotNull <a href="TagsPacket.html" title="class in net.minestom.server.network.packet.server.play">TagsPacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRequiredTagsPacket()">getRequiredTagsPacket</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="TagsPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>TagsPacket</code></a> sent to every <a href="../../../../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a>
@@ -233,7 +233,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(<a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(@NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
 <td class="colLast">
 <div class="block">Writes the packet to a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
 </td>
@@ -334,7 +334,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <li class="blockList">
 <h4>write</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
-                  <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</pre>
+                  @NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../ServerPacket.html#write(net.minestom.server.utils.binary.BinaryWriter)">ServerPacket</a></code></span></div>
 <div class="block">Writes the packet to a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
 <dl>
@@ -373,7 +373,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <li class="blockList">
 <h4>getRequiredTagsPacket</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="TagsPacket.html" title="class in net.minestom.server.network.packet.server.play">TagsPacket</a>&nbsp;getRequiredTagsPacket()</pre>
+public static&nbsp;@NotNull <a href="TagsPacket.html" title="class in net.minestom.server.network.packet.server.play">TagsPacket</a>&nbsp;getRequiredTagsPacket()</pre>
 <div class="block">Gets the <a href="TagsPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>TagsPacket</code></a> sent to every <a href="../../../../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a>
  on login.</div>
 <dl>

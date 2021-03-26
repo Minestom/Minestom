@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":18,"i1":18,"i2":18,"i3":18,"i4":6,"i5":18,"i6":18};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
+var data = {"i0":18,"i1":18,"i2":18,"i3":18,"i4":50,"i5":50,"i6":50};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],16:["t5","Default Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -123,7 +123,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code></dd>
+<dd><code>net.kyori.adventure.audience.Audience</code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code></dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
@@ -131,7 +131,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <hr>
 <pre>public interface <span class="typeNameLabel">CommandSender</span>
-extends <a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></pre>
+extends <a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a>, net.kyori.adventure.audience.Audience</pre>
 <div class="block">Represents something which can send commands to the server.
  <p>
  Main implementations are <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> and <a href="ConsoleSender.html" title="class in net.minestom.server.command"><code>ConsoleSender</code></a>.</div>
@@ -149,7 +149,7 @@ extends <a href="../permission/PermissionHandler.html" title="interface in net.m
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t5" class="tableTab"><span><a href="javascript:show(16);">Default Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t5" class="tableTab"><span><a href="javascript:show(16);">Default Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -184,27 +184,40 @@ extends <a href="../permission/PermissionHandler.html" title="interface in net.m
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(java.lang.String)">sendMessage</a></span>&#8203;(java.lang.String&nbsp;message)</code></th>
+<td class="colFirst"><code>default void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(java.lang.String)">sendMessage</a></span>&#8203;(@NotNull java.lang.String&nbsp;message)</code></th>
 <td class="colLast">
-<div class="block">Sends a raw string message.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <code>Audience.sendMessage(Component)</code></div>
+</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(java.lang.String%5B%5D)">sendMessage</a></span>&#8203;(java.lang.String[]&nbsp;messages)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(java.lang.String%5B%5D)">sendMessage</a></span>&#8203;(@NotNull java.lang.String[]&nbsp;messages)</code></th>
 <td class="colLast">
-<div class="block">Sends multiple raw string messages.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <code>Audience.sendMessage(Component)</code></div>
+</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(net.minestom.server.chat.JsonMessage)">sendMessage</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;text)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(net.minestom.server.chat.JsonMessage)">sendMessage</a></span>&#8203;(@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;text)</code></th>
 <td class="colLast">
-<div class="block">Sends a <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat"><code>JsonMessage</code></a> message.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <code>Audience.sendMessage(Component)</code></div>
+</div>
 </td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.kyori.adventure.audience.Audience">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.kyori.adventure.audience.Audience</h3>
+<code>clearTitle, hideBossBar, openBook, openBook, playSound, playSound, resetTitle, sendActionBar, sendActionBar, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendPlayerListFooter, sendPlayerListFooter, sendPlayerListHeader, sendPlayerListHeader, sendPlayerListHeaderAndFooter, sendPlayerListHeaderAndFooter, showBossBar, showTitle, stopSound</code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.permission.PermissionHandler">
 <!--   -->
@@ -234,8 +247,12 @@ extends <a href="../permission/PermissionHandler.html" title="interface in net.m
 <ul class="blockList">
 <li class="blockList">
 <h4>sendMessage</h4>
-<pre class="methodSignature">void&nbsp;sendMessage&#8203;(@NotNull
-                 java.lang.String&nbsp;message)</pre>
+<pre class="methodSignature">@Deprecated
+default&nbsp;void&nbsp;sendMessage&#8203;(@NotNull
+                         @NotNull java.lang.String&nbsp;message)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <code>Audience.sendMessage(Component)</code></div>
+</div>
 <div class="block">Sends a raw string message.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -249,8 +266,12 @@ extends <a href="../permission/PermissionHandler.html" title="interface in net.m
 <ul class="blockList">
 <li class="blockList">
 <h4>sendMessage</h4>
-<pre class="methodSignature">default&nbsp;void&nbsp;sendMessage&#8203;(@NotNull
-                         java.lang.String[]&nbsp;messages)</pre>
+<pre class="methodSignature">@Deprecated
+default&nbsp;void&nbsp;sendMessage&#8203;(@NotNull
+                         @NotNull java.lang.String[]&nbsp;messages)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <code>Audience.sendMessage(Component)</code></div>
+</div>
 <div class="block">Sends multiple raw string messages.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -264,8 +285,12 @@ extends <a href="../permission/PermissionHandler.html" title="interface in net.m
 <ul class="blockList">
 <li class="blockList">
 <h4>sendMessage</h4>
-<pre class="methodSignature">default&nbsp;void&nbsp;sendMessage&#8203;(@NotNull
-                         <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;text)</pre>
+<pre class="methodSignature">@Deprecated
+default&nbsp;void&nbsp;sendMessage&#8203;(@NotNull
+                         @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;text)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <code>Audience.sendMessage(Component)</code></div>
+</div>
 <div class="block">Sends a <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat"><code>JsonMessage</code></a> message.
  If this is not a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a>, only the content of the message will be sent as a string.</div>
 <dl>

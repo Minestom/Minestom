@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
+var data = {"i0":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -131,7 +131,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code></dd>
+<dd><code>net.kyori.adventure.audience.Audience</code>, <code><a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code></dd>
 </dl>
 <hr>
 <pre>public class <span class="typeNameLabel">ServerSender</span>
@@ -139,8 +139,9 @@ extends java.lang.Object
 implements <a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></pre>
 <div class="block">Sender used in <a href="CommandManager.html#executeServerCommand(java.lang.String)"><code>CommandManager.executeServerCommand(String)</code></a>.
  <p>
- Be aware that <a href="#sendMessage(java.lang.String)"><code>sendMessage(String)</code></a> is empty on purpose because the purpose
- of this sender is to process the data of <a href="builder/Arguments.html#getReturnData()"><code>Arguments.getReturnData()</code></a>.</div>
+ Although this class implemented <a href="CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a> and thus <code>Audience</code>, no
+ data can be sent to this sender because it's purpose is to process the data of
+ <a href="builder/Arguments.html#getReturnData()"><code>Arguments.getReturnData()</code></a>.</div>
 </li>
 </ul>
 </div>
@@ -183,17 +184,10 @@ implements <a href="CommandSender.html" title="interface in net.minestom.server.
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>java.util.Set&lt;<a href="../permission/Permission.html" title="class in net.minestom.server.permission">Permission</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.Set&lt;<a href="../permission/Permission.html" title="class in net.minestom.server.permission">Permission</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAllPermissions()">getAllPermissions</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns all permissions associated to this handler.</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(java.lang.String)">sendMessage</a></span>&#8203;(java.lang.String&nbsp;message)</code></th>
-<td class="colLast">
-<div class="block">Sends a raw string message.</div>
 </td>
 </tr>
 </table>
@@ -205,11 +199,18 @@ implements <a href="CommandSender.html" title="interface in net.minestom.server.
 <code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
 </ul>
 <ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.kyori.adventure.audience.Audience">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.kyori.adventure.audience.Audience</h3>
+<code>clearTitle, hideBossBar, openBook, openBook, playSound, playSound, resetTitle, sendActionBar, sendActionBar, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendPlayerListFooter, sendPlayerListFooter, sendPlayerListHeader, sendPlayerListHeader, sendPlayerListHeaderAndFooter, sendPlayerListHeaderAndFooter, showBossBar, showTitle, stopSound</code></li>
+</ul>
+<ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.command.CommandSender">
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;net.minestom.server.command.<a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></h3>
-<code><a href="CommandSender.html#asConsole()">asConsole</a>, <a href="CommandSender.html#asPlayer()">asPlayer</a>, <a href="CommandSender.html#isConsole()">isConsole</a>, <a href="CommandSender.html#isPlayer()">isPlayer</a>, <a href="CommandSender.html#sendMessage(java.lang.String%5B%5D)">sendMessage</a>, <a href="CommandSender.html#sendMessage(net.minestom.server.chat.JsonMessage)">sendMessage</a></code></li>
+<code><a href="CommandSender.html#asConsole()">asConsole</a>, <a href="CommandSender.html#asPlayer()">asPlayer</a>, <a href="CommandSender.html#isConsole()">isConsole</a>, <a href="CommandSender.html#isPlayer()">isPlayer</a>, <a href="CommandSender.html#sendMessage(java.lang.String)">sendMessage</a>, <a href="CommandSender.html#sendMessage(java.lang.String%5B%5D)">sendMessage</a>, <a href="CommandSender.html#sendMessage(net.minestom.server.chat.JsonMessage)">sendMessage</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.permission.PermissionHandler">
@@ -253,24 +254,6 @@ implements <a href="CommandSender.html" title="interface in net.minestom.server.
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="sendMessage(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>sendMessage</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;sendMessage&#8203;(@NotNull
-                        java.lang.String&nbsp;message)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="CommandSender.html#sendMessage(java.lang.String)">CommandSender</a></code></span></div>
-<div class="block">Sends a raw string message.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="CommandSender.html#sendMessage(java.lang.String)">sendMessage</a></code>&nbsp;in interface&nbsp;<code><a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>message</code> - the message to send</dd>
-</dl>
-</li>
-</ul>
 <a id="getAllPermissions()">
 <!--   -->
 </a>
@@ -278,7 +261,7 @@ implements <a href="CommandSender.html" title="interface in net.minestom.server.
 <li class="blockList">
 <h4>getAllPermissions</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.Set&lt;<a href="../permission/Permission.html" title="class in net.minestom.server.permission">Permission</a>&gt;&nbsp;getAllPermissions()</pre>
+public&nbsp;@NotNull java.util.Set&lt;<a href="../permission/Permission.html" title="class in net.minestom.server.permission">Permission</a>&gt;&nbsp;getAllPermissions()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../permission/PermissionHandler.html#getAllPermissions()">PermissionHandler</a></code></span></div>
 <div class="block">Returns all permissions associated to this handler.
  The returned collection should be modified only by subclasses.</div>

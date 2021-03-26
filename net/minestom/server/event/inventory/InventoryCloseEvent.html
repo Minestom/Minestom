@@ -180,8 +180,8 @@ extends <a href="../InventoryEvent.html" title="class in net.minestom.server.eve
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player)">InventoryCloseEvent</a></span>&#8203;(<a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
-                   <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player)">InventoryCloseEvent</a></span>&#8203;(@Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
+                   @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -203,14 +203,14 @@ extends <a href="../InventoryEvent.html" title="class in net.minestom.server.eve
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></code></td>
+<td class="colFirst"><code>@Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNewInventory()">getNewInventory</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the new inventory to open.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayer()">getPlayer</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player who closed the inventory.</div>
@@ -218,7 +218,7 @@ extends <a href="../InventoryEvent.html" title="class in net.minestom.server.eve
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setNewInventory(net.minestom.server.inventory.Inventory)">setNewInventory</a></span>&#8203;(<a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;newInventory)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setNewInventory(net.minestom.server.inventory.Inventory)">setNewInventory</a></span>&#8203;(@Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;newInventory)</code></th>
 <td class="colLast">
 <div class="block">Can be used to open a new inventory after closing the previous one.</div>
 </td>
@@ -261,9 +261,9 @@ extends <a href="../InventoryEvent.html" title="class in net.minestom.server.eve
 <li class="blockList">
 <h4>InventoryCloseEvent</h4>
 <pre>public&nbsp;InventoryCloseEvent&#8203;(@Nullable
-                           <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
+                           @Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
                            @NotNull
-                           <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+                           @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 </li>
 </ul>
 </li>
@@ -283,7 +283,7 @@ extends <a href="../InventoryEvent.html" title="class in net.minestom.server.eve
 <li class="blockList">
 <h4>getPlayer</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;getPlayer()</pre>
+public&nbsp;@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;getPlayer()</pre>
 <div class="block">Gets the player who closed the inventory.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -298,7 +298,7 @@ public&nbsp;<a href="../../entity/Player.html" title="class in net.minestom.serv
 <li class="blockList">
 <h4>getNewInventory</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;getNewInventory()</pre>
+public&nbsp;@Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;getNewInventory()</pre>
 <div class="block">Gets the new inventory to open.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -313,7 +313,7 @@ public&nbsp;<a href="../../inventory/Inventory.html" title="class in net.minesto
 <li class="blockList">
 <h4>setNewInventory</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setNewInventory&#8203;(@Nullable
-                            <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;newInventory)</pre>
+                            @Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;newInventory)</pre>
 <div class="block">Can be used to open a new inventory after closing the previous one.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

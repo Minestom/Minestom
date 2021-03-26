@@ -183,14 +183,14 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addTickEndCallback(java.util.function.LongConsumer)">addTickEndCallback</a></span>&#8203;(java.util.function.LongConsumer&nbsp;callback)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addTickEndCallback(java.util.function.LongConsumer)">addTickEndCallback</a></span>&#8203;(@NotNull java.util.function.LongConsumer&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Adds a callback executed at the end of the next server tick.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addTickStartCallback(java.util.function.LongConsumer)">addTickStartCallback</a></span>&#8203;(java.util.function.LongConsumer&nbsp;callback)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addTickStartCallback(java.util.function.LongConsumer)">addTickStartCallback</a></span>&#8203;(@NotNull java.util.function.LongConsumer&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Adds a callback executed at the start of the next server tick.</div>
 </td>
@@ -204,14 +204,14 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeTickEndCallback(java.util.function.LongConsumer)">removeTickEndCallback</a></span>&#8203;(java.util.function.LongConsumer&nbsp;callback)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeTickEndCallback(java.util.function.LongConsumer)">removeTickEndCallback</a></span>&#8203;(@NotNull java.util.function.LongConsumer&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Removes a tick end callback.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeTickStartCallback(java.util.function.LongConsumer)">removeTickStartCallback</a></span>&#8203;(java.util.function.LongConsumer&nbsp;callback)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeTickStartCallback(java.util.function.LongConsumer)">removeTickStartCallback</a></span>&#8203;(@NotNull java.util.function.LongConsumer&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Removes a tick start callback.</div>
 </td>
@@ -432,7 +432,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>addTickStartCallback</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;addTickStartCallback&#8203;(@NotNull
-                                 java.util.function.LongConsumer&nbsp;callback)</pre>
+                                 @NotNull java.util.function.LongConsumer&nbsp;callback)</pre>
 <div class="block">Adds a callback executed at the start of the next server tick.
  <p>
  The long in the consumer represents the starting time (in ms) of the tick.</div>
@@ -449,7 +449,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>removeTickStartCallback</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;removeTickStartCallback&#8203;(@NotNull
-                                    java.util.function.LongConsumer&nbsp;callback)</pre>
+                                    @NotNull java.util.function.LongConsumer&nbsp;callback)</pre>
 <div class="block">Removes a tick start callback.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -464,7 +464,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>addTickEndCallback</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;addTickEndCallback&#8203;(@NotNull
-                               java.util.function.LongConsumer&nbsp;callback)</pre>
+                               @NotNull java.util.function.LongConsumer&nbsp;callback)</pre>
 <div class="block">Adds a callback executed at the end of the next server tick.
  <p>
  The long in the consumer represents the duration (in ms) of the tick.</div>
@@ -481,7 +481,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>removeTickEndCallback</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;removeTickEndCallback&#8203;(@NotNull
-                                  java.util.function.LongConsumer&nbsp;callback)</pre>
+                                  @NotNull java.util.function.LongConsumer&nbsp;callback)</pre>
 <div class="block">Removes a tick end callback.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

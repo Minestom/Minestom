@@ -158,36 +158,36 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#delete(java.lang.String)">delete</a></span>&#8203;(java.lang.String&nbsp;key)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#delete(java.lang.String)">delete</a></span>&#8203;(@NotNull java.lang.String&nbsp;key)</code></th>
 <td class="colLast">
 <div class="block">Deletes the specified key from the database.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#exists(java.lang.String)">exists</a></span>&#8203;(java.lang.String&nbsp;location)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#exists(java.lang.String)">exists</a></span>&#8203;(@NotNull java.lang.String&nbsp;location)</code></th>
 <td class="colLast">
 <div class="block">Gets if the location exists.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>byte[]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#get(java.lang.String)">get</a></span>&#8203;(java.lang.String&nbsp;key)</code></th>
+<td class="colFirst"><code>@org.jetbrains.annotations.Nullable byte[]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#get(java.lang.String)">get</a></span>&#8203;(@NotNull java.lang.String&nbsp;key)</code></th>
 <td class="colLast">
 <div class="block">Gets the data associated to a key.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#open(java.lang.String,net.minestom.server.storage.StorageOptions)">open</a></span>&#8203;(java.lang.String&nbsp;location,
-    <a href="StorageOptions.html" title="class in net.minestom.server.storage">StorageOptions</a>&nbsp;storageOptions)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#open(java.lang.String,net.minestom.server.storage.StorageOptions)">open</a></span>&#8203;(@NotNull java.lang.String&nbsp;location,
+    @NotNull <a href="StorageOptions.html" title="class in net.minestom.server.storage">StorageOptions</a>&nbsp;storageOptions)</code></th>
 <td class="colLast">
 <div class="block">Called when a <a href="StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a> is opened with this <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a>.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(java.lang.String,byte%5B%5D)">set</a></span>&#8203;(java.lang.String&nbsp;key,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(java.lang.String,byte%5B%5D)">set</a></span>&#8203;(@NotNull java.lang.String&nbsp;key,
    byte[]&nbsp;data)</code></th>
 <td class="colLast">
 <div class="block">Sets the specified data to the defined key.</div>
@@ -217,7 +217,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>exists</h4>
 <pre class="methodSignature">boolean&nbsp;exists&#8203;(@NotNull
-               java.lang.String&nbsp;location)</pre>
+               @NotNull java.lang.String&nbsp;location)</pre>
 <div class="block">Gets if the location exists.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -234,9 +234,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>open</h4>
 <pre class="methodSignature">void&nbsp;open&#8203;(@NotNull
-          java.lang.String&nbsp;location,
+          @NotNull java.lang.String&nbsp;location,
           @NotNull
-          <a href="StorageOptions.html" title="class in net.minestom.server.storage">StorageOptions</a>&nbsp;storageOptions)</pre>
+          @NotNull <a href="StorageOptions.html" title="class in net.minestom.server.storage">StorageOptions</a>&nbsp;storageOptions)</pre>
 <div class="block">Called when a <a href="StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a> is opened with this <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -252,8 +252,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>get</h4>
 <pre class="methodSignature">@Nullable
-byte[]&nbsp;get&#8203;(@NotNull
-           java.lang.String&nbsp;key)</pre>
+@org.jetbrains.annotations.Nullable byte[]&nbsp;get&#8203;(@NotNull
+                                               @NotNull java.lang.String&nbsp;key)</pre>
 <div class="block">Gets the data associated to a key.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -270,7 +270,7 @@ byte[]&nbsp;get&#8203;(@NotNull
 <li class="blockList">
 <h4>set</h4>
 <pre class="methodSignature">void&nbsp;set&#8203;(@NotNull
-         java.lang.String&nbsp;key,
+         @NotNull java.lang.String&nbsp;key,
          byte[]&nbsp;data)</pre>
 <div class="block">Sets the specified data to the defined key.</div>
 <dl>
@@ -287,7 +287,7 @@ byte[]&nbsp;get&#8203;(@NotNull
 <li class="blockList">
 <h4>delete</h4>
 <pre class="methodSignature">void&nbsp;delete&#8203;(@NotNull
-            java.lang.String&nbsp;key)</pre>
+            @NotNull java.lang.String&nbsp;key)</pre>
 <div class="block">Deletes the specified key from the database.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

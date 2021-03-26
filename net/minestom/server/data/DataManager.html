@@ -181,16 +181,16 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="DataType.html" title="class in net.minestom.server.data">DataType</a>&lt;T&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDataType(java.lang.Class)">getDataType</a></span>&#8203;(java.lang.Class&lt;T&gt;&nbsp;clazz)</code></th>
+<td class="colFirst"><code>&lt;T&gt;&nbsp;@Nullable <a href="DataType.html" title="class in net.minestom.server.data">DataType</a>&lt;T&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDataType(java.lang.Class)">getDataType</a></span>&#8203;(@NotNull java.lang.Class&lt;T&gt;&nbsp;clazz)</code></th>
 <td class="colLast">
 <div class="block">Gets the data type associated with a class.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#registerType(java.lang.Class,net.minestom.server.data.DataType)">registerType</a></span>&#8203;(java.lang.Class&lt;T&gt;&nbsp;clazz,
-            <a href="DataType.html" title="class in net.minestom.server.data">DataType</a>&lt;T&gt;&nbsp;dataType)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#registerType(java.lang.Class,net.minestom.server.data.DataType)">registerType</a></span>&#8203;(@NotNull java.lang.Class&lt;T&gt;&nbsp;clazz,
+            @NotNull <a href="DataType.html" title="class in net.minestom.server.data">DataType</a>&lt;T&gt;&nbsp;dataType)</code></th>
 <td class="colLast">
 <div class="block">Registers a new data type.</div>
 </td>
@@ -245,9 +245,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>registerType</h4>
 <pre class="methodSignature">public&nbsp;&lt;T&gt;&nbsp;void&nbsp;registerType&#8203;(@NotNull
-                             java.lang.Class&lt;T&gt;&nbsp;clazz,
+                             @NotNull java.lang.Class&lt;T&gt;&nbsp;clazz,
                              @NotNull
-                             <a href="DataType.html" title="class in net.minestom.server.data">DataType</a>&lt;T&gt;&nbsp;dataType)</pre>
+                             @NotNull <a href="DataType.html" title="class in net.minestom.server.data">DataType</a>&lt;T&gt;&nbsp;dataType)</pre>
 <div class="block">Registers a new data type.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
@@ -267,8 +267,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getDataType</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;&lt;T&gt;&nbsp;<a href="DataType.html" title="class in net.minestom.server.data">DataType</a>&lt;T&gt;&nbsp;getDataType&#8203;(@NotNull
-                                   java.lang.Class&lt;T&gt;&nbsp;clazz)</pre>
+public&nbsp;&lt;T&gt;&nbsp;@Nullable <a href="DataType.html" title="class in net.minestom.server.data">DataType</a>&lt;T&gt;&nbsp;getDataType&#8203;(@NotNull
+                                             @NotNull java.lang.Class&lt;T&gt;&nbsp;clazz)</pre>
 <div class="block">Gets the data type associated with a class.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>

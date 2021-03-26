@@ -163,7 +163,7 @@ implements <a href="../ClientPreplayPacket.html" title="interface in net.minesto
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a></code></td>
+<td class="colFirst"><code>static net.kyori.adventure.text.Component</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#INVALID_PROXY_RESPONSE">INVALID_PROXY_RESPONSE</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -218,14 +218,14 @@ implements <a href="../ClientPreplayPacket.html" title="interface in net.minesto
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#process(net.minestom.server.network.player.PlayerConnection)">process</a></span>&#8203;(<a href="../../../player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#process(net.minestom.server.network.player.PlayerConnection)">process</a></span>&#8203;(@NotNull <a href="../../../player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></th>
 <td class="colLast">
 <div class="block">Called when the packet is received.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(net.minestom.server.utils.binary.BinaryReader)">read</a></span>&#8203;(<a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(net.minestom.server.utils.binary.BinaryReader)">read</a></span>&#8203;(@NotNull <a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</code></th>
 <td class="colLast">
 <div class="block">Reads from a <a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary"><code>BinaryReader</code></a>.</div>
 </td>
@@ -260,7 +260,7 @@ implements <a href="../ClientPreplayPacket.html" title="interface in net.minesto
 <ul class="blockList">
 <li class="blockList">
 <h4>INVALID_PROXY_RESPONSE</h4>
-<pre>public static final&nbsp;<a href="../../../../chat/ColoredText.html" title="class in net.minestom.server.chat">ColoredText</a> INVALID_PROXY_RESPONSE</pre>
+<pre>public static final&nbsp;net.kyori.adventure.text.Component INVALID_PROXY_RESPONSE</pre>
 </li>
 </ul>
 <a id="messageId">
@@ -326,7 +326,7 @@ implements <a href="../ClientPreplayPacket.html" title="interface in net.minesto
 <li class="blockList">
 <h4>process</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;process&#8203;(@NotNull
-                    <a href="../../../player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</pre>
+                    @NotNull <a href="../../../player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../ClientPreplayPacket.html#process(net.minestom.server.network.player.PlayerConnection)">ClientPreplayPacket</a></code></span></div>
 <div class="block">Called when the packet is received.</div>
 <dl>
@@ -344,7 +344,7 @@ implements <a href="../ClientPreplayPacket.html" title="interface in net.minesto
 <li class="blockList">
 <h4>read</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;read&#8203;(@NotNull
-                 <a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</pre>
+                 @NotNull <a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../utils/binary/Readable.html#read(net.minestom.server.utils.binary.BinaryReader)">Readable</a></code></span></div>
 <div class="block">Reads from a <a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary"><code>BinaryReader</code></a>.</div>
 <dl>

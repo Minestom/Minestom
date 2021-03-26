@@ -157,9 +157,9 @@ extends <a href="../Event.html" title="class in net.minestom.server.event">Event
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.item.ItemStack)">ItemUpdateStateEvent</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.item.ItemStack)">ItemUpdateStateEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                     <a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
-                    <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
+                    @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -186,12 +186,12 @@ extends <a href="../Event.html" title="class in net.minestom.server.event">Event
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getItemStack()">getItemStack</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayer()">getPlayer</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -236,11 +236,11 @@ extends <a href="../Event.html" title="class in net.minestom.server.event">Event
 <li class="blockList">
 <h4>ItemUpdateStateEvent</h4>
 <pre>public&nbsp;ItemUpdateStateEvent&#8203;(@NotNull
-                            <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                            @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                             @NotNull
                             <a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
                             @NotNull
-                            <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
+                            @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
 </li>
 </ul>
 </li>
@@ -260,7 +260,7 @@ extends <a href="../Event.html" title="class in net.minestom.server.event">Event
 <li class="blockList">
 <h4>getPlayer</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;getPlayer()</pre>
+public&nbsp;@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;getPlayer()</pre>
 </li>
 </ul>
 <a id="getHand()">
@@ -280,7 +280,7 @@ public&nbsp;<a href="../../entity/Player.Hand.html" title="enum in net.minestom.
 <li class="blockList">
 <h4>getItemStack</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getItemStack()</pre>
+public&nbsp;@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getItemStack()</pre>
 </li>
 </ul>
 <a id="setHandAnimation(boolean)">

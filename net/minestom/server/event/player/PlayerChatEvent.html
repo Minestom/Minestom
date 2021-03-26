@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":42,"i7":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -186,9 +186,9 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,java.util.Collection,java.lang.String)">PlayerChatEvent</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-               java.util.Collection&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;recipients,
-               java.lang.String&nbsp;message)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,java.util.Collection,java.lang.String)">PlayerChatEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+               @NotNull java.util.Collection&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;recipients,
+               @NotNull java.lang.String&nbsp;message)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -203,28 +203,28 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>java.util.function.Function&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,&#8203;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;</code></td>
+<td class="colFirst"><code>@Nullable java.util.function.Function&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,&#8203;net.kyori.adventure.text.Component&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChatFormatFunction()">getChatFormatFunction</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Used to retrieve the chat format for this message.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colFirst"><code>@NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMessage()">getMessage</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the message sent.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>java.util.Collection&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.Collection&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRecipients()">getRecipients</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Those are the players who will receive the message.</div>
@@ -246,14 +246,23 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChatFormat(java.util.function.Function)">setChatFormat</a></span>&#8203;(java.util.function.Function&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,&#8203;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;&nbsp;chatFormat)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChatFormat(java.util.function.Function)">setChatFormat</a></span>&#8203;(@Nullable java.util.function.Function&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,&#8203;net.kyori.adventure.text.Component&gt;&nbsp;chatFormat)</code></th>
 <td class="colLast">
 <div class="block">Changes the chat format.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMessage(java.lang.String)">setMessage</a></span>&#8203;(java.lang.String&nbsp;message)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChatFormatJson(java.util.function.Function)">setChatFormatJson</a></span>&#8203;(@Nullable java.util.function.Function&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,&#8203;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;&nbsp;chatFormat)</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#setChatFormat(java.util.function.Function)"><code>setChatFormat(Function)</code></a></div>
+</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMessage(java.lang.String)">setMessage</a></span>&#8203;(@NotNull java.lang.String&nbsp;message)</code></th>
 <td class="colLast">
 <div class="block">Used to change the message.</div>
 </td>
@@ -296,11 +305,11 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>PlayerChatEvent</h4>
 <pre>public&nbsp;PlayerChatEvent&#8203;(@NotNull
-                       <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                       @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                        @NotNull
-                       java.util.Collection&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;recipients,
+                       @NotNull java.util.Collection&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;recipients,
                        @NotNull
-                       java.lang.String&nbsp;message)</pre>
+                       @NotNull java.lang.String&nbsp;message)</pre>
 </li>
 </ul>
 </li>
@@ -313,6 +322,25 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="setChatFormatJson(java.util.function.Function)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setChatFormatJson</h4>
+<pre class="methodSignature">@Deprecated
+public&nbsp;void&nbsp;setChatFormatJson&#8203;(@Nullable
+                              @Nullable java.util.function.Function&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,&#8203;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;&nbsp;chatFormat)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#setChatFormat(java.util.function.Function)"><code>setChatFormat(Function)</code></a></div>
+</div>
+<div class="block">Changes the chat format.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>chatFormat</code> - the custom chat format, null to use the default one</dd>
+</dl>
+</li>
+</ul>
 <a id="setChatFormat(java.util.function.Function)">
 <!--   -->
 </a>
@@ -320,7 +348,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>setChatFormat</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setChatFormat&#8203;(@Nullable
-                          java.util.function.Function&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,&#8203;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;&nbsp;chatFormat)</pre>
+                          @Nullable java.util.function.Function&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,&#8203;net.kyori.adventure.text.Component&gt;&nbsp;chatFormat)</pre>
 <div class="block">Changes the chat format.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -335,7 +363,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>getRecipients</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.Collection&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;getRecipients()</pre>
+public&nbsp;@NotNull java.util.Collection&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;getRecipients()</pre>
 <div class="block">Those are the players who will receive the message.
  <p>
  It can be modified to add or remove recipient.</div>
@@ -352,7 +380,7 @@ public&nbsp;java.util.Collection&lt;<a href="../../entity/Player.html" title="cl
 <li class="blockList">
 <h4>getMessage</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.lang.String&nbsp;getMessage()</pre>
+public&nbsp;@NotNull java.lang.String&nbsp;getMessage()</pre>
 <div class="block">Gets the message sent.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -367,7 +395,7 @@ public&nbsp;java.lang.String&nbsp;getMessage()</pre>
 <li class="blockList">
 <h4>setMessage</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setMessage&#8203;(@NotNull
-                       java.lang.String&nbsp;message)</pre>
+                       @NotNull java.lang.String&nbsp;message)</pre>
 <div class="block">Used to change the message.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -382,7 +410,7 @@ public&nbsp;java.lang.String&nbsp;getMessage()</pre>
 <li class="blockList">
 <h4>getChatFormatFunction</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;java.util.function.Function&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,&#8203;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;&nbsp;getChatFormatFunction()</pre>
+public&nbsp;@Nullable java.util.function.Function&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,&#8203;net.kyori.adventure.text.Component&gt;&nbsp;getChatFormatFunction()</pre>
 <div class="block">Used to retrieve the chat format for this message.
  <p>
  If null, the default format will be used.</div>

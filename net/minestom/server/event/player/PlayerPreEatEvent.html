@@ -187,8 +187,8 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.item.ItemStack,long)">PlayerPreEatEvent</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                 <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;foodItem,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.item.ItemStack,long)">PlayerPreEatEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                 @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;foodItem,
                  long&nbsp;eatingTime)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -218,7 +218,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFoodItem()">getFoodItem</a></span>()</code></th>
 <td class="colLast">
 <div class="block">The food item which will be eaten.</div>
@@ -283,9 +283,9 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>PlayerPreEatEvent</h4>
 <pre>public&nbsp;PlayerPreEatEvent&#8203;(@NotNull
-                         <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                         @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                          @NotNull
-                         <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;foodItem,
+                         @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;foodItem,
                          long&nbsp;eatingTime)</pre>
 </li>
 </ul>
@@ -306,7 +306,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>getFoodItem</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getFoodItem()</pre>
+public&nbsp;@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getFoodItem()</pre>
 <div class="block">The food item which will be eaten.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

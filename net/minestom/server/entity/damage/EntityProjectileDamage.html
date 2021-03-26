@@ -179,8 +179,8 @@ extends <a href="DamageType.html" title="class in net.minestom.server.entity.dam
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,net.minestom.server.entity.Entity)">EntityProjectileDamage</a></span>&#8203;(<a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;shooter,
-                      <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;projectile)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,net.minestom.server.entity.Entity)">EntityProjectileDamage</a></span>&#8203;(@Nullable <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;shooter,
+                      @NotNull <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;projectile)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -202,14 +202,14 @@ extends <a href="DamageType.html" title="class in net.minestom.server.entity.dam
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getProjectile()">getProjectile</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the projectile responsible for the damage.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
+<td class="colFirst"><code>@Nullable <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getShooter()">getShooter</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the shooter of the projectile.</div>
@@ -221,7 +221,7 @@ extends <a href="DamageType.html" title="class in net.minestom.server.entity.dam
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.entity.damage.<a href="DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a></h3>
-<code><a href="DamageType.html#buildDeathMessage(net.minestom.server.entity.Player)">buildDeathMessage</a>, <a href="DamageType.html#buildDeathScreenText(net.minestom.server.entity.Player)">buildDeathScreenText</a>, <a href="DamageType.html#fromEntity(net.minestom.server.entity.Entity)">fromEntity</a>, <a href="DamageType.html#fromPlayer(net.minestom.server.entity.Player)">fromPlayer</a>, <a href="DamageType.html#fromProjectile(net.minestom.server.entity.Entity,net.minestom.server.entity.Entity)">fromProjectile</a>, <a href="DamageType.html#getData()">getData</a>, <a href="DamageType.html#getGenericSound(net.minestom.server.entity.LivingEntity)">getGenericSound</a>, <a href="DamageType.html#getIdentifier()">getIdentifier</a>, <a href="DamageType.html#getPlayerSound(net.minestom.server.entity.Player)">getPlayerSound</a>, <a href="DamageType.html#getSound(net.minestom.server.entity.LivingEntity)">getSound</a>, <a href="DamageType.html#setData(net.minestom.server.data.Data)">setData</a></code></li>
+<code><a href="DamageType.html#buildDeathMessage(net.minestom.server.entity.Player)">buildDeathMessage</a>, <a href="DamageType.html#buildDeathMessageJson(net.minestom.server.entity.Player)">buildDeathMessageJson</a>, <a href="DamageType.html#buildDeathScreenText(net.minestom.server.entity.Player)">buildDeathScreenText</a>, <a href="DamageType.html#buildDeathScreenTextJson(net.minestom.server.entity.Player)">buildDeathScreenTextJson</a>, <a href="DamageType.html#fromEntity(net.minestom.server.entity.Entity)">fromEntity</a>, <a href="DamageType.html#fromPlayer(net.minestom.server.entity.Player)">fromPlayer</a>, <a href="DamageType.html#fromProjectile(net.minestom.server.entity.Entity,net.minestom.server.entity.Entity)">fromProjectile</a>, <a href="DamageType.html#getData()">getData</a>, <a href="DamageType.html#getGenericSound(net.minestom.server.entity.LivingEntity)">getGenericSound</a>, <a href="DamageType.html#getIdentifier()">getIdentifier</a>, <a href="DamageType.html#getPlayerSound(net.minestom.server.entity.Player)">getPlayerSound</a>, <a href="DamageType.html#getSound(net.minestom.server.entity.LivingEntity)">getSound</a>, <a href="DamageType.html#setData(net.minestom.server.data.Data)">setData</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -253,9 +253,9 @@ extends <a href="DamageType.html" title="class in net.minestom.server.entity.dam
 <li class="blockList">
 <h4>EntityProjectileDamage</h4>
 <pre>public&nbsp;EntityProjectileDamage&#8203;(@Nullable
-                              <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;shooter,
+                              @Nullable <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;shooter,
                               @NotNull
-                              <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;projectile)</pre>
+                              @NotNull <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;projectile)</pre>
 </li>
 </ul>
 </li>
@@ -275,7 +275,7 @@ extends <a href="DamageType.html" title="class in net.minestom.server.entity.dam
 <li class="blockList">
 <h4>getProjectile</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;getProjectile()</pre>
+public&nbsp;@NotNull <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;getProjectile()</pre>
 <div class="block">Gets the projectile responsible for the damage.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -290,7 +290,7 @@ public&nbsp;<a href="../Entity.html" title="class in net.minestom.server.entity"
 <li class="blockList">
 <h4>getShooter</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;getShooter()</pre>
+public&nbsp;@Nullable <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;getShooter()</pre>
 <div class="block">Gets the shooter of the projectile.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

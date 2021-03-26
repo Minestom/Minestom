@@ -180,8 +180,8 @@ extends <a href="Argument.html" title="class in net.minestom.server.command.buil
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,net.minestom.server.command.builder.arguments.Argument...)">ArgumentLoop</a></span>&#8203;(java.lang.String&nbsp;id,
-            <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="ArgumentLoop.html" title="type parameter in ArgumentLoop">T</a>&gt;...&nbsp;arguments)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,net.minestom.server.command.builder.arguments.Argument...)">ArgumentLoop</a></span>&#8203;(@NotNull java.lang.String&nbsp;id,
+            @NotNull <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="ArgumentLoop.html" title="type parameter in ArgumentLoop">T</a>&gt;...&nbsp;arguments)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -203,8 +203,8 @@ extends <a href="Argument.html" title="class in net.minestom.server.command.buil
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="ArgumentLoop.html" title="type parameter in ArgumentLoop">T</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(java.lang.String&nbsp;input)</code></th>
+<td class="colFirst"><code>@NotNull java.util.List&lt;<a href="ArgumentLoop.html" title="type parameter in ArgumentLoop">T</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(@NotNull java.lang.String&nbsp;input)</code></th>
 <td class="colLast">
 <div class="block">Parses the given input, and throw an <a href="../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
  if the input cannot be convert to <code>T</code></div>
@@ -212,7 +212,7 @@ extends <a href="Argument.html" title="class in net.minestom.server.command.buil
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></span>&#8203;(<a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></span>&#8203;(@NotNull <a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
             boolean&nbsp;executable)</code></th>
 <td class="colLast">
 <div class="block">Turns the argument into a list of nodes for command dispatching.</div>
@@ -280,9 +280,9 @@ extends <a href="Argument.html" title="class in net.minestom.server.command.buil
 <h4>ArgumentLoop</h4>
 <pre>@SafeVarargs
 public&nbsp;ArgumentLoop&#8203;(@NotNull
-                    java.lang.String&nbsp;id,
+                    @NotNull java.lang.String&nbsp;id,
                     @NotNull
-                    <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="ArgumentLoop.html" title="type parameter in ArgumentLoop">T</a>&gt;...&nbsp;arguments)</pre>
+                    @NotNull <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="ArgumentLoop.html" title="type parameter in ArgumentLoop">T</a>&gt;...&nbsp;arguments)</pre>
 </li>
 </ul>
 </li>
@@ -302,9 +302,9 @@ public&nbsp;ArgumentLoop&#8203;(@NotNull
 <li class="blockList">
 <h4>parse</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.List&lt;<a href="ArgumentLoop.html" title="type parameter in ArgumentLoop">T</a>&gt;&nbsp;parse&#8203;(@NotNull
-                               java.lang.String&nbsp;input)
-                        throws <a href="../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></pre>
+public&nbsp;@NotNull java.util.List&lt;<a href="ArgumentLoop.html" title="type parameter in ArgumentLoop">T</a>&gt;&nbsp;parse&#8203;(@NotNull
+                                        @NotNull java.lang.String&nbsp;input)
+                                 throws <a href="../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Argument.html#parse(java.lang.String)">Argument</a></code></span></div>
 <div class="block">Parses the given input, and throw an <a href="../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
  if the input cannot be convert to <code>T</code></div>
@@ -327,7 +327,7 @@ public&nbsp;java.util.List&lt;<a href="ArgumentLoop.html" title="type parameter 
 <li class="blockList">
 <h4>processNodes</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;processNodes&#8203;(@NotNull
-                         <a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
+                         @NotNull <a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
                          boolean&nbsp;executable)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Argument.html#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">Argument</a></code></span></div>
 <div class="block">Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.</div>

@@ -209,8 +209,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected </code></td>
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.recipe.Recipe.RecipeType,java.lang.String)">Recipe</a></span>&#8203;(<a href="Recipe.RecipeType.html" title="enum in net.minestom.server.recipe">Recipe.RecipeType</a>&nbsp;recipeType,
-      java.lang.String&nbsp;recipeId)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.recipe.Recipe.RecipeType,java.lang.String)">Recipe</a></span>&#8203;(@NotNull <a href="Recipe.RecipeType.html" title="enum in net.minestom.server.recipe">Recipe.RecipeType</a>&nbsp;recipeType,
+      @NotNull java.lang.String&nbsp;recipeId)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -232,18 +232,18 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colFirst"><code>@NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRecipeId()">getRecipeId</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="Recipe.RecipeType.html" title="enum in net.minestom.server.recipe">Recipe.RecipeType</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="Recipe.RecipeType.html" title="enum in net.minestom.server.recipe">Recipe.RecipeType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRecipeType()">getRecipeType</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>abstract boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shouldShow(net.minestom.server.entity.Player)">shouldShow</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shouldShow(net.minestom.server.entity.Player)">shouldShow</a></span>&#8203;(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -305,9 +305,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>Recipe</h4>
 <pre>protected&nbsp;Recipe&#8203;(@NotNull
-                 <a href="Recipe.RecipeType.html" title="enum in net.minestom.server.recipe">Recipe.RecipeType</a>&nbsp;recipeType,
+                 @NotNull <a href="Recipe.RecipeType.html" title="enum in net.minestom.server.recipe">Recipe.RecipeType</a>&nbsp;recipeType,
                  @NotNull
-                 java.lang.String&nbsp;recipeId)</pre>
+                 @NotNull java.lang.String&nbsp;recipeId)</pre>
 </li>
 </ul>
 </li>
@@ -327,7 +327,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>shouldShow</h4>
 <pre class="methodSignature">public abstract&nbsp;boolean&nbsp;shouldShow&#8203;(@NotNull
-                                   <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+                                   @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 </li>
 </ul>
 <a id="getRecipeType()">
@@ -337,7 +337,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getRecipeType</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="Recipe.RecipeType.html" title="enum in net.minestom.server.recipe">Recipe.RecipeType</a>&nbsp;getRecipeType()</pre>
+public&nbsp;@NotNull <a href="Recipe.RecipeType.html" title="enum in net.minestom.server.recipe">Recipe.RecipeType</a>&nbsp;getRecipeType()</pre>
 </li>
 </ul>
 <a id="getRecipeId()">
@@ -347,7 +347,7 @@ public&nbsp;<a href="Recipe.RecipeType.html" title="enum in net.minestom.server.
 <li class="blockList">
 <h4>getRecipeId</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.lang.String&nbsp;getRecipeId()</pre>
+public&nbsp;@NotNull java.lang.String&nbsp;getRecipeId()</pre>
 </li>
 </ul>
 </li>

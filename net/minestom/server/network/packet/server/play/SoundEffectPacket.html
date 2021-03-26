@@ -163,13 +163,13 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../sound/SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#soundCategory">soundCategory</a></span></code></th>
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#soundId">soundId</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#soundId">soundId</a></span></code></th>
+<td class="colFirst"><code>net.kyori.adventure.sound.Sound.Source</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#soundSource">soundSource</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -232,9 +232,9 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static <a href="SoundEffectPacket.html" title="class in net.minestom.server.network.packet.server.play">SoundEffectPacket</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#create(net.minestom.server.sound.SoundCategory,net.minestom.server.sound.Sound,net.minestom.server.utils.Position,float,float)">create</a></span>&#8203;(<a href="../../../../sound/SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a>&nbsp;category,
-      <a href="../../../../sound/Sound.html" title="enum in net.minestom.server.sound">Sound</a>&nbsp;sound,
+<td class="colFirst"><code>static @NotNull <a href="SoundEffectPacket.html" title="class in net.minestom.server.network.packet.server.play">SoundEffectPacket</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#create(net.kyori.adventure.sound.Sound.Source,net.minestom.server.sound.SoundEvent,net.minestom.server.utils.Position,float,float)">create</a></span>&#8203;(net.kyori.adventure.sound.Sound.Source&nbsp;category,
+      <a href="../../../../sound/SoundEvent.html" title="enum in net.minestom.server.sound">SoundEvent</a>&nbsp;sound,
       <a href="../../../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
       float&nbsp;volume,
       float&nbsp;pitch)</code></th>
@@ -249,7 +249,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(<a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(@NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
 <td class="colLast">
 <div class="block">Writes the packet to a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
 </td>
@@ -287,13 +287,13 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <pre>public&nbsp;int soundId</pre>
 </li>
 </ul>
-<a id="soundCategory">
+<a id="soundSource">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>soundCategory</h4>
-<pre>public&nbsp;<a href="../../../../sound/SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a> soundCategory</pre>
+<h4>soundSource</h4>
+<pre>public&nbsp;net.kyori.adventure.sound.Sound.Source soundSource</pre>
 </li>
 </ul>
 <a id="x">
@@ -370,17 +370,18 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="create(net.minestom.server.sound.SoundCategory,net.minestom.server.sound.Sound,net.minestom.server.utils.Position,float,float)">
+<a id="create(net.kyori.adventure.sound.Sound.Source,net.minestom.server.sound.SoundEvent,net.minestom.server.utils.Position,float,float)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>create</h4>
-<pre class="methodSignature">public static&nbsp;<a href="SoundEffectPacket.html" title="class in net.minestom.server.network.packet.server.play">SoundEffectPacket</a>&nbsp;create&#8203;(<a href="../../../../sound/SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a>&nbsp;category,
-                                       <a href="../../../../sound/Sound.html" title="enum in net.minestom.server.sound">Sound</a>&nbsp;sound,
-                                       <a href="../../../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
-                                       float&nbsp;volume,
-                                       float&nbsp;pitch)</pre>
+<pre class="methodSignature">@NotNull
+public static&nbsp;@NotNull <a href="SoundEffectPacket.html" title="class in net.minestom.server.network.packet.server.play">SoundEffectPacket</a>&nbsp;create&#8203;(net.kyori.adventure.sound.Sound.Source&nbsp;category,
+                                                <a href="../../../../sound/SoundEvent.html" title="enum in net.minestom.server.sound">SoundEvent</a>&nbsp;sound,
+                                                <a href="../../../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
+                                                float&nbsp;volume,
+                                                float&nbsp;pitch)</pre>
 </li>
 </ul>
 <a id="write(net.minestom.server.utils.binary.BinaryWriter)">
@@ -390,7 +391,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <li class="blockList">
 <h4>write</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
-                  <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</pre>
+                  @NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../ServerPacket.html#write(net.minestom.server.utils.binary.BinaryWriter)">ServerPacket</a></code></span></div>
 <div class="block">Writes the packet to a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
 <dl>

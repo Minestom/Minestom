@@ -207,12 +207,12 @@ extends <a href="../../Argument.html" title="class in net.minestom.server.comman
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>abstract <a href="ArgumentRegistry.html" title="type parameter in ArgumentRegistry">T</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRegistry(java.lang.String)">getRegistry</a></span>&#8203;(java.lang.String&nbsp;value)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRegistry(java.lang.String)">getRegistry</a></span>&#8203;(@NotNull java.lang.String&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="ArgumentRegistry.html" title="type parameter in ArgumentRegistry">T</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(java.lang.String&nbsp;input)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(@NotNull java.lang.String&nbsp;input)</code></th>
 <td class="colLast">
 <div class="block">Parses the given input, and throw an <a href="../../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
  if the input cannot be convert to <code>T</code></div>
@@ -298,7 +298,7 @@ extends <a href="../../Argument.html" title="class in net.minestom.server.comman
 <li class="blockList">
 <h4>getRegistry</h4>
 <pre class="methodSignature">public abstract&nbsp;<a href="ArgumentRegistry.html" title="type parameter in ArgumentRegistry">T</a>&nbsp;getRegistry&#8203;(@NotNull
-                              java.lang.String&nbsp;value)</pre>
+                              @NotNull java.lang.String&nbsp;value)</pre>
 </li>
 </ul>
 <a id="parse(java.lang.String)">
@@ -309,7 +309,7 @@ extends <a href="../../Argument.html" title="class in net.minestom.server.comman
 <h4>parse</h4>
 <pre class="methodSignature">@NotNull
 public&nbsp;<a href="ArgumentRegistry.html" title="type parameter in ArgumentRegistry">T</a>&nbsp;parse&#8203;(@NotNull
-               java.lang.String&nbsp;input)
+               @NotNull java.lang.String&nbsp;input)
         throws <a href="../../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../Argument.html#parse(java.lang.String)">Argument</a></code></span></div>
 <div class="block">Parses the given input, and throw an <a href="../../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>

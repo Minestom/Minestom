@@ -183,7 +183,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#cache(java.util.UUID,T)">cache</a></span>&#8203;(java.util.UUID&nbsp;identifier,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#cache(java.util.UUID,T)">cache</a></span>&#8203;(@NotNull java.util.UUID&nbsp;identifier,
      <a href="TemporaryCache.html" title="type parameter in TemporaryCache">T</a>&nbsp;value)</code></th>
 <td class="colLast">
 <div class="block">Caches an object.</div>
@@ -191,7 +191,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="TemporaryCache.html" title="type parameter in TemporaryCache">T</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retrieve(java.util.UUID)">retrieve</a></span>&#8203;(java.util.UUID&nbsp;identifier)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retrieve(java.util.UUID)">retrieve</a></span>&#8203;(@NotNull java.util.UUID&nbsp;identifier)</code></th>
 <td class="colLast">
 <div class="block">Retrieves an object from cache.</div>
 </td>
@@ -254,7 +254,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>cache</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;cache&#8203;(@NotNull
-                  java.util.UUID&nbsp;identifier,
+                  @NotNull java.util.UUID&nbsp;identifier,
                   <a href="TemporaryCache.html" title="type parameter in TemporaryCache">T</a>&nbsp;value)</pre>
 <div class="block">Caches an object.</div>
 <dl>
@@ -272,7 +272,7 @@ extends java.lang.Object</pre>
 <h4>retrieve</h4>
 <pre class="methodSignature">@Nullable
 public&nbsp;<a href="TemporaryCache.html" title="type parameter in TemporaryCache">T</a>&nbsp;retrieve&#8203;(@NotNull
-                  java.util.UUID&nbsp;identifier)</pre>
+                  @NotNull java.util.UUID&nbsp;identifier)</pre>
 <div class="block">Retrieves an object from cache.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

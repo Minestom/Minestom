@@ -236,7 +236,7 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,boolean,float,float)">Attribute</a></span>&#8203;(java.lang.String&nbsp;key,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,boolean,float,float)">Attribute</a></span>&#8203;(@NotNull java.lang.String&nbsp;key,
          boolean&nbsp;shareWithClient,
          float&nbsp;defaultValue,
          float&nbsp;maxValue)</code></th>
@@ -245,7 +245,7 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,float,float)">Attribute</a></span>&#8203;(java.lang.String&nbsp;key,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,float,float)">Attribute</a></span>&#8203;(@NotNull java.lang.String&nbsp;key,
          float&nbsp;defaultValue,
          float&nbsp;maxValue)</code></th>
 <td class="colLast">
@@ -271,8 +271,8 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static <a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromKey(java.lang.String)">fromKey</a></span>&#8203;(java.lang.String&nbsp;key)</code></th>
+<td class="colFirst"><code>static @Nullable <a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromKey(java.lang.String)">fromKey</a></span>&#8203;(@NotNull java.lang.String&nbsp;key)</code></th>
 <td class="colLast">
 <div class="block">Retrieves an attribute by its key.</div>
 </td>
@@ -285,7 +285,7 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colFirst"><code>@NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getKey()">getKey</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the attribute unique key.</div>
@@ -306,21 +306,21 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code><a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#register()">register</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Register this attribute.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>static <a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>[]</code></td>
+<td class="colFirst"><code>static @NotNull <a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sharedAttributes()">sharedAttributes</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Retrieves registered attributes that are shared with the client.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
-<td class="colFirst"><code>static <a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>[]</code></td>
+<td class="colFirst"><code>static @NotNull <a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#values()">values</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Retrieves all registered attributes.</div>
@@ -484,7 +484,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>Attribute</h4>
 <pre>public&nbsp;Attribute&#8203;(@NotNull
-                 java.lang.String&nbsp;key,
+                 @NotNull java.lang.String&nbsp;key,
                  float&nbsp;defaultValue,
                  float&nbsp;maxValue)</pre>
 <div class="block">Create a new attribute with a given key and default.
@@ -506,7 +506,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>Attribute</h4>
 <pre>public&nbsp;Attribute&#8203;(@NotNull
-                 java.lang.String&nbsp;key,
+                 @NotNull java.lang.String&nbsp;key,
                  boolean&nbsp;shareWithClient,
                  float&nbsp;defaultValue,
                  float&nbsp;maxValue)</pre>
@@ -537,7 +537,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getKey</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.lang.String&nbsp;getKey()</pre>
+public&nbsp;@NotNull java.lang.String&nbsp;getKey()</pre>
 <div class="block">Gets the attribute unique key.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -594,7 +594,7 @@ public&nbsp;java.lang.String&nbsp;getKey()</pre>
 <li class="blockList">
 <h4>register</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;register()</pre>
+public&nbsp;@NotNull <a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;register()</pre>
 <div class="block">Register this attribute.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -612,8 +612,8 @@ public&nbsp;<a href="Attribute.html" title="class in net.minestom.server.attribu
 <li class="blockList">
 <h4>fromKey</h4>
 <pre class="methodSignature">@Nullable
-public static&nbsp;<a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;fromKey&#8203;(@NotNull
-                                java.lang.String&nbsp;key)</pre>
+public static&nbsp;@Nullable <a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;fromKey&#8203;(@NotNull
+                                          @NotNull java.lang.String&nbsp;key)</pre>
 <div class="block">Retrieves an attribute by its key.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -630,7 +630,7 @@ public static&nbsp;<a href="Attribute.html" title="class in net.minestom.server.
 <li class="blockList">
 <h4>values</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>[]&nbsp;values()</pre>
+public static&nbsp;@NotNull <a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>[]&nbsp;values()</pre>
 <div class="block">Retrieves all registered attributes.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -645,7 +645,7 @@ public static&nbsp;<a href="Attribute.html" title="class in net.minestom.server.
 <li class="blockList">
 <h4>sharedAttributes</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>[]&nbsp;sharedAttributes()</pre>
+public static&nbsp;@NotNull <a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>[]&nbsp;sharedAttributes()</pre>
 <div class="block">Retrieves registered attributes that are shared with the client.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

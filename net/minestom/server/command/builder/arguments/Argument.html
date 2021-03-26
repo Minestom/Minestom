@@ -165,20 +165,20 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String)">Argument</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String)">Argument</a></span>&#8203;(@NotNull java.lang.String&nbsp;id)</code></th>
 <td class="colLast">
 <div class="block">Creates a new argument with <code>useRemaining</code> and <code>allowSpace</code> sets to false.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,boolean)">Argument</a></span>&#8203;(java.lang.String&nbsp;id,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,boolean)">Argument</a></span>&#8203;(@NotNull java.lang.String&nbsp;id,
         boolean&nbsp;allowSpace)</code></th>
 <td class="colLast">
 <div class="block">Creates a new argument with <code>useRemaining</code> sets to false.</div>
 </td>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,boolean,boolean)">Argument</a></span>&#8203;(java.lang.String&nbsp;id,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,boolean,boolean)">Argument</a></span>&#8203;(@NotNull java.lang.String&nbsp;id,
         boolean&nbsp;allowSpace,
         boolean&nbsp;useRemaining)</code></th>
 <td class="colLast">
@@ -216,7 +216,7 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder">ArgumentCallback</a></code></td>
+<td class="colFirst"><code>@Nullable <a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder">ArgumentCallback</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCallback()">getCallback</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder"><code>ArgumentCallback</code></a> to check if the argument-specific conditions are validated or not.</div>
@@ -230,7 +230,7 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colFirst"><code>@NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getId()">getId</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the ID of the argument, showed in-game above the chat bar
@@ -238,7 +238,7 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code><a href="../suggestion/SuggestionCallback.html" title="interface in net.minestom.server.command.builder.suggestion">SuggestionCallback</a></code></td>
+<td class="colFirst"><code>@Nullable <a href="../suggestion/SuggestionCallback.html" title="interface in net.minestom.server.command.builder.suggestion">SuggestionCallback</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSuggestionCallback()">getSuggestionCallback</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -268,7 +268,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>abstract <a href="Argument.html" title="type parameter in Argument">T</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(java.lang.String&nbsp;input)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(@NotNull java.lang.String&nbsp;input)</code></th>
 <td class="colLast">
 <div class="block">Parses the given input, and throw an <a href="../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
  if the input cannot be convert to <code>T</code></div>
@@ -276,7 +276,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>abstract void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></span>&#8203;(<a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></span>&#8203;(@NotNull <a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
             boolean&nbsp;executable)</code></th>
 <td class="colLast">
 <div class="block">Turns the argument into a list of nodes for command dispatching.</div>
@@ -284,13 +284,13 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a></span>&#8203;(<a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder">ArgumentCallback</a>&nbsp;callback)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a></span>&#8203;(@Nullable <a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder">ArgumentCallback</a>&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Sets the <a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder"><code>ArgumentCallback</code></a>.</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
-<td class="colFirst"><code><a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDefaultValue(T)">setDefaultValue</a></span>&#8203;(<a href="Argument.html" title="type parameter in Argument">T</a>&nbsp;defaultValue)</code></th>
 <td class="colLast">
 <div class="block">Sets the default value of the argument.</div>
@@ -298,12 +298,12 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)">setSuggestionCallback</a></span>&#8203;(<a href="../suggestion/SuggestionCallback.html" title="interface in net.minestom.server.command.builder.suggestion">SuggestionCallback</a>&nbsp;suggestionCallback)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)">setSuggestionCallback</a></span>&#8203;(@NotNull <a href="../suggestion/SuggestionCallback.html" title="interface in net.minestom.server.command.builder.suggestion">SuggestionCallback</a>&nbsp;suggestionCallback)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>protected static <a href="../../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#simpleArgumentNode(net.minestom.server.command.builder.arguments.Argument,boolean,boolean,boolean)">simpleArgumentNode</a></span>&#8203;(<a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&nbsp;argument,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#simpleArgumentNode(net.minestom.server.command.builder.arguments.Argument,boolean,boolean,boolean)">simpleArgumentNode</a></span>&#8203;(@NotNull <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&nbsp;argument,
                   boolean&nbsp;executable,
                   boolean&nbsp;redirect,
                   boolean&nbsp;suggestion)</code></th>
@@ -349,7 +349,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>Argument</h4>
 <pre>public&nbsp;Argument&#8203;(@NotNull
-                java.lang.String&nbsp;id,
+                @NotNull java.lang.String&nbsp;id,
                 boolean&nbsp;allowSpace,
                 boolean&nbsp;useRemaining)</pre>
 <div class="block">Creates a new argument.</div>
@@ -368,7 +368,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>Argument</h4>
 <pre>public&nbsp;Argument&#8203;(@NotNull
-                java.lang.String&nbsp;id,
+                @NotNull java.lang.String&nbsp;id,
                 boolean&nbsp;allowSpace)</pre>
 <div class="block">Creates a new argument with <code>useRemaining</code> sets to false.</div>
 <dl>
@@ -385,7 +385,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>Argument</h4>
 <pre>public&nbsp;Argument&#8203;(@NotNull
-                java.lang.String&nbsp;id)</pre>
+                @NotNull java.lang.String&nbsp;id)</pre>
 <div class="block">Creates a new argument with <code>useRemaining</code> and <code>allowSpace</code> sets to false.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -411,7 +411,7 @@ extends java.lang.Object</pre>
 <h4>parse</h4>
 <pre class="methodSignature">@NotNull
 public abstract&nbsp;<a href="Argument.html" title="type parameter in Argument">T</a>&nbsp;parse&#8203;(@NotNull
-                        java.lang.String&nbsp;input)
+                        @NotNull java.lang.String&nbsp;input)
                  throws <a href="../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></pre>
 <div class="block">Parses the given input, and throw an <a href="../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
  if the input cannot be convert to <code>T</code></div>
@@ -432,7 +432,7 @@ public abstract&nbsp;<a href="Argument.html" title="type parameter in Argument">
 <li class="blockList">
 <h4>processNodes</h4>
 <pre class="methodSignature">public abstract&nbsp;void&nbsp;processNodes&#8203;(@NotNull
-                                  <a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
+                                  @NotNull <a href="../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
                                   boolean&nbsp;executable)</pre>
 <div class="block">Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.</div>
 <dl>
@@ -450,7 +450,7 @@ public abstract&nbsp;<a href="Argument.html" title="type parameter in Argument">
 <h4>simpleArgumentNode</h4>
 <pre class="methodSignature">@NotNull
 protected static&nbsp;<a href="../../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a>&nbsp;simpleArgumentNode&#8203;(@NotNull
-                                                               <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&nbsp;argument,
+                                                               @NotNull <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&nbsp;argument,
                                                                boolean&nbsp;executable,
                                                                boolean&nbsp;redirect,
                                                                boolean&nbsp;suggestion)</pre>
@@ -471,7 +471,7 @@ protected static&nbsp;<a href="../../../network/packet/server/play/DeclareComman
 <li class="blockList">
 <h4>getId</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.lang.String&nbsp;getId()</pre>
+public&nbsp;@NotNull java.lang.String&nbsp;getId()</pre>
 <div class="block">Gets the ID of the argument, showed in-game above the chat bar
  and used to retrieve the data when the command is parsed in <a href="../CommandContext.html" title="class in net.minestom.server.command.builder"><code>CommandContext</code></a>.</div>
 <dl>
@@ -518,7 +518,7 @@ public&nbsp;java.lang.String&nbsp;getId()</pre>
 <li class="blockList">
 <h4>getCallback</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder">ArgumentCallback</a>&nbsp;getCallback()</pre>
+public&nbsp;@Nullable <a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder">ArgumentCallback</a>&nbsp;getCallback()</pre>
 <div class="block">Gets the <a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder"><code>ArgumentCallback</code></a> to check if the argument-specific conditions are validated or not.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -533,7 +533,7 @@ public&nbsp;<a href="../ArgumentCallback.html" title="interface in net.minestom.
 <li class="blockList">
 <h4>setCallback</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setCallback&#8203;(@Nullable
-                        <a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder">ArgumentCallback</a>&nbsp;callback)</pre>
+                        @Nullable <a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder">ArgumentCallback</a>&nbsp;callback)</pre>
 <div class="block">Sets the <a href="../ArgumentCallback.html" title="interface in net.minestom.server.command.builder"><code>ArgumentCallback</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -596,8 +596,8 @@ public&nbsp;<a href="Argument.html" title="type parameter in Argument">T</a>&nbs
 <li class="blockList">
 <h4>setDefaultValue</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;&nbsp;setDefaultValue&#8203;(@Nullable
-                                   <a href="Argument.html" title="type parameter in Argument">T</a>&nbsp;defaultValue)</pre>
+public&nbsp;@NotNull <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;&nbsp;setDefaultValue&#8203;(@Nullable
+                                            <a href="Argument.html" title="type parameter in Argument">T</a>&nbsp;defaultValue)</pre>
 <div class="block">Sets the default value of the argument.
  <p>
  A non-null value means that the argument can be put at the end of a syntax
@@ -617,7 +617,7 @@ public&nbsp;<a href="Argument.html" title="class in net.minestom.server.command.
 <li class="blockList">
 <h4>getSuggestionCallback</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="../suggestion/SuggestionCallback.html" title="interface in net.minestom.server.command.builder.suggestion">SuggestionCallback</a>&nbsp;getSuggestionCallback()</pre>
+public&nbsp;@Nullable <a href="../suggestion/SuggestionCallback.html" title="interface in net.minestom.server.command.builder.suggestion">SuggestionCallback</a>&nbsp;getSuggestionCallback()</pre>
 </li>
 </ul>
 <a id="setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)">
@@ -628,7 +628,7 @@ public&nbsp;<a href="../suggestion/SuggestionCallback.html" title="interface in 
 <h4>setSuggestionCallback</h4>
 <pre class="methodSignature">@Beta
 public&nbsp;<a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;&nbsp;setSuggestionCallback&#8203;(@NotNull
-                                         <a href="../suggestion/SuggestionCallback.html" title="interface in net.minestom.server.command.builder.suggestion">SuggestionCallback</a>&nbsp;suggestionCallback)</pre>
+                                         @NotNull <a href="../suggestion/SuggestionCallback.html" title="interface in net.minestom.server.command.builder.suggestion">SuggestionCallback</a>&nbsp;suggestionCallback)</pre>
 </li>
 </ul>
 <a id="hasSuggestion()">

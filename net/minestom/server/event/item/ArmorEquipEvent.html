@@ -180,9 +180,9 @@ extends <a href="../Event.html" title="class in net.minestom.server.event">Event
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,net.minestom.server.item.ItemStack,net.minestom.server.event.item.ArmorEquipEvent.ArmorSlot)">ArmorEquipEvent</a></span>&#8203;(<a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
-               <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;armorItem,
-               <a href="ArmorEquipEvent.ArmorSlot.html" title="enum in net.minestom.server.event.item">ArmorEquipEvent.ArmorSlot</a>&nbsp;armorSlot)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,net.minestom.server.item.ItemStack,net.minestom.server.event.item.ArmorEquipEvent.ArmorSlot)">ArmorEquipEvent</a></span>&#8203;(@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+               @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;armorItem,
+               @NotNull <a href="ArmorEquipEvent.ArmorSlot.html" title="enum in net.minestom.server.event.item">ArmorEquipEvent.ArmorSlot</a>&nbsp;armorSlot)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -204,23 +204,23 @@ extends <a href="../Event.html" title="class in net.minestom.server.event">Event
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getArmorItem()">getArmorItem</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="ArmorEquipEvent.ArmorSlot.html" title="enum in net.minestom.server.event.item">ArmorEquipEvent.ArmorSlot</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="ArmorEquipEvent.ArmorSlot.html" title="enum in net.minestom.server.event.item">ArmorEquipEvent.ArmorSlot</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getArmorSlot()">getArmorSlot</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntity()">getEntity</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setArmorItem(net.minestom.server.item.ItemStack)">setArmorItem</a></span>&#8203;(<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;armorItem)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setArmorItem(net.minestom.server.item.ItemStack)">setArmorItem</a></span>&#8203;(@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;armorItem)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -254,11 +254,11 @@ extends <a href="../Event.html" title="class in net.minestom.server.event">Event
 <li class="blockList">
 <h4>ArmorEquipEvent</h4>
 <pre>public&nbsp;ArmorEquipEvent&#8203;(@NotNull
-                       <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+                       @NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
                        @NotNull
-                       <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;armorItem,
+                       @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;armorItem,
                        @NotNull
-                       <a href="ArmorEquipEvent.ArmorSlot.html" title="enum in net.minestom.server.event.item">ArmorEquipEvent.ArmorSlot</a>&nbsp;armorSlot)</pre>
+                       @NotNull <a href="ArmorEquipEvent.ArmorSlot.html" title="enum in net.minestom.server.event.item">ArmorEquipEvent.ArmorSlot</a>&nbsp;armorSlot)</pre>
 </li>
 </ul>
 </li>
@@ -278,7 +278,7 @@ extends <a href="../Event.html" title="class in net.minestom.server.event">Event
 <li class="blockList">
 <h4>getEntity</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;getEntity()</pre>
+public&nbsp;@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;getEntity()</pre>
 </li>
 </ul>
 <a id="getArmorItem()">
@@ -288,7 +288,7 @@ public&nbsp;<a href="../../entity/Entity.html" title="class in net.minestom.serv
 <li class="blockList">
 <h4>getArmorItem</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getArmorItem()</pre>
+public&nbsp;@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getArmorItem()</pre>
 </li>
 </ul>
 <a id="setArmorItem(net.minestom.server.item.ItemStack)">
@@ -298,7 +298,7 @@ public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.ser
 <li class="blockList">
 <h4>setArmorItem</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setArmorItem&#8203;(@NotNull
-                         <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;armorItem)</pre>
+                         @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;armorItem)</pre>
 </li>
 </ul>
 <a id="getArmorSlot()">
@@ -308,7 +308,7 @@ public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.ser
 <li class="blockList">
 <h4>getArmorSlot</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="ArmorEquipEvent.ArmorSlot.html" title="enum in net.minestom.server.event.item">ArmorEquipEvent.ArmorSlot</a>&nbsp;getArmorSlot()</pre>
+public&nbsp;@NotNull <a href="ArmorEquipEvent.ArmorSlot.html" title="enum in net.minestom.server.event.item">ArmorEquipEvent.ArmorSlot</a>&nbsp;getArmorSlot()</pre>
 </li>
 </ul>
 </li>

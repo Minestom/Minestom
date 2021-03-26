@@ -181,7 +181,7 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.EntityCreature)">TargetSelector</a></span>&#8203;(<a href="../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.EntityCreature)">TargetSelector</a></span>&#8203;(@NotNull <a href="../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -203,14 +203,14 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>abstract <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
+<td class="colFirst"><code>abstract @Nullable <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findTarget()">findTarget</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Finds the target.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntityCreature()">getEntityCreature</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the entity linked to this target selector.</div>
@@ -266,7 +266,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>TargetSelector</h4>
 <pre>public&nbsp;TargetSelector&#8203;(@NotNull
-                      <a href="../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature)</pre>
+                      @NotNull <a href="../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature)</pre>
 </li>
 </ul>
 </li>
@@ -286,7 +286,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>findTarget</h4>
 <pre class="methodSignature">@Nullable
-public abstract&nbsp;<a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;findTarget()</pre>
+public abstract&nbsp;@Nullable <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;findTarget()</pre>
 <div class="block">Finds the target.
  <p>
  Returning null means that this target selector didn't find any entity,
@@ -304,7 +304,7 @@ public abstract&nbsp;<a href="../Entity.html" title="class in net.minestom.serve
 <li class="blockList">
 <h4>getEntityCreature</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;getEntityCreature()</pre>
+public&nbsp;@NotNull <a href="../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;getEntityCreature()</pre>
 <div class="block">Gets the entity linked to this target selector.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

@@ -174,8 +174,8 @@ extends <a href="Command.html" title="class in net.minestom.server.command.build
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,java.lang.String...)">SimpleCommand</a></span>&#8203;(java.lang.String&nbsp;name,
-             java.lang.String...&nbsp;aliases)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,java.lang.String...)">SimpleCommand</a></span>&#8203;(@NotNull java.lang.String&nbsp;name,
+             @Nullable java.lang.String...&nbsp;aliases)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -198,17 +198,17 @@ extends <a href="Command.html" title="class in net.minestom.server.command.build
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>abstract boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasAccess(net.minestom.server.command.CommandSender,java.lang.String)">hasAccess</a></span>&#8203;(<a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
-         java.lang.String&nbsp;commandString)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasAccess(net.minestom.server.command.CommandSender,java.lang.String)">hasAccess</a></span>&#8203;(@NotNull <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
+         @Nullable java.lang.String&nbsp;commandString)</code></th>
 <td class="colLast">
 <div class="block">Called to know if a player has access to the command.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>abstract boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#process(net.minestom.server.command.CommandSender,java.lang.String,java.lang.String%5B%5D)">process</a></span>&#8203;(<a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
-       java.lang.String&nbsp;command,
-       java.lang.String[]&nbsp;args)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#process(net.minestom.server.command.CommandSender,java.lang.String,java.lang.String%5B%5D)">process</a></span>&#8203;(@NotNull <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
+       @NotNull java.lang.String&nbsp;command,
+       @NotNull java.lang.String[]&nbsp;args)</code></th>
 <td class="colLast">
 <div class="block">Called when the command is executed by a <a href="../CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a>.</div>
 </td>
@@ -251,9 +251,9 @@ extends <a href="Command.html" title="class in net.minestom.server.command.build
 <li class="blockList">
 <h4>SimpleCommand</h4>
 <pre>public&nbsp;SimpleCommand&#8203;(@NotNull
-                     java.lang.String&nbsp;name,
+                     @NotNull java.lang.String&nbsp;name,
                      @Nullable
-                     java.lang.String...&nbsp;aliases)</pre>
+                     @Nullable java.lang.String...&nbsp;aliases)</pre>
 </li>
 </ul>
 </li>
@@ -273,11 +273,11 @@ extends <a href="Command.html" title="class in net.minestom.server.command.build
 <li class="blockList">
 <h4>process</h4>
 <pre class="methodSignature">public abstract&nbsp;boolean&nbsp;process&#8203;(@NotNull
-                                <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
+                                @NotNull <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
                                 @NotNull
-                                java.lang.String&nbsp;command,
+                                @NotNull java.lang.String&nbsp;command,
                                 @NotNull
-                                java.lang.String[]&nbsp;args)</pre>
+                                @NotNull java.lang.String[]&nbsp;args)</pre>
 <div class="block">Called when the command is executed by a <a href="../CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -296,9 +296,9 @@ extends <a href="Command.html" title="class in net.minestom.server.command.build
 <li class="blockList">
 <h4>hasAccess</h4>
 <pre class="methodSignature">public abstract&nbsp;boolean&nbsp;hasAccess&#8203;(@NotNull
-                                  <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
+                                  @NotNull <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
                                   @Nullable
-                                  java.lang.String&nbsp;commandString)</pre>
+                                  @Nullable java.lang.String&nbsp;commandString)</pre>
 <div class="block">Called to know if a player has access to the command.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

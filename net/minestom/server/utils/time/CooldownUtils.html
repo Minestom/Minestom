@@ -156,7 +156,7 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasCooldown(long,long,net.minestom.server.utils.time.TimeUnit,long)">hasCooldown</a></span>&#8203;(long&nbsp;currentTime,
            long&nbsp;lastUpdate,
-           <a href="TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;timeUnit,
+           @NotNull <a href="TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;timeUnit,
            long&nbsp;cooldown)</code></th>
 <td class="colLast">
 <div class="block">Gets if something is in cooldown based on the current time.</div>
@@ -166,7 +166,7 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasCooldown(long,long,net.minestom.server.utils.time.UpdateOption)">hasCooldown</a></span>&#8203;(long&nbsp;currentTime,
            long&nbsp;lastUpdate,
-           <a href="UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;updateOption)</code></th>
+           @NotNull <a href="UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;updateOption)</code></th>
 <td class="colLast">
 <div class="block">Gets if something is in cooldown based on the current time.</div>
 </td>
@@ -174,7 +174,7 @@ extends java.lang.Object</pre>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasCooldown(long,net.minestom.server.utils.time.TimeUnit,int)">hasCooldown</a></span>&#8203;(long&nbsp;lastUpdate,
-           <a href="TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;timeUnit,
+           @NotNull <a href="TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;timeUnit,
            int&nbsp;cooldown)</code></th>
 <td class="colLast">
 <div class="block">Gets if something is in cooldown based on the current time (<code>System.currentTimeMillis()</code>).</div>
@@ -213,7 +213,7 @@ extends java.lang.Object</pre>
 <pre class="methodSignature">public static&nbsp;boolean&nbsp;hasCooldown&#8203;(long&nbsp;currentTime,
                                   long&nbsp;lastUpdate,
                                   @NotNull
-                                  <a href="TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;timeUnit,
+                                  @NotNull <a href="TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;timeUnit,
                                   long&nbsp;cooldown)</pre>
 <div class="block">Gets if something is in cooldown based on the current time.</div>
 <dl>
@@ -236,7 +236,7 @@ extends java.lang.Object</pre>
 <pre class="methodSignature">public static&nbsp;boolean&nbsp;hasCooldown&#8203;(long&nbsp;currentTime,
                                   long&nbsp;lastUpdate,
                                   @NotNull
-                                  <a href="UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;updateOption)</pre>
+                                  @NotNull <a href="UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;updateOption)</pre>
 <div class="block">Gets if something is in cooldown based on the current time.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -256,7 +256,7 @@ extends java.lang.Object</pre>
 <h4>hasCooldown</h4>
 <pre class="methodSignature">public static&nbsp;boolean&nbsp;hasCooldown&#8203;(long&nbsp;lastUpdate,
                                   @NotNull
-                                  <a href="TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;timeUnit,
+                                  @NotNull <a href="TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;timeUnit,
                                   int&nbsp;cooldown)</pre>
 <div class="block">Gets if something is in cooldown based on the current time (<code>System.currentTimeMillis()</code>).</div>
 <dl>

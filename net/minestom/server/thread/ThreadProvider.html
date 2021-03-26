@@ -208,10 +208,10 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#conditionalEntityUpdate(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long,net.minestom.server.utils.callback.validator.EntityValidator)">conditionalEntityUpdate</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                       <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#conditionalEntityUpdate(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long,net.minestom.server.utils.callback.validator.EntityValidator)">conditionalEntityUpdate</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                       @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                        long&nbsp;time,
-                       <a href="../utils/callback/validator/EntityValidator.html" title="interface in net.minestom.server.utils.callback.validator">EntityValidator</a>&nbsp;condition)</code></th>
+                       @Nullable <a href="../utils/callback/validator/EntityValidator.html" title="interface in net.minestom.server.utils.callback.validator">EntityValidator</a>&nbsp;condition)</code></th>
 <td class="colLast">
 <div class="block">Executes an entity tick in an instance's chunk if condition is verified.</div>
 </td>
@@ -225,7 +225,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onChunkLoad(net.minestom.server.instance.Instance,int,int)">onChunkLoad</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onChunkLoad(net.minestom.server.instance.Instance,int,int)">onChunkLoad</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
            int&nbsp;chunkX,
            int&nbsp;chunkZ)</code></th>
 <td class="colLast">
@@ -234,7 +234,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>abstract void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onChunkUnload(net.minestom.server.instance.Instance,int,int)">onChunkUnload</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onChunkUnload(net.minestom.server.instance.Instance,int,int)">onChunkUnload</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
              int&nbsp;chunkX,
              int&nbsp;chunkZ)</code></th>
 <td class="colLast">
@@ -243,21 +243,21 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onInstanceCreate(net.minestom.server.instance.Instance)">onInstanceCreate</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onInstanceCreate(net.minestom.server.instance.Instance)">onInstanceCreate</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
 <td class="colLast">
 <div class="block">Called when an <a href="../instance/Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> is registered.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>abstract void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onInstanceDelete(net.minestom.server.instance.Instance)">onInstanceDelete</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onInstanceDelete(net.minestom.server.instance.Instance)">onInstanceDelete</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
 <td class="colLast">
 <div class="block">Called when an <a href="../instance/Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> is unregistered.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processChunkTick(net.minestom.server.instance.Instance,long,long)">processChunkTick</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processChunkTick(net.minestom.server.instance.Instance,long,long)">processChunkTick</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                 long&nbsp;chunkIndex,
                 long&nbsp;time)</code></th>
 <td class="colLast">
@@ -272,7 +272,7 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i8" class="altColor">
-<td class="colFirst"><code>abstract java.util.List&lt;java.util.concurrent.Future&lt;?&gt;&gt;</code></td>
+<td class="colFirst"><code>abstract @NotNull java.util.List&lt;java.util.concurrent.Future&lt;?&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update(long)">update</a></span>&#8203;(long&nbsp;time)</code></th>
 <td class="colLast">
 <div class="block">Performs a server tick for all chunks based on their linked thread.</div>
@@ -280,8 +280,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateChunk(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateChunk</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-           <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateChunk(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateChunk</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+           @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
            long&nbsp;time)</code></th>
 <td class="colLast">
 <div class="block">Executes a chunk tick (blocks update).</div>
@@ -289,8 +289,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateCreatures(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateCreatures</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-               <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateCreatures(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateCreatures</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+               @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                long&nbsp;time)</code></th>
 <td class="colLast">
 <div class="block">Executes an entity tick for creatures entities in an instance's chunk.</div>
@@ -298,8 +298,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateEntities(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateEntities</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-              <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateEntities(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateEntities</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+              @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
               long&nbsp;time)</code></th>
 <td class="colLast">
 <div class="block">Executes an entity tick (all entities type creatures/objects/players) in an instance's chunk.</div>
@@ -307,7 +307,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateInstance(net.minestom.server.instance.Instance,long)">updateInstance</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateInstance(net.minestom.server.instance.Instance,long)">updateInstance</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
               long&nbsp;time)</code></th>
 <td class="colLast">
 <div class="block">Executes an instance tick.</div>
@@ -315,8 +315,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateLivingEntities(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateLivingEntities</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                    <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateLivingEntities(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateLivingEntities</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                    @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                     long&nbsp;time)</code></th>
 <td class="colLast">
 <div class="block">Executes an entity tick for living entities in an instance's chunk.</div>
@@ -324,8 +324,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateObjectEntities(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateObjectEntities</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                    <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateObjectEntities(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateObjectEntities</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                    @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                     long&nbsp;time)</code></th>
 <td class="colLast">
 <div class="block">Executes an entity tick for object entities in an instance's chunk.</div>
@@ -333,8 +333,8 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updatePlayers(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updatePlayers</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-             <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updatePlayers(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updatePlayers</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+             @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
              long&nbsp;time)</code></th>
 <td class="colLast">
 <div class="block">Executes an entity tick for players in an instance's chunk.</div>
@@ -410,7 +410,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>onInstanceCreate</h4>
 <pre class="methodSignature">public abstract&nbsp;void&nbsp;onInstanceCreate&#8203;(@NotNull
-                                      <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</pre>
+                                      @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</pre>
 <div class="block">Called when an <a href="../instance/Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> is registered.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -425,7 +425,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>onInstanceDelete</h4>
 <pre class="methodSignature">public abstract&nbsp;void&nbsp;onInstanceDelete&#8203;(@NotNull
-                                      <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</pre>
+                                      @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</pre>
 <div class="block">Called when an <a href="../instance/Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> is unregistered.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -440,7 +440,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>onChunkLoad</h4>
 <pre class="methodSignature">public abstract&nbsp;void&nbsp;onChunkLoad&#8203;(@NotNull
-                                 <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                                 @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                                  int&nbsp;chunkX,
                                  int&nbsp;chunkZ)</pre>
 <div class="block">Called when a chunk is loaded.
@@ -461,7 +461,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>onChunkUnload</h4>
 <pre class="methodSignature">public abstract&nbsp;void&nbsp;onChunkUnload&#8203;(@NotNull
-                                   <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                                   @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                                    int&nbsp;chunkX,
                                    int&nbsp;chunkZ)</pre>
 <div class="block">Called when a chunk is unloaded.</div>
@@ -480,7 +480,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>update</h4>
 <pre class="methodSignature">@NotNull
-public abstract&nbsp;java.util.List&lt;java.util.concurrent.Future&lt;?&gt;&gt;&nbsp;update&#8203;(long&nbsp;time)</pre>
+public abstract&nbsp;@NotNull java.util.List&lt;java.util.concurrent.Future&lt;?&gt;&gt;&nbsp;update&#8203;(long&nbsp;time)</pre>
 <div class="block">Performs a server tick for all chunks based on their linked thread.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -525,7 +525,7 @@ public abstract&nbsp;java.util.List&lt;java.util.concurrent.Future&lt;?&gt;&gt;&
 <li class="blockList">
 <h4>processChunkTick</h4>
 <pre class="methodSignature">protected&nbsp;void&nbsp;processChunkTick&#8203;(@NotNull
-                                <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                                @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                                 long&nbsp;chunkIndex,
                                 long&nbsp;time)</pre>
 <div class="block">Processes a whole tick for a chunk.</div>
@@ -544,7 +544,7 @@ public abstract&nbsp;java.util.List&lt;java.util.concurrent.Future&lt;?&gt;&gt;&
 <li class="blockList">
 <h4>updateInstance</h4>
 <pre class="methodSignature">protected&nbsp;void&nbsp;updateInstance&#8203;(@NotNull
-                              <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                              @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                               long&nbsp;time)</pre>
 <div class="block">Executes an instance tick.</div>
 <dl>
@@ -561,9 +561,9 @@ public abstract&nbsp;java.util.List&lt;java.util.concurrent.Future&lt;?&gt;&gt;&
 <li class="blockList">
 <h4>updateChunk</h4>
 <pre class="methodSignature">protected&nbsp;void&nbsp;updateChunk&#8203;(@NotNull
-                           <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                           @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                            @NotNull
-                           <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+                           @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                            long&nbsp;time)</pre>
 <div class="block">Executes a chunk tick (blocks update).</div>
 <dl>
@@ -581,9 +581,9 @@ public abstract&nbsp;java.util.List&lt;java.util.concurrent.Future&lt;?&gt;&gt;&
 <li class="blockList">
 <h4>updateEntities</h4>
 <pre class="methodSignature">protected&nbsp;void&nbsp;updateEntities&#8203;(@NotNull
-                              <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                              @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                               @NotNull
-                              <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+                              @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                               long&nbsp;time)</pre>
 <div class="block">Executes an entity tick (all entities type creatures/objects/players) in an instance's chunk.</div>
 <dl>
@@ -601,9 +601,9 @@ public abstract&nbsp;java.util.List&lt;java.util.concurrent.Future&lt;?&gt;&gt;&
 <li class="blockList">
 <h4>updateObjectEntities</h4>
 <pre class="methodSignature">protected&nbsp;void&nbsp;updateObjectEntities&#8203;(@NotNull
-                                    <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                                    @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                                     @NotNull
-                                    <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+                                    @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                                     long&nbsp;time)</pre>
 <div class="block">Executes an entity tick for object entities in an instance's chunk.</div>
 <dl>
@@ -621,9 +621,9 @@ public abstract&nbsp;java.util.List&lt;java.util.concurrent.Future&lt;?&gt;&gt;&
 <li class="blockList">
 <h4>updateLivingEntities</h4>
 <pre class="methodSignature">protected&nbsp;void&nbsp;updateLivingEntities&#8203;(@NotNull
-                                    <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                                    @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                                     @NotNull
-                                    <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+                                    @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                                     long&nbsp;time)</pre>
 <div class="block">Executes an entity tick for living entities in an instance's chunk.</div>
 <dl>
@@ -641,9 +641,9 @@ public abstract&nbsp;java.util.List&lt;java.util.concurrent.Future&lt;?&gt;&gt;&
 <li class="blockList">
 <h4>updateCreatures</h4>
 <pre class="methodSignature">protected&nbsp;void&nbsp;updateCreatures&#8203;(@NotNull
-                               <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                               @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                                @NotNull
-                               <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+                               @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                                long&nbsp;time)</pre>
 <div class="block">Executes an entity tick for creatures entities in an instance's chunk.</div>
 <dl>
@@ -661,9 +661,9 @@ public abstract&nbsp;java.util.List&lt;java.util.concurrent.Future&lt;?&gt;&gt;&
 <li class="blockList">
 <h4>updatePlayers</h4>
 <pre class="methodSignature">protected&nbsp;void&nbsp;updatePlayers&#8203;(@NotNull
-                             <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                             @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                              @NotNull
-                             <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+                             @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                              long&nbsp;time)</pre>
 <div class="block">Executes an entity tick for players in an instance's chunk.</div>
 <dl>
@@ -681,12 +681,12 @@ public abstract&nbsp;java.util.List&lt;java.util.concurrent.Future&lt;?&gt;&gt;&
 <li class="blockList">
 <h4>conditionalEntityUpdate</h4>
 <pre class="methodSignature">protected&nbsp;void&nbsp;conditionalEntityUpdate&#8203;(@NotNull
-                                       <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                                       @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                                        @NotNull
-                                       <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+                                       @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                                        long&nbsp;time,
                                        @Nullable
-                                       <a href="../utils/callback/validator/EntityValidator.html" title="interface in net.minestom.server.utils.callback.validator">EntityValidator</a>&nbsp;condition)</pre>
+                                       @Nullable <a href="../utils/callback/validator/EntityValidator.html" title="interface in net.minestom.server.utils.callback.validator">EntityValidator</a>&nbsp;condition)</pre>
 <div class="block">Executes an entity tick in an instance's chunk if condition is verified.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

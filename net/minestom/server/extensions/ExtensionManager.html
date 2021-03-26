@@ -212,23 +212,23 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="Extension.html" title="class in net.minestom.server.extensions">Extension</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getExtension(java.lang.String)">getExtension</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
+<td class="colFirst"><code>@Nullable <a href="Extension.html" title="class in net.minestom.server.extensions">Extension</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getExtension(java.lang.String)">getExtension</a></span>&#8203;(@NotNull java.lang.String&nbsp;name)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>java.io.File</code></td>
+<td class="colFirst"><code>@NotNull java.io.File</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getExtensionFolder()">getExtensionFolder</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>java.util.Collection&lt;<a href="Extension.html" title="class in net.minestom.server.extensions">Extension</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.Collection&lt;<a href="Extension.html" title="class in net.minestom.server.extensions">Extension</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getExtensions()">getExtensions</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasExtension(java.lang.String)">hasExtension</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasExtension(java.lang.String)">hasExtension</a></span>&#8203;(@NotNull java.lang.String&nbsp;name)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
@@ -240,7 +240,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadDynamicExtension(java.io.File)">loadDynamicExtension</a></span>&#8203;(java.io.File&nbsp;jarFile)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadDynamicExtension(java.io.File)">loadDynamicExtension</a></span>&#8203;(@NotNull java.io.File&nbsp;jarFile)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
@@ -252,7 +252,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#reload(java.lang.String)">reload</a></span>&#8203;(java.lang.String&nbsp;extensionName)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#reload(java.lang.String)">reload</a></span>&#8203;(@NotNull java.lang.String&nbsp;extensionName)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
@@ -285,7 +285,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unloadExtension(java.lang.String)">unloadExtension</a></span>&#8203;(java.lang.String&nbsp;extensionName)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unloadExtension(java.lang.String)">unloadExtension</a></span>&#8203;(@NotNull java.lang.String&nbsp;extensionName)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -477,7 +477,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getExtensionFolder</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.io.File&nbsp;getExtensionFolder()</pre>
+public&nbsp;@NotNull java.io.File&nbsp;getExtensionFolder()</pre>
 </li>
 </ul>
 <a id="getExtensions()">
@@ -487,7 +487,7 @@ public&nbsp;java.io.File&nbsp;getExtensionFolder()</pre>
 <li class="blockList">
 <h4>getExtensions</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.Collection&lt;<a href="Extension.html" title="class in net.minestom.server.extensions">Extension</a>&gt;&nbsp;getExtensions()</pre>
+public&nbsp;@NotNull java.util.Collection&lt;<a href="Extension.html" title="class in net.minestom.server.extensions">Extension</a>&gt;&nbsp;getExtensions()</pre>
 </li>
 </ul>
 <a id="getExtension(java.lang.String)">
@@ -497,8 +497,8 @@ public&nbsp;java.util.Collection&lt;<a href="Extension.html" title="class in net
 <li class="blockList">
 <h4>getExtension</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="Extension.html" title="class in net.minestom.server.extensions">Extension</a>&nbsp;getExtension&#8203;(@NotNull
-                              java.lang.String&nbsp;name)</pre>
+public&nbsp;@Nullable <a href="Extension.html" title="class in net.minestom.server.extensions">Extension</a>&nbsp;getExtension&#8203;(@NotNull
+                                        @NotNull java.lang.String&nbsp;name)</pre>
 </li>
 </ul>
 <a id="hasExtension(java.lang.String)">
@@ -508,7 +508,7 @@ public&nbsp;<a href="Extension.html" title="class in net.minestom.server.extensi
 <li class="blockList">
 <h4>hasExtension</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;hasExtension&#8203;(@NotNull
-                            java.lang.String&nbsp;name)</pre>
+                            @NotNull java.lang.String&nbsp;name)</pre>
 </li>
 </ul>
 <a id="reload(java.lang.String)">
@@ -518,7 +518,7 @@ public&nbsp;<a href="Extension.html" title="class in net.minestom.server.extensi
 <li class="blockList">
 <h4>reload</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;reload&#8203;(@NotNull
-                      java.lang.String&nbsp;extensionName)</pre>
+                      @NotNull java.lang.String&nbsp;extensionName)</pre>
 </li>
 </ul>
 <a id="loadDynamicExtension(java.io.File)">
@@ -528,7 +528,7 @@ public&nbsp;<a href="Extension.html" title="class in net.minestom.server.extensi
 <li class="blockList">
 <h4>loadDynamicExtension</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;loadDynamicExtension&#8203;(@NotNull
-                                    java.io.File&nbsp;jarFile)
+                                    @NotNull java.io.File&nbsp;jarFile)
                              throws java.io.FileNotFoundException</pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -543,7 +543,7 @@ public&nbsp;<a href="Extension.html" title="class in net.minestom.server.extensi
 <li class="blockList">
 <h4>unloadExtension</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;unloadExtension&#8203;(@NotNull
-                            java.lang.String&nbsp;extensionName)</pre>
+                            @NotNull java.lang.String&nbsp;extensionName)</pre>
 </li>
 </ul>
 <a id="shutdown()">

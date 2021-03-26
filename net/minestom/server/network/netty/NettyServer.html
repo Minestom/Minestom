@@ -225,7 +225,7 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.network.PacketProcessor)">NettyServer</a></span>&#8203;(<a href="../PacketProcessor.html" title="class in net.minestom.server.network">PacketProcessor</a>&nbsp;packetProcessor)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.network.PacketProcessor)">NettyServer</a></span>&#8203;(@NotNull <a href="../PacketProcessor.html" title="class in net.minestom.server.network">PacketProcessor</a>&nbsp;packetProcessor)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -247,14 +247,14 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colFirst"><code>@Nullable java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAddress()">getAddress</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the address of the server.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>io.netty.handler.traffic.GlobalChannelTrafficShapingHandler</code></td>
+<td class="colFirst"><code>@NotNull io.netty.handler.traffic.GlobalChannelTrafficShapingHandler</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getGlobalTrafficHandler()">getGlobalTrafficHandler</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the traffic handler, used to control channel and global bandwidth.</div>
@@ -276,7 +276,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#start(java.lang.String,int)">start</a></span>&#8203;(java.lang.String&nbsp;address,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#start(java.lang.String,int)">start</a></span>&#8203;(@NotNull java.lang.String&nbsp;address,
      int&nbsp;port)</code></th>
 <td class="colLast">
 <div class="block">Binds the address to start the server.</div>
@@ -469,7 +469,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>NettyServer</h4>
 <pre>public&nbsp;NettyServer&#8203;(@NotNull
-                   <a href="../PacketProcessor.html" title="class in net.minestom.server.network">PacketProcessor</a>&nbsp;packetProcessor)</pre>
+                   @NotNull <a href="../PacketProcessor.html" title="class in net.minestom.server.network">PacketProcessor</a>&nbsp;packetProcessor)</pre>
 </li>
 </ul>
 </li>
@@ -501,7 +501,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>start</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;start&#8203;(@NotNull
-                  java.lang.String&nbsp;address,
+                  @NotNull java.lang.String&nbsp;address,
                   int&nbsp;port)</pre>
 <div class="block">Binds the address to start the server.</div>
 <dl>
@@ -518,7 +518,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getAddress</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;java.lang.String&nbsp;getAddress()</pre>
+public&nbsp;@Nullable java.lang.String&nbsp;getAddress()</pre>
 <div class="block">Gets the address of the server.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -547,7 +547,7 @@ public&nbsp;java.lang.String&nbsp;getAddress()</pre>
 <li class="blockList">
 <h4>getGlobalTrafficHandler</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;io.netty.handler.traffic.GlobalChannelTrafficShapingHandler&nbsp;getGlobalTrafficHandler()</pre>
+public&nbsp;@NotNull io.netty.handler.traffic.GlobalChannelTrafficShapingHandler&nbsp;getGlobalTrafficHandler()</pre>
 <div class="block">Gets the traffic handler, used to control channel and global bandwidth.
  <p>
  The object can be modified as specified by Netty documentation.</div>

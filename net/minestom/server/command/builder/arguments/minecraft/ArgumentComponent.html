@@ -122,7 +122,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">net.minestom.server.command.builder.arguments.Argument</a>&lt;<a href="../../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;</li>
+<li><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">net.minestom.server.command.builder.arguments.Argument</a>&lt;net.kyori.adventure.text.Component&gt;</li>
 <li>
 <ul class="inheritance">
 <li>net.minestom.server.command.builder.arguments.minecraft.ArgumentComponent</li>
@@ -136,7 +136,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <hr>
 <pre>public class <span class="typeNameLabel">ArgumentComponent</span>
-extends <a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;</pre>
+extends <a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;net.kyori.adventure.text.Component&gt;</pre>
 </li>
 </ul>
 </div>
@@ -180,7 +180,7 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String)">ArgumentComponent</a></span>&#8203;(java.lang.String&nbsp;id)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String)">ArgumentComponent</a></span>&#8203;(@NotNull java.lang.String&nbsp;id)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -202,8 +202,8 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(java.lang.String&nbsp;input)</code></th>
+<td class="colFirst"><code>@NotNull net.kyori.adventure.text.Component</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(@NotNull java.lang.String&nbsp;input)</code></th>
 <td class="colLast">
 <div class="block">Parses the given input, and throw an <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
  if the input cannot be convert to <code>T</code></div>
@@ -211,7 +211,7 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></span>&#8203;(<a href="../../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></span>&#8203;(@NotNull <a href="../../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
             boolean&nbsp;executable)</code></th>
 <td class="colLast">
 <div class="block">Turns the argument into a list of nodes for command dispatching.</div>
@@ -278,7 +278,7 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <li class="blockList">
 <h4>ArgumentComponent</h4>
 <pre>public&nbsp;ArgumentComponent&#8203;(@NotNull
-                         java.lang.String&nbsp;id)</pre>
+                         @NotNull java.lang.String&nbsp;id)</pre>
 </li>
 </ul>
 </li>
@@ -298,15 +298,15 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <li class="blockList">
 <h4>parse</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;parse&#8203;(@NotNull
-                         java.lang.String&nbsp;input)
-                  throws <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></pre>
+public&nbsp;@NotNull net.kyori.adventure.text.Component&nbsp;parse&#8203;(@NotNull
+                                                         @NotNull java.lang.String&nbsp;input)
+                                                  throws <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../Argument.html#parse(java.lang.String)">Argument</a></code></span></div>
 <div class="block">Parses the given input, and throw an <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
  if the input cannot be convert to <code>T</code></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../Argument.html#parse(java.lang.String)">parse</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;</code></dd>
+<dd><code><a href="../Argument.html#parse(java.lang.String)">parse</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;net.kyori.adventure.text.Component&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>input</code> - the argument to parse</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -323,13 +323,13 @@ public&nbsp;<a href="../../../../chat/JsonMessage.html" title="class in net.mine
 <li class="blockList">
 <h4>processNodes</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;processNodes&#8203;(@NotNull
-                         <a href="../../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
+                         @NotNull <a href="../../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
                          boolean&nbsp;executable)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../Argument.html#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">Argument</a></code></span></div>
 <div class="block">Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../Argument.html#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;</code></dd>
+<dd><code><a href="../Argument.html#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;net.kyori.adventure.text.Component&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>nodeMaker</code> - helper object used to create and modify nodes</dd>
 <dd><code>executable</code> - true if this will be the last argument, false otherwise</dd>

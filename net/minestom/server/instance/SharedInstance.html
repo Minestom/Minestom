@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
@@ -136,7 +136,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a></code>, <code><a href="../event/handler/EventHandler.html" title="interface in net.minestom.server.event.handler">EventHandler</a></code>, <code><a href="../extensions/IExtensionObserver.html" title="interface in net.minestom.server.extensions">IExtensionObserver</a></code>, <code><a href="BlockModifier.html" title="interface in net.minestom.server.instance">BlockModifier</a></code></dd>
+<dd><code>net.kyori.adventure.audience.Audience</code>, <code>net.kyori.adventure.audience.ForwardingAudience</code>, <code><a href="../adventure/audience/PacketGroupingAudience.html" title="interface in net.minestom.server.adventure.audience">PacketGroupingAudience</a></code>, <code><a href="../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a></code>, <code><a href="../event/handler/EventHandler.html" title="interface in net.minestom.server.event.handler">EventHandler</a></code>, <code><a href="../extensions/IExtensionObserver.html" title="interface in net.minestom.server.extensions">IExtensionObserver</a></code>, <code><a href="BlockModifier.html" title="interface in net.minestom.server.instance">BlockModifier</a></code></dd>
 </dl>
 <hr>
 <pre>public class <span class="typeNameLabel">SharedInstance</span>
@@ -149,6 +149,23 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="nested.class.summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a id="nested.classes.inherited.from.class.net.kyori.adventure.audience.ForwardingAudience">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from interface&nbsp;net.kyori.adventure.audience.ForwardingAudience</h3>
+<code>net.kyori.adventure.audience.ForwardingAudience.Single</code></li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- =========== FIELD SUMMARY =========== -->
 <section role="region">
 <ul class="blockList">
@@ -180,8 +197,8 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.UUID,net.minestom.server.instance.InstanceContainer)">SharedInstance</a></span>&#8203;(java.util.UUID&nbsp;uniqueId,
-              <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instanceContainer)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.UUID,net.minestom.server.instance.InstanceContainer)">SharedInstance</a></span>&#8203;(@NotNull java.util.UUID&nbsp;uniqueId,
+              @NotNull <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instanceContainer)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -204,8 +221,8 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#breakBlock(net.minestom.server.entity.Player,net.minestom.server.utils.BlockPosition)">breakBlock</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-          <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#breakBlock(net.minestom.server.entity.Player,net.minestom.server.utils.BlockPosition)">breakBlock</a></span>&#8203;(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+          @NotNull <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</code></th>
 <td class="colLast">
 <div class="block">Does call <a href="../event/player/PlayerBlockBreakEvent.html" title="class in net.minestom.server.event.player"><code>PlayerBlockBreakEvent</code></a>
  and send particle packets</div>
@@ -243,14 +260,14 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 </td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code>java.util.Collection&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.Collection&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChunks()">getChunks</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the instance's loaded chunks.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code><a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInstanceContainer()">getInstanceContainer</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a> from where this instance takes its chunks from.</div>
@@ -272,7 +289,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInVoid(net.minestom.server.utils.Position)">isInVoid</a></span>&#8203;(<a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInVoid(net.minestom.server.utils.Position)">isInVoid</a></span>&#8203;(@NotNull <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
 <td class="colLast">
 <div class="block">Determines whether a position in the void.</div>
 </td>
@@ -281,7 +298,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadChunk(int,int,net.minestom.server.utils.chunk.ChunkCallback)">loadChunk</a></span>&#8203;(int&nbsp;chunkX,
          int&nbsp;chunkZ,
-         <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
+         @Nullable <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Forces the generation of a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>, even if no file and <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a> are defined.</div>
 </td>
@@ -290,7 +307,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadOptionalChunk(int,int,net.minestom.server.utils.chunk.ChunkCallback)">loadOptionalChunk</a></span>&#8203;(int&nbsp;chunkX,
                  int&nbsp;chunkZ,
-                 <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
+                 @Nullable <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Loads the chunk if the chunk is already loaded or if
  <a href="Instance.html#hasEnabledAutoChunkLoad()"><code>Instance.hasEnabledAutoChunkLoad()</code></a> returns true.</div>
@@ -298,7 +315,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshBlockStateId(net.minestom.server.utils.BlockPosition,short)">refreshBlockStateId</a></span>&#8203;(<a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshBlockStateId(net.minestom.server.utils.BlockPosition,short)">refreshBlockStateId</a></span>&#8203;(@NotNull <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                    short&nbsp;blockStateId)</code></th>
 <td class="colLast">
 <div class="block">Used to change the id of the block in a specific <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils"><code>BlockPosition</code></a>.</div>
@@ -308,22 +325,22 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retrieveChunk(int,int,net.minestom.server.utils.chunk.ChunkCallback)">retrieveChunk</a></span>&#8203;(int&nbsp;chunkX,
              int&nbsp;chunkZ,
-             <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
+             @Nullable <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Used when a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> is not currently loaded in memory and need to be retrieved from somewhere else.</div>
 </td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveChunksToStorage(java.lang.Runnable)">saveChunksToStorage</a></span>&#8203;(java.lang.Runnable&nbsp;callback)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveChunksToStorage(java.lang.Runnable)">saveChunksToStorage</a></span>&#8203;(@Nullable java.lang.Runnable&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Saves multiple chunks to permanent storage.</div>
 </td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveChunkToStorage(net.minestom.server.instance.Chunk,java.lang.Runnable)">saveChunkToStorage</a></span>&#8203;(<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
-                  java.lang.Runnable&nbsp;callback)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveChunkToStorage(net.minestom.server.instance.Chunk,java.lang.Runnable)">saveChunkToStorage</a></span>&#8203;(@NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+                  @Nullable java.lang.Runnable&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Saves a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> to permanent storage.</div>
 </td>
@@ -331,8 +348,8 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#scheduleUpdate(int,net.minestom.server.utils.time.TimeUnit,net.minestom.server.utils.BlockPosition)">scheduleUpdate</a></span>&#8203;(int&nbsp;time,
-              <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit,
-              <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position)</code></th>
+              @NotNull <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit,
+              @NotNull <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position)</code></th>
 <td class="colLast">
 <div class="block">Schedules a block update at a given <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils"><code>BlockPosition</code></a>.</div>
 </td>
@@ -387,7 +404,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 </tr>
 <tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unloadChunk(net.minestom.server.instance.Chunk)">unloadChunk</a></span>&#8203;(<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unloadChunk(net.minestom.server.instance.Chunk)">unloadChunk</a></span>&#8203;(@NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">
 <div class="block">Schedules the removal of a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>, this method does not promise when it will be done.</div>
 </td>
@@ -408,6 +425,13 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
 </ul>
 <ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.kyori.adventure.audience.Audience">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.kyori.adventure.audience.Audience</h3>
+<code>openBook, sendActionBar, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendPlayerListFooter, sendPlayerListHeader, sendPlayerListHeaderAndFooter</code></li>
+</ul>
+<ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.instance.BlockModifier">
 <!--   -->
 </a>
@@ -420,6 +444,20 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 </a>
 <h3>Methods inherited from interface&nbsp;net.minestom.server.event.handler.<a href="../event/handler/EventHandler.html" title="interface in net.minestom.server.event.handler">EventHandler</a></h3>
 <code><a href="../event/handler/EventHandler.html#addEventCallback(java.lang.Class,net.minestom.server.event.EventCallback)">addEventCallback</a>, <a href="../event/handler/EventHandler.html#callCancellableEvent(java.lang.Class,E,java.lang.Runnable)">callCancellableEvent</a>, <a href="../event/handler/EventHandler.html#callEvent(java.lang.Class,E)">callEvent</a>, <a href="../event/handler/EventHandler.html#getEventCallbacks()">getEventCallbacks</a>, <a href="../event/handler/EventHandler.html#getEventCallbacks(java.lang.Class)">getEventCallbacks</a>, <a href="../event/handler/EventHandler.html#onExtensionUnload(java.lang.String)">onExtensionUnload</a>, <a href="../event/handler/EventHandler.html#removeCallbacksOwnedByExtension(java.lang.String)">removeCallbacksOwnedByExtension</a>, <a href="../event/handler/EventHandler.html#removeEventCallback(java.lang.Class,net.minestom.server.event.EventCallback)">removeEventCallback</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.kyori.adventure.audience.ForwardingAudience">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.kyori.adventure.audience.ForwardingAudience</h3>
+<code>openBook, playSound, sendMessage, sendPlayerListFooter, sendPlayerListHeader</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.adventure.audience.PacketGroupingAudience">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.minestom.server.adventure.audience.<a href="../adventure/audience/PacketGroupingAudience.html" title="interface in net.minestom.server.adventure.audience">PacketGroupingAudience</a></h3>
+<code><a href="../adventure/audience/PacketGroupingAudience.html#audiences()">audiences</a>, <a href="../adventure/audience/PacketGroupingAudience.html#clearTitle()">clearTitle</a>, <a href="../adventure/audience/PacketGroupingAudience.html#hideBossBar(net.kyori.adventure.bossbar.BossBar)">hideBossBar</a>, <a href="../adventure/audience/PacketGroupingAudience.html#playSound(net.kyori.adventure.sound.Sound,double,double,double)">playSound</a>, <a href="../adventure/audience/PacketGroupingAudience.html#resetTitle()">resetTitle</a>, <a href="../adventure/audience/PacketGroupingAudience.html#sendActionBar(net.kyori.adventure.text.Component)">sendActionBar</a>, <a href="../adventure/audience/PacketGroupingAudience.html#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)">sendMessage</a>, <a href="../adventure/audience/PacketGroupingAudience.html#sendPlayerListHeaderAndFooter(net.kyori.adventure.text.Component,net.kyori.adventure.text.Component)">sendPlayerListHeaderAndFooter</a>, <a href="../adventure/audience/PacketGroupingAudience.html#showBossBar(net.kyori.adventure.bossbar.BossBar)">showBossBar</a>, <a href="../adventure/audience/PacketGroupingAudience.html#showTitle(net.kyori.adventure.title.Title)">showTitle</a>, <a href="../adventure/audience/PacketGroupingAudience.html#stopSound(net.kyori.adventure.sound.SoundStop)">stopSound</a></code></li>
 </ul>
 </li>
 </ul>
@@ -444,9 +482,9 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <li class="blockList">
 <h4>SharedInstance</h4>
 <pre>public&nbsp;SharedInstance&#8203;(@NotNull
-                      java.util.UUID&nbsp;uniqueId,
+                      @NotNull java.util.UUID&nbsp;uniqueId,
                       @NotNull
-                      <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instanceContainer)</pre>
+                      @NotNull <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instanceContainer)</pre>
 </li>
 </ul>
 </li>
@@ -466,7 +504,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <li class="blockList">
 <h4>refreshBlockStateId</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;refreshBlockStateId&#8203;(@NotNull
-                                <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                                @NotNull <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                                 short&nbsp;blockStateId)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Instance.html#refreshBlockStateId(net.minestom.server.utils.BlockPosition,short)">Instance</a></code></span></div>
 <div class="block">Used to change the id of the block in a specific <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils"><code>BlockPosition</code></a>.
@@ -488,9 +526,9 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <li class="blockList">
 <h4>breakBlock</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;breakBlock&#8203;(@NotNull
-                          <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                          @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                           @NotNull
-                          <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</pre>
+                          @NotNull <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Instance.html#breakBlock(net.minestom.server.entity.Player,net.minestom.server.utils.BlockPosition)">Instance</a></code></span></div>
 <div class="block">Does call <a href="../event/player/PlayerBlockBreakEvent.html" title="class in net.minestom.server.event.player"><code>PlayerBlockBreakEvent</code></a>
  and send particle packets</div>
@@ -514,7 +552,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <pre class="methodSignature">public&nbsp;void&nbsp;loadChunk&#8203;(int&nbsp;chunkX,
                       int&nbsp;chunkZ,
                       @Nullable
-                      <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
+                      @Nullable <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Instance.html#loadChunk(int,int,net.minestom.server.utils.chunk.ChunkCallback)">Instance</a></code></span></div>
 <div class="block">Forces the generation of a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>, even if no file and <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a> are defined.</div>
 <dl>
@@ -537,7 +575,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <pre class="methodSignature">public&nbsp;void&nbsp;loadOptionalChunk&#8203;(int&nbsp;chunkX,
                               int&nbsp;chunkZ,
                               @Nullable
-                              <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
+                              @Nullable <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Instance.html#loadOptionalChunk(int,int,net.minestom.server.utils.chunk.ChunkCallback)">Instance</a></code></span></div>
 <div class="block">Loads the chunk if the chunk is already loaded or if
  <a href="Instance.html#hasEnabledAutoChunkLoad()"><code>Instance.hasEnabledAutoChunkLoad()</code></a> returns true.</div>
@@ -559,7 +597,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <li class="blockList">
 <h4>unloadChunk</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;unloadChunk&#8203;(@NotNull
-                        <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
+                        @NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Instance.html#unloadChunk(net.minestom.server.instance.Chunk)">Instance</a></code></span></div>
 <div class="block">Schedules the removal of a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>, this method does not promise when it will be done.
  <p>
@@ -604,9 +642,9 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <li class="blockList">
 <h4>saveChunkToStorage</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;saveChunkToStorage&#8203;(@NotNull
-                               <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+                               @NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                                @Nullable
-                               java.lang.Runnable&nbsp;callback)</pre>
+                               @Nullable java.lang.Runnable&nbsp;callback)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Instance.html#saveChunkToStorage(net.minestom.server.instance.Chunk,java.lang.Runnable)">Instance</a></code></span></div>
 <div class="block">Saves a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> to permanent storage.</div>
 <dl>
@@ -625,7 +663,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <li class="blockList">
 <h4>saveChunksToStorage</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;saveChunksToStorage&#8203;(@Nullable
-                                java.lang.Runnable&nbsp;callback)</pre>
+                                @Nullable java.lang.Runnable&nbsp;callback)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Instance.html#saveChunksToStorage(java.lang.Runnable)">Instance</a></code></span></div>
 <div class="block">Saves multiple chunks to permanent storage.</div>
 <dl>
@@ -677,7 +715,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <li class="blockList">
 <h4>getChunks</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.Collection&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;&nbsp;getChunks()</pre>
+public&nbsp;@NotNull java.util.Collection&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;&nbsp;getChunks()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Instance.html#getChunks()">Instance</a></code></span></div>
 <div class="block">Gets all the instance's loaded chunks.</div>
 <dl>
@@ -731,7 +769,7 @@ public&nbsp;java.util.Collection&lt;<a href="Chunk.html" title="class in net.min
 <pre class="methodSignature">public&nbsp;void&nbsp;retrieveChunk&#8203;(int&nbsp;chunkX,
                           int&nbsp;chunkZ,
                           @Nullable
-                          <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
+                          @Nullable <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Instance.html#retrieveChunk(int,int,net.minestom.server.utils.chunk.ChunkCallback)">Instance</a></code></span></div>
 <div class="block">Used when a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> is not currently loaded in memory and need to be retrieved from somewhere else.
  Could be read from disk, or generated from scratch.
@@ -818,7 +856,7 @@ public&nbsp;java.util.Collection&lt;<a href="Chunk.html" title="class in net.min
 <li class="blockList">
 <h4>isInVoid</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isInVoid&#8203;(@NotNull
-                        <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
+                        @NotNull <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Instance.html#isInVoid(net.minestom.server.utils.Position)">Instance</a></code></span></div>
 <div class="block">Determines whether a position in the void. If true, entities should take damage and die.
  <p>
@@ -919,9 +957,9 @@ public&nbsp;java.util.Collection&lt;<a href="Chunk.html" title="class in net.min
 <h4>scheduleUpdate</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;scheduleUpdate&#8203;(int&nbsp;time,
                            @NotNull
-                           <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit,
+                           @NotNull <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit,
                            @NotNull
-                           <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position)</pre>
+                           @NotNull <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Instance.html#scheduleUpdate(int,net.minestom.server.utils.time.TimeUnit,net.minestom.server.utils.BlockPosition)">Instance</a></code></span></div>
 <div class="block">Schedules a block update at a given <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils"><code>BlockPosition</code></a>.
  Does nothing if no <a href="block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> is present at <code>position</code>.
@@ -944,7 +982,7 @@ public&nbsp;java.util.Collection&lt;<a href="Chunk.html" title="class in net.min
 <li class="blockList">
 <h4>getInstanceContainer</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;getInstanceContainer()</pre>
+public&nbsp;@NotNull <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;getInstanceContainer()</pre>
 <div class="block">Gets the <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a> from where this instance takes its chunks from.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1003,7 +1041,7 @@ public&nbsp;<a href="InstanceContainer.html" title="class in net.minestom.server
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>

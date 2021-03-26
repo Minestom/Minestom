@@ -219,17 +219,17 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.world.biomes.Biome%5B%5D,int,int)">DynamicChunk</a></span>&#8203;(<a href="../world/biomes/Biome.html" title="class in net.minestom.server.world.biomes">Biome</a>[]&nbsp;biomes,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.world.biomes.Biome%5B%5D,int,int)">DynamicChunk</a></span>&#8203;(@Nullable <a href="../world/biomes/Biome.html" title="class in net.minestom.server.world.biomes">Biome</a>[]&nbsp;biomes,
             int&nbsp;chunkX,
             int&nbsp;chunkZ)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.world.biomes.Biome%5B%5D,int,int,net.minestom.server.instance.palette.PaletteStorage,net.minestom.server.instance.palette.PaletteStorage)">DynamicChunk</a></span>&#8203;(<a href="../world/biomes/Biome.html" title="class in net.minestom.server.world.biomes">Biome</a>[]&nbsp;biomes,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.world.biomes.Biome%5B%5D,int,int,net.minestom.server.instance.palette.PaletteStorage,net.minestom.server.instance.palette.PaletteStorage)">DynamicChunk</a></span>&#8203;(@Nullable <a href="../world/biomes/Biome.html" title="class in net.minestom.server.world.biomes">Biome</a>[]&nbsp;biomes,
             int&nbsp;chunkX,
             int&nbsp;chunkZ,
-            <a href="palette/PaletteStorage.html" title="class in net.minestom.server.instance.palette">PaletteStorage</a>&nbsp;blockPalette,
-            <a href="palette/PaletteStorage.html" title="class in net.minestom.server.instance.palette">PaletteStorage</a>&nbsp;customBlockPalette)</code></th>
+            @NotNull <a href="palette/PaletteStorage.html" title="class in net.minestom.server.instance.palette">PaletteStorage</a>&nbsp;blockPalette,
+            @NotNull <a href="palette/PaletteStorage.html" title="class in net.minestom.server.instance.palette">PaletteStorage</a>&nbsp;customBlockPalette)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -251,7 +251,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copy(int,int)">copy</a></span>&#8203;(int&nbsp;chunkX,
     int&nbsp;chunkZ)</code></th>
 <td class="colLast">
@@ -259,7 +259,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>protected <a href="../network/packet/server/play/ChunkDataPacket.html" title="class in net.minestom.server.network.packet.server.play">ChunkDataPacket</a></code></td>
+<td class="colFirst"><code>protected @NotNull <a href="../network/packet/server/play/ChunkDataPacket.html" title="class in net.minestom.server.network.packet.server.play">ChunkDataPacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFreshPacket()">createFreshPacket</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Creates a <a href="../network/packet/server/play/ChunkDataPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>ChunkDataPacket</code></a> with this chunk data ready to be written.</div>
@@ -273,7 +273,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>java.util.Set&lt;java.lang.Integer&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.Set&lt;java.lang.Integer&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlockEntities()">getBlockEntities</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the block entities in this chunk.</div>
@@ -313,7 +313,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readChunk(net.minestom.server.utils.binary.BinaryReader,net.minestom.server.utils.chunk.ChunkCallback)">readChunk</a></span>&#8203;(<a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readChunk(net.minestom.server.utils.binary.BinaryReader,net.minestom.server.utils.chunk.ChunkCallback)">readChunk</a></span>&#8203;(@NotNull <a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader,
          <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Reads the chunk from binary.</div>
@@ -360,7 +360,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#tick(long,net.minestom.server.instance.Instance)">tick</a></span>&#8203;(long&nbsp;time,
-    <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
+    @NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
 <td class="colLast">
 <div class="block">Executes a chunk tick.</div>
 </td>
@@ -398,7 +398,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;net.minestom.server.<a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></h3>
-<code><a href="../Viewable.html#isViewer(net.minestom.server.entity.Player)">isViewer</a>, <a href="../Viewable.html#sendPacketsToViewers(net.minestom.server.network.packet.server.ServerPacket...)">sendPacketsToViewers</a>, <a href="../Viewable.html#sendPacketToViewers(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewers</a>, <a href="../Viewable.html#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewersAndSelf</a></code></li>
+<code><a href="../Viewable.html#getViewersAsAudience()">getViewersAsAudience</a>, <a href="../Viewable.html#getViewersAsAudiences()">getViewersAsAudiences</a>, <a href="../Viewable.html#isViewer(net.minestom.server.entity.Player)">isViewer</a>, <a href="../Viewable.html#sendPacketsToViewers(net.minestom.server.network.packet.server.ServerPacket...)">sendPacketsToViewers</a>, <a href="../Viewable.html#sendPacketToViewers(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewers</a>, <a href="../Viewable.html#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewersAndSelf</a></code></li>
 </ul>
 </li>
 </ul>
@@ -487,13 +487,13 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <li class="blockList">
 <h4>DynamicChunk</h4>
 <pre>public&nbsp;DynamicChunk&#8203;(@Nullable
-                    <a href="../world/biomes/Biome.html" title="class in net.minestom.server.world.biomes">Biome</a>[]&nbsp;biomes,
+                    @Nullable <a href="../world/biomes/Biome.html" title="class in net.minestom.server.world.biomes">Biome</a>[]&nbsp;biomes,
                     int&nbsp;chunkX,
                     int&nbsp;chunkZ,
                     @NotNull
-                    <a href="palette/PaletteStorage.html" title="class in net.minestom.server.instance.palette">PaletteStorage</a>&nbsp;blockPalette,
+                    @NotNull <a href="palette/PaletteStorage.html" title="class in net.minestom.server.instance.palette">PaletteStorage</a>&nbsp;blockPalette,
                     @NotNull
-                    <a href="palette/PaletteStorage.html" title="class in net.minestom.server.instance.palette">PaletteStorage</a>&nbsp;customBlockPalette)</pre>
+                    @NotNull <a href="palette/PaletteStorage.html" title="class in net.minestom.server.instance.palette">PaletteStorage</a>&nbsp;customBlockPalette)</pre>
 </li>
 </ul>
 <a id="&lt;init&gt;(net.minestom.server.world.biomes.Biome[],int,int)">
@@ -503,7 +503,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <li class="blockList">
 <h4>DynamicChunk</h4>
 <pre>public&nbsp;DynamicChunk&#8203;(@Nullable
-                    <a href="../world/biomes/Biome.html" title="class in net.minestom.server.world.biomes">Biome</a>[]&nbsp;biomes,
+                    @Nullable <a href="../world/biomes/Biome.html" title="class in net.minestom.server.world.biomes">Biome</a>[]&nbsp;biomes,
                     int&nbsp;chunkX,
                     int&nbsp;chunkZ)</pre>
 </li>
@@ -563,7 +563,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <h4>tick</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;tick&#8203;(long&nbsp;time,
                  @NotNull
-                 <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</pre>
+                 @NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Chunk.html#tick(long,net.minestom.server.instance.Instance)">Chunk</a></code></span></div>
 <div class="block">Executes a chunk tick.
  <p>
@@ -722,7 +722,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <li class="blockList">
 <h4>getBlockEntities</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.Set&lt;java.lang.Integer&gt;&nbsp;getBlockEntities()</pre>
+public&nbsp;@NotNull java.util.Set&lt;java.lang.Integer&gt;&nbsp;getBlockEntities()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Chunk.html#getBlockEntities()">Chunk</a></code></span></div>
 <div class="block">Gets all the block entities in this chunk.</div>
 <dl>
@@ -781,7 +781,7 @@ public&nbsp;java.util.Set&lt;java.lang.Integer&gt;&nbsp;getBlockEntities()</pre>
 <li class="blockList">
 <h4>readChunk</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;readChunk&#8203;(@NotNull
-                      <a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader,
+                      @NotNull <a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader,
                       <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Chunk.html#readChunk(net.minestom.server.utils.binary.BinaryReader,net.minestom.server.utils.chunk.ChunkCallback)">Chunk</a></code></span></div>
 <div class="block">Reads the chunk from binary.
@@ -808,7 +808,7 @@ public&nbsp;java.util.Set&lt;java.lang.Integer&gt;&nbsp;getBlockEntities()</pre>
 <li class="blockList">
 <h4>createFreshPacket</h4>
 <pre class="methodSignature">@NotNull
-protected&nbsp;<a href="../network/packet/server/play/ChunkDataPacket.html" title="class in net.minestom.server.network.packet.server.play">ChunkDataPacket</a>&nbsp;createFreshPacket()</pre>
+protected&nbsp;@NotNull <a href="../network/packet/server/play/ChunkDataPacket.html" title="class in net.minestom.server.network.packet.server.play">ChunkDataPacket</a>&nbsp;createFreshPacket()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Chunk.html#createFreshPacket()">Chunk</a></code></span></div>
 <div class="block">Creates a <a href="../network/packet/server/play/ChunkDataPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>ChunkDataPacket</code></a> with this chunk data ready to be written.</div>
 <dl>
@@ -826,8 +826,8 @@ protected&nbsp;<a href="../network/packet/server/play/ChunkDataPacket.html" titl
 <li class="blockList">
 <h4>copy</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;copy&#8203;(int&nbsp;chunkX,
-                  int&nbsp;chunkZ)</pre>
+public&nbsp;@NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;copy&#8203;(int&nbsp;chunkX,
+                           int&nbsp;chunkZ)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Chunk.html#copy(int,int)">Chunk</a></code></span></div>
 <div class="block">Creates a copy of this chunk, including blocks state id, custom block id, biomes, update data.
  <p>

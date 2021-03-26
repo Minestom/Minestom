@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":42,"i1":41,"i2":41};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -139,8 +139,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code>java.io.Serializable</code>, <code>java.lang.Comparable&lt;<a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a>&gt;</code></dd>
 </dl>
 <hr>
-<pre>public enum <span class="typeNameLabel">BarDivision</span>
+<pre>@Deprecated
+public enum <span class="typeNameLabel">BarDivision</span>
 extends java.lang.Enum&lt;<a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a>&gt;</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <code>BossBar</code></div>
+</div>
 <div class="block">Used to define the number of segments on a <a href="BossBar.html" title="class in net.minestom.server.bossbar"><code>BossBar</code></a>.</div>
 </li>
 </ul>
@@ -163,23 +167,33 @@ extends java.lang.Enum&lt;<a href="BarDivision.html" title="enum in net.minestom
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#SEGMENT_10">SEGMENT_10</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#SEGMENT_12">SEGMENT_12</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#SEGMENT_20">SEGMENT_20</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#SEGMENT_6">SEGMENT_6</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#SOLID">SOLID</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -193,23 +207,32 @@ extends java.lang.Enum&lt;<a href="BarDivision.html" title="enum in net.minestom
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>net.kyori.adventure.bossbar.BossBar.Overlay</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#asAdventureOverlay()">asAdventureOverlay</a></span>()</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>static <a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#valueOf(java.lang.String)">valueOf</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Returns the enum constant of this type with the specified name.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#values()">values</a></span>()</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Returns an array containing the constants of this enum type, in
 the order they are declared.</div>
 </td>
@@ -252,6 +275,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>SOLID</h4>
 <pre>public static final&nbsp;<a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a> SOLID</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="SEGMENT_6">
@@ -261,6 +285,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>SEGMENT_6</h4>
 <pre>public static final&nbsp;<a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a> SEGMENT_6</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="SEGMENT_10">
@@ -270,6 +295,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>SEGMENT_10</h4>
 <pre>public static final&nbsp;<a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a> SEGMENT_10</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="SEGMENT_12">
@@ -279,6 +305,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>SEGMENT_12</h4>
 <pre>public static final&nbsp;<a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a> SEGMENT_12</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="SEGMENT_20">
@@ -288,6 +315,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>SEGMENT_20</h4>
 <pre>public static final&nbsp;<a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a> SEGMENT_20</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 </li>
@@ -307,6 +335,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>values</h4>
 <pre class="methodSignature">public static&nbsp;<a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a>[]&nbsp;values()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Returns an array containing the constants of this enum type, in
 the order they are declared. This method may be used to iterate
 over the constants as follows:
@@ -323,10 +352,11 @@ for (BarDivision c : BarDivision.values())
 <a id="valueOf(java.lang.String)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>valueOf</h4>
 <pre class="methodSignature">public static&nbsp;<a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a>&nbsp;valueOf&#8203;(java.lang.String&nbsp;name)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Returns the enum constant of this type with the specified name.
 The string must match <i>exactly</i> an identifier used to declare an
 enum constant in this type.  (Extraneous whitespace characters are 
@@ -340,6 +370,16 @@ not permitted.)</div>
 <dd><code>java.lang.IllegalArgumentException</code> - if this enum type has no constant with the specified name</dd>
 <dd><code>java.lang.NullPointerException</code> - if the argument is null</dd>
 </dl>
+</li>
+</ul>
+<a id="asAdventureOverlay()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>asAdventureOverlay</h4>
+<pre class="methodSignature">public&nbsp;net.kyori.adventure.bossbar.BossBar.Overlay&nbsp;asAdventureOverlay()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 </li>

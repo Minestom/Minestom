@@ -26,6 +26,12 @@
     catch(err) {
     }
 //-->
+var data = {"i0":10,"i1":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var altColor = "altColor";
+var rowColor = "rowColor";
+var tableTab = "tableTab";
+var activeTableTab = "activeTableTab";
 var pathtoroot = "../../../../../../../";
 var useModuleDirectories = true;
 loadScripts(document, 'script');</script>
@@ -90,7 +96,7 @@ loadScripts(document, 'script');</script>
 <li>Detail:&nbsp;</li>
 <li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a id="skip.navbar.top">
@@ -124,12 +130,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="../../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a>&lt;<a href="TabCompletePacket.Match.html" title="class in net.minestom.server.network.packet.server.play">TabCompletePacket.Match</a>&gt;</code></dd>
+</dl>
+<dl>
 <dt>Enclosing class:</dt>
 <dd><a href="TabCompletePacket.html" title="class in net.minestom.server.network.packet.server.play">TabCompletePacket</a></dd>
 </dl>
 <hr>
 <pre>public static class <span class="typeNameLabel">TabCompletePacket.Match</span>
-extends java.lang.Object</pre>
+extends java.lang.Object
+implements <a href="../../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a>&lt;<a href="TabCompletePacket.Match.html" title="class in net.minestom.server.network.packet.server.play">TabCompletePacket.Match</a>&gt;</pre>
 </li>
 </ul>
 </div>
@@ -161,7 +172,7 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
+<td class="colFirst"><code>net.kyori.adventure.text.Component</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#tooltip">tooltip</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -197,12 +208,41 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Summary</h3>
+<table class="memberSummary">
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Method</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr id="i0" class="altColor">
+<td class="colFirst"><code>@NotNull java.util.Collection&lt;net.kyori.adventure.text.Component&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#components()">components</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the components held by this object.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>@NotNull <a href="TabCompletePacket.Match.html" title="class in net.minestom.server.network.packet.server.play">TabCompletePacket.Match</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copyWithOperator(java.util.function.UnaryOperator)">copyWithOperator</a></span>&#8203;(@NotNull java.util.function.UnaryOperator&lt;net.kyori.adventure.text.Component&gt;&nbsp;operator)</code></th>
+<td class="colLast">
+<div class="block">Returns a copy of this object.</div>
+</td>
+</tr>
+</table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
 <code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.adventure.ComponentHolder">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.minestom.server.adventure.<a href="../../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a></h3>
+<code><a href="../../../../adventure/ComponentHolder.html#visitComponents(java.util.function.Consumer)">visitComponents</a></code></li>
 </ul>
 </li>
 </ul>
@@ -244,7 +284,7 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>tooltip</h4>
-<pre>public&nbsp;<a href="../../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a> tooltip</pre>
+<pre>public&nbsp;net.kyori.adventure.text.Component tooltip</pre>
 </li>
 </ul>
 </li>
@@ -264,6 +304,56 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>Match</h4>
 <pre>public&nbsp;Match()</pre>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<!-- ============ METHOD DETAIL ========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="method.detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a id="components()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>components</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull java.util.Collection&lt;net.kyori.adventure.text.Component&gt;&nbsp;components()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../adventure/ComponentHolder.html#components()">ComponentHolder</a></code></span></div>
+<div class="block">Gets the components held by this object.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../adventure/ComponentHolder.html#components()">components</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a>&lt;<a href="TabCompletePacket.Match.html" title="class in net.minestom.server.network.packet.server.play">TabCompletePacket.Match</a>&gt;</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the components</dd>
+</dl>
+</li>
+</ul>
+<a id="copyWithOperator(java.util.function.UnaryOperator)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>copyWithOperator</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="TabCompletePacket.Match.html" title="class in net.minestom.server.network.packet.server.play">TabCompletePacket.Match</a>&nbsp;copyWithOperator&#8203;(@NotNull
+                                                         @NotNull java.util.function.UnaryOperator&lt;net.kyori.adventure.text.Component&gt;&nbsp;operator)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../adventure/ComponentHolder.html#copyWithOperator(java.util.function.UnaryOperator)">ComponentHolder</a></code></span></div>
+<div class="block">Returns a copy of this object. For each component this object holds, the operator
+ is applied to the copy before returning.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../adventure/ComponentHolder.html#copyWithOperator(java.util.function.UnaryOperator)">copyWithOperator</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../adventure/ComponentHolder.html" title="interface in net.minestom.server.adventure">ComponentHolder</a>&lt;<a href="TabCompletePacket.Match.html" title="class in net.minestom.server.network.packet.server.play">TabCompletePacket.Match</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>operator</code> - the operator</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the copy</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -326,7 +416,7 @@ extends java.lang.Object</pre>
 <li>Detail:&nbsp;</li>
 <li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a id="skip.navbar.bottom">

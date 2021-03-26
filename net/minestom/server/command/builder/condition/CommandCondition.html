@@ -151,8 +151,8 @@ public interface <span class="typeNameLabel">CommandCondition</span></pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#canUse(net.minestom.server.command.CommandSender,java.lang.String)">canUse</a></span>&#8203;(<a href="../../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
-      java.lang.String&nbsp;commandString)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#canUse(net.minestom.server.command.CommandSender,java.lang.String)">canUse</a></span>&#8203;(@NotNull <a href="../../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
+      @Nullable java.lang.String&nbsp;commandString)</code></th>
 <td class="colLast">
 <div class="block">Called when the sender permission needs to be checked.</div>
 </td>
@@ -181,9 +181,9 @@ public interface <span class="typeNameLabel">CommandCondition</span></pre>
 <li class="blockList">
 <h4>canUse</h4>
 <pre class="methodSignature">boolean&nbsp;canUse&#8203;(@NotNull
-               <a href="../../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
+               @NotNull <a href="../../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
                @Nullable
-               java.lang.String&nbsp;commandString)</pre>
+               @Nullable java.lang.String&nbsp;commandString)</pre>
 <div class="block">Called when the sender permission needs to be checked.
  <p>
  The first time will be during player connection in order to know

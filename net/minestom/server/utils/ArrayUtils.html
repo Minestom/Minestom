@@ -154,7 +154,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static int[]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#concatenateIntArrays(int%5B%5D...)">concatenateIntArrays</a></span>&#8203;(int[]...&nbsp;arrays)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#concatenateIntArrays(@org.jetbrains.annotations.NotNullint%5B%5D...)">concatenateIntArrays</a></span>&#8203;(@org.jetbrains.annotations.NotNull int[]...&nbsp;arrays)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -165,23 +165,23 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fill(T%5B%5D,java.util.function.Supplier)">fill</a></span>&#8203;(T[]&nbsp;array,
-    java.util.function.Supplier&lt;T&gt;&nbsp;supplier)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fill(T%5B%5D,java.util.function.Supplier)">fill</a></span>&#8203;(@NotNull T[]&nbsp;array,
+    @NotNull java.util.function.Supplier&lt;T&gt;&nbsp;supplier)</code></th>
 <td class="colLast">
 <div class="block">Fills an array using a supplier.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>static int[]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDifferencesBetweenArray(long%5B%5D,long%5B%5D)">getDifferencesBetweenArray</a></span>&#8203;(long[]&nbsp;a,
-                          long[]&nbsp;b)</code></th>
+<td class="colFirst"><code>static @org.jetbrains.annotations.NotNull int[]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDifferencesBetweenArray(@org.jetbrains.annotations.NotNulllong%5B%5D,@org.jetbrains.annotations.NotNulllong%5B%5D)">getDifferencesBetweenArray</a></span>&#8203;(@org.jetbrains.annotations.NotNull long[]&nbsp;a,
+                          @org.jetbrains.annotations.NotNull long[]&nbsp;b)</code></th>
 <td class="colLast">
 <div class="block">Gets the differences between 2 arrays.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeElement(java.lang.Object%5B%5D,int)">removeElement</a></span>&#8203;(java.lang.Object[]&nbsp;arr,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeElement(java.lang.Object%5B%5D,int)">removeElement</a></span>&#8203;(@NotNull java.lang.Object[]&nbsp;arr,
              int&nbsp;index)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -195,8 +195,8 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>static int[]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toArray(it.unimi.dsi.fastutil.ints.IntList)">toArray</a></span>&#8203;(it.unimi.dsi.fastutil.ints.IntList&nbsp;list)</code></th>
+<td class="colFirst"><code>static @org.jetbrains.annotations.NotNull int[]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toArray(it.unimi.dsi.fastutil.ints.IntList)">toArray</a></span>&#8203;(@NotNull it.unimi.dsi.fastutil.ints.IntList&nbsp;list)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -223,14 +223,14 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="concatenateIntArrays(int[]...)">
+<a id="concatenateIntArrays(@org.jetbrains.annotations.NotNullint[]...)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>concatenateIntArrays</h4>
 <pre class="methodSignature">public static&nbsp;int[]&nbsp;concatenateIntArrays&#8203;(@NotNull
-                                         int[]...&nbsp;arrays)</pre>
+                                         @org.jetbrains.annotations.NotNull int[]...&nbsp;arrays)</pre>
 </li>
 </ul>
 <a id="removeElement(java.lang.Object[],int)">
@@ -240,7 +240,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>removeElement</h4>
 <pre class="methodSignature">public static&nbsp;void&nbsp;removeElement&#8203;(@NotNull
-                                 java.lang.Object[]&nbsp;arr,
+                                 @NotNull java.lang.Object[]&nbsp;arr,
                                  int&nbsp;index)</pre>
 </li>
 </ul>
@@ -254,17 +254,17 @@ extends java.lang.Object</pre>
                                      short[]&nbsp;dest)</pre>
 </li>
 </ul>
-<a id="getDifferencesBetweenArray(long[],long[])">
+<a id="getDifferencesBetweenArray(@org.jetbrains.annotations.NotNulllong[],@org.jetbrains.annotations.NotNulllong[])">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDifferencesBetweenArray</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;int[]&nbsp;getDifferencesBetweenArray&#8203;(@NotNull
-                                               long[]&nbsp;a,
-                                               @NotNull
-                                               long[]&nbsp;b)</pre>
+public static&nbsp;@org.jetbrains.annotations.NotNull int[]&nbsp;getDifferencesBetweenArray&#8203;(@NotNull
+                                                                                  @org.jetbrains.annotations.NotNull long[]&nbsp;a,
+                                                                                  @NotNull
+                                                                                  @org.jetbrains.annotations.NotNull long[]&nbsp;b)</pre>
 <div class="block">Gets the differences between 2 arrays.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -282,8 +282,8 @@ public static&nbsp;int[]&nbsp;getDifferencesBetweenArray&#8203;(@NotNull
 <li class="blockList">
 <h4>toArray</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;int[]&nbsp;toArray&#8203;(@NotNull
-                            it.unimi.dsi.fastutil.ints.IntList&nbsp;list)</pre>
+public static&nbsp;@org.jetbrains.annotations.NotNull int[]&nbsp;toArray&#8203;(@NotNull
+                                                               @NotNull it.unimi.dsi.fastutil.ints.IntList&nbsp;list)</pre>
 </li>
 </ul>
 <a id="sameStart(java.lang.Object[],java.lang.Object[],int)">
@@ -319,9 +319,9 @@ public static&nbsp;int[]&nbsp;toArray&#8203;(@NotNull
 <li class="blockList">
 <h4>fill</h4>
 <pre class="methodSignature">public static&nbsp;&lt;T&gt;&nbsp;void&nbsp;fill&#8203;(@NotNull
-                            T[]&nbsp;array,
+                            @NotNull T[]&nbsp;array,
                             @NotNull
-                            java.util.function.Supplier&lt;T&gt;&nbsp;supplier)</pre>
+                            @NotNull java.util.function.Supplier&lt;T&gt;&nbsp;supplier)</pre>
 <div class="block">Fills an array using a supplier.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>

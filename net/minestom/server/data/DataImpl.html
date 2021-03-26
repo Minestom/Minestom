@@ -222,7 +222,7 @@ extends <a href="Data.html" title="class in net.minestom.server.data">Data</a></
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="DataImpl.html" title="class in net.minestom.server.data">DataImpl</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="DataImpl.html" title="class in net.minestom.server.data">DataImpl</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Creates and returns a copy of this object.</div>
@@ -235,13 +235,13 @@ extends <a href="Data.html" title="class in net.minestom.server.data">Data</a></
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#get(java.lang.String)">get</a></span>&#8203;(java.lang.String&nbsp;key)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#get(java.lang.String)">get</a></span>&#8203;(@NotNull java.lang.String&nbsp;key)</code></th>
 <td class="colLast">
 <div class="block">Retrieves a value based on its key.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>java.util.Set&lt;java.lang.String&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.Set&lt;java.lang.String&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getKeys()">getKeys</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the list of data keys.</div>
@@ -249,7 +249,7 @@ extends <a href="Data.html" title="class in net.minestom.server.data">Data</a></
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOrDefault(java.lang.String,T)">getOrDefault</a></span>&#8203;(java.lang.String&nbsp;key,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOrDefault(java.lang.String,T)">getOrDefault</a></span>&#8203;(@NotNull java.lang.String&nbsp;key,
             T&nbsp;defaultValue)</code></th>
 <td class="colLast">
 <div class="block">Retrieves a value based on its key, give a default value if not found.</div>
@@ -262,7 +262,7 @@ extends <a href="Data.html" title="class in net.minestom.server.data">Data</a></
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasKey(java.lang.String)">hasKey</a></span>&#8203;(java.lang.String&nbsp;key)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasKey(java.lang.String)">hasKey</a></span>&#8203;(@NotNull java.lang.String&nbsp;key)</code></th>
 <td class="colLast">
 <div class="block">Gets if the data has a key.</div>
 </td>
@@ -276,9 +276,9 @@ extends <a href="Data.html" title="class in net.minestom.server.data">Data</a></
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(java.lang.String,T,java.lang.Class)">set</a></span>&#8203;(java.lang.String&nbsp;key,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(java.lang.String,T,java.lang.Class)">set</a></span>&#8203;(@NotNull java.lang.String&nbsp;key,
    T&nbsp;value,
-   java.lang.Class&lt;T&gt;&nbsp;type)</code></th>
+   @Nullable java.lang.Class&lt;T&gt;&nbsp;type)</code></th>
 <td class="colLast">
 <div class="block">Assigns a value to a specific key.</div>
 </td>
@@ -372,11 +372,11 @@ extends <a href="Data.html" title="class in net.minestom.server.data">Data</a></
 <li class="blockList">
 <h4>set</h4>
 <pre class="methodSignature">public&nbsp;&lt;T&gt;&nbsp;void&nbsp;set&#8203;(@NotNull
-                    java.lang.String&nbsp;key,
+                    @NotNull java.lang.String&nbsp;key,
                     @Nullable
                     T&nbsp;value,
                     @Nullable
-                    java.lang.Class&lt;T&gt;&nbsp;type)</pre>
+                    @Nullable java.lang.Class&lt;T&gt;&nbsp;type)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Data.html#set(java.lang.String,T,java.lang.Class)">Data</a></code></span></div>
 <div class="block">Assigns a value to a specific key.</div>
 <dl>
@@ -399,7 +399,7 @@ extends <a href="Data.html" title="class in net.minestom.server.data">Data</a></
 <li class="blockList">
 <h4>get</h4>
 <pre class="methodSignature">public&nbsp;&lt;T&gt;&nbsp;T&nbsp;get&#8203;(@NotNull
-                 java.lang.String&nbsp;key)</pre>
+                 @NotNull java.lang.String&nbsp;key)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Data.html#get(java.lang.String)">Data</a></code></span></div>
 <div class="block">Retrieves a value based on its key.</div>
 <dl>
@@ -423,7 +423,7 @@ extends <a href="Data.html" title="class in net.minestom.server.data">Data</a></
 <li class="blockList">
 <h4>getOrDefault</h4>
 <pre class="methodSignature">public&nbsp;&lt;T&gt;&nbsp;T&nbsp;getOrDefault&#8203;(@NotNull
-                          java.lang.String&nbsp;key,
+                          @NotNull java.lang.String&nbsp;key,
                           T&nbsp;defaultValue)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Data.html#getOrDefault(java.lang.String,T)">Data</a></code></span></div>
 <div class="block">Retrieves a value based on its key, give a default value if not found.</div>
@@ -447,7 +447,7 @@ extends <a href="Data.html" title="class in net.minestom.server.data">Data</a></
 <li class="blockList">
 <h4>hasKey</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;hasKey&#8203;(@NotNull
-                      java.lang.String&nbsp;key)</pre>
+                      @NotNull java.lang.String&nbsp;key)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Data.html#hasKey(java.lang.String)">Data</a></code></span></div>
 <div class="block">Gets if the data has a key.</div>
 <dl>
@@ -467,7 +467,7 @@ extends <a href="Data.html" title="class in net.minestom.server.data">Data</a></
 <li class="blockList">
 <h4>getKeys</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.Set&lt;java.lang.String&gt;&nbsp;getKeys()</pre>
+public&nbsp;@NotNull java.util.Set&lt;java.lang.String&gt;&nbsp;getKeys()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Data.html#getKeys()">Data</a></code></span></div>
 <div class="block">Gets the list of data keys.</div>
 <dl>
@@ -502,7 +502,7 @@ public&nbsp;java.util.Set&lt;java.lang.String&gt;&nbsp;getKeys()</pre>
 <li class="blockList">
 <h4>clone</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="DataImpl.html" title="class in net.minestom.server.data">DataImpl</a>&nbsp;clone()</pre>
+public&nbsp;@NotNull <a href="DataImpl.html" title="class in net.minestom.server.data">DataImpl</a>&nbsp;clone()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../utils/clone/PublicCloneable.html#clone()">PublicCloneable</a></code></span></div>
 <div class="block">Creates and returns a copy of this object.</div>
 <dl>

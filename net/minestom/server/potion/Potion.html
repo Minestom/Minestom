@@ -152,7 +152,7 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.potion.PotionEffect,byte,int)">Potion</a></span>&#8203;(<a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a>&nbsp;effect,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.potion.PotionEffect,byte,int)">Potion</a></span>&#8203;(@NotNull <a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a>&nbsp;effect,
       byte&nbsp;amplifier,
       int&nbsp;duration)</code></th>
 <td class="colLast">
@@ -160,7 +160,7 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.potion.PotionEffect,byte,int,boolean)">Potion</a></span>&#8203;(<a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a>&nbsp;effect,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.potion.PotionEffect,byte,int,boolean)">Potion</a></span>&#8203;(@NotNull <a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a>&nbsp;effect,
       byte&nbsp;amplifier,
       int&nbsp;duration,
       boolean&nbsp;particles)</code></th>
@@ -169,7 +169,7 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.potion.PotionEffect,byte,int,boolean,boolean)">Potion</a></span>&#8203;(<a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a>&nbsp;effect,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.potion.PotionEffect,byte,int,boolean,boolean)">Potion</a></span>&#8203;(@NotNull <a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a>&nbsp;effect,
       byte&nbsp;amplifier,
       int&nbsp;duration,
       boolean&nbsp;particles,
@@ -179,7 +179,7 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.potion.PotionEffect,byte,int,boolean,boolean,boolean)">Potion</a></span>&#8203;(<a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a>&nbsp;effect,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.potion.PotionEffect,byte,int,boolean,boolean,boolean)">Potion</a></span>&#8203;(@NotNull <a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a>&nbsp;effect,
       byte&nbsp;amplifier,
       int&nbsp;duration,
       boolean&nbsp;particles,
@@ -218,7 +218,7 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEffect()">getEffect</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -229,14 +229,14 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendAddPacket(net.minestom.server.entity.Entity)">sendAddPacket</a></span>&#8203;(<a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendAddPacket(net.minestom.server.entity.Entity)">sendAddPacket</a></span>&#8203;(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
 <td class="colLast">
 <div class="block">Sends a packet that a potion effect has been applied to the entity.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendRemovePacket(net.minestom.server.entity.Entity)">sendRemovePacket</a></span>&#8203;(<a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendRemovePacket(net.minestom.server.entity.Entity)">sendRemovePacket</a></span>&#8203;(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
 <td class="colLast">
 <div class="block">Sends a packet that a potion effect has been removed from the entity.</div>
 </td>
@@ -272,7 +272,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>Potion</h4>
 <pre>public&nbsp;Potion&#8203;(@NotNull
-              <a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a>&nbsp;effect,
+              @NotNull <a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a>&nbsp;effect,
               byte&nbsp;amplifier,
               int&nbsp;duration)</pre>
 <div class="block">Creates a new potion.</div>
@@ -291,7 +291,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>Potion</h4>
 <pre>public&nbsp;Potion&#8203;(@NotNull
-              <a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a>&nbsp;effect,
+              @NotNull <a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a>&nbsp;effect,
               byte&nbsp;amplifier,
               int&nbsp;duration,
               boolean&nbsp;particles)</pre>
@@ -312,7 +312,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>Potion</h4>
 <pre>public&nbsp;Potion&#8203;(@NotNull
-              <a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a>&nbsp;effect,
+              @NotNull <a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a>&nbsp;effect,
               byte&nbsp;amplifier,
               int&nbsp;duration,
               boolean&nbsp;particles,
@@ -335,7 +335,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>Potion</h4>
 <pre>public&nbsp;Potion&#8203;(@NotNull
-              <a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a>&nbsp;effect,
+              @NotNull <a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a>&nbsp;effect,
               byte&nbsp;amplifier,
               int&nbsp;duration,
               boolean&nbsp;particles,
@@ -370,7 +370,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getEffect</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a>&nbsp;getEffect()</pre>
+public&nbsp;@NotNull <a href="PotionEffect.html" title="enum in net.minestom.server.potion">PotionEffect</a>&nbsp;getEffect()</pre>
 </li>
 </ul>
 <a id="getAmplifier()">
@@ -407,7 +407,7 @@ public&nbsp;<a href="PotionEffect.html" title="enum in net.minestom.server.potio
 <li class="blockList">
 <h4>sendAddPacket</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;sendAddPacket&#8203;(@NotNull
-                          <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</pre>
+                          @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</pre>
 <div class="block">Sends a packet that a potion effect has been applied to the entity.
  <p>
  Used internally by <a href="../entity/Entity.html#addEffect(net.minestom.server.potion.Potion)"><code>Entity.addEffect(Potion)</code></a></div>
@@ -424,7 +424,7 @@ public&nbsp;<a href="PotionEffect.html" title="enum in net.minestom.server.potio
 <li class="blockList">
 <h4>sendRemovePacket</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;sendRemovePacket&#8203;(@NotNull
-                             <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</pre>
+                             @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</pre>
 <div class="block">Sends a packet that a potion effect has been removed from the entity.
  <p>
  Used internally by <a href="../entity/Entity.html#removeEffect(net.minestom.server.potion.PotionEffect)"><code>Entity.removeEffect(PotionEffect)</code></a></div>

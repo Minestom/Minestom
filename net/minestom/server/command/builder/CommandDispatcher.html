@@ -175,35 +175,35 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#execute(net.minestom.server.command.CommandSender,java.lang.String)">execute</a></span>&#8203;(<a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
-       java.lang.String&nbsp;commandString)</code></th>
+<td class="colFirst"><code>@NotNull <a href="CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#execute(net.minestom.server.command.CommandSender,java.lang.String)">execute</a></span>&#8203;(@NotNull <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
+       @NotNull java.lang.String&nbsp;commandString)</code></th>
 <td class="colLast">
 <div class="block">Checks if the command exists, and execute it.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="Command.html" title="class in net.minestom.server.command.builder">Command</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findCommand(java.lang.String)">findCommand</a></span>&#8203;(java.lang.String&nbsp;commandName)</code></th>
+<td class="colFirst"><code>@Nullable <a href="Command.html" title="class in net.minestom.server.command.builder">Command</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findCommand(java.lang.String)">findCommand</a></span>&#8203;(@NotNull java.lang.String&nbsp;commandName)</code></th>
 <td class="colLast">
 <div class="block">Gets the command class associated with the name.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>java.util.Set&lt;<a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.Set&lt;<a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCommands()">getCommands</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(java.lang.String&nbsp;commandString)</code></th>
+<td class="colFirst"><code>@NotNull <a href="CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(@NotNull java.lang.String&nbsp;commandString)</code></th>
 <td class="colLast">
 <div class="block">Parses the given command.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#register(net.minestom.server.command.builder.Command)">register</a></span>&#8203;(<a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#register(net.minestom.server.command.builder.Command)">register</a></span>&#8203;(@NotNull <a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</code></th>
 <td class="colLast">
 <div class="block">Registers a command,
  be aware that registering a command name or alias will override the previous entry.</div>
@@ -211,7 +211,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unregister(net.minestom.server.command.builder.Command)">unregister</a></span>&#8203;(<a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unregister(net.minestom.server.command.builder.Command)">unregister</a></span>&#8203;(@NotNull <a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -264,7 +264,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>register</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;register&#8203;(@NotNull
-                     <a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</pre>
+                     @NotNull <a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</pre>
 <div class="block">Registers a command,
  be aware that registering a command name or alias will override the previous entry.</div>
 <dl>
@@ -280,7 +280,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>unregister</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;unregister&#8203;(@NotNull
-                       <a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</pre>
+                       @NotNull <a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</pre>
 </li>
 </ul>
 <a id="getCommands()">
@@ -290,7 +290,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getCommands</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.Set&lt;<a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&gt;&nbsp;getCommands()</pre>
+public&nbsp;@NotNull java.util.Set&lt;<a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&gt;&nbsp;getCommands()</pre>
 </li>
 </ul>
 <a id="findCommand(java.lang.String)">
@@ -300,8 +300,8 @@ public&nbsp;java.util.Set&lt;<a href="Command.html" title="class in net.minestom
 <li class="blockList">
 <h4>findCommand</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;findCommand&#8203;(@NotNull
-                           java.lang.String&nbsp;commandName)</pre>
+public&nbsp;@Nullable <a href="Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;findCommand&#8203;(@NotNull
+                                     @NotNull java.lang.String&nbsp;commandName)</pre>
 <div class="block">Gets the command class associated with the name.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -318,10 +318,10 @@ public&nbsp;<a href="Command.html" title="class in net.minestom.server.command.b
 <li class="blockList">
 <h4>execute</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a>&nbsp;execute&#8203;(@NotNull
-                             <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
-                             @NotNull
-                             java.lang.String&nbsp;commandString)</pre>
+public&nbsp;@NotNull <a href="CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a>&nbsp;execute&#8203;(@NotNull
+                                      @NotNull <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
+                                      @NotNull
+                                      @NotNull java.lang.String&nbsp;commandString)</pre>
 <div class="block">Checks if the command exists, and execute it.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -339,8 +339,8 @@ public&nbsp;<a href="CommandResult.html" title="class in net.minestom.server.com
 <li class="blockList">
 <h4>parse</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a>&nbsp;parse&#8203;(@NotNull
-                           java.lang.String&nbsp;commandString)</pre>
+public&nbsp;@NotNull <a href="CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a>&nbsp;parse&#8203;(@NotNull
+                                    @NotNull java.lang.String&nbsp;commandString)</pre>
 <div class="block">Parses the given command.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

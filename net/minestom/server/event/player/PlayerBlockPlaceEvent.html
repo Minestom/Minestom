@@ -185,9 +185,9 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.instance.block.Block,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Player.Hand)">PlayerBlockPlaceEvent</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                     <a href="../../instance/block/Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block,
-                     <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.instance.block.Block,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Player.Hand)">PlayerBlockPlaceEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                     @NotNull <a href="../../instance/block/Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block,
+                     @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                      <a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -224,14 +224,14 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a></code></td>
+<td class="colFirst"><code>@Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlockData()">getBlockData</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the data that the (not placed yet) block should have</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlockPosition()">getBlockPosition</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the block position.</div>
@@ -267,7 +267,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlockData(net.minestom.server.data.Data)">setBlockData</a></span>&#8203;(<a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;blockData)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlockData(net.minestom.server.data.Data)">setBlockData</a></span>&#8203;(@Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;blockData)</code></th>
 <td class="colLast">
 <div class="block">Sets the data of the block to place.</div>
 </td>
@@ -295,14 +295,14 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCustomBlock(java.lang.String)">setCustomBlock</a></span>&#8203;(java.lang.String&nbsp;customBlockId)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCustomBlock(java.lang.String)">setCustomBlock</a></span>&#8203;(@NotNull java.lang.String&nbsp;customBlockId)</code></th>
 <td class="colLast">
 <div class="block">Sets both the blockId and customBlockId.</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCustomBlock(net.minestom.server.instance.block.CustomBlock)">setCustomBlock</a></span>&#8203;(<a href="../../instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&nbsp;customBlock)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCustomBlock(net.minestom.server.instance.block.CustomBlock)">setCustomBlock</a></span>&#8203;(@NotNull <a href="../../instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&nbsp;customBlock)</code></th>
 <td class="colLast">
 <div class="block">Sets both the blockId and customBlockId.</div>
 </td>
@@ -352,11 +352,11 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>PlayerBlockPlaceEvent</h4>
 <pre>public&nbsp;PlayerBlockPlaceEvent&#8203;(@NotNull
-                             <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                             @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                              @NotNull
-                             <a href="../../instance/block/Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block,
+                             @NotNull <a href="../../instance/block/Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block,
                              @NotNull
-                             <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                             @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                              @NotNull
                              <a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</pre>
 </li>
@@ -378,7 +378,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>setCustomBlock</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setCustomBlock&#8203;(@NotNull
-                           <a href="../../instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&nbsp;customBlock)</pre>
+                           @NotNull <a href="../../instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&nbsp;customBlock)</pre>
 <div class="block">Sets both the blockId and customBlockId.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -407,7 +407,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>setCustomBlock</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setCustomBlock&#8203;(@NotNull
-                           java.lang.String&nbsp;customBlockId)</pre>
+                           @NotNull java.lang.String&nbsp;customBlockId)</pre>
 <div class="block">Sets both the blockId and customBlockId.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -481,7 +481,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>getBlockData</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;getBlockData()</pre>
+public&nbsp;@Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;getBlockData()</pre>
 <div class="block">Gets the data that the (not placed yet) block should have</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -496,7 +496,7 @@ public&nbsp;<a href="../../data/Data.html" title="class in net.minestom.server.d
 <li class="blockList">
 <h4>setBlockData</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setBlockData&#8203;(@Nullable
-                         <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;blockData)</pre>
+                         @Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;blockData)</pre>
 <div class="block">Sets the data of the block to place.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -511,7 +511,7 @@ public&nbsp;<a href="../../data/Data.html" title="class in net.minestom.server.d
 <li class="blockList">
 <h4>getBlockPosition</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;getBlockPosition()</pre>
+public&nbsp;@NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;getBlockPosition()</pre>
 <div class="block">Gets the block position.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

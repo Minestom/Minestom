@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":42,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -199,97 +199,105 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Creates and returns a copy of this object.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>static @NotNull <a href="WrittenBookMeta.html" title="class in net.minestom.server.item.metadata">WrittenBookMeta</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromAdventure(net.kyori.adventure.inventory.Book,net.minestom.server.adventure.Localizable)">fromAdventure</a></span>&#8203;(@NotNull net.kyori.adventure.inventory.Book&nbsp;book,
+             @NotNull <a href="../../adventure/Localizable.html" title="interface in net.minestom.server.adventure">Localizable</a>&nbsp;localizable)</code></th>
+<td class="colLast">
+<div class="block">Creates a written book meta from an Adventure book.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAuthor()">getAuthor</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the author of the book.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="WrittenBookMeta.WrittenBookGeneration.html" title="enum in net.minestom.server.item.metadata">WrittenBookMeta.WrittenBookGeneration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getGeneration()">getGeneration</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the copy tier of the book.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPages()">getPages</a></span>()</code></th>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>java.util.List&lt;net.kyori.adventure.text.Component&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPagesJson()">getPagesJson</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets an <code>ArrayList</code> containing all the pages.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTitle()">getTitle</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the title of the book.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasNbt()">hasNbt</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if this meta object contains any useful data to send to the client.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isResolved()">isResolved</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the book is resolved.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSimilar(net.minestom.server.item.metadata.ItemMeta)">isSimilar</a></span>&#8203;(<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSimilar(net.minestom.server.item.metadata.ItemMeta)">isSimilar</a></span>&#8203;(@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</code></th>
 <td class="colLast">
 <div class="block">Gets if the two ItemMeta are similar.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">read</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">read</a></span>&#8203;(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
 <div class="block">Reads nbt data from a compound.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setAuthor(java.lang.String)">setAuthor</a></span>&#8203;(java.lang.String&nbsp;author)</code></th>
 <td class="colLast">
 <div class="block">Sets the author of the book.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setGeneration(net.minestom.server.item.metadata.WrittenBookMeta.WrittenBookGeneration)">setGeneration</a></span>&#8203;(<a href="WrittenBookMeta.WrittenBookGeneration.html" title="enum in net.minestom.server.item.metadata">WrittenBookMeta.WrittenBookGeneration</a>&nbsp;generation)</code></th>
 <td class="colLast">
 <div class="block">Sets the copy tier of the book.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPages(java.util.List)">setPages</a></span>&#8203;(java.util.List&lt;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;&nbsp;pages)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPages(java.util.List)">setPages</a></span>&#8203;(java.util.List&lt;net.kyori.adventure.text.Component&gt;&nbsp;pages)</code></th>
 <td class="colLast">
 <div class="block">Sets the <code>ArrayList</code> containing the book pages.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResolved(boolean)">setResolved</a></span>&#8203;(boolean&nbsp;resolved)</code></th>
 <td class="colLast">
@@ -297,16 +305,16 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
  is opened for the first time after being created.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTitle(java.lang.String)">setTitle</a></span>&#8203;(java.lang.String&nbsp;title)</code></th>
 <td class="colLast">
 <div class="block">Sets the title of the book.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">write</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">write</a></span>&#8203;(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
 <div class="block">Writes nbt data to a compound.</div>
 </td>
@@ -467,16 +475,18 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 </dl>
 </li>
 </ul>
-<a id="getPages()">
+<a id="getPagesJson()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getPages</h4>
-<pre class="methodSignature">public&nbsp;java.util.List&lt;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;&nbsp;getPages()</pre>
+<h4>getPagesJson</h4>
+<pre class="methodSignature">@Deprecated
+public&nbsp;java.util.List&lt;net.kyori.adventure.text.Component&gt;&nbsp;getPagesJson()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets an <code>ArrayList</code> containing all the pages.
  <p>
- The list is modifiable.</div>
+ The list is not modifiable as it is .</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a modifiable <code>ArrayList</code> with the pages of the book</dd>
@@ -489,7 +499,7 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <ul class="blockList">
 <li class="blockList">
 <h4>setPages</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setPages&#8203;(java.util.List&lt;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&gt;&nbsp;pages)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;setPages&#8203;(java.util.List&lt;net.kyori.adventure.text.Component&gt;&nbsp;pages)</pre>
 <div class="block">Sets the <code>ArrayList</code> containing the book pages.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -521,7 +531,7 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <li class="blockList">
 <h4>isSimilar</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isSimilar&#8203;(@NotNull
-                         <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</pre>
+                         @NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#isSimilar(net.minestom.server.item.metadata.ItemMeta)">ItemMeta</a></code></span></div>
 <div class="block">Gets if the two ItemMeta are similar.
  <p>
@@ -543,7 +553,7 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <li class="blockList">
 <h4>read</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;read&#8203;(@NotNull
-                 org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
+                 @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">ItemMeta</a></code></span></div>
 <div class="block">Reads nbt data from a compound.
  <p>
@@ -564,7 +574,7 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <li class="blockList">
 <h4>write</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
-                  org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
+                  @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">ItemMeta</a></code></span></div>
 <div class="block">Writes nbt data to a compound.</div>
 <dl>
@@ -578,11 +588,11 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <a id="clone()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>clone</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;clone()</pre>
+public&nbsp;@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;clone()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#clone()">ItemMeta</a></code></span></div>
 <div class="block">Creates and returns a copy of this object.</div>
 <dl>
@@ -592,6 +602,28 @@ public&nbsp;<a href="ItemMeta.html" title="class in net.minestom.server.item.met
 <dd><code><a href="ItemMeta.html#clone()">clone</a></code>&nbsp;in class&nbsp;<code><a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A clone of this instance.</dd>
+</dl>
+</li>
+</ul>
+<a id="fromAdventure(net.kyori.adventure.inventory.Book,net.minestom.server.adventure.Localizable)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>fromAdventure</h4>
+<pre class="methodSignature">@NotNull
+public static&nbsp;@NotNull <a href="WrittenBookMeta.html" title="class in net.minestom.server.item.metadata">WrittenBookMeta</a>&nbsp;fromAdventure&#8203;(@NotNull
+                                                     @NotNull net.kyori.adventure.inventory.Book&nbsp;book,
+                                                     @NotNull
+                                                     @NotNull <a href="../../adventure/Localizable.html" title="interface in net.minestom.server.adventure">Localizable</a>&nbsp;localizable)</pre>
+<div class="block">Creates a written book meta from an Adventure book. This meta will not be
+ resolved and the generation will default to <a href="WrittenBookMeta.WrittenBookGeneration.html#ORIGINAL"><code>WrittenBookMeta.WrittenBookGeneration.ORIGINAL</code></a>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>book</code> - the book</dd>
+<dd><code>localizable</code> - who the book is for</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the meta</dd>
 </dl>
 </li>
 </ul>

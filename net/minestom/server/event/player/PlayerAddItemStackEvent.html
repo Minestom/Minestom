@@ -185,8 +185,8 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.item.ItemStack)">PlayerAddItemStackEvent</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                       <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.item.ItemStack)">PlayerAddItemStackEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                       @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -208,7 +208,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getItemStack()">getItemStack</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the item stack which will be added.</div>
@@ -230,7 +230,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setItemStack(net.minestom.server.item.ItemStack)">setItemStack</a></span>&#8203;(<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setItemStack(net.minestom.server.item.ItemStack)">setItemStack</a></span>&#8203;(@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Changes the item stack which will be added.</div>
 </td>
@@ -273,9 +273,9 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>PlayerAddItemStackEvent</h4>
 <pre>public&nbsp;PlayerAddItemStackEvent&#8203;(@NotNull
-                               <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                               @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                                @NotNull
-                               <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
+                               @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
 </li>
 </ul>
 </li>
@@ -295,7 +295,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>getItemStack</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getItemStack()</pre>
+public&nbsp;@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getItemStack()</pre>
 <div class="block">Gets the item stack which will be added.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -310,7 +310,7 @@ public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.ser
 <li class="blockList">
 <h4>setItemStack</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setItemStack&#8203;(@NotNull
-                         <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
+                         @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
 <div class="block">Changes the item stack which will be added.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

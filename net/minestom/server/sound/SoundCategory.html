@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":42,"i1":41,"i2":41};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -139,8 +139,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code>java.io.Serializable</code>, <code>java.lang.Comparable&lt;<a href="SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a>&gt;</code></dd>
 </dl>
 <hr>
-<pre>public enum <span class="typeNameLabel">SoundCategory</span>
+<pre>@Deprecated
+public enum <span class="typeNameLabel">SoundCategory</span>
 extends java.lang.Enum&lt;<a href="SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a>&gt;</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <code>Sound.Source</code></div>
+</div>
 </li>
 </ul>
 </div>
@@ -162,43 +166,63 @@ extends java.lang.Enum&lt;<a href="SoundCategory.html" title="enum in net.minest
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#AMBIENT">AMBIENT</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#BLOCKS">BLOCKS</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#HOSTILE">HOSTILE</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#MASTER">MASTER</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#MUSIC">MUSIC</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#NEUTRAL">NEUTRAL</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#PLAYERS">PLAYERS</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#RECORDS">RECORDS</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#VOICE">VOICE</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#WEATHER">WEATHER</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -212,23 +236,33 @@ extends java.lang.Enum&lt;<a href="SoundCategory.html" title="enum in net.minest
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static <a href="SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#valueOf(java.lang.String)">valueOf</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
+<td class="colFirst"><code>@NotNull net.kyori.adventure.sound.Sound.Source</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#asSource()">asSource</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Returns the enum constant of this type with the specified name.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block">Gets the Adventure source representing this sound category.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>static <a href="SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#valueOf(java.lang.String)">valueOf</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block">Returns the enum constant of this type with the specified name.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#values()">values</a></span>()</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Returns an array containing the constants of this enum type, in
 the order they are declared.</div>
 </td>
@@ -271,6 +305,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>MASTER</h4>
 <pre>public static final&nbsp;<a href="SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a> MASTER</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="MUSIC">
@@ -280,6 +315,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>MUSIC</h4>
 <pre>public static final&nbsp;<a href="SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a> MUSIC</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="RECORDS">
@@ -289,6 +325,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>RECORDS</h4>
 <pre>public static final&nbsp;<a href="SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a> RECORDS</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="WEATHER">
@@ -298,6 +335,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>WEATHER</h4>
 <pre>public static final&nbsp;<a href="SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a> WEATHER</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="BLOCKS">
@@ -307,6 +345,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>BLOCKS</h4>
 <pre>public static final&nbsp;<a href="SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a> BLOCKS</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="HOSTILE">
@@ -316,6 +355,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>HOSTILE</h4>
 <pre>public static final&nbsp;<a href="SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a> HOSTILE</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="NEUTRAL">
@@ -325,6 +365,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>NEUTRAL</h4>
 <pre>public static final&nbsp;<a href="SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a> NEUTRAL</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="PLAYERS">
@@ -334,6 +375,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>PLAYERS</h4>
 <pre>public static final&nbsp;<a href="SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a> PLAYERS</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="AMBIENT">
@@ -343,6 +385,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>AMBIENT</h4>
 <pre>public static final&nbsp;<a href="SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a> AMBIENT</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="VOICE">
@@ -352,6 +395,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>VOICE</h4>
 <pre>public static final&nbsp;<a href="SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a> VOICE</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 </li>
@@ -371,6 +415,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>values</h4>
 <pre class="methodSignature">public static&nbsp;<a href="SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a>[]&nbsp;values()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Returns an array containing the constants of this enum type, in
 the order they are declared. This method may be used to iterate
 over the constants as follows:
@@ -387,10 +432,11 @@ for (SoundCategory c : SoundCategory.values())
 <a id="valueOf(java.lang.String)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>valueOf</h4>
 <pre class="methodSignature">public static&nbsp;<a href="SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a>&nbsp;valueOf&#8203;(java.lang.String&nbsp;name)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Returns the enum constant of this type with the specified name.
 The string must match <i>exactly</i> an identifier used to declare an
 enum constant in this type.  (Extraneous whitespace characters are 
@@ -403,6 +449,22 @@ not permitted.)</div>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.IllegalArgumentException</code> - if this enum type has no constant with the specified name</dd>
 <dd><code>java.lang.NullPointerException</code> - if the argument is null</dd>
+</dl>
+</li>
+</ul>
+<a id="asSource()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>asSource</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull net.kyori.adventure.sound.Sound.Source&nbsp;asSource()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block">Gets the Adventure source representing this sound category.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the source</dd>
 </dl>
 </li>
 </ul>

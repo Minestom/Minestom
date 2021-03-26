@@ -185,12 +185,12 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player,int,net.minestom.server.inventory.click.ClickType,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">InventoryPreClickEvent</a></span>&#8203;(<a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
-                      <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player,int,net.minestom.server.inventory.click.ClickType,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">InventoryPreClickEvent</a></span>&#8203;(@Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
+                      @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                       int&nbsp;slot,
-                      <a href="../../inventory/click/ClickType.html" title="enum in net.minestom.server.inventory.click">ClickType</a>&nbsp;clickType,
-                      <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked,
-                      <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursor)</code></th>
+                      @NotNull <a href="../../inventory/click/ClickType.html" title="enum in net.minestom.server.inventory.click">ClickType</a>&nbsp;clickType,
+                      @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked,
+                      @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursor)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -212,28 +212,28 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getClickedItem()">getClickedItem</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the item who have been clicked.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../inventory/click/ClickType.html" title="enum in net.minestom.server.inventory.click">ClickType</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../inventory/click/ClickType.html" title="enum in net.minestom.server.inventory.click">ClickType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getClickType()">getClickType</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the click type.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCursorItem()">getCursorItem</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the item who was in the player cursor.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayer()">getPlayer</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player who is trying to click on the inventory.</div>
@@ -262,14 +262,14 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setClickedItem(net.minestom.server.item.ItemStack)">setClickedItem</a></span>&#8203;(<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clickedItem)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setClickedItem(net.minestom.server.item.ItemStack)">setClickedItem</a></span>&#8203;(@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clickedItem)</code></th>
 <td class="colLast">
 <div class="block">Changes the clicked item.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCursorItem(net.minestom.server.item.ItemStack)">setCursorItem</a></span>&#8203;(<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursorItem)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCursorItem(net.minestom.server.item.ItemStack)">setCursorItem</a></span>&#8203;(@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursorItem)</code></th>
 <td class="colLast">
 <div class="block">Changes the cursor item.</div>
 </td>
@@ -312,16 +312,16 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>InventoryPreClickEvent</h4>
 <pre>public&nbsp;InventoryPreClickEvent&#8203;(@Nullable
-                              <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
+                              @Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
                               @NotNull
-                              <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                              @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                               int&nbsp;slot,
                               @NotNull
-                              <a href="../../inventory/click/ClickType.html" title="enum in net.minestom.server.inventory.click">ClickType</a>&nbsp;clickType,
+                              @NotNull <a href="../../inventory/click/ClickType.html" title="enum in net.minestom.server.inventory.click">ClickType</a>&nbsp;clickType,
                               @NotNull
-                              <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked,
+                              @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked,
                               @NotNull
-                              <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursor)</pre>
+                              @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursor)</pre>
 </li>
 </ul>
 </li>
@@ -341,7 +341,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>getPlayer</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;getPlayer()</pre>
+public&nbsp;@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;getPlayer()</pre>
 <div class="block">Gets the player who is trying to click on the inventory.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -370,7 +370,7 @@ public&nbsp;<a href="../../entity/Player.html" title="class in net.minestom.serv
 <li class="blockList">
 <h4>getClickType</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../inventory/click/ClickType.html" title="enum in net.minestom.server.inventory.click">ClickType</a>&nbsp;getClickType()</pre>
+public&nbsp;@NotNull <a href="../../inventory/click/ClickType.html" title="enum in net.minestom.server.inventory.click">ClickType</a>&nbsp;getClickType()</pre>
 <div class="block">Gets the click type.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -385,7 +385,7 @@ public&nbsp;<a href="../../inventory/click/ClickType.html" title="enum in net.mi
 <li class="blockList">
 <h4>getClickedItem</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getClickedItem()</pre>
+public&nbsp;@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getClickedItem()</pre>
 <div class="block">Gets the item who have been clicked.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -400,7 +400,7 @@ public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.ser
 <li class="blockList">
 <h4>setClickedItem</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setClickedItem&#8203;(@NotNull
-                           <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clickedItem)</pre>
+                           @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clickedItem)</pre>
 <div class="block">Changes the clicked item.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -415,7 +415,7 @@ public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.ser
 <li class="blockList">
 <h4>getCursorItem</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getCursorItem()</pre>
+public&nbsp;@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getCursorItem()</pre>
 <div class="block">Gets the item who was in the player cursor.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -430,7 +430,7 @@ public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.ser
 <li class="blockList">
 <h4>setCursorItem</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setCursorItem&#8203;(@NotNull
-                          <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursorItem)</pre>
+                          @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursorItem)</pre>
 <div class="block">Changes the cursor item.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

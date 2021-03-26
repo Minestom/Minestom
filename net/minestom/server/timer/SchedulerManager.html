@@ -217,21 +217,21 @@ implements <a href="../extensions/IExtensionObserver.html" title="interface in n
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#buildShutdownTask(java.lang.Runnable)">buildShutdownTask</a></span>&#8203;(java.lang.Runnable&nbsp;runnable)</code></th>
+<td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#buildShutdownTask(java.lang.Runnable)">buildShutdownTask</a></span>&#8203;(@NotNull java.lang.Runnable&nbsp;runnable)</code></th>
 <td class="colLast">
 <div class="block">Initializes a new <a href="TaskBuilder.html" title="class in net.minestom.server.timer"><code>TaskBuilder</code></a> for creating a shutdown <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#buildTask(java.lang.Runnable)">buildTask</a></span>&#8203;(java.lang.Runnable&nbsp;runnable)</code></th>
+<td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#buildTask(java.lang.Runnable)">buildTask</a></span>&#8203;(@NotNull java.lang.Runnable&nbsp;runnable)</code></th>
 <td class="colLast">
 <div class="block">Initializes a new <a href="TaskBuilder.html" title="class in net.minestom.server.timer"><code>TaskBuilder</code></a> for creating a <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>java.util.concurrent.ExecutorService</code></td>
+<td class="colFirst"><code>@NotNull java.util.concurrent.ExecutorService</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBatchesPool()">getBatchesPool</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the execution service for all the registered <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
@@ -259,7 +259,7 @@ implements <a href="../extensions/IExtensionObserver.html" title="interface in n
 </td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>it.unimi.dsi.fastutil.objects.ObjectCollection&lt;<a href="Task.html" title="class in net.minestom.server.timer">Task</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull it.unimi.dsi.fastutil.objects.ObjectCollection&lt;<a href="Task.html" title="class in net.minestom.server.timer">Task</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getShutdownTasks()">getShutdownTasks</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets a <code>Collection</code> with all the registered shutdown <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
@@ -273,14 +273,14 @@ implements <a href="../extensions/IExtensionObserver.html" title="interface in n
 </td>
 </tr>
 <tr id="i8" class="altColor">
-<td class="colFirst"><code>it.unimi.dsi.fastutil.objects.ObjectCollection&lt;<a href="Task.html" title="class in net.minestom.server.timer">Task</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull it.unimi.dsi.fastutil.objects.ObjectCollection&lt;<a href="Task.html" title="class in net.minestom.server.timer">Task</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTasks()">getTasks</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets a <code>Collection</code> with all the registered <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
-<td class="colFirst"><code>java.util.concurrent.ScheduledExecutorService</code></td>
+<td class="colFirst"><code>@NotNull java.util.concurrent.ScheduledExecutorService</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTimerExecutionService()">getTimerExecutionService</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the scheduled execution service for all the registered <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
@@ -302,7 +302,7 @@ implements <a href="../extensions/IExtensionObserver.html" title="interface in n
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeTask(net.minestom.server.timer.Task)">removeTask</a></span>&#8203;(<a href="Task.html" title="class in net.minestom.server.timer">Task</a>&nbsp;task)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeTask(net.minestom.server.timer.Task)">removeTask</a></span>&#8203;(@NotNull <a href="Task.html" title="class in net.minestom.server.timer">Task</a>&nbsp;task)</code></th>
 <td class="colLast">
 <div class="block">Removes/Forces the end of a <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 </td>
@@ -393,8 +393,8 @@ implements <a href="../extensions/IExtensionObserver.html" title="interface in n
 <li class="blockList">
 <h4>buildTask</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;buildTask&#8203;(@NotNull
-                             java.lang.Runnable&nbsp;runnable)</pre>
+public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;buildTask&#8203;(@NotNull
+                                      @NotNull java.lang.Runnable&nbsp;runnable)</pre>
 <div class="block">Initializes a new <a href="TaskBuilder.html" title="class in net.minestom.server.timer"><code>TaskBuilder</code></a> for creating a <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -411,8 +411,8 @@ public&nbsp;<a href="TaskBuilder.html" title="class in net.minestom.server.timer
 <li class="blockList">
 <h4>buildShutdownTask</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;buildShutdownTask&#8203;(@NotNull
-                                     java.lang.Runnable&nbsp;runnable)</pre>
+public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;buildShutdownTask&#8203;(@NotNull
+                                              @NotNull java.lang.Runnable&nbsp;runnable)</pre>
 <div class="block">Initializes a new <a href="TaskBuilder.html" title="class in net.minestom.server.timer"><code>TaskBuilder</code></a> for creating a shutdown <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -429,7 +429,7 @@ public&nbsp;<a href="TaskBuilder.html" title="class in net.minestom.server.timer
 <li class="blockList">
 <h4>removeTask</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;removeTask&#8203;(@NotNull
-                       <a href="Task.html" title="class in net.minestom.server.timer">Task</a>&nbsp;task)</pre>
+                       @NotNull <a href="Task.html" title="class in net.minestom.server.timer">Task</a>&nbsp;task)</pre>
 <div class="block">Removes/Forces the end of a <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.
  <p>
  <a href="Task.html#cancel()"><code>Task.cancel()</code></a> can also be used instead.</div>
@@ -484,7 +484,7 @@ public&nbsp;<a href="TaskBuilder.html" title="class in net.minestom.server.timer
 <li class="blockList">
 <h4>getTasks</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;it.unimi.dsi.fastutil.objects.ObjectCollection&lt;<a href="Task.html" title="class in net.minestom.server.timer">Task</a>&gt;&nbsp;getTasks()</pre>
+public&nbsp;@NotNull it.unimi.dsi.fastutil.objects.ObjectCollection&lt;<a href="Task.html" title="class in net.minestom.server.timer">Task</a>&gt;&nbsp;getTasks()</pre>
 <div class="block">Gets a <code>Collection</code> with all the registered <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.
  <p>
  Be aware that the collection is not thread-safe.</div>
@@ -517,7 +517,7 @@ public&nbsp;it.unimi.dsi.fastutil.objects.ObjectCollection&lt;<a href="Task.html
 <li class="blockList">
 <h4>getShutdownTasks</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;it.unimi.dsi.fastutil.objects.ObjectCollection&lt;<a href="Task.html" title="class in net.minestom.server.timer">Task</a>&gt;&nbsp;getShutdownTasks()</pre>
+public&nbsp;@NotNull it.unimi.dsi.fastutil.objects.ObjectCollection&lt;<a href="Task.html" title="class in net.minestom.server.timer">Task</a>&gt;&nbsp;getShutdownTasks()</pre>
 <div class="block">Gets a <code>Collection</code> with all the registered shutdown <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -548,7 +548,7 @@ public&nbsp;it.unimi.dsi.fastutil.objects.ObjectCollection&lt;<a href="Task.html
 <li class="blockList">
 <h4>getBatchesPool</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.concurrent.ExecutorService&nbsp;getBatchesPool()</pre>
+public&nbsp;@NotNull java.util.concurrent.ExecutorService&nbsp;getBatchesPool()</pre>
 <div class="block">Gets the execution service for all the registered <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -563,7 +563,7 @@ public&nbsp;java.util.concurrent.ExecutorService&nbsp;getBatchesPool()</pre>
 <li class="blockList">
 <h4>getTimerExecutionService</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.concurrent.ScheduledExecutorService&nbsp;getTimerExecutionService()</pre>
+public&nbsp;@NotNull java.util.concurrent.ScheduledExecutorService&nbsp;getTimerExecutionService()</pre>
 <div class="block">Gets the scheduled execution service for all the registered <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":9,"i3":9,"i4":9,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":42,"i2":10,"i3":42,"i4":9,"i5":9,"i6":9,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -200,7 +200,7 @@ implements <a href="../../data/DataContainer.html" title="interface in net.mines
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String)">DamageType</a></span>&#8203;(java.lang.String&nbsp;identifier)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String)">DamageType</a></span>&#8203;(@NotNull java.lang.String&nbsp;identifier)</code></th>
 <td class="colLast">
 <div class="block">Creates a new damage type.</div>
 </td>
@@ -217,80 +217,98 @@ implements <a href="../../data/DataContainer.html" title="interface in net.mines
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#buildDeathMessage(net.minestom.server.entity.Player)">buildDeathMessage</a></span>&#8203;(<a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;killed)</code></th>
+<td class="colFirst"><code>@Nullable net.kyori.adventure.text.Component</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#buildDeathMessage(net.minestom.server.entity.Player)">buildDeathMessage</a></span>&#8203;(@NotNull <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;killed)</code></th>
 <td class="colLast">
 <div class="block">Builds the death message linked to this damage type.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#buildDeathScreenText(net.minestom.server.entity.Player)">buildDeathScreenText</a></span>&#8203;(<a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;killed)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#buildDeathMessageJson(net.minestom.server.entity.Player)">buildDeathMessageJson</a></span>&#8203;(@NotNull <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;killed)</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#buildDeathMessage(net.minestom.server.entity.Player)"><code>buildDeathMessage(Player)</code></a></div>
+</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>net.kyori.adventure.text.Component</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#buildDeathScreenText(net.minestom.server.entity.Player)">buildDeathScreenText</a></span>&#8203;(@NotNull <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;killed)</code></th>
 <td class="colLast">
 <div class="block">Builds the text sent to a player in his death screen.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>static <a href="EntityDamage.html" title="class in net.minestom.server.entity.damage">EntityDamage</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromEntity(net.minestom.server.entity.Entity)">fromEntity</a></span>&#8203;(<a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
-<td class="colLast">
-<div class="block">Convenient method to create an <a href="EntityDamage.html" title="class in net.minestom.server.entity.damage"><code>EntityDamage</code></a>.</div>
-</td>
-</tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>static <a href="EntityDamage.html" title="class in net.minestom.server.entity.damage">EntityDamage</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromPlayer(net.minestom.server.entity.Player)">fromPlayer</a></span>&#8203;(<a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<td class="colFirst"><code>@Nullable <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#buildDeathScreenTextJson(net.minestom.server.entity.Player)">buildDeathScreenTextJson</a></span>&#8203;(@NotNull <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;killed)</code></th>
 <td class="colLast">
-<div class="block">Convenient method to create an <a href="EntityDamage.html" title="class in net.minestom.server.entity.damage"><code>EntityDamage</code></a>.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#buildDeathScreenText(net.minestom.server.entity.Player)"><code>buildDeathScreenText(Player)</code></a></div>
+</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>static <a href="DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromProjectile(net.minestom.server.entity.Entity,net.minestom.server.entity.Entity)">fromProjectile</a></span>&#8203;(<a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;shooter,
-              <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;projectile)</code></th>
+<td class="colFirst"><code>static @NotNull <a href="EntityDamage.html" title="class in net.minestom.server.entity.damage">EntityDamage</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromEntity(net.minestom.server.entity.Entity)">fromEntity</a></span>&#8203;(@NotNull <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
+<td class="colLast">
+<div class="block">Convenient method to create an <a href="EntityDamage.html" title="class in net.minestom.server.entity.damage"><code>EntityDamage</code></a>.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>static @NotNull <a href="EntityDamage.html" title="class in net.minestom.server.entity.damage">EntityDamage</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromPlayer(net.minestom.server.entity.Player)">fromPlayer</a></span>&#8203;(@NotNull <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<td class="colLast">
+<div class="block">Convenient method to create an <a href="EntityDamage.html" title="class in net.minestom.server.entity.damage"><code>EntityDamage</code></a>.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>static @NotNull <a href="DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromProjectile(net.minestom.server.entity.Entity,net.minestom.server.entity.Entity)">fromProjectile</a></span>&#8203;(@Nullable <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;shooter,
+              @NotNull <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;projectile)</code></th>
 <td class="colLast">
 <div class="block">Convenient method to create an <a href="EntityProjectileDamage.html" title="class in net.minestom.server.entity.damage"><code>EntityProjectileDamage</code></a>.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getData()">getData</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="../../data/Data.html" title="class in net.minestom.server.data"><code>Data</code></a> of this container.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>protected <a href="../../sound/Sound.html" title="enum in net.minestom.server.sound">Sound</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getGenericSound(net.minestom.server.entity.LivingEntity)">getGenericSound</a></span>&#8203;(<a href="../LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity)</code></th>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>protected <a href="../../sound/SoundEvent.html" title="enum in net.minestom.server.sound">SoundEvent</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getGenericSound(net.minestom.server.entity.LivingEntity)">getGenericSound</a></span>&#8203;(@NotNull <a href="../LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>java.lang.String</code></td>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>@NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getIdentifier()">getIdentifier</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the identifier of this damage type.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>protected <a href="../../sound/Sound.html" title="enum in net.minestom.server.sound">Sound</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayerSound(net.minestom.server.entity.Player)">getPlayerSound</a></span>&#8203;(<a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>protected <a href="../../sound/SoundEvent.html" title="enum in net.minestom.server.sound">SoundEvent</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayerSound(net.minestom.server.entity.Player)">getPlayerSound</a></span>&#8203;(@NotNull <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code><a href="../../sound/Sound.html" title="enum in net.minestom.server.sound">Sound</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSound(net.minestom.server.entity.LivingEntity)">getSound</a></span>&#8203;(<a href="../LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity)</code></th>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>@Nullable <a href="../../sound/SoundEvent.html" title="enum in net.minestom.server.sound">SoundEvent</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSound(net.minestom.server.entity.LivingEntity)">getSound</a></span>&#8203;(@NotNull <a href="../LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity)</code></th>
 <td class="colLast">
 <div class="block">Sound event to play when the given entity is hit by this damage.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setData(net.minestom.server.data.Data)">setData</a></span>&#8203;(<a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
 <td class="colLast">
@@ -365,7 +383,7 @@ implements <a href="../../data/DataContainer.html" title="interface in net.mines
 <li class="blockList">
 <h4>DamageType</h4>
 <pre>public&nbsp;DamageType&#8203;(@NotNull
-                  java.lang.String&nbsp;identifier)</pre>
+                  @NotNull java.lang.String&nbsp;identifier)</pre>
 <div class="block">Creates a new damage type.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -391,7 +409,7 @@ implements <a href="../../data/DataContainer.html" title="interface in net.mines
 <li class="blockList">
 <h4>getIdentifier</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.lang.String&nbsp;getIdentifier()</pre>
+public&nbsp;@NotNull java.lang.String&nbsp;getIdentifier()</pre>
 <div class="block">Gets the identifier of this damage type.
  <p>
  It does not have to be unique to this object.o</div>
@@ -401,6 +419,20 @@ public&nbsp;java.lang.String&nbsp;getIdentifier()</pre>
 </dl>
 </li>
 </ul>
+<a id="buildDeathMessageJson(net.minestom.server.entity.Player)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>buildDeathMessageJson</h4>
+<pre class="methodSignature">@Deprecated
+public&nbsp;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;buildDeathMessageJson&#8203;(@NotNull
+                                         @NotNull <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;killed)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#buildDeathMessage(net.minestom.server.entity.Player)"><code>buildDeathMessage(Player)</code></a></div>
+</div>
+</li>
+</ul>
 <a id="buildDeathMessage(net.minestom.server.entity.Player)">
 <!--   -->
 </a>
@@ -408,8 +440,8 @@ public&nbsp;java.lang.String&nbsp;getIdentifier()</pre>
 <li class="blockList">
 <h4>buildDeathMessage</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;buildDeathMessage&#8203;(@NotNull
-                                     <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;killed)</pre>
+public&nbsp;@Nullable net.kyori.adventure.text.Component&nbsp;buildDeathMessage&#8203;(@NotNull
+                                                                      @NotNull <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;killed)</pre>
 <div class="block">Builds the death message linked to this damage type.
  <p>
  Used in <a href="../Player.html#kill()"><code>Player.kill()</code></a> to broadcast the proper message.</div>
@@ -417,8 +449,7 @@ public&nbsp;<a href="../../chat/JsonMessage.html" title="class in net.minestom.s
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>killed</code> - the player who has been killed</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the death message, null to do not send anything.
- Can be for instance, of type <a href="../../chat/ColoredText.html" title="class in net.minestom.server.chat"><code>ColoredText</code></a> or <a href="../../chat/RichMessage.html" title="class in net.minestom.server.chat"><code>RichMessage</code></a>.</dd>
+<dd>the death message, null to do not send anything</dd>
 </dl>
 </li>
 </ul>
@@ -429,10 +460,10 @@ public&nbsp;<a href="../../chat/JsonMessage.html" title="class in net.minestom.s
 <li class="blockList">
 <h4>fromProjectile</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a>&nbsp;fromProjectile&#8203;(@Nullable
-                                        <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;shooter,
-                                        @NotNull
-                                        <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;projectile)</pre>
+public static&nbsp;@NotNull <a href="DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a>&nbsp;fromProjectile&#8203;(@Nullable
+                                                 @Nullable <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;shooter,
+                                                 @NotNull
+                                                 @NotNull <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;projectile)</pre>
 <div class="block">Convenient method to create an <a href="EntityProjectileDamage.html" title="class in net.minestom.server.entity.damage"><code>EntityProjectileDamage</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -450,8 +481,8 @@ public static&nbsp;<a href="DamageType.html" title="class in net.minestom.server
 <li class="blockList">
 <h4>fromPlayer</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="EntityDamage.html" title="class in net.minestom.server.entity.damage">EntityDamage</a>&nbsp;fromPlayer&#8203;(@NotNull
-                                      <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+public static&nbsp;@NotNull <a href="EntityDamage.html" title="class in net.minestom.server.entity.damage">EntityDamage</a>&nbsp;fromPlayer&#8203;(@NotNull
+                                               @NotNull <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 <div class="block">Convenient method to create an <a href="EntityDamage.html" title="class in net.minestom.server.entity.damage"><code>EntityDamage</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -468,8 +499,8 @@ public static&nbsp;<a href="EntityDamage.html" title="class in net.minestom.serv
 <li class="blockList">
 <h4>fromEntity</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="EntityDamage.html" title="class in net.minestom.server.entity.damage">EntityDamage</a>&nbsp;fromEntity&#8203;(@NotNull
-                                      <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</pre>
+public static&nbsp;@NotNull <a href="EntityDamage.html" title="class in net.minestom.server.entity.damage">EntityDamage</a>&nbsp;fromEntity&#8203;(@NotNull
+                                               @NotNull <a href="../Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</pre>
 <div class="block">Convenient method to create an <a href="EntityDamage.html" title="class in net.minestom.server.entity.damage"><code>EntityDamage</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -479,15 +510,29 @@ public static&nbsp;<a href="EntityDamage.html" title="class in net.minestom.serv
 </dl>
 </li>
 </ul>
+<a id="buildDeathScreenTextJson(net.minestom.server.entity.Player)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>buildDeathScreenTextJson</h4>
+<pre class="methodSignature">@Deprecated
+@Nullable
+public&nbsp;@Nullable <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;buildDeathScreenTextJson&#8203;(@NotNull
+                                                      @NotNull <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;killed)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#buildDeathScreenText(net.minestom.server.entity.Player)"><code>buildDeathScreenText(Player)</code></a></div>
+</div>
+</li>
+</ul>
 <a id="buildDeathScreenText(net.minestom.server.entity.Player)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>buildDeathScreenText</h4>
-<pre class="methodSignature">@Nullable
-public&nbsp;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;buildDeathScreenText&#8203;(@NotNull
-                                        <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;killed)</pre>
+<pre class="methodSignature">public&nbsp;net.kyori.adventure.text.Component&nbsp;buildDeathScreenText&#8203;(@NotNull
+                                                               @NotNull <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;killed)</pre>
 <div class="block">Builds the text sent to a player in his death screen.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -504,8 +549,8 @@ public&nbsp;<a href="../../chat/JsonMessage.html" title="class in net.minestom.s
 <li class="blockList">
 <h4>getSound</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="../../sound/Sound.html" title="enum in net.minestom.server.sound">Sound</a>&nbsp;getSound&#8203;(@NotNull
-                      <a href="../LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity)</pre>
+public&nbsp;@Nullable <a href="../../sound/SoundEvent.html" title="enum in net.minestom.server.sound">SoundEvent</a>&nbsp;getSound&#8203;(@NotNull
+                                     @NotNull <a href="../LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity)</pre>
 <div class="block">Sound event to play when the given entity is hit by this damage. Possible to return null if no sound should be played</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -521,8 +566,8 @@ public&nbsp;<a href="../../sound/Sound.html" title="enum in net.minestom.server.
 <ul class="blockList">
 <li class="blockList">
 <h4>getGenericSound</h4>
-<pre class="methodSignature">protected&nbsp;<a href="../../sound/Sound.html" title="enum in net.minestom.server.sound">Sound</a>&nbsp;getGenericSound&#8203;(@NotNull
-                                <a href="../LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity)</pre>
+<pre class="methodSignature">protected&nbsp;<a href="../../sound/SoundEvent.html" title="enum in net.minestom.server.sound">SoundEvent</a>&nbsp;getGenericSound&#8203;(@NotNull
+                                     @NotNull <a href="../LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity)</pre>
 </li>
 </ul>
 <a id="getPlayerSound(net.minestom.server.entity.Player)">
@@ -531,8 +576,8 @@ public&nbsp;<a href="../../sound/Sound.html" title="enum in net.minestom.server.
 <ul class="blockList">
 <li class="blockList">
 <h4>getPlayerSound</h4>
-<pre class="methodSignature">protected&nbsp;<a href="../../sound/Sound.html" title="enum in net.minestom.server.sound">Sound</a>&nbsp;getPlayerSound&#8203;(@NotNull
-                               <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+<pre class="methodSignature">protected&nbsp;<a href="../../sound/SoundEvent.html" title="enum in net.minestom.server.sound">SoundEvent</a>&nbsp;getPlayerSound&#8203;(@NotNull
+                                    @NotNull <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 </li>
 </ul>
 <a id="getData()">

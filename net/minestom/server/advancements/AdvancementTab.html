@@ -189,8 +189,8 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected </code></td>
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,net.minestom.server.advancements.AdvancementRoot)">AdvancementTab</a></span>&#8203;(java.lang.String&nbsp;rootIdentifier,
-              <a href="AdvancementRoot.html" title="class in net.minestom.server.advancements">AdvancementRoot</a>&nbsp;root)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,net.minestom.server.advancements.AdvancementRoot)">AdvancementTab</a></span>&#8203;(@NotNull java.lang.String&nbsp;rootIdentifier,
+              @NotNull <a href="AdvancementRoot.html" title="class in net.minestom.server.advancements">AdvancementRoot</a>&nbsp;root)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -213,43 +213,43 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addViewer(net.minestom.server.entity.Player)">addViewer</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addViewer(net.minestom.server.entity.Player)">addViewer</a></span>&#8203;(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">Adds a viewer.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createAdvancement(java.lang.String,net.minestom.server.advancements.Advancement,net.minestom.server.advancements.Advancement)">createAdvancement</a></span>&#8203;(java.lang.String&nbsp;identifier,
-                 <a href="Advancement.html" title="class in net.minestom.server.advancements">Advancement</a>&nbsp;advancement,
-                 <a href="Advancement.html" title="class in net.minestom.server.advancements">Advancement</a>&nbsp;parent)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createAdvancement(java.lang.String,net.minestom.server.advancements.Advancement,net.minestom.server.advancements.Advancement)">createAdvancement</a></span>&#8203;(@NotNull java.lang.String&nbsp;identifier,
+                 @NotNull <a href="Advancement.html" title="class in net.minestom.server.advancements">Advancement</a>&nbsp;advancement,
+                 @NotNull <a href="Advancement.html" title="class in net.minestom.server.advancements">Advancement</a>&nbsp;parent)</code></th>
 <td class="colLast">
 <div class="block">Creates and add an advancement into this tab.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>protected <a href="../network/packet/server/play/AdvancementsPacket.html" title="class in net.minestom.server.network.packet.server.play">AdvancementsPacket</a></code></td>
+<td class="colFirst"><code>protected @NotNull <a href="../network/packet/server/play/AdvancementsPacket.html" title="class in net.minestom.server.network.packet.server.play">AdvancementsPacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createPacket()">createPacket</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Builds the packet which build the whole advancement tab.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="AdvancementRoot.html" title="class in net.minestom.server.advancements">AdvancementRoot</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="AdvancementRoot.html" title="class in net.minestom.server.advancements">AdvancementRoot</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRoot()">getRoot</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the root advancement of this tab.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>static java.util.Set&lt;<a href="AdvancementTab.html" title="class in net.minestom.server.advancements">AdvancementTab</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTabs(net.minestom.server.entity.Player)">getTabs</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<td class="colFirst"><code>static @Nullable java.util.Set&lt;<a href="AdvancementTab.html" title="class in net.minestom.server.advancements">AdvancementTab</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTabs(net.minestom.server.entity.Player)">getTabs</a></span>&#8203;(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">Gets all the tabs of a viewer.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code>java.util.Set&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.Set&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getViewers()">getViewers</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the viewers of this viewable element.</div>
@@ -257,7 +257,7 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeViewer(net.minestom.server.entity.Player)">removeViewer</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeViewer(net.minestom.server.entity.Player)">removeViewer</a></span>&#8203;(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">Removes a viewer.</div>
 </td>
@@ -275,7 +275,7 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;net.minestom.server.<a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></h3>
-<code><a href="../Viewable.html#isViewer(net.minestom.server.entity.Player)">isViewer</a>, <a href="../Viewable.html#sendPacketsToViewers(net.minestom.server.network.packet.server.ServerPacket...)">sendPacketsToViewers</a>, <a href="../Viewable.html#sendPacketToViewers(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewers</a>, <a href="../Viewable.html#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewersAndSelf</a></code></li>
+<code><a href="../Viewable.html#getViewersAsAudience()">getViewersAsAudience</a>, <a href="../Viewable.html#getViewersAsAudiences()">getViewersAsAudiences</a>, <a href="../Viewable.html#isViewer(net.minestom.server.entity.Player)">isViewer</a>, <a href="../Viewable.html#sendPacketsToViewers(net.minestom.server.network.packet.server.ServerPacket...)">sendPacketsToViewers</a>, <a href="../Viewable.html#sendPacketToViewers(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewers</a>, <a href="../Viewable.html#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewersAndSelf</a></code></li>
 </ul>
 </li>
 </ul>
@@ -319,9 +319,9 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <li class="blockList">
 <h4>AdvancementTab</h4>
 <pre>protected&nbsp;AdvancementTab&#8203;(@NotNull
-                         java.lang.String&nbsp;rootIdentifier,
+                         @NotNull java.lang.String&nbsp;rootIdentifier,
                          @NotNull
-                         <a href="AdvancementRoot.html" title="class in net.minestom.server.advancements">AdvancementRoot</a>&nbsp;root)</pre>
+                         @NotNull <a href="AdvancementRoot.html" title="class in net.minestom.server.advancements">AdvancementRoot</a>&nbsp;root)</pre>
 </li>
 </ul>
 </li>
@@ -341,8 +341,8 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <li class="blockList">
 <h4>getTabs</h4>
 <pre class="methodSignature">@Nullable
-public static&nbsp;java.util.Set&lt;<a href="AdvancementTab.html" title="class in net.minestom.server.advancements">AdvancementTab</a>&gt;&nbsp;getTabs&#8203;(@NotNull
-                                                    <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+public static&nbsp;@Nullable java.util.Set&lt;<a href="AdvancementTab.html" title="class in net.minestom.server.advancements">AdvancementTab</a>&gt;&nbsp;getTabs&#8203;(@NotNull
+                                                              @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 <div class="block">Gets all the tabs of a viewer.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -360,7 +360,7 @@ public static&nbsp;java.util.Set&lt;<a href="AdvancementTab.html" title="class i
 <li class="blockList">
 <h4>getRoot</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="AdvancementRoot.html" title="class in net.minestom.server.advancements">AdvancementRoot</a>&nbsp;getRoot()</pre>
+public&nbsp;@NotNull <a href="AdvancementRoot.html" title="class in net.minestom.server.advancements">AdvancementRoot</a>&nbsp;getRoot()</pre>
 <div class="block">Gets the root advancement of this tab.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -375,11 +375,11 @@ public&nbsp;<a href="AdvancementRoot.html" title="class in net.minestom.server.a
 <li class="blockList">
 <h4>createAdvancement</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;createAdvancement&#8203;(@NotNull
-                              java.lang.String&nbsp;identifier,
+                              @NotNull java.lang.String&nbsp;identifier,
                               @NotNull
-                              <a href="Advancement.html" title="class in net.minestom.server.advancements">Advancement</a>&nbsp;advancement,
+                              @NotNull <a href="Advancement.html" title="class in net.minestom.server.advancements">Advancement</a>&nbsp;advancement,
                               @NotNull
-                              <a href="Advancement.html" title="class in net.minestom.server.advancements">Advancement</a>&nbsp;parent)</pre>
+                              @NotNull <a href="Advancement.html" title="class in net.minestom.server.advancements">Advancement</a>&nbsp;parent)</pre>
 <div class="block">Creates and add an advancement into this tab.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -396,7 +396,7 @@ public&nbsp;<a href="AdvancementRoot.html" title="class in net.minestom.server.a
 <li class="blockList">
 <h4>createPacket</h4>
 <pre class="methodSignature">@NotNull
-protected&nbsp;<a href="../network/packet/server/play/AdvancementsPacket.html" title="class in net.minestom.server.network.packet.server.play">AdvancementsPacket</a>&nbsp;createPacket()</pre>
+protected&nbsp;@NotNull <a href="../network/packet/server/play/AdvancementsPacket.html" title="class in net.minestom.server.network.packet.server.play">AdvancementsPacket</a>&nbsp;createPacket()</pre>
 <div class="block">Builds the packet which build the whole advancement tab.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -411,7 +411,7 @@ protected&nbsp;<a href="../network/packet/server/play/AdvancementsPacket.html" t
 <li class="blockList">
 <h4>addViewer</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;addViewer&#8203;(@NotNull
-                         <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+                         @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Viewable.html#addViewer(net.minestom.server.entity.Player)">Viewable</a></code></span></div>
 <div class="block">Adds a viewer.</div>
 <dl>
@@ -431,7 +431,7 @@ protected&nbsp;<a href="../network/packet/server/play/AdvancementsPacket.html" t
 <li class="blockList">
 <h4>removeViewer</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;removeViewer&#8203;(@NotNull
-                            <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+                            @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Viewable.html#removeViewer(net.minestom.server.entity.Player)">Viewable</a></code></span></div>
 <div class="block">Removes a viewer.</div>
 <dl>
@@ -451,7 +451,7 @@ protected&nbsp;<a href="../network/packet/server/play/AdvancementsPacket.html" t
 <li class="blockList">
 <h4>getViewers</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.Set&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;getViewers()</pre>
+public&nbsp;@NotNull java.util.Set&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;getViewers()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Viewable.html#getViewers()">Viewable</a></code></span></div>
 <div class="block">Gets all the viewers of this viewable element.</div>
 <dl>

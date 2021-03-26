@@ -196,12 +196,12 @@ extends <a href="DeclareRecipesPacket.DeclaredRecipe.html" title="class in net.m
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,int,int,java.lang.String,net.minestom.server.network.packet.server.play.DeclareRecipesPacket.Ingredient%5B%5D,net.minestom.server.item.ItemStack)">DeclaredShapedCraftingRecipe</a></span>&#8203;(java.lang.String&nbsp;recipeId,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,int,int,java.lang.String,net.minestom.server.network.packet.server.play.DeclareRecipesPacket.Ingredient%5B%5D,net.minestom.server.item.ItemStack)">DeclaredShapedCraftingRecipe</a></span>&#8203;(@NotNull java.lang.String&nbsp;recipeId,
                             int&nbsp;width,
                             int&nbsp;height,
-                            java.lang.String&nbsp;group,
-                            <a href="DeclareRecipesPacket.Ingredient.html" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.Ingredient</a>[]&nbsp;ingredients,
-                            <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result)</code></th>
+                            @NotNull java.lang.String&nbsp;group,
+                            @NotNull <a href="DeclareRecipesPacket.Ingredient.html" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.Ingredient</a>[]&nbsp;ingredients,
+                            @NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -224,7 +224,7 @@ extends <a href="DeclareRecipesPacket.DeclaredRecipe.html" title="class in net.m
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(<a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(@NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -286,15 +286,15 @@ extends <a href="DeclareRecipesPacket.DeclaredRecipe.html" title="class in net.m
 <li class="blockList">
 <h4>DeclaredShapedCraftingRecipe</h4>
 <pre>public&nbsp;DeclaredShapedCraftingRecipe&#8203;(@NotNull
-                                    java.lang.String&nbsp;recipeId,
+                                    @NotNull java.lang.String&nbsp;recipeId,
                                     int&nbsp;width,
                                     int&nbsp;height,
                                     @NotNull
-                                    java.lang.String&nbsp;group,
+                                    @NotNull java.lang.String&nbsp;group,
                                     @NotNull
-                                    <a href="DeclareRecipesPacket.Ingredient.html" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.Ingredient</a>[]&nbsp;ingredients,
+                                    @NotNull <a href="DeclareRecipesPacket.Ingredient.html" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.Ingredient</a>[]&nbsp;ingredients,
                                     @NotNull
-                                    <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result)</pre>
+                                    @NotNull <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;result)</pre>
 </li>
 </ul>
 </li>
@@ -314,7 +314,7 @@ extends <a href="DeclareRecipesPacket.DeclaredRecipe.html" title="class in net.m
 <li class="blockList">
 <h4>write</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
-                  <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</pre>
+                  @NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="DeclareRecipesPacket.DeclaredRecipe.html#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></code>&nbsp;in class&nbsp;<code><a href="DeclareRecipesPacket.DeclaredRecipe.html" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.DeclaredRecipe</a></code></dd>

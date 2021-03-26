@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10,"i2":42};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -152,13 +152,22 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String)">SuggestionEntry</a></span>&#8203;(java.lang.String&nbsp;entry)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String)">SuggestionEntry</a></span>&#8203;(@NotNull java.lang.String&nbsp;entry)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,net.minestom.server.chat.JsonMessage)">SuggestionEntry</a></span>&#8203;(java.lang.String&nbsp;entry,
-               <a href="../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;tooltip)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,net.kyori.adventure.text.Component)">SuggestionEntry</a></span>&#8203;(@NotNull java.lang.String&nbsp;entry,
+               @Nullable net.kyori.adventure.text.Component&nbsp;tooltip)</code></th>
 <td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,net.minestom.server.chat.JsonMessage)">SuggestionEntry</a></span>&#8203;(@NotNull java.lang.String&nbsp;entry,
+               @Nullable <a href="../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;tooltip)</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use {<a href="#%3Cinit%3E(java.lang.String,net.minestom.server.chat.JsonMessage)"><code>SuggestionEntry(String, JsonMessage)</code></a>}</div>
+</div>
+</td>
 </tr>
 </table>
 </li>
@@ -172,21 +181,30 @@ extends java.lang.Object</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colFirst"><code>@NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntry()">getEntry</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
+<td class="colFirst"><code>@Nullable net.kyori.adventure.text.Component</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTooltip()">getTooltip</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>@Nullable <a href="../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTooltipJson()">getTooltipJson</a></span>()</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#getTooltip()"><code>getTooltip()</code></a></div>
+</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -218,10 +236,26 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>SuggestionEntry</h4>
-<pre>public&nbsp;SuggestionEntry&#8203;(@NotNull
-                       java.lang.String&nbsp;entry,
+<pre>@Deprecated
+public&nbsp;SuggestionEntry&#8203;(@NotNull
+                       @NotNull java.lang.String&nbsp;entry,
                        @Nullable
-                       <a href="../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;tooltip)</pre>
+                       @Nullable <a href="../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;tooltip)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use {<a href="#%3Cinit%3E(java.lang.String,net.minestom.server.chat.JsonMessage)"><code>SuggestionEntry(String, JsonMessage)</code></a>}</div>
+</div>
+</li>
+</ul>
+<a id="&lt;init&gt;(java.lang.String,net.kyori.adventure.text.Component)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SuggestionEntry</h4>
+<pre>public&nbsp;SuggestionEntry&#8203;(@NotNull
+                       @NotNull java.lang.String&nbsp;entry,
+                       @Nullable
+                       @Nullable net.kyori.adventure.text.Component&nbsp;tooltip)</pre>
 </li>
 </ul>
 <a id="&lt;init&gt;(java.lang.String)">
@@ -231,7 +265,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>SuggestionEntry</h4>
 <pre>public&nbsp;SuggestionEntry&#8203;(@NotNull
-                       java.lang.String&nbsp;entry)</pre>
+                       @NotNull java.lang.String&nbsp;entry)</pre>
 </li>
 </ul>
 </li>
@@ -251,17 +285,31 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getEntry</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.lang.String&nbsp;getEntry()</pre>
+public&nbsp;@NotNull java.lang.String&nbsp;getEntry()</pre>
 </li>
 </ul>
 <a id="getTooltip()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getTooltip</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getTooltip()</pre>
+public&nbsp;@Nullable net.kyori.adventure.text.Component&nbsp;getTooltip()</pre>
+</li>
+</ul>
+<a id="getTooltipJson()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getTooltipJson</h4>
+<pre class="methodSignature">@Deprecated
+@Nullable
+public&nbsp;@Nullable <a href="../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getTooltipJson()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#getTooltip()"><code>getTooltip()</code></a></div>
+</div>
 </li>
 </ul>
 </li>

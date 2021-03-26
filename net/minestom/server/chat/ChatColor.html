@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":9};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":42,"i1":42,"i2":41,"i3":41,"i4":41,"i5":41,"i6":42,"i7":42,"i8":42,"i9":42,"i10":42,"i11":42,"i12":42,"i13":42,"i14":41};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -130,8 +130,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <hr>
-<pre>public final class <span class="typeNameLabel">ChatColor</span>
+<pre>@Deprecated
+public final class <span class="typeNameLabel">ChatColor</span>
 extends java.lang.Object</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Represents a color in a text. You can either use one of the pre-made colors
  or make your own using RGB. <a href="#fromRGB(byte,byte,byte)"><code>fromRGB(byte, byte, byte)</code></a>.
  <p>
@@ -159,117 +161,163 @@ extends java.lang.Object</pre>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#BLACK">BLACK</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#BLUE">BLUE</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#BOLD">BOLD</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#BRIGHT_GREEN">BRIGHT_GREEN</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#CYAN">CYAN</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#DARK_BLUE">DARK_BLUE</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#DARK_CYAN">DARK_CYAN</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#DARK_GRAY">DARK_GRAY</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#DARK_GREEN">DARK_GREEN</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#DARK_RED">DARK_RED</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#GOLD">GOLD</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#GRAY">GRAY</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#ITALIC">ITALIC</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#NO_COLOR">NO_COLOR</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#OBFUSCATED">OBFUSCATED</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#PINK">PINK</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#PURPLE">PURPLE</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#RED">RED</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#RESET">RESET</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#STRIKETHROUGH">STRIKETHROUGH</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#UNDERLINED">UNDERLINED</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#WHITE">WHITE</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#YELLOW">YELLOW</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -283,98 +331,128 @@ extends java.lang.Object</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromId(int)">fromId</a></span>&#8203;(int&nbsp;id)</code></th>
+<td class="colFirst"><code>@NotNull <a href="../color/Color.html" title="class in net.minestom.server.color">Color</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#asColor()">asColor</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets a color based on its numerical id (0;15).</div>
-</td>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromLegacyColorCodes(char)">fromLegacyColorCodes</a></span>&#8203;(char&nbsp;colorCode)</code></th>
+<td class="colFirst"><code>@NotNull net.kyori.adventure.text.format.TextColor</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#asTextColor()">asTextColor</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets a color based on its legacy color code (eg: 1, 2, 3,...</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block">Gets the Adventure text color from this chat color.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromName(java.lang.String)">fromName</a></span>&#8203;(java.lang.String&nbsp;name)</code></th>
+<td class="colFirst"><code>static @NotNull <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromId(int)">fromId</a></span>&#8203;(int&nbsp;id)</code></th>
 <td class="colLast">
-<div class="block">Gets a color based on its name (eg: white, black, aqua, etc...).</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block">Gets a color based on its numerical id (0;15).</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>static <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
+<td class="colFirst"><code>static @NotNull <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromLegacyColorCodes(char)">fromLegacyColorCodes</a></span>&#8203;(char&nbsp;colorCode)</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block">Gets a color based on its legacy color code (eg: 1, 2, 3,...</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>static @NotNull <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromName(java.lang.String)">fromName</a></span>&#8203;(@NotNull java.lang.String&nbsp;name)</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block">Gets a color based on its name (eg: white, black, aqua, etc...).</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>static @NotNull <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromRGB(byte,byte,byte)">fromRGB</a></span>&#8203;(byte&nbsp;r,
        byte&nbsp;g,
        byte&nbsp;b)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Creates an RGB color.</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlue()">getBlue</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the blue component of the color.</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>java.lang.String</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCodeName()">getCodeName</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the code name.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getGreen()">getGreen</a></span>()</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlue()">getBlue</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets the green component of the color.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block">Gets the blue component of the color.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getId()">getId</a></span>()</code></th>
+<td class="colFirst"><code>@Nullable java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCodeName()">getCodeName</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets the color id, only present if this color has been retrieved from <a href="ChatColor.html" title="class in net.minestom.server.chat"><code>ChatColor</code></a> constants.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block">Gets the code name.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRed()">getRed</a></span>()</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getGreen()">getGreen</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets the red component of the color.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block">Gets the green component of the color.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isEmpty()">isEmpty</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getId()">getId</a></span>()</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block">Gets the color id, only present if this color has been retrieved from <a href="ChatColor.html" title="class in net.minestom.server.chat"><code>ChatColor</code></a> constants.</div>
+</td>
 </tr>
 <tr id="i10" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSpecial()">isSpecial</a></span>()</code></th>
+<td class="colFirst"><code>byte</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRed()">getRed</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets if the color is special (eg: no color, bold, reset, etc...).</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block">Gets the red component of the color.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
-<td class="colFirst"><code>java.lang.String</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isEmpty()">isEmpty</a></span>()</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i12" class="altColor">
-<td class="colFirst"><code>static java.util.Collection&lt;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&gt;</code></td>
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSpecial()">isSpecial</a></span>()</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block">Gets if the color is special (eg: no color, bold, reset, etc...).</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>@NotNull java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code>static @NotNull java.util.Collection&lt;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#values()">values</a></span>()</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets a collection of all chat colors</div>
 </td>
 </tr>
@@ -409,6 +487,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>NO_COLOR</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> NO_COLOR</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="RESET">
@@ -418,6 +497,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>RESET</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> RESET</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="BOLD">
@@ -427,6 +507,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>BOLD</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> BOLD</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="ITALIC">
@@ -436,6 +517,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>ITALIC</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> ITALIC</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="UNDERLINED">
@@ -445,6 +527,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>UNDERLINED</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> UNDERLINED</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="STRIKETHROUGH">
@@ -454,6 +537,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>STRIKETHROUGH</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> STRIKETHROUGH</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="OBFUSCATED">
@@ -463,6 +547,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>OBFUSCATED</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> OBFUSCATED</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="BLACK">
@@ -472,6 +557,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>BLACK</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> BLACK</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="DARK_BLUE">
@@ -481,6 +567,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>DARK_BLUE</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> DARK_BLUE</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="DARK_GREEN">
@@ -490,6 +577,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>DARK_GREEN</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> DARK_GREEN</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="DARK_CYAN">
@@ -499,6 +587,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>DARK_CYAN</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> DARK_CYAN</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="DARK_RED">
@@ -508,6 +597,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>DARK_RED</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> DARK_RED</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="PURPLE">
@@ -517,6 +607,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>PURPLE</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> PURPLE</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="GOLD">
@@ -526,6 +617,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>GOLD</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> GOLD</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="GRAY">
@@ -535,6 +627,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>GRAY</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> GRAY</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="DARK_GRAY">
@@ -544,6 +637,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>DARK_GRAY</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> DARK_GRAY</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="BLUE">
@@ -553,6 +647,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>BLUE</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> BLUE</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="BRIGHT_GREEN">
@@ -562,6 +657,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>BRIGHT_GREEN</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> BRIGHT_GREEN</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="CYAN">
@@ -571,6 +667,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>CYAN</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> CYAN</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="RED">
@@ -580,6 +677,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>RED</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> RED</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="PINK">
@@ -589,6 +687,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>PINK</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> PINK</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="YELLOW">
@@ -598,6 +697,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>YELLOW</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> YELLOW</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="WHITE">
@@ -607,6 +707,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>WHITE</h4>
 <pre>public static final&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a> WHITE</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 </li>
@@ -626,9 +727,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>fromRGB</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;fromRGB&#8203;(byte&nbsp;r,
-                                byte&nbsp;g,
-                                byte&nbsp;b)</pre>
+public static&nbsp;@NotNull <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;fromRGB&#8203;(byte&nbsp;r,
+                                         byte&nbsp;g,
+                                         byte&nbsp;b)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Creates an RGB color.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -647,8 +749,9 @@ public static&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.
 <li class="blockList">
 <h4>fromName</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;fromName&#8203;(@NotNull
-                                 java.lang.String&nbsp;name)</pre>
+public static&nbsp;@NotNull <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;fromName&#8203;(@NotNull
+                                          @NotNull java.lang.String&nbsp;name)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets a color based on its name (eg: white, black, aqua, etc...).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -665,7 +768,8 @@ public static&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.
 <li class="blockList">
 <h4>fromId</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;fromId&#8203;(int&nbsp;id)</pre>
+public static&nbsp;@NotNull <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;fromId&#8203;(int&nbsp;id)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets a color based on its numerical id (0;15).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -682,7 +786,8 @@ public static&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.
 <li class="blockList">
 <h4>fromLegacyColorCodes</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;fromLegacyColorCodes&#8203;(char&nbsp;colorCode)</pre>
+public static&nbsp;@NotNull <a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;fromLegacyColorCodes&#8203;(char&nbsp;colorCode)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets a color based on its legacy color code (eg: 1, 2, 3,... f).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -699,7 +804,8 @@ public static&nbsp;<a href="ChatColor.html" title="class in net.minestom.server.
 <li class="blockList">
 <h4>values</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;java.util.Collection&lt;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&gt;&nbsp;values()</pre>
+public static&nbsp;@NotNull java.util.Collection&lt;<a href="ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&gt;&nbsp;values()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets a collection of all chat colors</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -714,6 +820,7 @@ public static&nbsp;java.util.Collection&lt;<a href="ChatColor.html" title="class
 <li class="blockList">
 <h4>isEmpty</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isEmpty()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="getRed()">
@@ -723,6 +830,7 @@ public static&nbsp;java.util.Collection&lt;<a href="ChatColor.html" title="class
 <li class="blockList">
 <h4>getRed</h4>
 <pre class="methodSignature">public&nbsp;byte&nbsp;getRed()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the red component of the color.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -737,6 +845,7 @@ public static&nbsp;java.util.Collection&lt;<a href="ChatColor.html" title="class
 <li class="blockList">
 <h4>getGreen</h4>
 <pre class="methodSignature">public&nbsp;byte&nbsp;getGreen()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the green component of the color.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -751,6 +860,7 @@ public static&nbsp;java.util.Collection&lt;<a href="ChatColor.html" title="class
 <li class="blockList">
 <h4>getBlue</h4>
 <pre class="methodSignature">public&nbsp;byte&nbsp;getBlue()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the blue component of the color.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -765,6 +875,7 @@ public static&nbsp;java.util.Collection&lt;<a href="ChatColor.html" title="class
 <li class="blockList">
 <h4>isSpecial</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isSpecial()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets if the color is special (eg: no color, bold, reset, etc...).</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -779,7 +890,8 @@ public static&nbsp;java.util.Collection&lt;<a href="ChatColor.html" title="class
 <li class="blockList">
 <h4>getCodeName</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;java.lang.String&nbsp;getCodeName()</pre>
+public&nbsp;@Nullable java.lang.String&nbsp;getCodeName()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the code name.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -794,6 +906,7 @@ public&nbsp;java.lang.String&nbsp;getCodeName()</pre>
 <li class="blockList">
 <h4>getId</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;getId()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the color id, only present if this color has been retrieved from <a href="ChatColor.html" title="class in net.minestom.server.chat"><code>ChatColor</code></a> constants.
  <p>
  Should only be used for some special packets which require it.</div>
@@ -805,6 +918,33 @@ public&nbsp;java.lang.String&nbsp;getCodeName()</pre>
 </dl>
 </li>
 </ul>
+<a id="asTextColor()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>asTextColor</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull net.kyori.adventure.text.format.TextColor&nbsp;asTextColor()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block">Gets the Adventure text color from this chat color.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the text color</dd>
+</dl>
+</li>
+</ul>
+<a id="asColor()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>asColor</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="../color/Color.html" title="class in net.minestom.server.color">Color</a>&nbsp;asColor()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
+</li>
+</ul>
 <a id="toString()">
 <!--   -->
 </a>
@@ -812,7 +952,8 @@ public&nbsp;java.lang.String&nbsp;getCodeName()</pre>
 <li class="blockList">
 <h4>toString</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.lang.String&nbsp;toString()</pre>
+public&nbsp;@NotNull java.lang.String&nbsp;toString()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>toString</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>

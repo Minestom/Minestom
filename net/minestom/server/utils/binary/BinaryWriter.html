@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -175,13 +175,13 @@ extends java.io.OutputStream</pre>
 </td>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(io.netty.buffer.ByteBuf)">BinaryWriter</a></span>&#8203;(io.netty.buffer.ByteBuf&nbsp;buffer)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(io.netty.buffer.ByteBuf)">BinaryWriter</a></span>&#8203;(@NotNull io.netty.buffer.ByteBuf&nbsp;buffer)</code></th>
 <td class="colLast">
 <div class="block">Creates a <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a> from multiple a single buffer.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(io.netty.buffer.ByteBuf...)">BinaryWriter</a></span>&#8203;(io.netty.buffer.ByteBuf...&nbsp;buffers)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(io.netty.buffer.ByteBuf...)">BinaryWriter</a></span>&#8203;(@NotNull io.netty.buffer.ByteBuf...&nbsp;buffers)</code></th>
 <td class="colLast">
 <div class="block">Creates a <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a> from multiple buffers.</div>
 </td>
@@ -239,14 +239,14 @@ extends java.io.OutputStream</pre>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeAtEnd(net.minestom.server.utils.binary.BinaryWriter)">writeAtEnd</a></span>&#8203;(<a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;footerWriter)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeAtEnd(net.minestom.server.utils.binary.BinaryWriter)">writeAtEnd</a></span>&#8203;(@NotNull <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;footerWriter)</code></th>
 <td class="colLast">
 <div class="block">Adds a <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>'s <code>ByteBuf</code> at the end of this writer.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeAtStart(net.minestom.server.utils.binary.BinaryWriter)">writeAtStart</a></span>&#8203;(<a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;headerWriter)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeAtStart(net.minestom.server.utils.binary.BinaryWriter)">writeAtStart</a></span>&#8203;(@NotNull <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;headerWriter)</code></th>
 <td class="colLast">
 <div class="block">Adds a <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>'s <code>ByteBuf</code> at the beginning of this writer.</div>
 </td>
@@ -260,7 +260,7 @@ extends java.io.OutputStream</pre>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeBlockPosition(net.minestom.server.utils.BlockPosition)">writeBlockPosition</a></span>&#8203;(<a href="../BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeBlockPosition(net.minestom.server.utils.BlockPosition)">writeBlockPosition</a></span>&#8203;(@NotNull <a href="../BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
@@ -279,7 +279,7 @@ extends java.io.OutputStream</pre>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeBytes(byte%5B%5D)">writeBytes</a></span>&#8203;(byte[]&nbsp;bytes)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeBytes(@org.jetbrains.annotations.NotNullbyte%5B%5D)">writeBytes</a></span>&#8203;(@org.jetbrains.annotations.NotNull byte[]&nbsp;bytes)</code></th>
 <td class="colLast">
 <div class="block">Writes a byte array.</div>
 </td>
@@ -293,86 +293,93 @@ extends java.io.OutputStream</pre>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeComponent(net.kyori.adventure.text.Component)">writeComponent</a></span>&#8203;(net.kyori.adventure.text.Component&nbsp;component)</code></th>
+<td class="colLast">
+<div class="block">Writes a component to the buffer as a sized string.</div>
+</td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeDouble(double)">writeDouble</a></span>&#8203;(double&nbsp;d)</code></th>
 <td class="colLast">
 <div class="block">Writes a single double to the buffer.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeFloat(float)">writeFloat</a></span>&#8203;(float&nbsp;f)</code></th>
 <td class="colLast">
 <div class="block">Writes a single float to the buffer.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeInt(int)">writeInt</a></span>&#8203;(int&nbsp;i)</code></th>
 <td class="colLast">
 <div class="block">Writes a single int to the buffer.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeItemStack(net.minestom.server.item.ItemStack)">writeItemStack</a></span>&#8203;(<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeItemStack(net.minestom.server.item.ItemStack)">writeItemStack</a></span>&#8203;(@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeLong(long)">writeLong</a></span>&#8203;(long&nbsp;l)</code></th>
 <td class="colLast">
 <div class="block">Writes a single long to the buffer.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeNBT(java.lang.String,org.jglrxavpok.hephaistos.nbt.NBT)">writeNBT</a></span>&#8203;(java.lang.String&nbsp;name,
-        org.jglrxavpok.hephaistos.nbt.NBT&nbsp;tag)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeNBT(java.lang.String,org.jglrxavpok.hephaistos.nbt.NBT)">writeNBT</a></span>&#8203;(@NotNull java.lang.String&nbsp;name,
+        @NotNull org.jglrxavpok.hephaistos.nbt.NBT&nbsp;tag)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeShort(short)">writeShort</a></span>&#8203;(short&nbsp;s)</code></th>
 <td class="colLast">
 <div class="block">Writes a single short to the buffer.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeSizedString(java.lang.String)">writeSizedString</a></span>&#8203;(java.lang.String&nbsp;string)</code></th>
-<td class="colLast">
-<div class="block">Writes a string to the buffer.</div>
-</td>
-</tr>
 <tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeStringArray(java.lang.String%5B%5D)">writeStringArray</a></span>&#8203;(java.lang.String[]&nbsp;array)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeSizedString(java.lang.String)">writeSizedString</a></span>&#8203;(@NotNull java.lang.String&nbsp;string)</code></th>
 <td class="colLast">
 <div class="block">Writes a string to the buffer.</div>
 </td>
 </tr>
 <tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeUuid(java.util.UUID)">writeUuid</a></span>&#8203;(java.util.UUID&nbsp;uuid)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeStringArray(java.lang.String%5B%5D)">writeStringArray</a></span>&#8203;(@NotNull java.lang.String[]&nbsp;array)</code></th>
+<td class="colLast">
+<div class="block">Writes a string to the buffer.</div>
+</td>
+</tr>
+<tr id="i23" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeUuid(java.util.UUID)">writeUuid</a></span>&#8203;(@NotNull java.util.UUID&nbsp;uuid)</code></th>
 <td class="colLast">
 <div class="block">Writes an <code>UUID</code>.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeVarInt(int)">writeVarInt</a></span>&#8203;(int&nbsp;i)</code></th>
 <td class="colLast">
 <div class="block">Writes a single var-int to the buffer.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeVarIntArray(int%5B%5D)">writeVarIntArray</a></span>&#8203;(int[]&nbsp;array)</code></th>
 <td class="colLast">
 <div class="block">Writes a var-int array to the buffer.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeVarLong(long)">writeVarLong</a></span>&#8203;(long&nbsp;l)</code></th>
 <td class="colLast">
@@ -431,7 +438,7 @@ extends java.io.OutputStream</pre>
 <li class="blockList">
 <h4>BinaryWriter</h4>
 <pre>public&nbsp;BinaryWriter&#8203;(@NotNull
-                    io.netty.buffer.ByteBuf&nbsp;buffer)</pre>
+                    @NotNull io.netty.buffer.ByteBuf&nbsp;buffer)</pre>
 <div class="block">Creates a <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a> from multiple a single buffer.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -446,7 +453,7 @@ extends java.io.OutputStream</pre>
 <li class="blockList">
 <h4>BinaryWriter</h4>
 <pre>public&nbsp;BinaryWriter&#8203;(@NotNull
-                    io.netty.buffer.ByteBuf...&nbsp;buffers)</pre>
+                    @NotNull io.netty.buffer.ByteBuf...&nbsp;buffers)</pre>
 <div class="block">Creates a <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a> from multiple buffers.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -474,6 +481,20 @@ extends java.io.OutputStream</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="writeComponent(net.kyori.adventure.text.Component)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeComponent</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;writeComponent&#8203;(net.kyori.adventure.text.Component&nbsp;component)</pre>
+<div class="block">Writes a component to the buffer as a sized string.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>component</code> - the component</dd>
+</dl>
+</li>
+</ul>
 <a id="writeBoolean(boolean)">
 <!--   -->
 </a>
@@ -621,7 +642,7 @@ extends java.io.OutputStream</pre>
 <li class="blockList">
 <h4>writeSizedString</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;writeSizedString&#8203;(@NotNull
-                             java.lang.String&nbsp;string)</pre>
+                             @NotNull java.lang.String&nbsp;string)</pre>
 <div class="block">Writes a string to the buffer.
  <p>
  The size is a var-int type.</div>
@@ -647,14 +668,14 @@ extends java.io.OutputStream</pre>
 </dl>
 </li>
 </ul>
-<a id="writeBytes(byte[])">
+<a id="writeBytes(@org.jetbrains.annotations.NotNullbyte[])">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>writeBytes</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;writeBytes&#8203;(@NotNull
-                       byte[]&nbsp;bytes)</pre>
+                       @org.jetbrains.annotations.NotNull byte[]&nbsp;bytes)</pre>
 <div class="block">Writes a byte array.
  <p>
  WARNING: it doesn't write the length of <code>bytes</code>.</div>
@@ -671,7 +692,7 @@ extends java.io.OutputStream</pre>
 <li class="blockList">
 <h4>writeStringArray</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;writeStringArray&#8203;(@NotNull
-                             java.lang.String[]&nbsp;array)</pre>
+                             @NotNull java.lang.String[]&nbsp;array)</pre>
 <div class="block">Writes a string to the buffer.
  <p>
  The array is sized by a var-int and all strings are wrote using <a href="#writeSizedString(java.lang.String)"><code>writeSizedString(String)</code></a>.</div>
@@ -702,7 +723,7 @@ extends java.io.OutputStream</pre>
 <li class="blockList">
 <h4>writeUuid</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;writeUuid&#8203;(@NotNull
-                      java.util.UUID&nbsp;uuid)</pre>
+                      @NotNull java.util.UUID&nbsp;uuid)</pre>
 <div class="block">Writes an <code>UUID</code>.
  It is done by writing both long, the most and least significant bits.</div>
 <dl>
@@ -718,7 +739,7 @@ extends java.io.OutputStream</pre>
 <li class="blockList">
 <h4>writeBlockPosition</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;writeBlockPosition&#8203;(@NotNull
-                               <a href="../BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</pre>
+                               @NotNull <a href="../BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition)</pre>
 </li>
 </ul>
 <a id="writeBlockPosition(int,int,int)">
@@ -739,7 +760,7 @@ extends java.io.OutputStream</pre>
 <li class="blockList">
 <h4>writeItemStack</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;writeItemStack&#8203;(@NotNull
-                           <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
+                           @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
 </li>
 </ul>
 <a id="writeNBT(java.lang.String,org.jglrxavpok.hephaistos.nbt.NBT)">
@@ -749,9 +770,9 @@ extends java.io.OutputStream</pre>
 <li class="blockList">
 <h4>writeNBT</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;writeNBT&#8203;(@NotNull
-                     java.lang.String&nbsp;name,
+                     @NotNull java.lang.String&nbsp;name,
                      @NotNull
-                     org.jglrxavpok.hephaistos.nbt.NBT&nbsp;tag)</pre>
+                     @NotNull org.jglrxavpok.hephaistos.nbt.NBT&nbsp;tag)</pre>
 </li>
 </ul>
 <a id="toByteArray()">
@@ -775,7 +796,7 @@ extends java.io.OutputStream</pre>
 <li class="blockList">
 <h4>writeAtStart</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;writeAtStart&#8203;(@NotNull
-                         <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;headerWriter)</pre>
+                         @NotNull <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;headerWriter)</pre>
 <div class="block">Adds a <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>'s <code>ByteBuf</code> at the beginning of this writer.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -790,7 +811,7 @@ extends java.io.OutputStream</pre>
 <li class="blockList">
 <h4>writeAtEnd</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;writeAtEnd&#8203;(@NotNull
-                       <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;footerWriter)</pre>
+                       @NotNull <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;footerWriter)</pre>
 <div class="block">Adds a <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>'s <code>ByteBuf</code> at the end of this writer.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

@@ -180,8 +180,8 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.entity.PlayerSkin)">PlayerSkinInitEvent</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                   <a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;currentSkin)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.entity.PlayerSkin)">PlayerSkinInitEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                   @Nullable <a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;currentSkin)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -203,7 +203,7 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a></code></td>
+<td class="colFirst"><code>@Nullable <a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSkin()">getSkin</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the spawning skin of the player.</div>
@@ -211,7 +211,7 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSkin(net.minestom.server.entity.PlayerSkin)">setSkin</a></span>&#8203;(<a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;skin)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSkin(net.minestom.server.entity.PlayerSkin)">setSkin</a></span>&#8203;(@Nullable <a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;skin)</code></th>
 <td class="colLast">
 <div class="block">Sets the spawning skin of the player.</div>
 </td>
@@ -254,9 +254,9 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <li class="blockList">
 <h4>PlayerSkinInitEvent</h4>
 <pre>public&nbsp;PlayerSkinInitEvent&#8203;(@NotNull
-                           <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                           @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                            @Nullable
-                           <a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;currentSkin)</pre>
+                           @Nullable <a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;currentSkin)</pre>
 </li>
 </ul>
 </li>
@@ -276,7 +276,7 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <li class="blockList">
 <h4>getSkin</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;getSkin()</pre>
+public&nbsp;@Nullable <a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;getSkin()</pre>
 <div class="block">Gets the spawning skin of the player.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -291,7 +291,7 @@ public&nbsp;<a href="../../entity/PlayerSkin.html" title="class in net.minestom.
 <li class="blockList">
 <h4>setSkin</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setSkin&#8203;(@Nullable
-                    <a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;skin)</pre>
+                    @Nullable <a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;skin)</pre>
 <div class="block">Sets the spawning skin of the player.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

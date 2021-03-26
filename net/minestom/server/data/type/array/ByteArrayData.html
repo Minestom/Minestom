@@ -179,29 +179,29 @@ extends <a href="../../DataType.html" title="class in net.minestom.server.data">
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>byte[]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#decode(net.minestom.server.utils.binary.BinaryReader)">decode</a></span>&#8203;(<a href="../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</code></th>
+<td class="colFirst"><code>@org.jetbrains.annotations.NotNull byte[]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#decode(net.minestom.server.utils.binary.BinaryReader)">decode</a></span>&#8203;(@NotNull <a href="../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</code></th>
 <td class="colLast">
 <div class="block">Decodes the data type.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static byte[]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#decodeByteArray(net.minestom.server.utils.binary.BinaryReader)">decodeByteArray</a></span>&#8203;(<a href="../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;binaryReader)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#decodeByteArray(net.minestom.server.utils.binary.BinaryReader)">decodeByteArray</a></span>&#8203;(@NotNull <a href="../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;binaryReader)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#encode(net.minestom.server.utils.binary.BinaryWriter,byte%5B%5D)">encode</a></span>&#8203;(<a href="../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer,
-      byte[]&nbsp;value)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#encode(net.minestom.server.utils.binary.BinaryWriter,@org.jetbrains.annotations.NotNullbyte%5B%5D)">encode</a></span>&#8203;(@NotNull <a href="../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer,
+      @org.jetbrains.annotations.NotNull byte[]&nbsp;value)</code></th>
 <td class="colLast">
 <div class="block">Encodes the data type.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#encodeByteArray(net.minestom.server.utils.binary.BinaryWriter,byte%5B%5D)">encodeByteArray</a></span>&#8203;(<a href="../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;binaryWriter,
-               byte[]&nbsp;value)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#encodeByteArray(net.minestom.server.utils.binary.BinaryWriter,@org.jetbrains.annotations.NotNullbyte%5B%5D)">encodeByteArray</a></span>&#8203;(@NotNull <a href="../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;binaryWriter,
+               @org.jetbrains.annotations.NotNull byte[]&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -247,16 +247,16 @@ extends <a href="../../DataType.html" title="class in net.minestom.server.data">
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="encode(net.minestom.server.utils.binary.BinaryWriter,byte[])">
+<a id="encode(net.minestom.server.utils.binary.BinaryWriter,@org.jetbrains.annotations.NotNullbyte[])">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>encode</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;encode&#8203;(@NotNull
-                   <a href="../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer,
+                   @NotNull <a href="../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer,
                    @NotNull
-                   byte[]&nbsp;value)</pre>
+                   @org.jetbrains.annotations.NotNull byte[]&nbsp;value)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../DataType.html#encode(net.minestom.server.utils.binary.BinaryWriter,T)">DataType</a></code></span></div>
 <div class="block">Encodes the data type.
  <p>
@@ -277,8 +277,8 @@ extends <a href="../../DataType.html" title="class in net.minestom.server.data">
 <li class="blockList">
 <h4>decode</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;byte[]&nbsp;decode&#8203;(@NotNull
-                     <a href="../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</pre>
+public&nbsp;@org.jetbrains.annotations.NotNull byte[]&nbsp;decode&#8203;(@NotNull
+                                                        @NotNull <a href="../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../DataType.html#decode(net.minestom.server.utils.binary.BinaryReader)">DataType</a></code></span></div>
 <div class="block">Decodes the data type.</div>
 <dl>
@@ -291,16 +291,16 @@ public&nbsp;byte[]&nbsp;decode&#8203;(@NotNull
 </dl>
 </li>
 </ul>
-<a id="encodeByteArray(net.minestom.server.utils.binary.BinaryWriter,byte[])">
+<a id="encodeByteArray(net.minestom.server.utils.binary.BinaryWriter,@org.jetbrains.annotations.NotNullbyte[])">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>encodeByteArray</h4>
 <pre class="methodSignature">public static&nbsp;void&nbsp;encodeByteArray&#8203;(@NotNull
-                                   <a href="../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;binaryWriter,
+                                   @NotNull <a href="../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;binaryWriter,
                                    @NotNull
-                                   byte[]&nbsp;value)</pre>
+                                   @org.jetbrains.annotations.NotNull byte[]&nbsp;value)</pre>
 </li>
 </ul>
 <a id="decodeByteArray(net.minestom.server.utils.binary.BinaryReader)">
@@ -310,7 +310,7 @@ public&nbsp;byte[]&nbsp;decode&#8203;(@NotNull
 <li class="blockList">
 <h4>decodeByteArray</h4>
 <pre class="methodSignature">public static&nbsp;byte[]&nbsp;decodeByteArray&#8203;(@NotNull
-                                     <a href="../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;binaryReader)</pre>
+                                     @NotNull <a href="../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;binaryReader)</pre>
 </li>
 </ul>
 </li>

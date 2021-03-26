@@ -235,29 +235,29 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a></code></td>
+<td class="colFirst"><code>@Nullable <a href="CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCommandData()">getCommandData</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colFirst"><code>@NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInput()">getInput</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="ParsedCommand.html" title="class in net.minestom.server.command.builder">ParsedCommand</a></code></td>
+<td class="colFirst"><code>@Nullable <a href="ParsedCommand.html" title="class in net.minestom.server.command.builder">ParsedCommand</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getParsedCommand()">getParsedCommand</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="CommandResult.Type.html" title="enum in net.minestom.server.command.builder">CommandResult.Type</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="CommandResult.Type.html" title="enum in net.minestom.server.command.builder">CommandResult.Type</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getType()">getType</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>static <a href="CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#of(net.minestom.server.command.builder.CommandResult.Type,java.lang.String)">of</a></span>&#8203;(<a href="CommandResult.Type.html" title="enum in net.minestom.server.command.builder">CommandResult.Type</a>&nbsp;type,
-  java.lang.String&nbsp;input)</code></th>
+<td class="colFirst"><code>static @NotNull <a href="CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#of(net.minestom.server.command.builder.CommandResult.Type,java.lang.String)">of</a></span>&#8203;(@NotNull <a href="CommandResult.Type.html" title="enum in net.minestom.server.command.builder">CommandResult.Type</a>&nbsp;type,
+  @NotNull java.lang.String&nbsp;input)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -356,7 +356,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getType</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="CommandResult.Type.html" title="enum in net.minestom.server.command.builder">CommandResult.Type</a>&nbsp;getType()</pre>
+public&nbsp;@NotNull <a href="CommandResult.Type.html" title="enum in net.minestom.server.command.builder">CommandResult.Type</a>&nbsp;getType()</pre>
 </li>
 </ul>
 <a id="getInput()">
@@ -366,7 +366,7 @@ public&nbsp;<a href="CommandResult.Type.html" title="enum in net.minestom.server
 <li class="blockList">
 <h4>getInput</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.lang.String&nbsp;getInput()</pre>
+public&nbsp;@NotNull java.lang.String&nbsp;getInput()</pre>
 </li>
 </ul>
 <a id="getParsedCommand()">
@@ -376,7 +376,7 @@ public&nbsp;java.lang.String&nbsp;getInput()</pre>
 <li class="blockList">
 <h4>getParsedCommand</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="ParsedCommand.html" title="class in net.minestom.server.command.builder">ParsedCommand</a>&nbsp;getParsedCommand()</pre>
+public&nbsp;@Nullable <a href="ParsedCommand.html" title="class in net.minestom.server.command.builder">ParsedCommand</a>&nbsp;getParsedCommand()</pre>
 </li>
 </ul>
 <a id="getCommandData()">
@@ -386,7 +386,7 @@ public&nbsp;<a href="ParsedCommand.html" title="class in net.minestom.server.com
 <li class="blockList">
 <h4>getCommandData</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a>&nbsp;getCommandData()</pre>
+public&nbsp;@Nullable <a href="CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a>&nbsp;getCommandData()</pre>
 </li>
 </ul>
 <a id="of(net.minestom.server.command.builder.CommandResult.Type,java.lang.String)">
@@ -396,10 +396,10 @@ public&nbsp;<a href="CommandData.html" title="class in net.minestom.server.comma
 <li class="blockList">
 <h4>of</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a>&nbsp;of&#8203;(@NotNull
-                               <a href="CommandResult.Type.html" title="enum in net.minestom.server.command.builder">CommandResult.Type</a>&nbsp;type,
-                               @NotNull
-                               java.lang.String&nbsp;input)</pre>
+public static&nbsp;@NotNull <a href="CommandResult.html" title="class in net.minestom.server.command.builder">CommandResult</a>&nbsp;of&#8203;(@NotNull
+                                        @NotNull <a href="CommandResult.Type.html" title="enum in net.minestom.server.command.builder">CommandResult.Type</a>&nbsp;type,
+                                        @NotNull
+                                        @NotNull java.lang.String&nbsp;input)</pre>
 </li>
 </ul>
 </li>

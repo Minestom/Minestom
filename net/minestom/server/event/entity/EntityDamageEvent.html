@@ -185,8 +185,8 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.LivingEntity,net.minestom.server.entity.damage.DamageType,float)">EntityDamageEvent</a></span>&#8203;(<a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity,
-                 <a href="../../entity/damage/DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a>&nbsp;damageType,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.LivingEntity,net.minestom.server.entity.damage.DamageType,float)">EntityDamageEvent</a></span>&#8203;(@NotNull <a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity,
+                 @NotNull <a href="../../entity/damage/DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a>&nbsp;damageType,
                  float&nbsp;damage)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -216,14 +216,14 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../entity/damage/DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../entity/damage/DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDamageType()">getDamageType</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the damage type.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntity()">getEntity</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the entity of this event.</div>
@@ -281,9 +281,9 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>EntityDamageEvent</h4>
 <pre>public&nbsp;EntityDamageEvent&#8203;(@NotNull
-                         <a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity,
+                         @NotNull <a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity,
                          @NotNull
-                         <a href="../../entity/damage/DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a>&nbsp;damageType,
+                         @NotNull <a href="../../entity/damage/DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a>&nbsp;damageType,
                          float&nbsp;damage)</pre>
 </li>
 </ul>
@@ -304,7 +304,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <li class="blockList">
 <h4>getEntity</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;getEntity()</pre>
+public&nbsp;@NotNull <a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;getEntity()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../EntityEvent.html#getEntity()">EntityEvent</a></code></span></div>
 <div class="block">Gets the entity of this event.</div>
 <dl>
@@ -322,7 +322,7 @@ public&nbsp;<a href="../../entity/LivingEntity.html" title="class in net.minesto
 <li class="blockList">
 <h4>getDamageType</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../entity/damage/DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a>&nbsp;getDamageType()</pre>
+public&nbsp;@NotNull <a href="../../entity/damage/DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a>&nbsp;getDamageType()</pre>
 <div class="block">Gets the damage type.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

@@ -178,27 +178,27 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addDimension(net.minestom.server.world.DimensionType)">addDimension</a></span>&#8203;(<a href="DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addDimension(net.minestom.server.world.DimensionType)">addDimension</a></span>&#8203;(@NotNull <a href="DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType)</code></th>
 <td class="colLast">
 <div class="block">Adds a new dimension type.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeDimension(net.minestom.server.world.DimensionType)">removeDimension</a></span>&#8203;(<a href="DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeDimension(net.minestom.server.world.DimensionType)">removeDimension</a></span>&#8203;(@NotNull <a href="DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType)</code></th>
 <td class="colLast">
 <div class="block">Removes a dimension type.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>org.jglrxavpok.hephaistos.nbt.NBTCompound</code></td>
+<td class="colFirst"><code>@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toNBT()">toNBT</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Creates the <code>NBTCompound</code> containing all the registered dimensions.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.List&lt;<a href="DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unmodifiableList()">unmodifiableList</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns an immutable copy of the dimension types already registered.</div>
@@ -254,7 +254,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>addDimension</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;addDimension&#8203;(@NotNull
-                         <a href="DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType)</pre>
+                         @NotNull <a href="DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType)</pre>
 <div class="block">Adds a new dimension type. This does NOT send the new list to players.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -269,7 +269,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>removeDimension</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;removeDimension&#8203;(@NotNull
-                               <a href="DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType)</pre>
+                               @NotNull <a href="DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType)</pre>
 <div class="block">Removes a dimension type. This does NOT send the new list to players.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -286,7 +286,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>unmodifiableList</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.List&lt;<a href="DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&gt;&nbsp;unmodifiableList()</pre>
+public&nbsp;@NotNull java.util.List&lt;<a href="DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&gt;&nbsp;unmodifiableList()</pre>
 <div class="block">Returns an immutable copy of the dimension types already registered.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -301,7 +301,7 @@ public&nbsp;java.util.List&lt;<a href="DimensionType.html" title="class in net.m
 <li class="blockList">
 <h4>toNBT</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;toNBT()</pre>
+public&nbsp;@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;toNBT()</pre>
 <div class="block">Creates the <code>NBTCompound</code> containing all the registered dimensions.
  <p>
  Used when a player connects.</div>

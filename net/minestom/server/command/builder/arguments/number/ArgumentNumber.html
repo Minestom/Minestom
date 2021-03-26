@@ -231,7 +231,7 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="ArgumentNumber.html" title="class in net.minestom.server.command.builder.arguments.number">ArgumentNumber</a>&lt;<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull <a href="ArgumentNumber.html" title="class in net.minestom.server.command.builder.arguments.number">ArgumentNumber</a>&lt;<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#between(T,T)">between</a></span>&#8203;(<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&nbsp;min,
        <a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&nbsp;max)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -259,7 +259,7 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>protected int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRadix(java.lang.String)">getRadix</a></span>&#8203;(java.lang.String&nbsp;value)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRadix(java.lang.String)">getRadix</a></span>&#8203;(@NotNull java.lang.String&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -277,23 +277,23 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 </td>
 </tr>
 <tr id="i7" class="rowColor">
-<td class="colFirst"><code><a href="ArgumentNumber.html" title="class in net.minestom.server.command.builder.arguments.number">ArgumentNumber</a>&lt;<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull <a href="ArgumentNumber.html" title="class in net.minestom.server.command.builder.arguments.number">ArgumentNumber</a>&lt;<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#max(T)">max</a></span>&#8203;(<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
-<td class="colFirst"><code><a href="ArgumentNumber.html" title="class in net.minestom.server.command.builder.arguments.number">ArgumentNumber</a>&lt;<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull <a href="ArgumentNumber.html" title="class in net.minestom.server.command.builder.arguments.number">ArgumentNumber</a>&lt;<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#min(T)">min</a></span>&#8203;(<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
-<td class="colFirst"><code>protected java.lang.String</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parseValue(java.lang.String)">parseValue</a></span>&#8203;(java.lang.String&nbsp;value)</code></th>
+<td class="colFirst"><code>protected @NotNull java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parseValue(java.lang.String)">parseValue</a></span>&#8203;(@NotNull java.lang.String&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
-<td class="colFirst"><code>protected java.lang.String</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeScientificNotation(java.lang.String)">removeScientificNotation</a></span>&#8203;(java.lang.String&nbsp;value)</code></th>
+<td class="colFirst"><code>protected @Nullable java.lang.String</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeScientificNotation(java.lang.String)">removeScientificNotation</a></span>&#8203;(@NotNull java.lang.String&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -427,8 +427,8 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <li class="blockList">
 <h4>min</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="ArgumentNumber.html" title="class in net.minestom.server.command.builder.arguments.number">ArgumentNumber</a>&lt;<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&gt;&nbsp;min&#8203;(@NotNull
-                             <a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&nbsp;value)</pre>
+public&nbsp;@NotNull <a href="ArgumentNumber.html" title="class in net.minestom.server.command.builder.arguments.number">ArgumentNumber</a>&lt;<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&gt;&nbsp;min&#8203;(@NotNull
+                                      <a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&nbsp;value)</pre>
 </li>
 </ul>
 <a id="max(java.lang.Number)">
@@ -440,8 +440,8 @@ public&nbsp;<a href="ArgumentNumber.html" title="class in net.minestom.server.co
 <li class="blockList">
 <h4>max</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="ArgumentNumber.html" title="class in net.minestom.server.command.builder.arguments.number">ArgumentNumber</a>&lt;<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&gt;&nbsp;max&#8203;(@NotNull
-                             <a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&nbsp;value)</pre>
+public&nbsp;@NotNull <a href="ArgumentNumber.html" title="class in net.minestom.server.command.builder.arguments.number">ArgumentNumber</a>&lt;<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&gt;&nbsp;max&#8203;(@NotNull
+                                      <a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&nbsp;value)</pre>
 </li>
 </ul>
 <a id="between(java.lang.Number,java.lang.Number)">
@@ -453,10 +453,10 @@ public&nbsp;<a href="ArgumentNumber.html" title="class in net.minestom.server.co
 <li class="blockList">
 <h4>between</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="ArgumentNumber.html" title="class in net.minestom.server.command.builder.arguments.number">ArgumentNumber</a>&lt;<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&gt;&nbsp;between&#8203;(@NotNull
-                                 <a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&nbsp;min,
-                                 @NotNull
-                                 <a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&nbsp;max)</pre>
+public&nbsp;@NotNull <a href="ArgumentNumber.html" title="class in net.minestom.server.command.builder.arguments.number">ArgumentNumber</a>&lt;<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&gt;&nbsp;between&#8203;(@NotNull
+                                          <a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&nbsp;min,
+                                          @NotNull
+                                          <a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&nbsp;max)</pre>
 </li>
 </ul>
 <a id="getNumberProperties()">
@@ -538,8 +538,8 @@ public&nbsp;<a href="ArgumentNumber.html" title="type parameter in ArgumentNumbe
 <li class="blockList">
 <h4>parseValue</h4>
 <pre class="methodSignature">@NotNull
-protected&nbsp;java.lang.String&nbsp;parseValue&#8203;(@NotNull
-                                      java.lang.String&nbsp;value)</pre>
+protected&nbsp;@NotNull java.lang.String&nbsp;parseValue&#8203;(@NotNull
+                                               @NotNull java.lang.String&nbsp;value)</pre>
 </li>
 </ul>
 <a id="getRadix(java.lang.String)">
@@ -549,7 +549,7 @@ protected&nbsp;java.lang.String&nbsp;parseValue&#8203;(@NotNull
 <li class="blockList">
 <h4>getRadix</h4>
 <pre class="methodSignature">protected&nbsp;int&nbsp;getRadix&#8203;(@NotNull
-                       java.lang.String&nbsp;value)</pre>
+                       @NotNull java.lang.String&nbsp;value)</pre>
 </li>
 </ul>
 <a id="removeScientificNotation(java.lang.String)">
@@ -559,8 +559,8 @@ protected&nbsp;java.lang.String&nbsp;parseValue&#8203;(@NotNull
 <li class="blockList">
 <h4>removeScientificNotation</h4>
 <pre class="methodSignature">@Nullable
-protected&nbsp;java.lang.String&nbsp;removeScientificNotation&#8203;(@NotNull
-                                                    java.lang.String&nbsp;value)</pre>
+protected&nbsp;@Nullable java.lang.String&nbsp;removeScientificNotation&#8203;(@NotNull
+                                                              @NotNull java.lang.String&nbsp;value)</pre>
 </li>
 </ul>
 </li>

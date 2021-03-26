@@ -153,8 +153,8 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.attribute.Attribute,java.util.function.Consumer)">AttributeInstance</a></span>&#8203;(<a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;attribute,
-                 java.util.function.Consumer&lt;<a href="AttributeInstance.html" title="class in net.minestom.server.attribute">AttributeInstance</a>&gt;&nbsp;listener)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.attribute.Attribute,java.util.function.Consumer)">AttributeInstance</a></span>&#8203;(@NotNull <a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;attribute,
+                 @Nullable java.util.function.Consumer&lt;<a href="AttributeInstance.html" title="class in net.minestom.server.attribute">AttributeInstance</a>&gt;&nbsp;listener)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -177,13 +177,13 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addModifier(net.minestom.server.attribute.AttributeModifier)">addModifier</a></span>&#8203;(<a href="AttributeModifier.html" title="class in net.minestom.server.attribute">AttributeModifier</a>&nbsp;modifier)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addModifier(net.minestom.server.attribute.AttributeModifier)">addModifier</a></span>&#8203;(@NotNull <a href="AttributeModifier.html" title="class in net.minestom.server.attribute">AttributeModifier</a>&nbsp;modifier)</code></th>
 <td class="colLast">
 <div class="block">Add a modifier to this instance.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAttribute()">getAttribute</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the attribute associated to this instance.</div>
@@ -197,7 +197,7 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>java.util.Collection&lt;<a href="AttributeModifier.html" title="class in net.minestom.server.attribute">AttributeModifier</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.Collection&lt;<a href="AttributeModifier.html" title="class in net.minestom.server.attribute">AttributeModifier</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getModifiers()">getModifiers</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get the modifiers applied to this instance.</div>
@@ -219,7 +219,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeModifier(net.minestom.server.attribute.AttributeModifier)">removeModifier</a></span>&#8203;(<a href="AttributeModifier.html" title="class in net.minestom.server.attribute">AttributeModifier</a>&nbsp;modifier)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeModifier(net.minestom.server.attribute.AttributeModifier)">removeModifier</a></span>&#8203;(@NotNull <a href="AttributeModifier.html" title="class in net.minestom.server.attribute">AttributeModifier</a>&nbsp;modifier)</code></th>
 <td class="colLast">
 <div class="block">Remove a modifier from this instance.</div>
 </td>
@@ -262,9 +262,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>AttributeInstance</h4>
 <pre>public&nbsp;AttributeInstance&#8203;(@NotNull
-                         <a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;attribute,
+                         @NotNull <a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;attribute,
                          @Nullable
-                         java.util.function.Consumer&lt;<a href="AttributeInstance.html" title="class in net.minestom.server.attribute">AttributeInstance</a>&gt;&nbsp;listener)</pre>
+                         @Nullable java.util.function.Consumer&lt;<a href="AttributeInstance.html" title="class in net.minestom.server.attribute">AttributeInstance</a>&gt;&nbsp;listener)</pre>
 </li>
 </ul>
 </li>
@@ -284,7 +284,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getAttribute</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;getAttribute()</pre>
+public&nbsp;@NotNull <a href="Attribute.html" title="class in net.minestom.server.attribute">Attribute</a>&nbsp;getAttribute()</pre>
 <div class="block">Gets the attribute associated to this instance.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -331,7 +331,7 @@ public&nbsp;<a href="Attribute.html" title="class in net.minestom.server.attribu
 <li class="blockList">
 <h4>addModifier</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;addModifier&#8203;(@NotNull
-                        <a href="AttributeModifier.html" title="class in net.minestom.server.attribute">AttributeModifier</a>&nbsp;modifier)</pre>
+                        @NotNull <a href="AttributeModifier.html" title="class in net.minestom.server.attribute">AttributeModifier</a>&nbsp;modifier)</pre>
 <div class="block">Add a modifier to this instance.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -346,7 +346,7 @@ public&nbsp;<a href="Attribute.html" title="class in net.minestom.server.attribu
 <li class="blockList">
 <h4>removeModifier</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;removeModifier&#8203;(@NotNull
-                           <a href="AttributeModifier.html" title="class in net.minestom.server.attribute">AttributeModifier</a>&nbsp;modifier)</pre>
+                           @NotNull <a href="AttributeModifier.html" title="class in net.minestom.server.attribute">AttributeModifier</a>&nbsp;modifier)</pre>
 <div class="block">Remove a modifier from this instance.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -361,7 +361,7 @@ public&nbsp;<a href="Attribute.html" title="class in net.minestom.server.attribu
 <li class="blockList">
 <h4>getModifiers</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.Collection&lt;<a href="AttributeModifier.html" title="class in net.minestom.server.attribute">AttributeModifier</a>&gt;&nbsp;getModifiers()</pre>
+public&nbsp;@NotNull java.util.Collection&lt;<a href="AttributeModifier.html" title="class in net.minestom.server.attribute">AttributeModifier</a>&gt;&nbsp;getModifiers()</pre>
 <div class="block">Get the modifiers applied to this instance.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

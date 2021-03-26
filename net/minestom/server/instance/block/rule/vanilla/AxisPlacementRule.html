@@ -210,19 +210,19 @@ extends <a href="../BlockPlacementRule.html" title="class in net.minestom.server
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>short</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#blockPlace(net.minestom.server.instance.Instance,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockFace,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Player)">blockPlace</a></span>&#8203;(<a href="../../../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-          <a href="../../Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block,
-          <a href="../../BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace,
-          <a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
-          <a href="../../../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;pl)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#blockPlace(net.minestom.server.instance.Instance,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockFace,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Player)">blockPlace</a></span>&#8203;(@NotNull <a href="../../../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+          @NotNull <a href="../../Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block,
+          @NotNull <a href="../../BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace,
+          @NotNull <a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+          @NotNull <a href="../../../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;pl)</code></th>
 <td class="colLast">
 <div class="block">Called when the block is placed.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>short</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#blockUpdate(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,short)">blockUpdate</a></span>&#8203;(<a href="../../../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-           <a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#blockUpdate(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,short)">blockUpdate</a></span>&#8203;(@NotNull <a href="../../../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+           @NotNull <a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
            short&nbsp;currentId)</code></th>
 <td class="colLast">
 <div class="block">Called when the block state id can be updated (for instance if a neighbour block changed).</div>
@@ -304,9 +304,9 @@ extends <a href="../BlockPlacementRule.html" title="class in net.minestom.server
 <li class="blockList">
 <h4>blockUpdate</h4>
 <pre class="methodSignature">public&nbsp;short&nbsp;blockUpdate&#8203;(@NotNull
-                         <a href="../../../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                         @NotNull <a href="../../../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                          @NotNull
-                         <a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                         @NotNull <a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                          short&nbsp;currentId)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../BlockPlacementRule.html#blockUpdate(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,short)">BlockPlacementRule</a></code></span></div>
 <div class="block">Called when the block state id can be updated (for instance if a neighbour block changed).</div>
@@ -329,15 +329,15 @@ extends <a href="../BlockPlacementRule.html" title="class in net.minestom.server
 <li class="blockList">
 <h4>blockPlace</h4>
 <pre class="methodSignature">public&nbsp;short&nbsp;blockPlace&#8203;(@NotNull
-                        <a href="../../../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                        @NotNull <a href="../../../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                         @NotNull
-                        <a href="../../Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block,
+                        @NotNull <a href="../../Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block,
                         @NotNull
-                        <a href="../../BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace,
+                        @NotNull <a href="../../BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace,
                         @NotNull
-                        <a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+                        @NotNull <a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                         @NotNull
-                        <a href="../../../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;pl)</pre>
+                        @NotNull <a href="../../../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;pl)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../BlockPlacementRule.html#blockPlace(net.minestom.server.instance.Instance,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.BlockFace,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Player)">BlockPlacementRule</a></code></span></div>
 <div class="block">Called when the block is placed.</div>
 <dl>

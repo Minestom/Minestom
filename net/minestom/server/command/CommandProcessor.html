@@ -166,7 +166,7 @@ public interface <span class="typeNameLabel">CommandProcessor</span></pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>java.lang.String[]</code></td>
+<td class="colFirst"><code>@Nullable java.lang.String[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAliases()">getAliases</a></span>()</code></th>
 <td class="colLast">
 <div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
@@ -174,7 +174,7 @@ public interface <span class="typeNameLabel">CommandProcessor</span></pre>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colFirst"><code>@NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCommandName()">getCommandName</a></span>()</code></th>
 <td class="colLast">
 <div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
@@ -183,15 +183,15 @@ public interface <span class="typeNameLabel">CommandProcessor</span></pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasAccess(net.minestom.server.entity.Player)">hasAccess</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasAccess(net.minestom.server.entity.Player)">hasAccess</a></span>&#8203;(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Called to know if a player has access to the command.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>default java.lang.String[]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onWrite(net.minestom.server.command.CommandSender,java.lang.String)">onWrite</a></span>&#8203;(<a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
+<td class="colFirst"><code>default @Nullable java.lang.String[]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onWrite(net.minestom.server.command.CommandSender,java.lang.String)">onWrite</a></span>&#8203;(@NotNull <a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
        java.lang.String&nbsp;text)</code></th>
 <td class="colLast">
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>
@@ -201,9 +201,9 @@ public interface <span class="typeNameLabel">CommandProcessor</span></pre>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#process(net.minestom.server.command.CommandSender,java.lang.String,java.lang.String%5B%5D)">process</a></span>&#8203;(<a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
-       java.lang.String&nbsp;command,
-       java.lang.String[]&nbsp;args)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#process(net.minestom.server.command.CommandSender,java.lang.String,java.lang.String%5B%5D)">process</a></span>&#8203;(@NotNull <a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
+       @NotNull java.lang.String&nbsp;command,
+       @NotNull java.lang.String[]&nbsp;args)</code></th>
 <td class="colLast">
 <div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Called when the command is executed by a <a href="CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a>.</div>
@@ -233,7 +233,7 @@ public interface <span class="typeNameLabel">CommandProcessor</span></pre>
 <li class="blockList">
 <h4>getCommandName</h4>
 <pre class="methodSignature">@NotNull
-java.lang.String&nbsp;getCommandName()</pre>
+@NotNull java.lang.String&nbsp;getCommandName()</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the main command's name.</div>
 <dl>
@@ -249,7 +249,7 @@ java.lang.String&nbsp;getCommandName()</pre>
 <li class="blockList">
 <h4>getAliases</h4>
 <pre class="methodSignature">@Nullable
-java.lang.String[]&nbsp;getAliases()</pre>
+@Nullable java.lang.String[]&nbsp;getAliases()</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the command's aliases.
  <p>
@@ -267,11 +267,11 @@ java.lang.String[]&nbsp;getAliases()</pre>
 <li class="blockList">
 <h4>process</h4>
 <pre class="methodSignature">boolean&nbsp;process&#8203;(@NotNull
-                <a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
+                @NotNull <a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
                 @NotNull
-                java.lang.String&nbsp;command,
+                @NotNull java.lang.String&nbsp;command,
                 @NotNull
-                java.lang.String[]&nbsp;args)</pre>
+                @NotNull java.lang.String[]&nbsp;args)</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Called when the command is executed by a <a href="CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a>.</div>
 <dl>
@@ -291,7 +291,7 @@ java.lang.String[]&nbsp;getAliases()</pre>
 <li class="blockList">
 <h4>hasAccess</h4>
 <pre class="methodSignature">boolean&nbsp;hasAccess&#8203;(@NotNull
-                  <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+                  @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Called to know if a player has access to the command.
  <p>
@@ -332,9 +332,9 @@ java.lang.String[]&nbsp;getAliases()</pre>
 <h4>onWrite</h4>
 <pre class="methodSignature">@Deprecated
 @Nullable
-default&nbsp;java.lang.String[]&nbsp;onWrite&#8203;(@NotNull
-                                   <a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
-                                   java.lang.String&nbsp;text)</pre>
+default&nbsp;@Nullable java.lang.String[]&nbsp;onWrite&#8203;(@NotNull
+                                             @NotNull <a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
+                                             java.lang.String&nbsp;text)</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
 <div class="deprecationComment">not called anymore</div>
 </div>

@@ -207,7 +207,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static <a href="PluginMessagePacket.html" title="class in net.minestom.server.network.packet.server.play">PluginMessagePacket</a></code></td>
+<td class="colFirst"><code>static @NotNull <a href="PluginMessagePacket.html" title="class in net.minestom.server.network.packet.server.play">PluginMessagePacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBrandPacket()">getBrandPacket</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the current server brand name packet.</div>
@@ -222,7 +222,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(<a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(@NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
 <td class="colLast">
 <div class="block">Writes the packet to a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
 </td>
@@ -305,7 +305,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <li class="blockList">
 <h4>write</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
-                  <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</pre>
+                  @NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../ServerPacket.html#write(net.minestom.server.utils.binary.BinaryWriter)">ServerPacket</a></code></span></div>
 <div class="block">Writes the packet to a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
 <dl>
@@ -344,7 +344,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <li class="blockList">
 <h4>getBrandPacket</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="PluginMessagePacket.html" title="class in net.minestom.server.network.packet.server.play">PluginMessagePacket</a>&nbsp;getBrandPacket()</pre>
+public static&nbsp;@NotNull <a href="PluginMessagePacket.html" title="class in net.minestom.server.network.packet.server.play">PluginMessagePacket</a>&nbsp;getBrandPacket()</pre>
 <div class="block">Gets the current server brand name packet.
  <p>
  Sent to all players when the name changes.</div>

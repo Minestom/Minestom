@@ -247,28 +247,28 @@ implements <a href="Batch.html" title="interface in net.minestom.server.instance
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(net.minestom.server.instance.Instance,int,int,net.minestom.server.utils.chunk.ChunkCallback)">apply</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(net.minestom.server.instance.Instance,int,int,net.minestom.server.utils.chunk.ChunkCallback)">apply</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
      int&nbsp;chunkX,
      int&nbsp;chunkZ,
-     <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
+     @Nullable <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Apply this batch to the given chunk.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.utils.chunk.ChunkCallback)">apply</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-     <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
-     <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.utils.chunk.ChunkCallback)">apply</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+     @NotNull <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+     @Nullable <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Apply this batch to the given chunk.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>protected <a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.utils.chunk.ChunkCallback,boolean)">apply</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-     <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
-     <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.utils.chunk.ChunkCallback,boolean)">apply</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+     @NotNull <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+     @Nullable <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback,
      boolean&nbsp;safeCallback)</code></th>
 <td class="colLast">
 <div class="block">Apply this batch to the given chunk, and execute the callback depending on safeCallback.</div>
@@ -276,8 +276,8 @@ implements <a href="Batch.html" title="interface in net.minestom.server.instance
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(net.minestom.server.instance.Instance,net.minestom.server.utils.chunk.ChunkCallback)">apply</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-     <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(net.minestom.server.instance.Instance,net.minestom.server.utils.chunk.ChunkCallback)">apply</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+     @Nullable <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Apply this batch to chunk (0, 0).</div>
 </td>
@@ -310,16 +310,16 @@ implements <a href="Batch.html" title="interface in net.minestom.server.instance
                  int&nbsp;z,
                  short&nbsp;blockStateId,
                  short&nbsp;customBlockId,
-                 <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
+                 @Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
 <td class="colLast">
 <div class="block">Sets a <a href="../block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> at a position with a custom state id.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unsafeApply(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.utils.chunk.ChunkCallback)">unsafeApply</a></span>&#8203;(<a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-           <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
-           <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unsafeApply(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,net.minestom.server.utils.chunk.ChunkCallback)">unsafeApply</a></span>&#8203;(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+           @NotNull <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+           @Nullable <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Apply this batch to the given chunk, and execute the callback
  immediately when the blocks have been applied, in an unknown thread.</div>
@@ -433,7 +433,7 @@ implements <a href="Batch.html" title="interface in net.minestom.server.instance
                               short&nbsp;blockStateId,
                               short&nbsp;customBlockId,
                               @Nullable
-                              <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
+                              @Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../BlockModifier.html#setSeparateBlocks(int,int,int,short,short,net.minestom.server.data.Data)">BlockModifier</a></code></span></div>
 <div class="block">Sets a <a href="../block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> at a position with a custom state id.
  <p>
@@ -510,9 +510,9 @@ implements <a href="Batch.html" title="interface in net.minestom.server.instance
 <li class="blockList">
 <h4>apply</h4>
 <pre class="methodSignature">public&nbsp;<a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a>&nbsp;apply&#8203;(@NotNull
-                        <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                        @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                         @Nullable
-                        <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
+                        @Nullable <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
 <div class="block">Apply this batch to chunk (0, 0).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -532,11 +532,11 @@ implements <a href="Batch.html" title="interface in net.minestom.server.instance
 <li class="blockList">
 <h4>apply</h4>
 <pre class="methodSignature">public&nbsp;<a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a>&nbsp;apply&#8203;(@NotNull
-                        <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                        @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                         int&nbsp;chunkX,
                         int&nbsp;chunkZ,
                         @Nullable
-                        <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
+                        @Nullable <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
 <div class="block">Apply this batch to the given chunk.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -556,11 +556,11 @@ implements <a href="Batch.html" title="interface in net.minestom.server.instance
 <li class="blockList">
 <h4>apply</h4>
 <pre class="methodSignature">public&nbsp;<a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a>&nbsp;apply&#8203;(@NotNull
-                        <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                        @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                         @NotNull
-                        <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+                        @NotNull <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                         @Nullable
-                        <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
+                        @Nullable <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
 <div class="block">Apply this batch to the given chunk.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -579,11 +579,11 @@ implements <a href="Batch.html" title="interface in net.minestom.server.instance
 <li class="blockList">
 <h4>unsafeApply</h4>
 <pre class="methodSignature">public&nbsp;<a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a>&nbsp;unsafeApply&#8203;(@NotNull
-                              <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                              @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                               @NotNull
-                              <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+                              @NotNull <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                               @Nullable
-                              <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
+                              @Nullable <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
 <div class="block">Apply this batch to the given chunk, and execute the callback
  immediately when the blocks have been applied, in an unknown thread.</div>
 <dl>
@@ -603,11 +603,11 @@ implements <a href="Batch.html" title="interface in net.minestom.server.instance
 <li class="blockList">
 <h4>apply</h4>
 <pre class="methodSignature">protected&nbsp;<a href="ChunkBatch.html" title="class in net.minestom.server.instance.batch">ChunkBatch</a>&nbsp;apply&#8203;(@NotNull
-                           <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                           @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                            @NotNull
-                           <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+                           @NotNull <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                            @Nullable
-                           <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback,
+                           @Nullable <a href="../../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback,
                            boolean&nbsp;safeCallback)</pre>
 <div class="block">Apply this batch to the given chunk, and execute the callback depending on safeCallback.</div>
 <dl>

@@ -177,13 +177,13 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#defineDefaultStorageSystem(java.util.function.Supplier)">defineDefaultStorageSystem</a></span>&#8203;(java.util.function.Supplier&lt;<a href="StorageSystem.html" title="interface in net.minestom.server.storage">StorageSystem</a>&gt;&nbsp;storageSystemSupplier)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#defineDefaultStorageSystem(java.util.function.Supplier)">defineDefaultStorageSystem</a></span>&#8203;(@NotNull java.util.function.Supplier&lt;<a href="StorageSystem.html" title="interface in net.minestom.server.storage">StorageSystem</a>&gt;&nbsp;storageSystemSupplier)</code></th>
 <td class="colLast">
 <div class="block">Defines the default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a> used for <a href="StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a>.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>java.util.Collection&lt;<a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.Collection&lt;<a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLoadedLocations()">getLoadedLocations</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the <a href="StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a> which have been loaded by <a href="#getLocation(java.lang.String)"><code>getLocation(String)</code></a>
@@ -191,25 +191,25 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLocation(java.lang.String)">getLocation</a></span>&#8203;(java.lang.String&nbsp;location)</code></th>
+<td class="colFirst"><code>@Nullable <a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLocation(java.lang.String)">getLocation</a></span>&#8203;(@NotNull java.lang.String&nbsp;location)</code></th>
 <td class="colLast">
 <div class="block">Used to get an access to the specified location.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLocation(java.lang.String,net.minestom.server.storage.StorageOptions)">getLocation</a></span>&#8203;(java.lang.String&nbsp;location,
-           <a href="StorageOptions.html" title="class in net.minestom.server.storage">StorageOptions</a>&nbsp;storageOptions)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLocation(java.lang.String,net.minestom.server.storage.StorageOptions)">getLocation</a></span>&#8203;(@NotNull java.lang.String&nbsp;location,
+           @NotNull <a href="StorageOptions.html" title="class in net.minestom.server.storage">StorageOptions</a>&nbsp;storageOptions)</code></th>
 <td class="colLast">
 <div class="block">Used to get an access to the specified location.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLocation(java.lang.String,net.minestom.server.storage.StorageOptions,net.minestom.server.storage.StorageSystem)">getLocation</a></span>&#8203;(java.lang.String&nbsp;location,
-           <a href="StorageOptions.html" title="class in net.minestom.server.storage">StorageOptions</a>&nbsp;storageOptions,
-           <a href="StorageSystem.html" title="interface in net.minestom.server.storage">StorageSystem</a>&nbsp;storageSystem)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLocation(java.lang.String,net.minestom.server.storage.StorageOptions,net.minestom.server.storage.StorageSystem)">getLocation</a></span>&#8203;(@NotNull java.lang.String&nbsp;location,
+           @NotNull <a href="StorageOptions.html" title="class in net.minestom.server.storage">StorageOptions</a>&nbsp;storageOptions,
+           @NotNull <a href="StorageSystem.html" title="interface in net.minestom.server.storage">StorageSystem</a>&nbsp;storageSystem)</code></th>
 <td class="colLast">
 <div class="block">Used to get an access to the specified location.</div>
 </td>
@@ -223,15 +223,15 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#locationExists(java.lang.String)">locationExists</a></span>&#8203;(java.lang.String&nbsp;location)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#locationExists(java.lang.String)">locationExists</a></span>&#8203;(@NotNull java.lang.String&nbsp;location)</code></th>
 <td class="colLast">
 <div class="block">Calls <a href="#locationExists(java.lang.String,net.minestom.server.storage.StorageSystem)"><code>locationExists(String, StorageSystem)</code></a> with the default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a>.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#locationExists(java.lang.String,net.minestom.server.storage.StorageSystem)">locationExists</a></span>&#8203;(java.lang.String&nbsp;location,
-              <a href="StorageSystem.html" title="interface in net.minestom.server.storage">StorageSystem</a>&nbsp;storageSystem)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#locationExists(java.lang.String,net.minestom.server.storage.StorageSystem)">locationExists</a></span>&#8203;(@NotNull java.lang.String&nbsp;location,
+              @NotNull <a href="StorageSystem.html" title="interface in net.minestom.server.storage">StorageSystem</a>&nbsp;storageSystem)</code></th>
 <td class="colLast">
 <div class="block">Used to know if the specified location already exist or not.</div>
 </td>
@@ -286,11 +286,11 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getLocation</h4>
 <pre class="methodSignature">public&nbsp;<a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a>&nbsp;getLocation&#8203;(@NotNull
-                                   java.lang.String&nbsp;location,
+                                   @NotNull java.lang.String&nbsp;location,
                                    @NotNull
-                                   <a href="StorageOptions.html" title="class in net.minestom.server.storage">StorageOptions</a>&nbsp;storageOptions,
+                                   @NotNull <a href="StorageOptions.html" title="class in net.minestom.server.storage">StorageOptions</a>&nbsp;storageOptions,
                                    @NotNull
-                                   <a href="StorageSystem.html" title="interface in net.minestom.server.storage">StorageSystem</a>&nbsp;storageSystem)</pre>
+                                   @NotNull <a href="StorageSystem.html" title="interface in net.minestom.server.storage">StorageSystem</a>&nbsp;storageSystem)</pre>
 <div class="block">Used to get an access to the specified location.
  WARNING: a <a href="StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a> needs to be created with an unique <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a> linked
  you cannot open the save location with two or more different <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a> implementation.</div>
@@ -311,9 +311,9 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getLocation</h4>
 <pre class="methodSignature">public&nbsp;<a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a>&nbsp;getLocation&#8203;(@NotNull
-                                   java.lang.String&nbsp;location,
+                                   @NotNull java.lang.String&nbsp;location,
                                    @NotNull
-                                   <a href="StorageOptions.html" title="class in net.minestom.server.storage">StorageOptions</a>&nbsp;storageOptions)</pre>
+                                   @NotNull <a href="StorageOptions.html" title="class in net.minestom.server.storage">StorageOptions</a>&nbsp;storageOptions)</pre>
 <div class="block">Used to get an access to the specified location.
  The default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a> provider will be used.</div>
 <dl>
@@ -334,8 +334,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getLocation</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a>&nbsp;getLocation&#8203;(@NotNull
-                                   java.lang.String&nbsp;location)</pre>
+public&nbsp;@Nullable <a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a>&nbsp;getLocation&#8203;(@NotNull
+                                             @NotNull java.lang.String&nbsp;location)</pre>
 <div class="block">Used to get an access to the specified location.
  The default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a> provider will be used.</div>
 <dl>
@@ -355,9 +355,9 @@ public&nbsp;<a href="StorageLocation.html" title="class in net.minestom.server.s
 <li class="blockList">
 <h4>locationExists</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;locationExists&#8203;(@NotNull
-                              java.lang.String&nbsp;location,
+                              @NotNull java.lang.String&nbsp;location,
                               @NotNull
-                              <a href="StorageSystem.html" title="interface in net.minestom.server.storage">StorageSystem</a>&nbsp;storageSystem)</pre>
+                              @NotNull <a href="StorageSystem.html" title="interface in net.minestom.server.storage">StorageSystem</a>&nbsp;storageSystem)</pre>
 <div class="block">Used to know if the specified location already exist or not.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -375,7 +375,7 @@ public&nbsp;<a href="StorageLocation.html" title="class in net.minestom.server.s
 <li class="blockList">
 <h4>locationExists</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;locationExists&#8203;(@NotNull
-                              java.lang.String&nbsp;location)</pre>
+                              @NotNull java.lang.String&nbsp;location)</pre>
 <div class="block">Calls <a href="#locationExists(java.lang.String,net.minestom.server.storage.StorageSystem)"><code>locationExists(String, StorageSystem)</code></a> with the default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -392,7 +392,7 @@ public&nbsp;<a href="StorageLocation.html" title="class in net.minestom.server.s
 <li class="blockList">
 <h4>getLoadedLocations</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.Collection&lt;<a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a>&gt;&nbsp;getLoadedLocations()</pre>
+public&nbsp;@NotNull java.util.Collection&lt;<a href="StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a>&gt;&nbsp;getLoadedLocations()</pre>
 <div class="block">Gets all the <a href="StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a> which have been loaded by <a href="#getLocation(java.lang.String)"><code>getLocation(String)</code></a>
  or <a href="#getLocation(java.lang.String,net.minestom.server.storage.StorageOptions,net.minestom.server.storage.StorageSystem)"><code>getLocation(String, StorageOptions, StorageSystem)</code></a>.</div>
 <dl>
@@ -408,7 +408,7 @@ public&nbsp;java.util.Collection&lt;<a href="StorageLocation.html" title="class 
 <li class="blockList">
 <h4>defineDefaultStorageSystem</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;defineDefaultStorageSystem&#8203;(@NotNull
-                                       java.util.function.Supplier&lt;<a href="StorageSystem.html" title="interface in net.minestom.server.storage">StorageSystem</a>&gt;&nbsp;storageSystemSupplier)</pre>
+                                       @NotNull java.util.function.Supplier&lt;<a href="StorageSystem.html" title="interface in net.minestom.server.storage">StorageSystem</a>&gt;&nbsp;storageSystemSupplier)</pre>
 <div class="block">Defines the default <a href="StorageSystem.html" title="interface in net.minestom.server.storage"><code>StorageSystem</code></a> used for <a href="StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

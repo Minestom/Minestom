@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":42};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -153,16 +153,36 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.chat.JsonMessage,net.minestom.server.advancements.FrameType,net.minestom.server.item.ItemStack)">Notification</a></span>&#8203;(<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
-            <a href="../FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
-            <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;icon)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.kyori.adventure.text.Component,net.minestom.server.advancements.FrameType,net.minestom.server.item.ItemStack)">Notification</a></span>&#8203;(@NotNull net.kyori.adventure.text.Component&nbsp;title,
+            @NotNull <a href="../FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
+            @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;icon)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.chat.JsonMessage,net.minestom.server.advancements.FrameType,net.minestom.server.item.Material)">Notification</a></span>&#8203;(<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
-            <a href="../FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
-            <a href="../../item/Material.html" title="enum in net.minestom.server.item">Material</a>&nbsp;icon)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.kyori.adventure.text.Component,net.minestom.server.advancements.FrameType,net.minestom.server.item.Material)">Notification</a></span>&#8203;(@NotNull net.kyori.adventure.text.Component&nbsp;title,
+            @NotNull <a href="../FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
+            @NotNull <a href="../../item/Material.html" title="enum in net.minestom.server.item">Material</a>&nbsp;icon)</code></th>
 <td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.chat.JsonMessage,net.minestom.server.advancements.FrameType,net.minestom.server.item.ItemStack)">Notification</a></span>&#8203;(@NotNull <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
+            @NotNull <a href="../FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
+            @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;icon)</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#%3Cinit%3E(net.kyori.adventure.text.Component,net.minestom.server.advancements.FrameType,net.minestom.server.item.ItemStack)"><code>Notification(Component, FrameType, ItemStack)</code></a></div>
+</div>
+</td>
+</tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.chat.JsonMessage,net.minestom.server.advancements.FrameType,net.minestom.server.item.Material)">Notification</a></span>&#8203;(@NotNull <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
+            @NotNull <a href="../FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
+            @NotNull <a href="../../item/Material.html" title="enum in net.minestom.server.item">Material</a>&nbsp;icon)</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#%3Cinit%3E(net.kyori.adventure.text.Component,net.minestom.server.advancements.FrameType,net.minestom.server.item.Material)"><code>Notification(Component, FrameType, Material)</code></a></div>
+</div>
+</td>
 </tr>
 </table>
 </li>
@@ -176,31 +196,40 @@ extends java.lang.Object</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFrameType()">getFrameType</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="../FrameType.html" title="enum in net.minestom.server.advancements"><code>FrameType</code></a> of the notification.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>protected <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<td class="colFirst"><code>protected @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getIcon()">getIcon</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the icon of the notification.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
+<td class="colFirst"><code>net.kyori.adventure.text.Component</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTitle()">getTitle</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the title of the notification.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>@NotNull <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTitleJson()">getTitleJson</a></span>()</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#getTitle()"><code>getTitle()</code></a></div>
+</div>
 </td>
 </tr>
 </table>
@@ -233,26 +262,62 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>Notification</h4>
-<pre>public&nbsp;Notification&#8203;(@NotNull
-                    <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
+<pre>@Deprecated
+public&nbsp;Notification&#8203;(@NotNull
+                    @NotNull <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
                     @NotNull
-                    <a href="../FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
+                    @NotNull <a href="../FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
                     @NotNull
-                    <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;icon)</pre>
+                    @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;icon)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#%3Cinit%3E(net.kyori.adventure.text.Component,net.minestom.server.advancements.FrameType,net.minestom.server.item.ItemStack)"><code>Notification(Component, FrameType, ItemStack)</code></a></div>
+</div>
 </li>
 </ul>
 <a id="&lt;init&gt;(net.minestom.server.chat.JsonMessage,net.minestom.server.advancements.FrameType,net.minestom.server.item.Material)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>Notification</h4>
+<pre>@Deprecated
+public&nbsp;Notification&#8203;(@NotNull
+                    @NotNull <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
+                    @NotNull
+                    @NotNull <a href="../FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
+                    @NotNull
+                    @NotNull <a href="../../item/Material.html" title="enum in net.minestom.server.item">Material</a>&nbsp;icon)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#%3Cinit%3E(net.kyori.adventure.text.Component,net.minestom.server.advancements.FrameType,net.minestom.server.item.Material)"><code>Notification(Component, FrameType, Material)</code></a></div>
+</div>
+</li>
+</ul>
+<a id="&lt;init&gt;(net.kyori.adventure.text.Component,net.minestom.server.advancements.FrameType,net.minestom.server.item.Material)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>Notification</h4>
+<pre>public&nbsp;Notification&#8203;(@NotNull
+                    @NotNull net.kyori.adventure.text.Component&nbsp;title,
+                    @NotNull
+                    @NotNull <a href="../FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
+                    @NotNull
+                    @NotNull <a href="../../item/Material.html" title="enum in net.minestom.server.item">Material</a>&nbsp;icon)</pre>
+</li>
+</ul>
+<a id="&lt;init&gt;(net.kyori.adventure.text.Component,net.minestom.server.advancements.FrameType,net.minestom.server.item.ItemStack)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Notification</h4>
 <pre>public&nbsp;Notification&#8203;(@NotNull
-                    <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
+                    @NotNull net.kyori.adventure.text.Component&nbsp;title,
                     @NotNull
-                    <a href="../FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
+                    @NotNull <a href="../FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
                     @NotNull
-                    <a href="../../item/Material.html" title="enum in net.minestom.server.item">Material</a>&nbsp;icon)</pre>
+                    @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;icon)</pre>
 </li>
 </ul>
 </li>
@@ -265,14 +330,32 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="getTitleJson()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTitleJson</h4>
+<pre class="methodSignature">@NotNull
+@Deprecated
+public&nbsp;@NotNull <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getTitleJson()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#getTitle()"><code>getTitle()</code></a></div>
+</div>
+<div class="block">Gets the title of the notification.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the notification title</dd>
+</dl>
+</li>
+</ul>
 <a id="getTitle()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getTitle</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getTitle()</pre>
+<pre class="methodSignature">public&nbsp;net.kyori.adventure.text.Component&nbsp;getTitle()</pre>
 <div class="block">Gets the title of the notification.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -287,7 +370,7 @@ public&nbsp;<a href="../../chat/JsonMessage.html" title="class in net.minestom.s
 <li class="blockList">
 <h4>getFrameType</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;getFrameType()</pre>
+public&nbsp;@NotNull <a href="../FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;getFrameType()</pre>
 <div class="block">Gets the <a href="../FrameType.html" title="enum in net.minestom.server.advancements"><code>FrameType</code></a> of the notification.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -302,7 +385,7 @@ public&nbsp;<a href="../FrameType.html" title="enum in net.minestom.server.advan
 <li class="blockList">
 <h4>getIcon</h4>
 <pre class="methodSignature">@NotNull
-protected&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getIcon()</pre>
+protected&nbsp;@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getIcon()</pre>
 <div class="block">Gets the icon of the notification.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

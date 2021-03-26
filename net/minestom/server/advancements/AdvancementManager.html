@@ -177,22 +177,22 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="AdvancementTab.html" title="class in net.minestom.server.advancements">AdvancementTab</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createTab(java.lang.String,net.minestom.server.advancements.AdvancementRoot)">createTab</a></span>&#8203;(java.lang.String&nbsp;rootIdentifier,
-         <a href="AdvancementRoot.html" title="class in net.minestom.server.advancements">AdvancementRoot</a>&nbsp;root)</code></th>
+<td class="colFirst"><code>@NotNull <a href="AdvancementTab.html" title="class in net.minestom.server.advancements">AdvancementTab</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createTab(java.lang.String,net.minestom.server.advancements.AdvancementRoot)">createTab</a></span>&#8203;(@NotNull java.lang.String&nbsp;rootIdentifier,
+         @NotNull <a href="AdvancementRoot.html" title="class in net.minestom.server.advancements">AdvancementRoot</a>&nbsp;root)</code></th>
 <td class="colLast">
 <div class="block">Creates a new <a href="AdvancementTab.html" title="class in net.minestom.server.advancements"><code>AdvancementTab</code></a> with a single <a href="AdvancementRoot.html" title="class in net.minestom.server.advancements"><code>AdvancementRoot</code></a>.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="AdvancementTab.html" title="class in net.minestom.server.advancements">AdvancementTab</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTab(java.lang.String)">getTab</a></span>&#8203;(java.lang.String&nbsp;rootIdentifier)</code></th>
+<td class="colFirst"><code>@Nullable <a href="AdvancementTab.html" title="class in net.minestom.server.advancements">AdvancementTab</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTab(java.lang.String)">getTab</a></span>&#8203;(@NotNull java.lang.String&nbsp;rootIdentifier)</code></th>
 <td class="colLast">
 <div class="block">Gets an advancement tab by its root identifier.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>java.util.Collection&lt;<a href="AdvancementTab.html" title="class in net.minestom.server.advancements">AdvancementTab</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.Collection&lt;<a href="AdvancementTab.html" title="class in net.minestom.server.advancements">AdvancementTab</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTabs()">getTabs</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the created <a href="AdvancementTab.html" title="class in net.minestom.server.advancements"><code>AdvancementTab</code></a>.</div>
@@ -248,10 +248,10 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>createTab</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="AdvancementTab.html" title="class in net.minestom.server.advancements">AdvancementTab</a>&nbsp;createTab&#8203;(@NotNull
-                                java.lang.String&nbsp;rootIdentifier,
-                                @NotNull
-                                <a href="AdvancementRoot.html" title="class in net.minestom.server.advancements">AdvancementRoot</a>&nbsp;root)</pre>
+public&nbsp;@NotNull <a href="AdvancementTab.html" title="class in net.minestom.server.advancements">AdvancementTab</a>&nbsp;createTab&#8203;(@NotNull
+                                         @NotNull java.lang.String&nbsp;rootIdentifier,
+                                         @NotNull
+                                         @NotNull <a href="AdvancementRoot.html" title="class in net.minestom.server.advancements">AdvancementRoot</a>&nbsp;root)</pre>
 <div class="block">Creates a new <a href="AdvancementTab.html" title="class in net.minestom.server.advancements"><code>AdvancementTab</code></a> with a single <a href="AdvancementRoot.html" title="class in net.minestom.server.advancements"><code>AdvancementRoot</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -271,8 +271,8 @@ public&nbsp;<a href="AdvancementTab.html" title="class in net.minestom.server.ad
 <li class="blockList">
 <h4>getTab</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="AdvancementTab.html" title="class in net.minestom.server.advancements">AdvancementTab</a>&nbsp;getTab&#8203;(@NotNull
-                             java.lang.String&nbsp;rootIdentifier)</pre>
+public&nbsp;@Nullable <a href="AdvancementTab.html" title="class in net.minestom.server.advancements">AdvancementTab</a>&nbsp;getTab&#8203;(@NotNull
+                                       @NotNull java.lang.String&nbsp;rootIdentifier)</pre>
 <div class="block">Gets an advancement tab by its root identifier.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -289,7 +289,7 @@ public&nbsp;<a href="AdvancementTab.html" title="class in net.minestom.server.ad
 <li class="blockList">
 <h4>getTabs</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.Collection&lt;<a href="AdvancementTab.html" title="class in net.minestom.server.advancements">AdvancementTab</a>&gt;&nbsp;getTabs()</pre>
+public&nbsp;@NotNull java.util.Collection&lt;<a href="AdvancementTab.html" title="class in net.minestom.server.advancements">AdvancementTab</a>&gt;&nbsp;getTabs()</pre>
 <div class="block">Gets all the created <a href="AdvancementTab.html" title="class in net.minestom.server.advancements"><code>AdvancementTab</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

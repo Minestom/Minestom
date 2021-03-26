@@ -185,7 +185,7 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.network.packet.server.play.DeclareCommandsPacket.Node%5B%5D,int)">NodeMaker</a></span>&#8203;(<a href="../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a>[]&nbsp;commandNodes,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.network.packet.server.play.DeclareCommandsPacket.Node%5B%5D,int)">NodeMaker</a></span>&#8203;(@NotNull <a href="../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a>[]&nbsp;commandNodes,
          int&nbsp;id)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -209,11 +209,11 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addNodes(net.minestom.server.network.packet.server.play.DeclareCommandsPacket.Node%5B%5D)">addNodes</a></span>&#8203;(<a href="../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a>[]&nbsp;nodes)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addNodes(net.minestom.server.network.packet.server.play.DeclareCommandsPacket.Node%5B%5D)">addNodes</a></span>&#8203;(@NotNull <a href="../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a>[]&nbsp;nodes)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="NodeMaker.ConfiguredNodes.html" title="class in net.minestom.server.command.builder">NodeMaker.ConfiguredNodes</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.List&lt;<a href="NodeMaker.ConfiguredNodes.html" title="class in net.minestom.server.command.builder">NodeMaker.ConfiguredNodes</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getConfiguredNodes()">getConfiguredNodes</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -228,7 +228,7 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>it.unimi.dsi.fastutil.objects.Object2IntMap&lt;<a href="../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull it.unimi.dsi.fastutil.objects.Object2IntMap&lt;<a href="../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNodeIdsMap()">getNodeIdsMap</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -284,7 +284,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>NodeMaker</h4>
 <pre>public&nbsp;NodeMaker&#8203;(@NotNull
-                 <a href="../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a>[]&nbsp;commandNodes,
+                 @NotNull <a href="../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a>[]&nbsp;commandNodes,
                  int&nbsp;id)</pre>
 </li>
 </ul>
@@ -332,7 +332,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>addNodes</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;addNodes&#8203;(@NotNull
-                     <a href="../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a>[]&nbsp;nodes)</pre>
+                     @NotNull <a href="../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a>[]&nbsp;nodes)</pre>
 </li>
 </ul>
 <a id="getConfiguredNodes()">
@@ -342,7 +342,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getConfiguredNodes</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.List&lt;<a href="NodeMaker.ConfiguredNodes.html" title="class in net.minestom.server.command.builder">NodeMaker.ConfiguredNodes</a>&gt;&nbsp;getConfiguredNodes()</pre>
+public&nbsp;@NotNull java.util.List&lt;<a href="NodeMaker.ConfiguredNodes.html" title="class in net.minestom.server.command.builder">NodeMaker.ConfiguredNodes</a>&gt;&nbsp;getConfiguredNodes()</pre>
 </li>
 </ul>
 <a id="getNodes()">
@@ -361,7 +361,7 @@ public&nbsp;java.util.List&lt;<a href="NodeMaker.ConfiguredNodes.html" title="cl
 <li class="blockList">
 <h4>getNodeIdsMap</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;it.unimi.dsi.fastutil.objects.Object2IntMap&lt;<a href="../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a>&gt;&nbsp;getNodeIdsMap()</pre>
+public&nbsp;@NotNull it.unimi.dsi.fastutil.objects.Object2IntMap&lt;<a href="../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a>&gt;&nbsp;getNodeIdsMap()</pre>
 </li>
 </ul>
 <a id="request(java.lang.String,net.minestom.server.command.builder.NodeMaker.Request)">

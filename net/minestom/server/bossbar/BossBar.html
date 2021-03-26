@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":42,"i1":42,"i2":42,"i3":41,"i4":42,"i5":42,"i6":42,"i7":42,"i8":42,"i9":42,"i10":42,"i11":42,"i12":42,"i13":42,"i14":42,"i15":42,"i16":42};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -134,9 +134,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
 </dl>
 <hr>
-<pre>public class <span class="typeNameLabel">BossBar</span>
+<pre>@Deprecated
+public class <span class="typeNameLabel">BossBar</span>
 extends java.lang.Object
 implements <a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <code>Audience.showBossBar(net.kyori.adventure.bossbar.BossBar)</code></div>
+</div>
 <div class="block">Represents a boss bar which is displayed on the top of the client screen (max amount of boss bar defined by <a href="#MAX_BOSSBAR"><code>MAX_BOSSBAR</code></a>).
  <p>
  To use it, create a new instance using the constructor
@@ -163,10 +167,11 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.chat.JsonMessage,net.minestom.server.bossbar.BarColor,net.minestom.server.bossbar.BarDivision)">BossBar</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
-       <a href="BarColor.html" title="enum in net.minestom.server.bossbar">BarColor</a>&nbsp;color,
-       <a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a>&nbsp;division)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.chat.JsonMessage,net.minestom.server.bossbar.BarColor,net.minestom.server.bossbar.BarDivision)">BossBar</a></span>&#8203;(@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
+       @NotNull <a href="BarColor.html" title="enum in net.minestom.server.bossbar">BarColor</a>&nbsp;color,
+       @NotNull <a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a>&nbsp;division)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Creates a new <a href="BossBar.html" title="class in net.minestom.server.bossbar"><code>BossBar</code></a>.</div>
 </td>
 </tr>
@@ -182,7 +187,7 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -190,8 +195,9 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addViewer(net.minestom.server.entity.Player)">addViewer</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addViewer(net.minestom.server.entity.Player)">addViewer</a></span>&#8203;(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Adds a viewer.</div>
 </td>
 </tr>
@@ -199,32 +205,38 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#delete()">delete</a></span>()</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Deletes the boss bar and remove all of its viewers.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#equals(java.lang.Object)">equals</a></span>&#8203;(java.lang.Object&nbsp;o)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>static java.util.Set&lt;<a href="BossBar.html" title="class in net.minestom.server.bossbar">BossBar</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBossBars(net.minestom.server.entity.Player)">getBossBars</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<td class="colFirst"><code>static @Nullable java.util.Set&lt;<a href="BossBar.html" title="class in net.minestom.server.bossbar">BossBar</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBossBars(net.minestom.server.entity.Player)">getBossBars</a></span>&#8203;(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets all the visible boss bars of a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a>.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="BarColor.html" title="enum in net.minestom.server.bossbar">BarColor</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="BarColor.html" title="enum in net.minestom.server.bossbar">BarColor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getColor()">getColor</a></span>()</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the bossbar color.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code><a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDivision()">getDivision</a></span>()</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the bossbar division.</div>
 </td>
 </tr>
@@ -232,6 +244,7 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <td class="colFirst"><code>byte</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFlags()">getFlags</a></span>()</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the bossbar flags.</div>
 </td>
 </tr>
@@ -239,46 +252,54 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getProgress()">getProgress</a></span>()</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the bossbar progress.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
-<td class="colFirst"><code><a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTitle()">getTitle</a></span>()</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the bossbar title.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
-<td class="colFirst"><code>java.util.Set&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.Set&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getViewers()">getViewers</a></span>()</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets all the viewers of this viewable element.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hashCode()">hashCode</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeViewer(net.minestom.server.entity.Player)">removeViewer</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeViewer(net.minestom.server.entity.Player)">removeViewer</a></span>&#8203;(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Removes a viewer.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setColor(net.minestom.server.bossbar.BarColor)">setColor</a></span>&#8203;(<a href="BarColor.html" title="enum in net.minestom.server.bossbar">BarColor</a>&nbsp;color)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setColor(net.minestom.server.bossbar.BarColor)">setColor</a></span>&#8203;(@NotNull <a href="BarColor.html" title="enum in net.minestom.server.bossbar">BarColor</a>&nbsp;color)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Changes the bossbar color.</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDivision(net.minestom.server.bossbar.BarDivision)">setDivision</a></span>&#8203;(<a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a>&nbsp;division)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDivision(net.minestom.server.bossbar.BarDivision)">setDivision</a></span>&#8203;(@NotNull <a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a>&nbsp;division)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Changes the bossbar division.</div>
 </td>
 </tr>
@@ -286,6 +307,7 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFlags(byte)">setFlags</a></span>&#8203;(byte&nbsp;flags)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Sets the bossbar flags.</div>
 </td>
 </tr>
@@ -293,13 +315,15 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setProgress(float)">setProgress</a></span>&#8203;(float&nbsp;progress)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Changes the bossbar progress.</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTitle(net.minestom.server.chat.JsonMessage)">setTitle</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTitle(net.minestom.server.chat.JsonMessage)">setTitle</a></span>&#8203;(@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Changes the bossbar title.</div>
 </td>
 </tr>
@@ -316,7 +340,7 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;net.minestom.server.<a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></h3>
-<code><a href="../Viewable.html#isViewer(net.minestom.server.entity.Player)">isViewer</a>, <a href="../Viewable.html#sendPacketsToViewers(net.minestom.server.network.packet.server.ServerPacket...)">sendPacketsToViewers</a>, <a href="../Viewable.html#sendPacketToViewers(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewers</a>, <a href="../Viewable.html#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewersAndSelf</a></code></li>
+<code><a href="../Viewable.html#getViewersAsAudience()">getViewersAsAudience</a>, <a href="../Viewable.html#getViewersAsAudiences()">getViewersAsAudiences</a>, <a href="../Viewable.html#isViewer(net.minestom.server.entity.Player)">isViewer</a>, <a href="../Viewable.html#sendPacketsToViewers(net.minestom.server.network.packet.server.ServerPacket...)">sendPacketsToViewers</a>, <a href="../Viewable.html#sendPacketToViewers(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewers</a>, <a href="../Viewable.html#sendPacketToViewersAndSelf(net.minestom.server.network.packet.server.ServerPacket)">sendPacketToViewersAndSelf</a></code></li>
 </ul>
 </li>
 </ul>
@@ -341,11 +365,12 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <li class="blockList">
 <h4>BossBar</h4>
 <pre>public&nbsp;BossBar&#8203;(@NotNull
-               <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
+               @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
                @NotNull
-               <a href="BarColor.html" title="enum in net.minestom.server.bossbar">BarColor</a>&nbsp;color,
+               @NotNull <a href="BarColor.html" title="enum in net.minestom.server.bossbar">BarColor</a>&nbsp;color,
                @NotNull
-               <a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a>&nbsp;division)</pre>
+               @NotNull <a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a>&nbsp;division)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Creates a new <a href="BossBar.html" title="class in net.minestom.server.bossbar"><code>BossBar</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -372,8 +397,9 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <li class="blockList">
 <h4>getBossBars</h4>
 <pre class="methodSignature">@Nullable
-public static&nbsp;java.util.Set&lt;<a href="BossBar.html" title="class in net.minestom.server.bossbar">BossBar</a>&gt;&nbsp;getBossBars&#8203;(@NotNull
-                                                 <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+public static&nbsp;@Nullable java.util.Set&lt;<a href="BossBar.html" title="class in net.minestom.server.bossbar">BossBar</a>&gt;&nbsp;getBossBars&#8203;(@NotNull
+                                                           @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets all the visible boss bars of a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -390,7 +416,8 @@ public static&nbsp;java.util.Set&lt;<a href="BossBar.html" title="class in net.m
 <li class="blockList">
 <h4>addViewer</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;addViewer&#8203;(@NotNull
-                         <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+                         @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Viewable.html#addViewer(net.minestom.server.entity.Player)">Viewable</a></code></span></div>
 <div class="block">Adds a viewer.</div>
 <dl>
@@ -410,7 +437,8 @@ public static&nbsp;java.util.Set&lt;<a href="BossBar.html" title="class in net.m
 <li class="blockList">
 <h4>removeViewer</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;removeViewer&#8203;(@NotNull
-                            <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+                            @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Viewable.html#removeViewer(net.minestom.server.entity.Player)">Viewable</a></code></span></div>
 <div class="block">Removes a viewer.</div>
 <dl>
@@ -430,7 +458,8 @@ public static&nbsp;java.util.Set&lt;<a href="BossBar.html" title="class in net.m
 <li class="blockList">
 <h4>getViewers</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.Set&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;getViewers()</pre>
+public&nbsp;@NotNull java.util.Set&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;getViewers()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../Viewable.html#getViewers()">Viewable</a></code></span></div>
 <div class="block">Gets all the viewers of this viewable element.</div>
 <dl>
@@ -448,7 +477,8 @@ public&nbsp;java.util.Set&lt;<a href="../entity/Player.html" title="class in net
 <li class="blockList">
 <h4>getTitle</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getTitle()</pre>
+public&nbsp;@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getTitle()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the bossbar title.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -463,7 +493,8 @@ public&nbsp;<a href="../chat/JsonMessage.html" title="class in net.minestom.serv
 <li class="blockList">
 <h4>setTitle</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setTitle&#8203;(@NotNull
-                     <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title)</pre>
+                     @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Changes the bossbar title.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -478,6 +509,7 @@ public&nbsp;<a href="../chat/JsonMessage.html" title="class in net.minestom.serv
 <li class="blockList">
 <h4>getProgress</h4>
 <pre class="methodSignature">public&nbsp;float&nbsp;getProgress()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the bossbar progress.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -492,6 +524,7 @@ public&nbsp;<a href="../chat/JsonMessage.html" title="class in net.minestom.serv
 <li class="blockList">
 <h4>setProgress</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setProgress&#8203;(float&nbsp;progress)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Changes the bossbar progress.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -508,7 +541,8 @@ public&nbsp;<a href="../chat/JsonMessage.html" title="class in net.minestom.serv
 <li class="blockList">
 <h4>getColor</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="BarColor.html" title="enum in net.minestom.server.bossbar">BarColor</a>&nbsp;getColor()</pre>
+public&nbsp;@NotNull <a href="BarColor.html" title="enum in net.minestom.server.bossbar">BarColor</a>&nbsp;getColor()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the bossbar color.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -523,7 +557,8 @@ public&nbsp;<a href="BarColor.html" title="enum in net.minestom.server.bossbar">
 <li class="blockList">
 <h4>setColor</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setColor&#8203;(@NotNull
-                     <a href="BarColor.html" title="enum in net.minestom.server.bossbar">BarColor</a>&nbsp;color)</pre>
+                     @NotNull <a href="BarColor.html" title="enum in net.minestom.server.bossbar">BarColor</a>&nbsp;color)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Changes the bossbar color.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -538,7 +573,8 @@ public&nbsp;<a href="BarColor.html" title="enum in net.minestom.server.bossbar">
 <li class="blockList">
 <h4>getDivision</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a>&nbsp;getDivision()</pre>
+public&nbsp;@NotNull <a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a>&nbsp;getDivision()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the bossbar division.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -553,7 +589,8 @@ public&nbsp;<a href="BarDivision.html" title="enum in net.minestom.server.bossba
 <li class="blockList">
 <h4>setDivision</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setDivision&#8203;(@NotNull
-                        <a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a>&nbsp;division)</pre>
+                        @NotNull <a href="BarDivision.html" title="enum in net.minestom.server.bossbar">BarDivision</a>&nbsp;division)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Changes the bossbar division.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -568,6 +605,7 @@ public&nbsp;<a href="BarDivision.html" title="enum in net.minestom.server.bossba
 <li class="blockList">
 <h4>getFlags</h4>
 <pre class="methodSignature">public&nbsp;byte&nbsp;getFlags()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Gets the bossbar flags.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -582,6 +620,7 @@ public&nbsp;<a href="BarDivision.html" title="enum in net.minestom.server.bossba
 <li class="blockList">
 <h4>setFlags</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setFlags&#8203;(byte&nbsp;flags)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Sets the bossbar flags.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -598,6 +637,7 @@ public&nbsp;<a href="BarDivision.html" title="enum in net.minestom.server.bossba
 <li class="blockList">
 <h4>delete</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;delete()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Deletes the boss bar and remove all of its viewers.</div>
 </li>
 </ul>
@@ -608,6 +648,7 @@ public&nbsp;<a href="BarDivision.html" title="enum in net.minestom.server.bossba
 <li class="blockList">
 <h4>equals</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;equals&#8203;(java.lang.Object&nbsp;o)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>equals</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
@@ -621,6 +662,7 @@ public&nbsp;<a href="BarDivision.html" title="enum in net.minestom.server.bossba
 <li class="blockList">
 <h4>hashCode</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;hashCode()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>hashCode</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>

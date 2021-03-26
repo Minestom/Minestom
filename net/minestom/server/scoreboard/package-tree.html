@@ -108,7 +108,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">net.minestom.server.scoreboard.<a href="Sidebar.html" title="class in net.minestom.server.scoreboard"><span class="typeNameLink">Sidebar</span></a> (implements net.minestom.server.scoreboard.<a href="Scoreboard.html" title="interface in net.minestom.server.scoreboard">Scoreboard</a>)</li>
 <li class="circle">net.minestom.server.scoreboard.<a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard"><span class="typeNameLink">Sidebar.ScoreboardLine</span></a></li>
 <li class="circle">net.minestom.server.scoreboard.<a href="TabList.html" title="class in net.minestom.server.scoreboard"><span class="typeNameLink">TabList</span></a> (implements net.minestom.server.scoreboard.<a href="Scoreboard.html" title="interface in net.minestom.server.scoreboard">Scoreboard</a>)</li>
-<li class="circle">net.minestom.server.scoreboard.<a href="Team.html" title="class in net.minestom.server.scoreboard"><span class="typeNameLink">Team</span></a></li>
+<li class="circle">net.minestom.server.scoreboard.<a href="Team.html" title="class in net.minestom.server.scoreboard"><span class="typeNameLink">Team</span></a> (implements net.minestom.server.adventure.audience.<a href="../adventure/audience/PacketGroupingAudience.html" title="interface in net.minestom.server.adventure.audience">PacketGroupingAudience</a>)</li>
 <li class="circle">net.minestom.server.scoreboard.<a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard"><span class="typeNameLink">TeamBuilder</span></a></li>
 <li class="circle">net.minestom.server.scoreboard.<a href="TeamManager.html" title="class in net.minestom.server.scoreboard"><span class="typeNameLink">TeamManager</span></a></li>
 </ul>
@@ -118,9 +118,22 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section role="region">
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
+<li class="circle">net.kyori.adventure.audience.Audience
+<ul>
+<li class="circle">net.kyori.adventure.audience.ForwardingAudience
+<ul>
+<li class="circle">net.minestom.server.adventure.audience.<a href="../adventure/audience/PacketGroupingAudience.html" title="interface in net.minestom.server.adventure.audience"><span class="typeNameLink">PacketGroupingAudience</span></a>
+<ul>
+<li class="circle">net.minestom.server.scoreboard.<a href="Scoreboard.html" title="interface in net.minestom.server.scoreboard"><span class="typeNameLink">Scoreboard</span></a> (also extends net.minestom.server.<a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a>)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="circle">net.minestom.server.<a href="../Viewable.html" title="interface in net.minestom.server"><span class="typeNameLink">Viewable</span></a>
 <ul>
-<li class="circle">net.minestom.server.scoreboard.<a href="Scoreboard.html" title="interface in net.minestom.server.scoreboard"><span class="typeNameLink">Scoreboard</span></a></li>
+<li class="circle">net.minestom.server.scoreboard.<a href="Scoreboard.html" title="interface in net.minestom.server.scoreboard"><span class="typeNameLink">Scoreboard</span></a> (also extends net.minestom.server.adventure.audience.<a href="../adventure/audience/PacketGroupingAudience.html" title="interface in net.minestom.server.adventure.audience">PacketGroupingAudience</a>)</li>
 </ul>
 </li>
 </ul>

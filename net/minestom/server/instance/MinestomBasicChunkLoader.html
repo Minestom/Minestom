@@ -189,18 +189,18 @@ implements <a href="IChunkLoader.html" title="interface in net.minestom.server.i
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadChunk(net.minestom.server.instance.Instance,int,int,net.minestom.server.utils.chunk.ChunkCallback)">loadChunk</a></span>&#8203;(<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadChunk(net.minestom.server.instance.Instance,int,int,net.minestom.server.utils.chunk.ChunkCallback)">loadChunk</a></span>&#8203;(@NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
          int&nbsp;chunkX,
          int&nbsp;chunkZ,
-         <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
+         @Nullable <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Loads a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>, all blocks should be set since the <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a> is not applied.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveChunk(net.minestom.server.instance.Chunk,java.lang.Runnable)">saveChunk</a></span>&#8203;(<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
-         java.lang.Runnable&nbsp;callback)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveChunk(net.minestom.server.instance.Chunk,java.lang.Runnable)">saveChunk</a></span>&#8203;(@NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+         @Nullable java.lang.Runnable&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Saves a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> with an optional callback for when it is done.</div>
 </td>
@@ -285,9 +285,9 @@ implements <a href="IChunkLoader.html" title="interface in net.minestom.server.i
 <li class="blockList">
 <h4>saveChunk</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;saveChunk&#8203;(@NotNull
-                      <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
+                      @NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                       @Nullable
-                      java.lang.Runnable&nbsp;callback)</pre>
+                      @Nullable java.lang.Runnable&nbsp;callback)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="IChunkLoader.html#saveChunk(net.minestom.server.instance.Chunk,java.lang.Runnable)">IChunkLoader</a></code></span></div>
 <div class="block">Saves a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> with an optional callback for when it is done.</div>
 <dl>
@@ -308,11 +308,11 @@ implements <a href="IChunkLoader.html" title="interface in net.minestom.server.i
 <li class="blockList">
 <h4>loadChunk</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;loadChunk&#8203;(@NotNull
-                         <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                         @NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
                          int&nbsp;chunkX,
                          int&nbsp;chunkZ,
                          @Nullable
-                         <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
+                         @Nullable <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="IChunkLoader.html#loadChunk(net.minestom.server.instance.Instance,int,int,net.minestom.server.utils.chunk.ChunkCallback)">IChunkLoader</a></code></span></div>
 <div class="block">Loads a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>, all blocks should be set since the <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a> is not applied.</div>
 <dl>

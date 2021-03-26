@@ -158,33 +158,33 @@ implements java.util.Iterator&lt;<a href="../BlockPosition.html" title="class in
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.LivingEntity)">BlockIterator</a></span>&#8203;(<a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.LivingEntity)">BlockIterator</a></span>&#8203;(@NotNull <a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity)</code></th>
 <td class="colLast">
 <div class="block">Constructs the BlockIterator.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.LivingEntity,int)">BlockIterator</a></span>&#8203;(<a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.LivingEntity,int)">BlockIterator</a></span>&#8203;(@NotNull <a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity,
              int&nbsp;maxDistance)</code></th>
 <td class="colLast">
 <div class="block">Constructs the BlockIterator.</div>
 </td>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Position)">BlockIterator</a></span>&#8203;(<a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Position)">BlockIterator</a></span>&#8203;(@NotNull <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos)</code></th>
 <td class="colLast">
 <div class="block">Constructs the BlockIterator.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Position,double)">BlockIterator</a></span>&#8203;(<a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Position,double)">BlockIterator</a></span>&#8203;(@NotNull <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos,
              double&nbsp;yOffset)</code></th>
 <td class="colLast">
 <div class="block">Constructs the BlockIterator.</div>
 </td>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Position,double,int)">BlockIterator</a></span>&#8203;(<a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Position,double,int)">BlockIterator</a></span>&#8203;(@NotNull <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos,
              double&nbsp;yOffset,
              int&nbsp;maxDistance)</code></th>
 <td class="colLast">
@@ -192,8 +192,8 @@ implements java.util.Iterator&lt;<a href="../BlockPosition.html" title="class in
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Vector,net.minestom.server.utils.Vector,double,int)">BlockIterator</a></span>&#8203;(<a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;start,
-             <a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;direction,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Vector,net.minestom.server.utils.Vector,double,int)">BlockIterator</a></span>&#8203;(@NotNull <a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;start,
+             @NotNull <a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;direction,
              double&nbsp;yOffset,
              int&nbsp;maxDistance)</code></th>
 <td class="colLast">
@@ -231,7 +231,7 @@ implements java.util.Iterator&lt;<a href="../BlockPosition.html" title="class in
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#next()">next</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the next BlockPosition in the trace</div>
@@ -285,9 +285,9 @@ implements java.util.Iterator&lt;<a href="../BlockPosition.html" title="class in
 <li class="blockList">
 <h4>BlockIterator</h4>
 <pre>public&nbsp;BlockIterator&#8203;(@NotNull
-                     <a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;start,
+                     @NotNull <a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;start,
                      @NotNull
-                     <a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;direction,
+                     @NotNull <a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;direction,
                      double&nbsp;yOffset,
                      int&nbsp;maxDistance)</pre>
 <div class="block">Constructs the BlockIterator.
@@ -312,7 +312,7 @@ implements java.util.Iterator&lt;<a href="../BlockPosition.html" title="class in
 <li class="blockList">
 <h4>BlockIterator</h4>
 <pre>public&nbsp;BlockIterator&#8203;(@NotNull
-                     <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos,
+                     @NotNull <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos,
                      double&nbsp;yOffset,
                      int&nbsp;maxDistance)</pre>
 <div class="block">Constructs the BlockIterator.
@@ -336,7 +336,7 @@ implements java.util.Iterator&lt;<a href="../BlockPosition.html" title="class in
 <li class="blockList">
 <h4>BlockIterator</h4>
 <pre>public&nbsp;BlockIterator&#8203;(@NotNull
-                     <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos,
+                     @NotNull <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos,
                      double&nbsp;yOffset)</pre>
 <div class="block">Constructs the BlockIterator.
  <p>
@@ -356,7 +356,7 @@ implements java.util.Iterator&lt;<a href="../BlockPosition.html" title="class in
 <li class="blockList">
 <h4>BlockIterator</h4>
 <pre>public&nbsp;BlockIterator&#8203;(@NotNull
-                     <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos)</pre>
+                     @NotNull <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos)</pre>
 <div class="block">Constructs the BlockIterator.
  <p>
  This considers all blocks as 1x1x1 in size.</div>
@@ -373,7 +373,7 @@ implements java.util.Iterator&lt;<a href="../BlockPosition.html" title="class in
 <li class="blockList">
 <h4>BlockIterator</h4>
 <pre>public&nbsp;BlockIterator&#8203;(@NotNull
-                     <a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity,
+                     @NotNull <a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity,
                      int&nbsp;maxDistance)</pre>
 <div class="block">Constructs the BlockIterator.
  <p>
@@ -394,7 +394,7 @@ implements java.util.Iterator&lt;<a href="../BlockPosition.html" title="class in
 <li class="blockList">
 <h4>BlockIterator</h4>
 <pre>public&nbsp;BlockIterator&#8203;(@NotNull
-                     <a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity)</pre>
+                     @NotNull <a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity)</pre>
 <div class="block">Constructs the BlockIterator.
  <p>
  This considers all blocks as 1x1x1 in size.</div>
@@ -435,8 +435,8 @@ implements java.util.Iterator&lt;<a href="../BlockPosition.html" title="class in
 <li class="blockList">
 <h4>next</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;next()
-                   throws java.util.NoSuchElementException</pre>
+public&nbsp;@NotNull <a href="../BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;next()
+                            throws java.util.NoSuchElementException</pre>
 <div class="block">Returns the next BlockPosition in the trace</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>

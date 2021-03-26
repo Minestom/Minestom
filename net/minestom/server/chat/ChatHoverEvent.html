@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":9,"i6":9,"i7":9};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":42,"i1":42,"i2":42,"i3":42,"i4":41,"i5":41,"i6":41,"i7":41,"i8":41};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -130,8 +130,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <hr>
-<pre>public class <span class="typeNameLabel">ChatHoverEvent</span>
+<pre>@Deprecated
+public class <span class="typeNameLabel">ChatHoverEvent</span>
 extends java.lang.Object</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Represents a hover event for a specific portion of the message.</div>
 </li>
 </ul>
@@ -147,57 +149,77 @@ extends java.lang.Object</pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>protected java.lang.String</code></td>
+<td class="colFirst"><code>protected @NotNull java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAction()">getAction</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>protected java.lang.String</code></td>
+<td class="colFirst"><code>@Nullable java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getValue()">getValue</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>protected com.google.gson.JsonObject</code></td>
+<td class="colFirst"><code>@Nullable com.google.gson.JsonObject</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getValueObject()">getValueObject</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isJson()">isJson</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>static <a href="ChatHoverEvent.html" title="class in net.minestom.server.chat">ChatHoverEvent</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#showEntity(net.minestom.server.entity.Entity)">showEntity</a></span>&#8203;(<a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
+<td class="colFirst"><code>static @NotNull <a href="ChatHoverEvent.html" title="class in net.minestom.server.chat">ChatHoverEvent</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#showEntity(net.minestom.server.entity.Entity)">showEntity</a></span>&#8203;(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Shows an entity when hovered.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>static <a href="ChatHoverEvent.html" title="class in net.minestom.server.chat">ChatHoverEvent</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#showItem(net.minestom.server.item.ItemStack)">showItem</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#showEntity(java.util.UUID,net.minestom.server.entity.EntityType)">showEntity</a></span>&#8203;(java.util.UUID&nbsp;uuid,
+          <a href="../entity/EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>static @NotNull <a href="ChatHoverEvent.html" title="class in net.minestom.server.chat">ChatHoverEvent</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#showItem(net.minestom.server.item.ItemStack)">showItem</a></span>&#8203;(@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Shows an item when hovered.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>static <a href="ChatHoverEvent.html" title="class in net.minestom.server.chat">ChatHoverEvent</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#showText(java.lang.String)">showText</a></span>&#8203;(java.lang.String&nbsp;text)</code></th>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>static @NotNull <a href="ChatHoverEvent.html" title="class in net.minestom.server.chat">ChatHoverEvent</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#showText(java.lang.String)">showText</a></span>&#8203;(@NotNull java.lang.String&nbsp;text)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Shows a raw text when hovered.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>static <a href="ChatHoverEvent.html" title="class in net.minestom.server.chat">ChatHoverEvent</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#showText(net.minestom.server.chat.JsonMessage)">showText</a></span>&#8203;(<a href="JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;text)</code></th>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>static @NotNull <a href="ChatHoverEvent.html" title="class in net.minestom.server.chat">ChatHoverEvent</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#showText(net.minestom.server.chat.JsonMessage)">showText</a></span>&#8203;(@NotNull <a href="JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;text)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Shows a <a href="JsonMessage.html" title="class in net.minestom.server.chat"><code>JsonMessage</code></a> when hovered.</div>
 </td>
 </tr>
@@ -232,7 +254,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getAction</h4>
 <pre class="methodSignature">@NotNull
-protected&nbsp;java.lang.String&nbsp;getAction()</pre>
+protected&nbsp;@NotNull java.lang.String&nbsp;getAction()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="getValue()">
@@ -242,7 +265,8 @@ protected&nbsp;java.lang.String&nbsp;getAction()</pre>
 <li class="blockList">
 <h4>getValue</h4>
 <pre class="methodSignature">@Nullable
-protected&nbsp;java.lang.String&nbsp;getValue()</pre>
+public&nbsp;@Nullable java.lang.String&nbsp;getValue()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="getValueObject()">
@@ -252,7 +276,8 @@ protected&nbsp;java.lang.String&nbsp;getValue()</pre>
 <li class="blockList">
 <h4>getValueObject</h4>
 <pre class="methodSignature">@Nullable
-protected&nbsp;com.google.gson.JsonObject&nbsp;getValueObject()</pre>
+public&nbsp;@Nullable com.google.gson.JsonObject&nbsp;getValueObject()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="isJson()">
@@ -262,6 +287,7 @@ protected&nbsp;com.google.gson.JsonObject&nbsp;getValueObject()</pre>
 <li class="blockList">
 <h4>isJson</h4>
 <pre class="methodSignature">protected&nbsp;boolean&nbsp;isJson()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="showText(net.minestom.server.chat.JsonMessage)">
@@ -271,8 +297,9 @@ protected&nbsp;com.google.gson.JsonObject&nbsp;getValueObject()</pre>
 <li class="blockList">
 <h4>showText</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="ChatHoverEvent.html" title="class in net.minestom.server.chat">ChatHoverEvent</a>&nbsp;showText&#8203;(@NotNull
-                                      <a href="JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;text)</pre>
+public static&nbsp;@NotNull <a href="ChatHoverEvent.html" title="class in net.minestom.server.chat">ChatHoverEvent</a>&nbsp;showText&#8203;(@NotNull
+                                               @NotNull <a href="JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;text)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Shows a <a href="JsonMessage.html" title="class in net.minestom.server.chat"><code>JsonMessage</code></a> when hovered.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -289,8 +316,9 @@ public static&nbsp;<a href="ChatHoverEvent.html" title="class in net.minestom.se
 <li class="blockList">
 <h4>showText</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="ChatHoverEvent.html" title="class in net.minestom.server.chat">ChatHoverEvent</a>&nbsp;showText&#8203;(@NotNull
-                                      java.lang.String&nbsp;text)</pre>
+public static&nbsp;@NotNull <a href="ChatHoverEvent.html" title="class in net.minestom.server.chat">ChatHoverEvent</a>&nbsp;showText&#8203;(@NotNull
+                                               @NotNull java.lang.String&nbsp;text)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Shows a raw text when hovered.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -307,8 +335,9 @@ public static&nbsp;<a href="ChatHoverEvent.html" title="class in net.minestom.se
 <li class="blockList">
 <h4>showItem</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="ChatHoverEvent.html" title="class in net.minestom.server.chat">ChatHoverEvent</a>&nbsp;showItem&#8203;(@NotNull
-                                      <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
+public static&nbsp;@NotNull <a href="ChatHoverEvent.html" title="class in net.minestom.server.chat">ChatHoverEvent</a>&nbsp;showItem&#8203;(@NotNull
+                                               @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Shows an item when hovered.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -321,12 +350,13 @@ public static&nbsp;<a href="ChatHoverEvent.html" title="class in net.minestom.se
 <a id="showEntity(net.minestom.server.entity.Entity)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>showEntity</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="ChatHoverEvent.html" title="class in net.minestom.server.chat">ChatHoverEvent</a>&nbsp;showEntity&#8203;(@NotNull
-                                        <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</pre>
+public static&nbsp;@NotNull <a href="ChatHoverEvent.html" title="class in net.minestom.server.chat">ChatHoverEvent</a>&nbsp;showEntity&#8203;(@NotNull
+                                                 @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Shows an entity when hovered.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -334,6 +364,17 @@ public static&nbsp;<a href="ChatHoverEvent.html" title="class in net.minestom.se
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the chat hover event</dd>
 </dl>
+</li>
+</ul>
+<a id="showEntity(java.util.UUID,net.minestom.server.entity.EntityType)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>showEntity</h4>
+<pre class="methodSignature">public static&nbsp;<a href="ChatHoverEvent.html" title="class in net.minestom.server.chat">ChatHoverEvent</a>&nbsp;showEntity&#8203;(java.util.UUID&nbsp;uuid,
+                                        <a href="../entity/EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 </li>

@@ -174,20 +174,20 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#applyWorldBorder(net.minestom.server.instance.Instance,net.minestom.server.utils.Position,net.minestom.server.utils.Position)">applyWorldBorder</a></span>&#8203;(<a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;currentPosition,
-                <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;newPosition)</code></th>
+<td class="colFirst"><code>static @NotNull <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#applyWorldBorder(net.minestom.server.instance.Instance,net.minestom.server.utils.Position,net.minestom.server.utils.Position)">applyWorldBorder</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                @NotNull <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;currentPosition,
+                @NotNull <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;newPosition)</code></th>
 <td class="colLast">
 <div class="block">Applies world border collision.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#handlePhysics(net.minestom.server.entity.Entity,net.minestom.server.utils.Vector,net.minestom.server.utils.Position,net.minestom.server.utils.Vector)">handlePhysics</a></span>&#8203;(<a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
-             <a href="../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;deltaPosition,
-             <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;positionOut,
-             <a href="../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;velocityOut)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#handlePhysics(net.minestom.server.entity.Entity,net.minestom.server.utils.Vector,net.minestom.server.utils.Position,net.minestom.server.utils.Vector)">handlePhysics</a></span>&#8203;(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+             @NotNull <a href="../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;deltaPosition,
+             @NotNull <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;positionOut,
+             @NotNull <a href="../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;velocityOut)</code></th>
 <td class="colLast">
 <div class="block">Moves an entity with physics applied (ie checking against blocks)</div>
 </td>
@@ -242,13 +242,13 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>handlePhysics</h4>
 <pre class="methodSignature">public static&nbsp;boolean&nbsp;handlePhysics&#8203;(@NotNull
-                                    <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+                                    @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
                                     @NotNull
-                                    <a href="../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;deltaPosition,
+                                    @NotNull <a href="../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;deltaPosition,
                                     @NotNull
-                                    <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;positionOut,
+                                    @NotNull <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;positionOut,
                                     @NotNull
-                                    <a href="../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;velocityOut)</pre>
+                                    @NotNull <a href="../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;velocityOut)</pre>
 <div class="block">Moves an entity with physics applied (ie checking against blocks)</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -268,12 +268,12 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>applyWorldBorder</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;<a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;applyWorldBorder&#8203;(@NotNull
-                                        <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                                        @NotNull
-                                        <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;currentPosition,
-                                        @NotNull
-                                        <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;newPosition)</pre>
+public static&nbsp;@NotNull <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;applyWorldBorder&#8203;(@NotNull
+                                                 @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                                                 @NotNull
+                                                 @NotNull <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;currentPosition,
+                                                 @NotNull
+                                                 @NotNull <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;newPosition)</pre>
 <div class="block">Applies world border collision.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

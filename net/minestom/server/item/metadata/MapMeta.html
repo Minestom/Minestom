@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10,"i2":42,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":42,"i12":10,"i13":10,"i14":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -203,14 +203,14 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Creates and returns a copy of this object.</div>
@@ -225,77 +225,95 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLegacyMapColor()">getLegacyMapColor</a></span>()</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#getMapColor()"><code>getMapColor()</code></a></div>
+</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>@NotNull <a href="../../color/Color.html" title="class in net.minestom.server.color">Color</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMapColor()">getMapColor</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the map color.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMapId()">getMapId</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the map id.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMapScaleDirection()">getMapScaleDirection</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the map scale direction.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasNbt()">hasNbt</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if this meta object contains any useful data to send to the client.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSimilar(net.minestom.server.item.metadata.ItemMeta)">isSimilar</a></span>&#8203;(<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSimilar(net.minestom.server.item.metadata.ItemMeta)">isSimilar</a></span>&#8203;(@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</code></th>
 <td class="colLast">
 <div class="block">Gets if the two ItemMeta are similar.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">read</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">read</a></span>&#8203;(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
 <div class="block">Reads nbt data from a compound.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDecorations(java.util.List)">setDecorations</a></span>&#8203;(java.util.List&lt;<a href="MapMeta.MapDecoration.html" title="class in net.minestom.server.item.metadata">MapMeta.MapDecoration</a>&gt;&nbsp;decorations)</code></th>
 <td class="colLast">
 <div class="block">Changes the map decorations list.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMapColor(net.minestom.server.chat.ChatColor)">setMapColor</a></span>&#8203;(<a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;mapColor)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMapColor(net.minestom.server.color.Color)">setMapColor</a></span>&#8203;(@NotNull <a href="../../color/Color.html" title="class in net.minestom.server.color">Color</a>&nbsp;color)</code></th>
 <td class="colLast">
 <div class="block">Changes the map color.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMapColor(net.minestom.server.chat.ChatColor)">setMapColor</a></span>&#8203;(<a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;mapColor)</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#setMapColor(net.minestom.server.color.Color)"><code>setMapColor(Color)</code></a></div>
+</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMapId(int)">setMapId</a></span>&#8203;(int&nbsp;mapId)</code></th>
 <td class="colLast">
 <div class="block">Changes the map id.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMapScaleDirection(int)">setMapScaleDirection</a></span>&#8203;(int&nbsp;mapScaleDirection)</code></th>
 <td class="colLast">
 <div class="block">Changes the map scale direction.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">write</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">write</a></span>&#8203;(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
 <td class="colLast">
 <div class="block">Writes nbt data to a compound.</div>
 </td>
@@ -436,13 +454,32 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 </dl>
 </li>
 </ul>
+<a id="getLegacyMapColor()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLegacyMapColor</h4>
+<pre class="methodSignature">@Deprecated
+public&nbsp;<a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;getLegacyMapColor()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#getMapColor()"><code>getMapColor()</code></a></div>
+</div>
+<div class="block">Gets the map color.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the map color</dd>
+</dl>
+</li>
+</ul>
 <a id="getMapColor()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getMapColor</h4>
-<pre class="methodSignature">public&nbsp;<a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;getMapColor()</pre>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="../../color/Color.html" title="class in net.minestom.server.color">Color</a>&nbsp;getMapColor()</pre>
 <div class="block">Gets the map color.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -456,13 +493,30 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <ul class="blockList">
 <li class="blockList">
 <h4>setMapColor</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setMapColor&#8203;(<a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;mapColor)</pre>
-<div class="block">Changes the map color.
- <p>
- WARNING: RGB colors are not supported.</div>
+<pre class="methodSignature">@Deprecated
+public&nbsp;void&nbsp;setMapColor&#8203;(<a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;mapColor)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#setMapColor(net.minestom.server.color.Color)"><code>setMapColor(Color)</code></a></div>
+</div>
+<div class="block">Changes the map color.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>mapColor</code> - the new map color</dd>
+</dl>
+</li>
+</ul>
+<a id="setMapColor(net.minestom.server.color.Color)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setMapColor</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setMapColor&#8203;(@NotNull
+                        @NotNull <a href="../../color/Color.html" title="class in net.minestom.server.color">Color</a>&nbsp;color)</pre>
+<div class="block">Changes the map color.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>color</code> - the new map color</dd>
 </dl>
 </li>
 </ul>
@@ -490,7 +544,7 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <li class="blockList">
 <h4>isSimilar</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isSimilar&#8203;(@NotNull
-                         <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</pre>
+                         @NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#isSimilar(net.minestom.server.item.metadata.ItemMeta)">ItemMeta</a></code></span></div>
 <div class="block">Gets if the two ItemMeta are similar.
  <p>
@@ -512,7 +566,7 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <li class="blockList">
 <h4>read</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;read&#8203;(@NotNull
-                 org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
+                 @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">ItemMeta</a></code></span></div>
 <div class="block">Reads nbt data from a compound.
  <p>
@@ -533,7 +587,7 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <li class="blockList">
 <h4>write</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
-                  org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
+                  @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">ItemMeta</a></code></span></div>
 <div class="block">Writes nbt data to a compound.</div>
 <dl>
@@ -551,7 +605,7 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <li class="blockList">
 <h4>clone</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;clone()</pre>
+public&nbsp;@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;clone()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#clone()">ItemMeta</a></code></span></div>
 <div class="block">Creates and returns a copy of this object.</div>
 <dl>

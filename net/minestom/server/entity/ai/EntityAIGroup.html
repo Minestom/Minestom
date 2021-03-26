@@ -177,21 +177,21 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a></code></td>
+<td class="colFirst"><code>@Nullable <a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCurrentGoalSelector()">getCurrentGoalSelector</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the current goal selector of this group.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.List&lt;<a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getGoalSelectors()">getGoalSelectors</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the goal selectors of this group.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="TargetSelector.html" title="class in net.minestom.server.entity.ai">TargetSelector</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.List&lt;<a href="TargetSelector.html" title="class in net.minestom.server.entity.ai">TargetSelector</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTargetSelectors()">getTargetSelectors</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the target selectors of this group.</div>
@@ -199,7 +199,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCurrentGoalSelector(net.minestom.server.entity.ai.GoalSelector)">setCurrentGoalSelector</a></span>&#8203;(<a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&nbsp;goalSelector)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCurrentGoalSelector(net.minestom.server.entity.ai.GoalSelector)">setCurrentGoalSelector</a></span>&#8203;(@Nullable <a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&nbsp;goalSelector)</code></th>
 <td class="colLast">
 <div class="block">Changes the current goal selector of this group.</div>
 </td>
@@ -259,7 +259,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getGoalSelectors</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.List&lt;<a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&gt;&nbsp;getGoalSelectors()</pre>
+public&nbsp;@NotNull java.util.List&lt;<a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&gt;&nbsp;getGoalSelectors()</pre>
 <div class="block">Gets the goal selectors of this group.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -274,7 +274,7 @@ public&nbsp;java.util.List&lt;<a href="GoalSelector.html" title="class in net.mi
 <li class="blockList">
 <h4>getTargetSelectors</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.List&lt;<a href="TargetSelector.html" title="class in net.minestom.server.entity.ai">TargetSelector</a>&gt;&nbsp;getTargetSelectors()</pre>
+public&nbsp;@NotNull java.util.List&lt;<a href="TargetSelector.html" title="class in net.minestom.server.entity.ai">TargetSelector</a>&gt;&nbsp;getTargetSelectors()</pre>
 <div class="block">Gets the target selectors of this group.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -289,7 +289,7 @@ public&nbsp;java.util.List&lt;<a href="TargetSelector.html" title="class in net.
 <li class="blockList">
 <h4>getCurrentGoalSelector</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;<a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&nbsp;getCurrentGoalSelector()</pre>
+public&nbsp;@Nullable <a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&nbsp;getCurrentGoalSelector()</pre>
 <div class="block">Gets the current goal selector of this group.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -304,7 +304,7 @@ public&nbsp;<a href="GoalSelector.html" title="class in net.minestom.server.enti
 <li class="blockList">
 <h4>setCurrentGoalSelector</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setCurrentGoalSelector&#8203;(@Nullable
-                                   <a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&nbsp;goalSelector)</pre>
+                                   @Nullable <a href="GoalSelector.html" title="class in net.minestom.server.entity.ai">GoalSelector</a>&nbsp;goalSelector)</pre>
 <div class="block">Changes the current goal selector of this group.
  <p>
  Mostly unsafe since the current goal selector should normally

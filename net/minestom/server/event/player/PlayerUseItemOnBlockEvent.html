@@ -180,11 +180,11 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.item.ItemStack,net.minestom.server.utils.BlockPosition,net.minestom.server.utils.Direction)">PlayerUseItemOnBlockEvent</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.item.ItemStack,net.minestom.server.utils.BlockPosition,net.minestom.server.utils.Direction)">PlayerUseItemOnBlockEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                          <a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
-                         <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
-                         <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
-                         <a href="../../utils/Direction.html" title="enum in net.minestom.server.utils">Direction</a>&nbsp;blockFace)</code></th>
+                         @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
+                         @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
+                         @NotNull <a href="../../utils/Direction.html" title="enum in net.minestom.server.utils">Direction</a>&nbsp;blockFace)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -206,7 +206,7 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../utils/Direction.html" title="enum in net.minestom.server.utils">Direction</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../utils/Direction.html" title="enum in net.minestom.server.utils">Direction</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlockFace()">getBlockFace</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets which face the player has interacted with.</div>
@@ -220,14 +220,14 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getItemStack()">getItemStack</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets with which item the player has interacted with the block.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPosition()">getPosition</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the position of the interacted block.</div>
@@ -271,15 +271,15 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <li class="blockList">
 <h4>PlayerUseItemOnBlockEvent</h4>
 <pre>public&nbsp;PlayerUseItemOnBlockEvent&#8203;(@NotNull
-                                 <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                                 @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                                  @NotNull
                                  <a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
                                  @NotNull
-                                 <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
+                                 @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
                                  @NotNull
-                                 <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
+                                 @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
                                  @NotNull
-                                 <a href="../../utils/Direction.html" title="enum in net.minestom.server.utils">Direction</a>&nbsp;blockFace)</pre>
+                                 @NotNull <a href="../../utils/Direction.html" title="enum in net.minestom.server.utils">Direction</a>&nbsp;blockFace)</pre>
 </li>
 </ul>
 </li>
@@ -299,7 +299,7 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <li class="blockList">
 <h4>getPosition</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;getPosition()</pre>
+public&nbsp;@NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;getPosition()</pre>
 <div class="block">Gets the position of the interacted block.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -314,7 +314,7 @@ public&nbsp;<a href="../../utils/BlockPosition.html" title="class in net.minesto
 <li class="blockList">
 <h4>getBlockFace</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../utils/Direction.html" title="enum in net.minestom.server.utils">Direction</a>&nbsp;getBlockFace()</pre>
+public&nbsp;@NotNull <a href="../../utils/Direction.html" title="enum in net.minestom.server.utils">Direction</a>&nbsp;getBlockFace()</pre>
 <div class="block">Gets which face the player has interacted with.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -344,7 +344,7 @@ public&nbsp;<a href="../../entity/Player.Hand.html" title="enum in net.minestom.
 <li class="blockList">
 <h4>getItemStack</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getItemStack()</pre>
+public&nbsp;@NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getItemStack()</pre>
 <div class="block">Gets with which item the player has interacted with the block.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

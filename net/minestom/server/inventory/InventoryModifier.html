@@ -150,14 +150,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addInventoryCondition(net.minestom.server.inventory.condition.InventoryCondition)">addInventoryCondition</a></span>&#8203;(<a href="condition/InventoryCondition.html" title="interface in net.minestom.server.inventory.condition">InventoryCondition</a>&nbsp;inventoryCondition)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addInventoryCondition(net.minestom.server.inventory.condition.InventoryCondition)">addInventoryCondition</a></span>&#8203;(@NotNull <a href="condition/InventoryCondition.html" title="interface in net.minestom.server.inventory.condition">InventoryCondition</a>&nbsp;inventoryCondition)</code></th>
 <td class="colLast">
 <div class="block">Adds a new <a href="condition/InventoryCondition.html" title="interface in net.minestom.server.inventory.condition"><code>InventoryCondition</code></a> to this inventory.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addItemStack(net.minestom.server.item.ItemStack)">addItemStack</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addItemStack(net.minestom.server.item.ItemStack)">addItemStack</a></span>&#8203;(@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Adds an <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> to the inventory and send relevant update to the viewer(s).</div>
 </td>
@@ -171,27 +171,27 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copyContents(net.minestom.server.item.ItemStack%5B%5D)">copyContents</a></span>&#8203;(<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>[]&nbsp;itemStacks)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copyContents(net.minestom.server.item.ItemStack%5B%5D)">copyContents</a></span>&#8203;(@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>[]&nbsp;itemStacks)</code></th>
 <td class="colLast">
 <div class="block">Places all the items of <code>itemStacks</code> into the internal array.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>java.util.List&lt;<a href="condition/InventoryCondition.html" title="interface in net.minestom.server.inventory.condition">InventoryCondition</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.List&lt;<a href="condition/InventoryCondition.html" title="interface in net.minestom.server.inventory.condition">InventoryCondition</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInventoryConditions()">getInventoryConditions</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the <a href="condition/InventoryCondition.html" title="interface in net.minestom.server.inventory.condition"><code>InventoryCondition</code></a> of this inventory.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code><a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getItemStack(int)">getItemStack</a></span>&#8203;(int&nbsp;slot)</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> at the specified slot.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code><a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>[]</code></td>
+<td class="colFirst"><code>@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getItemStacks()">getItemStacks</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> in the inventory.</div>
@@ -207,7 +207,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setItemStack(int,net.minestom.server.item.ItemStack)">setItemStack</a></span>&#8203;(int&nbsp;slot,
-            <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
+            @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Sets an <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> at the specified slot and send relevant update to the viewer(s).</div>
 </td>
@@ -237,7 +237,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>setItemStack</h4>
 <pre class="methodSignature">void&nbsp;setItemStack&#8203;(int&nbsp;slot,
                   @NotNull
-                  <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
+                  @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
 <div class="block">Sets an <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> at the specified slot and send relevant update to the viewer(s).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -253,7 +253,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>addItemStack</h4>
 <pre class="methodSignature">boolean&nbsp;addItemStack&#8203;(@NotNull
-                     <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
+                     @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
 <div class="block">Adds an <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> to the inventory and send relevant update to the viewer(s).
  <p>
  Even the item cannot be fully added, the amount of <code>itemStack</code> will be updated.</div>
@@ -282,7 +282,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>getItemStack</h4>
 <pre class="methodSignature">@NotNull
-<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getItemStack&#8203;(int&nbsp;slot)</pre>
+@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getItemStack&#8203;(int&nbsp;slot)</pre>
 <div class="block">Gets the <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> at the specified slot.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -299,7 +299,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>getItemStacks</h4>
 <pre class="methodSignature">@NotNull
-<a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>[]&nbsp;getItemStacks()</pre>
+@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>[]&nbsp;getItemStacks()</pre>
 <div class="block">Gets all the <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> in the inventory.
  <p>
  Be aware that the returned array does not need to be the original one,
@@ -331,7 +331,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>getInventoryConditions</h4>
 <pre class="methodSignature">@NotNull
-java.util.List&lt;<a href="condition/InventoryCondition.html" title="interface in net.minestom.server.inventory.condition">InventoryCondition</a>&gt;&nbsp;getInventoryConditions()</pre>
+@NotNull java.util.List&lt;<a href="condition/InventoryCondition.html" title="interface in net.minestom.server.inventory.condition">InventoryCondition</a>&gt;&nbsp;getInventoryConditions()</pre>
 <div class="block">Gets all the <a href="condition/InventoryCondition.html" title="interface in net.minestom.server.inventory.condition"><code>InventoryCondition</code></a> of this inventory.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -346,7 +346,7 @@ java.util.List&lt;<a href="condition/InventoryCondition.html" title="interface i
 <li class="blockList">
 <h4>addInventoryCondition</h4>
 <pre class="methodSignature">void&nbsp;addInventoryCondition&#8203;(@NotNull
-                           <a href="condition/InventoryCondition.html" title="interface in net.minestom.server.inventory.condition">InventoryCondition</a>&nbsp;inventoryCondition)</pre>
+                           @NotNull <a href="condition/InventoryCondition.html" title="interface in net.minestom.server.inventory.condition">InventoryCondition</a>&nbsp;inventoryCondition)</pre>
 <div class="block">Adds a new <a href="condition/InventoryCondition.html" title="interface in net.minestom.server.inventory.condition"><code>InventoryCondition</code></a> to this inventory.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -361,7 +361,7 @@ java.util.List&lt;<a href="condition/InventoryCondition.html" title="interface i
 <li class="blockList">
 <h4>copyContents</h4>
 <pre class="methodSignature">default&nbsp;void&nbsp;copyContents&#8203;(@NotNull
-                          <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>[]&nbsp;itemStacks)</pre>
+                          @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>[]&nbsp;itemStacks)</pre>
 <div class="block">Places all the items of <code>itemStacks</code> into the internal array.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

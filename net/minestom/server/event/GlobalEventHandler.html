@@ -180,14 +180,14 @@ implements <a href="handler/EventHandler.html" title="interface in net.minestom.
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>java.util.Map&lt;java.lang.Class&lt;? extends <a href="Event.html" title="class in net.minestom.server.event">Event</a>&gt;,&#8203;java.util.Collection&lt;<a href="EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&gt;&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.Map&lt;java.lang.Class&lt;? extends <a href="Event.html" title="class in net.minestom.server.event">Event</a>&gt;,&#8203;java.util.Collection&lt;<a href="EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEventCallbacksMap()">getEventCallbacksMap</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets a <code>Map</code> containing all the listeners assigned to a specific <a href="Event.html" title="class in net.minestom.server.event"><code>Event</code></a> type.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>java.util.Collection&lt;<a href="EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;?&gt;&gt;</code></td>
+<td class="colFirst"><code>@NotNull java.util.Collection&lt;<a href="EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;?&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getExtensionCallbacks(java.lang.String)">getExtensionCallbacks</a></span>&#8203;(java.lang.String&nbsp;extension)</code></th>
 <td class="colLast">
 <div class="block">Gets a <code>Collection</code> containing all the listeners assigned to a specific extension (represented by its name).</div>
@@ -250,7 +250,7 @@ implements <a href="handler/EventHandler.html" title="interface in net.minestom.
 <li class="blockList">
 <h4>getEventCallbacksMap</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.Map&lt;java.lang.Class&lt;? extends <a href="Event.html" title="class in net.minestom.server.event">Event</a>&gt;,&#8203;java.util.Collection&lt;<a href="EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&gt;&gt;&nbsp;getEventCallbacksMap()</pre>
+public&nbsp;@NotNull java.util.Map&lt;java.lang.Class&lt;? extends <a href="Event.html" title="class in net.minestom.server.event">Event</a>&gt;,&#8203;java.util.Collection&lt;<a href="EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&gt;&gt;&nbsp;getEventCallbacksMap()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="handler/EventHandler.html#getEventCallbacksMap()">EventHandler</a></code></span></div>
 <div class="block">Gets a <code>Map</code> containing all the listeners assigned to a specific <a href="Event.html" title="class in net.minestom.server.event"><code>Event</code></a> type.</div>
 <dl>
@@ -268,7 +268,7 @@ public&nbsp;java.util.Map&lt;java.lang.Class&lt;? extends <a href="Event.html" t
 <li class="blockList">
 <h4>getExtensionCallbacks</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;java.util.Collection&lt;<a href="EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;?&gt;&gt;&nbsp;getExtensionCallbacks&#8203;(java.lang.String&nbsp;extension)</pre>
+public&nbsp;@NotNull java.util.Collection&lt;<a href="EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;?&gt;&gt;&nbsp;getExtensionCallbacks&#8203;(java.lang.String&nbsp;extension)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="handler/EventHandler.html#getExtensionCallbacks(java.lang.String)">EventHandler</a></code></span></div>
 <div class="block">Gets a <code>Collection</code> containing all the listeners assigned to a specific extension (represented by its name).
  Used to unload all callbacks when the extension is unloaded</div>

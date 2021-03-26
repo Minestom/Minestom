@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
+var data = {"i0":6,"i1":18};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -122,6 +122,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <dl>
+<dt>All Superinterfaces:</dt>
+<dd><code>java.util.function.Predicate&lt;T&gt;</code></dd>
+</dl>
+<dl>
 <dt>All Known Subinterfaces:</dt>
 <dd><code><a href="EntityValidator.html" title="interface in net.minestom.server.utils.callback.validator">EntityValidator</a></code>, <code><a href="PlayerValidator.html" title="interface in net.minestom.server.utils.callback.validator">PlayerValidator</a></code>, <code><a href="StringArrayValidator.html" title="interface in net.minestom.server.utils.callback.validator">StringArrayValidator</a></code>, <code><a href="StringValidator.html" title="interface in net.minestom.server.utils.callback.validator">StringValidator</a></code></dd>
 </dl>
@@ -131,7 +135,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <hr>
 <pre>@FunctionalInterface
-public interface <span class="typeNameLabel">Validator&lt;T&gt;</span></pre>
+public interface <span class="typeNameLabel">Validator&lt;T&gt;</span>
+extends java.util.function.Predicate&lt;T&gt;</pre>
 <div class="block">Interface used when a value needs to be validated dynamically.</div>
 </li>
 </ul>
@@ -147,7 +152,7 @@ public interface <span class="typeNameLabel">Validator&lt;T&gt;</span></pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t5" class="tableTab"><span><a href="javascript:show(16);">Default Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -160,7 +165,19 @@ public interface <span class="typeNameLabel">Validator&lt;T&gt;</span></pre>
 <div class="block">Gets if a value is valid based on a condition.</div>
 </td>
 </tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>default boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#test(T)">test</a></span>&#8203;(<a href="Validator.html" title="type parameter in Validator">T</a>&nbsp;t)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.java.util.function.Predicate">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;java.util.function.Predicate</h3>
+<code>and, negate, or</code></li>
+</ul>
 </li>
 </ul>
 </section>
@@ -182,7 +199,7 @@ public interface <span class="typeNameLabel">Validator&lt;T&gt;</span></pre>
 </a><a id="isValid(T)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>isValid</h4>
 <pre class="methodSignature">boolean&nbsp;isValid&#8203;(@NotNull
@@ -193,6 +210,21 @@ public interface <span class="typeNameLabel">Validator&lt;T&gt;</span></pre>
 <dd><code>value</code> - the value to check</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the value is valid, false otherwise</dd>
+</dl>
+</li>
+</ul>
+<a id="test(java.lang.Object)">
+<!--   -->
+</a><a id="test(T)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>test</h4>
+<pre class="methodSignature">default&nbsp;boolean&nbsp;test&#8203;(<a href="Validator.html" title="type parameter in Validator">T</a>&nbsp;t)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code>test</code>&nbsp;in interface&nbsp;<code>java.util.function.Predicate&lt;<a href="Validator.html" title="type parameter in Validator">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

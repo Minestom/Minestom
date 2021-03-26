@@ -180,8 +180,8 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.entity.Entity,net.minestom.server.entity.Player.Hand)">PlayerEntityInteractEvent</a></span>&#8203;(<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                         <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entityTarget,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.entity.Entity,net.minestom.server.entity.Player.Hand)">PlayerEntityInteractEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                         @NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entityTarget,
                          <a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -211,7 +211,7 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTarget()">getTarget</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="../../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> with who <a href="../PlayerEvent.html#getPlayer()"><code>PlayerEvent.getPlayer()</code></a> is interacting.</div>
@@ -255,9 +255,9 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <li class="blockList">
 <h4>PlayerEntityInteractEvent</h4>
 <pre>public&nbsp;PlayerEntityInteractEvent&#8203;(@NotNull
-                                 <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                                 @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                                  @NotNull
-                                 <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entityTarget,
+                                 @NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entityTarget,
                                  @NotNull
                                  <a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</pre>
 </li>
@@ -279,7 +279,7 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <li class="blockList">
 <h4>getTarget</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;<a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;getTarget()</pre>
+public&nbsp;@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;getTarget()</pre>
 <div class="block">Gets the <a href="../../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> with who <a href="../PlayerEvent.html#getPlayer()"><code>PlayerEvent.getPlayer()</code></a> is interacting.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

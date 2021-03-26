@@ -1,11 +1,15 @@
 net.minestom.server
 net.minestom.server.advancements
 net.minestom.server.advancements.notifications
+net.minestom.server.adventure
+net.minestom.server.adventure.audience
+net.minestom.server.adventure.bossbar
 net.minestom.server.attribute
 net.minestom.server.benchmark
 net.minestom.server.bossbar
 net.minestom.server.chat
 net.minestom.server.collision
+net.minestom.server.color
 net.minestom.server.command
 net.minestom.server.command.builder
 net.minestom.server.command.builder.arguments
