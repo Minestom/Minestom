@@ -3,7 +3,7 @@ package net.minestom.server.utils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.adventure.SerializationManager;
+import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.netty.packet.FramedPacket;
@@ -50,8 +50,8 @@ public final class PacketUtils {
         // work out if the packet needs to be sent individually due to server-side translating
         boolean needsTranslating = false;
 
-        if (SerializationManager.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ComponentHoldingServerPacket) {
-            needsTranslating = MinecraftServer.getSerializationManager().areAnyTranslatable(((ComponentHoldingServerPacket) packet).components());
+        if (AdventureSerializer.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ComponentHoldingServerPacket) {
+            needsTranslating = AdventureSerializer.areAnyTranslatable(((ComponentHoldingServerPacket) packet).components());
         }
 
         if (MinecraftServer.hasGroupedPacket() && !needsTranslating) {

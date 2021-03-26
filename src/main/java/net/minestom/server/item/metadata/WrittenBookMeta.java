@@ -3,7 +3,7 @@ package net.minestom.server.item.metadata;
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.adventure.Localizable;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -174,7 +174,7 @@ public class WrittenBookMeta extends ItemMeta {
         if (!pages.isEmpty()) {
             NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
             for (Component page : pages) {
-                list.add(new NBTString(MinecraftServer.getSerializationManager().serialize(page)));
+                list.add(new NBTString(AdventureSerializer.serialize(page)));
             }
             compound.set("pages", list);
         }
@@ -211,8 +211,8 @@ public class WrittenBookMeta extends ItemMeta {
         WrittenBookMeta meta = new WrittenBookMeta();
         meta.resolved = false;
         meta.generation = WrittenBookGeneration.ORIGINAL;
-        meta.author = MinecraftServer.getSerializationManager().translateAndSerialize(book.author(), localizable);
-        meta.title = MinecraftServer.getSerializationManager().translateAndSerialize(book.title(), localizable);
+        meta.author = AdventureSerializer.translateAndSerialize(book.author(), localizable);
+        meta.title = AdventureSerializer.translateAndSerialize(book.title(), localizable);
         meta.pages = new ArrayList<>();
         meta.pages.addAll(book.pages());
 

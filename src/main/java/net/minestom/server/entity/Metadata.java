@@ -1,7 +1,7 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
@@ -55,7 +55,7 @@ public class Metadata {
     }
 
     public static Value<Component> Chat(@NotNull Component value) {
-        return new Value<>(TYPE_CHAT, value, writer -> writer.writeSizedString(MinecraftServer.getSerializationManager().serialize(value)));
+        return new Value<>(TYPE_CHAT, value, writer -> writer.writeSizedString(AdventureSerializer.serialize(value)));
     }
 
     public static Value<Component> OptChat(@Nullable Component value) {
@@ -63,7 +63,7 @@ public class Metadata {
             final boolean present = value != null;
             writer.writeBoolean(present);
             if (present) {
-                writer.writeSizedString(MinecraftServer.getSerializationManager().serialize(value));
+                writer.writeSizedString(AdventureSerializer.serialize(value));
             }
         });
     }

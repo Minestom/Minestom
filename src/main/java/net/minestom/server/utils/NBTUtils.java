@@ -5,6 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.util.Codec;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.data.Data;
@@ -317,7 +318,7 @@ public final class NBTUtils {
         if (hasDisplayName || hasLore) {
             NBTCompound displayNBT = new NBTCompound();
             if (hasDisplayName) {
-                final String name = MinecraftServer.getSerializationManager().serialize(itemStack.getDisplayName());
+                final String name = AdventureSerializer.serialize(itemStack.getDisplayName());
                 displayNBT.setString("Name", name);
             }
 

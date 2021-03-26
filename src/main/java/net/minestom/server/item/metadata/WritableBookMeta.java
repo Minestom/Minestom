@@ -2,7 +2,7 @@ package net.minestom.server.item.metadata;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.AdventureSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -104,7 +104,7 @@ public class WritableBookMeta extends ItemMeta {
         if (!pages.isEmpty()) {
             NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
             for (Component page : pages) {
-                list.add(new NBTString(MinecraftServer.getSerializationManager().serialize(page)));
+                list.add(new NBTString(AdventureSerializer.serialize(page)));
             }
             compound.set("pages", list);
         }

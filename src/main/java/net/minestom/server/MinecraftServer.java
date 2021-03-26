@@ -2,7 +2,7 @@ package net.minestom.server;
 
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
-import net.minestom.server.adventure.SerializationManager;
+import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.command.CommandManager;
@@ -118,7 +118,6 @@ public final class MinecraftServer {
     private static DimensionTypeManager dimensionTypeManager;
     private static BiomeManager biomeManager;
     private static AdvancementManager advancementManager;
-    private static SerializationManager serializationManager;
     private static BossBarManager bossBarManager;
     private static Audiences audiences;
 
@@ -186,7 +185,6 @@ public final class MinecraftServer {
         dimensionTypeManager = new DimensionTypeManager();
         biomeManager = new BiomeManager();
         advancementManager = new AdvancementManager();
-        serializationManager = new SerializationManager();
         bossBarManager = new BossBarManager();
         audiences = new Audiences();
 
@@ -434,16 +432,6 @@ public final class MinecraftServer {
     public static ConnectionManager getConnectionManager() {
         checkInitStatus(connectionManager);
         return connectionManager;
-    }
-
-    /**
-     * Gets the manager handing component serialization.
-     *
-     * @return the manager
-     */
-    public static SerializationManager getSerializationManager() {
-        checkInitStatus(serializationManager);
-        return serializationManager;
     }
 
     /**

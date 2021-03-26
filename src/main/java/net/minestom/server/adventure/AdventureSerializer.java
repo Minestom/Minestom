@@ -14,10 +14,10 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * Manager class for handling Adventure serialization. By default this will simply
- * serialize components to Strings using {@link GsonComponentSerializer}. However, this
+ * Manager class for handling Adventure serialization. By default AdventureSerializer will simply
+ * serialize components to Strings using {@link GsonComponentSerializer}. However, AdventureSerializer
  * class can be used to change the way text is serialized. For example, a pre-JSON
- * implementation of Minestom could change this to the plain component serializer.
+ * implementation of Minestom could change AdventureSerializer to the plain component serializer.
  * <br><br>
  * This manager also performs translation on all messages and the {@code serialize}
  * method should be used when converting {@link Component}s into strings. This allows for
@@ -26,7 +26,7 @@ import java.util.function.Function;
  * own translations, use {@link GlobalTranslator#addSource(Translator)} with a
  * {@link TranslationRegistry} or your own implementation of {@link Translator}.
  */
-public class SerializationManager {
+public class AdventureSerializer {
     /**
      * If components should be automatically translated in outgoing packets.
      */
@@ -34,16 +34,18 @@ public class SerializationManager {
 
     protected static final Localizable NULL_LOCALIZABLE = () -> null;
 
-    private Function<Component, String> serializer = component -> GsonComponentSerializer.gson().serialize(component);
-    private Locale defaultLocale = Locale.US;
+    private static Function<Component, String> serializer = component -> GsonComponentSerializer.gson().serialize(component);
+    private static Locale defaultLocale = Locale.US;
+
+    private AdventureSerializer() {}
 
     /**
      * Gets the root serializer that is used to convert components into strings.
      *
      * @return the serializer
      */
-    public @NotNull Function<Component, String> getSerializer() {
-        return this.serializer;
+    public static @NotNull Function<Component, String> getSerializer() {
+        return AdventureSerializer.serializer;
     }
 
     /**
@@ -51,8 +53,8 @@ public class SerializationManager {
      *
      * @param serializer the serializer
      */
-    public void setSerializer(@NotNull Function<Component, String> serializer) {
-        this.serializer = serializer;
+    public static void setSerializer(@NotNull Function<Component, String> serializer) {
+        AdventureSerializer.serializer = serializer;
     }
 
     /**
@@ -62,7 +64,7 @@ public class SerializationManager {
      *
      * @return the default locale
      */
-    public @NotNull Locale getDefaultLocale() {
+    public static @NotNull Locale getDefaultLocale() {
         return defaultLocale;
     }
 
@@ -73,17 +75,17 @@ public class SerializationManager {
      *
      * @param defaultLocale the new default locale
      */
-    public void setDefaultLocale(@NotNull Locale defaultLocale) {
-        this.defaultLocale = defaultLocale;
+    public static void setDefaultLocale(@NotNull Locale defaultLocale) {
+        AdventureSerializer.defaultLocale = defaultLocale;
     }
 
     /**
-     * Gets the global translator object used by this manager. This is just shorthand for
+     * Gets the global translator object used by AdventureSerializer manager. This is just shorthand for
      * {@link GlobalTranslator#get()}.
      *
      * @return the global translator
      */
-    public @NotNull GlobalTranslator getTranslator() {
+    public static @NotNull GlobalTranslator getTranslator() {
         return GlobalTranslator.get();
     }
 
@@ -96,8 +98,8 @@ public class SerializationManager {
      *
      * @return the prepared component
      */
-    public @NotNull Component translate(@NotNull Component component, @NotNull Localizable localizable) {
-        return GlobalTranslator.renderer().render(component, Objects.requireNonNullElse(localizable.getLocale(), this.getDefaultLocale()));
+    public static @NotNull Component translate(@NotNull Component component, @NotNull Localizable localizable) {
+        return GlobalTranslator.renderer().render(component, Objects.requireNonNullElse(localizable.getLocale(), AdventureSerializer.getDefaultLocale()));
     }
 
     /**
@@ -109,7 +111,7 @@ public class SerializationManager {
      *
      * @return the prepared component
      */
-    public @NotNull Component translate(@NotNull Component component, @NotNull Locale locale) {
+    public static @NotNull Component translate(@NotNull Component component, @NotNull Locale locale) {
         return GlobalTranslator.renderer().render(component, locale);
     }
 
@@ -120,8 +122,8 @@ public class SerializationManager {
      *
      * @return the serialized string
      */
-    public @NotNull String serialize(@NotNull Component component) {
-        return this.serializer.apply(component);
+    public static @NotNull String serialize(@NotNull Component component) {
+        return AdventureSerializer.serializer.apply(component);
     }
 
     /**
@@ -132,8 +134,8 @@ public class SerializationManager {
      *
      * @return the string
      */
-    public String translateAndSerialize(@NotNull Component component, @NotNull Localizable localizable) {
-        return this.translateAndSerialize(component, Objects.requireNonNullElse(localizable.getLocale(), this.getDefaultLocale()));
+    public static String translateAndSerialize(@NotNull Component component, @NotNull Localizable localizable) {
+        return AdventureSerializer.translateAndSerialize(component, Objects.requireNonNullElse(localizable.getLocale(), AdventureSerializer.getDefaultLocale()));
     }
 
     /**
@@ -144,8 +146,8 @@ public class SerializationManager {
      *
      * @return the string
      */
-    public String translateAndSerialize(@NotNull Component component, @NotNull Locale locale) {
-        return this.serialize(this.translate(component, locale));
+    public static String translateAndSerialize(@NotNull Component component, @NotNull Locale locale) {
+        return AdventureSerializer.serialize(AdventureSerializer.translate(component, locale));
     }
 
     /**
@@ -156,8 +158,8 @@ public class SerializationManager {
      * @return {@code true} if the component can be translated server-side,
      * {@code false} otherwise
      */
-    public boolean isTranslatable(@NotNull Component component) {
-        return !component.equals(this.translate(component, this.getDefaultLocale()));
+    public static boolean isTranslatable(@NotNull Component component) {
+        return !component.equals(AdventureSerializer.translate(component, AdventureSerializer.getDefaultLocale()));
     }
 
     /**
@@ -166,9 +168,9 @@ public class SerializationManager {
      * @return {@code true} if any of the components can be translated server-side,
      * {@code false} otherwise
      */
-    public boolean areAnyTranslatable(@NotNull Collection<Component> components) {
+    public static boolean areAnyTranslatable(@NotNull Collection<Component> components) {
         for (Component component : components) {
-            if (this.isTranslatable(component)) {
+            if (AdventureSerializer.isTranslatable(component)) {
                 return true;
             }
         }

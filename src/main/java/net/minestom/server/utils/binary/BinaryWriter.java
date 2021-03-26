@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.NBTUtils;
@@ -69,7 +70,7 @@ public class BinaryWriter extends OutputStream {
      * @param component the component
      */
     public void writeComponent(Component component) {
-        this.writeSizedString(MinecraftServer.getSerializationManager().serialize(Objects.requireNonNullElseGet(component, Component::empty)));
+        this.writeSizedString(AdventureSerializer.serialize(Objects.requireNonNullElseGet(component, Component::empty)));
     }
 
     /**

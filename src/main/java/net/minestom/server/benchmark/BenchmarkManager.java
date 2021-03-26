@@ -6,6 +6,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
@@ -126,7 +127,7 @@ public final class BenchmarkManager {
             benchmarkMessage.append(Component.newline());
         }
 
-        return MinecraftServer.getSerializationManager().serialize(benchmarkMessage.build());
+        return AdventureSerializer.serialize(benchmarkMessage.build());
     }
 
     private void refreshData() {
