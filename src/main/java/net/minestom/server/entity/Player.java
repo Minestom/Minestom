@@ -64,6 +64,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -81,7 +82,7 @@ public class Player extends LivingEntity implements CommandSender {
     private String username;
     protected final PlayerConnection playerConnection;
     // All the entities that this player can see
-    protected final Set<Entity> viewableEntities = new CopyOnWriteArraySet<>();
+    protected final Set<Entity> viewableEntities = ConcurrentHashMap.newKeySet();
 
     private int latency;
     private JsonMessage displayName;
