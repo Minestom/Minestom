@@ -1,5 +1,9 @@
 package net.minestom.server.command;
 
+import net.kyori.adventure.audience.MessageType;
+import net.kyori.adventure.identity.Identity;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.permission.verifier.AllPermissionVerifier;
 import net.minestom.server.permission.verifier.PermissionVerifier;
@@ -25,8 +29,9 @@ public class ConsoleSender implements CommandSender {
     }
 
     @Override
-    public void sendMessage(@NotNull String message) {
-        LOGGER.info(message);
+    public void sendMessage(@NotNull  Identity source, @NotNull Component message, @NotNull MessageType type) {
+        // we don't use the serializer here as we just need the plain text of the message
+        LOGGER.info(PlainComponentSerializer.plain().serialize(message));
     }
 
     @NotNull

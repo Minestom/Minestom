@@ -135,6 +135,13 @@ public class ArgumentType {
     }
 
     /**
+     * @see ArgumentResourceLocation
+     */
+    public static ArgumentResourceLocation ResourceLocation(@NotNull String id) {
+        return new ArgumentResourceLocation(id);
+    }
+
+    /**
      * @see ArgumentPotionEffect
      */
     public static ArgumentPotionEffect Potion(@NotNull String id) {
@@ -188,6 +195,13 @@ public class ArgumentType {
      */
     public static ArgumentComponent Component(@NotNull String id) {
         return new ArgumentComponent(id);
+    }
+
+    /**
+     * @see ArgumentUUID
+     */
+    public static ArgumentUUID UUID(@NotNull String id) {
+        return new ArgumentUUID(id);
     }
 
     /**

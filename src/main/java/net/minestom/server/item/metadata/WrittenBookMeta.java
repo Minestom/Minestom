@@ -1,8 +1,10 @@
 package net.minestom.server.item.metadata;
 
-import net.minestom.server.chat.ChatParser;
-import net.minestom.server.chat.ColoredText;
-import net.minestom.server.chat.JsonMessage;
+import net.kyori.adventure.inventory.Book;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minestom.server.adventure.AdventureSerializer;
+import net.minestom.server.adventure.Localizable;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
@@ -18,7 +20,7 @@ public class WrittenBookMeta extends ItemMeta {
     private WrittenBookGeneration generation;
     private String author;
     private String title;
-    private List<JsonMessage> pages = new ArrayList<>();
+    private List<Component> pages = new ArrayList<>();
 
     /**
      * Gets if the book is resolved.
@@ -96,11 +98,12 @@ public class WrittenBookMeta extends ItemMeta {
     /**
      * Gets an {@link ArrayList} containing all the pages.
      * <p>
-     * The list is modifiable.
+     * The list is not modifiable as it is .
      *
      * @return a modifiable {@link ArrayList} with the pages of the book
      */
-    public List<JsonMessage> getPages() {
+    @Deprecated
+    public List<Component> getPagesJson() {
         return pages;
     }
 
@@ -109,7 +112,7 @@ public class WrittenBookMeta extends ItemMeta {
      *
      * @param pages the array list containing the book pages
      */
-    public void setPages(List<JsonMessage> pages) {
+    public void setPages(List<Component> pages) {
         this.pages = pages;
     }
 
@@ -149,9 +152,7 @@ public class WrittenBookMeta extends ItemMeta {
         if (compound.containsKey("pages")) {
             final NBTList<NBTString> list = compound.getList("pages");
             for (NBTString page : list) {
-                final String jsonPage = page.getValue();
-                final ColoredText coloredText = ChatParser.toColoredText(jsonPage);
-                this.pages.add(coloredText);
+                this.pages.add(GsonComponentSerializer.gson().deserialize(page.getValue()));
             }
         }
     }
@@ -172,8 +173,8 @@ public class WrittenBookMeta extends ItemMeta {
         }
         if (!pages.isEmpty()) {
             NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-            for (JsonMessage page : pages) {
-                list.add(new NBTString(page.toString()));
+            for (Component page : pages) {
+                list.add(new NBTString(AdventureSerializer.serialize(page)));
             }
             compound.set("pages", list);
         }
@@ -196,4 +197,25 @@ public class WrittenBookMeta extends ItemMeta {
         ORIGINAL, COPY_OF_ORIGINAL, COPY_OF_COPY, TATTERED
     }
 
+    /**
+     * Creates a written book meta from an Adventure book. This meta will not be
+     * resolved and the generation will default to {@link WrittenBookGeneration#ORIGINAL}.
+     *
+     * @param book the book
+     * @param localizable who the book is for
+     *
+     * @return the meta
+     */
+    public static @NotNull WrittenBookMeta fromAdventure(@NotNull Book book, @NotNull Localizable localizable) {
+        // make the book
+        WrittenBookMeta meta = new WrittenBookMeta();
+        meta.resolved = false;
+        meta.generation = WrittenBookGeneration.ORIGINAL;
+        meta.author = AdventureSerializer.translateAndSerialize(book.author(), localizable);
+        meta.title = AdventureSerializer.translateAndSerialize(book.title(), localizable);
+        meta.pages = new ArrayList<>();
+        meta.pages.addAll(book.pages());
+
+        return meta;
+    }
 }

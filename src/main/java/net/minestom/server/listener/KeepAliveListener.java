@@ -1,7 +1,7 @@
 package net.minestom.server.listener;
 
-import net.minestom.server.chat.ChatColor;
-import net.minestom.server.chat.ColoredText;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.client.play.ClientKeepAlivePacket;
 
@@ -12,7 +12,7 @@ public class KeepAliveListener {
         final long playerId = player.getLastKeepAlive();
         final boolean equals = packetId == playerId;
         if (!equals) {
-            player.kick(ColoredText.of(ChatColor.RED + "Bad Keep Alive packet"));
+            player.kick(Component.text("Bad Keep Alive packet", NamedTextColor.RED));
             return;
         }
 

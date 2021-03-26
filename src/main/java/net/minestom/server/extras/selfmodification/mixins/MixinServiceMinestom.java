@@ -1,6 +1,7 @@
 package net.minestom.server.extras.selfmodification.mixins;
 
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.launch.platform.container.ContainerHandleVirtual;
 import org.spongepowered.asm.launch.platform.container.IContainerHandle;
 import org.spongepowered.asm.mixin.MixinEnvironment;
@@ -64,7 +65,7 @@ public class MixinServiceMinestom extends MixinServiceAbstract {
     }
 
     @Override
-    public InputStream getResourceAsStream(String name) {
+    public InputStream getResourceAsStream(@NotNull String name) {
         return classLoader.getResourceAsStreamWithChildren(name);
     }
 

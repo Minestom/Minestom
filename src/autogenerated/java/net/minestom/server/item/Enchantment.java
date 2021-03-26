@@ -1,5 +1,7 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
@@ -9,7 +11,7 @@ import net.minestom.server.utils.NamespaceID;
  * //==============================
  */
 @SuppressWarnings({"deprecation"})
-public enum Enchantment {
+public enum Enchantment implements Keyed {
     PROTECTION("minecraft:protection"),
 
     FIRE_PROTECTION("minecraft:fire_protection"),
@@ -86,11 +88,14 @@ public enum Enchantment {
 
     VANISHING_CURSE("minecraft:vanishing_curse");
 
-    private String namespaceID;
+    private final String namespaceID;
+
+    private final Key key;
 
     Enchantment(String namespaceID) {
         this.namespaceID = namespaceID;
         Registries.enchantments.put(NamespaceID.from(namespaceID), this);
+        this.key = Key.key(this.namespaceID);
     }
 
     public int getId() {
@@ -99,6 +104,10 @@ public enum Enchantment {
 
     public String getNamespaceID() {
         return namespaceID;
+    }
+
+    public Key key() {
+        return this.key;
     }
 
     public static Enchantment fromId(int id) {

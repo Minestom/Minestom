@@ -22,20 +22,25 @@ public abstract class HierarchyClassLoader extends URLClassLoader {
         children.add(loader);
     }
 
-    public InputStream getResourceAsStreamWithChildren(String name) {
+    public InputStream getResourceAsStreamWithChildren(@NotNull String name) {
         InputStream in = getResourceAsStream(name);
-        if(in != null) return in;
+        if (in != null) return in;
 
-        for(MinestomExtensionClassLoader child : children) {
+        for (MinestomExtensionClassLoader child : children) {
             InputStream childInput = child.getResourceAsStreamWithChildren(name);
-            if(childInput != null)
+            if (childInput != null)
                 return childInput;
         }
+
         return null;
     }
 
     public void removeChildInHierarchy(MinestomExtensionClassLoader child) {
         children.remove(child);
-        children.forEach(c -> c.removeChildInHierarchy(child));
+
+        // Also remove all children from these extension's children.
+        for (MinestomExtensionClassLoader subChild : children) {
+            subChild.removeChildInHierarchy(child);
+        }
     }
 }

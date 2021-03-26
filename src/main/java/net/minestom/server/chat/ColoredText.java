@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
  * To create one, you simply call one of the static methods like {@link #of(ChatColor, String)},
  * you can then continue to append text with {@link #append(ChatColor, String)}.
  */
+@Deprecated
 public class ColoredText extends JsonMessage {
 
     private static final char SEPARATOR_START = '{';

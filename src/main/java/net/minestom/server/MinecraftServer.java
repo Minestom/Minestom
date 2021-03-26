@@ -1,6 +1,7 @@
 package net.minestom.server;
 
 import net.minestom.server.advancements.AdvancementManager;
+import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
@@ -37,7 +38,7 @@ import net.minestom.server.potion.PotionType;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.scoreboard.TeamManager;
-import net.minestom.server.sound.Sound;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.StatisticType;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.storage.StorageManager;
@@ -115,6 +116,7 @@ public final class MinecraftServer {
     private static DimensionTypeManager dimensionTypeManager;
     private static BiomeManager biomeManager;
     private static AdvancementManager advancementManager;
+    private static BossBarManager bossBarManager;
 
     private static ExtensionManager extensionManager;
 
@@ -158,7 +160,7 @@ public final class MinecraftServer {
         PotionEffect.values();
         Enchantment.values();
         EntityType.values();
-        Sound.values();
+        SoundEvent.values();
         Particle.values();
         StatisticType.values();
         Fluid.values();
@@ -180,6 +182,7 @@ public final class MinecraftServer {
         dimensionTypeManager = new DimensionTypeManager();
         biomeManager = new BiomeManager();
         advancementManager = new AdvancementManager();
+        bossBarManager = new BossBarManager();
 
         updateManager = new UpdateManager();
 
@@ -425,6 +428,16 @@ public final class MinecraftServer {
     public static ConnectionManager getConnectionManager() {
         checkInitStatus(connectionManager);
         return connectionManager;
+    }
+
+    /**
+     * Gets the boss bar manager.
+     *
+     * @return the boss bar manager
+     */
+    public static BossBarManager getBossBarManager() {
+        checkInitStatus(bossBarManager);
+        return bossBarManager;
     }
 
     /**
@@ -750,7 +763,6 @@ public final class MinecraftServer {
             // Load extensions
             extensionManager.loadExtensions();
             // Init extensions
-            // TODO: Extensions should handle depending on each other and have a load-order.
             extensionManager.getExtensions().forEach(Extension::preInitialize);
             extensionManager.getExtensions().forEach(Extension::initialize);
             extensionManager.getExtensions().forEach(Extension::postInitialize);
@@ -803,5 +815,4 @@ public final class MinecraftServer {
                 "You cannot access the manager before MinecraftServer#init, " +
                         "if you are developing an extension be sure to retrieve them at least after Extension#preInitialize");*/
     }
-
 }

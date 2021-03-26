@@ -1,5 +1,7 @@
 package net.minestom.server.potion;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
@@ -9,7 +11,7 @@ import net.minestom.server.utils.NamespaceID;
  * //==============================
  */
 @SuppressWarnings({"deprecation"})
-public enum PotionEffect {
+public enum PotionEffect implements Keyed {
     SPEED("minecraft:speed"),
 
     SLOWNESS("minecraft:slowness"),
@@ -74,11 +76,14 @@ public enum PotionEffect {
 
     HERO_OF_THE_VILLAGE("minecraft:hero_of_the_village");
 
-    private String namespaceID;
+    private final String namespaceID;
+
+    private final Key key;
 
     PotionEffect(String namespaceID) {
         this.namespaceID = namespaceID;
         Registries.potionEffects.put(NamespaceID.from(namespaceID), this);
+        this.key = Key.key(this.namespaceID);
     }
 
     public int getId() {
@@ -87,6 +92,10 @@ public enum PotionEffect {
 
     public String getNamespaceID() {
         return namespaceID;
+    }
+
+    public Key key() {
+        return this.key;
     }
 
     public static PotionEffect fromId(int id) {
