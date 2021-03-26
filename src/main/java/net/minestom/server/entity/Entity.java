@@ -1316,7 +1316,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
             Check.notNull(newChunk, "The entity " + getEntityId() + " tried to move in an unloaded chunk at " + x + ";" + z);
 
             if (lastChunk != newChunk) {
-                instance.switchEntityChunk(this, lastChunk, newChunk);
+                instance.UNSAFE_switchEntityChunk(this, lastChunk, newChunk);
                 if (this instanceof Player) {
                     // Refresh player view
                     final Player player = (Player) this;
