@@ -49,6 +49,8 @@ public class Main {
         commandManager.register(new ShootCommand());
         commandManager.register(new HorseCommand());
         commandManager.register(new EchoCommand());
+        commandManager.register(new SummonCommand());
+        commandManager.register(new RemoveCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
