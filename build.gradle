@@ -165,6 +165,12 @@ dependencies {
 
     api "com.github.Minestom:DependencyGetter:v1.0.1"
 
+    // Adventure, for user-interface
+    api "net.kyori:adventure-api:$adventureVersion"
+    api "net.kyori:adventure-text-serializer-gson:$adventureVersion"
+    api "net.kyori:adventure-text-serializer-plain:$adventureVersion"
+    api "net.kyori:adventure-text-serializer-legacy:$adventureVersion"
+
     // LWJGL, for map rendering
     lwjglApi platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
 
@@ -182,6 +188,11 @@ dependencies {
 
 
     generatorsImplementation("com.squareup:javapoet:1.13.0")
+}
+
+configurations.all {
+    // we use jetbrains annotations
+    exclude group: "org.checkerframework", module: "checker-qual"
 }
 
 publishing {

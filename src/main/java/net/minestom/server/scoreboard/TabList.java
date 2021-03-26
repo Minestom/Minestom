@@ -1,5 +1,6 @@
 package net.minestom.server.scoreboard;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -55,7 +56,7 @@ public class TabList implements Scoreboard {
         PlayerConnection connection = player.getPlayerConnection();
 
         if (result) {
-            connection.sendPacket(this.getCreationObjectivePacket("", this.type));
+            connection.sendPacket(this.getCreationObjectivePacket(Component.empty(), this.type));
             connection.sendPacket(this.getDisplayScoreboardPacket((byte) 0));
         }
 

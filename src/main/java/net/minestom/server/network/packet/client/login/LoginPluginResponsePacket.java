@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.client.login;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.ChatColor;
-import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.extras.velocity.VelocityProxy;
@@ -23,7 +23,7 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
 
     private final static ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 
-    public static final ColoredText INVALID_PROXY_RESPONSE = ColoredText.of(ChatColor.RED, "Invalid proxy response!");
+    public static final Component INVALID_PROXY_RESPONSE = Component.text("Invalid proxy response!", NamedTextColor.RED);
 
     public int messageId;
     public boolean successful;

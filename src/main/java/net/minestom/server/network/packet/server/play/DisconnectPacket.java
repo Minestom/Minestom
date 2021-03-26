@@ -1,26 +1,44 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.chat.JsonMessage;
+import net.kyori.adventure.text.Component;
+import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class DisconnectPacket implements ServerPacket {
+import java.util.Collection;
+import java.util.Collections;
+import java.util.function.UnaryOperator;
 
-    public JsonMessage message; // Only text
+public class DisconnectPacket implements ComponentHoldingServerPacket {
+    public Component message;
 
-    public DisconnectPacket(@NotNull JsonMessage message){
+    /**
+     * Creates a new disconnect packet with a given message.
+     * @param message the message
+     */
+    public DisconnectPacket(@NotNull Component message) {
         this.message = message;
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeSizedString(message.toString());
+        writer.writeComponent(message);
     }
 
     @Override
     public int getId() {
         return ServerPacketIdentifier.DISCONNECT;
+    }
+
+    @Override
+    public @NotNull Collection<Component> components() {
+        return Collections.singleton(message);
+    }
+
+    @Override
+    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        return new DisconnectPacket(operator.apply(message));
     }
 }

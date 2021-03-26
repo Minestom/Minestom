@@ -4,6 +4,8 @@ import demo.blocks.BurningTorchBlock;
 import demo.blocks.CustomBlockSample;
 import demo.blocks.UpdatableBlockDemo;
 import demo.commands.*;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.extras.optifine.OptifineSupport;
@@ -46,8 +48,9 @@ public class Main {
         commandManager.register(new BookCommand());
         commandManager.register(new ShootCommand());
         commandManager.register(new HorseCommand());
+        commandManager.register(new EchoCommand());
 
-        commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage("unknown command"));
+        commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
 
         StorageManager storageManager = MinecraftServer.getStorageManager();

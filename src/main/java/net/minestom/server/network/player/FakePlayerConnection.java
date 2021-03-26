@@ -13,7 +13,7 @@ import java.net.SocketAddress;
 public class FakePlayerConnection extends PlayerConnection {
 
     @Override
-    public void sendPacket(@NotNull ServerPacket serverPacket) {
+    public void sendPacket(@NotNull ServerPacket serverPacket, boolean skipTranslating) {
         if (shouldSendPacket(serverPacket)) {
             getFakePlayer().getController().consumePacket(serverPacket);
         }

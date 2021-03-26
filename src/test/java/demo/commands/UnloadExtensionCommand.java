@@ -1,5 +1,6 @@
 package demo.commands;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
@@ -30,12 +31,12 @@ public class UnloadExtensionCommand extends Command {
     }
 
     private void usage(CommandSender sender, CommandContext context) {
-        sender.sendMessage("Usage: /unload <extension name>");
+        sender.sendMessage(Component.text("Usage: /unload <extension name>"));
     }
 
     private void execute(CommandSender sender, CommandContext context) {
         String name = join(context.getStringArray("extensionName"));
-        sender.sendMessage("extensionName = " + name + "....");
+        sender.sendMessage(Component.text("extensionName = " + name + "...."));
 
         ExtensionManager extensionManager = MinecraftServer.getExtensionManager();
         Extension ext = extensionManager.getExtension(name);
@@ -56,12 +57,12 @@ public class UnloadExtensionCommand extends Command {
                 }
             }
         } else {
-            sender.sendMessage("Extension '" + name + "' does not exist.");
+            sender.sendMessage(Component.text("Extension '" + name + "' does not exist."));
         }
     }
 
     private void extensionCallback(CommandSender sender, ArgumentSyntaxException exception) {
-        sender.sendMessage("'" + exception.getInput() + "' is not a valid extension name!");
+        sender.sendMessage(Component.text("'" + exception.getInput() + "' is not a valid extension name!"));
     }
 
     private String join(String[] extensionNameParts) {

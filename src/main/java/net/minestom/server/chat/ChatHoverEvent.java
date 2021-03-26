@@ -1,15 +1,24 @@
 package net.minestom.server.chat;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.util.UUID;
+
 /**
  * Represents a hover event for a specific portion of the message.
  */
+@Deprecated
 public class ChatHoverEvent {
 
     private final String action;
@@ -37,12 +46,12 @@ public class ChatHoverEvent {
     }
 
     @Nullable
-    protected String getValue() {
+    public String getValue() {
         return value;
     }
 
     @Nullable
-    protected JsonObject getValueObject() {
+    public JsonObject getValueObject() {
         return valueObject;
     }
 
@@ -80,8 +89,17 @@ public class ChatHoverEvent {
      */
     @NotNull
     public static ChatHoverEvent showItem(@NotNull ItemStack itemStack) {
-        final String json = itemStack.toNBT().toSNBT();
-        return new ChatHoverEvent("show_item", json);
+        HoverEvent<HoverEvent.ShowItem> event = HoverEvent.showItem(itemStack.getMaterial().key(), itemStack.getAmount());
+        JsonObject obj = GsonComponentSerializer.gson().serializer().toJsonTree(Component.empty().hoverEvent(event)).getAsJsonObject();
+        obj = obj.get("hoverEvent").getAsJsonObject().get("contents").getAsJsonObject();
+
+        if (itemStack.getItemMeta() != null) {
+            NBTCompound compound = new NBTCompound();
+            itemStack.getItemMeta().write(compound);
+            obj.add("tag", new JsonPrimitive(compound.toSNBT()));
+        }
+
+        return new ChatHoverEvent("show_item", obj);
     }
 
     /**
@@ -92,9 +110,14 @@ public class ChatHoverEvent {
      */
     @NotNull
     public static ChatHoverEvent showEntity(@NotNull Entity entity) {
-        NBTCompound compound = new NBTCompound()
-                .setString("id", entity.getUuid().toString())
-                .setString("type", entity.getEntityType().getNamespaceID());
-        return new ChatHoverEvent("show_entity", compound.toSNBT());
+        HoverEvent<HoverEvent.ShowEntity> event = HoverEvent.showEntity(entity.getEntityType().key(), entity.getUuid());
+        JsonObject obj = GsonComponentSerializer.gson().serializer().toJsonTree(Component.empty().hoverEvent(event)).getAsJsonObject();
+        return new ChatHoverEvent("show_entity", obj.get("hoverEvent").getAsJsonObject().get("contents").getAsJsonObject());
+    }
+
+    public static ChatHoverEvent showEntity(UUID uuid, EntityType entityType) {
+        HoverEvent<HoverEvent.ShowEntity> event = HoverEvent.showEntity(entityType.key(), uuid);
+        JsonObject obj = GsonComponentSerializer.gson().serializer().toJsonTree(Component.empty().hoverEvent(event)).getAsJsonObject();
+        return new ChatHoverEvent("show_entity", obj.get("hoverEvent").getAsJsonObject().get("contents").getAsJsonObject());
     }
 }

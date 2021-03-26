@@ -94,4 +94,12 @@ public final class MathUtils {
     public static double mod(final double a, final double b) {
         return (a % b + b) % b;
     }
+
+    public static Integer tryParse(String string) {
+        try {
+            return Integer.parseInt(string);
+        } catch (NumberFormatException ignored) {
+            return null;
+        }
+    }
 }

@@ -1,8 +1,14 @@
 package net.minestom.server.instance;
 
 import com.google.common.collect.Queues;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.ForwardingAudience;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.UpdateManager;
+import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Entity;
@@ -53,7 +59,7 @@ import java.util.function.Consumer;
  * you need to be sure to signal the {@link UpdateManager} of the changes using
  * {@link UpdateManager#signalChunkLoad(Instance, int, int)} and {@link UpdateManager#signalChunkUnload(Instance, int, int)}.
  */
-public abstract class Instance implements BlockModifier, EventHandler, DataContainer {
+public abstract class Instance implements BlockModifier, EventHandler, DataContainer, PacketGroupingAudience {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
@@ -450,6 +456,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @return an unmodifiable {@link Set} containing all the players in the instance
      */
+    @Override
     @NotNull
     public Set<Player> getPlayers() {
         return Collections.unmodifiableSet(players);

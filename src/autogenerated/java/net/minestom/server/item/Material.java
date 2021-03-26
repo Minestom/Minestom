@@ -1,5 +1,7 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
@@ -12,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
  * //==============================
  */
 @SuppressWarnings({"deprecation"})
-public enum Material {
+public enum Material implements Keyed {
     AIR("minecraft:air", 64, Block.AIR),
 
     STONE("minecraft:stone", 64, Block.STONE),
@@ -1966,12 +1968,14 @@ public enum Material {
     RESPAWN_ANCHOR("minecraft:respawn_anchor", 64, Block.RESPAWN_ANCHOR);
 
     @NotNull
-    private String namespaceID;
+    private final String namespaceID;
 
-    private int maxDefaultStackSize;
+    private final int maxDefaultStackSize;
 
     @Nullable
-    private Block correspondingBlock;
+    private final Block correspondingBlock;
+
+    private final Key key;
 
     Material(@NotNull String namespaceID, int maxDefaultStackSize,
             @Nullable Block correspondingBlock) {
@@ -1979,6 +1983,7 @@ public enum Material {
         this.maxDefaultStackSize = maxDefaultStackSize;
         this.correspondingBlock = correspondingBlock;
         Registries.materials.put(NamespaceID.from(namespaceID), this);
+        this.key = Key.key(this.namespaceID);
     }
 
     public short getId() {
@@ -2082,5 +2087,9 @@ public enum Material {
             return true;
         }
         return isFood();
+    }
+
+    public Key key() {
+        return this.key;
     }
 }

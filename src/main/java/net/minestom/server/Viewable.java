@@ -1,10 +1,13 @@
 package net.minestom.server;
 
+import net.kyori.adventure.audience.Audience;
+import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -81,5 +84,24 @@ public interface Viewable {
      */
     default void sendPacketToViewersAndSelf(@NotNull ServerPacket packet) {
         sendPacketToViewers(packet);
+    }
+
+    /**
+     * Gets the result of {@link #getViewers()} as an Adventure Audience.
+     *
+     * @return the audience
+     */
+    default @NotNull Audience getViewersAsAudience() {
+        return PacketGroupingAudience.of(this.getViewers());
+    }
+
+    /**
+     * Gets the result of {@link #getViewers()} as an {@link Iterable} of Adventure
+     * {@link Audience}s.
+     *
+     * @return the audiences
+     */
+    default @NotNull Iterable<? extends Audience> getViewersAsAudiences() {
+        return this.getViewers();
     }
 }

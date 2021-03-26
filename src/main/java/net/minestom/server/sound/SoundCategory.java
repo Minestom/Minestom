@@ -1,5 +1,14 @@
 package net.minestom.server.sound;
 
+import net.kyori.adventure.sound.Sound;
+import org.jetbrains.annotations.NotNull;
+
+import static net.kyori.adventure.sound.Sound.*;
+
+/**
+ * @deprecated Use {@link Source}
+ */
+@Deprecated
 public enum SoundCategory {
     MASTER,
     MUSIC,
@@ -10,5 +19,14 @@ public enum SoundCategory {
     NEUTRAL,
     PLAYERS,
     AMBIENT,
-    VOICE
+    VOICE;
+
+    /**
+     * Gets the Adventure source representing this sound category.
+     *
+     * @return the source
+     */
+    public @NotNull Source asSource() {
+        return Source.values()[this.ordinal()];
+    }
 }
