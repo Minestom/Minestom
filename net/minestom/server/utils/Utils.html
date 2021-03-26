@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -169,34 +169,48 @@ extends java.lang.Object</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#overrideVarInt(io.netty.buffer.ByteBuf,int,int,int)">overrideVarInt</a></span>&#8203;(io.netty.buffer.ByteBuf&nbsp;buffer,
+              int&nbsp;startIndex,
+              int&nbsp;length,
+              int&nbsp;value)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readVarInt(io.netty.buffer.ByteBuf)">readVarInt</a></span>&#8203;(io.netty.buffer.ByteBuf&nbsp;buffer)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static int[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#uuidToIntArray(java.util.UUID)">uuidToIntArray</a></span>&#8203;(java.util.UUID&nbsp;uuid)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeEmptyVarInt(io.netty.buffer.ByteBuf,int)">writeEmptyVarInt</a></span>&#8203;(io.netty.buffer.ByteBuf&nbsp;buffer,
+                int&nbsp;length)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeSectionBlocks(io.netty.buffer.ByteBuf,net.minestom.server.instance.palette.Section)">writeSectionBlocks</a></span>&#8203;(io.netty.buffer.ByteBuf&nbsp;buffer,
                   <a href="../instance/palette/Section.html" title="class in net.minestom.server.instance.palette">Section</a>&nbsp;section)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeVarInt(net.minestom.server.utils.binary.BinaryWriter,int)">writeVarInt</a></span>&#8203;(<a href="binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer,
            int&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeVarIntBuf(io.netty.buffer.ByteBuf,int)">writeVarIntBuf</a></span>&#8203;(io.netty.buffer.ByteBuf&nbsp;buffer,
               int&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeVarLong(net.minestom.server.utils.binary.BinaryWriter,long)">writeVarLong</a></span>&#8203;(<a href="binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer,
             long&nbsp;value)</code></th>
@@ -253,6 +267,30 @@ extends java.lang.Object</pre>
 <h4>writeVarInt</h4>
 <pre class="methodSignature">public static&nbsp;void&nbsp;writeVarInt&#8203;(<a href="binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer,
                                int&nbsp;value)</pre>
+</li>
+</ul>
+<a id="overrideVarInt(io.netty.buffer.ByteBuf,int,int,int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>overrideVarInt</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;overrideVarInt&#8203;(@NotNull
+                                  io.netty.buffer.ByteBuf&nbsp;buffer,
+                                  int&nbsp;startIndex,
+                                  int&nbsp;length,
+                                  int&nbsp;value)</pre>
+</li>
+</ul>
+<a id="writeEmptyVarInt(io.netty.buffer.ByteBuf,int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeEmptyVarInt</h4>
+<pre class="methodSignature">public static&nbsp;int&nbsp;writeEmptyVarInt&#8203;(@NotNull
+                                   io.netty.buffer.ByteBuf&nbsp;buffer,
+                                   int&nbsp;length)</pre>
 </li>
 </ul>
 <a id="readVarInt(io.netty.buffer.ByteBuf)">
