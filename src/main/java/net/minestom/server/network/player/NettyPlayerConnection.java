@@ -71,12 +71,15 @@ public class NettyPlayerConnection extends PlayerConnection {
     @Override
     public void update() {
         // Flush
-        this.channel.eventLoop().submit(() -> {
-            if (channel.isActive()) {
-                writeWaitingPackets();
-                this.channel.flush();
-            }
-        });
+        final int bufferSize = tickBuffer.writerIndex();
+        if (bufferSize > 0) {
+            this.channel.eventLoop().submit(() -> {
+                if (channel.isActive()) {
+                    writeWaitingPackets();
+                    channel.flush();
+                }
+            });
+        }
         // Network stats
         super.update();
     }
@@ -208,6 +211,11 @@ public class NettyPlayerConnection extends PlayerConnection {
     private void writeWaitingPackets() {
         synchronized (tickBuffer) {
             final ByteBuf copy = tickBuffer.copy();
+            if (copy.writerIndex() == 0) {
+                // Nothing to write
+                copy.release();
+                return;
+            }
 
             ChannelFuture channelFuture = channel.write(new FramedPacket(copy));
             channelFuture.addListener(future -> copy.release());
