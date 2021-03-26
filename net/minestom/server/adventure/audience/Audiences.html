@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -129,14 +129,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
-<dl>
-<dt>All Implemented Interfaces:</dt>
-<dd><code><a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience">AudienceProvider</a>&lt;net.kyori.adventure.audience.Audience&gt;</code></dd>
-</dl>
 <hr>
 <pre>public class <span class="typeNameLabel">Audiences</span>
-extends java.lang.Object
-implements <a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience">AudienceProvider</a>&lt;net.kyori.adventure.audience.Audience&gt;</pre>
+extends java.lang.Object</pre>
 <div class="block">Utility class to access Adventure audiences.</div>
 </li>
 </ul>
@@ -159,9 +154,7 @@ implements <a href="AudienceProvider.html" title="interface in net.minestom.serv
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">Audiences</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Creates a new audiences instance.</div>
-</td>
+<td class="colLast">&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -175,49 +168,58 @@ implements <a href="AudienceProvider.html" title="interface in net.minestom.serv
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>@NotNull net.kyori.adventure.audience.Audience</code></td>
+<td class="colFirst"><code>static @NotNull net.kyori.adventure.audience.Audience</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#all()">all</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all audience members.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>@NotNull net.kyori.adventure.audience.Audience</code></td>
+<td class="colFirst"><code>static @NotNull net.kyori.adventure.audience.Audience</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#all(java.util.function.Predicate)">all</a></span>&#8203;(@NotNull java.util.function.Predicate&lt;net.kyori.adventure.audience.Audience&gt;&nbsp;filter)</code></th>
 <td class="colLast">
 <div class="block">Gets all audience members that match the given predicate.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>static @NotNull <a href="Audiences.html" title="class in net.minestom.server.adventure.audience">Audiences</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#audiences()">audiences</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Short-hand method for <a href="../../MinecraftServer.html#getAudiences()"><code>MinecraftServer.getAudiences()</code></a>.</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>@NotNull net.kyori.adventure.audience.Audience</code></td>
+<td class="colFirst"><code>static @NotNull net.kyori.adventure.audience.Audience</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#console()">console</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the console as an audience.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>@NotNull net.kyori.adventure.audience.Audience</code></td>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>static @NotNull net.kyori.adventure.audience.Audience</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#custom(net.kyori.adventure.key.Key)">custom</a></span>&#8203;(@NotNull net.kyori.adventure.key.Key&nbsp;key)</code></th>
 <td class="colLast">
 <div class="block">Gets all custom audience members stored using the given key.</div>
 </td>
 </tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>static @NotNull net.kyori.adventure.audience.Audience</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#custom(net.kyori.adventure.key.Keyed)">custom</a></span>&#8203;(@NotNull net.kyori.adventure.key.Keyed&nbsp;keyed)</code></th>
+<td class="colLast">
+<div class="block">Gets all custom audience members stored using the given keyed object.</div>
+</td>
+</tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code>@NotNull net.kyori.adventure.audience.Audience</code></td>
+<td class="colFirst"><code>static @NotNull net.kyori.adventure.audience.Audience</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#custom(net.kyori.adventure.key.Keyed,java.util.function.Predicate)">custom</a></span>&#8203;(@NotNull net.kyori.adventure.key.Keyed&nbsp;keyed,
+      java.util.function.Predicate&lt;net.kyori.adventure.audience.Audience&gt;&nbsp;filter)</code></th>
+<td class="colLast">
+<div class="block">Gets all custom audience members stored using the given keyed object that match
+ the given predicate.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>static @NotNull net.kyori.adventure.audience.Audience</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#custom(net.kyori.adventure.key.Key,java.util.function.Predicate)">custom</a></span>&#8203;(@NotNull net.kyori.adventure.key.Key&nbsp;key,
       java.util.function.Predicate&lt;net.kyori.adventure.audience.Audience&gt;&nbsp;filter)</code></th>
 <td class="colLast">
@@ -225,53 +227,60 @@ implements <a href="AudienceProvider.html" title="interface in net.minestom.serv
  given predicate.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>@NotNull net.kyori.adventure.audience.Audience</code></td>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>static @NotNull net.kyori.adventure.audience.Audience</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#customs()">customs</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all custom audience members.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>@NotNull net.kyori.adventure.audience.Audience</code></td>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>static @NotNull net.kyori.adventure.audience.Audience</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#customs(java.util.function.Predicate)">customs</a></span>&#8203;(@NotNull java.util.function.Predicate&lt;net.kyori.adventure.audience.Audience&gt;&nbsp;filter)</code></th>
 <td class="colLast">
 <div class="block">Gets all custom audience members matching the given predicate.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>@NotNull <a href="IterableAudienceProvider.html" title="class in net.minestom.server.adventure.audience">IterableAudienceProvider</a></code></td>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>static @NotNull <a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience">AudienceProvider</a>&lt;java.lang.Iterable&lt;? extends net.kyori.adventure.audience.Audience&gt;&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#iterable()">iterable</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets the <a href="IterableAudienceProvider.html" title="class in net.minestom.server.adventure.audience"><code>IterableAudienceProvider</code></a> instance.</div>
+<div class="block">Gets the <a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience"><code>AudienceProvider</code></a> that provides iterables of audience members.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>@NotNull net.kyori.adventure.audience.Audience</code></td>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>static @NotNull net.kyori.adventure.audience.Audience</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#players()">players</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all audience members that are of type <a href="../../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a>.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code>@NotNull net.kyori.adventure.audience.Audience</code></td>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>static @NotNull net.kyori.adventure.audience.Audience</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#players(java.util.function.Predicate)">players</a></span>&#8203;(@NotNull java.util.function.Predicate&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;filter)</code></th>
 <td class="colLast">
 <div class="block">Gets all audience members that are of type <a href="../../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> and match the predicate.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
-<td class="colFirst"><code>@NotNull <a href="AudienceRegistry.html" title="class in net.minestom.server.adventure.audience">AudienceRegistry</a></code></td>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>static @NotNull <a href="AudienceRegistry.html" title="class in net.minestom.server.adventure.audience">AudienceRegistry</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#registry()">registry</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the audience registry used to register custom audiences.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
-<td class="colFirst"><code>@NotNull net.kyori.adventure.audience.Audience</code></td>
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>static @NotNull net.kyori.adventure.audience.Audience</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#server()">server</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets the combination of <a href="AudienceProvider.html#players()"><code>AudienceProvider.players()</code></a> and <a href="AudienceProvider.html#console()"><code>AudienceProvider.console()</code></a>.</div>
+<div class="block">Gets the combination of <a href="#players()"><code>players()</code></a> and <a href="#console()"><code>console()</code></a>.</div>
+</td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code>static @NotNull <a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience">AudienceProvider</a>&lt;net.kyori.adventure.audience.Audience&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#single()">single</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the <a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience"><code>AudienceProvider</code></a> that provides forwarding audiences.</div>
 </td>
 </tr>
 </table>
@@ -281,13 +290,6 @@ implements <a href="AudienceProvider.html" title="interface in net.minestom.serv
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
 <code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
-</ul>
-<ul class="blockList">
-<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.adventure.audience.AudienceProvider">
-<!--   -->
-</a>
-<h3>Methods inherited from interface&nbsp;net.minestom.server.adventure.audience.<a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience">AudienceProvider</a></h3>
-<code><a href="AudienceProvider.html#custom(net.kyori.adventure.key.Keyed)">custom</a>, <a href="AudienceProvider.html#custom(net.kyori.adventure.key.Keyed,java.util.function.Predicate)">custom</a></code></li>
 </ul>
 </li>
 </ul>
@@ -312,8 +314,6 @@ implements <a href="AudienceProvider.html" title="interface in net.minestom.serv
 <li class="blockList">
 <h4>Audiences</h4>
 <pre>public&nbsp;Audiences()</pre>
-<div class="block">Creates a new audiences instance. <b>Do not</b> instantiate this class, instead
- you can obtain an instance using <a href="#audiences()"><code>audiences()</code></a>.</div>
 </li>
 </ul>
 </li>
@@ -326,18 +326,18 @@ implements <a href="AudienceProvider.html" title="interface in net.minestom.serv
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="audiences()">
+<a id="single()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>audiences</h4>
+<h4>single</h4>
 <pre class="methodSignature">@NotNull
-public static&nbsp;@NotNull <a href="Audiences.html" title="class in net.minestom.server.adventure.audience">Audiences</a>&nbsp;audiences()</pre>
-<div class="block">Short-hand method for <a href="../../MinecraftServer.html#getAudiences()"><code>MinecraftServer.getAudiences()</code></a>.</div>
+public static&nbsp;@NotNull <a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience">AudienceProvider</a>&lt;net.kyori.adventure.audience.Audience&gt;&nbsp;single()</pre>
+<div class="block">Gets the <a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience"><code>AudienceProvider</code></a> that provides forwarding audiences.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the audiences instance</dd>
+<dd>the instance</dd>
 </dl>
 </li>
 </ul>
@@ -348,8 +348,8 @@ public static&nbsp;@NotNull <a href="Audiences.html" title="class in net.minesto
 <li class="blockList">
 <h4>iterable</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="IterableAudienceProvider.html" title="class in net.minestom.server.adventure.audience">IterableAudienceProvider</a>&nbsp;iterable()</pre>
-<div class="block">Gets the <a href="IterableAudienceProvider.html" title="class in net.minestom.server.adventure.audience"><code>IterableAudienceProvider</code></a> instance.</div>
+public static&nbsp;@NotNull <a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience">AudienceProvider</a>&lt;java.lang.Iterable&lt;? extends net.kyori.adventure.audience.Audience&gt;&gt;&nbsp;iterable()</pre>
+<div class="block">Gets the <a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience"><code>AudienceProvider</code></a> that provides iterables of audience members.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the instance</dd>
@@ -363,14 +363,11 @@ public&nbsp;@NotNull <a href="IterableAudienceProvider.html" title="class in net
 <li class="blockList">
 <h4>all</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;all()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AudienceProvider.html#all()">AudienceProvider</a></code></span></div>
-<div class="block">Gets all audience members. This returns <a href="AudienceProvider.html#players()"><code>AudienceProvider.players()</code></a> combined with
- <a href="AudienceProvider.html#customs()"><code>AudienceProvider.customs()</code></a> and <a href="AudienceProvider.html#console()"><code>AudienceProvider.console()</code></a>. This can be a costly operation, so it
- is often preferable to use <a href="AudienceProvider.html#server()"><code>AudienceProvider.server()</code></a> instead.</div>
+public static&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;all()</pre>
+<div class="block">Gets all audience members. This returns <a href="#players()"><code>players()</code></a> combined with
+ <a href="#customs()"><code>customs()</code></a> and <a href="#console()"><code>console()</code></a>. This can be a costly operation, so it
+ is often preferable to use <a href="#server()"><code>server()</code></a> instead.</div>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="AudienceProvider.html#all()">all</a></code>&nbsp;in interface&nbsp;<code><a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience">AudienceProvider</a>&lt;net.kyori.adventure.audience.Audience&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>all audience members</dd>
 </dl>
@@ -383,12 +380,9 @@ public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;all()</pre>
 <li class="blockList">
 <h4>players</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;players()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AudienceProvider.html#players()">AudienceProvider</a></code></span></div>
+public static&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;players()</pre>
 <div class="block">Gets all audience members that are of type <a href="../../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a>.</div>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="AudienceProvider.html#players()">players</a></code>&nbsp;in interface&nbsp;<code><a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience">AudienceProvider</a>&lt;net.kyori.adventure.audience.Audience&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>all players</dd>
 </dl>
@@ -401,13 +395,10 @@ public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;players()</pre>
 <li class="blockList">
 <h4>players</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;players&#8203;(@NotNull
-                                                              @NotNull java.util.function.Predicate&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;filter)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AudienceProvider.html#players(java.util.function.Predicate)">AudienceProvider</a></code></span></div>
+public static&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;players&#8203;(@NotNull
+                                                                     @NotNull java.util.function.Predicate&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;filter)</pre>
 <div class="block">Gets all audience members that are of type <a href="../../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> and match the predicate.</div>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="AudienceProvider.html#players(java.util.function.Predicate)">players</a></code>&nbsp;in interface&nbsp;<code><a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience">AudienceProvider</a>&lt;net.kyori.adventure.audience.Audience&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>filter</code> - the predicate</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -422,12 +413,9 @@ public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;players&#8203;(@
 <li class="blockList">
 <h4>console</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;console()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AudienceProvider.html#console()">AudienceProvider</a></code></span></div>
+public static&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;console()</pre>
 <div class="block">Gets the console as an audience.</div>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="AudienceProvider.html#console()">console</a></code>&nbsp;in interface&nbsp;<code><a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience">AudienceProvider</a>&lt;net.kyori.adventure.audience.Audience&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the console</dd>
 </dl>
@@ -440,12 +428,9 @@ public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;console()</pre>
 <li class="blockList">
 <h4>server</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;server()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AudienceProvider.html#server()">AudienceProvider</a></code></span></div>
-<div class="block">Gets the combination of <a href="AudienceProvider.html#players()"><code>AudienceProvider.players()</code></a> and <a href="AudienceProvider.html#console()"><code>AudienceProvider.console()</code></a>.</div>
+public static&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;server()</pre>
+<div class="block">Gets the combination of <a href="#players()"><code>players()</code></a> and <a href="#console()"><code>console()</code></a>.</div>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="AudienceProvider.html#server()">server</a></code>&nbsp;in interface&nbsp;<code><a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience">AudienceProvider</a>&lt;net.kyori.adventure.audience.Audience&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the audience of all players and the console</dd>
 </dl>
@@ -458,14 +443,29 @@ public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;server()</pre>
 <li class="blockList">
 <h4>customs</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;customs()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AudienceProvider.html#customs()">AudienceProvider</a></code></span></div>
+public static&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;customs()</pre>
 <div class="block">Gets all custom audience members.</div>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="AudienceProvider.html#customs()">customs</a></code>&nbsp;in interface&nbsp;<code><a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience">AudienceProvider</a>&lt;net.kyori.adventure.audience.Audience&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>all custom audience members</dd>
+</dl>
+</li>
+</ul>
+<a id="custom(net.kyori.adventure.key.Keyed)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>custom</h4>
+<pre class="methodSignature">@NotNull
+public static&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;custom&#8203;(@NotNull
+                                                                    @NotNull net.kyori.adventure.key.Keyed&nbsp;keyed)</pre>
+<div class="block">Gets all custom audience members stored using the given keyed object.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>keyed</code> - the keyed object</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>all custom audience members stored using the key of the object</dd>
 </dl>
 </li>
 </ul>
@@ -476,15 +476,33 @@ public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;customs()</pre>
 <li class="blockList">
 <h4>custom</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;custom&#8203;(@NotNull
-                                                             @NotNull net.kyori.adventure.key.Key&nbsp;key)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AudienceProvider.html#custom(net.kyori.adventure.key.Key)">AudienceProvider</a></code></span></div>
+public static&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;custom&#8203;(@NotNull
+                                                                    @NotNull net.kyori.adventure.key.Key&nbsp;key)</pre>
 <div class="block">Gets all custom audience members stored using the given key.</div>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="AudienceProvider.html#custom(net.kyori.adventure.key.Key)">custom</a></code>&nbsp;in interface&nbsp;<code><a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience">AudienceProvider</a>&lt;net.kyori.adventure.audience.Audience&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>key</code> - the key</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>all custom audience members stored using the key</dd>
+</dl>
+</li>
+</ul>
+<a id="custom(net.kyori.adventure.key.Keyed,java.util.function.Predicate)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>custom</h4>
+<pre class="methodSignature">@NotNull
+public static&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;custom&#8203;(@NotNull
+                                                                    @NotNull net.kyori.adventure.key.Keyed&nbsp;keyed,
+                                                                    java.util.function.Predicate&lt;net.kyori.adventure.audience.Audience&gt;&nbsp;filter)</pre>
+<div class="block">Gets all custom audience members stored using the given keyed object that match
+ the given predicate.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>keyed</code> - the keyed object</dd>
+<dd><code>filter</code> - the predicate</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>all custom audience members stored using the key</dd>
 </dl>
@@ -497,15 +515,12 @@ public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;custom&#8203;(@N
 <li class="blockList">
 <h4>custom</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;custom&#8203;(@NotNull
-                                                             @NotNull net.kyori.adventure.key.Key&nbsp;key,
-                                                             java.util.function.Predicate&lt;net.kyori.adventure.audience.Audience&gt;&nbsp;filter)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AudienceProvider.html#custom(net.kyori.adventure.key.Key,java.util.function.Predicate)">AudienceProvider</a></code></span></div>
+public static&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;custom&#8203;(@NotNull
+                                                                    @NotNull net.kyori.adventure.key.Key&nbsp;key,
+                                                                    java.util.function.Predicate&lt;net.kyori.adventure.audience.Audience&gt;&nbsp;filter)</pre>
 <div class="block">Gets all custom audience members stored using the given key that match the
  given predicate.</div>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="AudienceProvider.html#custom(net.kyori.adventure.key.Key,java.util.function.Predicate)">custom</a></code>&nbsp;in interface&nbsp;<code><a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience">AudienceProvider</a>&lt;net.kyori.adventure.audience.Audience&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>key</code> - the key</dd>
 <dd><code>filter</code> - the predicate</dd>
@@ -521,13 +536,10 @@ public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;custom&#8203;(@N
 <li class="blockList">
 <h4>customs</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;customs&#8203;(@NotNull
-                                                              @NotNull java.util.function.Predicate&lt;net.kyori.adventure.audience.Audience&gt;&nbsp;filter)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AudienceProvider.html#customs(java.util.function.Predicate)">AudienceProvider</a></code></span></div>
+public static&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;customs&#8203;(@NotNull
+                                                                     @NotNull java.util.function.Predicate&lt;net.kyori.adventure.audience.Audience&gt;&nbsp;filter)</pre>
 <div class="block">Gets all custom audience members matching the given predicate.</div>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="AudienceProvider.html#customs(java.util.function.Predicate)">customs</a></code>&nbsp;in interface&nbsp;<code><a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience">AudienceProvider</a>&lt;net.kyori.adventure.audience.Audience&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>filter</code> - the predicate</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -542,13 +554,10 @@ public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;customs&#8203;(@
 <li class="blockList">
 <h4>all</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;all&#8203;(@NotNull
-                                                          @NotNull java.util.function.Predicate&lt;net.kyori.adventure.audience.Audience&gt;&nbsp;filter)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AudienceProvider.html#all(java.util.function.Predicate)">AudienceProvider</a></code></span></div>
+public static&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;all&#8203;(@NotNull
+                                                                 @NotNull java.util.function.Predicate&lt;net.kyori.adventure.audience.Audience&gt;&nbsp;filter)</pre>
 <div class="block">Gets all audience members that match the given predicate.</div>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="AudienceProvider.html#all(java.util.function.Predicate)">all</a></code>&nbsp;in interface&nbsp;<code><a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience">AudienceProvider</a>&lt;net.kyori.adventure.audience.Audience&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>filter</code> - the predicate</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -563,12 +572,9 @@ public&nbsp;@NotNull net.kyori.adventure.audience.Audience&nbsp;all&#8203;(@NotN
 <li class="blockList">
 <h4>registry</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="AudienceRegistry.html" title="class in net.minestom.server.adventure.audience">AudienceRegistry</a>&nbsp;registry()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="AudienceProvider.html#registry()">AudienceProvider</a></code></span></div>
+public static&nbsp;@NotNull <a href="AudienceRegistry.html" title="class in net.minestom.server.adventure.audience">AudienceRegistry</a>&nbsp;registry()</pre>
 <div class="block">Gets the audience registry used to register custom audiences.</div>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="AudienceProvider.html#registry()">registry</a></code>&nbsp;in interface&nbsp;<code><a href="AudienceProvider.html" title="interface in net.minestom.server.adventure.audience">AudienceProvider</a>&lt;net.kyori.adventure.audience.Audience&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the registry</dd>
 </dl>
