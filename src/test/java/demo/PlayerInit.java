@@ -80,7 +80,7 @@ public class PlayerInit {
 
             final Component header = Component.text("RAM USAGE: " + ramUsage + " MB");
             final Component footer = benchmarkManager.getCpuMonitoringMessage();
-            Audiences.audiences().players().sendPlayerListHeaderAndFooter(header, footer);
+            Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
 
         }).repeat(10, TimeUnit.TICK).schedule();
 

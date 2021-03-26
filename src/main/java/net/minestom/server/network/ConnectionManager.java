@@ -153,9 +153,9 @@ public final class ConnectionManager {
     @Deprecated
     public void broadcastMessage(@NotNull JsonMessage jsonMessage, @Nullable PlayerValidator condition) {
         if (condition == null) {
-            Audiences.audiences().players().sendMessage(jsonMessage);
+            Audiences.players().sendMessage(jsonMessage);
         } else {
-            Audiences.audiences().players(condition).sendMessage(jsonMessage);
+            Audiences.players(condition).sendMessage(jsonMessage);
         }
     }
 

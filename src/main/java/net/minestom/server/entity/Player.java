@@ -518,7 +518,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
             // #buildDeathMessage can return null, check here
             if (chatMessage != null) {
-                Audiences.audiences().players().sendMessage(chatMessage);
+                Audiences.players().sendMessage(chatMessage);
             }
 
         }
