@@ -7,12 +7,24 @@ import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Utility class to access Adventure audiences.
  */
 public class Audiences implements AudienceProvider<Audience> {
-    private final IterableAudienceProvider collection = new IterableAudienceProvider();
+    private final IterableAudienceProvider collection;
+    private final Audience players, server;
+
+    /**
+     * Creates a new audiences instance. <b>Do not</b> instantiate this class, instead
+     * you can obtain an instance using {@link #audiences()}.
+     */
+    public Audiences() {
+        this.collection = new IterableAudienceProvider();
+        this.players = PacketGroupingAudience.of(MinecraftServer.getConnectionManager().getOnlinePlayers());
+        this.server = Audience.audience(this.players, MinecraftServer.getCommandManager().getConsoleSender());
+    }
 
     /**
      * Short-hand method for {@link MinecraftServer#getAudiences()}.
@@ -32,17 +44,17 @@ public class Audiences implements AudienceProvider<Audience> {
 
     @Override
     public @NotNull Audience all() {
-        return Audience.audience(this.players(), this.console(), this.custom());
+        return Audience.audience(this.server, this.custom());
     }
 
     @Override
     public @NotNull Audience players() {
-        return PacketGroupingAudience.of(this.iterable().players());
+        return this.players;
     }
 
     @Override
     public @NotNull Audience players(@NotNull Predicate<Player> filter) {
-        return PacketGroupingAudience.of(this.iterable().players(filter));
+        return PacketGroupingAudience.of(MinecraftServer.getConnectionManager().getOnlinePlayers().stream().filter(filter).collect(Collectors.toList()));
     }
 
     @Override
@@ -52,7 +64,7 @@ public class Audiences implements AudienceProvider<Audience> {
 
     @Override
     public @NotNull Audience server() {
-        return Audience.audience(this.players(), this.console());
+        return this.server;
     }
 
     @Override
