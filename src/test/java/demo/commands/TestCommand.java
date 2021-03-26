@@ -1,14 +1,11 @@
 package demo.commands;
 
-import net.minestom.server.chat.JsonMessage;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.suggestion.SuggestionEntry;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.Integer;
-import static net.minestom.server.command.builder.arguments.ArgumentType.*;
+import static net.minestom.server.command.builder.arguments.ArgumentType.ResourceLocation;
 
 public class TestCommand extends Command {
 
@@ -18,9 +15,7 @@ public class TestCommand extends Command {
 
         var test = ResourceLocation("msg");
 
-        addSyntax((sender, context) -> {
-            System.out.println("executed");
-        },test);
+        addSyntax((sender, context) -> System.out.println("executed"),test);
     }
 
     private void usage(CommandSender sender, CommandContext context) {

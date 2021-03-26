@@ -6,23 +6,16 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.entity.Player;
 
 public class BookCommand extends Command {
     public BookCommand() {
         super("book");
 
-        setCondition(this::playerCondition);
+        setCondition(Conditions::playerOnly);
 
         setDefaultExecutor(this::execute);
-    }
-
-    private boolean playerCondition(CommandSender sender, String commandString) {
-        if (!sender.isPlayer()) {
-            sender.sendMessage(Component.text("The command is only available for players"));
-            return false;
-        }
-        return true;
     }
 
     private void execute(CommandSender sender, CommandContext context) {

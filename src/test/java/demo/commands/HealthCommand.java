@@ -6,6 +6,7 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.number.ArgumentNumber;
+import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.Player;
 
@@ -14,7 +15,7 @@ public class HealthCommand extends Command {
     public HealthCommand() {
         super("health");
 
-        setCondition(this::condition);
+        setCondition(Conditions::playerOnly);
 
         setDefaultExecutor(this::defaultExecutor);
 
@@ -29,16 +30,8 @@ public class HealthCommand extends Command {
         addSyntax(this::onHealthCommand, modeArg, valueArg);
     }
 
-    private boolean condition(CommandSender sender, String commandString) {
-        if (!sender.isPlayer()) {
-            sender.sendMessage(Component.text("The command is only available for player"));
-            return false;
-        }
-        return true;
-    }
-
     private void defaultExecutor(CommandSender sender, CommandContext context) {
-        sender.sendMessage(Component.text("Correct usage: health [set/add] [number]"));
+        sender.sendMessage(Component.text("Correct usage: health set|add <number>"));
     }
 
     private void onModeError(CommandSender sender, ArgumentSyntaxException exception) {

@@ -5,6 +5,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
@@ -17,19 +18,11 @@ public class ShootCommand extends Command {
 
     public ShootCommand() {
         super("shoot");
-        setCondition(this::condition);
+        setCondition(Conditions::playerOnly);
         setDefaultExecutor(this::defaultExecutor);
         var typeArg = ArgumentType.Word("type").from("default", "spectral", "colored");
         setArgumentCallback(this::onTypeError, typeArg);
         addSyntax(this::onShootCommand, typeArg);
-    }
-
-    private boolean condition(CommandSender sender, String commandString) {
-        if (!sender.isPlayer()) {
-            sender.sendMessage(Component.text("The command is only available for player"));
-            return false;
-        }
-        return true;
     }
 
     private void defaultExecutor(CommandSender sender, CommandContext context) {
@@ -60,6 +53,7 @@ public class ShootCommand extends Command {
                 return;
         }
         var pos = player.getPosition().clone().add(0D, player.getEyeHeight(), 0D);
+        //noinspection ConstantConditions - It should be impossible to execute a command without being in an instance
         projectile.setInstance(player.getInstance(), pos);
         var dir = pos.getDirection().multiply(30D);
         pos = pos.clone().add(dir.getX(), dir.getY(), dir.getZ());
