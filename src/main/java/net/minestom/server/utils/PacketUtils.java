@@ -7,17 +7,14 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.netty.packet.FramedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
-import net.minestom.server.utils.debug.DebugUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.zip.Deflater;
 
@@ -188,61 +185,59 @@ public final class PacketUtils {
     }
 
     public static void writeFramedPacket(@NotNull ByteBuf buffer,
-                                            @NotNull ServerPacket serverPacket, boolean directBuffer) {
-        ByteBuf packetBuf = null;//directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
-        //writePacket(packetBuf, serverPacket);
-
-        final int dataLength = 0;//packetBuf.readableBytes();
-
+                                         @NotNull ServerPacket serverPacket, boolean directBuffer) {
         final int compressionThreshold = MinecraftServer.getCompressionThreshold();
         final boolean compression = compressionThreshold > 0;
 
+        final int hardcodedVarIntSize = 3;
+
         if (compression) {
-            if (dataLength >= compressionThreshold) {
-                // Packet large enough
-                ByteBuf compressedBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
-                Utils.writeVarIntBuf(compressedBuf, dataLength);
-                final Deflater deflater = DEFLATER.get();
-                compress(deflater, packetBuf, compressedBuf);
-                packetBuf.release();
-                packetBuf = compressedBuf;
+            final int packetLengthIndex = Utils.writeEmptyVarInt(buffer, hardcodedVarIntSize);
+            final int dataLengthIndex = Utils.writeEmptyVarInt(buffer, hardcodedVarIntSize);
 
-                // Write the final length of the packet
-                Utils.writeVarIntBuf(buffer, packetBuf.readableBytes());
-                buffer.writeBytes(packetBuf);
-            } else {
-                // Packet too small
-                Utils.writeVarIntBuf(buffer, packetBuf.readableBytes()+1); // +1 for the 0 varint
-                Utils.writeVarIntBuf(buffer, 0);
-                buffer.writeBytes(packetBuf);
-            }
-        }else{
-            // No compression
-            final int hardcodedSize = 3;
-            final int index = buffer.writerIndex();
-            for(int i=0;i<hardcodedSize;i++){
-                buffer.writeByte(0b10000000);
-            }
-
+            // Write packet
+            final int contentIndex = buffer.writerIndex();
             writePacket(buffer, serverPacket);
             final int afterIndex = buffer.writerIndex();
+            //System.out.println("test "+contentIndex+" "+afterIndex);
+            final int packetSize = (afterIndex - dataLengthIndex) - hardcodedVarIntSize;
 
-            final int packetSize = (afterIndex-index)-hardcodedSize;
-            {
-                ByteBuf test = Unpooled.buffer();
-                Utils.writeVarIntBuf(test, packetSize);
-                int offset = hardcodedSize-test.readableBytes();
-                System.out.println("test "+offset);
-                buffer.setBytes(index, test);
+            if (packetSize >= compressionThreshold) {
+                // Packet large enough
+
+                // Compress id + payload
+                ByteBuf compressedBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
+                final Deflater deflater = DEFLATER.get();
+                compress(deflater, buffer.slice(contentIndex, packetSize), compressedBuf);
+
+                final int totalPacketLength = compressedBuf.readableBytes() + hardcodedVarIntSize;
+
+                // Replace uncompressed by compressed data
+                buffer.setBytes(contentIndex, compressedBuf);
+                buffer.writerIndex(contentIndex + compressedBuf.writerIndex());
+                compressedBuf.release();
+
+                Utils.overrideVarInt(buffer, packetLengthIndex, hardcodedVarIntSize, totalPacketLength);
+                Utils.overrideVarInt(buffer, dataLengthIndex, hardcodedVarIntSize, packetSize);
+            } else {
+                // Packet too small, just override header values
+                final int totalPacketLength = packetSize + hardcodedVarIntSize;
+                Utils.overrideVarInt(buffer, packetLengthIndex, hardcodedVarIntSize, totalPacketLength);
+                Utils.overrideVarInt(buffer, dataLengthIndex, hardcodedVarIntSize, 0); // -> Uncompressed
             }
+        } else {
+            // No compression
 
-            if(index == 0){
-                //System.out.println("test "+ Utils.readVarInt(buffer)+" "+packetSize);
-            }
+            // Write dummy varint
+            final int index = Utils.writeEmptyVarInt(buffer, hardcodedVarIntSize);
 
-            //System.out.println("test "+packetSize+" "+serverPacket.getClass().getSimpleName()+" "+varintSize);
-            //Utils.writeVarIntBuf(buffer, packetBuf.readableBytes());
-            //buffer.writeBytes(packetBuf);
+            // Write packet id + payload
+            writePacket(buffer, serverPacket);
+
+            // Rewrite dummy varint to packet length
+            final int afterIndex = buffer.writerIndex();
+            final int packetSize = (afterIndex - index) - hardcodedVarIntSize;
+            Utils.overrideVarInt(buffer, index, hardcodedVarIntSize, packetSize);
         }
     }
 

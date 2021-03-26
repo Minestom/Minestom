@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.shorts.Short2ShortLinkedOpenHashMap;
 import net.minestom.server.instance.palette.Section;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -41,6 +42,34 @@ public final class Utils {
             }
             writer.writeByte(temp);
         } while (value != 0);
+    }
+
+    public static void overrideVarInt(@NotNull ByteBuf buffer, int startIndex, int length, int value) {
+        final int indexCache = buffer.writerIndex();
+        buffer.writerIndex(startIndex);
+        writeVarIntBuf(buffer, value);
+
+        final int loopEnd = startIndex + length;
+        for (int i = startIndex; i < loopEnd; i++) {
+            byte b = buffer.getByte(i);
+            boolean last = i == loopEnd - 1;
+            if (last) {
+                b &= ~(1 << 7);
+            } else {
+                b |= 1 << 7;
+            }
+            buffer.setByte(i, b);
+        }
+
+        buffer.writerIndex(indexCache);
+    }
+
+    public static int writeEmptyVarInt(@NotNull ByteBuf buffer, int length) {
+        final int index = buffer.writerIndex();
+        for (int i = 0; i < length; i++) {
+            buffer.writeByte(0);
+        }
+        return index;
     }
 
     public static int readVarInt(ByteBuf buffer) {
