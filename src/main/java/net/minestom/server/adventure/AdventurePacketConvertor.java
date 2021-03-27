@@ -6,8 +6,12 @@ import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.sound.SoundStop;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.packet.server.play.EntitySoundEffectPacket;
 import net.minestom.server.network.packet.server.play.NamedSoundEffectPacket;
 import net.minestom.server.network.packet.server.play.SoundEffectPacket;
 import net.minestom.server.network.packet.server.play.StopSoundPacket;
@@ -118,6 +122,28 @@ public class AdventurePacketConvertor {
             packet.x = (int) x;
             packet.y = (int) y;
             packet.z = (int) z;
+            packet.volume = sound.volume();
+            packet.pitch = sound.pitch();
+            return packet;
+        }
+    }
+
+    /**
+     * Creates an entity sound packet from an Adventure sound.
+     * @param sound the sound
+     * @param entity the entity the sound is coming from
+     * @return the packet
+     */
+    public static ServerPacket createEntitySoundPacket(@NotNull Sound sound, @NotNull Entity entity) {
+        SoundEvent soundEvent = Registries.getSoundEvent(sound.name());
+
+        if (soundEvent == null) {
+            throw new IllegalArgumentException("Sound must be a valid sound event.");
+        } else {
+            EntitySoundEffectPacket packet = new EntitySoundEffectPacket();
+            packet.soundId = soundEvent.getId();
+            packet.soundSource = sound.source();
+            packet.entityId = entity.getEntityId();
             packet.volume = sound.volume();
             packet.pitch = sound.pitch();
             return packet;

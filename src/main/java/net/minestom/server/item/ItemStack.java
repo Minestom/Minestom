@@ -182,9 +182,8 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack>, Hov
                 return true;
             }
 
-            final Component itemDisplayName = itemStack.getDisplayName();
-            final boolean displayNameCheck = (displayName == null && itemDisplayName == null) ||
-                    (displayName != null && displayName.equals(itemDisplayName));
+            final boolean displayNameCheck = Objects.equals(displayName, itemStack.displayName);
+            final boolean loreCheck = Objects.equals(lore, itemStack.lore);
 
             final Data itemData = itemStack.getData();
             final boolean dataCheck = (data == null && itemData == null) ||
@@ -195,6 +194,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack>, Hov
 
             return itemStack.getMaterial() == material &&
                     displayNameCheck &&
+                    loreCheck &&
                     itemStack.isUnbreakable() == unbreakable &&
                     itemStack.getDamage() == damage &&
                     itemStack.enchantmentMap.equals(enchantmentMap) &&
@@ -216,6 +216,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack>, Hov
     /**
      * Checks if this item can be placed on the block.
      * This should be enforced only for adventure mode players.
+     *
      * @param block the block's namespaceID
      * @return <code>true</code> if it can be placed, <code>false</code> otherwise
      */
@@ -225,6 +226,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack>, Hov
 
     /**
      * Gets the blocks that this item can be placed on
+     *
      * @return the {@link Set} of blocks
      */
     public Set<String> getCanPlaceOn() {
@@ -234,6 +236,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack>, Hov
     /**
      * Checks if this item is allowed to break the provided block.
      * This should be enforced only for adventure mode players.
+     *
      * @param block the block's namespaceID
      * @return <code>true</code> if this item can destroy it, otherwise <code>false</code>
      */
@@ -243,6 +246,7 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack>, Hov
 
     /**
      * Gets the blocks that this item can destroy
+     *
      * @return the {@link Set} of blocks
      */
     public Set<String> getCanDestroy() {

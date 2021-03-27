@@ -6,6 +6,7 @@ import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.inventory.Book;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -920,12 +921,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public void playSound(net.kyori.adventure.sound.@NotNull Sound sound) {
-        this.playSound(sound, this.position.getX(), this.position.getY(), this.position.getZ());
+    public void playSound(@NotNull Sound sound) {
+        playerConnection.sendPacket(AdventurePacketConvertor.createEntitySoundPacket(sound, this));
     }
 
     @Override
-    public void playSound(net.kyori.adventure.sound.@NotNull Sound sound, double x, double y, double z) {
+    public void playSound(@NotNull Sound sound, double x, double y, double z) {
         playerConnection.sendPacket(AdventurePacketConvertor.createSoundPacket(sound, x, y, z));
     }
 
