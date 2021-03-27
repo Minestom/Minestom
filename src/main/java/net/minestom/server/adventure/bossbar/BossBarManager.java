@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * Manages all boss bars known to this Minestom instance. Although this class can be used
@@ -75,14 +76,7 @@ public class BossBarManager {
      */
     public void addBossBar(@NotNull Collection<Player> players, @NotNull BossBar bar) {
         BossBarHolder holder = this.getOrCreateHandler(bar);
-        Collection<Player> addedPlayers = new ArrayList<>();
-
-        for (Player player : players) {
-            if (holder.addViewer(player)) {
-                addedPlayers.add(player);
-                this.playerBars.computeIfAbsent(player.getUuid(), uuid -> new HashSet<>()).add(holder);
-            }
-        }
+        Collection<Player> addedPlayers = players.stream().filter(holder::addViewer).collect(Collectors.toList());
 
         if (!addedPlayers.isEmpty()) {
             PacketUtils.sendGroupedPacket(addedPlayers, holder.createAddPacket());
@@ -99,14 +93,7 @@ public class BossBarManager {
         BossBarHolder holder = this.bars.get(bar);
 
         if (holder != null) {
-            Collection<Player> removedPlayers = new ArrayList<>();
-
-            for (Player player : players) {
-                if (holder.removeViewer(player)) {
-                    removedPlayers.add(player);
-                    this.removePlayer(player, holder);
-                }
-            }
+            Collection<Player> removedPlayers = players.stream().filter(holder::removeViewer).collect(Collectors.toList());
 
             if (!removedPlayers.isEmpty()) {
                 PacketUtils.sendGroupedPacket(removedPlayers, holder.createRemovePacket());
