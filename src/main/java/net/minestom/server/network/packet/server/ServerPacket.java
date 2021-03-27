@@ -26,4 +26,9 @@ public interface ServerPacket extends Writeable {
      */
     int getId();
 
+    @NotNull
+    default NetworkHint getNetworkHint() {
+        return NetworkHint.ORDER_UNAWARE_PACKET;
+    }
+
 }

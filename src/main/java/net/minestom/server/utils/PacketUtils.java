@@ -213,15 +213,14 @@ public final class PacketUtils {
             if (packetSize >= compressionThreshold) {
                 // Packet large enough
 
-                // Compress id + payload
                 final Deflater deflater = DEFLATER.get();
-                ByteBuf slice = buffer.copy(contentIndex, packetSize);
+                // Compress id + payload
+                ByteBuf uncompressedCopy = buffer.copy(contentIndex, packetSize);
                 buffer.writerIndex(contentIndex);
-                compress(deflater, slice, buffer);
-                slice.release();
+                compress(deflater, uncompressedCopy, buffer);
+                uncompressedCopy.release();
 
-                final int totalPacketLength = buffer.writerIndex()-contentIndex+hardcodedVarIntSize;
-                //System.out.println("test "+buffer.writerIndex()+" "+contentIndex+" "+packetSize+" "+totalPacketLength);
+                final int totalPacketLength = buffer.writerIndex() - contentIndex + hardcodedVarIntSize;
 
                 // Update header values
                 Utils.overrideVarInt(buffer, packetLengthIndex, hardcodedVarIntSize, totalPacketLength);
