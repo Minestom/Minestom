@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -176,6 +176,14 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createEntitySoundPacket(net.kyori.adventure.sound.Sound,net.minestom.server.entity.Entity)">createEntitySoundPacket</a></span>&#8203;(@NotNull net.kyori.adventure.sound.Sound&nbsp;sound,
+                       @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
+<td class="colLast">
+<div class="block">Creates an entity sound packet from an Adventure sound.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>static <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createSoundPacket(net.kyori.adventure.sound.Sound,double,double,double)">createSoundPacket</a></span>&#8203;(@NotNull net.kyori.adventure.sound.Sound&nbsp;sound,
                  double&nbsp;x,
                  double&nbsp;y,
@@ -184,42 +192,42 @@ extends java.lang.Object</pre>
 <div class="block">Creates a sound packet from a sound and a location.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createSoundStopPacket(net.kyori.adventure.sound.SoundStop)">createSoundStopPacket</a></span>&#8203;(@NotNull net.kyori.adventure.sound.SoundStop&nbsp;stop)</code></th>
 <td class="colLast">
 <div class="block">Creates a sound stop packet from a sound stop.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBossBarColorValue(net.kyori.adventure.bossbar.BossBar.Color)">getBossBarColorValue</a></span>&#8203;(net.kyori.adventure.bossbar.BossBar.Color&nbsp;color)</code></th>
 <td class="colLast">
 <div class="block">Gets the int value of a boss bar color.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static byte</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBossBarFlagValue(java.util.Collection)">getBossBarFlagValue</a></span>&#8203;(@NotNull java.util.Collection&lt;net.kyori.adventure.bossbar.BossBar.Flag&gt;&nbsp;flags)</code></th>
 <td class="colLast">
 <div class="block">Gets the byte value of a collection of boss bar flags.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBossBarOverlayValue(net.kyori.adventure.bossbar.BossBar.Overlay)">getBossBarOverlayValue</a></span>&#8203;(net.kyori.adventure.bossbar.BossBar.Overlay&nbsp;overlay)</code></th>
 <td class="colLast">
 <div class="block">Gets the int value of a boss bar overlay.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNamedTextColorValue(net.kyori.adventure.text.format.NamedTextColor)">getNamedTextColorValue</a></span>&#8203;(@NotNull net.kyori.adventure.text.format.NamedTextColor&nbsp;color)</code></th>
 <td class="colLast">
 <div class="block">Gets the int value from a named text color.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSoundSourceValue(net.kyori.adventure.sound.Sound.Source)">getSoundSourceValue</a></span>&#8203;(net.kyori.adventure.sound.Sound.Source&nbsp;source)</code></th>
 <td class="colLast">
@@ -374,6 +382,26 @@ extends java.lang.Object</pre>
 <dd><code>z</code> - the z coordinate</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the sound packet</dd>
+</dl>
+</li>
+</ul>
+<a id="createEntitySoundPacket(net.kyori.adventure.sound.Sound,net.minestom.server.entity.Entity)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createEntitySoundPacket</h4>
+<pre class="methodSignature">public static&nbsp;<a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;createEntitySoundPacket&#8203;(@NotNull
+                                                   @NotNull net.kyori.adventure.sound.Sound&nbsp;sound,
+                                                   @NotNull
+                                                   @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</pre>
+<div class="block">Creates an entity sound packet from an Adventure sound.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>sound</code> - the sound</dd>
+<dd><code>entity</code> - the entity the sound is coming from</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the packet</dd>
 </dl>
 </li>
 </ul>
