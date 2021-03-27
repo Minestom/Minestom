@@ -56,7 +56,7 @@ class BossBarListener implements BossBar.Listener {
     private void doIfRegistered(@NotNull BossBar bar, @NotNull Consumer<BossBarHolder> consumer) {
         BossBarHolder holder = this.manager.bars.get(bar);
 
-        if (holder != null && holder.registered) {
+        if (holder != null) {
             consumer.accept(holder);
         }
     }
