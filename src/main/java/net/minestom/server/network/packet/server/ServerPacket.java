@@ -28,7 +28,7 @@ public interface ServerPacket extends Writeable {
 
     @NotNull
     default NetworkHint getNetworkHint() {
-        return NetworkHint.ORDER_UNAWARE_PACKET;
+        return NetworkHint.Preservative();
     }
 
 }
