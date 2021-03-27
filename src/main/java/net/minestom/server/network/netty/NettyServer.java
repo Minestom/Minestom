@@ -162,6 +162,7 @@ public final class NettyServer {
             protected void initChannel(@NotNull SocketChannel ch) {
                 ChannelConfig config = ch.config();
                 config.setOption(ChannelOption.TCP_NODELAY, true);
+                config.setOption(ChannelOption.SO_KEEPALIVE, true);
                 config.setOption(ChannelOption.SO_SNDBUF, 262_144);
                 config.setAllocator(ByteBufAllocator.DEFAULT);
 
