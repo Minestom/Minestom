@@ -263,13 +263,8 @@ public final class NettyServer {
      * Stops the server and the various services.
      */
     public void stop() {
-        try {
-            this.serverChannel.close().sync();
-            this.worker.shutdownGracefully();
-            this.boss.shutdownGracefully();
-        } catch (InterruptedException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-        }
+        this.worker.shutdownGracefully();
+        this.boss.shutdownGracefully();
 
         this.trafficScheduler.shutdown();
         this.globalTrafficHandler.release();
