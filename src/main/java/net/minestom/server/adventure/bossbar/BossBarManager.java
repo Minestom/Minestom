@@ -58,9 +58,9 @@ public class BossBarManager {
      * @param bar    the boss bar to hide
      */
     public void removeBossBar(@NotNull Player player, @NotNull BossBar bar) {
-        BossBarHolder holder = this.getOrCreateHandler(bar);
+        BossBarHolder holder = this.bars.get(bar);
 
-        if (holder.removeViewer(player)) {
+        if (holder != null && holder.removeViewer(player)) {
             player.getPlayerConnection().sendPacket(holder.createRemovePacket());
             this.removePlayer(player, holder);
         }
@@ -96,18 +96,21 @@ public class BossBarManager {
      * @param bar     the boss bar to hide
      */
     public void removeBossBar(@NotNull Collection<Player> players, @NotNull BossBar bar) {
-        BossBarHolder holder = this.getOrCreateHandler(bar);
-        Collection<Player> removedPlayers = new ArrayList<>();
+        BossBarHolder holder = this.bars.get(bar);
 
-        for (Player player : players) {
-            if (holder.removeViewer(player)) {
-                removedPlayers.add(player);
-                this.removePlayer(player, holder);
+        if (holder != null) {
+            Collection<Player> removedPlayers = new ArrayList<>();
+
+            for (Player player : players) {
+                if (holder.removeViewer(player)) {
+                    removedPlayers.add(player);
+                    this.removePlayer(player, holder);
+                }
             }
-        }
 
-        if (!removedPlayers.isEmpty()) {
-            PacketUtils.sendGroupedPacket(removedPlayers, holder.createRemovePacket());
+            if (!removedPlayers.isEmpty()) {
+                PacketUtils.sendGroupedPacket(removedPlayers, holder.createRemovePacket());
+            }
         }
     }
 
