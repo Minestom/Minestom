@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -213,13 +213,27 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>@NotNull java.util.Collection&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBossBarViewers(net.kyori.adventure.bossbar.BossBar)">getBossBarViewers</a></span>&#8203;(@NotNull net.kyori.adventure.bossbar.BossBar&nbsp;bossBar)</code></th>
+<td class="colLast">
+<div class="block">Gets all the players for whom the given boss bar is currently visible.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>@NotNull java.util.Collection&lt;net.kyori.adventure.bossbar.BossBar&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayerBossBars(net.minestom.server.entity.Player)">getPlayerBossBars</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<td class="colLast">
+<div class="block">Gets a collection of all boss bars currently visible to a given player.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeAllBossBars(net.minestom.server.entity.Player)">removeAllBossBars</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">Removes a player from all of their boss bars.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeBossBar(java.util.Collection,net.kyori.adventure.bossbar.BossBar)">removeBossBar</a></span>&#8203;(@NotNull java.util.Collection&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players,
              @NotNull net.kyori.adventure.bossbar.BossBar&nbsp;bar)</code></th>
@@ -227,7 +241,7 @@ extends java.lang.Object</pre>
 <div class="block">Removes the specified players from the boss bar's viewers and despawns the boss bar.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeBossBar(net.minestom.server.entity.Player,net.kyori.adventure.bossbar.BossBar)">removeBossBar</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
              @NotNull net.kyori.adventure.bossbar.BossBar&nbsp;bar)</code></th>
@@ -375,7 +389,7 @@ extends java.lang.Object</pre>
 <a id="removeAllBossBars(net.minestom.server.entity.Player)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>removeAllBossBars</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;removeAllBossBars&#8203;(@NotNull
@@ -386,6 +400,42 @@ extends java.lang.Object</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>player</code> - the player</dd>
+</dl>
+</li>
+</ul>
+<a id="getPlayerBossBars(net.minestom.server.entity.Player)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPlayerBossBars</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull java.util.Collection&lt;net.kyori.adventure.bossbar.BossBar&gt;&nbsp;getPlayerBossBars&#8203;(@NotNull
+                                                                                            @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+<div class="block">Gets a collection of all boss bars currently visible to a given player.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>player</code> - the player</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the boss bars</dd>
+</dl>
+</li>
+</ul>
+<a id="getBossBarViewers(net.kyori.adventure.bossbar.BossBar)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getBossBarViewers</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull java.util.Collection&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;getBossBarViewers&#8203;(@NotNull
+                                                               @NotNull net.kyori.adventure.bossbar.BossBar&nbsp;bossBar)</pre>
+<div class="block">Gets all the players for whom the given boss bar is currently visible.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>bossBar</code> - the boss bar</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the players</dd>
 </dl>
 </li>
 </ul>
