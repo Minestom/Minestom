@@ -1,6 +1,7 @@
 package net.minestom.server.utils.binary;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
@@ -170,9 +171,9 @@ public class BinaryWriter extends OutputStream {
      * @param string the string to write
      */
     public void writeSizedString(@NotNull String string) {
-        final byte[] bytes = string.getBytes(StandardCharsets.UTF_8);
-        writeVarInt(bytes.length);
-        writeBytes(bytes);
+        final int utf8Bytes = ByteBufUtil.utf8Bytes(string);
+        writeVarInt(utf8Bytes);
+        buffer.writeCharSequence(string, StandardCharsets.UTF_8);
     }
 
     /**

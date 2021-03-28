@@ -198,18 +198,16 @@ public final class PacketUtils {
         final int compressionThreshold = MinecraftServer.getCompressionThreshold();
         final boolean compression = compressionThreshold > 0;
 
-        final int hardcodedVarIntSize = 3;
-
         if (compression) {
             // Dummy varint
-            final int packetLengthIndex = Utils.writeEmptyVarInt(buffer, hardcodedVarIntSize);
-            final int dataLengthIndex = Utils.writeEmptyVarInt(buffer, hardcodedVarIntSize);
+            final int packetLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
+            final int dataLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
 
             // Write packet
             final int contentIndex = buffer.writerIndex();
             writePacket(buffer, serverPacket);
             final int afterIndex = buffer.writerIndex();
-            final int packetSize = (afterIndex - dataLengthIndex) - hardcodedVarIntSize;
+            final int packetSize = (afterIndex - dataLengthIndex) - Utils.VARINT_HEADER_SIZE;
 
             if (packetSize >= compressionThreshold) {
                 // Packet large enough
@@ -221,30 +219,30 @@ public final class PacketUtils {
                 compress(deflater, uncompressedCopy, buffer);
                 uncompressedCopy.release();
 
-                final int totalPacketLength = buffer.writerIndex() - contentIndex + hardcodedVarIntSize;
+                final int totalPacketLength = buffer.writerIndex() - contentIndex + Utils.VARINT_HEADER_SIZE;
 
                 // Update header values
-                Utils.overrideVarInt(buffer, packetLengthIndex, hardcodedVarIntSize, totalPacketLength);
-                Utils.overrideVarInt(buffer, dataLengthIndex, hardcodedVarIntSize, packetSize);
+                Utils.overrideVarIntHeader(buffer, packetLengthIndex, totalPacketLength);
+                Utils.overrideVarIntHeader(buffer, dataLengthIndex, packetSize);
             } else {
                 // Packet too small, just override header values
-                final int totalPacketLength = packetSize + hardcodedVarIntSize;
-                Utils.overrideVarInt(buffer, packetLengthIndex, hardcodedVarIntSize, totalPacketLength);
-                Utils.overrideVarInt(buffer, dataLengthIndex, hardcodedVarIntSize, 0); // -> Uncompressed
+                final int totalPacketLength = packetSize + Utils.VARINT_HEADER_SIZE;
+                Utils.overrideVarIntHeader(buffer, packetLengthIndex, totalPacketLength);
+                Utils.overrideVarIntHeader(buffer, dataLengthIndex, 0); // -> Uncompressed
             }
         } else {
             // No compression
 
             // Write dummy varint
-            final int index = Utils.writeEmptyVarInt(buffer, hardcodedVarIntSize);
+            final int index = Utils.writeEmptyVarIntHeader(buffer);
 
             // Write packet id + payload
             writePacket(buffer, serverPacket);
 
             // Rewrite dummy varint to packet length
             final int afterIndex = buffer.writerIndex();
-            final int packetSize = (afterIndex - index) - hardcodedVarIntSize;
-            Utils.overrideVarInt(buffer, index, hardcodedVarIntSize, packetSize);
+            final int packetSize = (afterIndex - index) - Utils.VARINT_HEADER_SIZE;
+            Utils.overrideVarIntHeader(buffer, index, packetSize);
         }
     }
 
