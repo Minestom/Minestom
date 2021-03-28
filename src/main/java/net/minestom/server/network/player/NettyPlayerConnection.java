@@ -62,12 +62,15 @@ public class NettyPlayerConnection extends PlayerConnection {
     private UUID bungeeUuid;
     private PlayerSkin bungeeSkin;
 
+    private final static int INITIAL_BUFFER_SIZE = 1_048_576; // 2^20
     private final ByteBuf tickBuffer = BufUtils.getBuffer(true);
 
     public NettyPlayerConnection(@NotNull SocketChannel channel) {
         super();
         this.channel = channel;
         this.remoteAddress = channel.remoteAddress();
+
+        this.tickBuffer.ensureWritable(INITIAL_BUFFER_SIZE);
     }
 
     @Override
@@ -218,13 +221,13 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     private void writeWaitingPackets() {
+        if (tickBuffer.writerIndex() == 0) {
+            // Nothing to write
+            return;
+        }
+
         synchronized (tickBuffer) {
             final ByteBuf copy = tickBuffer.copy();
-            if (copy.writerIndex() == 0) {
-                // Nothing to write
-                copy.release();
-                return;
-            }
 
             ChannelFuture channelFuture = channel.write(new FramedPacket(copy));
             channelFuture.addListener(future -> copy.release());

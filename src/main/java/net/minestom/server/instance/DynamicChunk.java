@@ -59,6 +59,9 @@ public class DynamicChunk extends Chunk {
 
     private long lastChangeTime;
 
+    private ChunkDataPacket cachedPacket;
+    private long cachedPacketTime;
+
     public DynamicChunk(@Nullable Biome[] biomes, int chunkX, int chunkZ,
                         @NotNull PaletteStorage blockPalette, @NotNull PaletteStorage customBlockPalette) {
         super(biomes, chunkX, chunkZ, true);
@@ -383,6 +386,9 @@ public class DynamicChunk extends Chunk {
     @NotNull
     @Override
     protected ChunkDataPacket createFreshPacket() {
+        if (cachedPacket != null && cachedPacketTime == getLastChangeTime()) {
+            return cachedPacket;
+        }
         ChunkDataPacket fullDataPacket = new ChunkDataPacket(getIdentifier(), getLastChangeTime());
         fullDataPacket.biomes = biomes;
         fullDataPacket.chunkX = chunkX;
@@ -391,6 +397,10 @@ public class DynamicChunk extends Chunk {
         fullDataPacket.customBlockPaletteStorage = customBlockPalette.clone();
         fullDataPacket.blockEntities = blockEntities.clone();
         fullDataPacket.blocksData = blocksData.clone();
+
+        this.cachedPacketTime = getLastChangeTime();
+        this.cachedPacket = fullDataPacket;
+
         return fullDataPacket;
     }
 
