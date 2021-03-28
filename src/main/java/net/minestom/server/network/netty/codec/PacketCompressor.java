@@ -34,7 +34,7 @@ public class PacketCompressor extends ByteToMessageCodec<ByteBuf> {
 
     private final int threshold;
 
-    private final Deflater deflater = new Deflater(3);
+    private final Deflater deflater = new Deflater();
     private final Inflater inflater = new Inflater();
 
     public PacketCompressor(int threshold) {
