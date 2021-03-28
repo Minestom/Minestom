@@ -11,6 +11,6 @@ import java.util.Map;
 public class ValidSyntaxHolder {
     public String commandString;
     public CommandSyntax syntax;
-    public Map<Argument<?>, CommandParser.ArgumentResult> argumentResults;
+    public Map<Argument<?>, ArgumentParser.ArgumentResult> argumentResults;
 
 }

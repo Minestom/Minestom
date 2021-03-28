@@ -1,6 +1,10 @@
 package net.minestom.server.entity;
 
 import com.google.common.collect.Queues;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
+import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
 import net.minestom.server.chat.JsonMessage;
@@ -46,17 +50,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 /**
  * Could be a player, a monster, or an object.
  * <p>
- * To create your own entity you probably want to extends {@link ObjectEntity} or {@link EntityCreature} instead.
+ * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler {
+public class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler, HoverEventSource<ShowEntity> {
 
-    private static final Map<Integer, Entity> entityById = new ConcurrentHashMap<>();
-    private static final Map<UUID, Entity> entityByUuid = new ConcurrentHashMap<>();
-    private static final AtomicInteger lastEntityId = new AtomicInteger();
+    private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
+    private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
+    private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
 
     protected Instance instance;
     protected final Position position;
@@ -140,8 +145,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         setAutoViewable(true);
         setGravity(entityType.getGravityDrag(), entityType.getGravityAcceleration());
 
-        Entity.entityById.put(id, this);
-        Entity.entityByUuid.put(uuid, this);
+        Entity.ENTITY_BY_ID.put(id, this);
+        Entity.ENTITY_BY_UUID.put(uuid, this);
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -182,7 +187,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      */
     @Nullable
     public static Entity getEntity(int id) {
-        return Entity.entityById.getOrDefault(id, null);
+        return Entity.ENTITY_BY_ID.getOrDefault(id, null);
     }
 
     /**
@@ -193,7 +198,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      */
     @Nullable
     public static Entity getEntity(@NotNull UUID uuid) {
-        return Entity.entityByUuid.getOrDefault(uuid, null);
+        return Entity.ENTITY_BY_UUID.getOrDefault(uuid, null);
     }
 
 
@@ -205,7 +210,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      * @return a newly generated entity id
      */
     public static int generateId() {
-        return lastEntityId.incrementAndGet();
+        return LAST_ENTITY_ID.incrementAndGet();
     }
 
     /**
@@ -352,7 +357,9 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
         PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getEntityType().getSpawnType().getSpawnPacket(this));
-        playerConnection.sendPacket(getVelocityPacket());
+        if (hasVelocity()) {
+            playerConnection.sendPacket(getVelocityPacket());
+        }
         playerConnection.sendPacket(getMetadataPacket());
 
         // Passenger
@@ -784,8 +791,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      */
     public void setUuid(@NotNull UUID uuid) {
         // Refresh internal map
-        Entity.entityByUuid.remove(this.uuid);
-        Entity.entityByUuid.put(uuid, this);
+        Entity.ENTITY_BY_UUID.remove(this.uuid);
+        Entity.ENTITY_BY_UUID.put(uuid, this);
 
         this.uuid = uuid;
     }
@@ -1211,9 +1218,21 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      * Gets the entity custom name.
      *
      * @return the custom name of the entity, null if there is not
+     * @deprecated Use {@link #getCustomName()}
+     */
+    @Deprecated
+    @Nullable
+    public JsonMessage getCustomNameJson() {
+        return this.entityMeta.getCustomNameJson();
+    }
+
+    /**
+     * Gets the entity custom name.
+     *
+     * @return the custom name of the entity, null if there is not
      */
     @Nullable
-    public JsonMessage getCustomName() {
+    public Component getCustomName() {
         return this.entityMeta.getCustomName();
     }
 
@@ -1221,8 +1240,19 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      * Changes the entity custom name.
      *
      * @param customName the custom name of the entity, null to remove it
+     * @deprecated Use {@link #setCustomName(Component)}
      */
+    @Deprecated
     public void setCustomName(@Nullable JsonMessage customName) {
+        this.entityMeta.setCustomName(customName);
+    }
+
+    /**
+     * Changes the entity custom name.
+     *
+     * @param customName the custom name of the entity, null to remove it
+     */
+    public void setCustomName(@Nullable Component customName) {
         this.entityMeta.setCustomName(customName);
     }
 
@@ -1302,11 +1332,11 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
             final Chunk lastChunk = instance.getChunkAt(lastX, lastZ);
             final Chunk newChunk = instance.getChunkAt(x, z);
 
-            Check.notNull(lastChunk, "The entity " + getEntityId() + " was in an unloaded chunk at " + lastX + ";" + lastZ);
-            Check.notNull(newChunk, "The entity " + getEntityId() + " tried to move in an unloaded chunk at " + x + ";" + z);
+            Check.notNull(lastChunk, "The entity {0} was in an unloaded chunk at {1};{2}", getEntityId(), lastX, lastZ);
+            Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1};{2}", getEntityId(), x, z);
 
             if (lastChunk != newChunk) {
-                instance.switchEntityChunk(this, lastChunk, newChunk);
+                instance.UNSAFE_switchEntityChunk(this, lastChunk, newChunk);
                 if (this instanceof Player) {
                     // Refresh player view
                     final Player player = (Player) this;
@@ -1430,8 +1460,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     public void remove() {
         this.removed = true;
         this.shouldRemove = true;
-        Entity.entityById.remove(id);
-        Entity.entityByUuid.remove(uuid);
+        Entity.ENTITY_BY_ID.remove(id);
+        Entity.ENTITY_BY_UUID.remove(uuid);
         if (instance != null)
             instance.UNSAFE_removeEntity(this);
     }
@@ -1520,6 +1550,11 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      */
     public void setCustomSynchronizationCooldown(@Nullable UpdateOption cooldown) {
         this.customSynchronizationCooldown = cooldown;
+    }
+
+    @Override
+    public @NotNull HoverEvent<ShowEntity> asHoverEvent(@NotNull UnaryOperator<ShowEntity> op) {
+        return HoverEvent.showEntity(ShowEntity.of(this.entityType, this.uuid));
     }
 
     private UpdateOption getSynchronizationCooldown() {

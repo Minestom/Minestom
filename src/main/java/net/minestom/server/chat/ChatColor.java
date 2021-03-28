@@ -4,6 +4,8 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.kyori.adventure.text.format.TextColor;
+import net.minestom.server.color.Color;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +20,7 @@ import java.util.Map;
  * <p>
  * Immutable class.
  */
+@Deprecated
 public final class ChatColor {
 
     // Special
@@ -270,6 +273,18 @@ public final class ChatColor {
     public int getId() {
         Check.stateCondition(id == -1, "Please use one of the ChatColor constant instead");
         return id;
+    }
+
+    /**
+     * Gets the Adventure text color from this chat color.
+     * @return the text color
+     */
+    public @NotNull TextColor asTextColor() {
+        return TextColor.color(red, blue, green);
+    }
+
+    public @NotNull Color asColor() {
+        return new Color(red, green, blue);
     }
 
     @NotNull

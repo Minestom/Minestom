@@ -1,5 +1,6 @@
 package demo.commands;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
@@ -19,17 +20,17 @@ public class PlayersCommand extends Command {
     private void usage(CommandSender sender, CommandContext context) {
         final Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
         final int playerCount = players.size();
-        sender.sendMessage("Total players: " + playerCount);
+        sender.sendMessage(Component.text("Total players: " + playerCount));
         final int limit = 15;
         if (playerCount <= limit) {
             for (final Player player : players) {
-                sender.sendMessage(player.getUsername());
+                sender.sendMessage(Component.text(player.getUsername()));
             }
         } else {
             for (final Player player : players.stream().limit(limit).collect(Collectors.toList())) {
-                sender.sendMessage(player.getUsername());
+                sender.sendMessage(Component.text(player.getUsername()));
             }
-            sender.sendMessage("...");
+            sender.sendMessage(Component.text("..."));
         }
     }
 

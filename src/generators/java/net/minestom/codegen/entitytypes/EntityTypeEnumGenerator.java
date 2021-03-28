@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.minestom.codegen.ConstructorLambda;
 import net.minestom.codegen.EnumGenerator;
 import net.minestom.codegen.MinestomEnumGenerator;
@@ -185,6 +187,12 @@ public class EntityTypeEnumGenerator extends MinestomEnumGenerator<EntityTypeCon
                     .endControlFlow()
                     .addStatement("return null");
         });
+
+        // implement Keyed
+        generator.addSuperinterface(ClassName.get(Keyed.class));
+        generator.addField(ClassName.get(Key.class), "key", true);
+        generator.appendToConstructor(code -> code.addStatement("this.key = Key.key(this.namespaceID)"));
+        generator.addMethod("key", new ParameterSpec[0], ClassName.get(Key.class), code -> code.addStatement("return this.key"));
     }
 
     @Override

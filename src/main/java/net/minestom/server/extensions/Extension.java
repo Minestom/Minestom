@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 public abstract class Extension {
     // Set by reflection
     @SuppressWarnings("unused")
-    private ExtensionDescription description;
+    private DiscoveredExtension origin;
     // Set by reflection
     @SuppressWarnings("unused")
     private Logger logger;
@@ -24,8 +24,13 @@ public abstract class Extension {
      * this extension holds a reference to it. A WeakReference makes sure this extension does not prevent the memory
      * from being cleaned up.
      */
-    private Set<WeakReference<IExtensionObserver>> observers = Collections.newSetFromMap(new ConcurrentHashMap<>());
-    private ReferenceQueue<IExtensionObserver> observerReferenceQueue = new ReferenceQueue<>();
+    protected final Set<WeakReference<IExtensionObserver>> observers = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    protected final ReferenceQueue<IExtensionObserver> observerReferenceQueue = new ReferenceQueue<>();
+
+    /**
+     * List of extensions that depend on this extension.
+     */
+    protected final Set<String> dependents = new HashSet<>();
 
     protected Extension() {
 
@@ -59,19 +64,24 @@ public abstract class Extension {
     }
 
     @NotNull
-    public ExtensionDescription getDescription() {
-        return description;
+    public DiscoveredExtension getOrigin() {
+        return origin;
     }
 
+    /**
+     * Gets the logger for the extension
+     * @return The logger for the extension
+     */
     @NotNull
-    protected Logger getLogger() {
+    public Logger getLogger() {
         return logger;
     }
 
     /**
      * Adds a new observer to this extension.
      * Will be kept as a WeakReference.
-     * @param observer
+     *
+     * @param observer The observer to add
      */
     public void observe(IExtensionObserver observer) {
         observers.add(new WeakReference<>(observer, observerReferenceQueue));
@@ -82,9 +92,9 @@ public abstract class Extension {
      * @param action code to execute on each observer
      */
     public void triggerChange(Consumer<IExtensionObserver> action) {
-        for(WeakReference<IExtensionObserver> weakObserver : observers) {
+        for (WeakReference<IExtensionObserver> weakObserver : observers) {
             IExtensionObserver observer = weakObserver.get();
-            if(observer != null) {
+            if (observer != null) {
                 action.accept(observer);
             }
         }
@@ -94,7 +104,7 @@ public abstract class Extension {
      * If this extension registers code modifiers and/or mixins, are they loaded correctly?
      */
     public boolean areCodeModifiersAllLoadedCorrectly() {
-        return !getDescription().failedToLoadMixin && getDescription().getMissingCodeModifiers().isEmpty();
+        return !getOrigin().hasFailedToLoadMixin() && getOrigin().getMissingCodeModifiers().isEmpty();
     }
 
     /**
@@ -109,57 +119,10 @@ public abstract class Extension {
         }
     }
 
-    public static class ExtensionDescription {
-        private final String name;
-        private final String version;
-        private final List<String> authors;
-        private final List<String> dependents = new ArrayList<>();
-        private final List<String> missingCodeModifiers = new LinkedList<>();
-        private final boolean failedToLoadMixin;
-        private final DiscoveredExtension origin;
-
-        ExtensionDescription(@NotNull String name, @NotNull String version, @NotNull List<String> authors, @NotNull DiscoveredExtension origin) {
-            this.name = name;
-            this.version = version;
-            this.authors = authors;
-            this.origin = origin;
-            failedToLoadMixin = origin.hasFailedToLoadMixin();
-            missingCodeModifiers.addAll(origin.getMissingCodeModifiers());
-        }
-
-        @NotNull
-        public String getName() {
-            return name;
-        }
-
-        @NotNull
-        public String getVersion() {
-            return version;
-        }
-
-        @NotNull
-        public List<String> getAuthors() {
-            return authors;
-        }
-
-        @NotNull
-        public List<String> getDependents() {
-            return dependents;
-        }
-
-        @NotNull
-        DiscoveredExtension getOrigin() {
-            return origin;
-        }
-
-        @NotNull
-        public List<String> getMissingCodeModifiers() {
-            return missingCodeModifiers;
-        }
-
-        @NotNull
-        public boolean hasFailedToLoadMixin() {
-            return failedToLoadMixin;
-        }
+    /**
+     * @return A modifiable list of dependents.
+     */
+    public Set<String> getDependents() {
+        return dependents;
     }
 }

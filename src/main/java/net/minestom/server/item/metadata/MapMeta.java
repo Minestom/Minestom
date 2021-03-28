@@ -1,7 +1,10 @@
 package net.minestom.server.item.metadata;
 
+import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
+import net.minestom.server.color.Color;
+import net.minestom.server.color.DyeColor;
 import net.minestom.server.utils.clone.CloneUtils;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +20,7 @@ public class MapMeta extends ItemMeta {
     private int mapId;
     private int mapScaleDirection = 1;
     private List<MapDecoration> decorations = new CopyOnWriteArrayList<>();
-    private ChatColor mapColor = ChatColor.NO_COLOR;
+    private Color mapColor = new Color(0, 0, 0);
 
     public MapMeta() {
     }
@@ -84,21 +87,40 @@ public class MapMeta extends ItemMeta {
      * Gets the map color.
      *
      * @return the map color
+     * @deprecated Use {@link #getMapColor()}
      */
-    public ChatColor getMapColor() {
-        return mapColor;
+    @Deprecated
+    public ChatColor getLegacyMapColor() {
+        return this.mapColor.asLegacyChatColor();
+    }
+
+    /**
+     * Gets the map color.
+     *
+     * @return the map color
+     */
+    public @NotNull Color getMapColor() {
+        return this.mapColor;
     }
 
     /**
      * Changes the map color.
-     * <p>
-     * WARNING: RGB colors are not supported.
      *
      * @param mapColor the new map color
+     * @deprecated Use {@link #setMapColor(Color)}
      */
+    @Deprecated
     public void setMapColor(ChatColor mapColor) {
-        mapColor.getId(); // used to throw an error if rgb color is used
-        this.mapColor = mapColor;
+        this.setMapColor(mapColor.asColor());
+    }
+
+    /**
+     * Changes the map color.
+     *
+     * @param color the new map color
+     */
+    public void setMapColor(@NotNull Color color) {
+        this.mapColor = color;
     }
 
     @Override
@@ -156,8 +178,7 @@ public class MapMeta extends ItemMeta {
         if (compound.containsKey("display")) {
             final NBTCompound displayCompound = compound.getCompound("display");
             if (displayCompound.containsKey("MapColor")) {
-                final int color = displayCompound.getAsInt("MapColor");
-                this.mapColor = ChatColor.fromId(color);
+                this.mapColor = new Color(displayCompound.getAsInt("MapColor"));
             }
         }
 
@@ -191,7 +212,7 @@ public class MapMeta extends ItemMeta {
             } else {
                 displayCompound = new NBTCompound();
             }
-            displayCompound.setInt("MapColor", mapColor.getId());
+            displayCompound.setInt("MapColor", mapColor.asRGB());
         }
     }
 

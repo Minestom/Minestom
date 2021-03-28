@@ -1,5 +1,7 @@
 package net.minestom.server.stat;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
@@ -9,7 +11,7 @@ import net.minestom.server.utils.NamespaceID;
  * //==============================
  */
 @SuppressWarnings({"deprecation"})
-public enum StatisticType {
+public enum StatisticType implements Keyed {
     LEAVE_GAME("minecraft:leave_game"),
 
     PLAY_ONE_MINUTE("minecraft:play_one_minute"),
@@ -158,11 +160,14 @@ public enum StatisticType {
 
     INTERACT_WITH_SMITHING_TABLE("minecraft:interact_with_smithing_table");
 
-    private String namespaceID;
+    private final String namespaceID;
+
+    private final Key key;
 
     StatisticType(String namespaceID) {
         this.namespaceID = namespaceID;
         Registries.statisticTypes.put(NamespaceID.from(namespaceID), this);
+        this.key = Key.key(this.namespaceID);
     }
 
     public int getId() {
@@ -171,6 +176,10 @@ public enum StatisticType {
 
     public String getNamespaceID() {
         return namespaceID;
+    }
+
+    public Key key() {
+        return this.key;
     }
 
     public static StatisticType fromId(int id) {

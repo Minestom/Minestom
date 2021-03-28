@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Represents a translatable component which can be used in {@link ColoredText}.
  */
+@Deprecated
 public class TranslatableText {
 
     private final String code;

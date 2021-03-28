@@ -23,8 +23,8 @@ import org.jetbrains.annotations.Nullable;
 public abstract class Argument<T> {
 
     private final String id;
-    private final boolean allowSpace;
-    private final boolean useRemaining;
+    protected final boolean allowSpace;
+    protected final boolean useRemaining;
 
     private ArgumentCallback callback;
 
