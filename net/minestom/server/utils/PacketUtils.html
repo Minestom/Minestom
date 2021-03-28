@@ -156,7 +156,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#compressBuffer(java.util.zip.Deflater,io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">compressBuffer</a></span>&#8203;(@NotNull java.util.zip.Deflater&nbsp;deflater,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#compressBuffer(com.velocitypowered.natives.compression.VelocityCompressor,io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">compressBuffer</a></span>&#8203;(@NotNull com.velocitypowered.natives.compression.VelocityCompressor&nbsp;compressor,
               @NotNull io.netty.buffer.ByteBuf&nbsp;packetBuffer,
               @NotNull io.netty.buffer.ByteBuf&nbsp;compressionTarget)</code></th>
 <td class="colLast">
@@ -316,14 +316,14 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a id="compressBuffer(java.util.zip.Deflater,io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">
+<a id="compressBuffer(com.velocitypowered.natives.compression.VelocityCompressor,io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>compressBuffer</h4>
 <pre class="methodSignature">public static&nbsp;void&nbsp;compressBuffer&#8203;(@NotNull
-                                  @NotNull java.util.zip.Deflater&nbsp;deflater,
+                                  @NotNull com.velocitypowered.natives.compression.VelocityCompressor&nbsp;compressor,
                                   @NotNull
                                   @NotNull io.netty.buffer.ByteBuf&nbsp;packetBuffer,
                                   @NotNull
@@ -333,7 +333,7 @@ extends java.lang.Object</pre>
  <code>packetBuffer</code> needs to be the packet content without any header (if you want to use it to write a Minecraft packet).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>deflater</code> - the deflater for zlib compression</dd>
+<dd><code>compressor</code> - the deflater for zlib compression</dd>
 <dd><code>packetBuffer</code> - the buffer containing all the packet fields</dd>
 <dd><code>compressionTarget</code> - the buffer which will receive the compressed version of <code>packetBuffer</code></dd>
 </dl>
