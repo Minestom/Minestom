@@ -88,13 +88,13 @@ loadScripts(document, 'script');</script>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -138,6 +138,29 @@ extends java.lang.Object</pre>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="memberSummary">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Field</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#VARINT_HEADER_SIZE">VARINT_HEADER_SIZE</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+</section>
 <!-- ========== METHOD SUMMARY =========== -->
 <section role="region">
 <ul class="blockList">
@@ -170,10 +193,9 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#overrideVarInt(io.netty.buffer.ByteBuf,int,int,int)">overrideVarInt</a></span>&#8203;(@NotNull io.netty.buffer.ByteBuf&nbsp;buffer,
-              int&nbsp;startIndex,
-              int&nbsp;length,
-              int&nbsp;value)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#overrideVarIntHeader(io.netty.buffer.ByteBuf,int,int)">overrideVarIntHeader</a></span>&#8203;(@NotNull io.netty.buffer.ByteBuf&nbsp;buffer,
+                    int&nbsp;startIndex,
+                    int&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
@@ -188,8 +210,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>static int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeEmptyVarInt(io.netty.buffer.ByteBuf,int)">writeEmptyVarInt</a></span>&#8203;(@NotNull io.netty.buffer.ByteBuf&nbsp;buffer,
-                int&nbsp;length)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeEmptyVarIntHeader(io.netty.buffer.ByteBuf)">writeEmptyVarIntHeader</a></span>&#8203;(@NotNull io.netty.buffer.ByteBuf&nbsp;buffer)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
@@ -233,6 +254,29 @@ extends java.lang.Object</pre>
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a id="VARINT_HEADER_SIZE">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>VARINT_HEADER_SIZE</h4>
+<pre>public static final&nbsp;int VARINT_HEADER_SIZE</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../constant-values.html#net.minestom.server.utils.Utils.VARINT_HEADER_SIZE">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ============ METHOD DETAIL ========== -->
 <section role="region">
 <ul class="blockList">
@@ -269,28 +313,26 @@ extends java.lang.Object</pre>
                                int&nbsp;value)</pre>
 </li>
 </ul>
-<a id="overrideVarInt(io.netty.buffer.ByteBuf,int,int,int)">
+<a id="overrideVarIntHeader(io.netty.buffer.ByteBuf,int,int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>overrideVarInt</h4>
-<pre class="methodSignature">public static&nbsp;void&nbsp;overrideVarInt&#8203;(@NotNull
-                                  @NotNull io.netty.buffer.ByteBuf&nbsp;buffer,
-                                  int&nbsp;startIndex,
-                                  int&nbsp;length,
-                                  int&nbsp;value)</pre>
+<h4>overrideVarIntHeader</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;overrideVarIntHeader&#8203;(@NotNull
+                                        @NotNull io.netty.buffer.ByteBuf&nbsp;buffer,
+                                        int&nbsp;startIndex,
+                                        int&nbsp;value)</pre>
 </li>
 </ul>
-<a id="writeEmptyVarInt(io.netty.buffer.ByteBuf,int)">
+<a id="writeEmptyVarIntHeader(io.netty.buffer.ByteBuf)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>writeEmptyVarInt</h4>
-<pre class="methodSignature">public static&nbsp;int&nbsp;writeEmptyVarInt&#8203;(@NotNull
-                                   @NotNull io.netty.buffer.ByteBuf&nbsp;buffer,
-                                   int&nbsp;length)</pre>
+<h4>writeEmptyVarIntHeader</h4>
+<pre class="methodSignature">public static&nbsp;int&nbsp;writeEmptyVarIntHeader&#8203;(@NotNull
+                                         @NotNull io.netty.buffer.ByteBuf&nbsp;buffer)</pre>
 </li>
 </ul>
 <a id="readVarInt(io.netty.buffer.ByteBuf)">
@@ -402,13 +444,13 @@ extends java.lang.Object</pre>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
