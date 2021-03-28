@@ -194,7 +194,7 @@ public final class PacketUtils {
     }
 
     public static void writeFramedPacket(@NotNull ByteBuf buffer,
-                                         @NotNull ServerPacket serverPacket, boolean directBuffer) {
+                                         @NotNull ServerPacket serverPacket) {
         final int compressionThreshold = MinecraftServer.getCompressionThreshold();
         final boolean compression = compressionThreshold > 0;
 
@@ -214,17 +214,14 @@ public final class PacketUtils {
             if (packetSize >= compressionThreshold) {
                 // Packet large enough
 
-                // Compress id + payload
-                ByteBuf compressedBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
                 final Deflater deflater = DEFLATER.get();
-                compress(deflater, buffer.slice(contentIndex, packetSize), compressedBuf);
+                // Compress id + payload
+                ByteBuf uncompressedCopy = buffer.copy(contentIndex, packetSize);
+                buffer.writerIndex(contentIndex);
+                compress(deflater, uncompressedCopy, buffer);
+                uncompressedCopy.release();
 
-                final int totalPacketLength = compressedBuf.readableBytes() + hardcodedVarIntSize;
-
-                // Replace uncompressed by compressed data
-                buffer.setBytes(contentIndex, compressedBuf);
-                buffer.writerIndex(contentIndex + compressedBuf.writerIndex());
-                compressedBuf.release();
+                final int totalPacketLength = buffer.writerIndex() - contentIndex + hardcodedVarIntSize;
 
                 // Update header values
                 Utils.overrideVarInt(buffer, packetLengthIndex, hardcodedVarIntSize, totalPacketLength);
@@ -263,7 +260,7 @@ public final class PacketUtils {
     @NotNull
     public static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket, boolean directBuffer) {
         ByteBuf packetBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
-        writeFramedPacket(packetBuf, serverPacket, directBuffer);
+        writeFramedPacket(packetBuf, serverPacket);
         return packetBuf;
     }
 

@@ -192,7 +192,7 @@ public class NettyPlayerConnection extends PlayerConnection {
             }
 
             synchronized (tickBuffer) {
-                PacketUtils.writeFramedPacket(tickBuffer, serverPacket, false);
+                PacketUtils.writeFramedPacket(tickBuffer, serverPacket);
             }
             return;
         } else if (message instanceof ByteBuf) {
