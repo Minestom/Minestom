@@ -136,6 +136,38 @@ public class BossBarManager {
     }
 
     /**
+     * Gets a collection of all boss bars currently visible to a given player.
+     *
+     * @param player the player
+     * @return the boss bars
+     */
+    public @NotNull Collection<BossBar> getPlayersBossBars(@NotNull Player player) {
+        Collection<BossBarHolder> holders = this.playerBars.get(player.getUuid());
+
+        if (holders == null) {
+            return Collections.emptyList();
+        } else {
+            return holders.stream().map(holder -> holder.bar).collect(Collectors.toUnmodifiableList());
+        }
+    }
+
+    /**
+     * Gets all the players for whom the given boss bar is currently visible.
+     *
+     * @param bossBar the boss bar
+     * @return the players
+     */
+    public @NotNull Collection<Player> getBossBarViewers(@NotNull BossBar bossBar) {
+        BossBarHolder holder = this.bars.get(bossBar);
+
+        if (holder == null) {
+            return Collections.emptyList();
+        } else {
+            return Collections.unmodifiableCollection(holder.players);
+        }
+    }
+
+    /**
      * Gets or creates a handler for this bar.
      *
      * @param bar the bar
