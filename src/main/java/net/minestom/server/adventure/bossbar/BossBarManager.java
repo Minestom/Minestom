@@ -141,7 +141,7 @@ public class BossBarManager {
      * @param player the player
      * @return the boss bars
      */
-    public @NotNull Collection<BossBar> getPlayersBossBars(@NotNull Player player) {
+    public @NotNull Collection<BossBar> getPlayerBossBars(@NotNull Player player) {
         Collection<BossBarHolder> holders = this.playerBars.get(player.getUuid());
 
         if (holders == null) {
