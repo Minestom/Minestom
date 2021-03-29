@@ -1,9 +1,7 @@
 package net.minestom.server.listener;
 
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.event.HoverEvent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Player;
@@ -14,7 +12,6 @@ import net.minestom.server.network.packet.server.play.ChatMessagePacket;
 import net.minestom.server.utils.PacketUtils;
 
 import java.util.Collection;
-import java.util.UUID;
 import java.util.function.Function;
 
 public class ChatMessageListener {
@@ -69,17 +66,12 @@ public class ChatMessageListener {
 
     private static Component buildDefaultChatMessage(PlayerChatEvent chatEvent) {
         final String username = chatEvent.getPlayer().getUsername();
-        final UUID uuid = chatEvent.getPlayer().getUuid();
 
         return Component.translatable("chat.type.text")
                 .args(Component.text(username)
                                 .insertion(username)
                                 .clickEvent(ClickEvent.suggestCommand("/msg " + username + " "))
-                                .hoverEvent(HoverEvent.showEntity(HoverEvent.ShowEntity.of(
-                                        Key.key("minecraft", "player"),
-                                        uuid,
-                                        Component.text(username)
-                                ))),
+                                .hoverEvent(chatEvent.getPlayer()),
                         Component.text(chatEvent.getMessage())
                 );
     }
