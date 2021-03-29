@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.network.packet.server.NetworkHint;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -22,6 +23,11 @@ public class EntityRotationPacket implements ServerPacket {
     @Override
     public int getId() {
         return ServerPacketIdentifier.ENTITY_ROTATION;
+    }
+
+    @Override
+    public @NotNull NetworkHint getNetworkHint() {
+        return NetworkHint.Unordered(10);
     }
 
     @NotNull

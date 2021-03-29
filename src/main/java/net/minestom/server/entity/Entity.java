@@ -30,6 +30,7 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.callback.OptionalCallback;
@@ -1513,7 +1514,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         entityTeleportPacket.entityId = getEntityId();
         entityTeleportPacket.position = getPosition().clone();
         entityTeleportPacket.onGround = isOnGround();
-        sendPacketToViewers(entityTeleportPacket);
+        PacketUtils.prepareGroupedPacket(this instanceof Player ? ((Player) this).getPlayerConnection() : null,
+                getChunk(), entityTeleportPacket);
     }
 
     /**

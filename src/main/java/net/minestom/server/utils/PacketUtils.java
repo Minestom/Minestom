@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.DataFormatException;
 
@@ -39,63 +40,79 @@ public final class PacketUtils {
 
     }
 
-    private static Map<Chunk, ChunkStorage> chunkStorageMap = new ConcurrentHashMap<>();
+    private static final Map<Chunk, ChunkStorage> CHUNK_STORAGE_MAP = new ConcurrentHashMap<>();
 
     private static class ChunkStorage {
-        Map<Player, IntIntPair> entityIdMap = new ConcurrentHashMap<>();
-        ByteBuf buffer = Unpooled.buffer();
-    }
+        Map<Integer, Entry> entries = new TreeMap<>();
 
-    public static void prepareGroupedPacket(Player player, @NotNull Chunk chunk, @NotNull ServerPacket serverPacket) {
-        ChunkStorage chunkStorage = chunkStorageMap.computeIfAbsent(chunk, c -> new ChunkStorage());
-        synchronized (chunkStorage) {
-            ByteBuf buffer = chunkStorage.buffer;
-            final int start = buffer.writerIndex();
-            writeFramedPacket(chunkStorage.buffer, serverPacket);
-            final int end = buffer.writerIndex();
-            chunkStorage.entityIdMap.put(player, IntIntPair.of(start, end));
+        private static class Entry {
+            Map<PlayerConnection, IntIntPair> entityIdMap = new ConcurrentHashMap<>();
+            ByteBuf buffer = Unpooled.buffer();
         }
     }
 
-    public static void flush(Chunk chunk) {
-        ChunkStorage chunkStorage = chunkStorageMap.get(chunk);
-        if (chunkStorage == null || chunkStorage.entityIdMap.isEmpty()) {
+    public static void prepareGroupedPacket(@Nullable PlayerConnection playerConnection, @NotNull Chunk chunk, @NotNull ServerPacket serverPacket) {
+        ChunkStorage chunkStorage = CHUNK_STORAGE_MAP.computeIfAbsent(chunk, c -> new ChunkStorage());
+        final int priority = serverPacket.getNetworkHint().getPriority();
+        synchronized (chunkStorage) {
+            ChunkStorage.Entry entry = chunkStorage.entries.computeIfAbsent(priority, integer -> new ChunkStorage.Entry());
+            final boolean hasConnection = playerConnection != null;
+            var entityIdMap = entry.entityIdMap;
+            if (hasConnection && entityIdMap.containsKey(playerConnection))
+                return;
+
+            ByteBuf buffer = entry.buffer;
+            final int start = buffer.writerIndex();
+            writeFramedPacket(buffer, serverPacket);
+            final int end = buffer.writerIndex();
+
+            if (hasConnection)
+                entityIdMap.put(playerConnection, IntIntPair.of(start, end));
+        }
+    }
+
+    public static void flush(@NotNull Chunk chunk) {
+        ChunkStorage chunkStorage = CHUNK_STORAGE_MAP.get(chunk);
+        if (chunkStorage == null || chunkStorage.entries.isEmpty()) {
             return; // nothing to flush
         }
 
         AsyncUtils.runAsync(() -> {
             synchronized (chunkStorage) {
-                var entityIdMap = chunkStorage.entityIdMap;
-                ByteBuf buffer = chunkStorage.buffer;
-                final int readable = buffer.readableBytes();
+                var entries = chunkStorage.entries;
+                entries.forEach((integer, entry) -> {
+                    var entityIdMap = entry.entityIdMap;
+                    if (entityIdMap.isEmpty())
+                        return;
 
-                var viewers = chunk.getViewers();
+                    ByteBuf buffer = entry.buffer;
+                    final int readable = buffer.readableBytes();
 
-                viewers.forEach(player -> {
-                    var connection = player.getPlayerConnection();
-                    var nettyPlayerConnection = (NettyPlayerConnection) connection;
-                    final var pair = entityIdMap.get(player);
-                    ByteBuf result = buffer;
-                    if (pair != null) {
-                        final int start = pair.leftInt();
-                        final int end = pair.rightInt();
-                        if (start == 0) {
-                            result = buffer.copy(end, readable - end);
-                        } else if (end == readable) {
-                            result = buffer.copy(0, start);
-                            // FIXME: teleport player to 0 0 0 when crossing chunk border (0, start)
-                        } else {
-                            final var slice1 = buffer.copy(0, start);
-                            final var slice2 = buffer.copy(end, readable - end);
-                            result = Unpooled.wrappedBuffer(slice1, slice2);
-                            // FIXME: teleport player to 0 0 0 when crossing chunk border (0, start)
+                    var viewers = chunk.getViewers();
+
+                    viewers.forEach(player -> {
+                        var connection = player.getPlayerConnection();
+                        var nettyPlayerConnection = (NettyPlayerConnection) connection;
+                        final var pair = entityIdMap.get(connection);
+                        ByteBuf result = buffer;
+                        if (pair != null) {
+                            final int start = pair.leftInt();
+                            final int end = pair.rightInt();
+
+                            if (start == 0) {
+                                result = buffer.copy(end, readable - end);
+                            } else if (end == readable) {
+                                result = buffer.copy(0, start);
+                            } else {
+                                final var slice1 = buffer.copy(0, start);
+                                final var slice2 = buffer.copy(end, readable - end);
+                                result = Unpooled.wrappedBuffer(slice1, slice2);
+                            }
                         }
-                    }
-                    nettyPlayerConnection.write(new FramedPacket(result));
+                        nettyPlayerConnection.write(new FramedPacket(result));
+                    });
                 });
-
-                entityIdMap.clear();
-                chunkStorage.buffer.clear();
+                entries.clear();
             }
         });
     }

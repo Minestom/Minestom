@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.network.packet.server.NetworkHint;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.Position;
@@ -26,5 +27,10 @@ public class EntityTeleportPacket implements ServerPacket {
     @Override
     public int getId() {
         return ServerPacketIdentifier.ENTITY_TELEPORT;
+    }
+
+    @Override
+    public @NotNull NetworkHint getNetworkHint() {
+        return NetworkHint.Unordered(5);
     }
 }
