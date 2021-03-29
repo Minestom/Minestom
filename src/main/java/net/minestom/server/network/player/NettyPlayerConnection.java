@@ -153,13 +153,10 @@ public class NettyPlayerConnection extends PlayerConnection {
                                 timestamp > timedBuffer.getTimestamp();
 
                         if (shouldUpdate) {
-                            final ByteBuf buffer = PacketUtils.createFramedPacket(serverPacket, false);
-                            TimedBuffer oldBuffer = timedBuffer;
+                            // Buffer freed by guava cache #removalListener
+                            final ByteBuf buffer = PacketUtils.createFramedPacket(serverPacket, true);
                             timedBuffer = new TimedBuffer(buffer, timestamp);
                             temporaryCache.cache(identifier, timedBuffer);
-                            if (oldBuffer != null) {
-                                oldBuffer.getBuffer().release();
-                            }
                         }
 
                         write(new FramedPacket(timedBuffer.getBuffer()));

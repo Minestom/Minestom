@@ -30,7 +30,8 @@ import java.util.concurrent.TimeUnit;
 public class ChunkDataPacket implements ServerPacket, CacheablePacket {
 
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
-    private static final TemporaryCache<TimedBuffer> CACHE = new TemporaryCache<>(5, TimeUnit.MINUTES);
+    private static final TemporaryCache<TimedBuffer> CACHE = new TemporaryCache<>(5, TimeUnit.MINUTES,
+            notification -> notification.getValue().getBuffer().release());
 
     public boolean fullChunk;
     public Biome[] biomes;
