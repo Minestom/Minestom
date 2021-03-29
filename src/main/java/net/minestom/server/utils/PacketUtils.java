@@ -48,7 +48,7 @@ public final class PacketUtils {
 
     public static void prepareGroupedPacket(Player player, @NotNull Chunk chunk, @NotNull ServerPacket serverPacket) {
         ChunkStorage chunkStorage = chunkStorageMap.computeIfAbsent(chunk, c -> new ChunkStorage());
-        synchronized (PacketUtils.class) {
+        synchronized (chunkStorage) {
             ByteBuf buffer = chunkStorage.buffer;
             final int start = buffer.writerIndex();
             writeFramedPacket(chunkStorage.buffer, serverPacket);
@@ -64,7 +64,7 @@ public final class PacketUtils {
         }
 
         AsyncUtils.runAsync(() -> {
-            synchronized (PacketUtils.class) {
+            synchronized (chunkStorage) {
                 var entityIdMap = chunkStorage.entityIdMap;
                 ByteBuf buffer = chunkStorage.buffer;
                 final int readable = buffer.readableBytes();
