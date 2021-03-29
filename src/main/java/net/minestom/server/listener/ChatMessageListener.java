@@ -72,15 +72,15 @@ public class ChatMessageListener {
         final UUID uuid = chatEvent.getPlayer().getUuid();
 
         return Component.translatable("chat.type.text")
-                   .args(Component.text(username)
-                             .insertion(username)
-                             .clickEvent(ClickEvent.suggestCommand("/msg" + username))
-                             .hoverEvent(HoverEvent.showEntity(HoverEvent.ShowEntity.of(
-                                 Key.key("minecraft", "player"),
-                                 uuid,
-                                 Component.text(username)
-                             ))),
-                         Component.text(chatEvent.getMessage())
+                .args(Component.text(username)
+                                .insertion(username)
+                                .clickEvent(ClickEvent.suggestCommand("/msg " + username + " "))
+                                .hoverEvent(HoverEvent.showEntity(HoverEvent.ShowEntity.of(
+                                        Key.key("minecraft", "player"),
+                                        uuid,
+                                        Component.text(username)
+                                ))),
+                        Component.text(chatEvent.getMessage())
                 );
     }
 
