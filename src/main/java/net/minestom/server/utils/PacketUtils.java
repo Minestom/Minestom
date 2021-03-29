@@ -4,21 +4,27 @@ import com.velocitypowered.natives.compression.VelocityCompressor;
 import com.velocitypowered.natives.util.Natives;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import it.unimi.dsi.fastutil.Pair;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.entity.Player;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.netty.packet.FramedPacket;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.DataFormatException;
 
 /**
@@ -32,6 +38,71 @@ public final class PacketUtils {
 
     private PacketUtils() {
 
+    }
+
+    private static Map<Chunk, ChunkStorage> chunkStorageMap = new ConcurrentHashMap<>();
+
+    private static class ChunkStorage {
+        Map<Player, Pair<Integer, Integer>> entityIdMap = new HashMap<>();
+        ByteBuf buffer = Unpooled.buffer();
+    }
+
+    public static void prepareGroupedPacket(Player player, @NotNull Chunk chunk, @NotNull ServerPacket serverPacket) {
+        ChunkStorage chunkStorage = chunkStorageMap.computeIfAbsent(chunk, c -> new ChunkStorage());
+        synchronized (chunkStorage) {
+            ByteBuf buffer = chunkStorage.buffer;
+            final int start = buffer.writerIndex();
+            writeFramedPacket(chunkStorage.buffer, serverPacket);
+            final int end = buffer.writerIndex();
+            chunkStorage.entityIdMap.put(player, Pair.of(start, end));
+        }
+    }
+
+    public static void flush(Chunk chunk) {
+        ChunkStorage chunkStorage = chunkStorageMap.get(chunk);
+        if (chunkStorage == null || chunkStorage.entityIdMap.isEmpty()) {
+            return; // nothing to flush
+        }
+
+        AsyncUtils.runAsync(() -> {
+            synchronized (chunkStorage) {
+
+                var entityIdMap = chunkStorage.entityIdMap;
+                ByteBuf buffer = chunkStorage.buffer;
+                int readable = buffer.readableBytes();
+
+                var viewers = chunk.getViewers();
+
+                viewers.forEach(player -> {
+                    var connection = player.getPlayerConnection();
+                    var nettyPlayerConnection = (NettyPlayerConnection) connection;
+                    if (entityIdMap.containsKey(player)) {
+                        final var pair = entityIdMap.get(player);
+                        final int start = pair.left();
+                        final int end = pair.right();
+                        ByteBuf result;
+                        if (start == 0) {
+                            result = buffer.retainedSlice(end, readable - end);
+                        } else if (end == readable) {
+                            result = buffer.retainedSlice(0, start);
+                        } else {
+                            final var slice1 = buffer.retainedSlice(0, start);
+                            final var slice2 = buffer.retainedSlice(end, readable - end);
+                            result = Unpooled.wrappedBuffer(slice1, slice2);
+                        }
+
+                        ((NettyPlayerConnection) connection).getChannel().write(new FramedPacket(result));
+
+                    } else {
+                        // No composite needed
+                        nettyPlayerConnection.write(new FramedPacket(buffer));
+                    }
+                });
+
+                entityIdMap.clear();
+                chunkStorage.buffer = Unpooled.buffer();
+            }
+        });
     }
 
     /**

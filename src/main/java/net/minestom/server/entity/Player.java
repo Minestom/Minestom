@@ -457,11 +457,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 }
 
                 // Send the update packet
-                if (optionalUpdatePacket != null) {
+                // FIXME: add optional packet
+                PacketUtils.prepareGroupedPacket(this, getChunk(), updatePacket);
+
+                /*if (optionalUpdatePacket != null) {
                     sendPacketsToViewers(updatePacket, optionalUpdatePacket);
                 } else {
                     sendPacketToViewers(updatePacket);
-                }
+                }*/
 
             }
 
