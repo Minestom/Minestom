@@ -4,7 +4,7 @@ import com.velocitypowered.natives.compression.VelocityCompressor;
 import com.velocitypowered.natives.util.Natives;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import it.unimi.dsi.fastutil.Pair;
+import it.unimi.dsi.fastutil.ints.IntIntPair;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.entity.Player;
@@ -22,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.DataFormatException;
@@ -43,18 +42,18 @@ public final class PacketUtils {
     private static Map<Chunk, ChunkStorage> chunkStorageMap = new ConcurrentHashMap<>();
 
     private static class ChunkStorage {
-        Map<Player, Pair<Integer, Integer>> entityIdMap = new HashMap<>();
+        Map<Player, IntIntPair> entityIdMap = new ConcurrentHashMap<>();
         ByteBuf buffer = Unpooled.buffer();
     }
 
     public static void prepareGroupedPacket(Player player, @NotNull Chunk chunk, @NotNull ServerPacket serverPacket) {
         ChunkStorage chunkStorage = chunkStorageMap.computeIfAbsent(chunk, c -> new ChunkStorage());
-        synchronized (chunkStorage) {
+        synchronized (PacketUtils.class) {
             ByteBuf buffer = chunkStorage.buffer;
             final int start = buffer.writerIndex();
             writeFramedPacket(chunkStorage.buffer, serverPacket);
             final int end = buffer.writerIndex();
-            chunkStorage.entityIdMap.put(player, Pair.of(start, end));
+            chunkStorage.entityIdMap.put(player, IntIntPair.of(start, end));
         }
     }
 
@@ -65,42 +64,38 @@ public final class PacketUtils {
         }
 
         AsyncUtils.runAsync(() -> {
-            synchronized (chunkStorage) {
-
+            synchronized (PacketUtils.class) {
                 var entityIdMap = chunkStorage.entityIdMap;
                 ByteBuf buffer = chunkStorage.buffer;
-                int readable = buffer.readableBytes();
+                final int readable = buffer.readableBytes();
 
                 var viewers = chunk.getViewers();
 
                 viewers.forEach(player -> {
                     var connection = player.getPlayerConnection();
                     var nettyPlayerConnection = (NettyPlayerConnection) connection;
-                    if (entityIdMap.containsKey(player)) {
-                        final var pair = entityIdMap.get(player);
-                        final int start = pair.left();
-                        final int end = pair.right();
-                        ByteBuf result;
+                    final var pair = entityIdMap.get(player);
+                    ByteBuf result = buffer;
+                    if (pair != null) {
+                        final int start = pair.leftInt();
+                        final int end = pair.rightInt();
                         if (start == 0) {
-                            result = buffer.retainedSlice(end, readable - end);
+                            result = buffer.copy(end, readable - end);
                         } else if (end == readable) {
-                            result = buffer.retainedSlice(0, start);
+                            result = buffer.copy(0, start);
+                            // FIXME: teleport player to 0 0 0 when crossing chunk border (0, start)
                         } else {
-                            final var slice1 = buffer.retainedSlice(0, start);
-                            final var slice2 = buffer.retainedSlice(end, readable - end);
+                            final var slice1 = buffer.copy(0, start);
+                            final var slice2 = buffer.copy(end, readable - end);
                             result = Unpooled.wrappedBuffer(slice1, slice2);
+                            // FIXME: teleport player to 0 0 0 when crossing chunk border (0, start)
                         }
-
-                        ((NettyPlayerConnection) connection).getChannel().write(new FramedPacket(result));
-
-                    } else {
-                        // No composite needed
-                        nettyPlayerConnection.write(new FramedPacket(buffer));
                     }
+                    nettyPlayerConnection.write(new FramedPacket(result));
                 });
 
                 entityIdMap.clear();
-                chunkStorage.buffer = Unpooled.buffer();
+                chunkStorage.buffer.clear();
             }
         });
     }
