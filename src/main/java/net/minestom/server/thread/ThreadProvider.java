@@ -7,6 +7,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.SharedInstance;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.callback.validator.EntityValidator;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.thread.MinestomThread;
@@ -130,6 +131,9 @@ public abstract class ThreadProvider {
         updateChunk(instance, chunk, time);
 
         updateEntities(instance, chunk, time);
+
+        // TODO: find a better place
+        PacketUtils.flush(chunk);
     }
 
     /**
