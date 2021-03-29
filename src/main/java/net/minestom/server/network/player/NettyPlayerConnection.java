@@ -153,7 +153,7 @@ public class NettyPlayerConnection extends PlayerConnection {
                                 timestamp > timedBuffer.getTimestamp();
 
                         if (shouldUpdate) {
-                            final ByteBuf buffer = PacketUtils.createFramedPacket(serverPacket, true);
+                            final ByteBuf buffer = PacketUtils.createFramedPacket(serverPacket, false);
                             TimedBuffer oldBuffer = timedBuffer;
                             timedBuffer = new TimedBuffer(buffer, timestamp);
                             temporaryCache.cache(identifier, timedBuffer);
