@@ -105,7 +105,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private DimensionType dimensionType;
     private GameMode gameMode;
     // Chunks that the player can view
-    protected final Set<Chunk> viewableChunks = new CopyOnWriteArraySet<>();
+    protected final Set<Chunk> viewableChunks = ConcurrentHashMap.newKeySet();
 
     private final AtomicInteger teleportId = new AtomicInteger();
     private int receivedTeleportId;
