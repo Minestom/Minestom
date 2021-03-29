@@ -12,7 +12,7 @@ public class InventoryData extends DataType<Inventory> {
     @Override
     public void encode(@NotNull BinaryWriter writer, @NotNull Inventory value) {
         final InventoryType inventoryType = value.getInventoryType();
-        final int size = inventoryType.getAdditionalSlot();
+        final int size = inventoryType.getSize();
 
         // Inventory title & type
         writer.writeSizedString(value.getTitle());
@@ -29,7 +29,7 @@ public class InventoryData extends DataType<Inventory> {
     public Inventory decode(@NotNull BinaryReader reader) {
         final String title = reader.readSizedString(Integer.MAX_VALUE);
         final InventoryType inventoryType = InventoryType.valueOf(reader.readSizedString(Integer.MAX_VALUE));
-        final int size = inventoryType.getAdditionalSlot();
+        final int size = inventoryType.getSize();
 
         Inventory inventory = new Inventory(inventoryType, title);
 

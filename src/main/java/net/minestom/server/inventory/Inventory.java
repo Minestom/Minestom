@@ -74,7 +74,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         this.inventoryType = inventoryType;
         this.title = title;
 
-        this.size = inventoryType.getAdditionalSlot();
+        this.size = inventoryType.getSize();
 
         this.offset = size;
 
