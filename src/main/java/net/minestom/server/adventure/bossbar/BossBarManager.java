@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * Manages all boss bars known to this Minestom instance. Although this class can be used
@@ -58,9 +59,9 @@ public class BossBarManager {
      * @param bar    the boss bar to hide
      */
     public void removeBossBar(@NotNull Player player, @NotNull BossBar bar) {
-        BossBarHolder holder = this.getOrCreateHandler(bar);
+        BossBarHolder holder = this.bars.get(bar);
 
-        if (holder.removeViewer(player)) {
+        if (holder != null && holder.removeViewer(player)) {
             player.getPlayerConnection().sendPacket(holder.createRemovePacket());
             this.removePlayer(player, holder);
         }
@@ -75,14 +76,7 @@ public class BossBarManager {
      */
     public void addBossBar(@NotNull Collection<Player> players, @NotNull BossBar bar) {
         BossBarHolder holder = this.getOrCreateHandler(bar);
-        Collection<Player> addedPlayers = new ArrayList<>();
-
-        for (Player player : players) {
-            if (holder.addViewer(player)) {
-                addedPlayers.add(player);
-                this.playerBars.computeIfAbsent(player.getUuid(), uuid -> new HashSet<>()).add(holder);
-            }
-        }
+        Collection<Player> addedPlayers = players.stream().filter(holder::addViewer).collect(Collectors.toList());
 
         if (!addedPlayers.isEmpty()) {
             PacketUtils.sendGroupedPacket(addedPlayers, holder.createAddPacket());
@@ -96,18 +90,14 @@ public class BossBarManager {
      * @param bar     the boss bar to hide
      */
     public void removeBossBar(@NotNull Collection<Player> players, @NotNull BossBar bar) {
-        BossBarHolder holder = this.getOrCreateHandler(bar);
-        Collection<Player> removedPlayers = new ArrayList<>();
+        BossBarHolder holder = this.bars.get(bar);
 
-        for (Player player : players) {
-            if (holder.removeViewer(player)) {
-                removedPlayers.add(player);
-                this.removePlayer(player, holder);
+        if (holder != null) {
+            Collection<Player> removedPlayers = players.stream().filter(holder::removeViewer).collect(Collectors.toList());
+
+            if (!removedPlayers.isEmpty()) {
+                PacketUtils.sendGroupedPacket(removedPlayers, holder.createRemovePacket());
             }
-        }
-
-        if (!removedPlayers.isEmpty()) {
-            PacketUtils.sendGroupedPacket(removedPlayers, holder.createRemovePacket());
         }
     }
 
@@ -142,6 +132,38 @@ public class BossBarManager {
             for (BossBarHolder holder : holders) {
                 holder.removeViewer(player);
             }
+        }
+    }
+
+    /**
+     * Gets a collection of all boss bars currently visible to a given player.
+     *
+     * @param player the player
+     * @return the boss bars
+     */
+    public @NotNull Collection<BossBar> getPlayerBossBars(@NotNull Player player) {
+        Collection<BossBarHolder> holders = this.playerBars.get(player.getUuid());
+
+        if (holders == null) {
+            return Collections.emptyList();
+        } else {
+            return holders.stream().map(holder -> holder.bar).collect(Collectors.toUnmodifiableList());
+        }
+    }
+
+    /**
+     * Gets all the players for whom the given boss bar is currently visible.
+     *
+     * @param bossBar the boss bar
+     * @return the players
+     */
+    public @NotNull Collection<Player> getBossBarViewers(@NotNull BossBar bossBar) {
+        BossBarHolder holder = this.bars.get(bossBar);
+
+        if (holder == null) {
+            return Collections.emptyList();
+        } else {
+            return Collections.unmodifiableCollection(holder.players);
         }
     }
 

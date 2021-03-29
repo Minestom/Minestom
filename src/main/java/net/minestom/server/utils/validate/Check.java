@@ -44,4 +44,11 @@ public final class Check {
         }
     }
 
+    @Contract("true, _, _ -> fail")
+    public static void stateCondition(boolean condition, @NotNull String reason, Object... arguments) {
+        if (condition) {
+            throw new IllegalStateException(MessageFormat.format(reason, arguments));
+        }
+    }
+
 }

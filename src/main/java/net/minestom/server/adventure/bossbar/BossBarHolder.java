@@ -25,16 +25,13 @@ final class BossBarHolder implements Viewable {
     protected final UUID uuid = UUID.randomUUID();
     protected final Set<Player> players = new CopyOnWriteArraySet<>();
     protected final BossBar bar;
-    protected boolean registered;
 
     BossBarHolder(@NotNull BossBar bar) {
         this.bar = bar;
-        this.registered = false;
     }
 
     @NotNull BossBarPacket createRemovePacket() {
-        return this.createGenericPacket(REMOVE, packet -> {
-        });
+        return this.createGenericPacket(REMOVE, packet -> { });
     }
 
     @NotNull BossBarPacket createAddPacket() {

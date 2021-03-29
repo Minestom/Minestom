@@ -10,6 +10,9 @@ import java.util.UUID;
 
 public final class Utils {
 
+    // Do NOT modify
+    public static final int VARINT_HEADER_SIZE = 3;
+
     private Utils() {
 
     }
@@ -44,31 +47,26 @@ public final class Utils {
         } while (value != 0);
     }
 
-    public static void overrideVarInt(@NotNull ByteBuf buffer, int startIndex, int length, int value) {
+    public static void overrideVarIntHeader(@NotNull ByteBuf buffer, int startIndex, int value) {
         final int indexCache = buffer.writerIndex();
         buffer.writerIndex(startIndex);
-        writeVarIntBuf(buffer, value);
 
-        final int loopEnd = startIndex + length;
-        for (int i = startIndex; i < loopEnd; i++) {
-            byte b = buffer.getByte(i);
-            boolean last = i == loopEnd - 1;
-            if (last) {
-                b &= ~(1 << 7);
-            } else {
-                b |= 1 << 7;
+        for (int i = 0; i < VARINT_HEADER_SIZE; i++) {
+            byte temp = (byte) (value & 0b01111111);
+            value >>>= 7;
+            if (value != 0 || i != VARINT_HEADER_SIZE - 1) {
+                temp |= 0b10000000;
             }
-            buffer.setByte(i, b);
+
+            buffer.writeByte(temp);
         }
 
         buffer.writerIndex(indexCache);
     }
 
-    public static int writeEmptyVarInt(@NotNull ByteBuf buffer, int length) {
+    public static int writeEmptyVarIntHeader(@NotNull ByteBuf buffer) {
         final int index = buffer.writerIndex();
-        for (int i = 0; i < length; i++) {
-            buffer.writeByte(0);
-        }
+        buffer.writeMedium(0);
         return index;
     }
 

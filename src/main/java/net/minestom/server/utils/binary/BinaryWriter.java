@@ -1,9 +1,9 @@
 package net.minestom.server.utils.binary;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.item.ItemStack;
@@ -18,7 +18,6 @@ import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -72,17 +71,6 @@ public class BinaryWriter extends OutputStream {
      */
     public void writeComponent(@NotNull Component component) {
         this.writeSizedString(AdventureSerializer.serialize(component));
-    }
-
-    /**
-     * Writes a component to the buffer as a sized string. This method uses
-     * {@link LegacyComponentSerializer} to convert the component into a string
-     * containing the legacy section signs.
-     *
-     * @param component the component
-     */
-    public void writeComponentAsLegacy(@NotNull Component component) {
-        this.writeSizedString(LegacyComponentSerializer.legacySection().serialize(component));
     }
 
     /**
@@ -183,9 +171,9 @@ public class BinaryWriter extends OutputStream {
      * @param string the string to write
      */
     public void writeSizedString(@NotNull String string) {
-        final byte[] bytes = string.getBytes(StandardCharsets.UTF_8);
-        writeVarInt(bytes.length);
-        writeBytes(bytes);
+        final int utf8Bytes = ByteBufUtil.utf8Bytes(string);
+        writeVarInt(utf8Bytes);
+        buffer.writeCharSequence(string, StandardCharsets.UTF_8);
     }
 
     /**

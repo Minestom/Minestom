@@ -38,7 +38,7 @@ public class ScoreboardObjectivePacket implements ComponentHoldingServerPacket {
         writer.writeByte(mode);
 
         if (mode == 0 || mode == 2) {
-            writer.writeComponentAsLegacy(objectiveValue);
+            writer.writeComponent(objectiveValue);
             writer.writeVarInt(type.ordinal());
         }
     }

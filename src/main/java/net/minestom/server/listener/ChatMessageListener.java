@@ -67,10 +67,13 @@ public class ChatMessageListener {
     private static Component buildDefaultChatMessage(PlayerChatEvent chatEvent) {
         final String username = chatEvent.getPlayer().getUsername();
 
-        return Component.text("<" + username + ">")
-                .hoverEvent(Component.text("Click to send a message to " + username))
-                .clickEvent(ClickEvent.suggestCommand("/msg " + username + " "))
-                .append(Component.text(" " + chatEvent.getMessage()));
+        return Component.translatable("chat.type.text")
+                .args(Component.text(username)
+                                .insertion(username)
+                                .clickEvent(ClickEvent.suggestCommand("/msg " + username + " "))
+                                .hoverEvent(chatEvent.getPlayer()),
+                        Component.text(chatEvent.getMessage())
+                );
     }
 
 }

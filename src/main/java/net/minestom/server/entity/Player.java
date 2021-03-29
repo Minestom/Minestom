@@ -6,6 +6,7 @@ import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.inventory.Book;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -780,7 +781,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param text      the text with the legacy color formatting
      * @param colorChar the color character
-     *
      * @deprecated Use {@link #sendMessage(Component)}
      */
     @Deprecated
@@ -793,7 +793,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Sends a legacy message with the default color char {@link ChatParser#COLOR_CHAR}.
      *
      * @param text the text with the legacy color formatting
-     *
      * @deprecated Use {@link #sendMessage(Component)}
      */
     @Deprecated
@@ -920,12 +919,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public void playSound(net.kyori.adventure.sound.@NotNull Sound sound) {
-        this.playSound(sound, this.position.getX(), this.position.getY(), this.position.getZ());
+    public void playSound(@NotNull Sound sound) {
+        playerConnection.sendPacket(AdventurePacketConvertor.createEntitySoundPacket(sound, this));
     }
 
     @Override
-    public void playSound(net.kyori.adventure.sound.@NotNull Sound sound, double x, double y, double z) {
+    public void playSound(@NotNull Sound sound, double x, double y, double z) {
         playerConnection.sendPacket(AdventurePacketConvertor.createSoundPacket(sound, x, y, z));
     }
 
@@ -955,6 +954,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     /**
      * Sends a {@link StopSoundPacket} packet.
+     *
      * @deprecated Use {@link #stopSound(SoundStop)} with {@link SoundStop#all()}
      */
     @Deprecated
@@ -969,7 +969,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param header the header text, null to set empty
      * @param footer the footer text, null to set empty
-     *
      * @deprecated Use {@link #sendPlayerListHeaderAndFooter(Component, Component)}
      */
     @Deprecated
@@ -990,7 +989,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param text   the text of the title
      * @param action the action of the title (where to show it)
      * @see #sendTitleTime(int, int, int) to specify the display time
-     *
      * @deprecated Use {@link #showTitle(Title)} and {@link #sendActionBar(Component)}
      */
     @Deprecated
@@ -1005,7 +1003,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param title    the title message
      * @param subtitle the subtitle message
      * @see #sendTitleTime(int, int, int) to specify the display time
-     *
      * @deprecated Use {@link #showTitle(Title)}
      */
     @Deprecated
@@ -1018,7 +1015,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param title the title message
      * @see #sendTitleTime(int, int, int) to specify the display time
-     *
      * @deprecated Use {@link #showTitle(Title)}
      */
     @Deprecated
@@ -1031,7 +1027,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param subtitle the subtitle message
      * @see #sendTitleTime(int, int, int) to specify the display time
-     *
      * @deprecated Use {@link #showTitle(Title)}
      */
     @Deprecated
@@ -1044,7 +1039,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param actionBar the action bar message
      * @see #sendTitleTime(int, int, int) to specify the display time
-     *
      * @deprecated Use {@link #sendActionBar(Component)}
      */
     @Deprecated
@@ -1073,7 +1067,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param fadeIn  ticks to spend fading in
      * @param stay    ticks to keep the title displayed
      * @param fadeOut ticks to spend out, not when to start fading out
-     *
      * @deprecated Use {@link #showTitle(Title)}. Note that this will overwrite the
      * existing title. This is expected behavior and will be the case in 1.17.
      */
@@ -1085,6 +1078,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     /**
      * Hides the previous title.
+     *
      * @deprecated Use {@link #clearTitle()}
      */
     @Deprecated
@@ -1119,7 +1113,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Opens a book ui for the player with the given book metadata.
      *
      * @param bookMeta The metadata of the book to open
-     *
      * @deprecated Use {@link #openBook(Book)}
      */
     @Deprecated
@@ -1860,7 +1853,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Kicks the player with a reason.
      *
      * @param text the kick reason
-     *
      * @deprecated Use {@link #kick(Component)}
      */
     @Deprecated
@@ -1872,7 +1864,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Kicks the player with a reason.
      *
      * @param message the kick reason
-     *
      * @deprecated Use {@link #kick(Component)}
      */
     @Deprecated
@@ -2488,10 +2479,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final int playerRange = getSettings().viewDistance;
         if (playerRange < 1) {
             // Didn't receive settings packet yet (is the case on login)
-            // In this case we send the smallest amount of chunks possible
+            // In this case we send an arbitrary number of chunks
             // Will be updated in PlayerSettings#refresh.
             // Non-compliant clients might also be stuck with this view
-            return 3;
+            return 7;
         } else {
             final int serverRange = MinecraftServer.getChunkViewDistance();
             return Math.min(playerRange, serverRange);
