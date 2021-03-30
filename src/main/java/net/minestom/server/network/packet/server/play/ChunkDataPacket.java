@@ -48,7 +48,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
     public IntSet blockEntities;
     public Int2ObjectMap<Data> blocksData;
 
-    public int[] sections;
+    public int[] sections = new int[0];
 
     private static final byte CHUNK_SECTION_COUNT = 16;
     private static final int MAX_BITS_PER_ENTRY = 16;
@@ -57,6 +57,17 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
     // Cacheable data
     private final UUID identifier;
     private final long timestamp;
+
+    /**
+     * Block entities NBT, as read from raw packet data.
+     * Only filled by #read, and unused at the moment.
+     */
+    public NBTCompound[] blockEntitiesNBT = new NBTCompound[0];
+    /**
+     * Heightmaps NBT, as read from raw packet data.
+     * Only filled by #read, and unused at the moment.
+     */
+    public NBTCompound heightmapsNBT;
 
     private ChunkDataPacket() {
         this(new UUID(0, 0), 0);
@@ -160,7 +171,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
         try {
             // TODO: Use heightmaps
             // unused at the moment
-            NBT heightmaps = reader.readTag();
+            heightmapsNBT = (NBTCompound) reader.readTag();
 
             // Biomes
             if (fullChunk) {
@@ -207,9 +218,10 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
             // Block entities
             int blockEntityCount = reader.readVarInt();
             blockEntities = new IntOpenHashSet();
+            blockEntitiesNBT = new NBTCompound[blockEntityCount];
             for (int i = 0; i < blockEntityCount; i++) {
                 NBTCompound tag = (NBTCompound) reader.readTag();
-                // TODO
+                blockEntitiesNBT[i] = tag;
             }
         } catch (IOException | NBTException e) {
             MinecraftServer.getExceptionManager().handleException(e);
