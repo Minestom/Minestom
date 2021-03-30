@@ -2,7 +2,6 @@ package net.minestom.server.entity;
 
 import com.google.common.collect.Queues;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.longs.LongArraySet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.kyori.adventure.audience.MessageType;
@@ -66,10 +65,7 @@ import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.PlayerStatistic;
-import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.Position;
+import net.minestom.server.utils.*;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
@@ -1674,7 +1670,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
 
             AsyncUtils.runAsync(() -> {
-                ByteBuf buffer = Unpooled.buffer();
+                ByteBuf buffer = BufUtils.getBuffer(true);
                 Semaphore semaphore = new Semaphore(chunkIndexesRequest.size());
                 for (long chunkIndex : chunkIndexesRequest) {
                     final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
@@ -1697,6 +1693,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 }
                 ((NettyPlayerConnection) playerConnection).getChannel().writeAndFlush(new FramedPacket(buffer)).addListener(future -> {
                     ((NettyPlayerConnection) playerConnection).setWritable(true);
+                    buffer.release();
                     System.out.println("chunks sent");
                 });
             });
