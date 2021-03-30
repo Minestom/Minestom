@@ -1,6 +1,7 @@
 package net.minestom.server.entity;
 
 import com.google.common.collect.Queues;
+import it.unimi.dsi.fastutil.longs.LongArraySet;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identified;
@@ -105,7 +106,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private DimensionType dimensionType;
     private GameMode gameMode;
     // Chunks that the player can view
-    protected final Set<Chunk> viewableChunks = ConcurrentHashMap.newKeySet();
+    protected final LongArraySet viewableChunks = new LongArraySet();
 
     private final AtomicInteger teleportId = new AtomicInteger();
     private int receivedTeleportId;
@@ -600,10 +601,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Clear all viewable entities
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         // Clear all viewable chunks
-        this.viewableChunks.forEach(chunk -> {
-            if (chunk.isLoaded())
-                chunk.removeViewer(this);
-        });
+        clearVisibleChunks();
         resetTargetBlock();
         playerConnection.disconnect();
     }
@@ -725,7 +723,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                              boolean firstSpawn, boolean updateChunks, boolean dimensionChange) {
         // Clear previous instance elements
         if (!firstSpawn) {
-            this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
+            clearVisibleChunks();
             this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         }
 
@@ -1624,52 +1622,37 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param newChunk the current/new player chunk (can be the current one)
      */
     public void refreshVisibleChunks(@NotNull Chunk newChunk) {
-        // Previous chunks indexes
-        final long[] lastVisibleChunks = viewableChunks.stream().mapToLong(viewableChunks ->
-                ChunkUtils.getChunkIndex(viewableChunks.getChunkX(), viewableChunks.getChunkZ())
-        ).toArray();
-
         // New chunks indexes
-        final long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(newChunk.toPosition(), getChunkRange());
+        final int range = getChunkRange();
 
-        // Find the difference between the two arrays
-        final int[] oldChunks = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks);
-        final int[] newChunks = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunks, lastVisibleChunks);
-
-        // Unload old chunks
-        for (int index : oldChunks) {
-            final long chunkIndex = lastVisibleChunks[index];
-            final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-            final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-
-            // TODO prevent the client from getting lag spikes when re-loading large chunks
-            // Probably by having a distinction between visible and loaded (cache) chunks
-            /*UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
-            unloadChunkPacket.chunkX = chunkX;
-            unloadChunkPacket.chunkZ = chunkZ;
-            playerConnection.sendPacket(unloadChunkPacket);*/
-
-            final Chunk chunk = instance.getChunk(chunkX, chunkZ);
-            if (chunk != null)
-                chunk.removeViewer(this);
-        }
-
-        // Update client render distance
-        updateViewPosition(newChunk.getChunkX(), newChunk.getChunkZ());
-
-        // Load new chunks
-        for (int index : newChunks) {
-            final long chunkIndex = updatedVisibleChunks[index];
-            final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-            final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-
-            this.instance.loadOptionalChunk(chunkX, chunkZ, chunk -> {
-                if (chunk == null) {
-                    // Cannot load chunk (auto load is not enabled)
-                    return;
+        synchronized (viewableChunks) {
+            for (long chunkIndex : viewableChunks) {
+                final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+                final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+                if (position.getDistance(chunkX * Chunk.CHUNK_SIZE_X, 0, chunkZ * Chunk.CHUNK_SIZE_Z) > range * Chunk.CHUNK_SIZE_X) {
+                    final Chunk chunk = instance.getChunk(chunkX, chunkZ);
+                    if (chunk != null) {
+                        chunk.removeViewer(this);
+                    }
+                    this.viewableChunks.remove(chunkIndex);
                 }
-                chunk.addViewer(this);
-            });
+            }
+
+            final long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(newChunk.toPosition(), range);
+            for (long chunkIndex : updatedVisibleChunks) {
+                if (!viewableChunks.contains(chunkIndex)) {
+                    final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+                    final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+                    this.instance.loadOptionalChunk(chunkX, chunkZ, chunk -> {
+                        if (chunk == null) {
+                            // Cannot load chunk (auto load is not enabled)
+                            return;
+                        }
+                        chunk.addViewer(this);
+                        this.viewableChunks.add(chunkIndex);
+                    });
+                }
+            }
         }
     }
 
@@ -1677,6 +1660,19 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final Chunk chunk = getChunk();
         if (chunk != null) {
             refreshVisibleChunks(chunk);
+        }
+    }
+
+    private void clearVisibleChunks() {
+        synchronized (viewableChunks) {
+            this.viewableChunks.forEach(chunkIndex -> {
+                final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+                final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+                final Chunk chunk = instance.getChunk(chunkX, chunkZ);
+                if (chunk != null) {
+                    chunk.removeViewer(this);
+                }
+            });
         }
     }
 
@@ -2054,18 +2050,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void UNSAFE_changeDidCloseInventory(boolean didCloseInventory) {
         this.didCloseInventory = didCloseInventory;
-    }
-
-    /**
-     * Gets the player viewable chunks.
-     * <p>
-     * WARNING: adding or removing a chunk there will not load/unload it,
-     * use {@link Chunk#addViewer(Player)} or {@link Chunk#removeViewer(Player)}.
-     *
-     * @return a {@link Set} containing all the chunks that the player sees
-     */
-    public Set<Chunk> getViewableChunks() {
-        return viewableChunks;
     }
 
     /**

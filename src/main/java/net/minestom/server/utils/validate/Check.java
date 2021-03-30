@@ -37,6 +37,13 @@ public final class Check {
         }
     }
 
+    @Contract("true, _, _ -> fail")
+    public static void argCondition(boolean condition, @NotNull String reason, Object... arguments) {
+        if (condition) {
+            throw new IllegalArgumentException(MessageFormat.format(reason, arguments));
+        }
+    }
+
     @Contract("true, _ -> fail")
     public static void stateCondition(boolean condition, @NotNull String reason) {
         if (condition) {
