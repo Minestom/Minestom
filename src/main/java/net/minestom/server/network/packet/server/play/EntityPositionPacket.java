@@ -4,6 +4,7 @@ import net.minestom.server.network.packet.server.NetworkHint;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,6 +14,8 @@ public class EntityPositionPacket implements ServerPacket {
     public short deltaX, deltaY, deltaZ;
     public boolean onGround;
 
+    public EntityPositionPacket() {}
+
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);
@@ -20,6 +23,15 @@ public class EntityPositionPacket implements ServerPacket {
         writer.writeShort(deltaY);
         writer.writeShort(deltaZ);
         writer.writeBoolean(onGround);
+    }
+
+    @Override
+    public void read(@NotNull BinaryReader reader) {
+        entityId = reader.readVarInt();
+        deltaX = reader.readShort();
+        deltaY = reader.readShort();
+        deltaZ = reader.readShort();
+        onGround = reader.readBoolean();
     }
 
     @Override

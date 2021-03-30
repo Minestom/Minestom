@@ -35,7 +35,7 @@ public class InventoryData extends DataType<Inventory> {
 
         // Read all item stacks
         for (int i = 0; i < size; i++) {
-            inventory.setItemStack(i, reader.readSlot());
+            inventory.setItemStack(i, reader.readItemStack());
         }
 
         return inventory;

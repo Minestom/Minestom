@@ -3,18 +3,27 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+
 public class PluginMessagePacket implements ServerPacket {
 
-    public String channel;
-    public byte[] data;
+    public String channel = "none";
+    public byte[] data = new byte[0];
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeSizedString(channel);
         writer.writeBytes(data);
+    }
+
+    @Override
+    public void read(@NotNull BinaryReader reader) {
+        channel = reader.readSizedString(Integer.MAX_VALUE);
+        data = reader.getRemainingBytes();
     }
 
     @Override

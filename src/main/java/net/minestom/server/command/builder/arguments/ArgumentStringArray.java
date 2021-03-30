@@ -2,6 +2,7 @@ package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import net.minestom.server.utils.binary.BinaryWriter;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,9 +30,9 @@ public class ArgumentStringArray extends Argument<String[]> {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
 
         argumentNode.parser = "brigadier:string";
-        argumentNode.properties = packetWriter -> {
+        argumentNode.properties = BinaryWriter.makeArray(packetWriter -> {
             packetWriter.writeVarInt(2); // Greedy phrase
-        };
+        });
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }

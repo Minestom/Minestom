@@ -1,21 +1,23 @@
 package net.minestom.server.network.packet.server;
 
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.Readable;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
+
+import java.nio.CharBuffer;
 
 /**
  * Represents a packet which can be sent to a player using {@link PlayerConnection#sendPacket(ServerPacket)}.
  */
-public interface ServerPacket extends Writeable {
+public interface ServerPacket extends Readable, Writeable {
 
-    /**
-     * Writes the packet to a {@link BinaryWriter}.
-     *
-     * @param writer the writer to write the packet to.
-     */
-    void write(@NotNull BinaryWriter writer);
+    @Override
+    default void read(@NotNull BinaryReader reader) {
+        // FIXME: remove when all packets are written and read properly
+        throw new UnsupportedOperationException("WIP: This packet is not set up to be read from Minestom code at the moment.");
+    }
 
     /**
      * Gets the id of this packet.

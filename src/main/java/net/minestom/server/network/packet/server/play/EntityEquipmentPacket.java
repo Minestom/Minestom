@@ -4,14 +4,20 @@ import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class EntityEquipmentPacket implements ServerPacket {
 
     public int entityId;
     public Slot[] slots;
     public ItemStack[] itemStacks;
+
+    public EntityEquipmentPacket() {}
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -38,6 +44,25 @@ public class EntityEquipmentPacket implements ServerPacket {
             writer.writeByte(slotEnum);
             writer.writeItemStack(itemStack);
         }
+    }
+
+    @Override
+    public void read(@NotNull BinaryReader reader) {
+        entityId = reader.readVarInt();
+
+        boolean hasRemaining = true;
+        List<Slot> slots = new LinkedList<>();
+        List<ItemStack> stacks = new LinkedList<>();
+        while(hasRemaining) {
+            byte slotEnum = reader.readByte();
+            hasRemaining = (slotEnum & 0x80) == 0x80;
+
+            slots.add(Slot.values()[slotEnum & 0x7F]);
+            stacks.add(reader.readItemStack());
+        }
+
+        this.slots = slots.toArray(new Slot[0]);
+        this.itemStacks = stacks.toArray(new ItemStack[0]);
     }
 
     @Override
