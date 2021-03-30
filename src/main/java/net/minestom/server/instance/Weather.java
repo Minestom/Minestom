@@ -10,34 +10,31 @@ public class Weather {
     private final int duration;
     private final TimeUnit timeUnit;
 
-    private final boolean clear;
-
-    private Weather(Type type, int level, int duration, TimeUnit timeUnit, boolean clear) {
+    private Weather(Type type, int level, int duration, TimeUnit timeUnit) {
         this.type = type;
         this.level = level;
         this.duration = duration;
         this.timeUnit = timeUnit;
-        this.clear = clear;
     }
 
     @NotNull
     public static Weather rain(int level, int duration, @NotNull TimeUnit timeUnit) {
-        return new Weather(Type.RAIN, level, duration, timeUnit, false);
+        return new Weather(Type.RAIN, level, duration, timeUnit);
     }
 
     @NotNull
     public static Weather thunder(int level, int duration, @NotNull TimeUnit timeUnit) {
-        return new Weather(Type.THUNDER, level, duration, timeUnit, false);
+        return new Weather(Type.THUNDER, level, duration, timeUnit);
     }
 
     @NotNull
     public static Weather clear() {
-        return new Weather(null, 0, 0, null, true);
+        return new Weather(null, 0, 0, null);
     }
 
     @NotNull
     public static Weather clear(Type type) {
-        return new Weather(type, 0, 0, null, true);
+        return new Weather(type, 0, 0, null);
     }
 
     public Type getType() {
@@ -57,7 +54,7 @@ public class Weather {
     }
 
     public boolean isClear() {
-        return clear;
+        return duration == 0;
     }
 
     public enum Type {
