@@ -1629,10 +1629,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param newChunk the current/new player chunk (can be the current one)
      */
     public void refreshVisibleChunks(@NotNull Chunk newChunk) {
+        updateViewPosition(newChunk.getChunkX(), newChunk.getChunkZ());
         // New chunks indexes
         final int range = getChunkRange();
 
         synchronized (viewableChunks) {
+
+            // Remove old chunks
             for (long chunkIndex : viewableChunks) {
                 final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
                 final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);

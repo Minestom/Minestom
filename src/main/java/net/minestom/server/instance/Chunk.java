@@ -451,7 +451,6 @@ public abstract class Chunk implements Viewable, DataContainer {
             PlayerChunkLoadEvent playerChunkLoadEvent = new PlayerChunkLoadEvent(player, chunkX, chunkZ);
             player.callEvent(PlayerChunkLoadEvent.class, playerChunkLoadEvent);
         }
-
         return result;
     }
 
@@ -469,7 +468,6 @@ public abstract class Chunk implements Viewable, DataContainer {
             PlayerChunkUnloadEvent playerChunkUnloadEvent = new PlayerChunkUnloadEvent(player, chunkX, chunkZ);
             player.callEvent(PlayerChunkUnloadEvent.class, playerChunkUnloadEvent);
         }
-
         return result;
     }
 
