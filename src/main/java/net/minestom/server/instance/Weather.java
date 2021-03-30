@@ -28,13 +28,13 @@ public class Weather {
     }
 
     @NotNull
-    public static Weather clear() {
-        return new Weather(null, 0, 0, null);
+    public static Weather clear(Type type) {
+        return new Weather(type, 0, 0, null);
     }
 
     @NotNull
-    public static Weather clear(Type type) {
-        return new Weather(type, 0, 0, null);
+    public static Weather clear() {
+        return clear(null);
     }
 
     public Type getType() {
