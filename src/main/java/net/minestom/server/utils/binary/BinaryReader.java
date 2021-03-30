@@ -195,6 +195,34 @@ public class BinaryReader extends InputStream {
         return GsonComponentSerializer.gson().deserialize(jsonObject);
     }
 
+    /**
+     * Creates a new object from the given supplier and calls its {@link Readable#read(BinaryReader)} method with this reader
+     * @param supplier supplier to create new instances of your object
+     * @param <T>
+     * @return the read object
+     */
+    public <T extends Readable> T read(Supplier<T> supplier) {
+        T result = supplier.get();
+        result.read(this);
+        return result;
+    }
+
+    /**
+     * Reads the length of the array to read as a varint, creates the array to contain the readable objects and call
+     * their respective {@link Readable#read(BinaryReader)} methods.
+     * @param supplier supplier to create new instances of your object
+     * @param <T>
+     * @return the read objects
+     */
+    public <T extends Readable> T[] readArray(Supplier<T> supplier) {
+        T[] result = (T[]) new Object[readVarInt()];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = supplier.get();
+            result[i].read(this);
+        }
+        return result;
+    }
+
     public ByteBuf getBuffer() {
         return buffer;
     }

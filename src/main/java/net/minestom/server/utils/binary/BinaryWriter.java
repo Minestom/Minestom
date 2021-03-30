@@ -276,6 +276,26 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
+     * Writes the given writeable object into this writer.
+     * @param writeable the object to write
+     */
+    public void write(Writeable writeable) {
+        writeable.write(this);
+    }
+
+    /**
+     * Writes an array of writeable objects to this writer. Will prepend the binary stream with a var int to denote the
+     * length of the array.
+     * @param writeables the array of writeables to write
+     */
+    public void writeArray(Writeable[] writeables) {
+        writeVarInt(writeables.length);
+        for(Writeable w : writeables) {
+            write(w);
+        }
+    }
+
+    /**
      * Converts the internal buffer to a byte array.
      *
      * @return the byte array containing all the {@link BinaryWriter} data
