@@ -5,8 +5,8 @@ import net.kyori.adventure.title.Title;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.TickUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.time.Tick;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 
@@ -136,9 +136,9 @@ public class TitlePacket implements ComponentHoldingServerPacket {
         // times packet
         Title.Times times = title.times();
         if (times != null) {
-            packets.add(new TitlePacket(TickUtils.fromDuration(times.fadeIn(), TickUtils.CLIENT_TICK_MS),
-                    TickUtils.fromDuration(times.stay(), TickUtils.CLIENT_TICK_MS),
-                    TickUtils.fromDuration(times.fadeOut(), TickUtils.CLIENT_TICK_MS)));
+            packets.add(new TitlePacket(Tick.CLIENT.fromDuration(times.fadeIn()),
+                    Tick.CLIENT.fromDuration(times.stay()),
+                    Tick.CLIENT.fromDuration(times.fadeOut())));
         }
 
         return packets;
