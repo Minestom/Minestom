@@ -64,6 +64,7 @@ public class NettyPlayerConnection extends PlayerConnection {
 
     private final static int INITIAL_BUFFER_SIZE = 1_048_576; // 2^20
     private final ByteBuf tickBuffer = BufUtils.getBuffer(true);
+    private volatile boolean writable = true;
 
     public NettyPlayerConnection(@NotNull SocketChannel channel) {
         super();
@@ -77,9 +78,9 @@ public class NettyPlayerConnection extends PlayerConnection {
     public void update() {
         // Flush
         final int bufferSize = tickBuffer.writerIndex();
-        if (bufferSize > 0) {
+        if (bufferSize > 0 && isWritable()) {
             this.channel.eventLoop().submit(() -> {
-                if (channel.isActive()) {
+                if (channel.isActive() && isWritable()) {
                     writeWaitingPackets();
                     channel.flush();
                 }
@@ -217,7 +218,7 @@ public class NettyPlayerConnection extends PlayerConnection {
         }
     }
 
-    private void writeWaitingPackets() {
+    public void writeWaitingPackets() {
         if (tickBuffer.writerIndex() == 0) {
             // Nothing to write
             return;
@@ -384,6 +385,14 @@ public class NettyPlayerConnection extends PlayerConnection {
     @NotNull
     public ByteBuf getTickBuffer() {
         return tickBuffer;
+    }
+
+    public boolean isWritable() {
+        return writable;
+    }
+
+    public void setWritable(boolean writable) {
+        this.writable = writable;
     }
 
     public byte[] getNonce() {

@@ -1,7 +1,10 @@
 package net.minestom.server.entity;
 
 import com.google.common.collect.Queues;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.longs.LongArraySet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identified;
@@ -47,6 +50,7 @@ import net.minestom.server.listener.PlayerDiggingListener;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
+import net.minestom.server.network.netty.packet.FramedPacket;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -59,10 +63,14 @@ import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
-import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.sound.SoundCategory;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.PlayerStatistic;
-import net.minestom.server.utils.*;
+import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.Position;
+import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -79,7 +87,7 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.UnaryOperator;
 
@@ -1642,8 +1650,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
 
             final long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(newChunk.toPosition(), range);
+
+            NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
+            nettyPlayerConnection.setWritable(false);
+            nettyPlayerConnection.writeWaitingPackets();
+            nettyPlayerConnection.getChannel().flush();
+
+            LongSet chunkIndexesRequest = new LongArraySet();
             for (long chunkIndex : updatedVisibleChunks) {
                 if (!viewableChunks.contains(chunkIndex)) {
+                    chunkIndexesRequest.add(chunkIndex);
                     final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
                     final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
                     this.instance.loadOptionalChunk(chunkX, chunkZ, chunk -> {
@@ -1656,6 +1672,34 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                     });
                 }
             }
+
+            AsyncUtils.runAsync(() -> {
+                ByteBuf buffer = Unpooled.buffer();
+                Semaphore semaphore = new Semaphore(chunkIndexesRequest.size());
+                for (long chunkIndex : chunkIndexesRequest) {
+                    final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+                    final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+                    this.instance.loadOptionalChunk(chunkX, chunkZ, chunk -> {
+                        if (chunk == null) {
+                            // Cannot load chunk (auto load is not enabled)
+                            semaphore.release();
+                            return;
+                        }
+                        PacketUtils.writeFramedPacket(buffer, chunk.getLightPacket());
+                        PacketUtils.writeFramedPacket(buffer, chunk.getFreshFullDataPacket());
+                        semaphore.release();
+                    });
+                }
+                try {
+                    semaphore.acquire();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                ((NettyPlayerConnection) playerConnection).getChannel().writeAndFlush(new FramedPacket(buffer)).addListener(future -> {
+                    ((NettyPlayerConnection) playerConnection).setWritable(true);
+                    System.out.println("chunks sent");
+                });
+            });
         }
     }
 
