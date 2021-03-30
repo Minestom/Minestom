@@ -458,9 +458,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 }
 
                 // Send the update packet
-                PacketUtils.prepareGroupedPacket(getChunk(), updatePacket, this);
-                if (optionalUpdatePacket != null) {
-                    PacketUtils.prepareGroupedPacket(getChunk(), optionalUpdatePacket, this);
+                var chunk = getChunk();
+                if (chunk != null) {
+                    PacketUtils.prepareGroupedPacket(chunk, updatePacket, this);
+                    if (optionalUpdatePacket != null) {
+                        PacketUtils.prepareGroupedPacket(chunk, optionalUpdatePacket, this);
+                    }
                 }
             }
 
