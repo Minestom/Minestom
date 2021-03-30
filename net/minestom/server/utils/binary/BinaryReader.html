@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":42,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":42,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":42,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":42,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -195,124 +195,177 @@ extends java.io.InputStream</pre>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>byte[]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#extractBytes(java.lang.Runnable)">extractBytes</a></span>&#8203;(java.lang.Runnable&nbsp;extractor)</code></th>
+<td class="colLast">
+<div class="block">Records the current position, runs the given Runnable, and then returns the bytes between the position before
+ running the runnable and the position after.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>io.netty.buffer.ByteBuf</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBuffer()">getBuffer</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRemainingBytes()">getRemainingBytes</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#readRemainingBytes()"><code>readRemainingBytes()</code></a> (same semantics, but more consistent naming)</div>
+</div>
+</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read()">read</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>&lt;T extends <a href="Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a>&gt;<br>T</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(java.util.function.Supplier)">read</a></span>&#8203;(java.util.function.Supplier&lt;T&gt;&nbsp;supplier)</code></th>
+<td class="colLast">
+<div class="block">Creates a new object from the given supplier and calls its <a href="Readable.html#read(net.minestom.server.utils.binary.BinaryReader)"><code>Readable.read(BinaryReader)</code></a> method with this reader</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>&lt;T extends <a href="Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a>&gt;<br>T[]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readArray(java.util.function.Supplier)">readArray</a></span>&#8203;(java.util.function.Supplier&lt;T&gt;&nbsp;supplier)</code></th>
+<td class="colLast">
+<div class="block">Reads the length of the array to read as a varint, creates the array to contain the readable objects and call
+ their respective <a href="Readable.html#read(net.minestom.server.utils.binary.BinaryReader)"><code>Readable.read(BinaryReader)</code></a> methods.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readBlockPosition()">readBlockPosition</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readBoolean()">readBoolean</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>byte</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readByte()">readByte</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readBytes(int)">readBytes</a></span>&#8203;(int&nbsp;length)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>char</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readChar()">readChar</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>net.kyori.adventure.text.Component</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readComponent(int)">readComponent</a></span>&#8203;(int&nbsp;maxLength)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readDouble()">readDouble</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readFloat()">readFloat</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i15" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readInt()">readInt</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Same as readInteger, created for parity with BinaryWriter</div>
+</td>
+</tr>
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readInteger()">readInteger</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Same as readInt</div>
+</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i17" class="rowColor">
+<td class="colFirst"><code><a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readItemStack()">readItemStack</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Tries to read an <a href="../../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a>.</div>
+</td>
+</tr>
+<tr id="i18" class="altColor">
 <td class="colFirst"><code><a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readJsonMessage(int)">readJsonMessage</a></span>&#8203;(int&nbsp;maxLength)</code></th>
 <td class="colLast">
 <div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readLong()">readLong</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i20" class="altColor">
+<td class="colFirst"><code>byte[]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readRemainingBytes()">readRemainingBytes</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>short</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readShort()">readShort</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readSizedString(int)">readSizedString</a></span>&#8203;(int&nbsp;maxLength)</code></th>
 <td class="colLast">
 <div class="block">Reads a string size by a var-int.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>java.lang.String[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readSizedStringArray(int)">readSizedStringArray</a></span>&#8203;(int&nbsp;maxLength)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code><a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readSlot()">readSlot</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Tries to read an <a href="../../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a>.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>org.jglrxavpok.hephaistos.nbt.NBT</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readTag()">readTag</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readUnsignedShort()">readUnsignedShort</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>java.util.UUID</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readUuid()">readUuid</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readVarInt()">readVarInt</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>int[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readVarIntArray()">readVarIntArray</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i30" class="altColor">
+<td class="colFirst"><code>long</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readVarLong()">readVarLong</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -384,6 +437,15 @@ extends java.io.InputStream</pre>
 <pre class="methodSignature">public&nbsp;int&nbsp;readVarInt()</pre>
 </li>
 </ul>
+<a id="readVarLong()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readVarLong</h4>
+<pre class="methodSignature">public&nbsp;long&nbsp;readVarLong()</pre>
+</li>
+</ul>
 <a id="readBoolean()">
 <!--   -->
 </a>
@@ -436,6 +498,17 @@ extends java.io.InputStream</pre>
 <li class="blockList">
 <h4>readInteger</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;readInteger()</pre>
+<div class="block">Same as readInt</div>
+</li>
+</ul>
+<a id="readInt()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readInt</h4>
+<pre class="methodSignature">public&nbsp;int&nbsp;readInt()</pre>
+<div class="block">Same as readInteger, created for parity with BinaryWriter</div>
 </li>
 </ul>
 <a id="readLong()">
@@ -519,7 +592,20 @@ extends java.io.InputStream</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getRemainingBytes</h4>
-<pre class="methodSignature">public&nbsp;byte[]&nbsp;getRemainingBytes()</pre>
+<pre class="methodSignature">@Deprecated
+public&nbsp;byte[]&nbsp;getRemainingBytes()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#readRemainingBytes()"><code>readRemainingBytes()</code></a> (same semantics, but more consistent naming)</div>
+</div>
+</li>
+</ul>
+<a id="readRemainingBytes()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readRemainingBytes</h4>
+<pre class="methodSignature">public&nbsp;byte[]&nbsp;readRemainingBytes()</pre>
 </li>
 </ul>
 <a id="readBlockPosition()">
@@ -540,13 +626,13 @@ extends java.io.InputStream</pre>
 <pre class="methodSignature">public&nbsp;java.util.UUID&nbsp;readUuid()</pre>
 </li>
 </ul>
-<a id="readSlot()">
+<a id="readItemStack()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>readSlot</h4>
-<pre class="methodSignature">public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;readSlot()</pre>
+<h4>readItemStack</h4>
+<pre class="methodSignature">public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;readItemStack()</pre>
 <div class="block">Tries to read an <a href="../../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -554,6 +640,18 @@ extends java.io.InputStream</pre>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.lang.NullPointerException</code> - if the item could not get read</dd>
 </dl>
+</li>
+</ul>
+<a id="readSlot()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readSlot</h4>
+<pre class="methodSignature">@Deprecated
+public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;readSlot()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block">Same as readItemStack</div>
 </li>
 </ul>
 <a id="readJsonMessage(int)">
@@ -575,6 +673,43 @@ public&nbsp;<a href="../../chat/JsonMessage.html" title="class in net.minestom.s
 <li class="blockList">
 <h4>readComponent</h4>
 <pre class="methodSignature">public&nbsp;net.kyori.adventure.text.Component&nbsp;readComponent&#8203;(int&nbsp;maxLength)</pre>
+</li>
+</ul>
+<a id="read(java.util.function.Supplier)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>read</h4>
+<pre class="methodSignature">public&nbsp;&lt;T extends <a href="Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a>&gt;&nbsp;T&nbsp;read&#8203;(java.util.function.Supplier&lt;T&gt;&nbsp;supplier)</pre>
+<div class="block">Creates a new object from the given supplier and calls its <a href="Readable.html#read(net.minestom.server.utils.binary.BinaryReader)"><code>Readable.read(BinaryReader)</code></a> method with this reader</div>
+<dl>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>T</code> - </dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>supplier</code> - supplier to create new instances of your object</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the read object</dd>
+</dl>
+</li>
+</ul>
+<a id="readArray(java.util.function.Supplier)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readArray</h4>
+<pre class="methodSignature">public&nbsp;&lt;T extends <a href="Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a>&gt;&nbsp;T[]&nbsp;readArray&#8203;(java.util.function.Supplier&lt;T&gt;&nbsp;supplier)</pre>
+<div class="block">Reads the length of the array to read as a varint, creates the array to contain the readable objects and call
+ their respective <a href="Readable.html#read(net.minestom.server.utils.binary.BinaryReader)"><code>Readable.read(BinaryReader)</code></a> methods.</div>
+<dl>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>T</code> - </dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>supplier</code> - supplier to create new instances of your object</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the read objects</dd>
+</dl>
 </li>
 </ul>
 <a id="getBuffer()">
@@ -615,7 +750,7 @@ public&nbsp;<a href="../../chat/JsonMessage.html" title="class in net.minestom.s
 <a id="readTag()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>readTag</h4>
 <pre class="methodSignature">public&nbsp;org.jglrxavpok.hephaistos.nbt.NBT&nbsp;readTag()
@@ -625,6 +760,22 @@ public&nbsp;<a href="../../chat/JsonMessage.html" title="class in net.minestom.s
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code></dd>
 <dd><code>org.jglrxavpok.hephaistos.nbt.NBTException</code></dd>
+</dl>
+</li>
+</ul>
+<a id="extractBytes(java.lang.Runnable)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>extractBytes</h4>
+<pre class="methodSignature">public&nbsp;byte[]&nbsp;extractBytes&#8203;(java.lang.Runnable&nbsp;extractor)</pre>
+<div class="block">Records the current position, runs the given Runnable, and then returns the bytes between the position before
+ running the runnable and the position after.
+ Can be used to extract a subsection of this reader's buffer with complex data</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>extractor</code> - the extraction code, simply call the reader's read* methods here.</dd>
 </dl>
 </li>
 </ul>

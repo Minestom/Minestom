@@ -193,6 +193,10 @@ implements <a href="../utils/binary/Writeable.html" title="interface in net.mine
      @NotNull <a href="Metadata.Value.html" title="class in net.minestom.server.entity">Metadata.Value</a>&lt;<a href="Metadata.Entry.html" title="type parameter in Metadata.Entry">T</a>&gt;&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.binary.BinaryReader)">Entry</a></span>&#8203;(<a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -258,7 +262,7 @@ implements <a href="../utils/binary/Writeable.html" title="interface in net.mine
 <ul class="blockList">
 <li class="blockList">
 <h4>index</h4>
-<pre>protected final&nbsp;byte index</pre>
+<pre>protected&nbsp;byte index</pre>
 </li>
 </ul>
 <a id="value">
@@ -267,7 +271,7 @@ implements <a href="../utils/binary/Writeable.html" title="interface in net.mine
 <ul class="blockListLast">
 <li class="blockList">
 <h4>value</h4>
-<pre>protected final&nbsp;<a href="Metadata.Value.html" title="class in net.minestom.server.entity">Metadata.Value</a>&lt;<a href="Metadata.Entry.html" title="type parameter in Metadata.Entry">T</a>&gt; value</pre>
+<pre>protected&nbsp;<a href="Metadata.Value.html" title="class in net.minestom.server.entity">Metadata.Value</a>&lt;<a href="Metadata.Entry.html" title="type parameter in Metadata.Entry">T</a>&gt; value</pre>
 </li>
 </ul>
 </li>
@@ -283,12 +287,21 @@ implements <a href="../utils/binary/Writeable.html" title="interface in net.mine
 <a id="&lt;init&gt;(byte,net.minestom.server.entity.Metadata.Value)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>Entry</h4>
 <pre>public&nbsp;Entry&#8203;(byte&nbsp;index,
              @NotNull
              @NotNull <a href="Metadata.Value.html" title="class in net.minestom.server.entity">Metadata.Value</a>&lt;<a href="Metadata.Entry.html" title="type parameter in Metadata.Entry">T</a>&gt;&nbsp;value)</pre>
+</li>
+</ul>
+<a id="&lt;init&gt;(net.minestom.server.utils.binary.BinaryReader)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>Entry</h4>
+<pre>public&nbsp;Entry&#8203;(<a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</pre>
 </li>
 </ul>
 </li>

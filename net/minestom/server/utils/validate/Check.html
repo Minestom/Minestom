@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -161,24 +161,29 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fail(java.lang.String)">fail</a></span>&#8203;(@NotNull java.lang.String&nbsp;reason)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#notNull(java.lang.Object,java.lang.String)">notNull</a></span>&#8203;(@Nullable java.lang.Object&nbsp;object,
        @NotNull java.lang.String&nbsp;reason)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#notNull(java.lang.Object,java.lang.String,java.lang.Object...)">notNull</a></span>&#8203;(@Nullable java.lang.Object&nbsp;object,
        @NotNull java.lang.String&nbsp;reason,
        java.lang.Object...&nbsp;arguments)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stateCondition(boolean,java.lang.String)">stateCondition</a></span>&#8203;(boolean&nbsp;condition,
               @NotNull java.lang.String&nbsp;reason)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stateCondition(boolean,java.lang.String,java.lang.Object...)">stateCondition</a></span>&#8203;(boolean&nbsp;condition,
               @NotNull java.lang.String&nbsp;reason,
@@ -246,6 +251,17 @@ public static&nbsp;void&nbsp;notNull&#8203;(@Nullable
 public static&nbsp;void&nbsp;argCondition&#8203;(boolean&nbsp;condition,
                                 @NotNull
                                 @NotNull java.lang.String&nbsp;reason)</pre>
+</li>
+</ul>
+<a id="fail(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fail</h4>
+<pre class="methodSignature">@Contract("_ -&gt; fail")
+public static&nbsp;void&nbsp;fail&#8203;(@NotNull
+                        @NotNull java.lang.String&nbsp;reason)</pre>
 </li>
 </ul>
 <a id="stateCondition(boolean,java.lang.String)">

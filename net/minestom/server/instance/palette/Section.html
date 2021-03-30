@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":9,"i9":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":9,"i9":10,"i10":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -284,6 +284,13 @@ implements <a href="../../utils/clone/PublicCloneable.html" title="interface in 
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resize(int)">resize</a></span>&#8203;(int&nbsp;newBitsPerEntry)</code></th>
+<td class="colLast">
+<div class="block">Resizes the array.</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlockAt(int,int,int,short)">setBlockAt</a></span>&#8203;(int&nbsp;x,
           int&nbsp;y,
           int&nbsp;z,
@@ -421,6 +428,22 @@ implements <a href="../../utils/clone/PublicCloneable.html" title="interface in 
 <pre class="methodSignature">public&nbsp;short&nbsp;getBlockAt&#8203;(int&nbsp;x,
                         int&nbsp;y,
                         int&nbsp;z)</pre>
+</li>
+</ul>
+<a id="resize(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>resize</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;resize&#8203;(int&nbsp;newBitsPerEntry)</pre>
+<div class="block">Resizes the array.
+ <p>
+ Will create a new palette storage to set all the current blocks, and the data will be transferred to 'this'.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>newBitsPerEntry</code> - the new bits per entry count</dd>
+</dl>
 </li>
 </ul>
 <a id="clean()">

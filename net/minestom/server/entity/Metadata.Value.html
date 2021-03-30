@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -131,7 +131,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
+<dd><code><a href="../utils/binary/Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a></code>, <code><a href="../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 </dl>
 <dl>
 <dt>Enclosing class:</dt>
@@ -140,7 +140,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public static class <span class="typeNameLabel">Metadata.Value&lt;T&gt;</span>
 extends java.lang.Object
-implements <a href="../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></pre>
+implements <a href="../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a>, <a href="../utils/binary/Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a></pre>
 </li>
 </ul>
 </div>
@@ -162,16 +162,21 @@ implements <a href="../utils/binary/Writeable.html" title="interface in net.mine
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected java.util.function.Function&lt;<a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>,&#8203;<a href="Metadata.Value.html" title="type parameter in Metadata.Value">T</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readingFunction">readingFunction</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#type">type</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="Metadata.Value.html" title="type parameter in Metadata.Value">T</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#value">value</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected java.util.function.Consumer&lt;<a href="../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#valueWriter">valueWriter</a></span></code></th>
 <td class="colLast">&nbsp;</td>
@@ -194,9 +199,10 @@ implements <a href="../utils/binary/Writeable.html" title="interface in net.mine
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(int,T,java.util.function.Consumer)">Value</a></span>&#8203;(int&nbsp;type,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(int,T,java.util.function.Consumer,java.util.function.Function)">Value</a></span>&#8203;(int&nbsp;type,
      <a href="Metadata.Value.html" title="type parameter in Metadata.Value">T</a>&nbsp;value,
-     @NotNull java.util.function.Consumer&lt;<a href="../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&gt;&nbsp;valueWriter)</code></th>
+     @NotNull java.util.function.Consumer&lt;<a href="../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&gt;&nbsp;valueWriter,
+     @NotNull java.util.function.Function&lt;<a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>,&#8203;<a href="Metadata.Value.html" title="type parameter in Metadata.Value">T</a>&gt;&nbsp;readingFunction)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -228,6 +234,13 @@ implements <a href="../utils/binary/Writeable.html" title="interface in net.mine
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(net.minestom.server.utils.binary.BinaryReader)">read</a></span>&#8203;(@NotNull <a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</code></th>
+<td class="colLast">
+<div class="block">Reads from a <a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary"><code>BinaryReader</code></a>.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(@NotNull <a href="../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
 <td class="colLast">
@@ -273,16 +286,25 @@ implements <a href="../utils/binary/Writeable.html" title="interface in net.mine
 <ul class="blockList">
 <li class="blockList">
 <h4>value</h4>
-<pre>protected final&nbsp;<a href="Metadata.Value.html" title="type parameter in Metadata.Value">T</a> value</pre>
+<pre>protected&nbsp;<a href="Metadata.Value.html" title="type parameter in Metadata.Value">T</a> value</pre>
 </li>
 </ul>
 <a id="valueWriter">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>valueWriter</h4>
 <pre>protected final&nbsp;java.util.function.Consumer&lt;<a href="../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&gt; valueWriter</pre>
+</li>
+</ul>
+<a id="readingFunction">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>readingFunction</h4>
+<pre>protected final&nbsp;java.util.function.Function&lt;<a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>,&#8203;<a href="Metadata.Value.html" title="type parameter in Metadata.Value">T</a>&gt; readingFunction</pre>
 </li>
 </ul>
 </li>
@@ -295,9 +317,9 @@ implements <a href="../utils/binary/Writeable.html" title="interface in net.mine
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(int,java.lang.Object,java.util.function.Consumer)">
+<a id="&lt;init&gt;(int,java.lang.Object,java.util.function.Consumer,java.util.function.Function)">
 <!--   -->
-</a><a id="&lt;init&gt;(int,T,java.util.function.Consumer)">
+</a><a id="&lt;init&gt;(int,T,java.util.function.Consumer,java.util.function.Function)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -306,7 +328,9 @@ implements <a href="../utils/binary/Writeable.html" title="interface in net.mine
 <pre>public&nbsp;Value&#8203;(int&nbsp;type,
              <a href="Metadata.Value.html" title="type parameter in Metadata.Value">T</a>&nbsp;value,
              @NotNull
-             @NotNull java.util.function.Consumer&lt;<a href="../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&gt;&nbsp;valueWriter)</pre>
+             @NotNull java.util.function.Consumer&lt;<a href="../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&gt;&nbsp;valueWriter,
+             @NotNull
+             @NotNull java.util.function.Function&lt;<a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>,&#8203;<a href="Metadata.Value.html" title="type parameter in Metadata.Value">T</a>&gt;&nbsp;readingFunction)</pre>
 </li>
 </ul>
 </li>
@@ -334,6 +358,24 @@ implements <a href="../utils/binary/Writeable.html" title="interface in net.mine
 <dd><code><a href="../utils/binary/Writeable.html#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>writer</code> - the writer to write to</dd>
+</dl>
+</li>
+</ul>
+<a id="read(net.minestom.server.utils.binary.BinaryReader)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>read</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;read&#8203;(@NotNull
+                 @NotNull <a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../utils/binary/Readable.html#read(net.minestom.server.utils.binary.BinaryReader)">Readable</a></code></span></div>
+<div class="block">Reads from a <a href="../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary"><code>BinaryReader</code></a>.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../utils/binary/Readable.html#read(net.minestom.server.utils.binary.BinaryReader)">read</a></code>&nbsp;in interface&nbsp;<code><a href="../utils/binary/Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>reader</code> - the reader to read from</dd>
 </dl>
 </li>
 </ul>

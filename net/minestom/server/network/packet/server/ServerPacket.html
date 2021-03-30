@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
+var data = {"i0":6,"i1":18};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -123,7 +123,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><code><a href="../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
+<dd><code><a href="../../../utils/binary/Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a></code>, <code><a href="../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 </dl>
 <dl>
 <dt>All Known Subinterfaces:</dt>
@@ -135,7 +135,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <hr>
 <pre>public interface <span class="typeNameLabel">ServerPacket</span>
-extends <a href="../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></pre>
+extends <a href="../../../utils/binary/Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a>, <a href="../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></pre>
 <div class="block">Represents a packet which can be sent to a player using <a href="../../player/PlayerConnection.html#sendPacket(net.minestom.server.network.packet.server.ServerPacket)"><code>PlayerConnection.sendPacket(ServerPacket)</code></a>.</div>
 </li>
 </ul>
@@ -151,7 +151,7 @@ extends <a href="../../../utils/binary/Writeable.html" title="interface in net.m
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t5" class="tableTab"><span><a href="javascript:show(16);">Default Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -165,13 +165,20 @@ extends <a href="../../../utils/binary/Writeable.html" title="interface in net.m
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(@NotNull <a href="../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
+<td class="colFirst"><code>default void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(net.minestom.server.utils.binary.BinaryReader)">read</a></span>&#8203;(@NotNull <a href="../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</code></th>
 <td class="colLast">
-<div class="block">Writes the packet to a <a href="../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
+<div class="block">Reads from a <a href="../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary"><code>BinaryReader</code></a>.</div>
 </td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.utils.binary.Writeable">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.minestom.server.utils.binary.<a href="../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></h3>
+<code><a href="../../../utils/binary/Writeable.html#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></code></li>
+</ul>
 </li>
 </ul>
 </section>
@@ -188,20 +195,21 @@ extends <a href="../../../utils/binary/Writeable.html" title="interface in net.m
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="write(net.minestom.server.utils.binary.BinaryWriter)">
+<a id="read(net.minestom.server.utils.binary.BinaryReader)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>write</h4>
-<pre class="methodSignature">void&nbsp;write&#8203;(@NotNull
-           @NotNull <a href="../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</pre>
-<div class="block">Writes the packet to a <a href="../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
+<h4>read</h4>
+<pre class="methodSignature">default&nbsp;void&nbsp;read&#8203;(@NotNull
+                  @NotNull <a href="../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../utils/binary/Readable.html#read(net.minestom.server.utils.binary.BinaryReader)">Readable</a></code></span></div>
+<div class="block">Reads from a <a href="../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary"><code>BinaryReader</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../utils/binary/Writeable.html#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
+<dd><code><a href="../../../utils/binary/Readable.html#read(net.minestom.server.utils.binary.BinaryReader)">read</a></code>&nbsp;in interface&nbsp;<code><a href="../../../utils/binary/Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>writer</code> - the writer to write the packet to.</dd>
+<dd><code>reader</code> - the reader to read from</dd>
 </dl>
 </li>
 </ul>

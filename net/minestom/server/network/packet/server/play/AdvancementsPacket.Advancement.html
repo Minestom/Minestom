@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10};
+var data = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -131,7 +131,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
+<dd><code><a href="../../../../utils/binary/Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a></code>, <code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 </dl>
 <dl>
 <dt>Enclosing class:</dt>
@@ -140,7 +140,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public static class <span class="typeNameLabel">AdvancementsPacket.Advancement</span>
 extends java.lang.Object
-implements <a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></pre>
+implements <a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a>, <a href="../../../../utils/binary/Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a></pre>
 </li>
 </ul>
 </div>
@@ -221,6 +221,13 @@ implements <a href="../../../../utils/binary/Writeable.html" title="interface in
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(net.minestom.server.utils.binary.BinaryReader)">read</a></span>&#8203;(@NotNull <a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</code></th>
+<td class="colLast">
+<div class="block">Reads from a <a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary"><code>BinaryReader</code></a>.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(@NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
 <td class="colLast">
@@ -319,7 +326,7 @@ implements <a href="../../../../utils/binary/Writeable.html" title="interface in
 <a id="write(net.minestom.server.utils.binary.BinaryWriter)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>write</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
@@ -331,6 +338,24 @@ implements <a href="../../../../utils/binary/Writeable.html" title="interface in
 <dd><code><a href="../../../../utils/binary/Writeable.html#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>writer</code> - the writer to write to</dd>
+</dl>
+</li>
+</ul>
+<a id="read(net.minestom.server.utils.binary.BinaryReader)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>read</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;read&#8203;(@NotNull
+                 @NotNull <a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../utils/binary/Readable.html#read(net.minestom.server.utils.binary.BinaryReader)">Readable</a></code></span></div>
+<div class="block">Reads from a <a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary"><code>BinaryReader</code></a>.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../utils/binary/Readable.html#read(net.minestom.server.utils.binary.BinaryReader)">read</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../utils/binary/Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>reader</code> - the reader to read from</dd>
 </dl>
 </li>
 </ul>
