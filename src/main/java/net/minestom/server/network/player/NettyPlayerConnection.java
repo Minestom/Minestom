@@ -20,8 +20,6 @@ import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.utils.BufUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.cache.CacheablePacket;
-import net.minestom.server.utils.cache.TemporaryCache;
-import net.minestom.server.utils.cache.TimedBuffer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -136,35 +134,13 @@ public class NettyPlayerConnection extends PlayerConnection {
             if (getPlayer() != null) {
                 // Flush happen during #update()
                 if (serverPacket instanceof CacheablePacket && MinecraftServer.hasPacketCaching()) {
-                    final CacheablePacket cacheablePacket = (CacheablePacket) serverPacket;
-                    final UUID identifier = cacheablePacket.getIdentifier();
-
-                    if (identifier == null) {
-                        // This packet explicitly asks to do not retrieve the cache
-                        write(serverPacket, skipTranslating);
+                    // Check if the packet is cached
+                    final FramedPacket cachedPacket = CacheablePacket.getCache(serverPacket);
+                    if (cachedPacket != null) {
+                        write(cachedPacket);
                     } else {
-                        final long timestamp = cacheablePacket.getTimestamp();
-                        // Try to retrieve the cached buffer
-                        TemporaryCache<TimedBuffer> temporaryCache = cacheablePacket.getCache();
-                        TimedBuffer timedBuffer = temporaryCache.retrieve(identifier);
-
-                        // Update the buffer if non-existent or outdated
-                        final boolean shouldUpdate = timedBuffer == null ||
-                                timestamp > timedBuffer.getTimestamp();
-
-                        if (shouldUpdate) {
-                            final ByteBuf buffer = PacketUtils.createFramedPacket(serverPacket, true);
-                            TimedBuffer oldBuffer = timedBuffer;
-                            timedBuffer = new TimedBuffer(buffer, timestamp);
-                            temporaryCache.cache(identifier, timedBuffer);
-                            if (oldBuffer != null) {
-                                oldBuffer.getBuffer().release();
-                            }
-                        }
-
-                        write(new FramedPacket(timedBuffer.getBuffer()));
+                        write(serverPacket, skipTranslating);
                     }
-
                 } else {
                     write(serverPacket, skipTranslating);
                 }
