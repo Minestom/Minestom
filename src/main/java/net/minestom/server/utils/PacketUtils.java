@@ -4,6 +4,8 @@ import com.velocitypowered.natives.compression.VelocityCompressor;
 import com.velocitypowered.natives.util.Natives;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
 import it.unimi.dsi.fastutil.ints.IntIntPair;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.AdventureSerializer;
@@ -23,7 +25,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.DataFormatException;
 
@@ -43,7 +44,7 @@ public final class PacketUtils {
     private static final Map<Chunk, ChunkStorage> CHUNK_STORAGE_MAP = new ConcurrentHashMap<>();
 
     private static class ChunkStorage {
-        Map<Integer, Entry> entries = new TreeMap<>();
+        Int2ObjectMap<Entry> entries = new Int2ObjectRBTreeMap<>();
 
         private static class Entry {
             Map<PlayerConnection, IntIntPair> entityIdMap = new ConcurrentHashMap<>();
@@ -51,7 +52,7 @@ public final class PacketUtils {
         }
     }
 
-    public static void prepareGroupedPacket(@Nullable PlayerConnection playerConnection, @NotNull Chunk chunk, @NotNull ServerPacket serverPacket) {
+    public static void prepareGroupedPacket(@NotNull Chunk chunk, @NotNull ServerPacket serverPacket, @Nullable PlayerConnection playerConnection) {
         ChunkStorage chunkStorage = CHUNK_STORAGE_MAP.computeIfAbsent(chunk, c -> new ChunkStorage());
         final int priority = serverPacket.getNetworkHint().getPriority();
         synchronized (chunkStorage) {
@@ -66,9 +67,14 @@ public final class PacketUtils {
             writeFramedPacket(buffer, serverPacket);
             final int end = buffer.writerIndex();
 
-            if (hasConnection)
+            if (hasConnection) {
                 entityIdMap.put(playerConnection, IntIntPair.of(start, end));
+            }
         }
+    }
+
+    public static void prepareGroupedPacket(@NotNull Chunk chunk, @NotNull ServerPacket serverPacket) {
+        prepareGroupedPacket(chunk, serverPacket, null);
     }
 
     public static void flush(@NotNull Chunk chunk) {
@@ -92,7 +98,6 @@ public final class PacketUtils {
 
                     viewers.forEach(player -> {
                         var connection = player.getPlayerConnection();
-                        var nettyPlayerConnection = (NettyPlayerConnection) connection;
                         final var pair = entityIdMap.get(connection);
                         ByteBuf result = buffer;
                         if (pair != null) {
@@ -109,7 +114,11 @@ public final class PacketUtils {
                                 result = Unpooled.wrappedBuffer(slice1, slice2);
                             }
                         }
-                        nettyPlayerConnection.write(new FramedPacket(result));
+                        if (connection instanceof NettyPlayerConnection) {
+                            var nettyPlayerConnection = (NettyPlayerConnection) connection;
+                            var framedPacket = new FramedPacket(result);
+                            nettyPlayerConnection.write(framedPacket); // Sync write
+                        }
                     });
                 });
                 entries.clear();
