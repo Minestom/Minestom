@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * Represents a syntax in {@link Command}
@@ -18,14 +19,14 @@ public class CommandSyntax {
     private CommandCondition commandCondition;
     private CommandExecutor executor;
 
-    private final Map<String, Object> defaultValuesMap;
+    private final Map<String, Supplier<Object>> defaultValuesMap;
     private final Argument<?>[] args;
 
     private final boolean suggestion;
 
     protected CommandSyntax(@Nullable CommandCondition commandCondition,
                             @NotNull CommandExecutor commandExecutor,
-                            @Nullable Map<String, Object> defaultValuesMap,
+                            @Nullable Map<String, Supplier<Object>> defaultValuesMap,
                             @NotNull Argument<?>... args) {
         this.commandCondition = commandCondition;
         this.executor = commandExecutor;
@@ -85,7 +86,7 @@ public class CommandSyntax {
     }
 
     @Nullable
-    protected Map<String, Object> getDefaultValuesMap() {
+    protected Map<String, Supplier<Object>> getDefaultValuesMap() {
         return defaultValuesMap;
     }
 

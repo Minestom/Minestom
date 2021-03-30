@@ -176,6 +176,7 @@ public class CommandDispatcher {
                     // Empty syntax found
                     final CommandSyntax syntax = optionalSyntax.get();
 
+                    parsedCommand.syntax = syntax;
                     parsedCommand.executor = syntax.getExecutor();
                     parsedCommand.context = new CommandContext(input);
 
