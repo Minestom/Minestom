@@ -74,7 +74,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         this.inventoryType = inventoryType;
         this.title = title;
 
-        this.size = inventoryType.getAdditionalSlot();
+        this.size = inventoryType.getSize();
 
         this.offset = size;
 
@@ -118,11 +118,10 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     public void setTitle(@NotNull String title) {
         this.title = title;
 
-        OpenWindowPacket packet = new OpenWindowPacket();
+        OpenWindowPacket packet = new OpenWindowPacket(title);
 
         packet.windowId = getWindowId();
         packet.windowType = getInventoryType().getWindowType();
-        packet.title = title;
 
         // Re-open the inventory
         sendPacketToViewers(packet);

@@ -20,7 +20,7 @@ public class ItemStackArrayData extends DataType<ItemStack[]> {
     public ItemStack[] decode(@NotNull BinaryReader reader) {
         ItemStack[] items = new ItemStack[reader.readVarInt()];
         for (int i = 0; i < items.length; i++) {
-            items[i] = reader.readSlot();
+            items[i] = reader.readItemStack();
         }
         return items;
     }

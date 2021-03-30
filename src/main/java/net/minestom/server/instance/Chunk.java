@@ -512,20 +512,16 @@ public abstract class Chunk implements Viewable, DataContainer {
             return;
 
         final PlayerConnection playerConnection = player.getPlayerConnection();
-
-        // Retrieve & send the buffer to the connection
-        playerConnection.sendPacket(getFreshFullDataPacket());
-
         playerConnection.sendPacket(getLightPacket());
+        playerConnection.sendPacket(getFreshFullDataPacket());
     }
 
     public synchronized void sendChunk() {
         if (!isLoaded()) {
             return;
         }
-
-        sendPacketToViewers(getFreshFullDataPacket());
         sendPacketToViewers(getLightPacket());
+        sendPacketToViewers(getFreshFullDataPacket());
     }
 
     /**

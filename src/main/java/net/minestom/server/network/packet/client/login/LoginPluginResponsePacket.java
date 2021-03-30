@@ -12,6 +12,7 @@ import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.InetAddress;
@@ -27,7 +28,7 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
 
     public int messageId;
     public boolean successful;
-    public byte[] data;
+    public byte[] data = new byte[0];
 
     @Override
     public void process(@NotNull PlayerConnection connection) {
@@ -93,7 +94,17 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
         this.messageId = reader.readVarInt();
         this.successful = reader.readBoolean();
         if (successful) {
-            this.data = reader.getRemainingBytes();
+            this.data = reader.readRemainingBytes();
+        }
+    }
+
+    @Override
+    public void write(@NotNull BinaryWriter writer) {
+        writer.writeVarInt(messageId);
+        writer.writeBoolean(successful);
+
+        if(successful) {
+            writer.writeBytes(data);
         }
     }
 }

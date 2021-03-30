@@ -15,6 +15,7 @@ import net.minestom.server.network.packet.server.login.LoginPluginRequestPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -24,7 +25,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
     private static final Component ALREADY_CONNECTED = Component.text("You are already on this server", NamedTextColor.RED);
 
-    public String username;
+    public String username = "";
 
     @Override
     public void process(@NotNull PlayerConnection connection) {
@@ -101,4 +102,10 @@ public class LoginStartPacket implements ClientPreplayPacket {
         this.username = reader.readSizedString(16);
     }
 
+    @Override
+    public void write(@NotNull BinaryWriter writer) {
+        if(username.length() > 16)
+            throw new IllegalArgumentException("Username is not allowed to be longer than 16 characters");
+        writer.writeSizedString(username);
+    }
 }

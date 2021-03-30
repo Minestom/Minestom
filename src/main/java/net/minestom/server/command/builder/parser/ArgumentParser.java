@@ -46,7 +46,12 @@ public class ArgumentParser {
         ARGUMENT_FUNCTION_MAP.put("BlockState", ArgumentBlockState::new);
         ARGUMENT_FUNCTION_MAP.put("IntRange", ArgumentIntRange::new);
         ARGUMENT_FUNCTION_MAP.put("FloatRange", ArgumentFloatRange::new);
-        ARGUMENT_FUNCTION_MAP.put("Entity", ArgumentEntity::new);
+
+        ARGUMENT_FUNCTION_MAP.put("Entity", s -> new ArgumentEntity(s).singleEntity(true));
+        ARGUMENT_FUNCTION_MAP.put("Entities", ArgumentEntity::new);
+        ARGUMENT_FUNCTION_MAP.put("Player", s -> new ArgumentEntity(s).singleEntity(true).onlyPlayers(true));
+        ARGUMENT_FUNCTION_MAP.put("Players", s -> new ArgumentEntity(s).onlyPlayers(true));
+
         ARGUMENT_FUNCTION_MAP.put("ItemStack", ArgumentItemStack::new);
         ARGUMENT_FUNCTION_MAP.put("Component", ArgumentComponent::new);
         ARGUMENT_FUNCTION_MAP.put("UUID", ArgumentUUID::new);

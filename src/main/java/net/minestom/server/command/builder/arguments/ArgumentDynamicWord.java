@@ -6,6 +6,7 @@ import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.suggestion.SuggestionCallback;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.validator.StringValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -56,9 +57,9 @@ public class ArgumentDynamicWord extends Argument<String> {
         final SuggestionType suggestionType = this.getSuggestionType();
 
         argumentNode.parser = "brigadier:string";
-        argumentNode.properties = packetWriter -> {
+        argumentNode.properties = BinaryWriter.makeArray(packetWriter -> {
             packetWriter.writeVarInt(0); // Single word
-        };
+        });
         argumentNode.suggestionsType = suggestionType.getIdentifier();
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});

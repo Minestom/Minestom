@@ -3,6 +3,7 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,6 +13,8 @@ public class EntityPositionAndRotationPacket implements ServerPacket {
     public short deltaX, deltaY, deltaZ;
     public float yaw, pitch;
     public boolean onGround;
+
+    public EntityPositionAndRotationPacket() {}
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -24,6 +27,16 @@ public class EntityPositionAndRotationPacket implements ServerPacket {
         writer.writeBoolean(onGround);
     }
 
+    @Override
+    public void read(@NotNull BinaryReader reader) {
+        entityId = reader.readVarInt();
+        deltaX = reader.readShort();
+        deltaY = reader.readShort();
+        deltaZ = reader.readShort();
+        yaw = reader.readByte() * 360f / 256f;
+        pitch = reader.readByte() * 360f / 256f;
+        onGround = reader.readBoolean();
+    }
 
     @Override
     public int getId() {

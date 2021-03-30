@@ -37,6 +37,11 @@ public final class Check {
         }
     }
 
+    @Contract("_ -> fail")
+    public static void fail(@NotNull String reason) {
+        throw new IllegalArgumentException(reason);
+    }
+
     @Contract("true, _ -> fail")
     public static void stateCondition(boolean condition, @NotNull String reason) {
         if (condition) {

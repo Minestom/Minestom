@@ -7,6 +7,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 public class StatusRequestPacket implements ClientPreplayPacket {
@@ -35,6 +36,11 @@ public class StatusRequestPacket implements ClientPreplayPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
+        // Empty
+    }
+
+    @Override
+    public void write(@NotNull BinaryWriter writer) {
         // Empty
     }
 }

@@ -5,13 +5,14 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 public class ClientPlayerBlockPlacementPacket extends ClientPlayPacket {
 
-    public Player.Hand hand;
-    public BlockPosition blockPosition;
-    public BlockFace blockFace;
+    public Player.Hand hand = Player.Hand.MAIN;
+    public BlockPosition blockPosition = new BlockPosition(0,0,0);
+    public BlockFace blockFace = BlockFace.TOP;
     public float cursorPositionX, cursorPositionY, cursorPositionZ;
     public boolean insideBlock;
 
@@ -26,4 +27,14 @@ public class ClientPlayerBlockPlacementPacket extends ClientPlayPacket {
         this.insideBlock = reader.readBoolean();
     }
 
+    @Override
+    public void write(@NotNull BinaryWriter writer) {
+        writer.writeVarInt(hand.ordinal());
+        writer.writeBlockPosition(blockPosition);
+        writer.writeVarInt(blockFace.ordinal());
+        writer.writeFloat(cursorPositionX);
+        writer.writeFloat(cursorPositionY);
+        writer.writeFloat(cursorPositionZ);
+        writer.writeBoolean(insideBlock);
+    }
 }

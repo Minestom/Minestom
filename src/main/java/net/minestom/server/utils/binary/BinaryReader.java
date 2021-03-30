@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 /**
  * Class used to read from a byte array.
@@ -43,6 +45,10 @@ public class BinaryReader extends InputStream {
         return Utils.readVarInt(buffer);
     }
 
+    public long readVarLong() {
+        return Utils.readVarLong(buffer);
+    }
+
     public boolean readBoolean() {
         return buffer.readBoolean();
     }
@@ -63,7 +69,17 @@ public class BinaryReader extends InputStream {
         return buffer.readUnsignedShort();
     }
 
+    /**
+     * Same as readInt
+     */
     public int readInteger() {
+        return buffer.readInt();
+    }
+
+    /**
+     * Same as readInteger, created for parity with BinaryWriter
+     */
+    public int readInt() {
         return buffer.readInt();
     }
 
@@ -122,7 +138,15 @@ public class BinaryReader extends InputStream {
         return array;
     }
 
+    /**
+     * @deprecated Use {@link #readRemainingBytes()} (same semantics, but more consistent naming)
+     */
+    @Deprecated
     public byte[] getRemainingBytes() {
+        return readRemainingBytes();
+    }
+
+    public byte[] readRemainingBytes() {
         return readBytes(buffer.readableBytes());
     }
 
@@ -143,10 +167,18 @@ public class BinaryReader extends InputStream {
      * @return the read item
      * @throws NullPointerException if the item could not get read
      */
-    public ItemStack readSlot() {
+    public ItemStack readItemStack() {
         final ItemStack itemStack = NBTUtils.readItemStack(this);
         Check.notNull(itemStack, "#readSlot returned null, probably because the buffer was corrupted");
         return itemStack;
+    }
+
+    /**
+     * Same as readItemStack
+     */
+    @Deprecated
+    public ItemStack readSlot() {
+        return readItemStack();
     }
 
     /**
@@ -161,6 +193,34 @@ public class BinaryReader extends InputStream {
     public Component readComponent(int maxLength) {
         final String jsonObject = readSizedString(maxLength);
         return GsonComponentSerializer.gson().deserialize(jsonObject);
+    }
+
+    /**
+     * Creates a new object from the given supplier and calls its {@link Readable#read(BinaryReader)} method with this reader
+     * @param supplier supplier to create new instances of your object
+     * @param <T>
+     * @return the read object
+     */
+    public <T extends Readable> T read(Supplier<T> supplier) {
+        T result = supplier.get();
+        result.read(this);
+        return result;
+    }
+
+    /**
+     * Reads the length of the array to read as a varint, creates the array to contain the readable objects and call
+     * their respective {@link Readable#read(BinaryReader)} methods.
+     * @param supplier supplier to create new instances of your object
+     * @param <T>
+     * @return the read objects
+     */
+    public <T extends Readable> T[] readArray(Supplier<T> supplier) {
+        T[] result = (T[]) new Object[readVarInt()];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = supplier.get();
+            result[i].read(this);
+        }
+        return result;
     }
 
     public ByteBuf getBuffer() {
@@ -179,5 +239,20 @@ public class BinaryReader extends InputStream {
 
     public NBT readTag() throws IOException, NBTException {
         return nbtReader.read();
+    }
+
+    /**
+     * Records the current position, runs the given Runnable, and then returns the bytes between the position before
+     * running the runnable and the position after.
+     * Can be used to extract a subsection of this reader's buffer with complex data
+     * @param extractor the extraction code, simply call the reader's read* methods here.
+     */
+    public byte[] extractBytes(Runnable extractor) {
+        int startingPosition = getBuffer().readerIndex();
+        extractor.run();
+        int endingPosition = getBuffer().readerIndex();
+        byte[] output = new byte[endingPosition-startingPosition];
+        getBuffer().getBytes(startingPosition, output);
+        return output;
     }
 }
