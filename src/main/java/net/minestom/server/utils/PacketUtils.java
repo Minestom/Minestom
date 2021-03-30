@@ -100,12 +100,12 @@ public final class PacketUtils {
                             final int end = pair.rightInt();
 
                             if (start == 0) {
-                                result = buffer.copy(end, readable - end);
+                                result = buffer.retainedSlice(end, readable - end);
                             } else if (end == readable) {
-                                result = buffer.copy(0, start);
+                                result = buffer.retainedSlice(0, start);
                             } else {
-                                final var slice1 = buffer.copy(0, start);
-                                final var slice2 = buffer.copy(end, readable - end);
+                                final var slice1 = buffer.retainedSlice(0, start);
+                                final var slice2 = buffer.retainedSlice(end, readable - end);
                                 result = Unpooled.wrappedBuffer(slice1, slice2);
                             }
                         }
