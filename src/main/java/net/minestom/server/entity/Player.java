@@ -83,7 +83,7 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.UnaryOperator;
 
@@ -1656,38 +1656,33 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             for (long chunkIndex : updatedVisibleChunks) {
                 if (!viewableChunks.contains(chunkIndex)) {
                     chunkIndexesRequest.add(chunkIndex);
-                    final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-                    final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-                    this.instance.loadOptionalChunk(chunkX, chunkZ, chunk -> {
-                        if (chunk == null) {
-                            // Cannot load chunk (auto load is not enabled)
-                            return;
-                        }
-                        chunk.addViewer(this);
-                        this.viewableChunks.add(chunkIndex);
-                    });
                 }
             }
 
             AsyncUtils.runAsync(() -> {
                 ByteBuf buffer = BufUtils.getBuffer(true);
-                Semaphore semaphore = new Semaphore(chunkIndexesRequest.size());
+                CountDownLatch latch = new CountDownLatch(chunkIndexesRequest.size());
                 for (long chunkIndex : chunkIndexesRequest) {
                     final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
                     final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
                     this.instance.loadOptionalChunk(chunkX, chunkZ, chunk -> {
                         if (chunk == null) {
                             // Cannot load chunk (auto load is not enabled)
-                            semaphore.release();
+                            latch.countDown();
                             return;
                         }
-                        PacketUtils.writeFramedPacket(buffer, chunk.getLightPacket());
-                        PacketUtils.writeFramedPacket(buffer, chunk.getFreshFullDataPacket());
-                        semaphore.release();
+
+                        synchronized (buffer) {
+                            PacketUtils.writeFramedPacket(buffer, chunk.getLightPacket());
+                            PacketUtils.writeFramedPacket(buffer, chunk.getFreshFullDataPacket());
+                            chunk.addViewer(this);
+                            this.viewableChunks.add(chunkIndex);
+                            latch.countDown();
+                        }
                     });
                 }
                 try {
-                    semaphore.acquire();
+                    latch.await();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
