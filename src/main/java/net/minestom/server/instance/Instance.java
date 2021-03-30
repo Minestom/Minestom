@@ -74,6 +74,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     private int timeRate = 1;
     private UpdateOption timeUpdate = new UpdateOption(1, TimeUnit.SECOND);
     private long lastTimeUpdate;
+    // Weather
+    private Weather rain;
+    private Weather thunder;
 
     // Field for tick events
     private long lastTickAge = System.currentTimeMillis();
@@ -412,6 +415,23 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      */
     public void setTimeUpdate(@Nullable UpdateOption timeUpdate) {
         this.timeUpdate = timeUpdate;
+    }
+
+    public void setWeather(@NotNull Weather weather) {
+        final Weather.Type type = weather.getType();
+        if (weather.isClear()) {
+            if (type == Weather.Type.RAIN) {
+                this.rain = null;
+            } else if (type == Weather.Type.THUNDER) {
+                this.thunder = null;
+            }
+        } else {
+            if (type == Weather.Type.RAIN) {
+                this.rain = weather;
+            } else if (type == Weather.Type.THUNDER) {
+                this.thunder = weather;
+            }
+        }
     }
 
     /**
