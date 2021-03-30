@@ -118,11 +118,10 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     public void setTitle(@NotNull String title) {
         this.title = title;
 
-        OpenWindowPacket packet = new OpenWindowPacket();
+        OpenWindowPacket packet = new OpenWindowPacket(title);
 
         packet.windowId = getWindowId();
         packet.windowType = getInventoryType().getWindowType();
-        packet.title = title;
 
         // Re-open the inventory
         sendPacketToViewers(packet);

@@ -11,6 +11,7 @@ import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.SocketAddress;
@@ -25,7 +26,7 @@ public class HandshakePacket implements ClientPreplayPacket {
     private static final Component INVALID_BUNGEE_FORWARDING = Component.text("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!", NamedTextColor.RED);
 
     private int protocolVersion;
-    private String serverAddress;
+    private String serverAddress = "";
     private int serverPort;
     private int nextState;
 
@@ -35,6 +36,18 @@ public class HandshakePacket implements ClientPreplayPacket {
         this.serverAddress = reader.readSizedString(BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255);
         this.serverPort = reader.readUnsignedShort();
         this.nextState = reader.readVarInt();
+    }
+
+    @Override
+    public void write(@NotNull BinaryWriter writer) {
+        writer.writeVarInt(protocolVersion);
+        int maxLength = BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255;
+        if(serverAddress.length() > maxLength) {
+            throw new IllegalArgumentException("serverAddress is "+serverAddress.length()+" characters long, maximum allowed is "+maxLength);
+        }
+        writer.writeSizedString(serverAddress);
+        writer.writeUnsignedShort(serverPort);
+        writer.writeVarInt(nextState);
     }
 
     @Override

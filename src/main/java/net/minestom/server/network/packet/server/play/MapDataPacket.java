@@ -4,7 +4,10 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.Readable;
+import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -17,13 +20,15 @@ public class MapDataPacket implements ComponentHoldingServerPacket {
     public boolean trackingPosition;
     public boolean locked;
 
-    public Icon[] icons;
+    public Icon[] icons = new Icon[0];
 
     public short columns;
     public short rows;
     public byte x;
     public byte z;
-    public byte[] data;
+    public byte[] data = new byte[0];
+
+    public MapDataPacket() {}
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -56,6 +61,32 @@ public class MapDataPacket implements ComponentHoldingServerPacket {
             writer.writeVarInt(0);
         }
 
+    }
+
+    @Override
+    public void read(@NotNull BinaryReader reader) {
+        mapId = reader.readVarInt();
+        scale = reader.readByte();
+        trackingPosition = reader.readBoolean();
+        locked = reader.readBoolean();
+
+        int iconCount = reader.readVarInt();
+        icons = new Icon[iconCount];
+        for (int i = 0; i < iconCount; i++) {
+            icons[i] = new Icon();
+            icons[i].read(reader);
+        }
+
+        columns = reader.readByte();
+        if(columns <= 0) {
+            return;
+        }
+
+        rows = reader.readByte();
+        x = reader.readByte();
+        z = reader.readByte();
+        int dataLength = reader.readVarInt();
+        data = reader.readBytes(dataLength);
     }
 
     @Override
@@ -101,13 +132,13 @@ public class MapDataPacket implements ComponentHoldingServerPacket {
         }
     }
 
-    public static class Icon {
+    public static class Icon implements Writeable, Readable {
         public int type;
         public byte x, z;
         public byte direction;
         public Component displayName;
 
-        private void write(BinaryWriter writer) {
+        public void write(BinaryWriter writer) {
             writer.writeVarInt(type);
             writer.writeByte(x);
             writer.writeByte(z);
@@ -120,6 +151,20 @@ public class MapDataPacket implements ComponentHoldingServerPacket {
             }
         }
 
+        @Override
+        public void read(@NotNull BinaryReader reader) {
+            type = reader.readVarInt();
+            x = reader.readByte();
+            z = reader.readByte();
+            direction = reader.readByte();
+
+            boolean hasDisplayName = reader.readBoolean();
+            if(hasDisplayName) {
+                displayName = reader.readComponent(Integer.MAX_VALUE);
+            } else {
+                displayName = null;
+            }
+        }
     }
 
 }

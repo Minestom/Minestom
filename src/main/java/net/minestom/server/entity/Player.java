@@ -1986,10 +1986,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 return;
             }
 
-            OpenWindowPacket openWindowPacket = new OpenWindowPacket();
+            OpenWindowPacket openWindowPacket = new OpenWindowPacket(newInventory.getTitle());
             openWindowPacket.windowId = newInventory.getWindowId();
             openWindowPacket.windowType = newInventory.getInventoryType().getWindowType();
-            openWindowPacket.title = newInventory.getTitle();
             playerConnection.sendPacket(openWindowPacket);
             newInventory.addViewer(this);
             this.openInventory = newInventory;

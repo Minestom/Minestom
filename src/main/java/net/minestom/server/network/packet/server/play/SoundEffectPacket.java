@@ -6,6 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +17,10 @@ public class SoundEffectPacket implements ServerPacket {
     public int x, y, z;
     public float volume;
     public float pitch;
+
+    public SoundEffectPacket() {
+        soundSource = Source.AMBIENT;
+    }
 
     @NotNull
     public static SoundEffectPacket create(Source category, SoundEvent sound, Position position, float volume, float pitch) {
@@ -39,6 +44,17 @@ public class SoundEffectPacket implements ServerPacket {
         writer.writeInt(z * 8);
         writer.writeFloat(volume);
         writer.writeFloat(pitch);
+    }
+
+    @Override
+    public void read(@NotNull BinaryReader reader) {
+        soundId = reader.readVarInt();
+        soundSource = Source.values()[reader.readVarInt()];
+        x = reader.readInt()/8;
+        y = reader.readInt()/8;
+        z = reader.readInt()/8;
+        volume = reader.readFloat();
+        pitch = reader.readFloat();
     }
 
     @Override

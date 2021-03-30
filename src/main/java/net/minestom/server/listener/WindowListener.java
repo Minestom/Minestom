@@ -7,7 +7,7 @@ import net.minestom.server.inventory.InventoryClickHandler;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
-import net.minestom.server.network.packet.client.play.ClientCloseWindow;
+import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientWindowConfirmationPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowConfirmationPacket;
@@ -96,7 +96,7 @@ public class WindowListener {
         player.getPlayerConnection().sendPacket(windowConfirmationPacket);
     }
 
-    public static void closeWindowListener(ClientCloseWindow packet, Player player) {
+    public static void closeWindowListener(ClientCloseWindowPacket packet, Player player) {
         // if windowId == 0 then it is player's inventory, meaning that they hadn't been any open inventory packet
         InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(player.getOpenInventory(), player);
         player.callEvent(InventoryCloseEvent.class, inventoryCloseEvent);
