@@ -67,6 +67,7 @@ import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.PlayerStatistic;
 import net.minestom.server.utils.*;
 import net.minestom.server.utils.async.AsyncUtils;
+import net.minestom.server.utils.cache.CacheablePacket;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -1665,8 +1666,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                         }
 
                         synchronized (buffer) {
-                            PacketUtils.writeFramedPacket(buffer, chunk.getLightPacket());
-                            PacketUtils.writeFramedPacket(buffer, chunk.getFreshFullDataPacket());
+                            CacheablePacket.writeCache(buffer, chunk.getLightPacket());
+                            CacheablePacket.writeCache(buffer, chunk.getFreshFullDataPacket());
                             chunk.addViewer(this);
                             this.viewableChunks.add(chunkIndex);
                             latch.countDown();
@@ -1681,7 +1682,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 ((NettyPlayerConnection) playerConnection).getChannel().writeAndFlush(new FramedPacket(buffer)).addListener(future -> {
                     ((NettyPlayerConnection) playerConnection).setWritable(true);
                     buffer.release();
-                    System.out.println("chunks sent");
                 });
             });
         }
