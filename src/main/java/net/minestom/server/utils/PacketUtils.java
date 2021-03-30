@@ -9,6 +9,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
 import it.unimi.dsi.fastutil.ints.IntIntPair;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.AdventureSerializer;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.listener.manager.PacketListenerManager;
@@ -52,7 +53,14 @@ public final class PacketUtils {
         }
     }
 
-    public static void prepareGroupedPacket(@NotNull Chunk chunk, @NotNull ServerPacket serverPacket, @Nullable PlayerConnection playerConnection) {
+    public static void prepareGroupedPacket(@NotNull Chunk chunk, @NotNull ServerPacket serverPacket, @Nullable Entity entity) {
+        if (entity != null && !entity.isAutoViewable()) {
+            // Operation cannot be optimized
+            entity.sendPacketToViewers(serverPacket);
+            return;
+        }
+
+        final PlayerConnection playerConnection = entity instanceof Player ? ((Player) entity).getPlayerConnection() : null;
         ChunkStorage chunkStorage = CHUNK_STORAGE_MAP.computeIfAbsent(chunk, c -> new ChunkStorage());
         final int priority = serverPacket.getNetworkHint().getPriority();
         synchronized (chunkStorage) {

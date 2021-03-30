@@ -1514,8 +1514,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         entityTeleportPacket.entityId = getEntityId();
         entityTeleportPacket.position = getPosition().clone();
         entityTeleportPacket.onGround = isOnGround();
-        PacketUtils.prepareGroupedPacket(getChunk(), entityTeleportPacket,
-                this instanceof Player ? ((Player) this).getPlayerConnection() : null);
+        PacketUtils.prepareGroupedPacket(getChunk(), entityTeleportPacket, this);
     }
 
     /**
