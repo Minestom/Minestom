@@ -1714,34 +1714,35 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param newChunk the new chunk of the player (can be the current one)
      */
     public void refreshVisibleEntities(@NotNull Chunk newChunk) {
-        final int entityViewDistance = MinecraftServer.getEntityViewDistance();
-        final float maximalDistance = entityViewDistance * Chunk.CHUNK_SECTION_SIZE;
+        AsyncUtils.runAsync(() -> {
+            final int entityViewDistance = MinecraftServer.getEntityViewDistance();
+            final float maximalDistance = entityViewDistance * Chunk.CHUNK_SECTION_SIZE;
 
-        // Manage already viewable entities
-        this.viewableEntities.forEach(entity -> {
-            final double distance = entity.getDistance(this);
-            if (distance > maximalDistance) {
-                // Entity shouldn't be viewable anymore
-                if (isAutoViewable()) {
-                    entity.removeViewer(this);
+            // Manage already viewable entities
+            this.viewableEntities.forEach(entity -> {
+                final double distance = entity.getDistance(this);
+                if (distance > maximalDistance) {
+                    // Entity shouldn't be viewable anymore
+                    if (isAutoViewable()) {
+                        entity.removeViewer(this);
+                    }
+                    if (entity instanceof Player && entity.isAutoViewable()) {
+                        removeViewer((Player) entity);
+                    }
                 }
-                if (entity instanceof Player && entity.isAutoViewable()) {
-                    removeViewer((Player) entity);
+            });
+
+            // Manage entities in unchecked chunks
+            EntityUtils.forEachRange(instance, newChunk.toPosition(), entityViewDistance, entity -> {
+                if (entity.isAutoViewable() && !entity.viewers.contains(this)) {
+                    entity.addViewer(this);
                 }
-            }
+
+                if (entity instanceof Player && isAutoViewable() && !viewers.contains(entity)) {
+                    addViewer((Player) entity);
+                }
+            });
         });
-
-        // Manage entities in unchecked chunks
-        EntityUtils.forEachRange(instance, newChunk.toPosition(), entityViewDistance, entity -> {
-            if (entity.isAutoViewable() && !entity.viewers.contains(this)) {
-                entity.addViewer(this);
-            }
-
-            if (entity instanceof Player && isAutoViewable() && !viewers.contains(entity)) {
-                addViewer((Player) entity);
-            }
-        });
-
     }
 
     @Override
