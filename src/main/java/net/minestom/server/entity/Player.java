@@ -113,6 +113,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     // Chunks that the player can view
     protected final LongArraySet viewableChunks = new LongArraySet();
 
+    // View update
+    protected Chunk viewUpdateChunk;
+    protected final Cooldown viewUpdateCooldown = new Cooldown(new UpdateOption(10, TimeUnit.TICK));
+
     private final AtomicInteger teleportId = new AtomicInteger();
     private int receivedTeleportId;
 
@@ -426,6 +430,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Tick event
         callEvent(PlayerTickEvent.class, playerTickEvent);
+
+        // Update view
+        if (viewUpdateChunk != null && viewUpdateCooldown.isReady(time)) {
+            final Chunk cache = viewUpdateChunk;
+            this.viewUpdateChunk = null;
+            this.viewUpdateCooldown.refreshLastUpdate(time);
+
+            refreshVisibleChunks(cache);
+            refreshVisibleEntities(cache);
+        }
 
         // Multiplayer sync
         if (!viewers.isEmpty()) {
@@ -1741,6 +1755,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 }
             });
         });
+    }
+
+    /**
+     * Notifies that this player should have his view updated (chunks + entities).
+     *
+     * @param newChunk the new chunk the player is in
+     */
+    protected void notifyChunkChange(@NotNull Chunk newChunk) {
+        this.viewUpdateChunk = newChunk;
     }
 
     @Override

@@ -1321,8 +1321,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                 if (this instanceof Player) {
                     // Refresh player view
                     final Player player = (Player) this;
-                    player.refreshVisibleChunks(newChunk);
-                    player.refreshVisibleEntities(newChunk);
+                    player.notifyChunkChange(newChunk);
                 }
             }
         }
