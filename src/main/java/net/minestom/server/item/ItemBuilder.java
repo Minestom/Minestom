@@ -27,14 +27,13 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder lore(Component... lore) {
-        this.lore = Arrays.asList(lore);
-        return this;
-    }
-
     public ItemBuilder lore(List<Component> lore) {
         this.lore = Collections.unmodifiableList(lore);
         return this;
+    }
+
+    public ItemBuilder lore(Component... lore) {
+        return lore(Arrays.asList(lore));
     }
 
     @NotNull
