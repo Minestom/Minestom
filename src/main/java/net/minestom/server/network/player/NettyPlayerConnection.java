@@ -19,6 +19,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.utils.BufUtils;
 import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.cache.CacheablePacket;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -77,7 +78,7 @@ public class NettyPlayerConnection extends PlayerConnection {
         // Flush
         final int bufferSize = tickBuffer.writerIndex();
         if (bufferSize > 0 && isWritable()) {
-            this.channel.eventLoop().submit(() -> {
+            AsyncUtils.runAsync(() -> {
                 if (channel.isActive() && isWritable()) {
                     writeWaitingPackets();
                     channel.flush();
