@@ -119,7 +119,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
-<li>java.lang.Object</li>
+<li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
 <li><a href="Entity.html" title="class in net.minestom.server.entity">net.minestom.server.entity.Entity</a></li>
@@ -141,7 +141,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code>net.kyori.adventure.audience.Audience</code>, <code>net.kyori.adventure.identity.Identified</code>, <code>net.kyori.adventure.text.event.HoverEventSource&lt;net.kyori.adventure.text.event.HoverEvent.ShowEntity&gt;</code>, <code><a href="../adventure/Localizable.html" title="interface in net.minestom.server.adventure">Localizable</a></code>, <code><a href="../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code>, <code><a href="../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a></code>, <code><a href="../event/handler/EventHandler.html" title="interface in net.minestom.server.event.handler">EventHandler</a></code>, <code><a href="../extensions/IExtensionObserver.html" title="interface in net.minestom.server.extensions">IExtensionObserver</a></code>, <code><a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code>, <code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/identity/Identified.html?is-external=true" title="class or interface in net.kyori.adventure.identity" class="externalLink">Identified</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/event/HoverEventSource.html?is-external=true" title="class or interface in net.kyori.adventure.text.event" class="externalLink">HoverEventSource</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/event/HoverEvent.ShowEntity.html?is-external=true" title="class or interface in net.kyori.adventure.text.event" class="externalLink">HoverEvent.ShowEntity</a>&gt;</code>, <code><a href="../adventure/Localizable.html" title="interface in net.minestom.server.adventure">Localizable</a></code>, <code><a href="../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code>, <code><a href="../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a></code>, <code><a href="../event/handler/EventHandler.html" title="interface in net.minestom.server.event.handler">EventHandler</a></code>, <code><a href="../extensions/IExtensionObserver.html" title="interface in net.minestom.server.extensions">IExtensionObserver</a></code>, <code><a href="../inventory/EquipmentHandler.html" title="interface in net.minestom.server.inventory">EquipmentHandler</a></code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code>, <code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
@@ -150,7 +150,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public class <span class="typeNameLabel">Player</span>
 extends <a href="LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>
-implements <a href="../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>, <a href="../adventure/Localizable.html" title="interface in net.minestom.server.adventure">Localizable</a>, net.kyori.adventure.text.event.HoverEventSource&lt;net.kyori.adventure.text.event.HoverEvent.ShowEntity&gt;, net.kyori.adventure.identity.Identified</pre>
+implements <a href="../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>, <a href="../adventure/Localizable.html" title="interface in net.minestom.server.adventure">Localizable</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/event/HoverEventSource.html?is-external=true" title="class or interface in net.kyori.adventure.text.event" class="externalLink">HoverEventSource</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/event/HoverEvent.ShowEntity.html?is-external=true" title="class or interface in net.kyori.adventure.text.event" class="externalLink">HoverEvent.ShowEntity</a>&gt;, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/identity/Identified.html?is-external=true" title="class or interface in net.kyori.adventure.identity" class="externalLink">Identified</a></pre>
 <div class="block">Those are the major actors of the server,
  they are not necessary backed by a <a href="../network/player/NettyPlayerConnection.html" title="class in net.minestom.server.network.player"><code>NettyPlayerConnection</code></a> as shown by <a href="fakeplayer/FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer"><code>FakePlayer</code></a>.
  <p>
@@ -245,12 +245,12 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected java.util.Set&lt;<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#viewableChunks">viewableChunks</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected java.util.Set&lt;<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#viewableEntities">viewableEntities</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -286,8 +286,8 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.UUID,java.lang.String,net.minestom.server.network.player.PlayerConnection)">Player</a></span>&#8203;(@NotNull java.util.UUID&nbsp;uuid,
-      @NotNull java.lang.String&nbsp;username,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.UUID,java.lang.String,net.minestom.server.network.player.PlayerConnection)">Player</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;uuid,
+      @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;username,
       @NotNull <a href="../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;playerConnection)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -323,8 +323,8 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>@NotNull net.kyori.adventure.text.event.HoverEvent&lt;net.kyori.adventure.text.event.HoverEvent.ShowEntity&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#asHoverEvent(java.util.function.UnaryOperator)">asHoverEvent</a></span>&#8203;(@NotNull java.util.function.UnaryOperator&lt;net.kyori.adventure.text.event.HoverEvent.ShowEntity&gt;&nbsp;op)</code></th>
+<td class="colFirst"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/event/HoverEvent.html?is-external=true" title="class or interface in net.kyori.adventure.text.event" class="externalLink">HoverEvent</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/event/HoverEvent.ShowEntity.html?is-external=true" title="class or interface in net.kyori.adventure.text.event" class="externalLink">HoverEvent.ShowEntity</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#asHoverEvent(java.util.function.UnaryOperator)">asHoverEvent</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/UnaryOperator.html?is-external=true" title="class or interface in java.util.function" class="externalLink">UnaryOperator</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/event/HoverEvent.ShowEntity.html?is-external=true" title="class or interface in net.kyori.adventure.text.event" class="externalLink">HoverEvent.ShowEntity</a>&gt;&nbsp;op)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -337,7 +337,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#chat(java.lang.String)">chat</a></span>&#8203;(@NotNull java.lang.String&nbsp;message)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#chat(java.lang.String)">chat</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;message)</code></th>
 <td class="colLast">
 <div class="block">Makes the player send a message (can be used for commands).</div>
 </td>
@@ -446,7 +446,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </td>
 </tr>
 <tr id="i20" class="altColor">
-<td class="colFirst"><code>@Nullable net.kyori.adventure.text.Component</code></td>
+<td class="colFirst"><code>@Nullable <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDisplayName()">getDisplayName</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player display name in the tab-list.</div>
@@ -572,7 +572,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </td>
 </tr>
 <tr id="i39" class="rowColor">
-<td class="colFirst"><code>java.util.Locale</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Locale.html?is-external=true" title="class or interface in java.util" class="externalLink">Locale</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLocale()">getLocale</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the locale.</div>
@@ -628,14 +628,14 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </td>
 </tr>
 <tr id="i47" class="rowColor">
-<td class="colFirst"><code>@NotNull java.util.Map&lt;<a href="../stat/PlayerStatistic.html" title="class in net.minestom.server.stat">PlayerStatistic</a>,&#8203;java.lang.Integer&gt;</code></td>
+<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="../stat/PlayerStatistic.html" title="class in net.minestom.server.stat">PlayerStatistic</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStatisticValueMap()">getStatisticValueMap</a></span>()</code></th>
 <td class="colLast">
 <div class="block">This is the map used to send the statistic packet.</div>
 </td>
 </tr>
 <tr id="i48" class="altColor">
-<td class="colFirst"><code>@NotNull java.lang.String</code></td>
+<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getUsername()">getUsername</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player username.</div>
@@ -649,7 +649,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </td>
 </tr>
 <tr id="i50" class="altColor">
-<td class="colFirst"><code>java.util.Set&lt;<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getViewableChunks()">getViewableChunks</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player viewable chunks.</div>
@@ -664,7 +664,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i52" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hideBossBar(net.kyori.adventure.bossbar.BossBar)">hideBossBar</a></span>&#8203;(@NotNull net.kyori.adventure.bossbar.BossBar&nbsp;bar)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hideBossBar(net.kyori.adventure.bossbar.BossBar)">hideBossBar</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/bossbar/BossBar.html?is-external=true" title="class or interface in net.kyori.adventure.bossbar" class="externalLink">BossBar</a>&nbsp;bar)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i53" class="rowColor">
@@ -677,7 +677,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </td>
 </tr>
 <tr id="i54" class="altColor">
-<td class="colFirst"><code>@NotNull net.kyori.adventure.identity.Identity</code></td>
+<td class="colFirst"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/identity/Identity.html?is-external=true" title="class or interface in net.kyori.adventure.identity" class="externalLink">Identity</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#identity()">identity</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -749,7 +749,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i65" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#kick(java.lang.String)">kick</a></span>&#8203;(@NotNull java.lang.String&nbsp;message)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#kick(java.lang.String)">kick</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;message)</code></th>
 <td class="colLast">
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>
 <div class="deprecationComment">Use <a href="#kick(net.kyori.adventure.text.Component)"><code>kick(Component)</code></a></div>
@@ -758,7 +758,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i66" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#kick(net.kyori.adventure.text.Component)">kick</a></span>&#8203;(@NotNull net.kyori.adventure.text.Component&nbsp;component)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#kick(net.kyori.adventure.text.Component)">kick</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component)</code></th>
 <td class="colLast">
 <div class="block">Kicks the player with a reason.</div>
 </td>
@@ -781,7 +781,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i69" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openBook(net.kyori.adventure.inventory.Book)">openBook</a></span>&#8203;(@NotNull net.kyori.adventure.inventory.Book&nbsp;book)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#openBook(net.kyori.adventure.inventory.Book)">openBook</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/inventory/Book.html?is-external=true" title="class or interface in net.kyori.adventure.inventory" class="externalLink">Book</a>&nbsp;book)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i70" class="altColor">
@@ -821,7 +821,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i74" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#playSound(java.lang.String,net.minestom.server.sound.SoundCategory,int,int,int,float,float)">playSound</a></span>&#8203;(@NotNull java.lang.String&nbsp;identifier,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#playSound(java.lang.String,net.minestom.server.sound.SoundCategory,int,int,int,float,float)">playSound</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;identifier,
          @NotNull <a href="../sound/SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a>&nbsp;soundCategory,
          int&nbsp;x,
          int&nbsp;y,
@@ -836,7 +836,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i75" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#playSound(java.lang.String,net.minestom.server.sound.SoundCategory,net.minestom.server.utils.BlockPosition,float,float)">playSound</a></span>&#8203;(@NotNull java.lang.String&nbsp;identifier,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#playSound(java.lang.String,net.minestom.server.sound.SoundCategory,net.minestom.server.utils.BlockPosition,float,float)">playSound</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;identifier,
          @NotNull <a href="../sound/SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a>&nbsp;soundCategory,
          <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
          float&nbsp;volume,
@@ -849,12 +849,12 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i76" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#playSound(net.kyori.adventure.sound.Sound)">playSound</a></span>&#8203;(@NotNull net.kyori.adventure.sound.Sound&nbsp;sound)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#playSound(net.kyori.adventure.sound.Sound)">playSound</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/sound/Sound.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound</a>&nbsp;sound)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i77" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#playSound(net.kyori.adventure.sound.Sound,double,double,double)">playSound</a></span>&#8203;(@NotNull net.kyori.adventure.sound.Sound&nbsp;sound,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#playSound(net.kyori.adventure.sound.Sound,double,double,double)">playSound</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/sound/Sound.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound</a>&nbsp;sound,
          double&nbsp;x,
          double&nbsp;y,
          double&nbsp;z)</code></th>
@@ -1039,7 +1039,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i102" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendActionBar(net.kyori.adventure.text.Component)">sendActionBar</a></span>&#8203;(@NotNull net.kyori.adventure.text.Component&nbsp;message)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendActionBar(net.kyori.adventure.text.Component)">sendActionBar</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;message)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i103" class="rowColor">
@@ -1077,37 +1077,37 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i107" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendJsonMessage(java.lang.String)">sendJsonMessage</a></span>&#8203;(@NotNull java.lang.String&nbsp;json)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendJsonMessage(java.lang.String)">sendJsonMessage</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;json)</code></th>
 <td class="colLast">
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <code>Audience.sendMessage(Component)</code></div>
+<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>Audience.sendMessage(Component)</code></a></div>
 </div>
 </td>
 </tr>
 <tr id="i108" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendLegacyMessage(java.lang.String)">sendLegacyMessage</a></span>&#8203;(@NotNull java.lang.String&nbsp;text)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendLegacyMessage(java.lang.String)">sendLegacyMessage</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;text)</code></th>
 <td class="colLast">
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <code>Audience.sendMessage(Component)</code></div>
+<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>Audience.sendMessage(Component)</code></a></div>
 </div>
 </td>
 </tr>
 <tr id="i109" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendLegacyMessage(java.lang.String,char)">sendLegacyMessage</a></span>&#8203;(@NotNull java.lang.String&nbsp;text,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendLegacyMessage(java.lang.String,char)">sendLegacyMessage</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;text,
                  char&nbsp;colorChar)</code></th>
 <td class="colLast">
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <code>Audience.sendMessage(Component)</code></div>
+<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>Audience.sendMessage(Component)</code></a></div>
 </div>
 </td>
 </tr>
 <tr id="i110" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)">sendMessage</a></span>&#8203;(@NotNull net.kyori.adventure.identity.Identity&nbsp;source,
-           @NotNull net.kyori.adventure.text.Component&nbsp;message,
-           @NotNull net.kyori.adventure.audience.MessageType&nbsp;type)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)">sendMessage</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/identity/Identity.html?is-external=true" title="class or interface in net.kyori.adventure.identity" class="externalLink">Identity</a>&nbsp;source,
+           @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;message,
+           @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/MessageType.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">MessageType</a>&nbsp;type)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i111" class="rowColor">
@@ -1119,13 +1119,13 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i112" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPlayerListHeaderAndFooter(net.kyori.adventure.text.Component,net.kyori.adventure.text.Component)">sendPlayerListHeaderAndFooter</a></span>&#8203;(@NotNull net.kyori.adventure.text.Component&nbsp;header,
-                             @NotNull net.kyori.adventure.text.Component&nbsp;footer)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPlayerListHeaderAndFooter(net.kyori.adventure.text.Component,net.kyori.adventure.text.Component)">sendPlayerListHeaderAndFooter</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;header,
+                             @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;footer)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i113" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPluginMessage(java.lang.String,@org.jetbrains.annotations.NotNullbyte%5B%5D)">sendPluginMessage</a></span>&#8203;(@NotNull java.lang.String&nbsp;channel,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPluginMessage(java.lang.String,@org.jetbrains.annotations.NotNullbyte%5B%5D)">sendPluginMessage</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;channel,
                  @org.jetbrains.annotations.NotNull byte[]&nbsp;data)</code></th>
 <td class="colLast">
 <div class="block">Sends a plugin message to the player.</div>
@@ -1133,8 +1133,8 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i114" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPluginMessage(java.lang.String,java.lang.String)">sendPluginMessage</a></span>&#8203;(@NotNull java.lang.String&nbsp;channel,
-                 @NotNull java.lang.String&nbsp;message)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPluginMessage(java.lang.String,java.lang.String)">sendPluginMessage</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;channel,
+                 @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;message)</code></th>
 <td class="colLast">
 <div class="block">Sends a plugin message to the player.</div>
 </td>
@@ -1229,7 +1229,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i126" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDisplayName(net.kyori.adventure.text.Component)">setDisplayName</a></span>&#8203;(@Nullable net.kyori.adventure.text.Component&nbsp;displayName)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDisplayName(net.kyori.adventure.text.Component)">setDisplayName</a></span>&#8203;(@Nullable <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;displayName)</code></th>
 <td class="colLast">
 <div class="block">Changes the player display name in the tab-list.</div>
 </td>
@@ -1380,7 +1380,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i147" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLocale(java.util.Locale)">setLocale</a></span>&#8203;(@Nullable java.util.Locale&nbsp;locale)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLocale(java.util.Locale)">setLocale</a></span>&#8203;(@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Locale.html?is-external=true" title="class or interface in java.util" class="externalLink">Locale</a>&nbsp;locale)</code></th>
 <td class="colLast">
 <div class="block">Sets the player's locale.</div>
 </td>
@@ -1424,7 +1424,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTargetBlock(net.minestom.server.instance.block.CustomBlock,net.minestom.server.utils.BlockPosition,java.util.Set)">setTargetBlock</a></span>&#8203;(@NotNull <a href="../instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&nbsp;targetCustomBlock,
               @NotNull <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;targetBlockPosition,
-              @Nullable java.util.Set&lt;<a href="Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;breakers)</code></th>
+              @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;breakers)</code></th>
 <td class="colLast">
 <div class="block">Makes the player digging a custom block, see <a href="#resetTargetBlock()"><code>resetTargetBlock()</code></a> to rewind.</div>
 </td>
@@ -1438,7 +1438,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i155" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUsernameField(java.lang.String)">setUsernameField</a></span>&#8203;(@NotNull java.lang.String&nbsp;username)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUsernameField(java.lang.String)">setUsernameField</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;username)</code></th>
 <td class="colLast">
 <div class="block">Changes the internal player name, used for the <a href="../event/player/AsyncPlayerPreLoginEvent.html" title="class in net.minestom.server.event.player"><code>AsyncPlayerPreLoginEvent</code></a>
  mostly unsafe outside of it.</div>
@@ -1446,14 +1446,14 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i156" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUuid(java.util.UUID)">setUuid</a></span>&#8203;(@NotNull java.util.UUID&nbsp;uuid)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUuid(java.util.UUID)">setUuid</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;uuid)</code></th>
 <td class="colLast">
 <div class="block">Changes the internal entity UUID, mostly unsafe.</div>
 </td>
 </tr>
 <tr id="i157" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#showBossBar(net.kyori.adventure.bossbar.BossBar)">showBossBar</a></span>&#8203;(@NotNull net.kyori.adventure.bossbar.BossBar&nbsp;bar)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#showBossBar(net.kyori.adventure.bossbar.BossBar)">showBossBar</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/bossbar/BossBar.html?is-external=true" title="class or interface in net.kyori.adventure.bossbar" class="externalLink">BossBar</a>&nbsp;bar)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i158" class="altColor">
@@ -1466,7 +1466,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i159" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#showTitle(net.kyori.adventure.title.Title)">showTitle</a></span>&#8203;(@NotNull net.kyori.adventure.title.Title&nbsp;title)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#showTitle(net.kyori.adventure.title.Title)">showTitle</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/title/Title.html?is-external=true" title="class or interface in net.kyori.adventure.title" class="externalLink">Title</a>&nbsp;title)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i160" class="altColor">
@@ -1488,13 +1488,13 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stopSound()">stopSound</a></span>()</code></th>
 <td class="colLast">
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#stopSound(net.kyori.adventure.sound.SoundStop)"><code>stopSound(SoundStop)</code></a> with <code>SoundStop.all()</code></div>
+<div class="deprecationComment">Use <a href="#stopSound(net.kyori.adventure.sound.SoundStop)"><code>stopSound(SoundStop)</code></a> with <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/sound/SoundStop.html?is-external=true#all()" title="class or interface in net.kyori.adventure.sound" class="externalLink"><code>SoundStop.all()</code></a></div>
 </div>
 </td>
 </tr>
 <tr id="i163" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stopSound(net.kyori.adventure.sound.SoundStop)">stopSound</a></span>&#8203;(@NotNull net.kyori.adventure.sound.SoundStop&nbsp;stop)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stopSound(net.kyori.adventure.sound.SoundStop)">stopSound</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/sound/SoundStop.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">SoundStop</a>&nbsp;stop)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i164" class="altColor">
@@ -1513,7 +1513,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teleport(net.minestom.server.utils.Position,@org.jetbrains.annotations.Nullablelong%5B%5D,java.lang.Runnable)">teleport</a></span>&#8203;(@NotNull <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
         @org.jetbrains.annotations.Nullable long[]&nbsp;chunks,
-        @Nullable java.lang.Runnable&nbsp;callback)</code></th>
+        @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Runnable</a>&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Teleports the entity only if the chunk at <code>position</code> is loaded or if
  <a href="../instance/Instance.html#hasEnabledAutoChunkLoad()"><code>Instance.hasEnabledAutoChunkLoad()</code></a> returns true.</div>
@@ -1522,7 +1522,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <tr id="i167" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teleport(net.minestom.server.utils.Position,java.lang.Runnable)">teleport</a></span>&#8203;(@NotNull <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
-        @Nullable java.lang.Runnable&nbsp;callback)</code></th>
+        @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Runnable</a>&nbsp;callback)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i168" class="altColor">
@@ -1580,15 +1580,15 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
+<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.kyori.adventure.audience.Audience">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;net.kyori.adventure.audience.Audience</h3>
-<code>openBook, sendActionBar, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendPlayerListFooter, sendPlayerListFooter, sendPlayerListHeader, sendPlayerListHeader, sendPlayerListHeaderAndFooter</code></li>
+<h3>Methods inherited from interface&nbsp;net.kyori.adventure.audience.<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></h3>
+<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#openBook(net.kyori.adventure.inventory.Book.Builder)" title="class or interface in net.kyori.adventure.audience" class="externalLink">openBook</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendActionBar(net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendActionBar</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identified,net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identified,net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identified,net.kyori.adventure.text.ComponentLike,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identified,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.ComponentLike,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.ComponentLike,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListFooter(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListFooter</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListFooter(net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListFooter</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListHeader(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListHeader</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListHeader(net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListHeader</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListHeaderAndFooter(net.kyori.adventure.text.ComponentLike,net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListHeaderAndFooter</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.command.CommandSender">
@@ -1615,8 +1615,8 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <li class="blockList"><a id="methods.inherited.from.class.net.kyori.adventure.text.event.HoverEventSource">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;net.kyori.adventure.text.event.HoverEventSource</h3>
-<code>asHoverEvent</code></li>
+<h3>Methods inherited from interface&nbsp;net.kyori.adventure.text.event.<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/event/HoverEventSource.html?is-external=true" title="class or interface in net.kyori.adventure.text.event" class="externalLink">HoverEventSource</a></h3>
+<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/event/HoverEventSource.html?is-external=true#asHoverEvent()" title="class or interface in net.kyori.adventure.text.event" class="externalLink">asHoverEvent</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.permission.PermissionHandler">
@@ -1663,7 +1663,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <ul class="blockList">
 <li class="blockList">
 <h4>viewableEntities</h4>
-<pre>protected final&nbsp;java.util.Set&lt;<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt; viewableEntities</pre>
+<pre>protected final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt; viewableEntities</pre>
 </li>
 </ul>
 <a id="viewableChunks">
@@ -1672,7 +1672,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <ul class="blockList">
 <li class="blockList">
 <h4>viewableChunks</h4>
-<pre>protected final&nbsp;java.util.Set&lt;<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt; viewableChunks</pre>
+<pre>protected final&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt; viewableChunks</pre>
 </li>
 </ul>
 <a id="inventory">
@@ -1710,9 +1710,9 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <li class="blockList">
 <h4>Player</h4>
 <pre>public&nbsp;Player&#8203;(@NotNull
-              @NotNull java.util.UUID&nbsp;uuid,
+              @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;uuid,
               @NotNull
-              @NotNull java.lang.String&nbsp;username,
+              @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;username,
               @NotNull
               @NotNull <a href="../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;playerConnection)</pre>
 </li>
@@ -1942,7 +1942,7 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <li class="blockList">
 <h4>sendPluginMessage</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;sendPluginMessage&#8203;(@NotNull
-                              @NotNull java.lang.String&nbsp;channel,
+                              @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;channel,
                               @NotNull
                               @org.jetbrains.annotations.NotNull byte[]&nbsp;data)</pre>
 <div class="block">Sends a plugin message to the player.</div>
@@ -1960,9 +1960,9 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <li class="blockList">
 <h4>sendPluginMessage</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;sendPluginMessage&#8203;(@NotNull
-                              @NotNull java.lang.String&nbsp;channel,
+                              @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;channel,
                               @NotNull
-                              @NotNull java.lang.String&nbsp;message)</pre>
+                              @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;message)</pre>
 <div class="block">Sends a plugin message to the player.
  <p>
  Message encoded to UTF-8.</div>
@@ -1979,12 +1979,12 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 <ul class="blockList">
 <li class="blockList">
 <h4>sendLegacyMessage</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;sendLegacyMessage&#8203;(@NotNull
-                              @NotNull java.lang.String&nbsp;text,
+                              @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;text,
                               char&nbsp;colorChar)</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <code>Audience.sendMessage(Component)</code></div>
+<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>Audience.sendMessage(Component)</code></a></div>
 </div>
 <div class="block">Sends a legacy message with the specified color char.</div>
 <dl>
@@ -2000,11 +2000,11 @@ public&nbsp;void&nbsp;sendLegacyMessage&#8203;(@NotNull
 <ul class="blockList">
 <li class="blockList">
 <h4>sendLegacyMessage</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;sendLegacyMessage&#8203;(@NotNull
-                              @NotNull java.lang.String&nbsp;text)</pre>
+                              @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;text)</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <code>Audience.sendMessage(Component)</code></div>
+<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>Audience.sendMessage(Component)</code></a></div>
 </div>
 <div class="block">Sends a legacy message with the default color char <a href="../chat/ChatParser.html#COLOR_CHAR"><code>ChatParser.COLOR_CHAR</code></a>.</div>
 <dl>
@@ -2019,11 +2019,11 @@ public&nbsp;void&nbsp;sendLegacyMessage&#8203;(@NotNull
 <ul class="blockList">
 <li class="blockList">
 <h4>sendJsonMessage</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;sendJsonMessage&#8203;(@NotNull
-                            @NotNull java.lang.String&nbsp;json)</pre>
+                            @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;json)</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <code>Audience.sendMessage(Component)</code></div>
+<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>Audience.sendMessage(Component)</code></a></div>
 </div>
 </li>
 </ul>
@@ -2034,14 +2034,14 @@ public&nbsp;void&nbsp;sendJsonMessage&#8203;(@NotNull
 <li class="blockList">
 <h4>sendMessage</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;sendMessage&#8203;(@NotNull
-                        @NotNull net.kyori.adventure.identity.Identity&nbsp;source,
+                        @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/identity/Identity.html?is-external=true" title="class or interface in net.kyori.adventure.identity" class="externalLink">Identity</a>&nbsp;source,
                         @NotNull
-                        @NotNull net.kyori.adventure.text.Component&nbsp;message,
+                        @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;message,
                         @NotNull
-                        @NotNull net.kyori.adventure.audience.MessageType&nbsp;type)</pre>
+                        @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/MessageType.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">MessageType</a>&nbsp;type)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>sendMessage</code>&nbsp;in interface&nbsp;<code>net.kyori.adventure.audience.Audience</code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a></code>&nbsp;in interface&nbsp;<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -2052,7 +2052,7 @@ public&nbsp;void&nbsp;sendJsonMessage&#8203;(@NotNull
 <li class="blockList">
 <h4>chat</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;chat&#8203;(@NotNull
-                 @NotNull java.lang.String&nbsp;message)</pre>
+                 @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;message)</pre>
 <div class="block">Makes the player send a message (can be used for commands).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2066,7 +2066,7 @@ public&nbsp;void&nbsp;sendJsonMessage&#8203;(@NotNull
 <ul class="blockList">
 <li class="blockList">
 <h4>playSound</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;playSound&#8203;(@NotNull
                       @NotNull <a href="../sound/SoundEvent.html" title="enum in net.minestom.server.sound">SoundEvent</a>&nbsp;sound,
                       @NotNull
@@ -2098,7 +2098,7 @@ public&nbsp;void&nbsp;playSound&#8203;(@NotNull
 <ul class="blockList">
 <li class="blockList">
 <h4>playSound</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;playSound&#8203;(@NotNull
                       @NotNull <a href="../sound/SoundEvent.html" title="enum in net.minestom.server.sound">SoundEvent</a>&nbsp;sound,
                       @NotNull
@@ -2122,9 +2122,9 @@ public&nbsp;void&nbsp;playSound&#8203;(@NotNull
 <ul class="blockList">
 <li class="blockList">
 <h4>playSound</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;playSound&#8203;(@NotNull
-                      @NotNull java.lang.String&nbsp;identifier,
+                      @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;identifier,
                       @NotNull
                       @NotNull <a href="../sound/SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a>&nbsp;soundCategory,
                       int&nbsp;x,
@@ -2154,9 +2154,9 @@ public&nbsp;void&nbsp;playSound&#8203;(@NotNull
 <ul class="blockList">
 <li class="blockList">
 <h4>playSound</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;playSound&#8203;(@NotNull
-                      @NotNull java.lang.String&nbsp;identifier,
+                      @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;identifier,
                       @NotNull
                       @NotNull <a href="../sound/SoundCategory.html" title="enum in net.minestom.server.sound">SoundCategory</a>&nbsp;soundCategory,
                       <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
@@ -2178,7 +2178,7 @@ public&nbsp;void&nbsp;playSound&#8203;(@NotNull
 <ul class="blockList">
 <li class="blockList">
 <h4>playSound</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;playSound&#8203;(@NotNull
                       @NotNull <a href="../sound/SoundEvent.html" title="enum in net.minestom.server.sound">SoundEvent</a>&nbsp;sound,
                       @NotNull
@@ -2205,10 +2205,10 @@ public&nbsp;void&nbsp;playSound&#8203;(@NotNull
 <li class="blockList">
 <h4>playSound</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;playSound&#8203;(@NotNull
-                      @NotNull net.kyori.adventure.sound.Sound&nbsp;sound)</pre>
+                      @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/sound/Sound.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound</a>&nbsp;sound)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>playSound</code>&nbsp;in interface&nbsp;<code>net.kyori.adventure.audience.Audience</code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#playSound(net.kyori.adventure.sound.Sound)" title="class or interface in net.kyori.adventure.audience" class="externalLink">playSound</a></code>&nbsp;in interface&nbsp;<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -2219,13 +2219,13 @@ public&nbsp;void&nbsp;playSound&#8203;(@NotNull
 <li class="blockList">
 <h4>playSound</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;playSound&#8203;(@NotNull
-                      @NotNull net.kyori.adventure.sound.Sound&nbsp;sound,
+                      @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/sound/Sound.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound</a>&nbsp;sound,
                       double&nbsp;x,
                       double&nbsp;y,
                       double&nbsp;z)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>playSound</code>&nbsp;in interface&nbsp;<code>net.kyori.adventure.audience.Audience</code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#playSound(net.kyori.adventure.sound.Sound,double,double,double)" title="class or interface in net.kyori.adventure.audience" class="externalLink">playSound</a></code>&nbsp;in interface&nbsp;<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -2236,10 +2236,10 @@ public&nbsp;void&nbsp;playSound&#8203;(@NotNull
 <li class="blockList">
 <h4>stopSound</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;stopSound&#8203;(@NotNull
-                      @NotNull net.kyori.adventure.sound.SoundStop&nbsp;stop)</pre>
+                      @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/sound/SoundStop.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">SoundStop</a>&nbsp;stop)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>stopSound</code>&nbsp;in interface&nbsp;<code>net.kyori.adventure.audience.Audience</code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#stopSound(net.kyori.adventure.sound.SoundStop)" title="class or interface in net.kyori.adventure.audience" class="externalLink">stopSound</a></code>&nbsp;in interface&nbsp;<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -2274,10 +2274,10 @@ public&nbsp;void&nbsp;playSound&#8203;(@NotNull
 <ul class="blockList">
 <li class="blockList">
 <h4>stopSound</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;stopSound()</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#stopSound(net.kyori.adventure.sound.SoundStop)"><code>stopSound(SoundStop)</code></a> with <code>SoundStop.all()</code></div>
+<div class="deprecationComment">Use <a href="#stopSound(net.kyori.adventure.sound.SoundStop)"><code>stopSound(SoundStop)</code></a> with <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/sound/SoundStop.html?is-external=true#all()" title="class or interface in net.kyori.adventure.sound" class="externalLink"><code>SoundStop.all()</code></a></div>
 </div>
 <div class="block">Sends a <a href="../network/packet/server/play/StopSoundPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>StopSoundPacket</code></a> packet.</div>
 </li>
@@ -2288,7 +2288,7 @@ public&nbsp;void&nbsp;stopSound()</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>sendHeaderFooter</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;sendHeaderFooter&#8203;(@Nullable
                              @Nullable <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;header,
                              @Nullable
@@ -2311,12 +2311,12 @@ public&nbsp;void&nbsp;sendHeaderFooter&#8203;(@Nullable
 <li class="blockList">
 <h4>sendPlayerListHeaderAndFooter</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;sendPlayerListHeaderAndFooter&#8203;(@NotNull
-                                          @NotNull net.kyori.adventure.text.Component&nbsp;header,
+                                          @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;header,
                                           @NotNull
-                                          @NotNull net.kyori.adventure.text.Component&nbsp;footer)</pre>
+                                          @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;footer)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>sendPlayerListHeaderAndFooter</code>&nbsp;in interface&nbsp;<code>net.kyori.adventure.audience.Audience</code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListHeaderAndFooter(net.kyori.adventure.text.Component,net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListHeaderAndFooter</a></code>&nbsp;in interface&nbsp;<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -2326,7 +2326,7 @@ public&nbsp;void&nbsp;sendHeaderFooter&#8203;(@Nullable
 <ul class="blockList">
 <li class="blockList">
 <h4>sendTitleSubtitleMessage</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;sendTitleSubtitleMessage&#8203;(@NotNull
                                      @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
                                      @NotNull
@@ -2350,7 +2350,7 @@ public&nbsp;void&nbsp;sendTitleSubtitleMessage&#8203;(@NotNull
 <ul class="blockList">
 <li class="blockList">
 <h4>sendTitleMessage</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;sendTitleMessage&#8203;(@NotNull
                              @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title)</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
@@ -2371,7 +2371,7 @@ public&nbsp;void&nbsp;sendTitleMessage&#8203;(@NotNull
 <ul class="blockList">
 <li class="blockList">
 <h4>sendSubtitleMessage</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;sendSubtitleMessage&#8203;(@NotNull
                                 @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;subtitle)</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
@@ -2392,7 +2392,7 @@ public&nbsp;void&nbsp;sendSubtitleMessage&#8203;(@NotNull
 <ul class="blockList">
 <li class="blockList">
 <h4>sendActionBarMessage</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;sendActionBarMessage&#8203;(@NotNull
                                  @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;actionBar)</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
@@ -2414,10 +2414,10 @@ public&nbsp;void&nbsp;sendActionBarMessage&#8203;(@NotNull
 <li class="blockList">
 <h4>showTitle</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;showTitle&#8203;(@NotNull
-                      @NotNull net.kyori.adventure.title.Title&nbsp;title)</pre>
+                      @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/title/Title.html?is-external=true" title="class or interface in net.kyori.adventure.title" class="externalLink">Title</a>&nbsp;title)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>showTitle</code>&nbsp;in interface&nbsp;<code>net.kyori.adventure.audience.Audience</code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#showTitle(net.kyori.adventure.title.Title)" title="class or interface in net.kyori.adventure.audience" class="externalLink">showTitle</a></code>&nbsp;in interface&nbsp;<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -2428,10 +2428,10 @@ public&nbsp;void&nbsp;sendActionBarMessage&#8203;(@NotNull
 <li class="blockList">
 <h4>sendActionBar</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;sendActionBar&#8203;(@NotNull
-                          @NotNull net.kyori.adventure.text.Component&nbsp;message)</pre>
+                          @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;message)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>sendActionBar</code>&nbsp;in interface&nbsp;<code>net.kyori.adventure.audience.Audience</code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendActionBar(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendActionBar</a></code>&nbsp;in interface&nbsp;<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -2441,7 +2441,7 @@ public&nbsp;void&nbsp;sendActionBarMessage&#8203;(@NotNull
 <ul class="blockList">
 <li class="blockList">
 <h4>sendTitleTime</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;sendTitleTime&#8203;(int&nbsp;fadeIn,
                           int&nbsp;stay,
                           int&nbsp;fadeOut)</pre>
@@ -2464,7 +2464,7 @@ public&nbsp;void&nbsp;sendTitleTime&#8203;(int&nbsp;fadeIn,
 <ul class="blockList">
 <li class="blockList">
 <h4>hideTitle</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;hideTitle()</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
 <div class="deprecationComment">Use <a href="#clearTitle()"><code>clearTitle()</code></a></div>
@@ -2481,7 +2481,7 @@ public&nbsp;void&nbsp;hideTitle()</pre>
 <pre class="methodSignature">public&nbsp;void&nbsp;resetTitle()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>resetTitle</code>&nbsp;in interface&nbsp;<code>net.kyori.adventure.audience.Audience</code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#resetTitle()" title="class or interface in net.kyori.adventure.audience" class="externalLink">resetTitle</a></code>&nbsp;in interface&nbsp;<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -2494,7 +2494,7 @@ public&nbsp;void&nbsp;hideTitle()</pre>
 <pre class="methodSignature">public&nbsp;void&nbsp;clearTitle()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>clearTitle</code>&nbsp;in interface&nbsp;<code>net.kyori.adventure.audience.Audience</code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#clearTitle()" title="class or interface in net.kyori.adventure.audience" class="externalLink">clearTitle</a></code>&nbsp;in interface&nbsp;<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -2505,10 +2505,10 @@ public&nbsp;void&nbsp;hideTitle()</pre>
 <li class="blockList">
 <h4>showBossBar</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;showBossBar&#8203;(@NotNull
-                        @NotNull net.kyori.adventure.bossbar.BossBar&nbsp;bar)</pre>
+                        @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/bossbar/BossBar.html?is-external=true" title="class or interface in net.kyori.adventure.bossbar" class="externalLink">BossBar</a>&nbsp;bar)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>showBossBar</code>&nbsp;in interface&nbsp;<code>net.kyori.adventure.audience.Audience</code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#showBossBar(net.kyori.adventure.bossbar.BossBar)" title="class or interface in net.kyori.adventure.audience" class="externalLink">showBossBar</a></code>&nbsp;in interface&nbsp;<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -2519,10 +2519,10 @@ public&nbsp;void&nbsp;hideTitle()</pre>
 <li class="blockList">
 <h4>hideBossBar</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;hideBossBar&#8203;(@NotNull
-                        @NotNull net.kyori.adventure.bossbar.BossBar&nbsp;bar)</pre>
+                        @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/bossbar/BossBar.html?is-external=true" title="class or interface in net.kyori.adventure.bossbar" class="externalLink">BossBar</a>&nbsp;bar)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>hideBossBar</code>&nbsp;in interface&nbsp;<code>net.kyori.adventure.audience.Audience</code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#hideBossBar(net.kyori.adventure.bossbar.BossBar)" title="class or interface in net.kyori.adventure.audience" class="externalLink">hideBossBar</a></code>&nbsp;in interface&nbsp;<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -2532,7 +2532,7 @@ public&nbsp;void&nbsp;hideTitle()</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>openBook</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;openBook&#8203;(@NotNull
                      @NotNull <a href="../item/metadata/WrittenBookMeta.html" title="class in net.minestom.server.item.metadata">WrittenBookMeta</a>&nbsp;bookMeta)</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
@@ -2552,10 +2552,10 @@ public&nbsp;void&nbsp;openBook&#8203;(@NotNull
 <li class="blockList">
 <h4>openBook</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;openBook&#8203;(@NotNull
-                     @NotNull net.kyori.adventure.inventory.Book&nbsp;book)</pre>
+                     @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/inventory/Book.html?is-external=true" title="class or interface in net.kyori.adventure.inventory" class="externalLink">Book</a>&nbsp;book)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>openBook</code>&nbsp;in interface&nbsp;<code>net.kyori.adventure.audience.Audience</code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#openBook(net.kyori.adventure.inventory.Book)" title="class or interface in net.kyori.adventure.audience" class="externalLink">openBook</a></code>&nbsp;in interface&nbsp;<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -2650,7 +2650,7 @@ public&nbsp;void&nbsp;openBook&#8203;(@NotNull
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>food</code> - the new food value</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.IllegalArgumentException</code> - if <code>food</code> is not between 0 and 20</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>food</code> is not between 0 and 20</dd>
 </dl>
 </li>
 </ul>
@@ -2675,7 +2675,7 @@ public&nbsp;void&nbsp;openBook&#8203;(@NotNull
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>foodSaturation</code> - the food saturation</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.IllegalArgumentException</code> - if <code>foodSaturation</code> is not between 0 and 20</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>foodSaturation</code> is not between 0 and 20</dd>
 </dl>
 </li>
 </ul>
@@ -2728,7 +2728,7 @@ public&nbsp;void&nbsp;openBook&#8203;(@NotNull
 <li class="blockList">
 <h4>getDisplayNameJson</h4>
 <pre class="methodSignature">@Nullable
-@Deprecated
+<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;@Nullable <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getDisplayNameJson()</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
 <div class="deprecationComment">Use <a href="#getDisplayName()"><code>getDisplayName()</code></a></div>
@@ -2747,7 +2747,7 @@ public&nbsp;@Nullable <a href="../chat/JsonMessage.html" title="class in net.min
 <li class="blockList">
 <h4>getDisplayName</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;@Nullable net.kyori.adventure.text.Component&nbsp;getDisplayName()</pre>
+public&nbsp;@Nullable <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;getDisplayName()</pre>
 <div class="block">Gets the player display name in the tab-list.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -2761,7 +2761,7 @@ public&nbsp;@Nullable net.kyori.adventure.text.Component&nbsp;getDisplayName()</
 <ul class="blockList">
 <li class="blockList">
 <h4>setDisplayName</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;setDisplayName&#8203;(@Nullable
                            @Nullable <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;displayName)</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
@@ -2783,7 +2783,7 @@ public&nbsp;void&nbsp;setDisplayName&#8203;(@Nullable
 <li class="blockList">
 <h4>setDisplayName</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setDisplayName&#8203;(@Nullable
-                           @Nullable net.kyori.adventure.text.Component&nbsp;displayName)</pre>
+                           @Nullable <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;displayName)</pre>
 <div class="block">Changes the player display name in the tab-list.
  <p>
  Sets to null to show the player username.</div>
@@ -2863,7 +2863,7 @@ public&nbsp;@Nullable <a href="PlayerSkin.html" title="class in net.minestom.ser
 <li class="blockList">
 <h4>getUsername</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull java.lang.String&nbsp;getUsername()</pre>
+public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getUsername()</pre>
 <div class="block">Gets the player username.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -2878,7 +2878,7 @@ public&nbsp;@NotNull java.lang.String&nbsp;getUsername()</pre>
 <li class="blockList">
 <h4>setUsernameField</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setUsernameField&#8203;(@NotNull
-                             @NotNull java.lang.String&nbsp;username)</pre>
+                             @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;username)</pre>
 <div class="block">Changes the internal player name, used for the <a href="../event/player/AsyncPlayerPreLoginEvent.html" title="class in net.minestom.server.event.player"><code>AsyncPlayerPreLoginEvent</code></a>
  mostly unsafe outside of it.</div>
 <dl>
@@ -3073,7 +3073,7 @@ public&nbsp;@NotNull <a href="../utils/Position.html" title="class in net.minest
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>exp</code> - a percentage between 0 and 1</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.IllegalArgumentException</code> - if <code>exp</code> is not between 0 and 1</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>exp</code> is not between 0 and 1</dd>
 </dl>
 </li>
 </ul>
@@ -3171,7 +3171,7 @@ public&nbsp;@NotNull <a href="../utils/Position.html" title="class in net.minest
                      @Nullable
                      @org.jetbrains.annotations.Nullable long[]&nbsp;chunks,
                      @Nullable
-                     @Nullable java.lang.Runnable&nbsp;callback)</pre>
+                     @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Runnable</a>&nbsp;callback)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Entity.html#teleport(net.minestom.server.utils.Position,@org.jetbrains.annotations.Nullablelong%5B%5D,java.lang.Runnable)">Entity</a></code></span></div>
 <div class="block">Teleports the entity only if the chunk at <code>position</code> is loaded or if
  <a href="../instance/Instance.html#hasEnabledAutoChunkLoad()"><code>Instance.hasEnabledAutoChunkLoad()</code></a> returns true.</div>
@@ -3196,7 +3196,7 @@ public&nbsp;@NotNull <a href="../utils/Position.html" title="class in net.minest
 <pre class="methodSignature">public&nbsp;void&nbsp;teleport&#8203;(@NotNull
                      @NotNull <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
                      @Nullable
-                     @Nullable java.lang.Runnable&nbsp;callback)</pre>
+                     @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Runnable</a>&nbsp;callback)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="Entity.html#teleport(net.minestom.server.utils.Position,java.lang.Runnable)">teleport</a></code>&nbsp;in class&nbsp;<code><a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></dd>
@@ -3367,7 +3367,7 @@ public&nbsp;@NotNull <a href="../inventory/PlayerInventory.html" title="class in
 <ul class="blockList">
 <li class="blockList">
 <h4>kick</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;kick&#8203;(@NotNull
                  @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;text)</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
@@ -3386,9 +3386,9 @@ public&nbsp;void&nbsp;kick&#8203;(@NotNull
 <ul class="blockList">
 <li class="blockList">
 <h4>kick</h4>
-<pre class="methodSignature">@Deprecated
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;kick&#8203;(@NotNull
-                 @NotNull java.lang.String&nbsp;message)</pre>
+                 @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;message)</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
 <div class="deprecationComment">Use <a href="#kick(net.kyori.adventure.text.Component)"><code>kick(Component)</code></a></div>
 </div>
@@ -3406,7 +3406,7 @@ public&nbsp;void&nbsp;kick&#8203;(@NotNull
 <li class="blockList">
 <h4>kick</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;kick&#8203;(@NotNull
-                 @NotNull net.kyori.adventure.text.Component&nbsp;component)</pre>
+                 @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component)</pre>
 <div class="block">Kicks the player with a reason.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -3426,7 +3426,7 @@ public&nbsp;void&nbsp;kick&#8203;(@NotNull
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>slot</code> - the slot that the player has to held</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.IllegalArgumentException</code> - if <code>slot</code> is not between 0 and 8</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>slot</code> is not between 0 and 8</dd>
 </dl>
 </li>
 </ul>
@@ -3572,14 +3572,14 @@ public&nbsp;@Nullable <a href="../inventory/Inventory.html" title="class in net.
 <ul class="blockList">
 <li class="blockList">
 <h4>getViewableChunks</h4>
-<pre class="methodSignature">public&nbsp;java.util.Set&lt;<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;&nbsp;getViewableChunks()</pre>
+<pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;&nbsp;getViewableChunks()</pre>
 <div class="block">Gets the player viewable chunks.
  <p>
  WARNING: adding or removing a chunk there will not load/unload it,
  use <a href="../instance/Chunk.html#addViewer(net.minestom.server.entity.Player)"><code>Chunk.addViewer(Player)</code></a> or <a href="../instance/Chunk.html#removeViewer(net.minestom.server.entity.Player)"><code>Chunk.removeViewer(Player)</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a <code>Set</code> containing all the chunks that the player sees</dd>
+<dd>a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>Set</code></a> containing all the chunks that the player sees</dd>
 </dl>
 </li>
 </ul>
@@ -3662,7 +3662,7 @@ public&nbsp;@Nullable <a href="../inventory/Inventory.html" title="class in net.
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>permissionLevel</code> - the new player permission level</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.IllegalArgumentException</code> - if <code>permissionLevel</code> is not between 0 and 4</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>permissionLevel</code> is not between 0 and 4</dd>
 </dl>
 </li>
 </ul>
@@ -3880,7 +3880,7 @@ public&nbsp;@Nullable <a href="../inventory/Inventory.html" title="class in net.
 <li class="blockList">
 <h4>getStatisticValueMap</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull java.util.Map&lt;<a href="../stat/PlayerStatistic.html" title="class in net.minestom.server.stat">PlayerStatistic</a>,&#8203;java.lang.Integer&gt;&nbsp;getStatisticValueMap()</pre>
+public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="../stat/PlayerStatistic.html" title="class in net.minestom.server.stat">PlayerStatistic</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;&nbsp;getStatisticValueMap()</pre>
 <div class="block">This is the map used to send the statistic packet.
  It is possible to add/remove/change statistic value directly into it.</div>
 <dl>
@@ -4055,7 +4055,7 @@ public&nbsp;@Nullable <a href="../event/item/ItemUpdateStateEvent.html" title="c
                            @NotNull
                            @NotNull <a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;targetBlockPosition,
                            @Nullable
-                           @Nullable java.util.Set&lt;<a href="Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;breakers)</pre>
+                           @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;breakers)</pre>
 <div class="block">Makes the player digging a custom block, see <a href="#resetTargetBlock()"><code>resetTargetBlock()</code></a> to rewind.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -4124,11 +4124,11 @@ public&nbsp;@Nullable <a href="../event/item/ItemUpdateStateEvent.html" title="c
 <li class="blockList">
 <h4>asHoverEvent</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull net.kyori.adventure.text.event.HoverEvent&lt;net.kyori.adventure.text.event.HoverEvent.ShowEntity&gt;&nbsp;asHoverEvent&#8203;(@NotNull
-                                                                                                                             @NotNull java.util.function.UnaryOperator&lt;net.kyori.adventure.text.event.HoverEvent.ShowEntity&gt;&nbsp;op)</pre>
+public&nbsp;@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/event/HoverEvent.html?is-external=true" title="class or interface in net.kyori.adventure.text.event" class="externalLink">HoverEvent</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/event/HoverEvent.ShowEntity.html?is-external=true" title="class or interface in net.kyori.adventure.text.event" class="externalLink">HoverEvent.ShowEntity</a>&gt;&nbsp;asHoverEvent&#8203;(@NotNull
+                                                               @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/UnaryOperator.html?is-external=true" title="class or interface in java.util.function" class="externalLink">UnaryOperator</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/event/HoverEvent.ShowEntity.html?is-external=true" title="class or interface in net.kyori.adventure.text.event" class="externalLink">HoverEvent.ShowEntity</a>&gt;&nbsp;op)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>asHoverEvent</code>&nbsp;in interface&nbsp;<code>net.kyori.adventure.text.event.HoverEventSource&lt;net.kyori.adventure.text.event.HoverEvent.ShowEntity&gt;</code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/event/HoverEventSource.html?is-external=true#asHoverEvent(java.util.function.UnaryOperator)" title="class or interface in net.kyori.adventure.text.event" class="externalLink">asHoverEvent</a></code>&nbsp;in interface&nbsp;<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/event/HoverEventSource.html?is-external=true" title="class or interface in net.kyori.adventure.text.event" class="externalLink">HoverEventSource</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/event/HoverEvent.ShowEntity.html?is-external=true" title="class or interface in net.kyori.adventure.text.event" class="externalLink">HoverEvent.ShowEntity</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="Entity.html#asHoverEvent(java.util.function.UnaryOperator)">asHoverEvent</a></code>&nbsp;in class&nbsp;<code><a href="Entity.html" title="class in net.minestom.server.entity">Entity</a></code></dd>
 </dl>
@@ -4428,7 +4428,7 @@ public&nbsp;@NotNull <a href="../item/ItemStack.html" title="class in net.minest
 <ul class="blockList">
 <li class="blockList">
 <h4>getLocale</h4>
-<pre class="methodSignature">public&nbsp;java.util.Locale&nbsp;getLocale()</pre>
+<pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Locale.html?is-external=true" title="class or interface in java.util" class="externalLink">Locale</a>&nbsp;getLocale()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../adventure/Localizable.html#getLocale()">Localizable</a></code></span></div>
 <div class="block">Gets the locale.</div>
 <dl>
@@ -4446,7 +4446,7 @@ public&nbsp;@NotNull <a href="../item/ItemStack.html" title="class in net.minest
 <li class="blockList">
 <h4>setLocale</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setLocale&#8203;(@Nullable
-                      @Nullable java.util.Locale&nbsp;locale)</pre>
+                      @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Locale.html?is-external=true" title="class or interface in java.util" class="externalLink">Locale</a>&nbsp;locale)</pre>
 <div class="block">Sets the player's locale. This will only set the locale of the player as it
  is stored in the server. This will also be reset if the settings are refreshed.</div>
 <dl>
@@ -4464,10 +4464,10 @@ public&nbsp;@NotNull <a href="../item/ItemStack.html" title="class in net.minest
 <li class="blockList">
 <h4>identity</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull net.kyori.adventure.identity.Identity&nbsp;identity()</pre>
+public&nbsp;@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/identity/Identity.html?is-external=true" title="class or interface in net.kyori.adventure.identity" class="externalLink">Identity</a>&nbsp;identity()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>identity</code>&nbsp;in interface&nbsp;<code>net.kyori.adventure.identity.Identified</code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/identity/Identified.html?is-external=true#identity()" title="class or interface in net.kyori.adventure.identity" class="externalLink">identity</a></code>&nbsp;in interface&nbsp;<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/identity/Identified.html?is-external=true" title="class or interface in net.kyori.adventure.identity" class="externalLink">Identified</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -4478,7 +4478,7 @@ public&nbsp;@NotNull net.kyori.adventure.identity.Identity&nbsp;identity()</pre>
 <li class="blockList">
 <h4>setUuid</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setUuid&#8203;(@NotNull
-                    @NotNull java.util.UUID&nbsp;uuid)</pre>
+                    @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;uuid)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Entity.html#setUuid(java.util.UUID)">Entity</a></code></span></div>
 <div class="block">Changes the internal entity UUID, mostly unsafe.</div>
 <dl>

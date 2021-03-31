@@ -119,7 +119,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
-<li>java.lang.Object</li>
+<li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
 <li>net.minestom.server.command.builder.parser.CommandParser</li>
@@ -131,7 +131,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <hr>
 <pre>public class <span class="typeNameLabel">CommandParser</span>
-extends java.lang.Object</pre>
+extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Class used to parse complete command inputs.</div>
 </li>
 </ul>
@@ -176,30 +176,30 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static @Nullable <a href="CommandQueryResult.html" title="class in net.minestom.server.command.builder.parser">CommandQueryResult</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findCommand(java.lang.String)">findCommand</a></span>&#8203;(@NotNull java.lang.String&nbsp;input)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findCommand(java.lang.String)">findCommand</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;input)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static @Nullable <a href="CommandQueryResult.html" title="class in net.minestom.server.command.builder.parser">CommandQueryResult</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findCommand(net.minestom.server.command.builder.Command,java.lang.String,java.lang.String%5B%5D)">findCommand</a></span>&#8203;(@Nullable <a href="../Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;parentCommand,
-           @NotNull java.lang.String&nbsp;commandName,
-           @NotNull java.lang.String[]&nbsp;args)</code></th>
+           @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;commandName,
+           @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;args)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static @Nullable <a href="ArgumentQueryResult.html" title="class in net.minestom.server.command.builder.parser">ArgumentQueryResult</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findEligibleArgument(net.minestom.server.command.builder.Command,java.lang.String%5B%5D,java.lang.String,boolean,boolean,java.util.function.Predicate,java.util.function.Predicate)">findEligibleArgument</a></span>&#8203;(@NotNull <a href="../Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command,
-                    java.lang.String[]&nbsp;args,
-                    java.lang.String&nbsp;commandString,
+                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;args,
+                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;commandString,
                     boolean&nbsp;trailingSpace,
                     boolean&nbsp;forceCorrect,
-                    java.util.function.Predicate&lt;<a href="../CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a>&gt;&nbsp;syntaxPredicate,
-                    java.util.function.Predicate&lt;<a href="../arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&gt;&nbsp;argumentPredicate)</code></th>
+                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Predicate.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Predicate</a>&lt;<a href="../CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a>&gt;&nbsp;syntaxPredicate,
+                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Predicate.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Predicate</a>&lt;<a href="../arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&gt;&nbsp;argumentPredicate)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static @Nullable <a href="ValidSyntaxHolder.html" title="class in net.minestom.server.command.builder.parser">ValidSyntaxHolder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findMostCorrectSyntax(java.util.List,net.minestom.server.command.builder.CommandContext)">findMostCorrectSyntax</a></span>&#8203;(@NotNull java.util.List&lt;<a href="ValidSyntaxHolder.html" title="class in net.minestom.server.command.builder.parser">ValidSyntaxHolder</a>&gt;&nbsp;validSyntaxes,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findMostCorrectSyntax(java.util.List,net.minestom.server.command.builder.CommandContext)">findMostCorrectSyntax</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="ValidSyntaxHolder.html" title="class in net.minestom.server.command.builder.parser">ValidSyntaxHolder</a>&gt;&nbsp;validSyntaxes,
                      @NotNull <a href="../CommandContext.html" title="class in net.minestom.server.command.builder">CommandContext</a>&nbsp;context)</code></th>
 <td class="colLast">
 <div class="block">Retrieves from the valid syntax map the arguments condition result and get the one with the most
@@ -210,9 +210,9 @@ extends java.lang.Object</pre>
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(net.minestom.server.command.builder.CommandSyntax,net.minestom.server.command.builder.arguments.Argument%5B%5D,java.lang.String%5B%5D,java.lang.String,java.util.List,it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap)">parse</a></span>&#8203;(@Nullable <a href="../CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a>&nbsp;syntax,
      @NotNull <a href="../arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;[]&nbsp;commandArguments,
-     @NotNull java.lang.String[]&nbsp;inputArguments,
-     @NotNull java.lang.String&nbsp;commandString,
-     @Nullable java.util.List&lt;<a href="ValidSyntaxHolder.html" title="class in net.minestom.server.command.builder.parser">ValidSyntaxHolder</a>&gt;&nbsp;validSyntaxes,
+     @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;inputArguments,
+     @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;commandString,
+     @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="ValidSyntaxHolder.html" title="class in net.minestom.server.command.builder.parser">ValidSyntaxHolder</a>&gt;&nbsp;validSyntaxes,
      @Nullable it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap&lt;<a href="CommandSuggestionHolder.html" title="class in net.minestom.server.command.builder.parser">CommandSuggestionHolder</a>&gt;&nbsp;syntaxesSuggestions)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -221,8 +221,8 @@ extends java.lang.Object</pre>
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
+<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
 </ul>
 </li>
 </ul>
@@ -269,9 +269,9 @@ extends java.lang.Object</pre>
 public static&nbsp;@Nullable <a href="CommandQueryResult.html" title="class in net.minestom.server.command.builder.parser">CommandQueryResult</a>&nbsp;findCommand&#8203;(@Nullable
                                                        @Nullable <a href="../Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;parentCommand,
                                                        @NotNull
-                                                       @NotNull java.lang.String&nbsp;commandName,
+                                                       @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;commandName,
                                                        @NotNull
-                                                       @NotNull java.lang.String[]&nbsp;args)</pre>
+                                                       @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;args)</pre>
 </li>
 </ul>
 <a id="findCommand(java.lang.String)">
@@ -282,7 +282,7 @@ public static&nbsp;@Nullable <a href="CommandQueryResult.html" title="class in n
 <h4>findCommand</h4>
 <pre class="methodSignature">@Nullable
 public static&nbsp;@Nullable <a href="CommandQueryResult.html" title="class in net.minestom.server.command.builder.parser">CommandQueryResult</a>&nbsp;findCommand&#8203;(@NotNull
-                                                       @NotNull java.lang.String&nbsp;input)</pre>
+                                                       @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;input)</pre>
 </li>
 </ul>
 <a id="parse(net.minestom.server.command.builder.CommandSyntax,net.minestom.server.command.builder.arguments.Argument[],java.lang.String[],java.lang.String,java.util.List,it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap)">
@@ -296,11 +296,11 @@ public static&nbsp;@Nullable <a href="CommandQueryResult.html" title="class in n
                          @NotNull
                          @NotNull <a href="../arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;[]&nbsp;commandArguments,
                          @NotNull
-                         @NotNull java.lang.String[]&nbsp;inputArguments,
+                         @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;inputArguments,
                          @NotNull
-                         @NotNull java.lang.String&nbsp;commandString,
+                         @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;commandString,
                          @Nullable
-                         @Nullable java.util.List&lt;<a href="ValidSyntaxHolder.html" title="class in net.minestom.server.command.builder.parser">ValidSyntaxHolder</a>&gt;&nbsp;validSyntaxes,
+                         @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="ValidSyntaxHolder.html" title="class in net.minestom.server.command.builder.parser">ValidSyntaxHolder</a>&gt;&nbsp;validSyntaxes,
                          @Nullable
                          @Nullable it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap&lt;<a href="CommandSuggestionHolder.html" title="class in net.minestom.server.command.builder.parser">CommandSuggestionHolder</a>&gt;&nbsp;syntaxesSuggestions)</pre>
 </li>
@@ -313,7 +313,7 @@ public static&nbsp;@Nullable <a href="CommandQueryResult.html" title="class in n
 <h4>findMostCorrectSyntax</h4>
 <pre class="methodSignature">@Nullable
 public static&nbsp;@Nullable <a href="ValidSyntaxHolder.html" title="class in net.minestom.server.command.builder.parser">ValidSyntaxHolder</a>&nbsp;findMostCorrectSyntax&#8203;(@NotNull
-                                                                @NotNull java.util.List&lt;<a href="ValidSyntaxHolder.html" title="class in net.minestom.server.command.builder.parser">ValidSyntaxHolder</a>&gt;&nbsp;validSyntaxes,
+                                                                @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="ValidSyntaxHolder.html" title="class in net.minestom.server.command.builder.parser">ValidSyntaxHolder</a>&gt;&nbsp;validSyntaxes,
                                                                 @NotNull
                                                                 @NotNull <a href="../CommandContext.html" title="class in net.minestom.server.command.builder">CommandContext</a>&nbsp;context)</pre>
 <div class="block">Retrieves from the valid syntax map the arguments condition result and get the one with the most
@@ -336,12 +336,12 @@ public static&nbsp;@Nullable <a href="ValidSyntaxHolder.html" title="class in ne
 <pre class="methodSignature">@Nullable
 public static&nbsp;@Nullable <a href="ArgumentQueryResult.html" title="class in net.minestom.server.command.builder.parser">ArgumentQueryResult</a>&nbsp;findEligibleArgument&#8203;(@NotNull
                                                                  @NotNull <a href="../Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command,
-                                                                 java.lang.String[]&nbsp;args,
-                                                                 java.lang.String&nbsp;commandString,
+                                                                 <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;args,
+                                                                 <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;commandString,
                                                                  boolean&nbsp;trailingSpace,
                                                                  boolean&nbsp;forceCorrect,
-                                                                 java.util.function.Predicate&lt;<a href="../CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a>&gt;&nbsp;syntaxPredicate,
-                                                                 java.util.function.Predicate&lt;<a href="../arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&gt;&nbsp;argumentPredicate)</pre>
+                                                                 <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Predicate.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Predicate</a>&lt;<a href="../CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a>&gt;&nbsp;syntaxPredicate,
+                                                                 <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Predicate.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Predicate</a>&lt;<a href="../arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&gt;&nbsp;argumentPredicate)</pre>
 </li>
 </ul>
 </li>

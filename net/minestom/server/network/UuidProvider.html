@@ -126,9 +126,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>This is a functional interface and can therefore be used as the assignment target for a lambda expression or method reference.</dd>
 </dl>
 <hr>
-<pre>@FunctionalInterface
+<pre><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/FunctionalInterface.html?is-external=true" title="class or interface in java.lang" class="externalLink">@FunctionalInterface</a>
 public interface <span class="typeNameLabel">UuidProvider</span></pre>
-<div class="block">Used when you want to provide your own <code>UUID</code> object for players instead of using the default one.
+<div class="block">Used when you want to provide your own <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>UUID</code></a> object for players instead of using the default one.
  <p>
  Sets with <a href="ConnectionManager.html#setUuidProvider(net.minestom.server.network.UuidProvider)"><code>ConnectionManager.setUuidProvider(UuidProvider)</code></a>.</div>
 </li>
@@ -152,11 +152,11 @@ public interface <span class="typeNameLabel">UuidProvider</span></pre>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>java.util.UUID</code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#provide(net.minestom.server.network.player.PlayerConnection,java.lang.String)">provide</a></span>&#8203;(<a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;playerConnection,
-       java.lang.String&nbsp;username)</code></th>
+       <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;username)</code></th>
 <td class="colLast">
-<div class="block">Called when a new <code>UUID</code> is requested.</div>
+<div class="block">Called when a new <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>UUID</code></a> is requested.</div>
 </td>
 </tr>
 </table>
@@ -182,18 +182,18 @@ public interface <span class="typeNameLabel">UuidProvider</span></pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>provide</h4>
-<pre class="methodSignature">java.util.UUID&nbsp;provide&#8203;(<a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;playerConnection,
-                       java.lang.String&nbsp;username)</pre>
-<div class="block">Called when a new <code>UUID</code> is requested.
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;provide&#8203;(<a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;playerConnection,
+             <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;username)</pre>
+<div class="block">Called when a new <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>UUID</code></a> is requested.
  <p>
- The <code>UUID</code> does not need to be persistent between restart, but being sure that all players have a different
+ The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>UUID</code></a> does not need to be persistent between restart, but being sure that all players have a different
  one is good practice. Otherwise, undefined behavior can happen.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>playerConnection</code> - the connection who requires a new unique id</dd>
 <dd><code>username</code> - the username given by the connection</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the new <code>UUID</code> for the player</dd>
+<dd>the new <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>UUID</code></a> for the player</dd>
 </dl>
 </li>
 </ul>

@@ -119,7 +119,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
-<li>java.lang.Object</li>
+<li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
 <li><a href="Instance.html" title="class in net.minestom.server.instance">net.minestom.server.instance.Instance</a></li>
@@ -136,7 +136,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code>net.kyori.adventure.audience.Audience</code>, <code>net.kyori.adventure.audience.ForwardingAudience</code>, <code><a href="../adventure/audience/PacketGroupingAudience.html" title="interface in net.minestom.server.adventure.audience">PacketGroupingAudience</a></code>, <code><a href="../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a></code>, <code><a href="../event/handler/EventHandler.html" title="interface in net.minestom.server.event.handler">EventHandler</a></code>, <code><a href="../extensions/IExtensionObserver.html" title="interface in net.minestom.server.extensions">IExtensionObserver</a></code>, <code><a href="BlockModifier.html" title="interface in net.minestom.server.instance">BlockModifier</a></code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/ForwardingAudience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">ForwardingAudience</a></code>, <code><a href="../adventure/audience/PacketGroupingAudience.html" title="interface in net.minestom.server.adventure.audience">PacketGroupingAudience</a></code>, <code><a href="../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a></code>, <code><a href="../event/handler/EventHandler.html" title="interface in net.minestom.server.event.handler">EventHandler</a></code>, <code><a href="../extensions/IExtensionObserver.html" title="interface in net.minestom.server.extensions">IExtensionObserver</a></code>, <code><a href="BlockModifier.html" title="interface in net.minestom.server.instance">BlockModifier</a></code></dd>
 </dl>
 <hr>
 <pre>public class <span class="typeNameLabel">SharedInstance</span>
@@ -160,8 +160,8 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <li class="blockList"><a id="nested.classes.inherited.from.class.net.kyori.adventure.audience.ForwardingAudience">
 <!--   -->
 </a>
-<h3>Nested classes/interfaces inherited from interface&nbsp;net.kyori.adventure.audience.ForwardingAudience</h3>
-<code>net.kyori.adventure.audience.ForwardingAudience.Single</code></li>
+<h3>Nested classes/interfaces inherited from interface&nbsp;net.kyori.adventure.audience.<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/ForwardingAudience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">ForwardingAudience</a></h3>
+<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/ForwardingAudience.Single.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">ForwardingAudience.Single</a></code></li>
 </ul>
 </li>
 </ul>
@@ -197,7 +197,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.UUID,net.minestom.server.instance.InstanceContainer)">SharedInstance</a></span>&#8203;(@NotNull java.util.UUID&nbsp;uniqueId,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.UUID,net.minestom.server.instance.InstanceContainer)">SharedInstance</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;uniqueId,
               @NotNull <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instanceContainer)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -260,7 +260,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 </td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code>@NotNull java.util.Collection&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChunks()">getChunks</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the instance's loaded chunks.</div>
@@ -332,7 +332,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveChunksToStorage(java.lang.Runnable)">saveChunksToStorage</a></span>&#8203;(@Nullable java.lang.Runnable&nbsp;callback)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveChunksToStorage(java.lang.Runnable)">saveChunksToStorage</a></span>&#8203;(@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Runnable</a>&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Saves multiple chunks to permanent storage.</div>
 </td>
@@ -340,7 +340,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveChunkToStorage(net.minestom.server.instance.Chunk,java.lang.Runnable)">saveChunkToStorage</a></span>&#8203;(@NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
-                  @Nullable java.lang.Runnable&nbsp;callback)</code></th>
+                  @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Runnable</a>&nbsp;callback)</code></th>
 <td class="colLast">
 <div class="block">Saves a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> to permanent storage.</div>
 </td>
@@ -421,15 +421,15 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
+<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.kyori.adventure.audience.Audience">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;net.kyori.adventure.audience.Audience</h3>
-<code>openBook, sendActionBar, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendMessage, sendPlayerListFooter, sendPlayerListHeader, sendPlayerListHeaderAndFooter</code></li>
+<h3>Methods inherited from interface&nbsp;net.kyori.adventure.audience.<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></h3>
+<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#openBook(net.kyori.adventure.inventory.Book.Builder)" title="class or interface in net.kyori.adventure.audience" class="externalLink">openBook</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendActionBar(net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendActionBar</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identified,net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identified,net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identified,net.kyori.adventure.text.ComponentLike,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.ComponentLike,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.ComponentLike,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListFooter(net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListFooter</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListHeader(net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListHeader</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListHeaderAndFooter(net.kyori.adventure.text.ComponentLike,net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListHeaderAndFooter</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.instance.BlockModifier">
@@ -449,8 +449,8 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <li class="blockList"><a id="methods.inherited.from.class.net.kyori.adventure.audience.ForwardingAudience">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;net.kyori.adventure.audience.ForwardingAudience</h3>
-<code>openBook, playSound, sendMessage, sendPlayerListFooter, sendPlayerListHeader</code></li>
+<h3>Methods inherited from interface&nbsp;net.kyori.adventure.audience.<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/ForwardingAudience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">ForwardingAudience</a></h3>
+<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/ForwardingAudience.html?is-external=true#openBook(net.kyori.adventure.inventory.Book)" title="class or interface in net.kyori.adventure.audience" class="externalLink">openBook</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/ForwardingAudience.html?is-external=true#playSound(net.kyori.adventure.sound.Sound)" title="class or interface in net.kyori.adventure.audience" class="externalLink">playSound</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/ForwardingAudience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identified,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/ForwardingAudience.html?is-external=true#sendPlayerListFooter(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListFooter</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/ForwardingAudience.html?is-external=true#sendPlayerListHeader(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListHeader</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.adventure.audience.PacketGroupingAudience">
@@ -482,7 +482,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <li class="blockList">
 <h4>SharedInstance</h4>
 <pre>public&nbsp;SharedInstance&#8203;(@NotNull
-                      @NotNull java.util.UUID&nbsp;uniqueId,
+                      @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;uniqueId,
                       @NotNull
                       @NotNull <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instanceContainer)</pre>
 </li>
@@ -644,7 +644,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <pre class="methodSignature">public&nbsp;void&nbsp;saveChunkToStorage&#8203;(@NotNull
                                @NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                                @Nullable
-                               @Nullable java.lang.Runnable&nbsp;callback)</pre>
+                               @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Runnable</a>&nbsp;callback)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Instance.html#saveChunkToStorage(net.minestom.server.instance.Chunk,java.lang.Runnable)">Instance</a></code></span></div>
 <div class="block">Saves a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> to permanent storage.</div>
 <dl>
@@ -663,7 +663,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <li class="blockList">
 <h4>saveChunksToStorage</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;saveChunksToStorage&#8203;(@Nullable
-                                @Nullable java.lang.Runnable&nbsp;callback)</pre>
+                                @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Runnable</a>&nbsp;callback)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Instance.html#saveChunksToStorage(java.lang.Runnable)">Instance</a></code></span></div>
 <div class="block">Saves multiple chunks to permanent storage.</div>
 <dl>
@@ -715,7 +715,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <li class="blockList">
 <h4>getChunks</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull java.util.Collection&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;&nbsp;getChunks()</pre>
+public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;&nbsp;getChunks()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Instance.html#getChunks()">Instance</a></code></span></div>
 <div class="block">Gets all the instance's loaded chunks.</div>
 <dl>
