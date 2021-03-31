@@ -3,7 +3,6 @@ package net.minestom.server.entity;
 import com.google.common.collect.Queues;
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.longs.LongArraySet;
-import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
@@ -112,7 +111,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private DimensionType dimensionType;
     private GameMode gameMode;
     // Chunks that the player can view
-    protected final LongOpenHashSet viewableChunks = new LongOpenHashSet();
+    protected final LongArraySet viewableChunks = new LongArraySet();
 
     // View update
     protected Chunk viewUpdateChunk;
