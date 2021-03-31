@@ -39,12 +39,13 @@ public class Item {
     }
 
     @Contract(value = "_, -> new", pure = true)
-    public @NotNull Item with(@NotNull Consumer<ItemBuilder> builderConsumer) {
+    public @NotNull Item with(@NotNull Consumer<@NotNull ItemBuilder> builderConsumer) {
         var builder = builder();
         builderConsumer.accept(builder);
         return builder.build();
     }
 
+    @Contract(pure = true)
     public int getAmount() {
         return amount;
     }
@@ -59,6 +60,7 @@ public class Item {
         return withAmount(intUnaryOperator.applyAsInt(amount));
     }
 
+    @Contract(pure = true)
     public @Nullable Component getDisplayName() {
         return displayName;
     }
@@ -73,6 +75,7 @@ public class Item {
         return withDisplayName(componentUnaryOperator.apply(displayName));
     }
 
+    @Contract(pure = true)
     public @Nullable List<@NotNull Component> getLore() {
         return lore;
     }
