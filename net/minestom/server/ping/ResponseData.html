@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":42,"i6":10,"i7":10,"i8":10,"i9":42,"i10":10,"i11":10,"i12":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -172,7 +172,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -180,66 +180,98 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addPlayer(java.lang.Iterable)">addPlayer</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players)</code></th>
+<td class="colLast">
+<div class="block">Adds some players to the response.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addPlayer(java.lang.String,java.util.UUID)">addPlayer</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
          <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;uuid)</code></th>
 <td class="colLast">
 <div class="block">Adds a player to the response.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addPlayer(net.minestom.server.entity.Player)">addPlayer</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<td class="colLast">
+<div class="block">Adds a player to the response.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>@NotNull com.google.gson.JsonObject</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#build()">build</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Converts the response data into a <code>JsonObject</code>.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clearPlayers()">clearPlayers</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Removes all of the ping players from this <a href="#pingPlayers"><code>pingPlayers</code></a>.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDescription(java.lang.String)">setDescription</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;description)</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#setDescription(net.kyori.adventure.text.Component)"><code>setDescription(Component)</code></a></div>
+</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDescription(net.kyori.adventure.text.Component)">setDescription</a></span>&#8203;(<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;description)</code></th>
 <td class="colLast">
 <div class="block">Sets the response description.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFavicon(java.lang.String)">setFavicon</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;favicon)</code></th>
 <td class="colLast">
 <div class="block">Sets the response favicon.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMaxPlayer(int)">setMaxPlayer</a></span>&#8203;(int&nbsp;maxPlayer)</code></th>
 <td class="colLast">
 <div class="block">Sets the response maximum player count.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setName(java.lang.String)">setName</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</code></th>
 <td class="colLast">
-<div class="block">Sets the name for the response.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#setVersion(java.lang.String)"><code>setVersion(String)</code></a></div>
+</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setOnline(int)">setOnline</a></span>&#8203;(int&nbsp;online)</code></th>
 <td class="colLast">
 <div class="block">Sets the response online count.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setProtocol(int)">setProtocol</a></span>&#8203;(int&nbsp;protocol)</code></th>
 <td class="colLast">
 <div class="block">Sets the response protocol version.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setVersion(java.lang.String)">setVersion</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;version)</code></th>
+<td class="colLast">
+<div class="block">Sets the version name for the response.</div>
 </td>
 </tr>
 </table>
@@ -292,11 +324,29 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <ul class="blockList">
 <li class="blockList">
 <h4>setName</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setName&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</pre>
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
+public&nbsp;void&nbsp;setName&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#setVersion(java.lang.String)"><code>setVersion(String)</code></a></div>
+</div>
 <div class="block">Sets the name for the response.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>name</code> - The name for the response data.</dd>
+</dl>
+</li>
+</ul>
+<a id="setVersion(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setVersion</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setVersion&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;version)</pre>
+<div class="block">Sets the version name for the response.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>version</code> - The version name for the response data.</dd>
 </dl>
 </li>
 </ul>
@@ -342,6 +392,34 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
+<a id="addPlayer(java.lang.Iterable)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addPlayer</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;addPlayer&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players)</pre>
+<div class="block">Adds some players to the response.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>players</code> - the players</dd>
+</dl>
+</li>
+</ul>
+<a id="addPlayer(net.minestom.server.entity.Player)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addPlayer</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;addPlayer&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+<div class="block">Adds a player to the response.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>player</code> - the player</dd>
+</dl>
+</li>
+</ul>
 <a id="addPlayer(java.lang.String,java.util.UUID)">
 <!--   -->
 </a>
@@ -375,7 +453,25 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <ul class="blockList">
 <li class="blockList">
 <h4>setDescription</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setDescription&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;description)</pre>
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
+public&nbsp;void&nbsp;setDescription&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;description)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#setDescription(net.kyori.adventure.text.Component)"><code>setDescription(Component)</code></a></div>
+</div>
+<div class="block">Sets the response description.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>description</code> - The description for the response data.</dd>
+</dl>
+</li>
+</ul>
+<a id="setDescription(net.kyori.adventure.text.Component)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setDescription</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setDescription&#8203;(<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;description)</pre>
 <div class="block">Sets the response description.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
