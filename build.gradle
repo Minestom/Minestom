@@ -13,7 +13,6 @@ group 'net.minestom.server'
 version '1.0'
 
 sourceCompatibility = 1.11
-project.ext.lwjglVersion = "3.2.3"
 
 switch (OperatingSystem.current()) {
     case OperatingSystem.LINUX:
@@ -71,6 +70,15 @@ sourceSets {
         compileClasspath += sourceSets.main.runtimeClasspath
         runtimeClasspath += sourceSets.main.runtimeClasspath
     }
+    testingFramework {
+        java {
+            srcDir 'src/testingframework/java'
+        }
+
+        compileClasspath += sourceSets.main.runtimeClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+        runtimeClasspath += sourceSets.test.output
+    }
     lwjgl {
         java {
             srcDir 'src/lwjgl/java'
@@ -95,6 +103,12 @@ java {
         withSourcesJar()
     }
 
+    registerFeature("testingFramework") {
+        usingSourceSet(sourceSets.testingFramework)
+        withJavadocJar()
+        withSourcesJar()
+    }
+
     withJavadocJar()
     withSourcesJar()
 }
@@ -105,8 +119,9 @@ test {
 
 dependencies {
     // Junit Testing Framework
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
-    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.2')
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    testImplementation sourceSets.testingFramework.output
 
     // Only here to ensure J9 module support for extensions and our classloaders
     testCompileOnly "org.mockito:mockito-core:2.28.2"
@@ -194,6 +209,11 @@ dependencies {
 
 
     generatorsImplementation("com.squareup:javapoet:1.13.0")
+
+    // Junit Testing Framework
+    testingFrameworkImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testingFrameworkRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    testingFrameworkRuntimeOnly sourceSets.test.output
 }
 
 configurations.all {
