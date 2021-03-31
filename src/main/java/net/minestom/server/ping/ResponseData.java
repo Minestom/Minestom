@@ -2,6 +2,10 @@ package net.minestom.server.ping;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -15,19 +19,12 @@ import java.util.UUID;
  * net.minestom.server.MinecraftServer#start(String, int, ResponseDataConsumer)}.
  */
 public class ResponseData {
-
-    private final JsonObject jsonObject;
-
-    private final JsonObject versionObject;
-    private final JsonObject playersObject;
-    private final JsonArray sampleArray;
-    private final JsonObject descriptionObject;
     private final List<PingPlayer> pingPlayers;
-    private String name;
+    private String version;
     private int protocol;
     private int maxPlayer;
     private int online;
-    private String description;
+    private Component description;
 
     private String favicon;
 
@@ -35,11 +32,6 @@ public class ResponseData {
      * Constructs a new {@link ResponseData}.
      */
     public ResponseData() {
-        this.jsonObject = new JsonObject();
-        this.versionObject = new JsonObject();
-        this.playersObject = new JsonObject();
-        this.sampleArray = new JsonArray();
-        this.descriptionObject = new JsonObject();
         this.pingPlayers = new ArrayList<>();
     }
 
@@ -47,9 +39,20 @@ public class ResponseData {
      * Sets the name for the response.
      *
      * @param name The name for the response data.
+     * @deprecated Use {@link #setVersion(String)}
      */
+    @Deprecated
     public void setName(String name) {
-        this.name = name;
+        this.setVersion(name);
+    }
+
+    /**
+     * Sets the version name for the response.
+     *
+     * @param version The version name for the response data.
+     */
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     /**
@@ -80,6 +83,26 @@ public class ResponseData {
     }
 
     /**
+     * Adds some players to the response.
+     *
+     * @param players the players
+     */
+    public void addPlayer(Iterable<Player> players) {
+        for (Player player : players) {
+            this.addPlayer(player);
+        }
+    }
+
+    /**
+     * Adds a player to the response.
+     *
+     * @param player the player
+     */
+    public void addPlayer(Player player) {
+        this.addPlayer(player.getUsername(), player.getUuid());
+    }
+
+    /**
      * Adds a player to the response.
      *
      * @param name The name of the player.
@@ -104,8 +127,19 @@ public class ResponseData {
      * Sets the response description.
      *
      * @param description The description for the response data.
+     * @deprecated Use {@link #setDescription(Component)}
      */
+    @Deprecated
     public void setDescription(String description) {
+        this.description = LegacyComponentSerializer.legacySection().deserialize(description);
+    }
+
+    /**
+     * Sets the response description.
+     *
+     * @param description The description for the response data.
+     */
+    public void setDescription(Component description) {
         this.description = description;
     }
 
@@ -125,13 +159,19 @@ public class ResponseData {
      */
     @NotNull
     public JsonObject build() {
-        versionObject.addProperty("name", name);
-        versionObject.addProperty("protocol", protocol);
+        // version
+        final JsonObject versionObject = new JsonObject();
+        versionObject.addProperty("name", this.version);
+        versionObject.addProperty("protocol", this.protocol);
 
-        playersObject.addProperty("max", maxPlayer);
-        playersObject.addProperty("online", online);
+        // players info
+        final JsonObject playersObject = new JsonObject();
+        playersObject.addProperty("max", this.maxPlayer);
+        playersObject.addProperty("online", this.online);
 
-        for (PingPlayer pingPlayer : pingPlayers) {
+        // individual players
+        final JsonArray sampleArray = new JsonArray();
+        for (PingPlayer pingPlayer : this.pingPlayers) {
             JsonObject pingPlayerObject = new JsonObject();
             pingPlayerObject.addProperty("name", pingPlayer.name);
             pingPlayerObject.addProperty("id", pingPlayer.uuid.toString());
@@ -139,12 +179,14 @@ public class ResponseData {
         }
         playersObject.add("sample", sampleArray);
 
-        descriptionObject.addProperty("text", description);
+        final JsonObject descriptionObject = GsonComponentSerializer.gson().serializer()
+                .toJsonTree(this.description).getAsJsonObject();
 
+        final JsonObject jsonObject = new JsonObject();
         jsonObject.add("version", versionObject);
         jsonObject.add("players", playersObject);
         jsonObject.add("description", descriptionObject);
-        jsonObject.addProperty("favicon", favicon);
+        jsonObject.addProperty("favicon", this.favicon);
         return jsonObject;
     }
 
