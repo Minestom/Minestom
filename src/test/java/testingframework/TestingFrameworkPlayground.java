@@ -4,7 +4,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.EntityTeleportPacket;
-import net.minestom.testing.framework.MinestomTest;
+import net.minestom.testing.framework.*;
 
 import java.util.List;
 
@@ -40,12 +40,14 @@ public class TestingFrameworkPlayground {
     }
 
     @MinestomTest
-    public void mySecondTest(Game game) {
+    public void mySecondTest(TestEnvironment env) {
+        Game game = new Game(); // TODO: remove, temporary
         System.out.println("hello");
     }
 
     @MinestomTest
-    public void myTest(Game game) {
+    public void myTest(TestEnvironment env) {
+        Game game = new Game(); // TODO: remove, temporary
         // Connects two clients
         Client clientA = game.newClient();
         Client clientB = game.newClient();
@@ -71,5 +73,32 @@ public class TestingFrameworkPlayground {
         assertEquals(0.0f, teleportPacket.position.getY(), 10e-16);
         assertEquals(0.0f, teleportPacket.position.getZ(), 10e-16);
         assertTrue(teleportPacket.onGround);
+    }
+
+    @MinestomTestCollection(value = "MyCollection", independent = true)
+    public static class IndependentTests {
+
+        private boolean beforeCalled = false;
+
+        @BeforeEachMinestomTest
+        public void before(TestEnvironment env) {
+            beforeCalled = true;
+        }
+
+        @MinestomTest
+        public void test1(TestEnvironment env) {
+            assertTrue(beforeCalled);
+            System.out.println("hello independent");
+        }
+
+        @MinestomTest
+        public void test2(TestEnvironment env) {
+            assertTrue(beforeCalled);
+        }
+
+        @AfterEachMinestomTest
+        public void after(TestEnvironment env) {
+            beforeCalled = false;
+        }
     }
 }
