@@ -1,6 +1,7 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,21 +25,21 @@ public class Item {
         this.lore = lore;
     }
 
-    @NotNull
-    public static ItemBuilder builder(@NotNull Material material) {
+    @Contract(value = "_ -> new", pure = true)
+    public static @NotNull ItemBuilder builder(@NotNull Material material) {
         return new ItemBuilder(material);
     }
 
-    @NotNull
-    public ItemBuilder builder() {
+    @Contract(value = "-> new", pure = true)
+    public @NotNull ItemBuilder builder() {
         return new ItemBuilder(material)
                 .amount(amount)
                 .displayName(displayName)
                 .lore(lore);
     }
 
-    @NotNull
-    public Item with(@NotNull Consumer<ItemBuilder> builderConsumer) {
+    @Contract(value = "_, -> new", pure = true)
+    public @NotNull Item with(@NotNull Consumer<ItemBuilder> builderConsumer) {
         var builder = builder();
         builderConsumer.accept(builder);
         return builder.build();
@@ -48,43 +49,41 @@ public class Item {
         return amount;
     }
 
-    @NotNull
-    public Item withAmount(int amount) {
+    @Contract(value = "_, -> new", pure = true)
+    public @NotNull Item withAmount(int amount) {
         return builder().amount(amount).build();
     }
 
-    @NotNull
-    public Item withAmount(@NotNull IntUnaryOperator intUnaryOperator) {
+    @Contract(value = "_, -> new", pure = true)
+    public @NotNull Item withAmount(@NotNull IntUnaryOperator intUnaryOperator) {
         return withAmount(intUnaryOperator.applyAsInt(amount));
     }
 
-    @Nullable
-    public Component getDisplayName() {
+    public @Nullable Component getDisplayName() {
         return displayName;
     }
 
-    @NotNull
-    public Item withDisplayName(@Nullable Component displayName) {
+    @Contract(value = "_, -> new", pure = true)
+    public @NotNull Item withDisplayName(@Nullable Component displayName) {
         return builder().displayName(displayName).build();
     }
 
-    @NotNull
-    public Item withDisplayName(@NotNull UnaryOperator<@Nullable Component> componentUnaryOperator) {
+    @Contract(value = "_, -> new", pure = true)
+    public @NotNull Item withDisplayName(@NotNull UnaryOperator<@Nullable Component> componentUnaryOperator) {
         return withDisplayName(componentUnaryOperator.apply(displayName));
     }
 
-    @Nullable
-    public List<Component> getLore() {
+    public @Nullable List<@NotNull Component> getLore() {
         return lore;
     }
 
-    @NotNull
-    public Item withLore(@Nullable List<@NotNull Component> lore) {
+    @Contract(value = "_, -> new", pure = true)
+    public @NotNull Item withLore(@Nullable List<@NotNull Component> lore) {
         return builder().lore(lore).build();
     }
 
-    @NotNull
-    public Item withLore(@NotNull UnaryOperator<@Nullable List<Component>> loreUnaryOperator) {
+    @Contract(value = "_, -> new", pure = true)
+    public @NotNull Item withLore(@NotNull UnaryOperator<@Nullable List<@NotNull Component>> loreUnaryOperator) {
         return withLore(loreUnaryOperator.apply(lore));
     }
 }

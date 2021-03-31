@@ -1,7 +1,9 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,31 +21,31 @@ public class ItemBuilder {
         this.amount = 0;
     }
 
-    @NotNull
-    public ItemBuilder amount(int amount) {
+    @Contract(value = "_ -> this")
+    public @NotNull ItemBuilder amount(int amount) {
         this.amount = amount;
         return this;
     }
 
-    @NotNull
-    public ItemBuilder displayName(Component displayName) {
+    @Contract(value = "_ -> this")
+    public @NotNull ItemBuilder displayName(@Nullable Component displayName) {
         this.displayName = displayName;
         return this;
     }
 
-    @NotNull
-    public ItemBuilder lore(List<Component> lore) {
+    @Contract(value = "_ -> this")
+    public @NotNull ItemBuilder lore(List<@NotNull Component> lore) {
         this.lore = Collections.unmodifiableList(lore);
         return this;
     }
 
-    @NotNull
-    public ItemBuilder lore(Component... lore) {
+    @Contract(value = "_ -> this")
+    public @NotNull ItemBuilder lore(Component... lore) {
         return lore(Arrays.asList(lore));
     }
 
-    @NotNull
-    public Item build() {
+    @Contract(value = "-> new", pure = true)
+    public @NotNull Item build() {
         return new Item(material, amount, displayName, lore);
     }
 

@@ -26,6 +26,7 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.item.Item;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
@@ -62,6 +63,18 @@ public class PlayerInit {
             inventoryConditionResult.setCancel(slot == 3);
         });*/
         //inventory.setItemStack(3, new ItemStack(Material.DIAMOND, (byte) 34));
+
+        {
+            Item item = Item.builder(Material.STONE)
+                    .amount(5)
+                    .displayName(Component.text("displayName"))
+                    .build();
+
+            item = item.with(itemBuilder -> itemBuilder
+                    .amount(10)
+                    .lore(Component.text("Lore")));
+        }
+
     }
 
     public static void init() {
