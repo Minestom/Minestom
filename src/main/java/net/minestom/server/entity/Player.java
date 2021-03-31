@@ -67,7 +67,7 @@ import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.instance.InstanceUtils;
-import net.minestom.server.utils.time.CooldownUtils;
+import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
@@ -78,7 +78,6 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.UnaryOperator;
 
@@ -152,8 +151,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private float lastPlayerSyncYaw, lastPlayerSyncPitch;
 
     // Experience orb pickup
-    protected UpdateOption experiencePickupCooldown = new UpdateOption(10, TimeUnit.TICK);
-    private long lastExperiencePickupCheckTime;
+    protected Cooldown experiencePickupCooldown = new Cooldown(new UpdateOption(10, TimeUnit.TICK));
 
     private BelowNameTag belowNameTag;
 
@@ -374,9 +372,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         // Experience orb pickup
-        if (!CooldownUtils.hasCooldown(time, lastExperiencePickupCheckTime, experiencePickupCooldown)) {
-            this.lastExperiencePickupCheckTime = time;
-
+        if (experiencePickupCooldown.isReady(time)) {
+            experiencePickupCooldown.refreshLastUpdate(time);
             final Chunk chunk = getChunk(); // TODO check surrounding chunks
             final Set<Entity> entities = instance.getChunkEntities(chunk);
             for (Entity entity : entities) {

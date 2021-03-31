@@ -7,7 +7,7 @@ import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.entity.type.projectile.EntityProjectile;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.time.CooldownUtils;
+import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -83,7 +83,7 @@ public class RangedAttackGoal extends GoalSelector {
         double distanceSquared = this.entityCreature.getDistanceSquared(target);
         boolean comeClose = false;
         if (distanceSquared <= this.attackRangeSquared) {
-            if (!CooldownUtils.hasCooldown(time, this.lastShot, this.timeUnit, this.delay)) {
+            if (!Cooldown.hasCooldown(time, this.lastShot, this.timeUnit, this.delay)) {
                 if (this.entityCreature.hasLineOfSight(target)) {
                     Position to = target.getPosition().clone().add(0D, target.getEyeHeight(), 0D);
 
