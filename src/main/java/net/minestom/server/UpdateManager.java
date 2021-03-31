@@ -4,8 +4,10 @@ import com.google.common.collect.Queues;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.thread.PerInstanceThreadProvider;
 import net.minestom.server.thread.ThreadProvider;
+import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -77,8 +79,16 @@ public final class UpdateManager {
                 // the time that the tick took in nanoseconds
                 final long tickTime = System.nanoTime() - currentTime;
 
+                System.out.println("TPS: " + tickTime / 1e6D + "ms");
+
                 // Tick end callbacks
                 doTickCallback(tickEndCallbacks, tickTime / 1000000L);
+
+                // Flush all waiting packets
+                AsyncUtils.runAsync(() -> connectionManager.getOnlinePlayers().stream()
+                        .filter(player -> player.getPlayerConnection() instanceof NettyPlayerConnection)
+                        .map(player -> (NettyPlayerConnection) player.getPlayerConnection())
+                        .forEach(NettyPlayerConnection::flush));
 
             } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(e);

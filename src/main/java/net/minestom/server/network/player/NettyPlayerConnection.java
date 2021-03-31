@@ -19,7 +19,6 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.utils.BufUtils;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.cache.CacheablePacket;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -71,22 +70,6 @@ public class NettyPlayerConnection extends PlayerConnection {
         this.remoteAddress = channel.remoteAddress();
 
         this.tickBuffer.ensureWritable(INITIAL_BUFFER_SIZE);
-    }
-
-    @Override
-    public void update() {
-        // Flush
-        final int bufferSize = tickBuffer.writerIndex();
-        if (bufferSize > 0 && isWritable()) {
-            AsyncUtils.runAsync(() -> {
-                if (channel.isActive() && isWritable()) {
-                    writeWaitingPackets();
-                    channel.flush();
-                }
-            });
-        }
-        // Network stats
-        super.update();
     }
 
     /**
@@ -220,6 +203,16 @@ public class NettyPlayerConnection extends PlayerConnection {
             }
 
             tickBuffer.clear();
+        }
+    }
+
+    public void flush() {
+        final int bufferSize = tickBuffer.writerIndex();
+        if (bufferSize > 0 && isWritable()) {
+            if (channel.isActive()) {
+                writeWaitingPackets();
+                channel.flush();
+            }
         }
     }
 
