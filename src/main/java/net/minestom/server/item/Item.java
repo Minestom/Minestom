@@ -1,6 +1,7 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.item.metadata.ItemMeta;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,6 +15,7 @@ public class Item {
 
     private final Material material;
     private final int amount;
+    //private final ItemMeta meta;
     private final Component displayName;
     private final List<Component> lore;
 
@@ -58,6 +60,10 @@ public class Item {
     @Contract(value = "_, -> new", pure = true)
     public @NotNull Item withAmount(@NotNull IntUnaryOperator intUnaryOperator) {
         return withAmount(intUnaryOperator.applyAsInt(amount));
+    }
+
+    public <T extends ItemMeta> @NotNull Item withMeta(Class<T> metaType, Consumer<T> metaConsumer) {
+        return builder().meta(metaType, metaConsumer).build();
     }
 
     @Contract(pure = true)

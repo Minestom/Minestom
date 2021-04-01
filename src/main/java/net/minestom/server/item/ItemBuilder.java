@@ -1,6 +1,7 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.item.metadata.ItemMeta;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -8,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ItemBuilder {
 
@@ -24,6 +26,12 @@ public class ItemBuilder {
     @Contract(value = "_ -> this")
     public @NotNull ItemBuilder amount(int amount) {
         this.amount = amount;
+        return this;
+    }
+
+    @Contract(value = "_, _ -> this")
+    public <T extends ItemMeta> @NotNull ItemBuilder meta(Class<T> metaType, Consumer<T> metaConsumer) {
+        // TODO
         return this;
     }
 
