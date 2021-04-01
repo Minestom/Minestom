@@ -666,15 +666,6 @@ public class ItemStack implements DataContainer, PublicCloneable<ItemStack>, Hov
     }
 
     /**
-     * @deprecated use {@link #clone()}
-     */
-    @Deprecated
-    @NotNull
-    public synchronized ItemStack copy() {
-        return clone();
-    }
-
-    /**
      * Clones this item stack.
      * <p>
      * Be aware that the identifier ({@link #getIdentifier()}) will change.

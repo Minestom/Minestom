@@ -213,14 +213,6 @@ public class Position implements PublicCloneable<Position> {
     }
 
     /**
-     * @deprecated Please use {@link #clone()}
-     */
-    @Deprecated
-    public Position copy() {
-        return clone();
-    }
-
-    /**
      * Gets if the two objects are position and have the same values.
      *
      * @param o the position to check the equality
