@@ -6,12 +6,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.IntUnaryOperator;
 import java.util.function.UnaryOperator;
 
 public class Item {
 
+    private final UUID uuid = UUID.randomUUID();
     private final Material material;
     private final int amount;
     private final ItemMeta meta;
@@ -25,6 +27,16 @@ public class Item {
     @Contract(value = "_ -> new", pure = true)
     public static @NotNull ItemBuilder builder(@NotNull Material material) {
         return new ItemBuilder(material);
+    }
+
+    @Contract(pure = true)
+    public @NotNull UUID getUuid() {
+        return uuid;
+    }
+
+    @Contract(pure = true)
+    public @NotNull Material getMaterial() {
+        return material;
     }
 
     @Contract(value = "_, -> new", pure = true)

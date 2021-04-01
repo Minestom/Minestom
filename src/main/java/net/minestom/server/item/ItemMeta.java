@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ItemMeta implements Cloneable {
 
@@ -17,6 +18,13 @@ public class ItemMeta implements Cloneable {
         this.builder = metaBuilder.clone();
         this.displayName = metaBuilder.displayName;
         this.lore = metaBuilder.lore;
+    }
+
+    @Contract(value = "_, -> new", pure = true)
+    public @NotNull ItemMeta with(@NotNull Consumer<@NotNull ItemMetaBuilder> builderConsumer) {
+        var builder = builder();
+        builderConsumer.accept(builder);
+        return builder.build();
     }
 
     @Contract(pure = true)
