@@ -1,13 +1,11 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.item.metadata.ItemMeta;
+import net.minestom.server.item.meta.CompassMeta;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -15,12 +13,17 @@ public class ItemBuilder {
 
     private final Material material;
     private int amount;
-    private Component displayName;
-    private List<Component> lore;
+    protected ItemMetaBuilder metaBuilder;
 
-    protected ItemBuilder(@NotNull Material material) {
+    protected ItemBuilder(@NotNull Material material, @NotNull ItemMetaBuilder metaBuilder) {
         this.material = material;
         this.amount = 0;
+        this.metaBuilder=metaBuilder;
+    }
+
+    protected ItemBuilder(@NotNull Material material) {
+        // TODO: meta depends on material
+        this(material, new CompassMeta.Builder());
     }
 
     @Contract(value = "_ -> this")
@@ -30,31 +33,32 @@ public class ItemBuilder {
     }
 
     @Contract(value = "_, _ -> this")
-    public <T extends ItemMeta> @NotNull ItemBuilder meta(Class<T> metaType, Consumer<T> metaConsumer) {
-        // TODO
+    public <T extends ItemMetaBuilder> @NotNull ItemBuilder meta(Class<T> metaType, Consumer<T> itemMetaConsumer) {
+        itemMetaConsumer.accept((T) metaBuilder);
         return this;
     }
 
     @Contract(value = "_ -> this")
     public @NotNull ItemBuilder displayName(@Nullable Component displayName) {
-        this.displayName = displayName;
+        this.metaBuilder.displayName(displayName);
         return this;
     }
 
     @Contract(value = "_ -> this")
     public @NotNull ItemBuilder lore(List<@NotNull Component> lore) {
-        this.lore = Collections.unmodifiableList(lore);
+        this.metaBuilder.lore(lore);
         return this;
     }
 
     @Contract(value = "_ -> this")
     public @NotNull ItemBuilder lore(Component... lore) {
-        return lore(Arrays.asList(lore));
+        this.metaBuilder.lore(lore);
+        return this;
     }
 
     @Contract(value = "-> new", pure = true)
     public @NotNull Item build() {
-        return new Item(material, amount, displayName, lore);
+        return new Item(material, amount, metaBuilder.build());
     }
 
 }

@@ -1,7 +1,6 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.item.metadata.ItemMeta;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,16 +14,12 @@ public class Item {
 
     private final Material material;
     private final int amount;
-    //private final ItemMeta meta;
-    private final Component displayName;
-    private final List<Component> lore;
+    private final ItemMeta meta;
 
-    protected Item(@NotNull Material material, int amount,
-                   @Nullable Component displayName, @Nullable List<Component> lore) {
+    protected Item(@NotNull Material material, int amount, ItemMeta meta) {
         this.material = material;
         this.amount = amount;
-        this.displayName = displayName;
-        this.lore = lore;
+        this.meta = meta;
     }
 
     @Contract(value = "_ -> new", pure = true)
@@ -34,10 +29,8 @@ public class Item {
 
     @Contract(value = "-> new", pure = true)
     public @NotNull ItemBuilder builder() {
-        return new ItemBuilder(material)
-                .amount(amount)
-                .displayName(displayName)
-                .lore(lore);
+        return new ItemBuilder(material, meta.builder())
+                .amount(amount);
     }
 
     @Contract(value = "_, -> new", pure = true)
@@ -62,13 +55,14 @@ public class Item {
         return withAmount(intUnaryOperator.applyAsInt(amount));
     }
 
-    public <T extends ItemMeta> @NotNull Item withMeta(Class<T> metaType, Consumer<T> metaConsumer) {
+    @Contract(value = "_, _ -> new", pure = true)
+    public <T extends ItemMetaBuilder> @NotNull Item withMeta(Class<T> metaType, Consumer<T> metaConsumer) {
         return builder().meta(metaType, metaConsumer).build();
     }
 
     @Contract(pure = true)
     public @Nullable Component getDisplayName() {
-        return displayName;
+        return meta.getDisplayName();
     }
 
     @Contract(value = "_, -> new", pure = true)
@@ -78,12 +72,12 @@ public class Item {
 
     @Contract(value = "_, -> new", pure = true)
     public @NotNull Item withDisplayName(@NotNull UnaryOperator<@Nullable Component> componentUnaryOperator) {
-        return withDisplayName(componentUnaryOperator.apply(displayName));
+        return withDisplayName(componentUnaryOperator.apply(getDisplayName()));
     }
 
     @Contract(pure = true)
     public @Nullable List<@NotNull Component> getLore() {
-        return lore;
+        return meta.getLore();
     }
 
     @Contract(value = "_, -> new", pure = true)
@@ -93,6 +87,6 @@ public class Item {
 
     @Contract(value = "_, -> new", pure = true)
     public @NotNull Item withLore(@NotNull UnaryOperator<@Nullable List<@NotNull Component>> loreUnaryOperator) {
-        return withLore(loreUnaryOperator.apply(lore));
+        return withLore(loreUnaryOperator.apply(getLore()));
     }
 }

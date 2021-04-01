@@ -29,7 +29,7 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.Item;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.metadata.WritableBookMeta;
+import net.minestom.server.item.meta.CompassMeta;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.Position;
@@ -66,24 +66,20 @@ public class PlayerInit {
         //inventory.setItemStack(3, new ItemStack(Material.DIAMOND, (byte) 34));
 
         {
-            Item item = Item.builder(Material.WRITABLE_BOOK)
+            Item item = Item.builder(Material.COMPASS)
                     .amount(5)
-                    .meta(WritableBookMeta.class, writableBookMeta -> {
-                        writableBookMeta.setTitle("Title");
+                    .meta(CompassMeta.Builder.class, builder -> {
+                        builder.lodestonePosition(new Position(0, 0, 0));
                     })
                     .displayName(Component.text("displayName"))
                     .build();
 
             item = item.with(itemBuilder -> itemBuilder
                     .amount(10)
-                    .meta(WritableBookMeta.class, writableBookMeta -> {
-                        writableBookMeta.setTitle("Title2");
+                    .meta(CompassMeta.Builder.class, builder -> {
+                        builder.lodestonePosition(new Position(5, 0, 0));
                     })
                     .lore(Component.text("Lore")));
-
-            item = item.withMeta(WritableBookMeta.class, writableBookMeta -> {
-                writableBookMeta.setTitle("Title3");
-            });
         }
 
     }
