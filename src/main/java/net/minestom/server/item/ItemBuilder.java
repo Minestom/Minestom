@@ -18,7 +18,7 @@ public class ItemBuilder {
     protected ItemBuilder(@NotNull Material material, @NotNull ItemMetaBuilder metaBuilder) {
         this.material = material;
         this.amount = 0;
-        this.metaBuilder=metaBuilder;
+        this.metaBuilder = metaBuilder;
     }
 
     protected ItemBuilder(@NotNull Material material) {
@@ -29,6 +29,12 @@ public class ItemBuilder {
     @Contract(value = "_ -> this")
     public @NotNull ItemBuilder amount(int amount) {
         this.amount = amount;
+        return this;
+    }
+
+    @Contract(value = "_ -> this")
+    public @NotNull ItemBuilder meta(@NotNull ItemMeta itemMeta) {
+        this.metaBuilder = itemMeta.builder();
         return this;
     }
 

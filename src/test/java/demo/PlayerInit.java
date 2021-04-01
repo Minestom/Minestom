@@ -66,8 +66,14 @@ public class PlayerInit {
         //inventory.setItemStack(3, new ItemStack(Material.DIAMOND, (byte) 34));
 
         {
+
+            CompassMeta compassMeta = new CompassMeta.Builder()
+                    .lodestonePosition(new Position(0, 0, 0))
+                    .build();
+
             Item item = Item.builder(Material.COMPASS)
                     .amount(5)
+                    .meta(compassMeta)
                     .meta(CompassMeta.Builder.class, builder -> {
                         builder.lodestonePosition(new Position(0, 0, 0));
                     })
