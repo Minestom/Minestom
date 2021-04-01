@@ -27,12 +27,6 @@ public class Item {
         return new ItemBuilder(material);
     }
 
-    @Contract(value = "-> new", pure = true)
-    public @NotNull ItemBuilder builder() {
-        return new ItemBuilder(material, meta.builder())
-                .amount(amount);
-    }
-
     @Contract(value = "_, -> new", pure = true)
     public @NotNull Item with(@NotNull Consumer<@NotNull ItemBuilder> builderConsumer) {
         var builder = builder();
@@ -88,5 +82,11 @@ public class Item {
     @Contract(value = "_, -> new", pure = true)
     public @NotNull Item withLore(@NotNull UnaryOperator<@Nullable List<@NotNull Component>> loreUnaryOperator) {
         return withLore(loreUnaryOperator.apply(getLore()));
+    }
+
+    @Contract(value = "-> new", pure = true)
+    protected @NotNull ItemBuilder builder() {
+        return new ItemBuilder(material, meta.builder())
+                .amount(amount);
     }
 }
