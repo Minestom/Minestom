@@ -4,25 +4,45 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public abstract class ItemMetaBuilder implements Cloneable {
 
     protected Component displayName;
     protected List<Component> lore;
+    protected Map<Enchantment, Short> enchantmentMap = new HashMap<>();
 
-    public void displayName(@Nullable Component displayName) {
+    protected ItemMetaBuilder() {
+    }
+
+    public @NotNull ItemMetaBuilder displayName(@Nullable Component displayName) {
         this.displayName = displayName;
+        return this;
     }
 
-    public void lore(List<@NotNull Component> lore) {
+    public @NotNull ItemMetaBuilder lore(List<@NotNull Component> lore) {
         this.lore = Collections.unmodifiableList(lore);
+        return this;
     }
 
-    public void lore(Component... lore) {
+    public @NotNull ItemMetaBuilder lore(Component... lore) {
         lore(Arrays.asList(lore));
+        return this;
+    }
+
+    public @NotNull ItemMetaBuilder enchantments(@NotNull Map<Enchantment, Short> enchantments) {
+        this.enchantmentMap.putAll(enchantments);
+        return this;
+    }
+
+    public @NotNull ItemMetaBuilder enchantment(@NotNull Enchantment enchantment, short level) {
+        this.enchantmentMap.put(enchantment, level);
+        return this;
+    }
+
+    public @NotNull ItemMetaBuilder clearEnchantment() {
+        this.enchantmentMap.clear();
+        return this;
     }
 
     public abstract @NotNull ItemMeta build();
@@ -33,6 +53,8 @@ public abstract class ItemMetaBuilder implements Cloneable {
     protected ItemMetaBuilder clone() {
         try {
             var builder = (ItemMetaBuilder) super.clone();
+            builder.displayName = displayName;
+            builder.lore = lore;
             deepClone(builder);
             return builder;
         } catch (CloneNotSupportedException e) {

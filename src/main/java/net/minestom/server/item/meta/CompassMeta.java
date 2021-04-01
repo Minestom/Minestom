@@ -1,9 +1,15 @@
 package net.minestom.server.item.meta;
 
+import net.kyori.adventure.text.Component;
+import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+import java.util.Map;
 
 public class CompassMeta extends ItemMeta {
 
@@ -49,6 +55,44 @@ public class CompassMeta extends ItemMeta {
 
         public Builder lodestonePosition(Position lodestonePosition) {
             this.lodestonePosition = lodestonePosition;
+            return this;
+        }
+
+        @Override
+        public @NotNull Builder displayName(@Nullable Component displayName) {
+            super.displayName(displayName);
+            return this;
+        }
+
+        @Override
+        public @NotNull Builder lore(List<@NotNull Component> lore) {
+            super.lore(lore);
+            return this;
+
+        }
+
+        @Override
+        public @NotNull Builder lore(Component... lore) {
+            super.lore(lore);
+            return this;
+        }
+
+        @Override
+        public @NotNull Builder enchantments(@NotNull Map<Enchantment, Short> enchantments) {
+            super.enchantments(enchantments);
+            return this;
+
+        }
+
+        @Override
+        public @NotNull Builder enchantment(@NotNull Enchantment enchantment, short level) {
+            super.enchantment(enchantment, level);
+            return this;
+        }
+
+        @Override
+        public @NotNull Builder clearEnchantment() {
+            super.clearEnchantment();
             return this;
         }
 
