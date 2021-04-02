@@ -24,7 +24,7 @@ public class StairsPlacementRule extends BlockPlacementRule {
 
     @Override
     public short blockPlace(@NotNull Instance instance, @NotNull Block block, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition, @NotNull Player player) {
-        Facing facing = this.getDirection(player);
+        Facing facing = this.getFacing(player);
         Shape shape = this.getShape(instance, blockPosition, facing);
         BlockFace half = BlockFace.BOTTOM; // waiting for new block faces to be implemented
         boolean waterlogged = false; // waiting for water to be implemented
@@ -42,8 +42,7 @@ public class StairsPlacementRule extends BlockPlacementRule {
         OUTER_LEFT,
         OUTER_RIGHT,
         INNER_LEFT,
-        INNER_RIGHT,
-        UNKNOWN
+        INNER_RIGHT;
     }
 
     private enum Facing {
@@ -68,26 +67,26 @@ public class StairsPlacementRule extends BlockPlacementRule {
         private final BlockPosition front;
         private final BlockPosition back;
 
-        Facing(BlockPosition front, BlockPosition back) {
+        Facing(@NotNull BlockPosition front, @NotNull BlockPosition back) {
             this.front = front;
             this.back = back;
         }
 
         @NotNull
-        public Pair<Shape, Facing> getFront(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
+        public Pair<@Nullable Shape, @Nullable Facing> getFront(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
             return this.getProperties(instance, blockPosition.clone().add(this.front));
         }
 
         @NotNull
-        public Pair<Shape, Facing> getBack(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
+        public Pair<@Nullable Shape, @Nullable Facing> getBack(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
             return this.getProperties(instance, blockPosition.clone().add(this.back));
         }
 
         @NotNull
-        private Pair<@NotNull Shape, @Nullable Facing> getProperties(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
+        private Pair<@Nullable Shape, @Nullable Facing> getProperties(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
             Block block = instance.getBlock(blockPosition);
             if (block == null) {
-                return Pair.of(Shape.UNKNOWN, null);
+                return Pair.of(null, null);
             }
             short stateId = instance.getBlockStateId(blockPosition);
             BlockAlternative alternative = block.getAlternative(stateId);
@@ -96,24 +95,26 @@ public class StairsPlacementRule extends BlockPlacementRule {
                 Facing facing = Facing.valueOf(alternative.getProperty("facing").toUpperCase());
                 return Pair.of(shape, facing);
             } catch (Exception ex) {
-                return Pair.of(Shape.UNKNOWN, null);
+                return Pair.of(null, null);
             }
         }
     }
 
-    private Shape getShape(Instance instance, BlockPosition blockPosition, Facing facing) {
+    @NotNull
+    private Shape getShape(@NotNull Instance instance, @NotNull BlockPosition blockPosition, @NotNull Facing facing) {
         Pair<Shape, Facing> front = facing.getFront(instance, blockPosition);
         Pair<Shape, Facing> back = facing.getBack(instance, blockPosition);
         Shape shape = this.getShapeFromSide(front, facing, Shape.INNER_RIGHT, Shape.INNER_LEFT);
-        if (shape.equals(Shape.UNKNOWN)) {
+        if (shape == null) {
             shape = this.getShapeFromSide(back, facing, Shape.OUTER_RIGHT, Shape.OUTER_LEFT);
         }
-        return shape.equals(Shape.UNKNOWN) ? Shape.STRAIGHT : shape;
+        return shape == null ? Shape.STRAIGHT : shape;
     }
 
-    private Shape getShapeFromSide(Pair<Shape, Facing> side, Facing facing, Shape right, Shape left) {
-        if (side.getLeft().equals(Shape.UNKNOWN)) {
-            return Shape.UNKNOWN;
+    @Nullable
+    private Shape getShapeFromSide(@NotNull Pair<Shape, Facing> side, @NotNull Facing facing, @NotNull Shape right, @NotNull Shape left) {
+        if (side.getLeft() == null) {
+            return null;
         }
         Facing sideFacing = side.getRight();
         if (facing.equals(Facing.NORTH)) {
@@ -141,10 +142,11 @@ public class StairsPlacementRule extends BlockPlacementRule {
                 return right;
             }
         }
-        return Shape.UNKNOWN;
+        return null;
     }
 
-    private Facing getDirection(Player player) {
+    @NotNull
+    private Facing getFacing(@NotNull Player player) {
         float degrees = (player.getPosition().getYaw() - 90) % 360;
         if (degrees < 0) {
             degrees += 360;
