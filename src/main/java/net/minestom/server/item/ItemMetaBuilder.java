@@ -21,7 +21,7 @@ public abstract class ItemMetaBuilder implements Cloneable {
     }
 
     public @NotNull ItemMetaBuilder lore(List<@NotNull Component> lore) {
-        this.lore = Collections.unmodifiableList(lore);
+        this.lore = lore;
         return this;
     }
 
@@ -54,7 +54,8 @@ public abstract class ItemMetaBuilder implements Cloneable {
         try {
             var builder = (ItemMetaBuilder) super.clone();
             builder.displayName = displayName;
-            builder.lore = lore;
+            builder.lore = new ArrayList<>(lore);
+            builder.enchantmentMap = new HashMap<>(enchantmentMap);
             deepClone(builder);
             return builder;
         } catch (CloneNotSupportedException e) {
