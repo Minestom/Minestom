@@ -19,12 +19,12 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.cache.CacheablePacket;
 import net.minestom.server.utils.cache.TemporaryCache;
+import net.minestom.server.utils.cache.TemporaryPacketCache;
 import net.minestom.server.utils.cache.TimedBuffer;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
 
@@ -35,8 +35,7 @@ import java.util.concurrent.TimeUnit;
 public class ChunkDataPacket implements ServerPacket, CacheablePacket {
 
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
-    private static final TemporaryCache<TimedBuffer> CACHE = new TemporaryCache<>(5, TimeUnit.MINUTES,
-            notification -> notification.getValue().getBuffer().release());
+    private static final TemporaryCache<TimedBuffer> CACHE = new TemporaryPacketCache(5, TimeUnit.MINUTES);
 
     public boolean fullChunk;
     public Biome[] biomes;
