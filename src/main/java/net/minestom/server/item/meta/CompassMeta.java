@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
-public class CompassMeta extends ItemMeta {
+public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<CompassMeta.Builder> {
 
     private final boolean lodestoneTracked;
     private final String lodestoneDimension;

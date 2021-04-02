@@ -39,7 +39,7 @@ public class ItemBuilder {
     }
 
     @Contract(value = "_, _ -> this")
-    public <T extends ItemMetaBuilder> @NotNull ItemBuilder meta(Class<T> metaType, Consumer<T> itemMetaConsumer) {
+    public <T extends ItemMetaBuilder, U extends ItemMetaBuilder.Provider<T>> @NotNull ItemBuilder meta(Class<U> metaType, Consumer<T> itemMetaConsumer) {
         itemMetaConsumer.accept((T) metaBuilder);
         return this;
     }

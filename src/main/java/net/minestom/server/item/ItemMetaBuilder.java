@@ -64,4 +64,7 @@ public abstract class ItemMetaBuilder implements Cloneable {
         }
     }
 
+    public interface Provider<T> {
+    }
+
 }

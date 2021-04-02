@@ -62,7 +62,7 @@ public class Item {
     }
 
     @Contract(value = "_, _ -> new", pure = true)
-    public <T extends ItemMetaBuilder> @NotNull Item withMeta(Class<T> metaType, Consumer<T> metaConsumer) {
+    public <T extends ItemMetaBuilder, U extends ItemMetaBuilder.Provider<T>> @NotNull Item withMeta(Class<U> metaType, Consumer<T> metaConsumer) {
         return builder().meta(metaType, metaConsumer).build();
     }
 

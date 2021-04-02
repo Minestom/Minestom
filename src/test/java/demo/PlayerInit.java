@@ -76,7 +76,7 @@ public class PlayerInit {
             Item item = Item.builder(Material.COMPASS)
                     .amount(5)
                     .meta(compassMeta)
-                    .meta(CompassMeta.Builder.class, builder -> {
+                    .meta(CompassMeta.class, builder -> {
                         builder.lodestonePosition(new Position(0, 0, 0));
                     })
                     .displayName(Component.text("displayName"))
@@ -84,7 +84,7 @@ public class PlayerInit {
 
             item = item.with(itemBuilder -> itemBuilder
                     .amount(10)
-                    .meta(CompassMeta.Builder.class, builder -> {
+                    .meta(CompassMeta.class, builder -> {
                         builder.lodestonePosition(new Position(5, 0, 0));
                     })
                     .lore(Component.text("Lore")));
