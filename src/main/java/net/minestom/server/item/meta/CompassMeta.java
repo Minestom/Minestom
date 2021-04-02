@@ -7,6 +7,7 @@ import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.List;
 import java.util.Map;
@@ -99,6 +100,40 @@ public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<Co
         @Override
         public @NotNull CompassMeta build() {
             return new CompassMeta(this, lodestoneTracked, lodestoneDimension, lodestonePosition);
+        }
+
+        @Override
+        public void read(@NotNull NBTCompound nbtCompound) {
+            if (nbtCompound.containsKey("LodestoneTracked")) {
+                this.lodestoneTracked = nbtCompound.getByte("LodestoneTracked") == 1;
+            }
+            if (nbtCompound.containsKey("LodestoneDimension")) {
+                this.lodestoneDimension = nbtCompound.getString("LodestoneDimension");
+            }
+            if (nbtCompound.containsKey("LodestonePos")) {
+                final NBTCompound posCompound = nbtCompound.getCompound("LodestonePos");
+                final int x = posCompound.getInt("X");
+                final int y = posCompound.getInt("Y");
+                final int z = posCompound.getInt("Z");
+
+                this.lodestonePosition = new Position(x, y, z);
+            }
+        }
+
+        @Override
+        public void write(@NotNull NBTCompound nbtCompound) {
+            nbtCompound.setByte("LodestoneTracked", (byte) (lodestoneTracked ? 1 : 0));
+            if (lodestoneDimension != null) {
+                nbtCompound.setString("LodestoneDimension", lodestoneDimension);
+            }
+
+            if (lodestonePosition != null) {
+                NBTCompound posCompound = new NBTCompound();
+                posCompound.setInt("X", (int) lodestonePosition.getX());
+                posCompound.setInt("Y", (int) lodestonePosition.getY());
+                posCompound.setInt("Z", (int) lodestonePosition.getZ());
+                nbtCompound.set("LodestonePos", posCompound);
+            }
         }
 
         @Override

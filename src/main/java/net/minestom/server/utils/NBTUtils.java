@@ -6,11 +6,11 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.util.Codec;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.AdventureSerializer;
+import net.minestom.server.attribute.Attribute;
+import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.inventory.Inventory;
-import net.minestom.server.item.Enchantment;
-import net.minestom.server.item.ItemMeta;
-import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
+import net.minestom.server.item.*;
+import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.binary.BinaryReader;
@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -65,15 +67,17 @@ public final class NBTUtils {
     public static void loadAllItems(@NotNull NBTList<NBTCompound> items, @NotNull Inventory destination) {
         destination.clear();
         for (NBTCompound tag : items) {
-            Material item = Registries.getMaterial(tag.getString("id"));
-            if (item == Material.AIR) {
-                item = Material.STONE;
+            Material material = Registries.getMaterial(tag.getString("id"));
+            if (material == Material.AIR) {
+                material = Material.STONE;
             }
-            ItemStack stack = ItemStack.of(item, tag.getByte("Count"));
+            byte count = tag.getByte("Count");
+            NBTCompound nbtCompound = null;
             if (tag.containsKey("tag")) {
-                loadDataIntoItem(stack, tag.getCompound("tag"));
+                nbtCompound = tag.getCompound("tag");
             }
-            destination.setItemStack(tag.getByte("Slot"), stack);
+            ItemStack itemStack = loadItem(material, count, nbtCompound);
+            destination.setItemStack(tag.getByte("Slot"), itemStack);
         }
     }
 
@@ -124,32 +128,44 @@ public final class NBTUtils {
 
         final Material material = Material.fromId((short) id);
         final byte count = reader.readByte();
-        ItemStack item = ItemStack.of(material, count);
+        NBTCompound nbtCompound = null;
 
         try {
             final NBT itemNBT = reader.readTag();
             if (itemNBT instanceof NBTCompound) { // can also be a TAG_End if no data
-                NBTCompound nbt = (NBTCompound) itemNBT;
-                loadDataIntoItem(item, nbt);
+                nbtCompound = (NBTCompound) itemNBT;
             }
         } catch (IOException | NBTException e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
 
-        return item;
+        return loadItem(material, count, nbtCompound);
+    }
+
+    public static @NotNull ItemStack loadItem(@NotNull Material material, int count, NBTCompound nbtCompound) {
+        return ItemStack.builder(material)
+                .amount(count)
+                .meta(metaBuilder -> {
+                    if (nbtCompound != null) {
+                        return ItemMetaBuilder.fromNBT(metaBuilder, nbtCompound);
+                    } else {
+                        return metaBuilder;
+                    }
+                })
+                .build();
     }
 
     @SuppressWarnings("ConstantConditions")
-    public static void loadDataIntoItem(@NotNull ItemStack item, @NotNull NBTCompound nbt) {
-        /*if (nbt.containsKey("Damage")) item.setDamage(nbt.getInt("Damage"));
-        if (nbt.containsKey("Unbreakable")) item.setUnbreakable(nbt.getAsByte("Unbreakable") == 1);
-        if (nbt.containsKey("HideFlags")) item.setHideFlag(nbt.getInt("HideFlags"));
+    public static void loadDataIntoMeta(@NotNull ItemMetaBuilder metaBuilder, @NotNull NBTCompound nbt) {
+        if (nbt.containsKey("Damage")) metaBuilder.damage(nbt.getInt("Damage"));
+        if (nbt.containsKey("Unbreakable")) metaBuilder.unbreakable(nbt.getAsByte("Unbreakable") == 1);
+        if (nbt.containsKey("HideFlags")) metaBuilder.hideFlag(nbt.getInt("HideFlags"));
         if (nbt.containsKey("display")) {
             final NBTCompound display = nbt.getCompound("display");
             if (display.containsKey("Name")) {
                 final String rawName = display.getString("Name");
                 final Component displayName = GsonComponentSerializer.gson().deserialize(rawName);
-                item.setDisplayName(displayName);
+                metaBuilder.displayName(displayName);
             }
             if (display.containsKey("Lore")) {
                 NBTList<NBTString> loreList = display.getList("Lore");
@@ -157,19 +173,20 @@ public final class NBTUtils {
                 for (NBTString s : loreList) {
                     lore.add(GsonComponentSerializer.gson().deserialize(s.getValue()));
                 }
-                item.setLore(lore);
+                metaBuilder.lore(lore);
             }
         }
 
         // Enchantments
         if (nbt.containsKey("Enchantments")) {
-            loadEnchantments(nbt.getList("Enchantments"), item::setEnchantment);
+            loadEnchantments(nbt.getList("Enchantments"), metaBuilder::enchantment);
         }
 
         // Attributes
         if (nbt.containsKey("AttributeModifiers")) {
-            NBTList<NBTCompound> attributes = nbt.getList("AttributeModifiers");
-            for (NBTCompound attributeNBT : attributes) {
+            List<ItemAttribute> attributes = new ArrayList<>();
+            NBTList<NBTCompound> nbtAttributes = nbt.getList("AttributeModifiers");
+            for (NBTCompound attributeNBT : nbtAttributes) {
                 final UUID uuid;
                 {
                     final int[] uuidArray = attributeNBT.getIntArray("UUID");
@@ -203,44 +220,37 @@ public final class NBTUtils {
                 // Add attribute
                 final ItemAttribute itemAttribute =
                         new ItemAttribute(uuid, name, attribute, attributeOperation, value, attributeSlot);
-                item.addAttribute(itemAttribute);
+                attributes.add(itemAttribute);
             }
-        }
-
-        // Hide flags
-        {
-            if (nbt.containsKey("HideFlags")) {
-                item.setHideFlag(nbt.getInt("HideFlags"));
-            }
+            metaBuilder.attributes(attributes);
         }
 
         // Custom model data
         {
             if (nbt.containsKey("CustomModelData")) {
-                item.setCustomModelData(nbt.getInt("CustomModelData"));
+                metaBuilder.customModelData(nbt.getInt("CustomModelData"));
             }
         }
 
-        // Meta specific field
-        final ItemMeta itemMeta = item.getItemMeta();
-        if (itemMeta != null) {
-            itemMeta.read(nbt);
-        }
+        // Meta specific fields
+        metaBuilder.read(nbt);
 
         // Ownership
         {
-            if (nbt.containsKey(ItemStack.OWNERSHIP_DATA_KEY)) {
+            // FIXME: custom data
+            /*if (nbt.containsKey(ItemStack.OWNERSHIP_DATA_KEY)) {
                 final String identifierString = nbt.getString(ItemStack.OWNERSHIP_DATA_KEY);
                 final UUID identifier = UUID.fromString(identifierString);
                 final Data data = ItemStack.DATA_OWNERSHIP.getOwnObject(identifier);
                 if (data != null) {
                     item.setData(data);
                 }
-            }
+            }*/
         }
 
         //CanPlaceOn
-        {
+        // FIXME: PlaceOn/CanDestroy
+        /*{
             if (nbt.containsKey("CanPlaceOn")) {
                 NBTList<NBTString> canPlaceOn = nbt.getList("CanPlaceOn");
                 canPlaceOn.forEach(x -> item.getCanPlaceOn().add(x.getValue()));
@@ -268,7 +278,7 @@ public final class NBTUtils {
         }
     }
 
-    public static void writeItemStack(BinaryWriter packet, @NotNull ItemStack itemStack) {
+    public static void writeItemStack(@NotNull BinaryWriter packet, @NotNull ItemStack itemStack) {
         if (itemStack.isAir()) {
             packet.writeBoolean(false);
         } else {

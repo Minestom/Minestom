@@ -136,8 +136,7 @@ public class CrossbowMeta extends ItemMeta {
 
                 final NBTCompound tagsCompound = projectileCompound.getCompound("tag");
 
-                ItemStack itemStack = ItemStack.of(material, count);
-                NBTUtils.loadDataIntoItem(itemStack, tagsCompound);
+                ItemStack itemStack = NBTUtils.loadItem(material, count, tagsCompound);
 
                 index++;
 

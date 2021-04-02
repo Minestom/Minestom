@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 public class ItemBuilder {
 
@@ -38,8 +39,14 @@ public class ItemBuilder {
         return this;
     }
 
+    @Contract(value = "_ -> this")
+    public @NotNull ItemBuilder meta(@NotNull UnaryOperator<@NotNull ItemMetaBuilder> itemMetaConsumer) {
+        itemMetaConsumer.apply(metaBuilder);
+        return this;
+    }
+
     @Contract(value = "_, _ -> this")
-    public <T extends ItemMetaBuilder, U extends ItemMetaBuilder.Provider<T>> @NotNull ItemBuilder meta(Class<U> metaType, Consumer<T> itemMetaConsumer) {
+    public <T extends ItemMetaBuilder, U extends ItemMetaBuilder.Provider<T>> @NotNull ItemBuilder meta(@NotNull Class<U> metaType, @NotNull Consumer<@NotNull T> itemMetaConsumer) {
         itemMetaConsumer.accept((T) metaBuilder);
         return this;
     }

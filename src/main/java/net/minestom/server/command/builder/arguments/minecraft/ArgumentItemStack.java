@@ -47,8 +47,6 @@ public class ArgumentItemStack extends Argument<ItemStack> {
             final String materialName = input.substring(0, nbtIndex);
             final Material material = Registries.getMaterial(materialName);
 
-            ItemStack itemStack = ItemStack.of(material);
-
             final String sNBT = input.substring(nbtIndex).replace("\\\"", "\"");
 
             NBTCompound compound;
@@ -58,9 +56,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
                 throw new ArgumentSyntaxException("Item NBT is invalid", input, INVALID_NBT);
             }
 
-            NBTUtils.loadDataIntoItem(itemStack, compound);
-
-            return itemStack;
+            return NBTUtils.loadItem(material, 1, compound);
         }
     }
 

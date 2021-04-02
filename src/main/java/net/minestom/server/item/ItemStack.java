@@ -81,6 +81,11 @@ public class ItemStack {
         return builder().meta(metaType, metaConsumer).build();
     }
 
+    @Contract(value = "_ -> new", pure = true)
+    public @NotNull ItemStack withMeta(@NotNull UnaryOperator<@NotNull ItemMetaBuilder> metaOperator) {
+        return builder().meta(metaOperator).build();
+    }
+
     @Contract(pure = true)
     public @Nullable Component getDisplayName() {
         return meta.getDisplayName();

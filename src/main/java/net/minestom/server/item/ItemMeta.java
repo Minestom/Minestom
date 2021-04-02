@@ -30,6 +30,7 @@ public class ItemMeta implements Cloneable {
 
     private final int customModelData;
 
+    private final @Nullable NBTCompound originalNbt;
     private SoftReference<NBTCompound> cache;
 
     protected ItemMeta(@NotNull ItemMetaBuilder metaBuilder) {
@@ -42,6 +43,9 @@ public class ItemMeta implements Cloneable {
         this.enchantmentMap = Collections.unmodifiableMap(metaBuilder.enchantmentMap);
         this.attributes = new ArrayList<>();
         this.customModelData = 0;
+
+        // Can be null
+        this.originalNbt = metaBuilder.originalNBT;
     }
 
     @Contract(value = "_, -> new", pure = true)
@@ -69,28 +73,38 @@ public class ItemMeta implements Cloneable {
     }
 
     @Contract(pure = true)
-    public @Nullable List<@NotNull Component> getLore() {
+    public @NotNull List<@NotNull Component> getLore() {
         return lore;
     }
 
-    public Map<Enchantment, Short> getEnchantmentMap() {
+    @Contract(pure = true)
+    public @NotNull Map<Enchantment, Short> getEnchantmentMap() {
         return enchantmentMap;
     }
 
-    public List<ItemAttribute> getAttributes() {
+    @Contract(pure = true)
+    public @NotNull List<ItemAttribute> getAttributes() {
         return attributes;
     }
 
+    @Contract(pure = true)
     public int getCustomModelData() {
         return customModelData;
     }
 
     public @NotNull NBTCompound toNBT() {
+        if (originalNbt != null) {
+            // Return the nbt this meta has been created with
+            return originalNbt;
+        }
+
         var nbt = cache != null ? cache.get() : null;
         if (nbt == null) {
             nbt = NBTUtils.metaToNBT(this);
-            cache = new SoftReference<>(nbt);
+            this.builder.write(nbt);
+            this.cache = new SoftReference<>(nbt);
         }
+
         return nbt;
     }
 
@@ -108,6 +122,7 @@ public class ItemMeta implements Cloneable {
         return toNBT().hashCode();
     }
 
+    @Contract(value = "-> new", pure = true)
     protected @NotNull ItemMetaBuilder builder() {
         return builder.clone();
     }
