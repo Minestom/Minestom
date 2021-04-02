@@ -3,11 +3,13 @@ package net.minestom.server.item;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.utils.NBTUtils;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 public abstract class ItemMetaBuilder implements Cloneable {
 
@@ -21,9 +23,6 @@ public abstract class ItemMetaBuilder implements Cloneable {
     protected int customModelData;
 
     protected NBTCompound originalNBT;
-
-    protected ItemMetaBuilder() {
-    }
 
     public @NotNull ItemMetaBuilder damage(int damage) {
         this.damage = damage;
@@ -88,10 +87,14 @@ public abstract class ItemMetaBuilder implements Cloneable {
 
     protected abstract void deepClone(@NotNull ItemMetaBuilder metaBuilder);
 
-    public static @NotNull ItemMetaBuilder fromNBT(@NotNull ItemMetaBuilder metaBuilder, @NotNull NBTCompound nbtCompound) {
-        NBTUtils.loadDataIntoMeta(metaBuilder, nbtCompound);
-        metaBuilder.originalNBT = nbtCompound;
-        return metaBuilder;
+    protected abstract @NotNull Supplier<@NotNull ItemMetaBuilder> getSupplier();
+
+    @Contract(value = "_, _ -> new", pure = true)
+    public static @NotNull ItemMetaBuilder fromNBT(@NotNull ItemMetaBuilder src, @NotNull NBTCompound nbtCompound) {
+        ItemMetaBuilder dest = src.getSupplier().get();
+        NBTUtils.loadDataIntoMeta(dest, nbtCompound);
+        dest.originalNBT = nbtCompound;
+        return dest;
     }
 
     @Override

@@ -222,19 +222,19 @@ public class PlayerInit {
 
         globalEventHandler.addEventCallback(PlayerSpawnEvent.class, event -> {
             final Player player = event.getPlayer();
-            player.setGameMode(GameMode.SURVIVAL);
+            player.setGameMode(GameMode.CREATIVE);
 
             player.setPermissionLevel(4);
 
             PlayerInventory inventory = player.getInventory();
             ItemStack itemStack = ItemStack.of(Material.STONE, 64);
-            inventory.addItemStack(itemStack);
+            //inventory.addItemStack(itemStack);
 
             {
                 ItemStack item = ItemStack.builder(Material.DIAMOND_CHESTPLATE)
                         .displayName(Component.text("test"))
                         .build();
-                inventory.setChestplate(item);
+                //inventory.setChestplate(item);
             }
 
             //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 32));

@@ -142,7 +142,7 @@ public final class NBTUtils {
         return loadItem(material, count, nbtCompound);
     }
 
-    public static @NotNull ItemStack loadItem(@NotNull Material material, int count, NBTCompound nbtCompound) {
+    public static @NotNull ItemStack loadItem(@NotNull Material material, int count, @Nullable NBTCompound nbtCompound) {
         return ItemStack.builder(material)
                 .amount(count)
                 .meta(metaBuilder -> {

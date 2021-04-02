@@ -41,7 +41,7 @@ public class ItemBuilder {
 
     @Contract(value = "_ -> this")
     public @NotNull ItemBuilder meta(@NotNull UnaryOperator<@NotNull ItemMetaBuilder> itemMetaConsumer) {
-        itemMetaConsumer.apply(metaBuilder);
+        this.metaBuilder = itemMetaConsumer.apply(metaBuilder);
         return this;
     }
 

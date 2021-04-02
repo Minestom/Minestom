@@ -11,6 +11,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<CompassMeta.Builder> {
 
@@ -142,6 +143,11 @@ public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<Co
             compassBuilder.lodestoneTracked = lodestoneTracked;
             compassBuilder.lodestoneDimension = lodestoneDimension;
             compassBuilder.lodestonePosition = lodestonePosition;
+        }
+
+        @Override
+        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
+            return Builder::new;
         }
     }
 }
