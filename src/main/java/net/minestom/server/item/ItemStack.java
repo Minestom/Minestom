@@ -12,9 +12,18 @@ import java.util.function.Consumer;
 import java.util.function.IntUnaryOperator;
 import java.util.function.UnaryOperator;
 
+/**
+ * Represents an immutable item to be placed inside {@link net.minestom.server.inventory.PlayerInventory},
+ * {@link net.minestom.server.inventory.Inventory} or even on the ground {@link net.minestom.server.entity.ItemEntity}.
+ * <p>
+ * An item stack cannot be null, {@link ItemStack#AIR} should be used instead.
+ */
 public class ItemStack {
 
-    public static final ItemStack AIR = ItemStack.of(Material.AIR);
+    /**
+     * Constant AIR item. Should be used instead of 'null'.
+     */
+    public static final @NotNull ItemStack AIR = ItemStack.of(Material.AIR);
 
     private final UUID uuid = UUID.randomUUID();
     private final StackingRule stackingRule = new VanillaStackingRule(64);
@@ -23,7 +32,7 @@ public class ItemStack {
     private final int amount;
     private final ItemMeta meta;
 
-    protected ItemStack(@NotNull Material material, int amount, ItemMeta meta) {
+    protected ItemStack(@NotNull Material material, int amount, @NotNull ItemMeta meta) {
         this.material = material;
         this.amount = amount;
         this.meta = meta;
@@ -102,7 +111,7 @@ public class ItemStack {
     }
 
     @Contract(pure = true)
-    public @Nullable List<@NotNull Component> getLore() {
+    public @NotNull List<@NotNull Component> getLore() {
         return meta.getLore();
     }
 

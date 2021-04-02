@@ -26,7 +26,6 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.PlayerInventory;
-import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.meta.CompassMeta;
@@ -38,7 +37,6 @@ import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -68,7 +66,6 @@ public class PlayerInit {
         {
             CompassMeta compassMeta = new CompassMeta.Builder()
                     .lodestonePosition(new Position(0, 0, 0))
-                    .enchantments(Map.of(Enchantment.KNOCKBACK, (short) 5, Enchantment.EFFICIENCY, (short) 10))
                     .build();
 
             ItemStack itemStack = ItemStack.builder(Material.COMPASS)

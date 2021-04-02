@@ -1,7 +1,5 @@
 package net.minestom.server.item.meta;
 
-import net.kyori.adventure.text.Component;
-import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.utils.Position;
@@ -9,8 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.List;
-import java.util.Map;
 import java.util.function.Supplier;
 
 public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<CompassMeta.Builder> {
@@ -20,7 +16,9 @@ public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<Co
     private final Position lodestonePosition;
 
     protected CompassMeta(ItemMetaBuilder metaBuilder,
-                          boolean lodestoneTracked, String lodestoneDimension, Position lodestonePosition) {
+                          boolean lodestoneTracked,
+                          @Nullable String lodestoneDimension,
+                          @Nullable Position lodestonePosition) {
         super(metaBuilder);
         this.lodestoneTracked = lodestoneTracked;
         this.lodestoneDimension = lodestoneDimension;
@@ -31,11 +29,11 @@ public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<Co
         return lodestoneTracked;
     }
 
-    public String getLodestoneDimension() {
+    public @Nullable String getLodestoneDimension() {
         return lodestoneDimension;
     }
 
-    public Position getLodestonePosition() {
+    public @Nullable Position getLodestonePosition() {
         return lodestonePosition;
     }
 
@@ -50,51 +48,13 @@ public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<Co
             return this;
         }
 
-        public Builder lodestoneDimension(String lodestoneDimension) {
+        public Builder lodestoneDimension(@Nullable String lodestoneDimension) {
             this.lodestoneDimension = lodestoneDimension;
             return this;
         }
 
-        public Builder lodestonePosition(Position lodestonePosition) {
+        public Builder lodestonePosition(@Nullable Position lodestonePosition) {
             this.lodestonePosition = lodestonePosition;
-            return this;
-        }
-
-        @Override
-        public @NotNull Builder displayName(@Nullable Component displayName) {
-            super.displayName(displayName);
-            return this;
-        }
-
-        @Override
-        public @NotNull Builder lore(List<@NotNull Component> lore) {
-            super.lore(lore);
-            return this;
-
-        }
-
-        @Override
-        public @NotNull Builder lore(Component... lore) {
-            super.lore(lore);
-            return this;
-        }
-
-        @Override
-        public @NotNull Builder enchantments(@NotNull Map<Enchantment, Short> enchantments) {
-            super.enchantments(enchantments);
-            return this;
-
-        }
-
-        @Override
-        public @NotNull Builder enchantment(@NotNull Enchantment enchantment, short level) {
-            super.enchantment(enchantment, level);
-            return this;
-        }
-
-        @Override
-        public @NotNull Builder clearEnchantment() {
-            super.clearEnchantment();
             return this;
         }
 

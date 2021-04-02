@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -40,10 +41,10 @@ public abstract class StackingRule {
      *
      * @param item      the {@link ItemStack} to applies the size to
      * @param newAmount the new item size
-     * @return the new {@link ItemStack} with the new amount
+     * @return a new {@link ItemStack item} with the specified amount
      */
-    @NotNull
-    public abstract ItemStack apply(@NotNull ItemStack item, int newAmount);
+    @Contract("_, _ -> new")
+    public abstract @NotNull ItemStack apply(@NotNull ItemStack item, int newAmount);
 
     /**
      * Used to determine the current stack size of an {@link ItemStack}.

@@ -55,14 +55,17 @@ public class ItemMeta implements Cloneable {
         return builder.build();
     }
 
+    @Contract(pure = true)
     public int getDamage() {
         return damage;
     }
 
+    @Contract(pure = true)
     public boolean isUnbreakable() {
         return unbreakable;
     }
 
+    @Contract(pure = true)
     public int getHideFlag() {
         return hideFlag;
     }
