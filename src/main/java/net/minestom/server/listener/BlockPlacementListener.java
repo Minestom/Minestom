@@ -195,8 +195,6 @@ public class BlockPlacementListener {
         if (refreshChunk) {
             chunk.sendChunkSectionUpdate(ChunkUtils.getSectionAt(blockPosition.getY()), player);
         }
-
-        player.getInventory().refreshSlot(player.getHeldSlot());
     }
 
 }
