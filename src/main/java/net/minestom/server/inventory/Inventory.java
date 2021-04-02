@@ -10,7 +10,6 @@ import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.server.play.OpenWindowPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
@@ -149,30 +148,14 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
 
     @Override
     public synchronized boolean addItemStack(@NotNull ItemStack itemStack) {
-        final StackingRule stackingRule = itemStack.getStackingRule();
-        for (int i = 0; i < getSize(); i++) {
-            ItemStack item = getItemStack(i);
-            final StackingRule itemStackingRule = item.getStackingRule();
-            if (itemStackingRule.canBeStacked(itemStack, item)) {
-                final int itemAmount = itemStackingRule.getAmount(item);
-                if (itemAmount == stackingRule.getMaxSize())
-                    continue;
-                final int itemStackAmount = itemStackingRule.getAmount(itemStack);
-                final int totalAmount = itemStackAmount + itemAmount;
-                if (!stackingRule.canApply(itemStack, totalAmount)) {
-                    item = itemStackingRule.apply(item, itemStackingRule.getMaxSize());
-                    setItemStack(i, item);
-                    itemStack = stackingRule.apply(itemStack, totalAmount - stackingRule.getMaxSize());
-                } else {
-                    setItemStack(i, item.withAmount(totalAmount));
-                    return true;
-                }
-            } else if (item.isAir()) {
-                setItemStack(i, itemStack);
-                return true;
-            }
-        }
-        return false;
+        // Make the method synchronized
+        return InventoryModifier.super.addItemStack(itemStack);
+    }
+
+    @Override
+    public synchronized boolean addItemStack(@NotNull ItemStack itemStack, int startSlot, int endSlot) {
+        // Make the method synchronized
+        return InventoryModifier.super.addItemStack(itemStack, startSlot, endSlot);
     }
 
     @Override

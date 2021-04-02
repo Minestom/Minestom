@@ -1,7 +1,10 @@
 package net.minestom.server.inventory;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.StackingRule;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +31,49 @@ public interface InventoryModifier {
      * @param itemStack the item to add
      * @return true if the item has been successfully fully added, false otherwise
      */
-    boolean addItemStack(@NotNull ItemStack itemStack);
+    default boolean addItemStack(@NotNull ItemStack itemStack) {
+        return addItemStack(itemStack, 0, getSize());
+    }
+
+    default boolean addItemStack(@NotNull ItemStack itemStack, int startSlot, int endSlot) {
+        Int2ObjectMap<ItemStack> itemChangesMap = new Int2ObjectOpenHashMap<>();
+
+        final StackingRule stackingRule = itemStack.getStackingRule();
+        for (int i = startSlot; i < endSlot; i++) {
+            ItemStack inventoryItem = getItemStack(i);
+            if (stackingRule.canBeStacked(itemStack, inventoryItem)) {
+                final int itemAmount = stackingRule.getAmount(inventoryItem);
+                if (itemAmount == stackingRule.getMaxSize())
+                    continue;
+                final int itemStackAmount = stackingRule.getAmount(itemStack);
+                final int totalAmount = itemStackAmount + itemAmount;
+                if (!stackingRule.canApply(itemStack, totalAmount)) {
+                    // Slot cannot accept the whole item, reduce amount to 'itemStack'
+                    itemChangesMap.put(i, stackingRule.apply(inventoryItem, stackingRule.getMaxSize()));
+                    itemStack = stackingRule.apply(itemStack, totalAmount - stackingRule.getMaxSize());
+                } else {
+                    // Slot can accept the whole item
+                    itemChangesMap.put(i, inventoryItem.withAmount(totalAmount));
+                    itemStack = ItemStack.AIR;
+                    break;
+                }
+            } else if (inventoryItem.isAir()) {
+                // Fill the slot
+                itemChangesMap.put(i, itemStack);
+                itemStack = ItemStack.AIR;
+                break;
+            }
+        }
+
+        if (itemStack.isAir()) {
+            // Item can be fully placed inside the inventory, do so
+            itemChangesMap.forEach(this::setItemStack);
+            return true;
+        } else {
+            // Inventory cannot accept the item fully
+            return false;
+        }
+    }
 
     /**
      * Clears the inventory and send relevant update to the viewer(s).

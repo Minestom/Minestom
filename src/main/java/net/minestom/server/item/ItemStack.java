@@ -128,7 +128,7 @@ public class ItemStack {
 
     @Contract(pure = true)
     public boolean isAir() {
-        return equals(AIR);
+        return material.equals(Material.AIR);
     }
 
     @Contract(pure = true)
