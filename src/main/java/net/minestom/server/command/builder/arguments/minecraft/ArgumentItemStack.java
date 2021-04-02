@@ -42,12 +42,12 @@ public class ArgumentItemStack extends Argument<ItemStack> {
         if (nbtIndex == -1) {
             // Only item name
             final Material material = Registries.getMaterial(input);
-            return new ItemStack(material, (byte) 1);
+            return ItemStack.of(material);
         } else {
             final String materialName = input.substring(0, nbtIndex);
             final Material material = Registries.getMaterial(materialName);
 
-            ItemStack itemStack = new ItemStack(material, (byte) 1);
+            ItemStack itemStack = ItemStack.of(material);
 
             final String sNBT = input.substring(nbtIndex).replace("\\\"", "\"");
 

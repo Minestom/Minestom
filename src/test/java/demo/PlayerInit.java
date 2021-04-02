@@ -27,7 +27,6 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.Enchantment;
-import net.minestom.server.item.Item;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.meta.CompassMeta;
@@ -35,7 +34,6 @@ import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
-import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
@@ -73,7 +71,7 @@ public class PlayerInit {
                     .enchantments(Map.of(Enchantment.KNOCKBACK, (short) 5, Enchantment.EFFICIENCY, (short) 10))
                     .build();
 
-            Item item = Item.builder(Material.COMPASS)
+            ItemStack itemStack = ItemStack.builder(Material.COMPASS)
                     .amount(5)
                     .meta(compassMeta)
                     .meta(CompassMeta.class, builder -> {
@@ -82,7 +80,7 @@ public class PlayerInit {
                     .displayName(Component.text("displayName"))
                     .build();
 
-            item = item.with(itemBuilder -> itemBuilder
+            itemStack = itemStack.with(itemBuilder -> itemBuilder
                     .amount(10)
                     .meta(CompassMeta.class, builder -> {
                         builder.lodestonePosition(new Position(5, 0, 0));
@@ -224,21 +222,19 @@ public class PlayerInit {
 
         globalEventHandler.addEventCallback(PlayerSpawnEvent.class, event -> {
             final Player player = event.getPlayer();
-            player.setGameMode(GameMode.CREATIVE);
+            player.setGameMode(GameMode.SURVIVAL);
 
             player.setPermissionLevel(4);
 
             PlayerInventory inventory = player.getInventory();
-            ItemStack itemStack = new ItemStack(Material.STONE, (byte) 64);
+            ItemStack itemStack = ItemStack.of(Material.STONE, 64);
             inventory.addItemStack(itemStack);
 
             {
-                ItemStack item = new ItemStack(Material.DIAMOND_CHESTPLATE, (byte) 1);
+                ItemStack item = ItemStack.builder(Material.DIAMOND_CHESTPLATE)
+                        .displayName(Component.text("test"))
+                        .build();
                 inventory.setChestplate(item);
-                item.setDisplayName(ColoredText.of("test"));
-
-                inventory.refreshSlot((short) PlayerInventoryUtils.CHESTPLATE_SLOT);
-
             }
 
             //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 32));

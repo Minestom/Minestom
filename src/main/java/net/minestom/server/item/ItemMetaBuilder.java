@@ -9,7 +9,7 @@ import java.util.*;
 public abstract class ItemMetaBuilder implements Cloneable {
 
     protected Component displayName;
-    protected List<Component> lore;
+    protected List<Component> lore = new ArrayList<>();
     protected Map<Enchantment, Short> enchantmentMap = new HashMap<>();
 
     protected ItemMetaBuilder() {

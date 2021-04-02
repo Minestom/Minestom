@@ -180,6 +180,7 @@ public class BinaryWriter extends OutputStream {
     /**
      * Writes a JsonMessage to the buffer.
      * Simply a writeSizedString with message.toString()
+     *
      * @param message
      */
     public void writeJsonMessage(JsonMessage message) {
@@ -277,6 +278,7 @@ public class BinaryWriter extends OutputStream {
 
     /**
      * Writes the given writeable object into this writer.
+     *
      * @param writeable the object to write
      */
     public void write(Writeable writeable) {
@@ -286,11 +288,12 @@ public class BinaryWriter extends OutputStream {
     /**
      * Writes an array of writeable objects to this writer. Will prepend the binary stream with a var int to denote the
      * length of the array.
+     *
      * @param writeables the array of writeables to write
      */
     public void writeArray(Writeable[] writeables) {
         writeVarInt(writeables.length);
-        for(Writeable w : writeables) {
+        for (Writeable w : writeables) {
             write(w);
         }
     }

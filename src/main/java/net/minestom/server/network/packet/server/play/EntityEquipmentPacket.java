@@ -17,7 +17,8 @@ public class EntityEquipmentPacket implements ServerPacket {
     public Slot[] slots;
     public ItemStack[] itemStacks;
 
-    public EntityEquipmentPacket() {}
+    public EntityEquipmentPacket() {
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -53,7 +54,7 @@ public class EntityEquipmentPacket implements ServerPacket {
         boolean hasRemaining = true;
         List<Slot> slots = new LinkedList<>();
         List<ItemStack> stacks = new LinkedList<>();
-        while(hasRemaining) {
+        while (hasRemaining) {
             byte slotEnum = reader.readByte();
             hasRemaining = (slotEnum & 0x80) == 0x80;
 

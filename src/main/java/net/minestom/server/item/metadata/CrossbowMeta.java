@@ -4,7 +4,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NBTUtils;
-import net.minestom.server.utils.clone.CloneUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -137,7 +136,7 @@ public class CrossbowMeta extends ItemMeta {
 
                 final NBTCompound tagsCompound = projectileCompound.getCompound("tag");
 
-                ItemStack itemStack = new ItemStack(material, count);
+                ItemStack itemStack = ItemStack.of(material, count);
                 NBTUtils.loadDataIntoItem(itemStack, tagsCompound);
 
                 index++;
@@ -184,9 +183,9 @@ public class CrossbowMeta extends ItemMeta {
     public ItemMeta clone() {
         CrossbowMeta crossbowMeta = (CrossbowMeta) super.clone();
         crossbowMeta.triple = triple;
-        crossbowMeta.projectile1 = CloneUtils.optionalClone(projectile1);
-        crossbowMeta.projectile2 = CloneUtils.optionalClone(projectile2);
-        crossbowMeta.projectile3 = CloneUtils.optionalClone(projectile3);
+        crossbowMeta.projectile1 = projectile1;
+        crossbowMeta.projectile2 = projectile2;
+        crossbowMeta.projectile3 = projectile3;
 
         crossbowMeta.charged = charged;
 
@@ -195,12 +194,9 @@ public class CrossbowMeta extends ItemMeta {
 
     @NotNull
     private NBTCompound getItemCompound(@NotNull ItemStack itemStack) {
-        NBTCompound compound = new NBTCompound();
-
-        compound.setByte("Count", itemStack.getAmount());
+        NBTCompound compound = NBTUtils.metaToNBT(itemStack.getMeta());
+        compound.setByte("Count", (byte) itemStack.getAmount());
         compound.setString("id", itemStack.getMaterial().getName());
-        NBTUtils.saveDataIntoNBT(itemStack, compound);
-
         return compound;
     }
 }

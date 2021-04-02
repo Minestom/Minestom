@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * Item meta for
+ * ItemStack meta for
  * {@link net.minestom.server.item.Material#POTION},
  * {@link net.minestom.server.item.Material#LINGERING_POTION},
  * {@link net.minestom.server.item.Material#SPLASH_POTION},

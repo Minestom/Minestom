@@ -1,6 +1,5 @@
 package net.minestom.server.chat;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.kyori.adventure.text.Component;
@@ -93,11 +92,8 @@ public class ChatHoverEvent {
         JsonObject obj = GsonComponentSerializer.gson().serializer().toJsonTree(Component.empty().hoverEvent(event)).getAsJsonObject();
         obj = obj.get("hoverEvent").getAsJsonObject().get("contents").getAsJsonObject();
 
-        if (itemStack.getItemMeta() != null) {
-            NBTCompound compound = new NBTCompound();
-            itemStack.getItemMeta().write(compound);
-            obj.add("tag", new JsonPrimitive(compound.toSNBT()));
-        }
+        NBTCompound compound = itemStack.getMeta().toNBT();
+        obj.add("tag", new JsonPrimitive(compound.toSNBT()));
 
         return new ChatHoverEvent("show_item", obj);
     }

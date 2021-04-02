@@ -60,7 +60,7 @@ public class Advancement {
     public Advancement(@NotNull JsonMessage title, @NotNull JsonMessage description,
                        @NotNull Material icon, @NotNull FrameType frameType,
                        float x, float y) {
-        this(title, description, new ItemStack(icon, (byte) 1), frameType, x, y);
+        this(title, description, ItemStack.of(icon, 1), frameType, x, y);
     }
 
     public Advancement(@NotNull Component title, Component description,
@@ -77,7 +77,7 @@ public class Advancement {
     public Advancement(@NotNull Component title, @NotNull Component description,
                        @NotNull Material icon, @NotNull FrameType frameType,
                        float x, float y) {
-        this(title, description, new ItemStack(icon, (byte) 1), frameType, x, y);
+        this(title, description, ItemStack.of(icon, 1), frameType, x, y);
     }
 
     /**

@@ -10,7 +10,7 @@ public class AnimationListener {
     public static void animationListener(ClientAnimationPacket packet, Player player) {
         final Player.Hand hand = packet.hand;
         final ItemStack itemStack = player.getItemInHand(hand);
-        itemStack.onLeftClick(player, hand);
+        //itemStack.onLeftClick(player, hand);
         PlayerHandAnimationEvent handAnimationEvent = new PlayerHandAnimationEvent(player, hand);
         player.callCancellableEvent(PlayerHandAnimationEvent.class, handAnimationEvent, () -> {
             switch (hand) {

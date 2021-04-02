@@ -47,11 +47,12 @@ public class PlayerDiggingListener {
             } else if (player.getGameMode() == GameMode.ADVENTURE) {
                 //Check if the item can break the block with the current item
                 ItemStack itemInMainHand = player.getItemInMainHand();
-                if (!itemInMainHand.canDestroy(instance.getBlock(blockPosition).getName())) {
+                // FIXME: canDestroy
+                /*if (!itemInMainHand.canDestroy(instance.getBlock(blockPosition).getName())) {
                     sendAcknowledgePacket(player, blockPosition, blockStateId,
                             ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
                     return;
-                }
+                }*/
             }
 
             final boolean instantBreak = player.isCreative() ||
@@ -111,7 +112,7 @@ public class PlayerDiggingListener {
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM_STACK) {
 
             final ItemStack droppedItemStack = player.getInventory().getItemInMainHand();
-            dropItem(player, droppedItemStack, ItemStack.getAirItem());
+            dropItem(player, droppedItemStack, ItemStack.AIR);
 
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM) {
 
@@ -123,14 +124,11 @@ public class PlayerDiggingListener {
 
             if (handAmount <= dropAmount) {
                 // Drop the whole item without copy
-                dropItem(player, handItem, ItemStack.getAirItem());
+                dropItem(player, handItem, ItemStack.AIR);
             } else {
                 // Drop a single item, need a copy
-                ItemStack droppedItemStack2 = handItem.clone();
+                ItemStack droppedItemStack2 = stackingRule.apply(handItem, dropAmount);
 
-                droppedItemStack2 = stackingRule.apply(droppedItemStack2, dropAmount);
-
-                handItem = handItem.clone(); // Force the copy
                 handItem = stackingRule.apply(handItem, handAmount - dropAmount);
 
                 dropItem(player, droppedItemStack2, handItem);

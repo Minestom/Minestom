@@ -2,8 +2,6 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.advancements.FrameType;
-import net.minestom.server.chat.ColoredText;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -27,7 +25,8 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
     public String[] identifiersToRemove = new String[0];
     public ProgressMapping[] progressMappings = new ProgressMapping[0];
 
-    public AdvancementsPacket() {}
+    public AdvancementsPacket() {
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -151,14 +150,14 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
         @Override
         public void read(@NotNull BinaryReader reader) {
             boolean hasParent = reader.readBoolean();
-            if(hasParent) {
+            if (hasParent) {
                 parentIdentifier = reader.readSizedString(Integer.MAX_VALUE);
             } else {
                 parentIdentifier = null;
             }
 
             boolean hasDisplay = reader.readBoolean();
-            if(hasDisplay) {
+            if (hasDisplay) {
                 displayData = new DisplayData();
                 displayData.read(reader);
             } else {
@@ -179,7 +178,7 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
     public static class DisplayData implements Writeable, Readable {
         public Component title = Component.empty(); // Only text
         public Component description = Component.empty(); // Only text
-        public ItemStack icon = ItemStack.getAirItem();
+        public ItemStack icon = ItemStack.AIR;
         public FrameType frameType = FrameType.TASK;
         public int flags;
         public String backgroundTexture = "";
@@ -207,7 +206,7 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
             icon = reader.readItemStack();
             frameType = FrameType.values()[reader.readVarInt()];
             flags = reader.readInt();
-            if((flags & 0x1) != 0) {
+            if ((flags & 0x1) != 0) {
                 backgroundTexture = reader.readSizedString(Integer.MAX_VALUE);
             } else {
                 backgroundTexture = null;
@@ -304,7 +303,7 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
         @Override
         public void read(@NotNull BinaryReader reader) {
             achieved = reader.readBoolean();
-            if(achieved) {
+            if (achieved) {
                 dateOfAchieving = reader.readLong();
             }
         }

@@ -16,13 +16,13 @@ import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -79,8 +79,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         this.offset = size;
 
         this.itemStacks = new ItemStack[size];
-
-        ArrayUtils.fill(itemStacks, ItemStack::getAirItem);
+        Arrays.fill(itemStacks, ItemStack.AIR);
     }
 
     private static byte generateId() {
@@ -162,12 +161,10 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
                 final int totalAmount = itemStackAmount + itemAmount;
                 if (!stackingRule.canApply(itemStack, totalAmount)) {
                     item = itemStackingRule.apply(item, itemStackingRule.getMaxSize());
-
-                    sendSlotRefresh((short) i, item);
+                    setItemStack(i, item);
                     itemStack = stackingRule.apply(itemStack, totalAmount - stackingRule.getMaxSize());
                 } else {
-                    item.setAmount((byte) totalAmount);
-                    sendSlotRefresh((short) i, item);
+                    setItemStack(i, item.withAmount(totalAmount));
                     return true;
                 }
             } else if (item.isAir()) {
@@ -182,7 +179,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     public void clear() {
         // Clear the item array
         for (int i = 0; i < getSize(); i++) {
-            setItemStackInternal(i, ItemStack.getAirItem());
+            setItemStackInternal(i, ItemStack.AIR);
         }
         // Send the cleared inventory to viewers
         update();
@@ -289,7 +286,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      */
     @NotNull
     public ItemStack getCursorItem(@NotNull Player player) {
-        return cursorPlayersItem.getOrDefault(player, ItemStack.getAirItem());
+        return cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
     }
 
     /**
@@ -543,7 +540,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         final boolean outsideDrop = slot == -999;
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
         final ItemStack clicked = outsideDrop ?
-                ItemStack.getAirItem() : (isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot));
+                ItemStack.AIR : (isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot));
         final ItemStack cursor = getCursorItem(player);
 
         final InventoryClickResult clickResult = clickProcessor.drop(this, player,
@@ -574,7 +571,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
         final ItemStack clicked = slot != -999 ?
                 (isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot)) :
-                ItemStack.getAirItem();
+                ItemStack.AIR;
         final ItemStack cursor = getCursorItem(player);
 
         final InventoryClickResult clickResult = clickProcessor.dragging(this, player,

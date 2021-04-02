@@ -17,7 +17,7 @@ public class ItemBuilder {
 
     protected ItemBuilder(@NotNull Material material, @NotNull ItemMetaBuilder metaBuilder) {
         this.material = material;
-        this.amount = 0;
+        this.amount = 1;
         this.metaBuilder = metaBuilder;
     }
 
@@ -63,8 +63,8 @@ public class ItemBuilder {
     }
 
     @Contract(value = "-> new", pure = true)
-    public @NotNull Item build() {
-        return new Item(material, amount, metaBuilder.build());
+    public @NotNull ItemStack build() {
+        return new ItemStack(material, amount, metaBuilder.build());
     }
 
 }

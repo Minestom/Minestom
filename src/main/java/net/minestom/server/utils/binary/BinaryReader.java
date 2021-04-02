@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 /**
@@ -197,6 +196,7 @@ public class BinaryReader extends InputStream {
 
     /**
      * Creates a new object from the given supplier and calls its {@link Readable#read(BinaryReader)} method with this reader
+     *
      * @param supplier supplier to create new instances of your object
      * @param <T>
      * @return the read object
@@ -210,6 +210,7 @@ public class BinaryReader extends InputStream {
     /**
      * Reads the length of the array to read as a varint, creates the array to contain the readable objects and call
      * their respective {@link Readable#read(BinaryReader)} methods.
+     *
      * @param supplier supplier to create new instances of your object
      * @param <T>
      * @return the read objects
@@ -245,13 +246,14 @@ public class BinaryReader extends InputStream {
      * Records the current position, runs the given Runnable, and then returns the bytes between the position before
      * running the runnable and the position after.
      * Can be used to extract a subsection of this reader's buffer with complex data
+     *
      * @param extractor the extraction code, simply call the reader's read* methods here.
      */
     public byte[] extractBytes(Runnable extractor) {
         int startingPosition = getBuffer().readerIndex();
         extractor.run();
         int endingPosition = getBuffer().readerIndex();
-        byte[] output = new byte[endingPosition-startingPosition];
+        byte[] output = new byte[endingPosition - startingPosition];
         getBuffer().getBytes(startingPosition, output);
         return output;
     }
