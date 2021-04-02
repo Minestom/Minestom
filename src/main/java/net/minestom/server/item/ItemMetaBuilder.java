@@ -24,61 +24,73 @@ public abstract class ItemMetaBuilder implements Cloneable {
 
     protected NBTCompound originalNBT;
 
+    @Contract("_ -> this")
     public @NotNull ItemMetaBuilder damage(int damage) {
         this.damage = damage;
         return this;
     }
 
+    @Contract("_ -> this")
     public @NotNull ItemMetaBuilder unbreakable(boolean unbreakable) {
         this.unbreakable = unbreakable;
         return this;
     }
 
+    @Contract("_ -> this")
     public @NotNull ItemMetaBuilder hideFlag(int hideFlag) {
         this.hideFlag = hideFlag;
         return this;
     }
 
+    @Contract("_ -> this")
     public @NotNull ItemMetaBuilder displayName(@Nullable Component displayName) {
         this.displayName = displayName;
         return this;
     }
 
-    public @NotNull ItemMetaBuilder lore(List<@NotNull Component> lore) {
+    @Contract("_ -> this")
+    public @NotNull ItemMetaBuilder lore(@NotNull List<@NotNull Component> lore) {
         this.lore = lore;
         return this;
     }
 
+    @Contract("_ -> this")
     public @NotNull ItemMetaBuilder lore(Component... lore) {
         lore(Arrays.asList(lore));
         return this;
     }
 
+    @Contract("_ -> this")
     public @NotNull ItemMetaBuilder enchantments(@NotNull Map<Enchantment, Short> enchantments) {
         this.enchantmentMap.putAll(enchantments);
         return this;
     }
 
+    @Contract("_, _ -> this")
     public @NotNull ItemMetaBuilder enchantment(@NotNull Enchantment enchantment, short level) {
         this.enchantmentMap.put(enchantment, level);
         return this;
     }
 
+    @Contract("-> this")
     public @NotNull ItemMetaBuilder clearEnchantment() {
         this.enchantmentMap.clear();
         return this;
     }
 
-    public @NotNull ItemMetaBuilder attributes(List<ItemAttribute> attributes) {
+    @Contract("_ -> this")
+    public @NotNull ItemMetaBuilder attributes(@NotNull List<@NotNull ItemAttribute> attributes) {
         this.attributes = attributes;
         return this;
     }
 
+    @Contract("_ -> this")
     public @NotNull ItemMetaBuilder customModelData(int customModelData) {
         this.customModelData = customModelData;
         return this;
     }
 
+    @Contract("-> new")
     public abstract @NotNull ItemMeta build();
 
     public abstract void read(@NotNull NBTCompound nbtCompound);
