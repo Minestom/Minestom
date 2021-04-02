@@ -9,7 +9,7 @@ public class TemporaryPacketCache extends TemporaryCache<TimedBuffer> {
         super(duration, timeUnit, notification -> {
             final ByteBuf buffer = notification.getValue().getBuffer();
             synchronized (buffer) {
-                notification.getValue().getBuffer().release();
+                buffer.release();
             }
         });
     }
