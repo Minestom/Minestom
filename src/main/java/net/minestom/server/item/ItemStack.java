@@ -14,7 +14,7 @@ import java.util.function.UnaryOperator;
 
 public class ItemStack {
 
-    public static final ItemStack AIR = ItemStack.builder(Material.AIR).build();
+    public static final ItemStack AIR = ItemStack.of(Material.AIR);
 
     private final UUID uuid = UUID.randomUUID();
     private final StackingRule stackingRule = new VanillaStackingRule(64);
@@ -34,7 +34,7 @@ public class ItemStack {
         return new ItemBuilder(material);
     }
 
-    @Contract(value = "_ -> new", pure = true)
+    @Contract(value = "_ ,_ -> new", pure = true)
     public static @NotNull ItemStack of(@NotNull Material material, int amount) {
         return builder(material).amount(amount).build();
     }

@@ -6,15 +6,11 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.util.Codec;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.AdventureSerializer;
-import net.minestom.server.attribute.Attribute;
-import net.minestom.server.attribute.AttributeOperation;
-import net.minestom.server.data.Data;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.binary.BinaryReader;
@@ -28,8 +24,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -286,7 +280,7 @@ public final class NBTUtils {
         }
     }
 
-    public static NBTCompound metaToNBT(@NotNull ItemMeta itemMeta) {
+    public static @NotNull NBTCompound metaToNBT(@NotNull ItemMeta itemMeta) {
         final NBTCompound itemNBT = new NBTCompound();
 
         // Unbreakable
@@ -302,7 +296,7 @@ public final class NBTUtils {
             }
         }
 
-        // Display
+        // Start display
         {
             final var displayName = itemMeta.getDisplayName();
             final var lore = itemMeta.getLore();
@@ -326,14 +320,16 @@ public final class NBTUtils {
                 itemNBT.set("display", displayNBT);
             }
         }
+        // End display
 
-        // Enchantment
+        // Start enchantment
         {
             final var enchantmentMap = itemMeta.getEnchantmentMap();
             if (!enchantmentMap.isEmpty()) {
                 NBTUtils.writeEnchant(itemNBT, "Enchantments", enchantmentMap);
             }
         }
+        // End enchantment
 
         // Start attribute
         {
@@ -358,14 +354,14 @@ public final class NBTUtils {
         }
         // End attribute
 
-        // Start hide flags
+        // Start hide flag
         {
             final int hideFlag = itemMeta.getHideFlag();
             if (hideFlag != 0) {
                 itemNBT.setInt("HideFlags", hideFlag);
             }
         }
-        // End hide flags
+        // End hide flag
 
         // Start custom model data
         {

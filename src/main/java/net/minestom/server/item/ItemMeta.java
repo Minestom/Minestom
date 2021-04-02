@@ -84,11 +84,25 @@ public class ItemMeta implements Cloneable {
         return customModelData;
     }
 
-    public NBTCompound toNBT() {
+    public @NotNull NBTCompound toNBT() {
         if (cache == null) {
             this.cache = NBTUtils.metaToNBT(this);
         }
         return cache;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ItemMeta itemMeta = (ItemMeta) o;
+        return toNBT().equals(itemMeta.toNBT());
+    }
+
+    @Override
+    public int hashCode() {
+        return toNBT().hashCode();
     }
 
     protected @NotNull ItemMetaBuilder builder() {
