@@ -13,7 +13,7 @@ class ItemContainingMeta extends EntityMeta {
 
     protected ItemContainingMeta(@NotNull Entity entity, @NotNull Metadata metadata, @NotNull Material defaultItemMaterial) {
         super(entity, metadata);
-        this.defaultItem = ItemStack.of(defaultItemMaterial, 1);
+        this.defaultItem = ItemStack.of(defaultItemMaterial);
     }
 
     @NotNull
