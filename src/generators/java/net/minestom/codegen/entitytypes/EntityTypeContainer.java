@@ -33,7 +33,7 @@ public class EntityTypeContainer implements Comparable<EntityTypeContainer> {
         String metaClassName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, name.getPath());
         // special cases
         switch (metaClassName) {
-            case "ItemStack":
+            case "Item":
                 metaClassName = "ItemEntity";
                 break;
             case "Tnt":
