@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,7 +30,7 @@ public class ItemMeta implements Cloneable {
 
     private final int customModelData;
 
-    private NBTCompound cache = null;
+    private SoftReference<NBTCompound> cache;
 
     protected ItemMeta(@NotNull ItemMetaBuilder metaBuilder) {
         this.builder = metaBuilder.clone();
@@ -85,10 +86,12 @@ public class ItemMeta implements Cloneable {
     }
 
     public @NotNull NBTCompound toNBT() {
-        if (cache == null) {
-            this.cache = NBTUtils.metaToNBT(this);
+        var nbt = cache != null ? cache.get() : null;
+        if (nbt == null) {
+            nbt = NBTUtils.metaToNBT(this);
+            cache = new SoftReference<>(nbt);
         }
-        return cache;
+        return nbt;
     }
 
     @Override

@@ -111,21 +111,48 @@ public class ItemStack {
         return withLore(loreUnaryOperator.apply(getLore()));
     }
 
+    @Contract(pure = true)
     public @NotNull StackingRule getStackingRule() {
         return stackingRule;
     }
 
+    @Contract(pure = true)
     public @NotNull ItemMeta getMeta() {
         return meta;
     }
 
+    @Contract(pure = true)
+    public boolean isAir() {
+        return equals(AIR);
+    }
+
+    @Contract(pure = true)
     public boolean isSimilar(@NotNull ItemStack itemStack) {
         return material.equals(itemStack.material) &&
                 meta.equals(itemStack.meta);
     }
 
-    public boolean isAir() {
-        return equals(AIR);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ItemStack itemStack = (ItemStack) o;
+        if (uuid.equals(itemStack.uuid)) return true;
+
+        if (amount != itemStack.amount) return false;
+        if (!stackingRule.equals(itemStack.stackingRule)) return false;
+        if (material != itemStack.material) return false;
+        return meta.equals(itemStack.meta);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = stackingRule.hashCode();
+        result = 31 * result + material.hashCode();
+        result = 31 * result + amount;
+        result = 31 * result + meta.hashCode();
+        return result;
     }
 
     @Contract(value = "-> new", pure = true)
