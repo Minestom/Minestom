@@ -20,8 +20,7 @@ public interface EquipmentHandler {
      *
      * @return the {@link ItemStack} in main hand
      */
-    @NotNull
-    ItemStack getItemInMainHand();
+    @NotNull ItemStack getItemInMainHand();
 
     /**
      * Changes the main hand {@link ItemStack}.
@@ -35,8 +34,7 @@ public interface EquipmentHandler {
      *
      * @return the item in off hand
      */
-    @NotNull
-    ItemStack getItemInOffHand();
+    @NotNull ItemStack getItemInOffHand();
 
     /**
      * Changes the off hand {@link ItemStack}.
@@ -51,8 +49,7 @@ public interface EquipmentHandler {
      * @param hand the Hand to get the {@link ItemStack} from
      * @return the {@link ItemStack} in {@code hand}
      */
-    @NotNull
-    default ItemStack getItemInHand(@NotNull Player.Hand hand) {
+    default @NotNull ItemStack getItemInHand(@NotNull Player.Hand hand) {
         switch (hand) {
             case MAIN:
                 return getItemInMainHand();
@@ -85,8 +82,7 @@ public interface EquipmentHandler {
      *
      * @return the helmet
      */
-    @NotNull
-    ItemStack getHelmet();
+    @NotNull ItemStack getHelmet();
 
     /**
      * Changes the helmet.
@@ -100,8 +96,7 @@ public interface EquipmentHandler {
      *
      * @return the chestplate
      */
-    @NotNull
-    ItemStack getChestplate();
+    @NotNull ItemStack getChestplate();
 
     /**
      * Changes the chestplate.
@@ -115,8 +110,7 @@ public interface EquipmentHandler {
      *
      * @return the leggings
      */
-    @NotNull
-    ItemStack getLeggings();
+    @NotNull ItemStack getLeggings();
 
     /**
      * Changes the leggings.
@@ -130,8 +124,7 @@ public interface EquipmentHandler {
      *
      * @return the boots
      */
-    @NotNull
-    ItemStack getBoots();
+    @NotNull ItemStack getBoots();
 
     /**
      * Changes the boots.
@@ -146,8 +139,7 @@ public interface EquipmentHandler {
      * @param slot the equipment to get the item from
      * @return the equipment {@link ItemStack}
      */
-    @NotNull
-    default ItemStack getEquipment(@NotNull EntityEquipmentPacket.Slot slot) {
+    default @NotNull ItemStack getEquipment(@NotNull EntityEquipmentPacket.Slot slot) {
         switch (slot) {
             case MAIN_HAND:
                 return getItemInMainHand();
@@ -191,8 +183,7 @@ public interface EquipmentHandler {
      * @return the packet with the equipments
      * @throws IllegalStateException if 'this' is not an {@link Entity}
      */
-    @NotNull
-    default EntityEquipmentPacket getEquipmentsPacket() {
+    default @NotNull EntityEquipmentPacket getEquipmentsPacket() {
         Check.stateCondition(!(this instanceof Entity), "Only accessible for Entity");
 
         final Entity entity = (Entity) this;

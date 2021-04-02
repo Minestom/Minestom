@@ -41,8 +41,7 @@ public interface InventoryModifier {
      * @param slot the slot to check
      * @return the item in the slot {@code slot}
      */
-    @NotNull
-    ItemStack getItemStack(int slot);
+    @NotNull ItemStack getItemStack(int slot);
 
     /**
      * Gets all the {@link ItemStack} in the inventory.
@@ -52,8 +51,7 @@ public interface InventoryModifier {
      *
      * @return an array containing all the inventory's items
      */
-    @NotNull
-    ItemStack[] getItemStacks();
+    @NotNull ItemStack[] getItemStacks();
 
     /**
      * Gets the size of the inventory.
@@ -67,8 +65,7 @@ public interface InventoryModifier {
      *
      * @return a modifiable {@link List} containing all the inventory conditions
      */
-    @NotNull
-    List<InventoryCondition> getInventoryConditions();
+    @NotNull List<InventoryCondition> getInventoryConditions();
 
     /**
      * Adds a new {@link InventoryCondition} to this inventory.

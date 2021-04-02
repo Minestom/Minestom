@@ -48,21 +48,18 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         Arrays.fill(items, ItemStack.AIR);
     }
 
-    @NotNull
     @Override
-    public ItemStack getItemStack(int slot) {
+    public @NotNull ItemStack getItemStack(int slot) {
         return this.items[slot];
     }
 
-    @NotNull
     @Override
-    public ItemStack[] getItemStacks() {
+    public @NotNull ItemStack[] getItemStacks() {
         return items.clone();
     }
 
-    @NotNull
     @Override
-    public List<InventoryCondition> getInventoryConditions() {
+    public @NotNull List<InventoryCondition> getInventoryConditions() {
         return inventoryConditions;
     }
 
@@ -216,16 +213,6 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     /**
-     * Refreshes only a specific slot with the updated item stack data.
-     *
-     * @param slot the slot to refresh
-     */
-    public void refreshSlot(short slot) {
-        final int packetSlot = convertToPacketSlot(slot);
-        sendSlotRefresh((short) packetSlot, getItemStack(slot));
-    }
-
-    /**
      * Gets the item in player cursor.
      *
      * @return the cursor item
@@ -305,7 +292,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         //refreshSlot((short) slot);
     }
 
-    protected void setItemStackInternal(int slot, ItemStack itemStack) {
+    protected void setItemStackInternal(int slot, @NotNull ItemStack itemStack) {
         items[slot] = itemStack;
     }
 
@@ -316,7 +303,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
      * @param offset    offset (generally 9 to ignore armor and craft slots)
      * @param itemStack the item stack to set
      */
-    protected void setItemStack(int slot, int offset, ItemStack itemStack) {
+    protected void setItemStack(int slot, int offset, @NotNull ItemStack itemStack) {
         final int convertedSlot = convertPlayerInventorySlot(slot, offset);
         setItemStack(convertedSlot, itemStack);
     }
