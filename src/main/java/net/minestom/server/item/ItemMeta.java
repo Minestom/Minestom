@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class ItemMeta implements Cloneable {
+public class ItemMeta {
 
     private final ItemMetaBuilder builder;
 
