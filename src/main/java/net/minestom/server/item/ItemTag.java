@@ -3,34 +3,39 @@ package net.minestom.server.item;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-public abstract class ItemTag<T> {
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+
+public class ItemTag<T> {
 
     private final String key;
+    private final Function<NBTCompound, T> readFunction;
+    private final BiConsumer<NBTCompound, T> writeConsumer;
 
-    private ItemTag(@NotNull String key) {
+    private ItemTag(@NotNull String key,
+                    @NotNull Function<NBTCompound, T> readFunction,
+                    @NotNull BiConsumer<NBTCompound, T> writeConsumer) {
         this.key = key;
+        this.readFunction = readFunction;
+        this.writeConsumer = writeConsumer;
     }
 
     public @NotNull String getKey() {
         return key;
     }
 
-    protected abstract T read(@NotNull NBTCompound nbtCompound);
+    protected T read(@NotNull NBTCompound nbtCompound) {
+        return readFunction.apply(nbtCompound);
+    }
 
-    protected abstract void write(@NotNull NBTCompound nbtCompound, @NotNull T value);
+    protected void write(@NotNull NBTCompound nbtCompound, @NotNull T value) {
+        this.writeConsumer.accept(nbtCompound, value);
+    }
 
     public static @NotNull ItemTag<Integer> Integer(@NotNull String key) {
-        return new ItemTag<>(key) {
-            @Override
-            protected Integer read(@NotNull NBTCompound nbtCompound) {
-                return nbtCompound.getInt(key);
-            }
-
-            @Override
-            protected void write(@NotNull NBTCompound nbtCompound, @NotNull Integer value) {
-                nbtCompound.setInt(key, value);
-            }
-        };
+        return new ItemTag<>(key,
+                nbtCompound -> nbtCompound.getInt(key),
+                (nbtCompound, integer) -> nbtCompound.setInt(key, integer));
     }
 
 }
