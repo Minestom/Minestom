@@ -95,9 +95,14 @@ public class ItemMeta {
         return customModelData;
     }
 
-    @Contract("_, null -> null; _, !null -> !null")
     public <T> T getOrDefault(@NotNull ItemTag<T> tag, @Nullable T defaultValue) {
-        return tag.read(toNBT());
+        var nbt = toNBT();
+        var key = tag.getKey();
+        if (nbt.containsKey(key)) {
+            return tag.read(toNBT());
+        } else {
+            return defaultValue;
+        }
     }
 
     public <T> @Nullable T get(@NotNull ItemTag<T> tag) {
