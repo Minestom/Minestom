@@ -67,6 +67,7 @@ public final class DimensionTypeManager {
      * @param namespaceID The Dimension Name
      * @return an a DimensionType if it present and registered
      */
+    @Nullable
     public DimensionType getDimension(@NotNull NamespaceID namespaceID) {
         return unmodifiableList().stream().filter(dimensionType -> dimensionType.getName().equals(namespaceID)).filter(DimensionType::isRegistered).findFirst().orElse(null);
     }
