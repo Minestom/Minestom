@@ -80,9 +80,6 @@ public class PlayerInit {
                     })
                     .build();
 
-            ItemStore store = itemStack.getStore();
-            System.out.println("value: " + store.get("key"));
-
             itemStack = itemStack.with(itemBuilder -> itemBuilder
                     .amount(10)
                     .meta(CompassMeta.class, builder -> {
@@ -230,9 +227,16 @@ public class PlayerInit {
             player.setPermissionLevel(4);
 
             PlayerInventory inventory = player.getInventory();
-            ItemStack itemStack = ItemStack.of(Material.STONE, 64);
-            inventory.addItemStack(itemStack.withMeta(metaBuilder -> metaBuilder.set(ItemTag.Integer("int"), 25)));
-            inventory.replaceItemStack(0, i -> i.withAmount(32));
+            ItemStack itemStack = ItemStack.builder(Material.STONE)
+                    .amount(64)
+                    .store(store -> {
+                        store.set("key", 5, Integer::sum);
+                    })
+                    .build();
+
+            itemStack = itemStack.withStore(storeBuilder -> storeBuilder.set("key2", 25, Integer::sum));
+
+            inventory.addItemStack(itemStack);
 
             {
                 ItemStack item = ItemStack.builder(Material.DIAMOND_CHESTPLATE)
@@ -251,6 +255,7 @@ public class PlayerInit {
 
         globalEventHandler.addEventCallback(PlayerUseItemEvent.class, useEvent -> {
             final Player player = useEvent.getPlayer();
+            System.out.println("test: " + player.getItemInMainHand().getStore().get("key2"));
             player.sendMessage("Using item in air: " + useEvent.getItemStack().getMaterial());
         });
 

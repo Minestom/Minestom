@@ -100,6 +100,16 @@ public class ItemStack {
         return builder().meta(metaOperator).build();
     }
 
+    @Contract(value = "_, -> new", pure = true)
+    public @NotNull ItemStack withStore(@NotNull ItemStore store) {
+        return builder().store(store).build();
+    }
+
+    @Contract(value = "_ -> new", pure = true)
+    public @NotNull ItemStack withStore(@NotNull Consumer<@NotNull ItemStoreBuilder> metaOperator) {
+        return builder().store(metaOperator).build();
+    }
+
     @Contract(pure = true)
     public @Nullable Component getDisplayName() {
         return meta.getDisplayName();
