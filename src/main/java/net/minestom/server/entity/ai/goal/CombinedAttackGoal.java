@@ -7,7 +7,7 @@ import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.entity.type.projectile.EntityProjectile;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.time.CooldownUtils;
+import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -122,12 +122,12 @@ public class CombinedAttackGoal extends GoalSelector {
         boolean comeClose = false;
         // First of all, checking if to perform melee or ranged attack depending on the distance to target.
         if (distanceSquared <= this.meleeRangeSquared) {
-            if (!CooldownUtils.hasCooldown(time, this.lastAttack, this.meleeTimeUnit, this.meleeDelay)) {
+            if (!Cooldown.hasCooldown(time, this.lastAttack, this.meleeTimeUnit, this.meleeDelay)) {
                 this.entityCreature.attack(target, true);
                 this.lastAttack = time;
             }
         } else if (distanceSquared <= this.rangedRangeSquared) {
-            if (!CooldownUtils.hasCooldown(time, this.lastAttack, this.rangedTimeUnit, this.rangedDelay)) {
+            if (!Cooldown.hasCooldown(time, this.lastAttack, this.rangedTimeUnit, this.rangedDelay)) {
                 if (this.entityCreature.hasLineOfSight(target)) {
                     // If target is on line of entity sight, ranged attack can be performed
                     Position to = target.getPosition().clone().add(0D, target.getEyeHeight(), 0D);

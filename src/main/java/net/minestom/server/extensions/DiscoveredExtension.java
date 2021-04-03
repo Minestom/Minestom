@@ -1,5 +1,8 @@
 package net.minestom.server.extensions;
 
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
+import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -10,24 +13,60 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
-final class DiscoveredExtension {
+/**
+ * Represents an extension from an `extension.json` that is capable of powering an Extension object.
+ *
+ * This has no constructor as its properties are set via GSON.
+ */
+public final class DiscoveredExtension {
 
-    public final static Logger LOGGER = LoggerFactory.getLogger(DiscoveredExtension.class);
+    /** Static logger for this class. */
+    public static final Logger LOGGER = LoggerFactory.getLogger(DiscoveredExtension.class);
 
+    /** The regex that this name must pass. If it doesn't, it will not be accepted. */
     public static final String NAME_REGEX = "[A-Za-z][_A-Za-z0-9]+";
+
+    /** Name of the DiscoveredExtension. Unique for all extensions. */
     private String name;
+
+    /** Main class of this DiscoveredExtension, must extend Extension. */
     private String entrypoint;
+
+    /** Version of this extension, highly reccomended to set it. */
     private String version;
+
+    /** Points to sponge mixin config in resources folder. */
     private String mixinConfig;
+
+    /** People who have made this extension. */
     private String[] authors;
+
+    /** All code modifiers (the classes they point to) */
     private String[] codeModifiers;
+
+    /** List of extension names that this depends on. */
     private String[] dependencies;
+
+    /** List of Repositories and URLs that this depends on. */
     private ExternalDependencies externalDependencies;
-    private List<String> missingCodeModifiers = new LinkedList<>();
+
+    /** A list of any missing code modifiers to be used for logging. */
+    private final List<String> missingCodeModifiers = new LinkedList<>();
+
+    /** If this extension couldn't load its mixin configuration. */
     private boolean failedToLoadMixin = false;
+
+    /** All files of this extension */
     transient List<URL> files = new LinkedList<>();
+
+    /** The load status of this extension -- LOAD_SUCCESS is the only good one. */
     transient LoadStatus loadStatus = LoadStatus.LOAD_SUCCESS;
+
+    /** The original jar this is from. */
     transient private File originalJar;
+
+    /** The class loader that powers it. */
+    transient private MinestomExtensionClassLoader minestomExtensionClassLoader;
 
     @NotNull
     public String getName() {
@@ -72,16 +111,36 @@ final class DiscoveredExtension {
         return externalDependencies;
     }
 
-    void setOriginalJar(@Nullable File file) {
+    public void setOriginalJar(@Nullable File file) {
         originalJar = file;
     }
 
     @Nullable
-    File getOriginalJar() {
+    public File getOriginalJar() {
         return originalJar;
     }
 
-    static void verifyIntegrity(@NotNull DiscoveredExtension extension) {
+    MinestomExtensionClassLoader removeMinestomExtensionClassLoader() {
+        MinestomExtensionClassLoader oldClassLoader = getMinestomExtensionClassLoader();
+        setMinestomExtensionClassLoader(null);
+        return oldClassLoader;
+    }
+
+    void setMinestomExtensionClassLoader(@Nullable MinestomExtensionClassLoader minestomExtensionClassLoader) {
+        this.minestomExtensionClassLoader = minestomExtensionClassLoader;
+    }
+
+    @Nullable
+    public MinestomExtensionClassLoader getMinestomExtensionClassLoader() {
+        return this.minestomExtensionClassLoader;
+    }
+
+    /**
+     * Ensures that all properties of this extension are properly set if they aren't
+     *
+     * @param extension The extension to verify
+     */
+    public static void verifyIntegrity(@NotNull DiscoveredExtension extension) {
         if (extension.name == null) {
             StringBuilder fileList = new StringBuilder();
             for (URL f : extension.files) {
@@ -95,6 +154,7 @@ final class DiscoveredExtension {
             extension.name = extension.loadStatus.name();
             return;
         }
+
         if (!extension.name.matches(NAME_REGEX)) {
             LOGGER.error("Extension '{}' specified an invalid name.", extension.name);
             LOGGER.error("Extension '{}' will not be loaded.", extension.name);
@@ -104,6 +164,7 @@ final class DiscoveredExtension {
             extension.name = extension.loadStatus.name();
             return;
         }
+
         if (extension.entrypoint == null) {
             LOGGER.error("Extension '{}' did not specify an entry point (via 'entrypoint').", extension.name);
             LOGGER.error("Extension '{}' will not be loaded.", extension.name);
@@ -113,6 +174,7 @@ final class DiscoveredExtension {
             extension.entrypoint = extension.loadStatus.name();
             return;
         }
+
         // Handle defaults
         // If we reach this code, then the extension will most likely be loaded:
         if (extension.version == null) {
@@ -120,19 +182,24 @@ final class DiscoveredExtension {
             LOGGER.warn("Extension '{}' will continue to load but should specify a plugin version.", extension.name);
             extension.version = "Unspecified";
         }
+
         if (extension.mixinConfig == null) {
             extension.mixinConfig = "";
         }
+
         if (extension.authors == null) {
             extension.authors = new String[0];
         }
+
         if (extension.codeModifiers == null) {
             extension.codeModifiers = new String[0];
         }
+
         // No dependencies were specified
         if (extension.dependencies == null) {
             extension.dependencies = new String[0];
         }
+
         // No external dependencies were specified;
         if (extension.externalDependencies == null) {
             extension.externalDependencies = new ExternalDependencies();
@@ -156,6 +223,38 @@ final class DiscoveredExtension {
         return failedToLoadMixin;
     }
 
+    public MinestomExtensionClassLoader makeClassLoader() {
+        final URL[] urls = this.files.toArray(new URL[0]);
+
+        MinestomRootClassLoader root = MinestomRootClassLoader.getInstance();
+
+        MinestomExtensionClassLoader loader = new MinestomExtensionClassLoader(this.getName(), this.getEntrypoint(), urls, root);
+
+        if (this.getDependencies().length == 0 || MinecraftServer.getExtensionManager() == null) { // it also may invoked in early class loader
+            // orphaned extension, we can insert it directly
+            root.addChild(loader);
+        } else {
+            // add children to the dependencies
+            for (String dependency : this.getDependencies()) {
+                if (MinecraftServer.getExtensionManager().hasExtension(dependency.toLowerCase())) {
+                    MinestomExtensionClassLoader parentLoader = MinecraftServer.getExtensionManager().getExtension(dependency.toLowerCase()).getOrigin().getMinestomExtensionClassLoader();
+
+                    // TODO should never happen but replace with better throws error.
+                    assert parentLoader != null;
+
+                    parentLoader.addChild(loader);
+                }
+            }
+        }
+
+        return loader;
+    }
+
+    /**
+     * The status this extension has, all are breakpoints.
+     *
+     * LOAD_SUCCESS is the only valid one.
+     */
     enum LoadStatus {
         LOAD_SUCCESS("Actually, it did not fail. This message should not have been printed."),
         MISSING_DEPENDENCIES("Missing dependencies, check your logs."),
@@ -177,11 +276,11 @@ final class DiscoveredExtension {
         }
     }
 
-    static final class ExternalDependencies {
+    public static final class ExternalDependencies {
         Repository[] repositories = new Repository[0];
         String[] artifacts = new String[0];
 
-        static class Repository {
+        public static class Repository {
             String name = "";
             String url = "";
         }

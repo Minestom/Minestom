@@ -65,8 +65,6 @@ public final class NettyServer {
     private final PacketProcessor packetProcessor;
     private final GlobalChannelTrafficShapingHandler globalTrafficHandler;
 
-    private boolean tcpNoDelay = false;
-
     private EventLoopGroup boss, worker;
     private ServerBootstrap bootstrap;
 
@@ -163,13 +161,15 @@ public final class NettyServer {
         bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
             protected void initChannel(@NotNull SocketChannel ch) {
                 ChannelConfig config = ch.config();
-                config.setOption(ChannelOption.TCP_NODELAY, tcpNoDelay);
+                config.setOption(ChannelOption.TCP_NODELAY, true);
+                config.setOption(ChannelOption.SO_KEEPALIVE, true);
                 config.setOption(ChannelOption.SO_SNDBUF, 262_144);
                 config.setAllocator(ByteBufAllocator.DEFAULT);
 
                 ChannelPipeline pipeline = ch.pipeline();
 
-                pipeline.addLast(TRAFFIC_LIMITER_HANDLER_NAME, globalTrafficHandler);
+                // TODO enable when properly implemented (dynamic limit based on the number of clients)
+                //pipeline.addLast(TRAFFIC_LIMITER_HANDLER_NAME, globalTrafficHandler);
 
                 // First check should verify if the packet is a legacy ping (from 1.6 version and earlier)
                 // Removed from the pipeline later in LegacyPingHandler if unnecessary (>1.6)
@@ -259,25 +259,12 @@ public final class NettyServer {
         return globalTrafficHandler;
     }
 
-    public boolean isTcpNoDelay() {
-        return tcpNoDelay;
-    }
-
-    public void setTcpNoDelay(boolean tcpNoDelay) {
-        this.tcpNoDelay = tcpNoDelay;
-    }
-
     /**
      * Stops the server and the various services.
      */
     public void stop() {
-        try {
-            this.serverChannel.close().sync();
-            this.worker.shutdownGracefully();
-            this.boss.shutdownGracefully();
-        } catch (InterruptedException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-        }
+        this.worker.shutdownGracefully();
+        this.boss.shutdownGracefully();
 
         this.trafficScheduler.shutdown();
         this.globalTrafficHandler.release();

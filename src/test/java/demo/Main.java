@@ -4,6 +4,8 @@ import demo.blocks.BurningTorchBlock;
 import demo.blocks.CustomBlockSample;
 import demo.blocks.UpdatableBlockDemo;
 import demo.commands.*;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.extras.optifine.OptifineSupport;
@@ -34,7 +36,7 @@ public class Main {
         commandManager.register(new GamemodeCommand());
         commandManager.register(new EntitySelectorCommand());
         commandManager.register(new HealthCommand());
-        commandManager.register(new SimpleCommand());
+        commandManager.register(new LegacyCommand());
         commandManager.register(new DimensionCommand());
         commandManager.register(new ShutdownCommand());
         commandManager.register(new TeleportCommand());
@@ -44,8 +46,11 @@ public class Main {
         commandManager.register(new BookCommand());
         commandManager.register(new ShootCommand());
         commandManager.register(new HorseCommand());
+        commandManager.register(new EchoCommand());
+        commandManager.register(new SummonCommand());
+        commandManager.register(new RemoveCommand());
 
-        commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage("unknown command"));
+        commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
 
         StorageManager storageManager = MinecraftServer.getStorageManager();

@@ -3,6 +3,8 @@ package net.minestom.codegen;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
@@ -116,6 +118,12 @@ public abstract class BasicEnumGenerator extends MinestomEnumGenerator<BasicEnum
         generator.appendToConstructor(code -> {
             code.addStatement("$T." + CodeGenerator.decapitalize(getClassName()) + "s.put($T.from($N), this)", registriesClass, NamespaceID.class, "namespaceID");
         });
+
+        // implement Keyed
+        generator.addSuperinterface(ClassName.get(Keyed.class));
+        generator.addField(ClassName.get(Key.class), "key", true);
+        generator.appendToConstructor(code -> code.addStatement("this.key = Key.key(this.namespaceID)"));
+        generator.addMethod("key", new ParameterSpec[0], ClassName.get(Key.class), code -> code.addStatement("return this.key"));
     }
 
     @Override

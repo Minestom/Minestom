@@ -3,7 +3,9 @@ package net.minestom.server.command.builder.arguments;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.suggestion.SuggestionCallback;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.validator.StringArrayValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +14,10 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Same as {@link ArgumentStringArray} with the exception
  * that this argument can trigger {@link net.minestom.server.command.builder.Command#onDynamicWrite(CommandSender, String)}.
+ *
+ * @deprecated Use {@link Argument#setSuggestionCallback(SuggestionCallback)} with any argument type you want
  */
+@Deprecated
 public class ArgumentDynamicStringArray extends Argument<String[]> {
 
     public static final int RESTRICTION_ERROR = 1;
@@ -43,9 +48,9 @@ public class ArgumentDynamicStringArray extends Argument<String[]> {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, true);
 
         argumentNode.parser = "brigadier:string";
-        argumentNode.properties = packetWriter -> {
+        argumentNode.properties = BinaryWriter.makeArray(packetWriter -> {
             packetWriter.writeVarInt(2); // Greedy phrase
-        };
+        });
         argumentNode.suggestionsType = "minecraft:ask_server";
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});

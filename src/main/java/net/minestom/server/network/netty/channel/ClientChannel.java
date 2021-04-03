@@ -8,6 +8,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.packet.InboundPacket;
+import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -27,6 +28,7 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
     @Override
     public void channelActive(@NotNull ChannelHandlerContext ctx) {
         //System.out.println("CONNECTION");
+        packetProcessor.createPlayerConnection(ctx);
     }
 
     @Override
@@ -57,7 +59,7 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
 
     @Override
     public void channelInactive(@NotNull ChannelHandlerContext ctx) {
-        PlayerConnection playerConnection = packetProcessor.getPlayerConnection(ctx);
+        PlayerConnection playerConnection = packetProcessor.removePlayerConnection(ctx);
         if (playerConnection != null) {
             // Remove the connection
             playerConnection.refreshOnline(false);
@@ -66,7 +68,14 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
                 player.remove();
                 CONNECTION_MANAGER.removePlayer(playerConnection);
             }
-            packetProcessor.removePlayerConnection(ctx);
+
+            // Release tick buffer
+            if (playerConnection instanceof NettyPlayerConnection) {
+                final ByteBuf tickBuffer = ((NettyPlayerConnection) playerConnection).getTickBuffer();
+                synchronized (tickBuffer) {
+                    tickBuffer.release();
+                }
+            }
         }
     }
 

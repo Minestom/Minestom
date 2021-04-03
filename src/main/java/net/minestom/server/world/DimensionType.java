@@ -82,6 +82,24 @@ public class DimensionType {
         return new DimensionTypeBuilder();
     }
 
+    public static DimensionType fromNBT(NBTCompound nbt) {
+        return DimensionType.builder(NamespaceID.from(nbt.getString("name")))
+                .ambientLight(nbt.getFloat("ambient_light"))
+                .infiniburn(NamespaceID.from(nbt.getString("infiniburn")))
+                .natural(nbt.getByte("natural") != 0)
+                .ceilingEnabled(nbt.getByte("has_ceiling") != 0)
+                .skylightEnabled(nbt.getByte("has_skylight") != 0)
+                .ultrawarm(nbt.getByte("ultrawarm") != 0)
+                .raidCapable(nbt.getByte("has_raids") != 0)
+                .respawnAnchorSafe(nbt.getByte("respawn_anchor_works") != 0)
+                .bedSafe(nbt.getByte("bed_works") != 0)
+                .effects(nbt.getString("effects"))
+                .piglinSafe(nbt.getByte("piglin_safe") != 0)
+                .logicalHeight(nbt.getInt("logical_height"))
+                .coordinateScale(nbt.getInt("coordinate_scale"))
+                .build();
+    }
+
     @NotNull
     public NBTCompound toIndexedNBT() {
         NBTCompound nbt = new NBTCompound();

@@ -179,7 +179,7 @@ public class EntityFinder {
         // Entity type
         if (!entityTypes.isEmpty()) {
             result = result.stream().filter(entity ->
-                    filterToggleableMap(entity, entity.getEntityType(), entityTypes))
+                    filterToggleableMap(entity.getEntityType(), entityTypes))
                     .collect(Collectors.toList());
         }
 
@@ -188,7 +188,7 @@ public class EntityFinder {
             result = result.stream().filter(entity -> {
                 if (!(entity instanceof Player))
                     return false;
-                return filterToggleableMap(entity, ((Player) entity).getGameMode(), gameModes);
+                return filterToggleableMap(((Player) entity).getGameMode(), gameModes);
             }).collect(Collectors.toList());
         }
 
@@ -210,15 +210,14 @@ public class EntityFinder {
             result = result.stream().filter(entity -> {
                 if (!(entity instanceof Player))
                     return false;
-                return filterToggleableMap(entity, ((Player) entity).getUsername(), names);
+                return filterToggleableMap(((Player) entity).getUsername(), names);
             }).collect(Collectors.toList());
         }
 
         // UUID
         if (!uuids.isEmpty()) {
-            result = result.stream().filter(entity -> {
-                return filterToggleableMap(entity, entity.getUuid(), uuids);
-            }).collect(Collectors.toList());
+            result = result.stream().filter(entity ->
+                    filterToggleableMap(entity.getUuid(), uuids)).collect(Collectors.toList());
         }
 
 
@@ -371,10 +370,7 @@ public class EntityFinder {
         throw new IllegalStateException("Weird thing happened: " + targetSelector);
     }
 
-    private static <T> boolean filterToggleableMap(@NotNull Entity entity, @NotNull T value, @NotNull ToggleableMap<T> map) {
-        if (!(entity instanceof Player))
-            return false;
-
+    private static <T> boolean filterToggleableMap(@NotNull T value, @NotNull ToggleableMap<T> map) {
         for (Object2BooleanMap.Entry<T> entry : map.object2BooleanEntrySet()) {
             final T key = entry.getKey();
             final boolean include = entry.getBooleanValue();

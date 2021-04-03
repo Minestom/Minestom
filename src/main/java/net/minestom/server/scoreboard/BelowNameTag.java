@@ -1,5 +1,6 @@
 package net.minestom.server.scoreboard;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -30,15 +31,26 @@ public class BelowNameTag implements Scoreboard {
      *
      * @param name  The objective name of the scoreboard
      * @param value The value of the scoreboard
+     * @deprecated Use {@link #BelowNameTag(String, Component)}
      */
+    @Deprecated
     public BelowNameTag(String name, String value) {
-        this.objectiveName = BELOW_NAME_TAG_PREFIX + name;
+        this(name, Component.text(value));
+    }
 
+    /**
+     * Creates a new below name scoreboard.
+     *
+     * @param name  The objective name of the scoreboard
+     * @param value The value of the scoreboard
+     */
+    public BelowNameTag(String name, Component value) {
+        this.objectiveName = BELOW_NAME_TAG_PREFIX + name;
         this.scoreboardObjectivePacket = this.getCreationObjectivePacket(value, ScoreboardObjectivePacket.Type.INTEGER);
     }
 
     @Override
-    public String getObjectiveName() {
+    public @NotNull String getObjectiveName() {
         return this.objectiveName;
     }
 

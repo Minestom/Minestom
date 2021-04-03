@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Represents a click event for a specific portion of the message.
  */
+@Deprecated
 public class ChatClickEvent {
 
     private final String action;

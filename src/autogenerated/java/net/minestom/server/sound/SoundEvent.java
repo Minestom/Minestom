@@ -1,5 +1,8 @@
 package net.minestom.server.sound;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
+import net.kyori.adventure.sound.Sound;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
@@ -9,7 +12,7 @@ import net.minestom.server.utils.NamespaceID;
  * //==============================
  */
 @SuppressWarnings({"deprecation"})
-public enum Sound {
+public enum SoundEvent implements Keyed, Sound.Type {
     AMBIENT_CAVE("minecraft:ambient.cave"),
 
     AMBIENT_BASALT_DELTAS_ADDITIONS("minecraft:ambient.basalt_deltas.additions"),
@@ -1994,11 +1997,14 @@ public enum Sound {
 
     ENTITY_ZOMBIE_VILLAGER_STEP("minecraft:entity.zombie_villager.step");
 
-    private String namespaceID;
+    private final String namespaceID;
 
-    Sound(String namespaceID) {
+    private final Key key;
+
+    SoundEvent(String namespaceID) {
         this.namespaceID = namespaceID;
-        Registries.sounds.put(NamespaceID.from(namespaceID), this);
+        Registries.soundEvents.put(NamespaceID.from(namespaceID), this);
+        this.key = Key.key(this.namespaceID);
     }
 
     public int getId() {
@@ -2009,7 +2015,11 @@ public enum Sound {
         return namespaceID;
     }
 
-    public static Sound fromId(int id) {
+    public Key key() {
+        return this.key;
+    }
+
+    public static SoundEvent fromId(int id) {
         if (id >= 0 && id < values().length) {
             return values()[id];
         }

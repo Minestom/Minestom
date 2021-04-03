@@ -14,7 +14,7 @@ public class ClientPlayPacketsHandler extends ClientPacketsHandler {
         register(0x07, ClientWindowConfirmationPacket::new);
         register(0x08, ClientClickWindowButtonPacket::new);
         register(0x09, ClientClickWindowPacket::new);
-        register(0x0A, ClientCloseWindow::new);
+        register(0x0A, ClientCloseWindowPacket::new);
         register(0x0B, ClientPluginMessagePacket::new);
         register(0x0C, ClientEditBookPacket::new);
         register(0x0D, ClientQueryEntityNbtPacket::new);

@@ -11,6 +11,7 @@ import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.SecretKey;
@@ -26,6 +27,11 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
     private static final Gson GSON = new Gson();
     private byte[] sharedSecret;
     private byte[] verifyToken;
+
+    public EncryptionResponsePacket() {
+        sharedSecret = new byte[0];
+        verifyToken = new byte[0];
+    }
 
     @Override
     public void process(@NotNull PlayerConnection connection) {
@@ -81,6 +87,12 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
     public void read(@NotNull BinaryReader reader) {
         sharedSecret = ByteArrayData.decodeByteArray(reader);
         verifyToken = ByteArrayData.decodeByteArray(reader);
+    }
+
+    @Override
+    public void write(@NotNull BinaryWriter writer) {
+        ByteArrayData.encodeByteArray(writer, sharedSecret);
+        ByteArrayData.encodeByteArray(writer, verifyToken);
     }
 
     public SecretKey getSecretKey() {

@@ -6,11 +6,9 @@ import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.time.CooldownUtils;
+import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Attacks the entity's target ({@link EntityCreature#getTarget()}) OR the closest entity
@@ -67,7 +65,7 @@ public class MeleeAttackGoal extends GoalSelector {
 
             // Attack the target entity
             if (entityCreature.getDistance(target) <= range) {
-                if (!CooldownUtils.hasCooldown(time, lastHit, timeUnit, delay)) {
+                if (!Cooldown.hasCooldown(time, lastHit, timeUnit, delay)) {
                     entityCreature.attack(target, true);
                     this.lastHit = time;
                 }

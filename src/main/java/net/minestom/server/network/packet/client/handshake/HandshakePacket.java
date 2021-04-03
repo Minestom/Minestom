@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.client.handshake;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.ChatColor;
-import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.network.ConnectionState;
@@ -11,6 +11,7 @@ import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.SocketAddress;
@@ -21,12 +22,11 @@ public class HandshakePacket implements ClientPreplayPacket {
     /**
      * Text sent if a player tries to connect with an invalid version of the client
      */
-    private static final ColoredText INVALID_VERSION_TEXT = ColoredText.of(ChatColor.RED, "Invalid Version, please use " + MinecraftServer.VERSION_NAME);
-
-    private static final ColoredText INVALID_BUNGEE_FORWARDING = ColoredText.of(ChatColor.RED, "If you wish to use IP forwarding, please enable it in your BungeeCord config as well!");
+    private static final Component INVALID_VERSION_TEXT = Component.text("Invalid Version, please use " + MinecraftServer.VERSION_NAME, NamedTextColor.RED);
+    private static final Component INVALID_BUNGEE_FORWARDING = Component.text("If you wish to use IP forwarding, please enable it in your BungeeCord config as well!", NamedTextColor.RED);
 
     private int protocolVersion;
-    private String serverAddress;
+    private String serverAddress = "";
     private int serverPort;
     private int nextState;
 
@@ -36,6 +36,18 @@ public class HandshakePacket implements ClientPreplayPacket {
         this.serverAddress = reader.readSizedString(BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255);
         this.serverPort = reader.readUnsignedShort();
         this.nextState = reader.readVarInt();
+    }
+
+    @Override
+    public void write(@NotNull BinaryWriter writer) {
+        writer.writeVarInt(protocolVersion);
+        int maxLength = BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255;
+        if(serverAddress.length() > maxLength) {
+            throw new IllegalArgumentException("serverAddress is "+serverAddress.length()+" characters long, maximum allowed is "+maxLength);
+        }
+        writer.writeSizedString(serverAddress);
+        writer.writeUnsignedShort(serverPort);
+        writer.writeVarInt(nextState);
     }
 
     @Override
@@ -95,7 +107,7 @@ public class HandshakePacket implements ClientPreplayPacket {
                     }
                 } else {
                     // Incorrect client version
-                    connection.sendPacket(new LoginDisconnectPacket(INVALID_VERSION_TEXT.toString()));
+                    connection.sendPacket(new LoginDisconnectPacket(INVALID_VERSION_TEXT));
                     connection.disconnect();
                 }
                 break;

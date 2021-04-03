@@ -57,10 +57,6 @@ public class AttributeInstance {
         if (this.baseValue != baseValue) {
             this.baseValue = baseValue;
             refreshCachedValue();
-
-            if (propertyChangeListener != null) {
-                propertyChangeListener.accept(this);
-            }
         }
     }
 
@@ -126,5 +122,10 @@ public class AttributeInstance {
         }
 
         this.cachedValue = Math.min(result, getAttribute().getMaxValue());
+
+        // Signal entity
+        if (propertyChangeListener != null) {
+            propertyChangeListener.accept(this);
+        }
     }
 }

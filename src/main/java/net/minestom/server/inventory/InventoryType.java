@@ -30,18 +30,26 @@ public enum InventoryType {
     CARTOGRAPHY(3),
     STONE_CUTTER(2);
 
-    private final int slot;
+    private final int size;
 
-    InventoryType(int slot) {
-        this.slot = slot;
+    InventoryType(int size) {
+        this.size = size;
     }
 
     public int getWindowType() {
         return ordinal();
     }
 
+    public int getSize() {
+        return size;
+    }
+
+    /**
+     * @deprecated use {@link #getSize()}
+     */
+    @Deprecated
     public int getAdditionalSlot() {
-        return slot;
+        return size;
     }
 
 }
