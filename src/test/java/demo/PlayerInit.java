@@ -27,6 +27,7 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.ItemTag;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.meta.CompassMeta;
 import net.minestom.server.network.ConnectionManager;
@@ -69,12 +70,10 @@ public class PlayerInit {
                     .build();
 
             ItemStack itemStack = ItemStack.builder(Material.COMPASS)
-                    .amount(5)
-                    .meta(compassMeta)
                     .meta(CompassMeta.class, builder -> {
                         builder.lodestonePosition(new Position(0, 0, 0));
+                        builder.set(ItemTag.Integer("int"), 25);
                     })
-                    .displayName(Component.text("displayName"))
                     .build();
 
             itemStack = itemStack.with(itemBuilder -> itemBuilder
@@ -225,8 +224,8 @@ public class PlayerInit {
 
             PlayerInventory inventory = player.getInventory();
             ItemStack itemStack = ItemStack.of(Material.STONE, 64);
-            inventory.addItemStack(itemStack);
-            inventory.replaceItemStack(0, i -> i.withAmount(32));
+            inventory.addItemStack(itemStack.withMeta(metaBuilder -> metaBuilder.set(ItemTag.Integer("int"), 25)));
+            //inventory.replaceItemStack(0, i -> i.withAmount(32));
 
             {
                 ItemStack item = ItemStack.builder(Material.DIAMOND_CHESTPLATE)

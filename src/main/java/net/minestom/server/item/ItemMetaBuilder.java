@@ -90,6 +90,22 @@ public abstract class ItemMetaBuilder implements Cloneable {
         return this;
     }
 
+    public <T> @NotNull ItemMetaBuilder set(@NotNull ItemTag<T> tag, @Nullable T value) {
+        if (originalNBT != null) {
+            // Item is from nbt
+            if (value != null) {
+                tag.write(originalNBT, value);
+            } else {
+                this.originalNBT.removeTag(tag.getKey());
+            }
+            return this;
+        } else {
+            // Create item meta based on nbt
+            var currentNbt = build().toNBT();
+            return fromNBT(this, currentNbt).set(tag, value);
+        }
+    }
+
     @Contract("-> new")
     public abstract @NotNull ItemMeta build();
 

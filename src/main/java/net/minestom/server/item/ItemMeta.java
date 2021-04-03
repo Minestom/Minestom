@@ -95,6 +95,15 @@ public class ItemMeta {
         return customModelData;
     }
 
+    @Contract("_, null -> null; _, !null -> !null")
+    public <T> T getOrDefault(@NotNull ItemTag<T> tag, @Nullable T defaultValue) {
+        return tag.read(toNBT());
+    }
+
+    public <T> @Nullable T get(@NotNull ItemTag<T> tag) {
+        return tag.read(toNBT());
+    }
+
     public @NotNull NBTCompound toNBT() {
         if (originalNbt != null) {
             // Return the nbt this meta has been created with
@@ -127,6 +136,6 @@ public class ItemMeta {
 
     @Contract(value = "-> new", pure = true)
     protected @NotNull ItemMetaBuilder builder() {
-        return builder.clone();
+        return ItemMetaBuilder.fromNBT(builder, toNBT());
     }
 }
