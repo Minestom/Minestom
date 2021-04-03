@@ -120,6 +120,7 @@ public final class SchedulerManager implements IExtensionObserver {
         } catch (InterruptedException e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
+        instanced = false;
     }
 
     /**

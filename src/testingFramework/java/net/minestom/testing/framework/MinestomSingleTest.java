@@ -53,41 +53,46 @@ public class MinestomSingleTest {
         this.after = after;
     }
 
-    public void before() throws Throwable {
+    public void before(TestEnvironment env) throws Throwable {
         instance = constructor.get();
         if(before != null) {
-            before.run(instance, environment.get());
+            before.run(instance, env);
         }
     }
 
-    public void runTest() throws Throwable {
-        test.run(instance, environment.get());
+    public void runTest(TestEnvironment env) throws Throwable {
+        test.run(instance, env);
     }
 
-    public void after() throws Throwable {
+    public void after(TestEnvironment env) throws Throwable {
         if(after != null) {
-            after.run(instance, environment.get());
+            after.run(instance, env);
         }
         instance = null;
     }
 
     public DynamicTest toDynamicTest() {
         return DynamicTest.dynamicTest(name, () -> {
-            try {
-                before();
-            } catch (InvocationTargetException e) {
-                throw e.getCause();
-            }
-            try {
-                runTest();
-            } catch (InvocationTargetException e) {
-                throw e.getCause();
-            }
-            try {
-                after();
-            } catch (InvocationTargetException e) {
-                throw e.getCause();
-            }
+            try(TestEnvironment env = environment.get()) {
+                try {
+                    try {
+                        before(env);
+                    } catch (InvocationTargetException e) {
+                        throw e.getCause();
+                    }
+                    try {
+                        runTest(env);
+                    } catch (InvocationTargetException e) {
+                        throw e.getCause();
+                    }
+                } finally {
+                    try {
+                        after(env);
+                    } catch (InvocationTargetException e) {
+                        throw e.getCause();
+                    }
+                }
+            } // server will be closed at this point
         });
     }
 }

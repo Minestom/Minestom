@@ -1,5 +1,10 @@
 package net.minestom.testing.miniclient;
 
+import net.minestom.server.network.packet.client.ClientPacket;
+import net.minestom.server.network.packet.server.ServerPacket;
+
+import java.util.List;
+
 /**
  * MiniClient that can connect to a Minecraft server. Used for testing Minestom.
  *
@@ -7,6 +12,20 @@ package net.minestom.testing.miniclient;
  */
 public class MiniClient {
 
+    public MiniClient() {
 
+    }
+
+    public void sendPacket(ClientPacket p) {}
+
+    public int getEntityId() { return 0; }
+
+    public <Packet extends ServerPacket> List<Packet> expect(Class<Packet> toExpect) {
+        return null;
+    }
+
+    public <Packet extends ServerPacket> Packet expectSingle(Class<Packet> toExpect) {
+        return null;
+    }
 
 }

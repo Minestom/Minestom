@@ -808,6 +808,10 @@ public final class MinecraftServer {
         commandManager.stopConsoleThread();
         MinestomThread.shutdownAll();
         LOGGER.info("Minestom server stopped successfully.");
+        started = false;
+        initialized = false;
+        minecraftServer = null;
+        stopping = false;
     }
 
     private static void checkInitStatus(@Nullable Object object) {

@@ -77,7 +77,7 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
      */
     private final Set<String> alreadyLoadedCodeModifiers = new HashSet<>();
 
-    private MinestomRootClassLoader(ClassLoader parent) {
+    public MinestomRootClassLoader(ClassLoader parent) {
         super("Minestom Root ClassLoader", extractURLsFromClasspath(), parent);
         asmClassLoader = newChild(new URL[0]);
         inDevEnvironment = System.getProperty(ExtensionManager.INDEV_CLASSES_FOLDER) != null;

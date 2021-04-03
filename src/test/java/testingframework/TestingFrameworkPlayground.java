@@ -5,6 +5,7 @@ import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.EntityTeleportPacket;
 import net.minestom.testing.framework.*;
+import net.minestom.testing.miniclient.MiniClient;
 
 import java.util.List;
 
@@ -15,42 +16,16 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class TestingFrameworkPlayground {
 
-    class Client {
-        public void sendPacket(ClientPacket p) {}
-
-        public int getEntityId() { return 0; }
-
-        public <Packet extends ServerPacket> List<Packet> expect(Class<Packet> toExpect) {
-            return null;
-        }
-
-        public <Packet extends ServerPacket> Packet expectSingle(Class<Packet> toExpect) {
-            return null;
-        }
-    }
-
-    class Game {
-
-        public Client newClient() {
-            return null;
-        }
-
-        public void waitNetworkIdle() {}
-
-    }
-
     @MinestomTest
     public void mySecondTest(TestEnvironment env) {
-        Game game = new Game(); // TODO: remove, temporary
         System.out.println("hello");
     }
 
     @MinestomTest
     public void myTest(TestEnvironment env) {
-        Game game = new Game(); // TODO: remove, temporary
         // Connects two clients
-        Client clientA = game.newClient();
-        Client clientB = game.newClient();
+        MiniClient clientA = env.newClient();
+        MiniClient clientB = env.newClient();
 
         // send a packet through client A
         ClientPlayerPositionPacket packet = new ClientPlayerPositionPacket();
@@ -61,7 +36,7 @@ public class TestingFrameworkPlayground {
         clientA.sendPacket(packet);
 
         // Waits for all packets to be sent on the server
-        game.waitNetworkIdle();
+        env.waitNetworkIdle();
 
         // Checks that the second client received an EntityTeleportPacket and returns the first one
         //  should throw if 0 or > 1 are found
