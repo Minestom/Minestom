@@ -32,15 +32,20 @@ public class ItemStack {
     private final int amount;
     private final ItemMeta meta;
 
-    protected ItemStack(@NotNull Material material, int amount, @NotNull ItemMeta meta) {
+    private final ItemStore store;
+
+    protected ItemStack(@NotNull Material material, int amount,
+                        @NotNull ItemMeta meta,
+                        @NotNull ItemStore store) {
         this.material = material;
         this.amount = amount;
         this.meta = meta;
+        this.store = store;
     }
 
     @Contract(value = "_ -> new", pure = true)
-    public static @NotNull ItemBuilder builder(@NotNull Material material) {
-        return new ItemBuilder(material);
+    public static @NotNull ItemStackBuilder builder(@NotNull Material material) {
+        return new ItemStackBuilder(material);
     }
 
     @Contract(value = "_ ,_ -> new", pure = true)
@@ -64,7 +69,7 @@ public class ItemStack {
     }
 
     @Contract(value = "_, -> new", pure = true)
-    public @NotNull ItemStack with(@NotNull Consumer<@NotNull ItemBuilder> builderConsumer) {
+    public @NotNull ItemStack with(@NotNull Consumer<@NotNull ItemStackBuilder> builderConsumer) {
         var builder = builder();
         builderConsumer.accept(builder);
         return builder.build();
@@ -136,6 +141,11 @@ public class ItemStack {
     }
 
     @Contract(pure = true)
+    public @NotNull ItemStore getStore() {
+        return store;
+    }
+
+    @Contract(pure = true)
     public boolean isAir() {
         return material.equals(Material.AIR);
     }
@@ -170,8 +180,8 @@ public class ItemStack {
     }
 
     @Contract(value = "-> new", pure = true)
-    protected @NotNull ItemBuilder builder() {
-        return new ItemBuilder(material, meta.builder())
+    protected @NotNull ItemStackBuilder builder() {
+        return new ItemStackBuilder(material, meta.builder(), store.builder())
                 .amount(amount);
     }
 }

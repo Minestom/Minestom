@@ -27,6 +27,7 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.ItemStore;
 import net.minestom.server.item.ItemTag;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.meta.CompassMeta;
@@ -74,7 +75,13 @@ public class PlayerInit {
                         builder.lodestonePosition(new Position(0, 0, 0));
                         builder.set(ItemTag.Integer("int"), 25);
                     })
+                    .store(store -> {
+                        store.set("key", 5, Integer::sum);
+                    })
                     .build();
+
+            ItemStore store = itemStack.getStore();
+            System.out.println("value: " + store.get("key"));
 
             itemStack = itemStack.with(itemBuilder -> itemBuilder
                     .amount(10)
@@ -225,7 +232,7 @@ public class PlayerInit {
             PlayerInventory inventory = player.getInventory();
             ItemStack itemStack = ItemStack.of(Material.STONE, 64);
             inventory.addItemStack(itemStack.withMeta(metaBuilder -> metaBuilder.set(ItemTag.Integer("int"), 25)));
-            //inventory.replaceItemStack(0, i -> i.withAmount(32));
+            inventory.replaceItemStack(0, i -> i.withAmount(32));
 
             {
                 ItemStack item = ItemStack.builder(Material.DIAMOND_CHESTPLATE)
