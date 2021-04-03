@@ -161,9 +161,7 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     @Override
     public void clear() {
         // Clear the item array
-        for (int i = 0; i < getSize(); i++) {
-            setItemStackInternal(i, ItemStack.AIR);
-        }
+        Arrays.fill(itemStacks, ItemStack.AIR);
         // Send the cleared inventory to viewers
         update();
     }
@@ -295,25 +293,12 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      * @param itemStack the item to insert
      */
     private synchronized void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
-        setItemStackInternal(slot, itemStack);
+        this.itemStacks[slot] = itemStack;
         SetSlotPacket setSlotPacket = new SetSlotPacket();
         setSlotPacket.windowId = getWindowId();
         setSlotPacket.slot = (short) slot;
         setSlotPacket.itemStack = itemStack;
         sendPacketToViewers(setSlotPacket);
-    }
-
-    /**
-     * Inserts an item into the inventory without notifying viewers.
-     * <p>
-     * This will also warn the inventory that the cached window items packet is
-     * not up-to-date.
-     *
-     * @param slot      the internal slot
-     * @param itemStack the item to insert
-     */
-    protected void setItemStackInternal(int slot, @NotNull ItemStack itemStack) {
-        itemStacks[slot] = itemStack;
     }
 
     /**
@@ -602,22 +587,6 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
         setCursorPlayerItem(player, clickResult.getCursor());
 
         return !clickResult.isCancel();
-    }
-
-    /**
-     * Refresh a slot for all viewers
-     * <p>
-     * WARNING: this does not update the items in the inventory, this is only visual
-     *
-     * @param slot      the packet slot
-     * @param itemStack the item stack to set at the slot
-     */
-    private void sendSlotRefresh(short slot, ItemStack itemStack) {
-        SetSlotPacket setSlotPacket = new SetSlotPacket();
-        setSlotPacket.windowId = getWindowId();
-        setSlotPacket.slot = slot;
-        setSlotPacket.itemStack = itemStack;
-        sendPacketToViewers(setSlotPacket);
     }
 
     /**

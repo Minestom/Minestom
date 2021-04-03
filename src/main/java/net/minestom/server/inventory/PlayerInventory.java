@@ -34,7 +34,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     public static final int INVENTORY_SIZE = 46;
 
     protected final Player player;
-    protected final ItemStack[] items = new ItemStack[INVENTORY_SIZE];
+    protected final ItemStack[] itemStacks = new ItemStack[INVENTORY_SIZE];
     private ItemStack cursorItem = ItemStack.AIR;
 
     private final List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
@@ -44,17 +44,17 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
     public PlayerInventory(@NotNull Player player) {
         this.player = player;
-        Arrays.fill(items, ItemStack.AIR);
+        Arrays.fill(itemStacks, ItemStack.AIR);
     }
 
     @Override
     public @NotNull ItemStack getItemStack(int slot) {
-        return this.items[slot];
+        return this.itemStacks[slot];
     }
 
     @Override
     public @NotNull ItemStack[] getItemStacks() {
-        return items.clone();
+        return itemStacks.clone();
     }
 
     @Override
@@ -109,9 +109,8 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     @Override
     public void clear() {
         // Clear the item array
-        for (int i = 0; i < getSize(); i++) {
-            setItemStackInternal(i, ItemStack.AIR);
-        }
+        Arrays.fill(itemStacks, ItemStack.AIR);
+
         // Send the cleared inventory to the inventory's owner
         update();
 
@@ -265,7 +264,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
             }
         }
 
-        this.items[slot] = itemStack;
+        this.itemStacks[slot] = itemStack;
 
         // Sync equipment
         if (equipmentSlot != null) {
@@ -276,10 +275,6 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         update();
         // FIXME: replace update() to refreshSlot, currently not possible because our inventory click handling is not exactly the same as what the client expects
         //refreshSlot((short) slot);
-    }
-
-    protected void setItemStackInternal(int slot, @NotNull ItemStack itemStack) {
-        items[slot] = itemStack;
     }
 
     /**
@@ -303,7 +298,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
      */
     protected ItemStack getItemStack(int slot, int offset) {
         final int convertedSlot = convertPlayerInventorySlot(slot, offset);
-        return this.items[convertedSlot];
+        return this.itemStacks[convertedSlot];
     }
 
     /**
@@ -329,9 +324,9 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     private WindowItemsPacket createWindowItemsPacket() {
         ItemStack[] convertedSlots = new ItemStack[INVENTORY_SIZE];
 
-        for (int i = 0; i < items.length; i++) {
+        for (int i = 0; i < itemStacks.length; i++) {
             final int slot = convertToPacketSlot(i);
-            convertedSlots[slot] = items[i];
+            convertedSlots[slot] = itemStacks[i];
         }
 
         WindowItemsPacket windowItemsPacket = new WindowItemsPacket();
@@ -411,7 +406,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
 
         final boolean hotBarClick = convertToPacketSlot(slot) < 9;
         final InventoryClickResult clickResult = clickProcessor.shiftClick(null, player, slot, clicked, cursor,
-                new InventoryClickLoopHandler(0, items.length, 1,
+                new InventoryClickLoopHandler(0, itemStacks.length, 1,
                         i -> {
                             if (hotBarClick) {
                                 return i < 9 ? i + 9 : i - 9;
@@ -486,9 +481,9 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         final ItemStack cursor = getCursorItem();
 
         final InventoryClickResult clickResult = clickProcessor.doubleClick(null, player, slot, cursor,
-                new InventoryClickLoopHandler(0, items.length, 1,
+                new InventoryClickLoopHandler(0, itemStacks.length, 1,
                         i -> i < 9 ? i + 9 : i - 9,
-                        index -> items[index],
+                        index -> itemStacks[index],
                         this::setItemStack));
 
         if (clickResult == null)
