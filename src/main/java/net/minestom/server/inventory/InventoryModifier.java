@@ -5,6 +5,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public interface InventoryModifier {
     void setItemStack(int slot, @NotNull ItemStack itemStack);
 
     /**
-     * Adds an {@link ItemStack} to the inventory and send relevant update to the viewer(s).
+     * Adds an {@link ItemStack} to the inventory and sends relevant update to the viewer(s).
      * <p>
      * Even the item cannot be fully added, the amount of {@code itemStack} will be updated.
      *
@@ -29,6 +30,88 @@ public interface InventoryModifier {
      * @return true if the item has been successfully fully added, false otherwise
      */
     boolean addItemStack(@NotNull ItemStack itemStack);
+
+    /**
+     * Adds {@link ItemStack}s to the inventory and sends relevant updates to the viewer(s).
+     * <p>
+     * Even items cannot be fully added, the amount of {@code itemStack}s will be updated.
+     *
+     * @param itemStacks items to add
+     * @return list of itemstacks that could not be successfully fully added, empty list otherwise
+     */
+    default List<ItemStack> addItemStacks(@NotNull List<ItemStack> itemStacks) {
+        List<ItemStack> result = new ArrayList<>(itemStacks.size());
+        itemStacks.forEach(itemStack -> {
+            if (!addItemStack(itemStack)) {
+                result.add(itemStack);
+            }
+        });
+        return result;
+    }
+
+    /**
+     * Checks whether {@link ItemStack} can be fully added to the inventory.
+     *
+     * @param itemStack the item to be checked
+     * @return true if the item can be fully added to the inventory, false otherwise
+     */
+    boolean canAddItemStack(@NotNull ItemStack itemStack);
+
+    /**
+     * Checks whether {@link ItemStack}s can be fully added to the inventory.
+     *
+     * @param itemStacks items to be checked
+     * @return true if all the items can be fully added to the inventory, false otherwise
+     */
+    default boolean canAddItemStacks(@NotNull List<ItemStack> itemStacks) {
+        return itemStacks.stream().allMatch(this::canAddItemStack);
+    }
+
+    /**
+     * Takes an {@link ItemStack} from the inventory and sends relevant update to the viewer(s).
+     * <p>
+     * Even the item cannot be fully taken, the amount of {@code itemStack} will be updated.
+     *
+     * @param itemStack the item to take
+     * @return true if the item has been successfully fully taken, false otherwise
+     */
+    boolean takeItemStack(@NotNull ItemStack itemStack);
+
+    /**
+     * Takes {@link ItemStack}s from the inventory and sends relevant updates to the viewer(s).
+     * <p>
+     * Even items cannot be fully taken, the amount of {@code itemStack}s will be updated.
+     *
+     * @param itemStacks items to take
+     * @return list of itemstacks that could not be successfully fully taken, empty list otherwise
+     */
+    default List<ItemStack> takeItemStacks(@NotNull List<ItemStack> itemStacks) {
+        List<ItemStack> result = new ArrayList<>(itemStacks.size());
+        itemStacks.forEach(itemStack -> {
+            if (!takeItemStack(itemStack)) {
+                result.add(itemStack);
+            }
+        });
+        return result;
+    }
+
+    /**
+     * Checks whether {@link ItemStack} can be fully taken from the inventory.
+     *
+     * @param itemStack the item to be checked
+     * @return true if the item can be fully taken from the inventory, false otherwise
+     */
+    boolean canTakeItemStack(@NotNull ItemStack itemStack);
+
+    /**
+     * Checks whether {@link ItemStack}s can be fully taken from the inventory.
+     *
+     * @param itemStacks items to be checked
+     * @return true if all the items can be fully taken from the inventory, false otherwise
+     */
+    default boolean canTakeItemStacks(@NotNull List<ItemStack> itemStacks) {
+        return itemStacks.stream().allMatch(this::canTakeItemStack);
+    }
 
     /**
      * Clears the inventory and send relevant update to the viewer(s).

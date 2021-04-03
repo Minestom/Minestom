@@ -100,7 +100,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         itemStack = addItemStackEvent.getItemStack();
 
         final StackingRule stackingRule = itemStack.getStackingRule();
-        for (int i = 0; i < INNER_INVENTORY_SIZE; ++i) {
+        for (int i = 0; i < getInnerInventorySize(); ++i) {
             ItemStack item = items[i];
             if (item.isAir()) {
                 continue;
@@ -124,13 +124,85 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
                 }
             }
         }
-        for (int i = 0; i < INNER_INVENTORY_SIZE; ++i) {
+        for (int i = 0; i < getInnerInventorySize(); ++i) {
             ItemStack item = items[i];
             if (!item.isAir()) {
                 continue;
             }
             safeItemInsert(i, itemStack);
             return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean canAddItemStack(@NotNull ItemStack itemStack) {
+        StackingRule stackingRule = itemStack.getStackingRule();
+        int amountLeft = itemStack.getAmount();
+        for (int i = 0; i < getInnerInventorySize(); i++) {
+            ItemStack item = getItemStack(i);
+            StackingRule itemStackingRule = item.getStackingRule();
+            if (itemStackingRule.canBeStacked(itemStack, item)) {
+                int itemAmount = itemStackingRule.getAmount(item);
+                if (itemAmount == stackingRule.getMaxSize())
+                    continue;
+                if (!stackingRule.canApply(itemStack, amountLeft + itemAmount)) {
+                    amountLeft -= itemStackingRule.getMaxSize() - item.getAmount();
+                } else {
+                    return true;
+                }
+            } else if (item.isAir()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean takeItemStack(@NotNull ItemStack itemStack) {
+        final StackingRule stackingRule = itemStack.getStackingRule();
+        for (int i = 0; i < getInnerInventorySize(); i++) {
+            ItemStack item = getItemStack(i);
+            if (item.isAir()) {
+                continue;
+            }
+            final StackingRule itemStackingRule = item.getStackingRule();
+            if (itemStackingRule.canBeStacked(itemStack, item)) {
+                final int itemAmount = itemStackingRule.getAmount(item);
+                if (itemAmount == stackingRule.getMaxSize())
+                    continue;
+                final int itemStackAmount = itemStackingRule.getAmount(itemStack);
+                if (itemStackAmount < itemAmount) {
+                    item = itemStackingRule.apply(item, itemAmount - itemStackAmount);
+                    sendSlotRefresh((short) i, item);
+                    return true;
+                }
+                safeItemInsert(i, ItemStack.getAirItem());
+                itemStack.setAmount((byte) (itemStack.getAmount() - itemAmount));
+                if (itemStack.getAmount() == 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean canTakeItemStack(@NotNull ItemStack itemStack) {
+        int amountLeft = itemStack.getAmount();
+        for (int i = 0; i < getInnerInventorySize(); i++) {
+            ItemStack item = getItemStack(i);
+            if (item.isAir()) {
+                continue;
+            }
+            StackingRule itemStackingRule = item.getStackingRule();
+            if (itemStackingRule.canBeStacked(itemStack, item)) {
+                int itemAmount = itemStackingRule.getAmount(item);
+                if (itemAmount >= amountLeft) {
+                    return true;
+                }
+                amountLeft -= itemAmount;
+            }
         }
         return false;
     }
