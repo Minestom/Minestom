@@ -225,7 +225,8 @@ public class PlayerInit {
 
             PlayerInventory inventory = player.getInventory();
             ItemStack itemStack = ItemStack.of(Material.STONE, 64);
-            //inventory.addItemStack(itemStack);
+            inventory.addItemStack(itemStack);
+            inventory.replaceItemStack(0, i -> i.withAmount(32));
 
             {
                 ItemStack item = ItemStack.builder(Material.DIAMOND_CHESTPLATE)

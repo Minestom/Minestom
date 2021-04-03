@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.UnaryOperator;
 
 import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 
@@ -73,7 +74,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     @Override
-    public void setItemStack(int slot, @NotNull ItemStack itemStack) {
+    public synchronized void setItemStack(int slot, @NotNull ItemStack itemStack) {
         PlayerSetItemStackEvent setItemStackEvent = new PlayerSetItemStackEvent(player, slot, itemStack);
         player.callEvent(PlayerSetItemStackEvent.class, setItemStackEvent);
         if (setItemStackEvent.isCancelled())
@@ -107,7 +108,13 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     }
 
     @Override
-    public void clear() {
+    public synchronized void replaceItemStack(int slot, @NotNull UnaryOperator<@NotNull ItemStack> operator) {
+        // Make the method synchronized
+        InventoryModifier.super.replaceItemStack(slot, operator);
+    }
+
+    @Override
+    public synchronized void clear() {
         // Clear the item array
         Arrays.fill(itemStacks, ItemStack.AIR);
 

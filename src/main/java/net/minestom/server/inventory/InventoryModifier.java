@@ -9,6 +9,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 /**
  * Represents an inventory where items can be modified/retrieved.
@@ -73,6 +74,11 @@ public interface InventoryModifier {
             // Inventory cannot accept the item fully
             return false;
         }
+    }
+
+    default void replaceItemStack(int slot, @NotNull UnaryOperator<@NotNull ItemStack> operator) {
+        var currentItem = getItemStack(slot);
+        setItemStack(slot, operator.apply(currentItem));
     }
 
     /**

@@ -29,6 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.UnaryOperator;
 
 /**
  * Represents an inventory which can be viewed by a collection of {@link Player}.
@@ -159,7 +160,13 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     }
 
     @Override
-    public void clear() {
+    public synchronized void replaceItemStack(int slot, @NotNull UnaryOperator<@NotNull ItemStack> operator) {
+        // Make the method synchronized
+        InventoryModifier.super.replaceItemStack(slot, operator);
+    }
+
+    @Override
+    public synchronized void clear() {
         // Clear the item array
         Arrays.fill(itemStacks, ItemStack.AIR);
         // Send the cleared inventory to viewers
