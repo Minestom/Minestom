@@ -8,6 +8,7 @@ import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,6 +16,9 @@ import org.jetbrains.annotations.NotNull;
  * which can be targeted with the entity {@link TargetSelector}.
  */
 public class MeleeAttackGoal extends GoalSelector {
+
+    private final UpdateOption pathUpdateOptions = new UpdateOption(5, TimeUnit.TICK);
+    private long lastPathUpdate;
 
     private long lastHit;
     private final int delay;
@@ -35,6 +39,10 @@ public class MeleeAttackGoal extends GoalSelector {
         this.delay = delay;
         this.range = range;
         this.timeUnit = timeUnit;
+    }
+
+    public UpdateOption getPathUpdateOptions() {
+        return this.pathUpdateOptions;
     }
 
     @Override
@@ -77,7 +85,10 @@ public class MeleeAttackGoal extends GoalSelector {
             final Position pathPosition = navigator.getPathPosition();
             final Position targetPosition = target.getPosition();
             if (pathPosition == null || !pathPosition.isSimilar(targetPosition)) {
-                navigator.setPathTo(targetPosition);
+                if (!Cooldown.hasCooldown(time, this.lastPathUpdate, getPathUpdateOptions())) {
+                    this.lastPathUpdate = time;
+                    navigator.setPathTo(targetPosition);
+                }
             }
         }
     }
