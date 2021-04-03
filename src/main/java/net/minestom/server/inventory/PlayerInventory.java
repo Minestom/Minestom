@@ -33,6 +33,7 @@ import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 public class PlayerInventory implements InventoryModifier, InventoryClickHandler, EquipmentHandler, DataContainer {
 
     public static final int INVENTORY_SIZE = 46;
+    public static final int INNER_INVENTORY_SIZE = 36;
 
     protected final Player player;
     protected final ItemStack[] items = new ItemStack[INVENTORY_SIZE];
@@ -99,9 +100,12 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
         itemStack = addItemStackEvent.getItemStack();
 
         final StackingRule stackingRule = itemStack.getStackingRule();
-        for (int i = 0; i < items.length - 10; i++) {
+        for (int i = 0; i < INNER_INVENTORY_SIZE; ++i) {
             ItemStack item = items[i];
-            final StackingRule itemStackingRule = item.getStackingRule();
+            if (item.isAir()) {
+                continue;
+            }
+            StackingRule itemStackingRule = item.getStackingRule();
             if (itemStackingRule.canBeStacked(itemStack, item)) {
                 final int itemAmount = itemStackingRule.getAmount(item);
                 if (itemAmount == stackingRule.getMaxSize())
@@ -118,10 +122,15 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
                     sendSlotRefresh((short) convertToPacketSlot(i), item);
                     return true;
                 }
-            } else if (item.isAir()) {
-                safeItemInsert(i, itemStack);
-                return true;
             }
+        }
+        for (int i = 0; i < INNER_INVENTORY_SIZE; ++i) {
+            ItemStack item = items[i];
+            if (!item.isAir()) {
+                continue;
+            }
+            safeItemInsert(i, itemStack);
+            return true;
         }
         return false;
     }
@@ -142,6 +151,10 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     @Override
     public int getSize() {
         return INVENTORY_SIZE;
+    }
+
+    public int getInnerInventorySize() {
+        return INNER_INVENTORY_SIZE;
     }
 
     @NotNull
