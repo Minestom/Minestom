@@ -37,7 +37,7 @@ import java.util.function.UnaryOperator;
  * You can create one with {@link Inventory#Inventory(InventoryType, String)} or by making your own subclass.
  * It can then be opened using {@link Player#openInventory(Inventory)}.
  */
-public class Inventory implements InventoryModifier, InventoryClickHandler, Viewable, DataContainer {
+public class Inventory extends AbstractInventory implements InventoryClickHandler, Viewable, DataContainer {
 
     // incremented each time an inventory is created (used in the window packets)
     private static final AtomicInteger LAST_INVENTORY_ID = new AtomicInteger();
@@ -150,19 +150,13 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
     @Override
     public synchronized boolean addItemStack(@NotNull ItemStack itemStack) {
         // Make the method synchronized
-        return InventoryModifier.super.addItemStack(itemStack);
-    }
-
-    @Override
-    public synchronized boolean addItemStack(@NotNull ItemStack itemStack, int startSlot, int endSlot) {
-        // Make the method synchronized
-        return InventoryModifier.super.addItemStack(itemStack, startSlot, endSlot);
+        return super.addItemStack(itemStack);
     }
 
     @Override
     public synchronized void replaceItemStack(int slot, @NotNull UnaryOperator<@NotNull ItemStack> operator) {
         // Make the method synchronized
-        InventoryModifier.super.replaceItemStack(slot, operator);
+        super.replaceItemStack(slot, operator);
     }
 
     @Override
@@ -299,7 +293,8 @@ public class Inventory implements InventoryModifier, InventoryClickHandler, View
      * @param slot      the internal slot id
      * @param itemStack the item to insert
      */
-    private synchronized void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
+    @Override
+    protected synchronized void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
         this.itemStacks[slot] = itemStack;
         SetSlotPacket setSlotPacket = new SetSlotPacket();
         setSlotPacket.windowId = getWindowId();
