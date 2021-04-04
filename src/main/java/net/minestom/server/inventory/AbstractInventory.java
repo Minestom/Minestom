@@ -79,7 +79,7 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
                     itemStack = stackingRule.apply(itemStack, totalAmount - stackingRule.getMaxSize());
                 } else {
                     // Slot can accept the whole item
-                    itemChangesMap.put(i, inventoryItem.withAmount(totalAmount));
+                    itemChangesMap.put(i, stackingRule.apply(inventoryItem, totalAmount));
                     itemStack = ItemStack.AIR;
                     break;
                 }
@@ -172,7 +172,6 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
      */
     public boolean takeItemStack(@NotNull ItemStack itemStack) {
         Int2ObjectMap<ItemStack> itemChangesMap = new Int2ObjectOpenHashMap<>();
-
         final StackingRule stackingRule = itemStack.getStackingRule();
         for (int i = 0; i < getInnerSize(); i++) {
             ItemStack inventoryItem = getItemStack(i);
@@ -188,7 +187,7 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
                     break;
                 }
                 itemChangesMap.put(i, ItemStack.AIR);
-                itemStack = itemStack.withAmount(amount -> amount - itemAmount);
+                itemStack = stackingRule.apply(itemStack, itemStackAmount - itemAmount);
                 if (stackingRule.getAmount(itemStack) == 0) {
                     itemStack = ItemStack.AIR;
                     break;
@@ -231,6 +230,7 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
      */
     public boolean canTakeItemStack(@NotNull ItemStack itemStack) {
         final StackingRule stackingRule = itemStack.getStackingRule();
+        int amountLeft = stackingRule.getAmount(itemStack);
         for (int i = 0; i < getInnerSize(); i++) {
             ItemStack inventoryItem = getItemStack(i);
             if (inventoryItem.isAir()) {
@@ -238,11 +238,10 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
             }
             if (stackingRule.canBeStacked(itemStack, inventoryItem)) {
                 final int itemAmount = stackingRule.getAmount(inventoryItem);
-                final int itemStackAmount = stackingRule.getAmount(itemStack);
-                if (itemStackAmount <= itemAmount) {
+                if (amountLeft <= itemAmount) {
                     return true;
                 }
-                itemStack = itemStack.withAmount(amount -> amount - itemAmount);
+                amountLeft -= itemAmount;
             }
         }
         return false;
