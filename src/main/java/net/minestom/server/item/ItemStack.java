@@ -131,12 +131,12 @@ public class ItemStack {
     }
 
     @Contract(value = "_, -> new", pure = true)
-    public @NotNull ItemStack withLore(@Nullable List<@NotNull Component> lore) {
+    public @NotNull ItemStack withLore(@NotNull List<@NotNull Component> lore) {
         return builder().lore(lore).build();
     }
 
     @Contract(value = "_, -> new", pure = true)
-    public @NotNull ItemStack withLore(@NotNull UnaryOperator<@Nullable List<@NotNull Component>> loreUnaryOperator) {
+    public @NotNull ItemStack withLore(@NotNull UnaryOperator<@NotNull List<@NotNull Component>> loreUnaryOperator) {
         return withLore(loreUnaryOperator.apply(getLore()));
     }
 

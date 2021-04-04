@@ -353,9 +353,8 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
         }
     }
 
-    @Nullable
     @Override
-    public Data getData() {
+    public @Nullable Data getData() {
         return data;
     }
 

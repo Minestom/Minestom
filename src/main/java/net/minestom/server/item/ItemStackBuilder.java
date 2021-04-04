@@ -60,7 +60,7 @@ public class ItemStackBuilder {
     }
 
     @Contract(value = "_ -> this")
-    public @NotNull ItemStackBuilder lore(List<@NotNull Component> lore) {
+    public @NotNull ItemStackBuilder lore(@NotNull List<@NotNull Component> lore) {
         this.metaBuilder.lore(lore);
         return this;
     }
