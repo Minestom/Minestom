@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -180,13 +180,34 @@ implements <a href="CommandSender.html" title="interface in net.minestom.server.
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="ConsoleSender.html" title="class in net.minestom.server.command">ConsoleSender</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#asConsole()">asConsole</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Casts this object to a <a href="ConsoleSender.html" title="class in net.minestom.server.command"><code>ConsoleSender</code></a>.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="../permission/Permission.html" title="class in net.minestom.server.permission">Permission</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAllPermissions()">getAllPermissions</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns all permissions associated to this handler.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isConsole()">isConsole</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets if the sender is a <a href="ConsoleSender.html" title="class in net.minestom.server.command"><code>ConsoleSender</code></a>.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(java.lang.String)">sendMessage</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;message)</code></th>
+<td class="colLast">
+<div class="block">Sends a raw string message.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)">sendMessage</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/identity/Identity.html?is-external=true" title="class or interface in net.kyori.adventure.identity" class="externalLink">Identity</a>&nbsp;source,
            @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;message,
@@ -213,7 +234,7 @@ implements <a href="CommandSender.html" title="interface in net.minestom.server.
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;net.minestom.server.command.<a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></h3>
-<code><a href="CommandSender.html#asConsole()">asConsole</a>, <a href="CommandSender.html#asPlayer()">asPlayer</a>, <a href="CommandSender.html#isConsole()">isConsole</a>, <a href="CommandSender.html#isPlayer()">isPlayer</a>, <a href="CommandSender.html#sendMessage(java.lang.String)">sendMessage</a>, <a href="CommandSender.html#sendMessage(java.lang.String%5B%5D)">sendMessage</a>, <a href="CommandSender.html#sendMessage(net.minestom.server.chat.JsonMessage)">sendMessage</a></code></li>
+<code><a href="CommandSender.html#asPlayer()">asPlayer</a>, <a href="CommandSender.html#isPlayer()">isPlayer</a>, <a href="CommandSender.html#sendMessage(java.lang.String%5B%5D)">sendMessage</a>, <a href="CommandSender.html#sendMessage(net.minestom.server.chat.JsonMessage)">sendMessage</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.permission.PermissionHandler">
@@ -257,6 +278,24 @@ implements <a href="CommandSender.html" title="interface in net.minestom.server.
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="sendMessage(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sendMessage</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;sendMessage&#8203;(@NotNull
+                        @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;message)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="CommandSender.html#sendMessage(java.lang.String)">CommandSender</a></code></span></div>
+<div class="block">Sends a raw string message.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="CommandSender.html#sendMessage(java.lang.String)">sendMessage</a></code>&nbsp;in interface&nbsp;<code><a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>message</code> - the message to send</dd>
+</dl>
+</li>
+</ul>
 <a id="sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)">
 <!--   -->
 </a>
@@ -278,7 +317,7 @@ implements <a href="CommandSender.html" title="interface in net.minestom.server.
 <a id="getAllPermissions()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getAllPermissions</h4>
 <pre class="methodSignature">@NotNull
@@ -291,6 +330,41 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 <dd><code><a href="../permission/PermissionHandler.html#getAllPermissions()">getAllPermissions</a></code>&nbsp;in interface&nbsp;<code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the permissions of this handler.</dd>
+</dl>
+</li>
+</ul>
+<a id="isConsole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isConsole</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isConsole()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="CommandSender.html#isConsole()">CommandSender</a></code></span></div>
+<div class="block">Gets if the sender is a <a href="ConsoleSender.html" title="class in net.minestom.server.command"><code>ConsoleSender</code></a>.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="CommandSender.html#isConsole()">isConsole</a></code>&nbsp;in interface&nbsp;<code><a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if 'this' is the console, false otherwise</dd>
+</dl>
+</li>
+</ul>
+<a id="asConsole()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>asConsole</h4>
+<pre class="methodSignature">public&nbsp;<a href="ConsoleSender.html" title="class in net.minestom.server.command">ConsoleSender</a>&nbsp;asConsole()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="CommandSender.html#asConsole()">CommandSender</a></code></span></div>
+<div class="block">Casts this object to a <a href="ConsoleSender.html" title="class in net.minestom.server.command"><code>ConsoleSender</code></a>.
+ No checks are performed, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/ClassCastException.html?is-external=true" title="class or interface in java.lang" class="externalLink"><code>ClassCastException</code></a> can very much happen.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="CommandSender.html#asConsole()">asConsole</a></code>&nbsp;in interface&nbsp;<code><a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code></dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="CommandSender.html#isConsole()"><code>CommandSender.isConsole()</code></a></dd>
 </dl>
 </li>
 </ul>
