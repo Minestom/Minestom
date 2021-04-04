@@ -1,8 +1,10 @@
 package net.minestom.server.item.rule;
 
+import it.unimi.dsi.fastutil.Pair;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 public class VanillaStackingRule extends StackingRule {
@@ -28,6 +30,23 @@ public class VanillaStackingRule extends StackingRule {
             return ItemStack.AIR;
 
         return item.withAmount(newAmount);
+    }
+
+    @Override
+    public @NotNull ItemStack merge(@NotNull ItemStack first, @NotNull ItemStack second) {
+        int newAmount = first.getAmount() + second.getAmount();
+        return first.withAmount(newAmount).withStore(builder -> builder.merge(second.getStore().builder()));
+    }
+
+    @Override
+    public @NotNull Pair<@NotNull ItemStack, @NotNull ItemStack> split(@NotNull ItemStack item, int firstAmount) {
+        Check.argCondition(firstAmount >= item.getAmount(), "Could not split item with provided amount");
+        int secondAmount = item.getAmount() - firstAmount;
+        var builders = item.getStore().builder().split(firstAmount, secondAmount);
+        return Pair.of(
+                item.withAmount(firstAmount).withStore(builders.left().build()),
+                item.withAmount(secondAmount).withStore(builders.right().build())
+        );
     }
 
     @Override

@@ -22,8 +22,13 @@ public class ItemStore {
         return null;
     }
 
+    /**
+     * For internal usage only.
+     *
+     * @return builder with this {@link ItemStore} entries.
+     */
     @Contract(value = "-> new", pure = true)
-    protected @NotNull ItemStoreBuilder builder() {
+    public @NotNull ItemStoreBuilder builder() {
         return new ItemStoreBuilder(new ConcurrentHashMap<>(entryMap));
     }
 

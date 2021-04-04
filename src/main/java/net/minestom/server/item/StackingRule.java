@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import it.unimi.dsi.fastutil.Pair;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,6 +46,12 @@ public abstract class StackingRule {
      */
     @Contract("_, _ -> new")
     public abstract @NotNull ItemStack apply(@NotNull ItemStack item, int newAmount);
+
+    @Contract("_, _ -> new")
+    public abstract @NotNull ItemStack merge(@NotNull ItemStack first, @NotNull ItemStack second);
+
+    @Contract("_, _ -> new")
+    public abstract @NotNull Pair<@NotNull ItemStack, @NotNull ItemStack> split(@NotNull ItemStack item, int firstAmount);
 
     /**
      * Used to determine the current stack size of an {@link ItemStack}.
