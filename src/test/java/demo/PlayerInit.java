@@ -7,10 +7,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.chat.ColoredText;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.GameMode;
-import net.minestom.server.entity.ItemEntity;
-import net.minestom.server.entity.Player;
+import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -102,14 +99,11 @@ public class PlayerInit {
 
         globalEventHandler.addEventCallback(EntityAttackEvent.class, event -> {
             final Entity source = event.getEntity();
-            final Entity entity = event.getTarget();
 
-            if (entity instanceof Player) {
-                Player target = (Player) entity;
+            if (event.getTarget() instanceof LivingEntity) {
+                final LivingEntity target = (LivingEntity) event.getTarget();
                 target.takeKnockback(0.4F, Math.sin(source.getPosition().getYaw() * 0.017453292), -Math.cos(source.getPosition().getYaw() * 0.017453292));
                 target.damage(DamageType.fromEntity(source), 5);
-            } else {
-                entity.takeKnockback(0.4F, Math.sin(source.getPosition().getYaw() * 0.017453292), -Math.cos(source.getPosition().getYaw() * 0.017453292));
             }
 
             if (source instanceof Player) {
