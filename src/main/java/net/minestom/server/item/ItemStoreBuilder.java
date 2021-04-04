@@ -34,7 +34,7 @@ public class ItemStoreBuilder {
 
     @Contract(value = "_ -> this", pure = true)
     public @NotNull ItemStoreBuilder merge(@NotNull ItemStoreBuilder builder) {
-        if (hashCode() <= builder.hashCode()) {
+        if (hashCode() <= builder.hashCode()) { // here we determine the order of synchronization
             merge0(builder, this.entryMap);
         } else {
             builder.merge0(this, this.entryMap);
@@ -50,7 +50,10 @@ public class ItemStoreBuilder {
                 if (otherEntry == null) {
                     result.put(key, entry);
                 } else {
-                    result.put(key, entry.merge(otherEntry));
+                    var newEntry = entry.merge(otherEntry);
+                    if (newEntry != null) {
+                        result.put(key, entry.merge(otherEntry));
+                    }
                 }
             });
             builder.entryMap.entrySet().stream()
