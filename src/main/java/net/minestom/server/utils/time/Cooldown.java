@@ -12,6 +12,10 @@ public final class Cooldown {
         this.lastUpdate = System.currentTimeMillis();
     }
 
+    public UpdateOption getUpdateOption() {
+        return this.updateOption;
+    }
+
     public void refreshLastUpdate(long lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
