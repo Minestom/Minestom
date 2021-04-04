@@ -53,7 +53,7 @@ public interface CommandSender extends PermissionHandler, Audience {
      * @return true if 'this' is a player, false otherwise
      */
     default boolean isPlayer() {
-        return this instanceof Player;
+        return false;
     }
 
     /**
@@ -62,7 +62,7 @@ public interface CommandSender extends PermissionHandler, Audience {
      * @return true if 'this' is the console, false otherwise
      */
     default boolean isConsole() {
-        return this instanceof ConsoleSender;
+        return false;
     }
 
     /**
@@ -73,7 +73,7 @@ public interface CommandSender extends PermissionHandler, Audience {
      * @see #isPlayer()
      */
     default Player asPlayer() {
-        return (Player) this;
+        throw new ClassCastException("CommandSender is not a Player");
     }
 
     /**
@@ -84,6 +84,6 @@ public interface CommandSender extends PermissionHandler, Audience {
      * @see #isConsole()
      */
     default ConsoleSender asConsole() {
-        return (ConsoleSender) this;
+        throw new ClassCastException("CommandSender is not the ConsoleSender");
     }
 }

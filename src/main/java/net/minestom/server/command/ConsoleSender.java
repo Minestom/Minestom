@@ -37,4 +37,14 @@ public class ConsoleSender implements CommandSender {
     public Set<Permission> getAllPermissions() {
         return permissions;
     }
+
+    @Override
+    public boolean isConsole() {
+        return true;
+    }
+
+    @Override
+    public ConsoleSender asConsole() {
+        return this;
+    }
 }

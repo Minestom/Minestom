@@ -2667,6 +2667,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.identity = Identity.identity(uuid);
     }
 
+    @Override
+    public boolean isPlayer() {
+        return true;
+    }
+
+    @Override
+    public Player asPlayer() {
+        return this;
+    }
+
     /**
      * Represents the main or off hand of the player.
      */
