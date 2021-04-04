@@ -86,7 +86,7 @@ public final class NBTUtils {
             final ItemStack stack = inventory.getItemStack(i);
             NBTCompound nbt = new NBTCompound();
 
-            NBTCompound tag = metaToNBT(stack.getMeta());
+            NBTCompound tag = getMetaNBT(stack.getMeta());
 
             nbt.set("tag", tag);
             nbt.setByte("Slot", (byte) i);
@@ -290,9 +290,7 @@ public final class NBTUtils {
         }
     }
 
-    public static @NotNull NBTCompound metaToNBT(@NotNull ItemMeta itemMeta) {
-        final NBTCompound itemNBT = new NBTCompound();
-
+    public static void writeMetaNBT(@NotNull ItemMeta itemMeta, @NotNull NBTCompound itemNBT) {
         // Unbreakable
         if (itemMeta.isUnbreakable()) {
             itemNBT.setInt("Unbreakable", 1);
@@ -381,8 +379,12 @@ public final class NBTUtils {
             }
         }
         // End custom model data
+    }
 
-        return itemNBT;
+    public static @NotNull NBTCompound getMetaNBT(@NotNull ItemMeta itemMeta) {
+        var nbt = new NBTCompound();
+        writeMetaNBT(itemMeta, nbt);
+        return nbt;
     }
 
     @FunctionalInterface

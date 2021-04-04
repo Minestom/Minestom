@@ -9,10 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.lang.ref.SoftReference;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class ItemMeta {
@@ -110,14 +107,10 @@ public class ItemMeta {
     }
 
     public @NotNull NBTCompound toNBT() {
-        if (originalNbt != null) {
-            // Return the nbt this meta has been created with
-            return originalNbt;
-        }
-
         var nbt = cache != null ? cache.get() : null;
         if (nbt == null) {
-            nbt = NBTUtils.metaToNBT(this);
+            nbt = Objects.requireNonNullElseGet(originalNbt, NBTCompound::new);
+            NBTUtils.writeMetaNBT(this, nbt);
             this.builder.write(nbt);
             this.cache = new SoftReference<>(nbt);
         }

@@ -27,7 +27,6 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.ItemStore;
 import net.minestom.server.item.ItemTag;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.meta.CompassMeta;
@@ -38,6 +37,7 @@ import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -241,13 +241,14 @@ public class PlayerInit {
             {
                 ItemStack item = ItemStack.builder(Material.DIAMOND_CHESTPLATE)
                         .displayName(Component.text("test"))
+                        .lore(Component.text("lore"))
                         .build();
-                //inventory.setChestplate(item);
+                inventory.setChestplate(item.withLore(components -> {
+                    var list = new ArrayList<>(components);
+                    list.add(Component.text("hey"));
+                    return list;
+                }));
             }
-
-            player.openInventory(PlayerInit.inventory);
-
-            //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 32));
         });
 
         globalEventHandler.addEventCallback(PlayerBlockBreakEvent.class, event -> {
