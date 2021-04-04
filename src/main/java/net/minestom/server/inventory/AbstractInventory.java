@@ -53,10 +53,10 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
     /**
      * Adds an {@link ItemStack} to the inventory and sends relevant update to the viewer(s).
      * <p>
-     * Even the item cannot be fully added, the amount of {@code itemStack} will be updated.
+     * Does nothing if the item cannot be fully added.
      *
      * @param itemStack the item to add
-     * @return true if the item has been successfully fully added, false otherwise
+     * @return true if the item has been successfully added, false otherwise
      */
     public synchronized boolean addItemStack(@NotNull ItemStack itemStack) {
         Int2ObjectMap<ItemStack> itemChangesMap = new Int2ObjectOpenHashMap<>();
@@ -109,10 +109,10 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
     /**
      * Adds {@link ItemStack}s to the inventory and sends relevant updates to the viewer(s).
      * <p>
-     * Even items cannot be fully added, the amount of {@code itemStack}s will be updated.
+     * Does nothing if the item cannot be fully added.
      *
      * @param itemStacks items to add
-     * @return list of itemstacks that could not be successfully fully added, empty list otherwise
+     * @return list of items that could not be successfully added, empty list otherwise
      */
     public @NotNull List<ItemStack> addItemStacks(@NotNull List<ItemStack> itemStacks) {
         List<ItemStack> result = new ArrayList<>();
