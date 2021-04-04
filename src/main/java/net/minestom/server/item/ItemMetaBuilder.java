@@ -43,6 +43,15 @@ public abstract class ItemMetaBuilder implements Cloneable {
     }
 
     @Contract("_ -> this")
+    public @NotNull ItemMetaBuilder hideFlag(@NotNull ItemHideFlag... hideFlags) {
+        int result = 0;
+        for (ItemHideFlag hideFlag : hideFlags) {
+            result |= hideFlag.getBitFieldPart();
+        }
+        return hideFlag(result);
+    }
+
+    @Contract("_ -> this")
     public @NotNull ItemMetaBuilder displayName(@Nullable Component displayName) {
         this.displayName = displayName;
         return this;
