@@ -47,9 +47,24 @@ public abstract class StackingRule {
     @Contract("_, _ -> new")
     public abstract @NotNull ItemStack apply(@NotNull ItemStack item, int newAmount);
 
+    /**
+     * Merges two {@link ItemStack}s together.
+     * At this point we know that the result item can have summarized stack sizes applied.
+     *
+     * @param first first {@link ItemStack} to be merged
+     * @param second second {@link ItemStack} to be merged
+     * @return a new {@link ItemStack} that is a result of merging
+     */
     @Contract("_, _ -> new")
     public abstract @NotNull ItemStack merge(@NotNull ItemStack first, @NotNull ItemStack second);
 
+    /**
+     * Splits this {@link ItemStack} into two separate ones.
+     *
+     * @param item an {@link ItemStack} to be split
+     * @param firstAmount amount of first {@link ItemStack}; amount of second one is determined as an amount of first argument minus this value.
+     * @return {@link Pair} of {@link ItemStack}s which are the result of the splitting
+     */
     @Contract("_, _ -> new")
     public abstract @NotNull Pair<@NotNull ItemStack, @NotNull ItemStack> split(@NotNull ItemStack item, int firstAmount);
 
