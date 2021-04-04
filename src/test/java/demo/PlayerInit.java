@@ -3,6 +3,7 @@ package demo;
 import demo.generator.ChunkGeneratorDemo;
 import demo.generator.NoiseTestGenerator;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.benchmark.BenchmarkManager;
@@ -252,9 +253,12 @@ public class PlayerInit {
         return (playerConnection, responseData) -> {
             responseData.setMaxPlayer(0);
             responseData.setOnline(MinecraftServer.getConnectionManager().getOnlinePlayers().size());
-            responseData.addPlayer("A name", UUID.randomUUID());
-            responseData.addPlayer("Could be some message", UUID.randomUUID());
-            responseData.setDescription("IP test: " + playerConnection.getRemoteAddress());
+            responseData.addPlayer("The first line is separated from the others", UUID.randomUUID());
+            responseData.addPlayer("Could be a name, or a message", UUID.randomUUID());
+            responseData.setDescription(Component.text("You can do ")
+                    .append(Component.text("RGB", TextColor.color(0x66b3ff)))
+                    .append(Component.text(" color here")));
+
         };
     }
 

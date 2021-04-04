@@ -8,13 +8,17 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.event.server.StatusRequestEvent;
 import net.minestom.server.extras.optifine.OptifineSupport;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
+import net.minestom.server.ping.ResponseData;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.storage.systems.FileStorageSystem;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
+
+import java.util.UUID;
 
 
 public class Main {
@@ -59,6 +63,12 @@ public class Main {
         MinecraftServer.getBenchmarkManager().enable(new UpdateOption(10 * 1000, TimeUnit.MILLISECOND));
 
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night")).schedule();
+
+        MinecraftServer.getGlobalEventHandler().addEventCallback(StatusRequestEvent.class, event -> {
+            ResponseData responseData = event.getResponseData();
+            responseData.addPlayer("IP test: " + event.getConnection().getRemoteAddress().toString(), UUID.randomUUID());
+            responseData.addPlayer("Use " + (char)0x00a7 + "6section characters for formatting: (char)0x00a7", UUID.randomUUID());
+        });
 
         PlayerInit.init();
 
