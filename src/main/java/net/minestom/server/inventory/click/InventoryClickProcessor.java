@@ -281,7 +281,6 @@ public class InventoryClickProcessor {
                 int finalCursorAmount = cursorAmount;
 
                 for (int s : slots) {
-                    final ItemStack draggedItem = cursor;
                     ItemStack slotItem = itemGetter.apply(s);
 
                     clickResult = startCondition(inventory, player, s, ClickType.DRAGGING, slotItem, cursor);
@@ -290,7 +289,7 @@ public class InventoryClickProcessor {
                     StackingRule slotItemRule = slotItem.getStackingRule();
 
                     final int maxSize = stackingRule.getMaxSize();
-                    if (stackingRule.canBeStacked(draggedItem, slotItem)) {
+                    if (stackingRule.canBeStacked(cursor, slotItem)) {
                         final int amount = slotItemRule.getAmount(slotItem) + slotSize;
                         if (stackingRule.canApply(slotItem, amount)) {
                             slotItem = stackingRule.apply(slotItem, amount);
@@ -301,7 +300,7 @@ public class InventoryClickProcessor {
                             finalCursorAmount -= removedAmount;
                         }
                     } else if (slotItem.isAir()) {
-                        slotItem = stackingRule.apply(draggedItem, slotSize);
+                        slotItem = stackingRule.apply(cursor, slotSize);
                         finalCursorAmount -= slotSize;
                     }
                     itemSetter.accept(s, slotItem);
