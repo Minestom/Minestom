@@ -144,6 +144,7 @@ public abstract class ItemMetaBuilder implements Cloneable {
             deepClone(builder);
             return builder;
         } catch (CloneNotSupportedException e) {
+            // Should never happen, because ItemMetaBuilder implements Cloneable
             e.printStackTrace();
             throw new UnsupportedOperationException("Weird thing happened");
         }
