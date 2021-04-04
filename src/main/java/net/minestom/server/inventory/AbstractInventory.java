@@ -21,7 +21,7 @@ import java.util.function.UnaryOperator;
 /**
  * Represents an inventory where items can be modified/retrieved.
  */
-public abstract class AbstractInventory implements DataContainer {
+public abstract class AbstractInventory implements InventoryClickHandler, DataContainer {
 
     private final int size;
     protected final ItemStack[] itemStacks;

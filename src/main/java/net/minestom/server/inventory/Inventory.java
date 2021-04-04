@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * You can create one with {@link Inventory#Inventory(InventoryType, String)} or by making your own subclass.
  * It can then be opened using {@link Player#openInventory(Inventory)}.
  */
-public class Inventory extends AbstractInventory implements InventoryClickHandler, Viewable {
+public class Inventory extends AbstractInventory implements Viewable {
 
     // incremented each time an inventory is created (used in the window packets)
     private static final AtomicInteger LAST_INVENTORY_ID = new AtomicInteger();
