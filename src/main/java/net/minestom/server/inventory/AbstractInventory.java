@@ -132,7 +132,7 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
      */
     public boolean canAddItemStack(@NotNull ItemStack itemStack) {
         final StackingRule stackingRule = itemStack.getStackingRule();
-        int amountLeft = itemStack.getAmount();
+        int amountLeft = stackingRule.getAmount(itemStack);
         for (int i = 0; i < getInnerSize(); i++) {
             ItemStack inventoryItem = getItemStack(i);
             if (stackingRule.canBeStacked(itemStack, inventoryItem)) {
@@ -189,7 +189,7 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
                 }
                 itemChangesMap.put(i, ItemStack.AIR);
                 itemStack = itemStack.withAmount(amount -> amount - itemAmount);
-                if (itemStack.getAmount() == 0) {
+                if (stackingRule.getAmount(itemStack) == 0) {
                     itemStack = ItemStack.AIR;
                     break;
                 }
