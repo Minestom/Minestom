@@ -114,7 +114,7 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
      * @param itemStacks items to add
      * @return list of itemstacks that could not be successfully fully added, empty list otherwise
      */
-    public List<ItemStack> addItemStacks(@NotNull List<ItemStack> itemStacks) {
+    public @NotNull List<ItemStack> addItemStacks(@NotNull List<ItemStack> itemStacks) {
         List<ItemStack> result = new ArrayList<>();
         itemStacks.forEach(itemStack -> {
             if (!addItemStack(itemStack)) {
@@ -212,7 +212,7 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
      * @param itemStacks items to take
      * @return list of itemstacks that could not be successfully fully taken, empty list otherwise
      */
-    public List<ItemStack> takeItemStacks(@NotNull List<ItemStack> itemStacks) {
+    public @NotNull List<ItemStack> takeItemStacks(@NotNull List<ItemStack> itemStacks) {
         List<ItemStack> result = new ArrayList<>();
         itemStacks.forEach(itemStack -> {
             if (!takeItemStack(itemStack)) {
@@ -280,8 +280,7 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
      * @param slot the slot to check
      * @return the item in the slot {@code slot}
      */
-    @NotNull
-    public ItemStack getItemStack(int slot) {
+    public @NotNull ItemStack getItemStack(int slot) {
         return itemStacks[slot];
     }
 
@@ -293,8 +292,7 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
      *
      * @return an array containing all the inventory's items
      */
-    @NotNull
-    public ItemStack[] getItemStacks() {
+    public @NotNull ItemStack[] getItemStacks() {
         return itemStacks.clone();
     }
 
@@ -321,8 +319,7 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
      *
      * @return a modifiable {@link List} containing all the inventory conditions
      */
-    @NotNull
-    public List<InventoryCondition> getInventoryConditions() {
+    public @NotNull List<InventoryCondition> getInventoryConditions() {
         return inventoryConditions;
     }
 
