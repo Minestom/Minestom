@@ -24,7 +24,7 @@ import java.util.Objects;
  * or make your own using RGB. {@link ChatColor#fromRGB(byte, byte, byte)}.
  * <p>
  * Immutable class.
- * @deprecated For chat colors, use {@link TextColor} or {@link NamedTextColor#}. For styles, use {@link TextDecoration}.
+ * @deprecated For chat colors, use {@link TextColor} or {@link NamedTextColor}. For styles, use {@link TextDecoration}.
  * For colors in other contexts, see {@link Color} or {@link DyeColor}.
  */
 @Deprecated
