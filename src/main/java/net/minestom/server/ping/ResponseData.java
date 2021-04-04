@@ -146,6 +146,8 @@ public class ResponseData {
     /**
      * Sets the response favicon.
      *
+     * MUST start with "data:image/png;base64,"
+     *
      * @param favicon The favicon for the response data.
      */
     public void setFavicon(String favicon) {

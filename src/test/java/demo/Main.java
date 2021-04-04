@@ -67,7 +67,10 @@ public class Main {
         MinecraftServer.getGlobalEventHandler().addEventCallback(StatusRequestEvent.class, event -> {
             ResponseData responseData = event.getResponseData();
             responseData.addPlayer("IP test: " + event.getConnection().getRemoteAddress().toString(), UUID.randomUUID());
-            responseData.addPlayer("Use " + (char)0x00a7 + "6section characters for formatting: (char)0x00a7", UUID.randomUUID());
+            responseData.addPlayer("Use " + (char)0x00a7 + "7section characters", UUID.randomUUID());
+            responseData.addPlayer((char)0x00a7 + "7" + (char)0x00a7 + "ofor formatting" + (char)0x00a7 + "r: (" + (char)0x00a7 + "6char" + (char)0x00a7 + "r)" + (char)0x00a7 + "90x00a7", UUID.randomUUID());
+
+            
         });
 
         PlayerInit.init();
