@@ -106,8 +106,8 @@ public class ItemStack {
     }
 
     @Contract(value = "_ -> new", pure = true)
-    public @NotNull ItemStack withStore(@NotNull Consumer<@NotNull ItemStoreBuilder> metaOperator) {
-        return builder().store(metaOperator).build();
+    public @NotNull ItemStack withStore(@NotNull Consumer<@NotNull ItemStoreBuilder> storeConsumer) {
+        return builder().store(storeConsumer).build();
     }
 
     @Contract(pure = true)

@@ -20,8 +20,10 @@ public class ItemStoreBuilder {
         this(new ConcurrentHashMap<>());
     }
 
-    public <T> void set(@NotNull String key, T value, MergingRule<T> mergingRule) {
+    @Contract(value = "_, _, _ -> this")
+    public <T> @NotNull ItemStoreBuilder set(@NotNull String key, T value, MergingRule<T> mergingRule) {
         this.entryMap.put(key, new Entry<>(value, mergingRule));
+        return this;
     }
 
     @Contract(value = "-> new", pure = true)
