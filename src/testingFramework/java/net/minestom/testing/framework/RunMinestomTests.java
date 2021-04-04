@@ -105,7 +105,6 @@ public class RunMinestomTests {
                     return null;
                 }
 
-                // TODO: preload class separately to ensure the class has annotations, accelerating the search
                 MinestomRootClassLoader rootClassLoader = new MinestomRootClassLoader(ClassLoader.getSystemClassLoader());
                 rootClassLoader.protectedPackages.add("org.junit.jupiter.");
                 rootClassLoader.protectedPackages.add("io.netty.");
