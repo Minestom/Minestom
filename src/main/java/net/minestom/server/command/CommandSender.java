@@ -18,21 +18,17 @@ public interface CommandSender extends PermissionHandler, Audience {
      * Sends a raw string message.
      *
      * @param message the message to send
-     *
-     * @deprecated Use {@link #sendMessage(Component)}
      */
-    @Deprecated
-    default void sendMessage(@NotNull String message) { this.sendMessage(Component.text(message)); }
+    default void sendMessage(@NotNull String message) {
+        this.sendMessage(Component.text(message));
+    }
 
     /**
      * Sends multiple raw string messages.
      *
      * @param messages the messages to send
-     *
-     * @deprecated Use {@link #sendMessage(Component)}
      */
-    @Deprecated
-    default void sendMessage(@NotNull String[] messages) {
+    default void sendMessage(@NotNull String @NotNull[] messages) {
         for (String message : messages) {
             sendMessage(message);
         }
