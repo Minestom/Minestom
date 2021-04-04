@@ -53,11 +53,13 @@ public class InventoryClickProcessor {
             final int totalAmount = cursorRule.getAmount(cursor) + clickedRule.getAmount(clicked);
 
             if (!clickedRule.canApply(clicked, totalAmount)) {
-                resultCursor = cursorRule.apply(cursor, totalAmount - cursorRule.getMaxSize());
-                resultClicked = clickedRule.apply(clicked, clickedRule.getMaxSize());
+                var split = cursorRule.split(cursor, totalAmount - cursorRule.getMaxSize());
+                resultCursor = split.left();
+                resultClicked = clickedRule.merge(clicked, split.right());
             } else {
-                resultCursor = cursorRule.apply(cursor, 0);
-                resultClicked = clickedRule.apply(clicked, totalAmount);
+                var split = cursorRule.split(cursor, 0);
+                resultCursor = split.left();
+                resultClicked = clickedRule.merge(clicked, split.right());
             }
         } else {
             resultCursor = clicked;
@@ -95,19 +97,20 @@ public class InventoryClickProcessor {
             if (!clickedRule.canApply(clicked, amount)) {
                 return clickResult;
             } else {
-                resultCursor = cursorRule.apply(cursor, cursorRule.getAmount(cursor) - 1);
-                resultClicked = clickedRule.apply(clicked, amount);
+                var split = cursorRule.split(cursor, 1);
+                resultCursor = split.right();
+                resultClicked = clickedRule.merge(clicked, split.left());
             }
         } else {
             if (cursor.isAir()) {
-                final int amount = (int) Math.ceil((double) clickedRule.getAmount(clicked) / 2d);
-                resultCursor = cursorRule.apply(clicked, amount);
-                resultClicked = clickedRule.apply(clicked, clickedRule.getAmount(clicked) / 2);
+                var split = clickedRule.split(clicked, clickedRule.getAmount(clicked) >> 1);
+                resultClicked = split.left();
+                resultCursor = split.right();
             } else {
                 if (clicked.isAir()) {
-                    final int amount = cursorRule.getAmount(cursor);
-                    resultCursor = cursorRule.apply(cursor, amount - 1);
-                    resultClicked = clickedRule.apply(cursor, 1);
+                    var split = cursorRule.split(cursor, 1);
+                    resultClicked = split.left();
+                    resultCursor = split.right();
                 } else {
                     resultCursor = clicked;
                     resultClicked = cursor;
@@ -209,19 +212,19 @@ public class InventoryClickProcessor {
 
                     final int totalAmount = clickedRule.getAmount(resultClicked) + amount;
                     if (!clickedRule.canApply(clicked, totalAmount)) {
-                        item = itemRule.apply(item, itemRule.getMaxSize());
+                        var split = clickedRule.split(resultClicked, itemRule.getMaxSize() - amount);
+                        item = itemRule.merge(item, split.left());
                         itemSetter.accept(index, item);
 
-                        resultClicked = clickedRule.apply(resultClicked, totalAmount - clickedRule.getMaxSize());
+                        resultClicked = split.right();
                         filled = false;
 
                         callClickEvent(player, inventory, index, ClickType.SHIFT_CLICK, item, cursor);
-                        continue;
                     } else {
-                        resultClicked = clickedRule.apply(resultClicked, totalAmount);
+                        resultClicked = clickedRule.merge(resultClicked, item);
                         itemSetter.accept(index, resultClicked);
 
-                        item = itemRule.apply(item, 0);
+                        item = itemRule.split(item, 0).left();
                         itemSetter.accept(slot, item);
                         filled = true;
 
@@ -278,7 +281,6 @@ public class InventoryClickProcessor {
                     return null;
                 // Should be size of each defined slot (if not full)
                 final int slotSize = (int) ((float) cursorAmount / (float) slotCount);
-                int finalCursorAmount = cursorAmount;
 
                 for (int s : slots) {
                     ItemStack slotItem = itemGetter.apply(s);
@@ -292,22 +294,23 @@ public class InventoryClickProcessor {
                     if (stackingRule.canBeStacked(cursor, slotItem)) {
                         final int amount = slotItemRule.getAmount(slotItem) + slotSize;
                         if (stackingRule.canApply(slotItem, amount)) {
-                            slotItem = stackingRule.apply(slotItem, amount);
-                            finalCursorAmount -= slotSize;
+                            var split = stackingRule.split(cursor, slotSize);
+                            slotItem = stackingRule.merge(slotItem, split.left());
+                            cursor = split.right();
                         } else {
-                            final int removedAmount = amount - maxSize;
-                            slotItem = stackingRule.apply(slotItem, maxSize);
-                            finalCursorAmount -= removedAmount;
+                            var split = stackingRule.split(cursor, amount - maxSize);
+                            slotItem = stackingRule.merge(slotItem, split.left());
+                            cursor = split.right();
                         }
                     } else if (slotItem.isAir()) {
-                        slotItem = stackingRule.apply(cursor, slotSize);
-                        finalCursorAmount -= slotSize;
+                        var split = stackingRule.split(cursor, slotSize);
+                        slotItem = split.left();
+                        cursor = split.right();
                     }
                     itemSetter.accept(s, slotItem);
 
                     callClickEvent(player, inventory, s, ClickType.DRAGGING, slotItem, cursor);
                 }
-                cursor = stackingRule.apply(cursor, finalCursorAmount);
                 clickResult.setCursor(cursor);
 
                 leftDraggingMap.remove(player);
@@ -317,8 +320,7 @@ public class InventoryClickProcessor {
                     return null;
                 final IntSet slots = rightDraggingMap.get(player);
                 final int size = slots.size();
-                int cursorAmount = stackingRule.getAmount(cursor);
-                if (size > cursorAmount)
+                if (size > stackingRule.getAmount(cursor))
                     return null;
                 for (int s : slots) {
                     ItemStack draggedItem = cursor;
@@ -332,19 +334,20 @@ public class InventoryClickProcessor {
                     if (stackingRule.canBeStacked(draggedItem, slotItem)) {
                         final int amount = slotItemRule.getAmount(slotItem) + 1;
                         if (stackingRule.canApply(slotItem, amount)) {
-                            slotItem = stackingRule.apply(slotItem, amount);
+                            var split = stackingRule.split(cursor, 1);
+                            slotItem = stackingRule.merge(slotItem, split.left());
                             itemSetter.accept(s, slotItem);
-                            cursorAmount -= 1;
+                            cursor = split.right();
                         }
                     } else if (slotItem.isAir()) {
-                        draggedItem = stackingRule.apply(draggedItem, 1);
+                        var split = stackingRule.split(cursor, 1);
+                        draggedItem = split.left();
                         itemSetter.accept(s, draggedItem);
-                        cursorAmount -= 1;
+                        cursor = split.right();
                     }
 
                     callClickEvent(player, inventory, s, ClickType.DRAGGING, draggedItem, cursor);
                 }
-                cursor = stackingRule.apply(cursor, cursorAmount);
                 clickResult.setCursor(cursor);
 
                 rightDraggingMap.remove(player);
@@ -408,12 +411,13 @@ public class InventoryClickProcessor {
 
                     final int totalAmount = amount + cursorRule.getAmount(item);
                     if (!cursorRule.canApply(cursor, totalAmount)) {
-                        cursor = cursorRule.apply(cursor, cursorRule.getMaxSize());
-
-                        item = itemRule.apply(item, totalAmount - itemRule.getMaxSize());
+                        var split = itemRule.split(item, cursorRule.getMaxSize() - amount);
+                        cursor = cursorRule.merge(cursor, split.left());
+                        item = split.right();
                     } else {
-                        cursor = cursorRule.apply(cursor, totalAmount);
-                        item = itemRule.apply(item, 0);
+                        var split = itemRule.split(item, 0);
+                        cursor = cursorRule.merge(cursor, split.right());
+                        item = split.left();
                     }
                     itemSetter.accept(index, item);
                     amount = cursorRule.getAmount(cursor);
@@ -438,7 +442,6 @@ public class InventoryClickProcessor {
             return clickResult;
         }
 
-        final StackingRule clickedRule = clicked.getStackingRule();
         final StackingRule cursorRule = cursor.getStackingRule();
 
         ItemStack resultClicked = clicked;
@@ -449,44 +452,42 @@ public class InventoryClickProcessor {
             // Click outside
             if (button == 0) {
                 // Left (drop all)
-                final int amount = cursorRule.getAmount(resultCursor);
-                final ItemStack dropItem = cursorRule.apply(resultCursor, amount);
-                final boolean dropResult = player.dropItem(dropItem);
+                var split = cursorRule.split(resultCursor, 0);
+                ItemStack dropItem = split.right();
+                boolean dropResult = player.dropItem(dropItem);
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
-                    resultCursor = cursorRule.apply(resultCursor, 0);
+                    resultCursor = split.left();
                 }
             } else if (button == 1) {
                 // Right (drop 1)
-                final ItemStack dropItem = cursorRule.apply(resultCursor, 1);
-                final boolean dropResult = player.dropItem(dropItem);
+                var split = cursorRule.split(resultCursor, 1);
+                ItemStack dropItem = split.left();
+                boolean dropResult = player.dropItem(dropItem);
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
-                    final int amount = cursorRule.getAmount(resultCursor);
-                    final int newAmount = amount - 1;
-                    resultCursor = cursorRule.apply(resultCursor, newAmount);
+                    resultCursor = split.right();
                 }
             }
 
         } else if (mode == 4) {
             if (button == 0) {
                 // Drop key Q (drop 1)
-                final ItemStack dropItem = cursorRule.apply(resultClicked, 1);
-                final boolean dropResult = player.dropItem(dropItem);
+                var split = cursorRule.split(resultClicked, 1);
+                ItemStack dropItem = split.left();
+                boolean dropResult = player.dropItem(dropItem);
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
-                    final int amount = clickedRule.getAmount(resultClicked);
-                    final int newAmount = amount - 1;
-                    resultClicked = cursorRule.apply(resultClicked, newAmount);
+                    resultClicked = split.right();
                 }
             } else if (button == 1) {
                 // Ctrl + Drop key Q (drop all)
-                final int amount = cursorRule.getAmount(resultClicked);
-                final ItemStack dropItem = clickedRule.apply(resultClicked, amount);
-                final boolean dropResult = player.dropItem(dropItem);
+                var split = cursorRule.split(resultClicked, 0);
+                ItemStack dropItem = split.right();
+                boolean dropResult = player.dropItem(dropItem);
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
-                    resultClicked = cursorRule.apply(resultClicked, 0);
+                    resultClicked = split.left();
                 }
             }
         }

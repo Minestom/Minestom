@@ -127,11 +127,10 @@ public class PlayerDiggingListener {
                 dropItem(player, handItem, ItemStack.AIR);
             } else {
                 // Drop a single item, need a copy
-                ItemStack droppedItemStack2 = stackingRule.apply(handItem, dropAmount);
-
-                handItem = stackingRule.apply(handItem, handAmount - dropAmount);
-
-                dropItem(player, droppedItemStack2, handItem);
+                var split = stackingRule.split(handItem, dropAmount);
+                ItemStack droppedItemStack = split.left();
+                handItem = split.right();
+                dropItem(player, droppedItemStack, handItem);
             }
 
         } else if (status == ClientPlayerDiggingPacket.Status.UPDATE_ITEM_STATE) {

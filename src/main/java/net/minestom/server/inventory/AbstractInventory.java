@@ -75,11 +75,12 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
                 final int totalAmount = itemStackAmount + itemAmount;
                 if (!stackingRule.canApply(itemStack, totalAmount)) {
                     // Slot cannot accept the whole item, reduce amount to 'itemStack'
-                    itemChangesMap.put(i, stackingRule.apply(inventoryItem, stackingRule.getMaxSize()));
-                    itemStack = stackingRule.apply(itemStack, totalAmount - stackingRule.getMaxSize());
+                    var split = stackingRule.split(itemStack, stackingRule.getMaxSize() - itemAmount);
+                    itemChangesMap.put(i, stackingRule.merge(inventoryItem, split.left()));
+                    itemStack = split.right();
                 } else {
                     // Slot can accept the whole item
-                    itemChangesMap.put(i, stackingRule.apply(inventoryItem, totalAmount));
+                    itemChangesMap.put(i, stackingRule.merge(inventoryItem, itemStack));
                     itemStack = ItemStack.AIR;
                     break;
                 }
@@ -182,12 +183,14 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
                 final int itemAmount = stackingRule.getAmount(inventoryItem);
                 final int itemStackAmount = stackingRule.getAmount(itemStack);
                 if (itemStackAmount < itemAmount) {
-                    itemChangesMap.put(i, stackingRule.apply(inventoryItem, itemAmount - itemStackAmount));
+                    var split = stackingRule.split(inventoryItem, itemAmount - itemStackAmount);
+                    itemChangesMap.put(i, split.left());
                     itemStack = ItemStack.AIR;
                     break;
                 }
                 itemChangesMap.put(i, ItemStack.AIR);
-                itemStack = stackingRule.apply(itemStack, itemStackAmount - itemAmount);
+                var split = stackingRule.split(itemStack, itemStackAmount - itemAmount);
+                itemStack = split.left();
                 if (stackingRule.getAmount(itemStack) == 0) {
                     itemStack = ItemStack.AIR;
                     break;

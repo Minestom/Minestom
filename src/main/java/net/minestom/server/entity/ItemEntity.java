@@ -109,7 +109,7 @@ public class ItemEntity extends ObjectEntity {
                     if (!canApply)
                         continue;
 
-                    final ItemStack result = stackingRule.apply(itemStack, totalAmount);
+                    final ItemStack result = stackingRule.merge(itemStack, itemStackEntity);
 
                     EntityItemMergeEvent entityItemMergeEvent = new EntityItemMergeEvent(this, itemEntity, result);
                     callCancellableEvent(EntityItemMergeEvent.class, entityItemMergeEvent, () -> {

@@ -168,7 +168,8 @@ public class BlockPlacementListener {
                             // Block consuming
                             if (playerBlockPlaceEvent.doesConsumeBlock()) {
                                 // Consume the block in the player's hand
-                                final ItemStack newUsedItem = usedItem.getStackingRule().apply(usedItem, usedItem.getAmount() - 1);
+                                var split = usedItem.getStackingRule().split(usedItem, 1);
+                                ItemStack newUsedItem = split.right();
                                 playerInventory.setItemInHand(hand, newUsedItem);
                             }
                         } else {

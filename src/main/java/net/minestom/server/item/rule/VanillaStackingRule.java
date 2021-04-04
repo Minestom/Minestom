@@ -35,17 +35,17 @@ public class VanillaStackingRule extends StackingRule {
     @Override
     public @NotNull ItemStack merge(@NotNull ItemStack first, @NotNull ItemStack second) {
         int newAmount = first.getAmount() + second.getAmount();
-        return first.withAmount(newAmount).withStore(builder -> builder.merge(second.getStore().builder()));
+        return apply(first, newAmount).withStore(builder -> builder.merge(second.getStore().builder()));
     }
 
     @Override
     public @NotNull Pair<@NotNull ItemStack, @NotNull ItemStack> split(@NotNull ItemStack item, int firstAmount) {
-        Check.argCondition(firstAmount >= item.getAmount(), "Could not split item with provided amount");
-        int secondAmount = item.getAmount() - firstAmount;
+        Check.argCondition(firstAmount < 0 || firstAmount > getAmount(item), "Could not split item with provided amount");
+        int secondAmount = getAmount(item) - firstAmount;
         var builders = item.getStore().builder().split(firstAmount, secondAmount);
         return Pair.of(
-                item.withAmount(firstAmount).withStore(builders.left().build()),
-                item.withAmount(secondAmount).withStore(builders.right().build())
+                apply(item, firstAmount).withStore(builders.left().build()),
+                apply(item, secondAmount).withStore(builders.right().build())
         );
     }
 
