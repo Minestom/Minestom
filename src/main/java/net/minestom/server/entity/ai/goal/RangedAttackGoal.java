@@ -17,8 +17,7 @@ import java.util.function.Function;
 
 public class RangedAttackGoal extends GoalSelector {
 
-    private final UpdateOption pathUpdateOptions = new UpdateOption(5, TimeUnit.TICK);
-    private long lastPathUpdate;
+    private final Cooldown cooldown = new Cooldown(new UpdateOption(5, TimeUnit.TICK));
 
     private long lastShot;
     private final int delay;
@@ -56,8 +55,8 @@ public class RangedAttackGoal extends GoalSelector {
         Check.argCondition(desirableRange > attackRange, "Desirable range can not exceed attack range!");
     }
 
-    public UpdateOption getPathUpdateOptions() {
-        return this.pathUpdateOptions;
+    public Cooldown getCooldown() {
+        return this.cooldown;
     }
 
     public void setProjectileGenerator(Function<Entity, EntityProjectile> projectileGenerator) {
@@ -119,8 +118,8 @@ public class RangedAttackGoal extends GoalSelector {
         }
         Position targetPosition = target.getPosition();
         if (pathPosition == null || !pathPosition.isSimilar(targetPosition)) {
-            if (!Cooldown.hasCooldown(time, this.lastPathUpdate, getPathUpdateOptions())) {
-                this.lastPathUpdate = time;
+            if (this.cooldown.isReady(time)) {
+                this.cooldown.refreshLastUpdate(time);
                 navigator.setPathTo(targetPosition);
             }
         }

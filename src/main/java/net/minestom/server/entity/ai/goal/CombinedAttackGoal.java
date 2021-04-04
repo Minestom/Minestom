@@ -20,8 +20,7 @@ import java.util.function.Function;
  */
 public class CombinedAttackGoal extends GoalSelector {
 
-    private final UpdateOption pathUpdateOptions = new UpdateOption(5, TimeUnit.TICK);
-    private long lastPathUpdate;
+    private final Cooldown cooldown = new Cooldown(new UpdateOption(5, TimeUnit.TICK));
 
     private final int meleeRangeSquared;
     private final int meleeDelay;
@@ -94,8 +93,8 @@ public class CombinedAttackGoal extends GoalSelector {
         Check.argCondition(desirableRange > rangedRange, "Desirable range can not exceed ranged range!");
     }
 
-    public UpdateOption getPathUpdateOptions() {
-        return this.pathUpdateOptions;
+    public Cooldown getCooldown() {
+        return this.cooldown;
     }
 
     public void setProjectileGenerator(Function<Entity, EntityProjectile> projectileGenerator) {
@@ -167,8 +166,8 @@ public class CombinedAttackGoal extends GoalSelector {
         // Otherwise going to the target.
         Position targetPosition = target.getPosition();
         if (pathPosition == null || !pathPosition.isSimilar(targetPosition)) {
-            if (!Cooldown.hasCooldown(time, this.lastPathUpdate, getPathUpdateOptions())) {
-                this.lastPathUpdate = time;
+            if (this.cooldown.isReady(time)) {
+                this.cooldown.refreshLastUpdate(time);
                 navigator.setPathTo(targetPosition);
             }
         }

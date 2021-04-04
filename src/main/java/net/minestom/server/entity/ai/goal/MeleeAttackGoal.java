@@ -17,8 +17,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MeleeAttackGoal extends GoalSelector {
 
-    private final UpdateOption pathUpdateOptions = new UpdateOption(5, TimeUnit.TICK);
-    private long lastPathUpdate;
+    private final Cooldown cooldown = new Cooldown(new UpdateOption(5, TimeUnit.TICK));
 
     private long lastHit;
     private final int delay;
@@ -41,8 +40,8 @@ public class MeleeAttackGoal extends GoalSelector {
         this.timeUnit = timeUnit;
     }
 
-    public UpdateOption getPathUpdateOptions() {
-        return this.pathUpdateOptions;
+    public Cooldown getCooldown() {
+        return this.cooldown;
     }
 
     @Override
@@ -85,8 +84,8 @@ public class MeleeAttackGoal extends GoalSelector {
             final Position pathPosition = navigator.getPathPosition();
             final Position targetPosition = target.getPosition();
             if (pathPosition == null || !pathPosition.isSimilar(targetPosition)) {
-                if (!Cooldown.hasCooldown(time, this.lastPathUpdate, getPathUpdateOptions())) {
-                    this.lastPathUpdate = time;
+                if (this.cooldown.isReady(time)) {
+                    this.cooldown.refreshLastUpdate(time);
                     navigator.setPathTo(targetPosition);
                 }
             }
