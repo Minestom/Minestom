@@ -8,6 +8,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.event.server.HandshakeEvent;
 import net.minestom.server.event.server.StatusRequestEvent;
 import net.minestom.server.extras.optifine.OptifineSupport;
 import net.minestom.server.instance.block.BlockManager;
@@ -70,7 +71,7 @@ public class Main {
             responseData.addPlayer("Use " + (char)0x00a7 + "7section characters", UUID.randomUUID());
             responseData.addPlayer((char)0x00a7 + "7" + (char)0x00a7 + "ofor formatting" + (char)0x00a7 + "r: (" + (char)0x00a7 + "6char" + (char)0x00a7 + "r)" + (char)0x00a7 + "90x00a7", UUID.randomUUID());
 
-            
+
         });
 
         PlayerInit.init();

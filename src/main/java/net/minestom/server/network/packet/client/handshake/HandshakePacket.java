@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.PlayerSkin;
+import net.minestom.server.event.server.HandshakeEvent;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
@@ -81,20 +82,21 @@ public class HandshakePacket implements ClientPreplayPacket {
 
                     nettyPlayerConnection.UNSAFE_setBungeeUuid(playerUuid);
                     nettyPlayerConnection.UNSAFE_setBungeeSkin(playerSkin);
-
                 } else {
                     nettyPlayerConnection.sendPacket(new LoginDisconnectPacket(INVALID_BUNGEE_FORWARDING));
                     nettyPlayerConnection.disconnect();
                     return;
                 }
             } else {
-                // Happen when a client ping the server, ignore
+                // Happen when a client ping the server, trigger HandshakeEvent
+                MinecraftServer.getGlobalEventHandler().callEvent(HandshakeEvent.class, new HandshakeEvent(null, serverPort, protocolVersion, connection));
                 return;
             }
         }
 
         switch (nextState) {
             case 1:
+                MinecraftServer.getGlobalEventHandler().callEvent(HandshakeEvent.class, new HandshakeEvent(serverAddress, serverPort, protocolVersion, connection));
                 connection.setConnectionState(ConnectionState.STATUS);
                 break;
             case 2:
