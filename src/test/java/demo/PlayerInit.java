@@ -57,13 +57,13 @@ public class PlayerInit {
         instanceContainer.enableAutoChunkLoad(true);
         instanceContainer.setChunkGenerator(chunkGeneratorDemo);
 
-        inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");
+        inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         /*inventory.addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
             p.sendMessage("click type inventory: " + clickType);
             System.out.println("slot inv: " + slot)0;
             inventoryConditionResult.setCancel(slot == 3);
         });*/
-        //inventory.setItemStack(3, new ItemStack(Material.DIAMOND, (byte) 34));
+        inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));
 
         {
             CompassMeta compassMeta = new CompassMeta.Builder()
@@ -244,6 +244,8 @@ public class PlayerInit {
                         .build();
                 //inventory.setChestplate(item);
             }
+
+            player.openInventory(PlayerInit.inventory);
 
             //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 32));
         });

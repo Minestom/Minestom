@@ -1,5 +1,6 @@
 package net.minestom.server.inventory;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.click.ClickType;
@@ -37,8 +38,8 @@ public class Inventory extends AbstractInventory implements Viewable {
     private final byte id;
     // the type of this inventory
     private final InventoryType inventoryType;
-    // the title of this inventory)
-    private String title;
+    // the title of this inventory
+    private Component title;
 
     private final int offset;
 
@@ -48,13 +49,21 @@ public class Inventory extends AbstractInventory implements Viewable {
     // (player -> cursor item) map, used by the click listeners
     private final ConcurrentHashMap<Player, ItemStack> cursorPlayersItem = new ConcurrentHashMap<>();
 
-    public Inventory(@NotNull InventoryType inventoryType, @NotNull String title) {
+    public Inventory(@NotNull InventoryType inventoryType, @NotNull Component title) {
         super(inventoryType.getSize());
         this.id = generateId();
         this.inventoryType = inventoryType;
         this.title = title;
 
         this.offset = getSize();
+    }
+
+    /**
+     * @deprecated use {@link Inventory#Inventory(InventoryType, Component)}
+     */
+    @Deprecated
+    public Inventory(@NotNull InventoryType inventoryType, @NotNull String title) {
+        this(inventoryType, Component.text(title));
     }
 
     private static byte generateId() {
@@ -80,7 +89,7 @@ public class Inventory extends AbstractInventory implements Viewable {
      * @return the inventory title
      */
     @NotNull
-    public String getTitle() {
+    public Component getTitle() {
         return title;
     }
 
@@ -89,7 +98,7 @@ public class Inventory extends AbstractInventory implements Viewable {
      *
      * @param title the new inventory title
      */
-    public void setTitle(@NotNull String title) {
+    public void setTitle(@NotNull Component title) {
         this.title = title;
 
         OpenWindowPacket packet = new OpenWindowPacket(title);
