@@ -1,14 +1,11 @@
 package net.minestom.server.inventory;
 
-import net.minestom.server.data.Data;
-import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.event.player.PlayerAddItemStackEvent;
 import net.minestom.server.event.player.PlayerSetItemStackEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickLoopHandler;
-import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
@@ -18,60 +15,34 @@ import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.UnaryOperator;
 
 import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 
 /**
  * Represents the inventory of a {@link Player}, retrieved with {@link Player#getInventory()}.
  */
-public class PlayerInventory extends AbstractInventory implements InventoryClickHandler, EquipmentHandler, DataContainer {
+public class PlayerInventory extends AbstractInventory implements InventoryClickHandler, EquipmentHandler {
 
     public static final int INVENTORY_SIZE = 46;
     public static final int INNER_INVENTORY_SIZE = 36;
 
     protected final Player player;
-    protected final ItemStack[] itemStacks = new ItemStack[INVENTORY_SIZE];
     private ItemStack cursorItem = ItemStack.AIR;
 
-    private final List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
-    private final InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
-
-    private Data data;
-
     public PlayerInventory(@NotNull Player player) {
+        super(INVENTORY_SIZE);
         this.player = player;
-        Arrays.fill(itemStacks, ItemStack.AIR);
-    }
-
-    @Override
-    public @NotNull ItemStack getItemStack(int slot) {
-        return this.itemStacks[slot];
-    }
-
-    @Override
-    public @NotNull ItemStack[] getItemStacks() {
-        return itemStacks.clone();
-    }
-
-    @Override
-    public @NotNull List<InventoryCondition> getInventoryConditions() {
-        return inventoryConditions;
     }
 
     @Override
     public void addInventoryCondition(@NotNull InventoryCondition inventoryCondition) {
+        // fix packet slot to inventory slot conversion
         InventoryCondition condition = (p, slot, clickType, inventoryConditionResult) -> {
             final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
             inventoryCondition.accept(p, convertedSlot, clickType, inventoryConditionResult);
         };
 
-        this.inventoryConditions.add(condition);
+        super.addInventoryCondition(condition);
     }
 
     @Override
@@ -98,26 +69,10 @@ public class PlayerInventory extends AbstractInventory implements InventoryClick
     }
 
     @Override
-    public synchronized void replaceItemStack(int slot, @NotNull UnaryOperator<@NotNull ItemStack> operator) {
-        // Make the method synchronized
-        super.replaceItemStack(slot, operator);
-    }
-
-    @Override
     public synchronized void clear() {
-        // Clear the item array
-        Arrays.fill(itemStacks, ItemStack.AIR);
-
-        // Send the cleared inventory to the inventory's owner
-        update();
-
+        super.clear();
         // Update equipments
         this.player.sendPacketToViewersAndSelf(player.getEquipmentsPacket());
-    }
-
-    @Override
-    public int getSize() {
-        return INVENTORY_SIZE;
     }
 
     @Override
@@ -195,6 +150,7 @@ public class PlayerInventory extends AbstractInventory implements InventoryClick
      * Refreshes the player inventory by sending a {@link WindowItemsPacket} containing all.
      * the inventory items
      */
+    @Override
     public void update() {
         player.getPlayerConnection().sendPacket(createWindowItemsPacket());
     }
@@ -498,16 +454,5 @@ public class PlayerInventory extends AbstractInventory implements InventoryClick
         setCursorItem(clickResult.getCursor());
 
         return !clickResult.isCancel();
-    }
-
-    @Nullable
-    @Override
-    public Data getData() {
-        return data;
-    }
-
-    @Override
-    public void setData(@Nullable Data data) {
-        this.data = data;
     }
 }

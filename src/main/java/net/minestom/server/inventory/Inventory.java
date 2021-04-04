@@ -1,14 +1,10 @@
 package net.minestom.server.inventory;
 
 import net.minestom.server.Viewable;
-import net.minestom.server.data.Data;
-import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickLoopHandler;
-import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.click.InventoryClickResult;
-import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.OpenWindowPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
@@ -19,17 +15,12 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.UnaryOperator;
 
 /**
  * Represents an inventory which can be viewed by a collection of {@link Player}.
@@ -37,7 +28,7 @@ import java.util.function.UnaryOperator;
  * You can create one with {@link Inventory#Inventory(InventoryType, String)} or by making your own subclass.
  * It can then be opened using {@link Player#openInventory(Inventory)}.
  */
-public class Inventory extends AbstractInventory implements InventoryClickHandler, Viewable, DataContainer {
+public class Inventory extends AbstractInventory implements InventoryClickHandler, Viewable {
 
     // incremented each time an inventory is created (used in the window packets)
     private static final AtomicInteger LAST_INVENTORY_ID = new AtomicInteger();
@@ -49,37 +40,21 @@ public class Inventory extends AbstractInventory implements InventoryClickHandle
     // the title of this inventory)
     private String title;
 
-    // the size based on the inventory type
-    private final int size;
-
     private final int offset;
 
-    // the items in this inventory
-    private final ItemStack[] itemStacks;
     // the players currently viewing this inventory
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
     // (player -> cursor item) map, used by the click listeners
     private final ConcurrentHashMap<Player, ItemStack> cursorPlayersItem = new ConcurrentHashMap<>();
 
-    // list of conditions/callbacks assigned to this inventory
-    private final List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
-    // the click processor which process all the clicks in the inventory
-    private final InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
-
-    private Data data;
-
     public Inventory(@NotNull InventoryType inventoryType, @NotNull String title) {
+        super(inventoryType.getSize());
         this.id = generateId();
         this.inventoryType = inventoryType;
         this.title = title;
 
-        this.size = inventoryType.getSize();
-
-        this.offset = size;
-
-        this.itemStacks = new ItemStack[size];
-        Arrays.fill(itemStacks, ItemStack.AIR);
+        this.offset = getSize();
     }
 
     private static byte generateId() {
@@ -147,58 +122,10 @@ public class Inventory extends AbstractInventory implements InventoryClickHandle
         safeItemInsert(slot, itemStack);
     }
 
-    @Override
-    public synchronized boolean addItemStack(@NotNull ItemStack itemStack) {
-        // Make the method synchronized
-        return super.addItemStack(itemStack);
-    }
-
-    @Override
-    public synchronized void replaceItemStack(int slot, @NotNull UnaryOperator<@NotNull ItemStack> operator) {
-        // Make the method synchronized
-        super.replaceItemStack(slot, operator);
-    }
-
-    @Override
-    public synchronized void clear() {
-        // Clear the item array
-        Arrays.fill(itemStacks, ItemStack.AIR);
-        // Send the cleared inventory to viewers
-        update();
-    }
-
-
-    @NotNull
-    @Override
-    public ItemStack getItemStack(int slot) {
-        return itemStacks[slot];
-    }
-
-    @NotNull
-    @Override
-    public ItemStack[] getItemStacks() {
-        return itemStacks.clone();
-    }
-
-    @Override
-    public int getSize() {
-        return size;
-    }
-
-    @NotNull
-    @Override
-    public List<InventoryCondition> getInventoryConditions() {
-        return inventoryConditions;
-    }
-
-    @Override
-    public void addInventoryCondition(@NotNull InventoryCondition inventoryCondition) {
-        this.inventoryConditions.add(inventoryCondition);
-    }
-
     /**
      * Refreshes the inventory for all viewers.
      */
+    @Override
     public void update() {
         sendPacketToViewers(createNewWindowItemsPacket());
     }
@@ -603,16 +530,5 @@ public class Inventory extends AbstractInventory implements InventoryClickHandle
         } else {
             update(player);
         }
-    }
-
-    @Nullable
-    @Override
-    public Data getData() {
-        return data;
-    }
-
-    @Override
-    public void setData(@Nullable Data data) {
-        this.data = data;
     }
 }

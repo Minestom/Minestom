@@ -2,20 +2,43 @@ package net.minestom.server.inventory;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minestom.server.data.Data;
+import net.minestom.server.data.DataContainer;
+import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.UnaryOperator;
 
 /**
  * Represents an inventory where items can be modified/retrieved.
  */
-public abstract class AbstractInventory {
+public abstract class AbstractInventory implements DataContainer {
+
+    private final int size;
+    protected final ItemStack[] itemStacks;
+
+    // list of conditions/callbacks assigned to this inventory
+    protected final List<InventoryCondition> inventoryConditions = new CopyOnWriteArrayList<>();
+    // the click processor which process all the clicks in the inventory
+    protected final InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
+
+    private Data data;
+
+    protected AbstractInventory(int size) {
+        this.size = size;
+        this.itemStacks = new ItemStack[getSize()];
+
+        Arrays.fill(itemStacks, ItemStack.AIR);
+    }
 
     /**
      * Sets an {@link ItemStack} at the specified slot and send relevant update to the viewer(s).
@@ -35,7 +58,7 @@ public abstract class AbstractInventory {
      * @param itemStack the item to add
      * @return true if the item has been successfully fully added, false otherwise
      */
-    public boolean addItemStack(@NotNull ItemStack itemStack) {
+    public synchronized boolean addItemStack(@NotNull ItemStack itemStack) {
         Int2ObjectMap<ItemStack> itemChangesMap = new Int2ObjectOpenHashMap<>();
 
         final StackingRule stackingRule = itemStack.getStackingRule();
@@ -235,7 +258,7 @@ public abstract class AbstractInventory {
         return itemStacks.stream().allMatch(this::canTakeItemStack);
     }
 
-    public void replaceItemStack(int slot, @NotNull UnaryOperator<@NotNull ItemStack> operator) {
+    public synchronized void replaceItemStack(int slot, @NotNull UnaryOperator<@NotNull ItemStack> operator) {
         var currentItem = getItemStack(slot);
         setItemStack(slot, operator.apply(currentItem));
     }
@@ -243,7 +266,14 @@ public abstract class AbstractInventory {
     /**
      * Clears the inventory and send relevant update to the viewer(s).
      */
-    public abstract void clear();
+    public synchronized void clear() {
+        // Clear the item array
+        Arrays.fill(itemStacks, ItemStack.AIR);
+        // Send the cleared inventory to viewers
+        update();
+    }
+
+    public abstract void update();
 
     /**
      * Gets the {@link ItemStack} at the specified slot.
@@ -252,7 +282,9 @@ public abstract class AbstractInventory {
      * @return the item in the slot {@code slot}
      */
     @NotNull
-    public abstract ItemStack getItemStack(int slot);
+    public ItemStack getItemStack(int slot) {
+        return itemStacks[slot];
+    }
 
     /**
      * Gets all the {@link ItemStack} in the inventory.
@@ -263,14 +295,18 @@ public abstract class AbstractInventory {
      * @return an array containing all the inventory's items
      */
     @NotNull
-    public abstract ItemStack[] getItemStacks();
+    public ItemStack[] getItemStacks() {
+        return itemStacks.clone();
+    }
 
     /**
      * Gets the size of the inventory.
      *
      * @return the inventory's size
      */
-    public abstract int getSize();
+    public int getSize() {
+        return size;
+    }
 
     /**
      * Gets the size of the "inner inventory" (which includes only "usable" slots).
@@ -287,14 +323,18 @@ public abstract class AbstractInventory {
      * @return a modifiable {@link List} containing all the inventory conditions
      */
     @NotNull
-    public abstract List<InventoryCondition> getInventoryConditions();
+    public List<InventoryCondition> getInventoryConditions() {
+        return inventoryConditions;
+    }
 
     /**
      * Adds a new {@link InventoryCondition} to this inventory.
      *
      * @param inventoryCondition the inventory condition to add
      */
-    public abstract void addInventoryCondition(@NotNull InventoryCondition inventoryCondition);
+    public void addInventoryCondition(@NotNull InventoryCondition inventoryCondition) {
+        this.inventoryConditions.add(inventoryCondition);
+    }
 
     /**
      * Places all the items of {@code itemStacks} into the internal array.
@@ -312,5 +352,16 @@ public abstract class AbstractInventory {
             Check.notNull(itemStack, "The item array cannot contain any null element!");
             setItemStack(i, itemStack);
         }
+    }
+
+    @Nullable
+    @Override
+    public Data getData() {
+        return data;
+    }
+
+    @Override
+    public void setData(@Nullable Data data) {
+        this.data = data;
     }
 }
