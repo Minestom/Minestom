@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -74,9 +75,37 @@ public class RunMinestomTests {
     public Stream<DynamicContainer> launchMinestomTests() throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         var cp = ClassPath.from(ClassLoader.getSystemClassLoader());
 
+        // classloader used to speed up look up by loading a class and testing whether it has methods annotated with @MinestomTest
+        MinestomRootClassLoader checkingClassloader = new MinestomRootClassLoader(ClassLoader.getSystemClassLoader());
+        checkingClassloader.protectedPackages.add("org.junit.jupiter.");
+        checkingClassloader.protectedPackages.add("io.netty.");
+        checkingClassloader.protectedPackages.add("com.intellij.");
+        checkingClassloader.protectedPackages.add("io.unimi.dsi.fastutil.");
+
+        Class<? extends Annotation> testAnnotation = (Class<? extends Annotation>) checkingClassloader.loadClass(MinestomTest.class.getCanonicalName());
+
+        Predicate<ClassPath.ClassInfo> preliminaryTest = (clazz) -> {
+            try {
+                Class<?> loadedClass = checkingClassloader.loadClass(clazz.getName());
+                Method[] methods = loadedClass.getDeclaredMethods();
+                for (Method m : methods) {
+                    if(m.getAnnotation(testAnnotation) != null)
+                        return true;
+                }
+            } catch (Throwable e) {
+                // nop
+            }
+            return false;
+        };
+
         // TODO: might need to move loop body to method to be able to test it properly
         return cp.getAllClasses().parallelStream().map(clazz -> {
             try {
+                if(!preliminaryTest.test(clazz)) {
+                    return null;
+                }
+
+                // TODO: preload class separately to ensure the class has annotations, accelerating the search
                 MinestomRootClassLoader rootClassLoader = new MinestomRootClassLoader(ClassLoader.getSystemClassLoader());
                 rootClassLoader.protectedPackages.add("org.junit.jupiter.");
                 rootClassLoader.protectedPackages.add("io.netty.");
