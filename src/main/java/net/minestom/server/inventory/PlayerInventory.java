@@ -30,9 +30,10 @@ import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 /**
  * Represents the inventory of a {@link Player}, retrieved with {@link Player#getInventory()}.
  */
-public class PlayerInventory implements InventoryModifier, InventoryClickHandler, EquipmentHandler, DataContainer {
+public class PlayerInventory extends AbstractInventory implements InventoryClickHandler, EquipmentHandler, DataContainer {
 
     public static final int INVENTORY_SIZE = 46;
+    public static final int INNER_INVENTORY_SIZE = 36;
 
     protected final Player player;
     protected final ItemStack[] itemStacks = new ItemStack[INVENTORY_SIZE];
@@ -93,24 +94,13 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
             return false;
 
         itemStack = addItemStackEvent.getItemStack();
-        return InventoryModifier.super.addItemStack(itemStack, 0, getSize() - 10);
-    }
-
-    @Override
-    public synchronized boolean addItemStack(@NotNull ItemStack itemStack, int startSlot, int endSlot) {
-        PlayerAddItemStackEvent addItemStackEvent = new PlayerAddItemStackEvent(player, itemStack);
-        player.callEvent(PlayerAddItemStackEvent.class, addItemStackEvent);
-        if (addItemStackEvent.isCancelled())
-            return false;
-
-        itemStack = addItemStackEvent.getItemStack();
-        return InventoryModifier.super.addItemStack(itemStack, startSlot, endSlot);
+        return super.addItemStack(itemStack);
     }
 
     @Override
     public synchronized void replaceItemStack(int slot, @NotNull UnaryOperator<@NotNull ItemStack> operator) {
         // Make the method synchronized
-        InventoryModifier.super.replaceItemStack(slot, operator);
+        super.replaceItemStack(slot, operator);
     }
 
     @Override
@@ -128,6 +118,11 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
     @Override
     public int getSize() {
         return INVENTORY_SIZE;
+    }
+
+    @Override
+    public int getInnerSize() {
+        return INNER_INVENTORY_SIZE;
     }
 
     @NotNull
@@ -237,6 +232,7 @@ public class PlayerInventory implements InventoryModifier, InventoryClickHandler
      * @throws IllegalArgumentException if the slot {@code slot} does not exist
      * @throws NullPointerException     if {@code itemStack} is null
      */
+    @Override
     protected synchronized void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
         Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
                 "The slot " + slot + " does not exist for player");

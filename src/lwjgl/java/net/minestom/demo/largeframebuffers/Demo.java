@@ -6,8 +6,9 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.type.decoration.EntityItemFrame;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.metadata.MapMeta;
+import net.minestom.server.item.meta.MapMeta;
 import net.minestom.server.map.Framebuffer;
 import net.minestom.server.map.LargeFramebuffer;
 import net.minestom.server.map.MapColors;
@@ -67,8 +68,9 @@ public class Demo {
     private static void createFrame(Instance instance, int id, int x, int y, int z) {
         EntityItemFrame itemFrame = new EntityItemFrame(new Position(x, y, z), EntityItemFrame.ItemFrameOrientation.NORTH);
         itemFrame.getPosition().setYaw(180f);
-        ItemStack map = new ItemStack(Material.FILLED_MAP, (byte) 1);
-        map.setItemMeta(new MapMeta(id));
+        ItemStack map = ItemStack.builder(Material.FILLED_MAP)
+                .meta(new MapMeta.Builder().mapId(id).build())
+                .build();
         itemFrame.setItemStack(map);
         itemFrame.setInstance(instance);
         itemFrame.setCustomNameVisible(true);
