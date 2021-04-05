@@ -1269,10 +1269,12 @@ public class Player extends LivingEntity implements CommandSender {
         respawnPacket.gameMode = getGameMode();
         respawnPacket.isFlat = levelFlat;
 
-        Set<TabList> displayedOn = new HashSet<>();
         for (TabList tabList : MinecraftServer.getTabListManager().getTabLists()) {
             if (tabList.getDisplayedPlayers().contains(this)) {
-                displayedOn.add(tabList);
+                tabList.removeDisplayedPlayer(this);
+                tabList.addDisplayedPlayer(this);
+            } else {
+                tabList.addDisplayedPlayer(this);
                 tabList.removeDisplayedPlayer(this);
             }
         }
@@ -1281,12 +1283,6 @@ public class Player extends LivingEntity implements CommandSender {
         playerConnection.sendPacket(destroyEntitiesPacket);
         playerConnection.sendPacket(respawnPacket);
 
-        for (TabList tabList : MinecraftServer.getTabListManager().getTabLists()) {
-            tabList.addDisplayedPlayer(this);
-            if (!displayedOn.contains(tabList)) {
-                tabList.removeDisplayedPlayer(this);
-            }
-        }
         //playerConnection.sendPacket(addPlayerPacket);
 
 //        {
