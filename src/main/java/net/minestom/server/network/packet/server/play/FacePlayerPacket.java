@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,6 +13,10 @@ public class FacePlayerPacket implements ServerPacket {
     public int entityId;
     public FacePosition entityFacePosition;
 
+    public FacePlayerPacket() {
+        facePosition = FacePosition.EYES;
+        entityFacePosition = FacePosition.EYES;
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -25,6 +30,22 @@ public class FacePlayerPacket implements ServerPacket {
         if (isEntity) {
             writer.writeVarInt(entityId);
             writer.writeVarInt(entityFacePosition.ordinal());
+        }
+    }
+
+    @Override
+    public void read(@NotNull BinaryReader reader) {
+        facePosition = FacePosition.values()[reader.readVarInt()];
+        targetX = reader.readDouble();
+        targetY = reader.readDouble();
+        targetZ = reader.readDouble();
+
+        boolean isEntity = reader.readBoolean();
+        if(isEntity) {
+            entityId = reader.readVarInt();
+            entityFacePosition = FacePosition.values()[reader.readVarInt()];
+        } else {
+            entityId = 0;
         }
     }
 

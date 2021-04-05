@@ -2,8 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
-import net.minestom.server.instance.batch.BlockBatch;
-import net.minestom.server.instance.batch.ChunkBatch;
+import net.minestom.server.instance.batch.Batch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
@@ -15,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Represents an element which can place blocks at position.
  * <p>
- * Notably used by {@link Instance}, {@link BlockBatch} and {@link ChunkBatch}.
+ * Notably used by {@link Instance}, {@link Batch}.
  */
 public interface BlockModifier {
 

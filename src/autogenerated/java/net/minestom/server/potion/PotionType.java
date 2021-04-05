@@ -1,5 +1,7 @@
 package net.minestom.server.potion;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
@@ -9,7 +11,7 @@ import net.minestom.server.utils.NamespaceID;
  * //==============================
  */
 @SuppressWarnings({"deprecation"})
-public enum PotionType {
+public enum PotionType implements Keyed {
     EMPTY("minecraft:empty"),
 
     WATER("minecraft:water"),
@@ -96,11 +98,14 @@ public enum PotionType {
 
     LONG_SLOW_FALLING("minecraft:long_slow_falling");
 
-    private String namespaceID;
+    private final String namespaceID;
+
+    private final Key key;
 
     PotionType(String namespaceID) {
         this.namespaceID = namespaceID;
         Registries.potionTypes.put(NamespaceID.from(namespaceID), this);
+        this.key = Key.key(this.namespaceID);
     }
 
     public int getId() {
@@ -109,6 +114,10 @@ public enum PotionType {
 
     public String getNamespaceID() {
         return namespaceID;
+    }
+
+    public Key key() {
+        return this.key;
     }
 
     public static PotionType fromId(int id) {

@@ -29,7 +29,7 @@ public final class EntityUtils {
             final Chunk chunk = instance.getChunk(chunkX, chunkZ);
             if (chunk == null)
                 continue;
-            instance.getChunkEntities(chunk).forEach(consumer::accept);
+            instance.getChunkEntities(chunk).forEach(consumer);
         }
     }
 

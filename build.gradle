@@ -39,11 +39,26 @@ allprojects {
             name 'sponge'
             url 'https://repo.spongepowered.org/maven'
         }
+        maven {
+            url "https://repo.velocitypowered.com/snapshots/"
+        }
     }
     javadoc {
         options {
             destinationDir(file("docs"))
             addBooleanOption('html5', true)
+            links "https://jd.adventure.kyori.net/api/$adventureVersion/"
+            links "https://docs.oracle.com/en/java/javase/11/docs/api/"
+        }
+
+        // see https://stackoverflow.com/a/56641766
+        doLast {
+            // Append the fix to the file
+            def searchScript = new File(destinationDir.getAbsolutePath() + '/search.js')
+            searchScript.append '\n\n' +
+                    'getURLPrefix = function(ui) {\n' +
+                    '    return \'\';\n' +
+                    '};\n'
         }
     }
 
@@ -113,7 +128,7 @@ dependencies {
     api 'io.netty:netty-codec:4.1.59.Final'
     api 'io.netty:netty-transport-native-epoll:4.1.59.Final:linux-x86_64'
     api 'io.netty:netty-transport-native-kqueue:4.1.59.Final:osx-x86_64'
-    api 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.3.Final:linux-x86_64'
+    api 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.4.Final:linux-x86_64'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     compile group: 'org.apache.commons', name: 'commons-text', version: '1.9'
@@ -137,7 +152,7 @@ dependencies {
     api 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.0'
 
     // Guava 21.0+ required for Mixin, but Authlib imports 17.0
-    api 'com.google.guava:guava:21.0'
+    api 'com.google.guava:guava:30.1-jre'
     api 'com.mojang:authlib:1.5.21'
 
     // Code modification
@@ -148,8 +163,11 @@ dependencies {
     api "org.ow2.asm:asm-commons:${asmVersion}"
     api "org.spongepowered:mixin:${mixinVersion}"
 
+    // Compression
+    implementation "com.velocitypowered:velocity-native:1.1.0-SNAPSHOT"
+
     // Path finding
-    api 'com.github.MadMartian:hydrazine-path-finding:1.5.3'
+    api 'com.github.MadMartian:hydrazine-path-finding:1.5.4'
 
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${project.kotlinVersion}"
     api "org.jetbrains.kotlin:kotlin-reflect:${project.kotlinVersion}"
@@ -164,6 +182,12 @@ dependencies {
     }
 
     api "com.github.Minestom:DependencyGetter:v1.0.1"
+
+    // Adventure, for user-interface
+    api "net.kyori:adventure-api:$adventureVersion"
+    api "net.kyori:adventure-text-serializer-gson:$adventureVersion"
+    api "net.kyori:adventure-text-serializer-plain:$adventureVersion"
+    api "net.kyori:adventure-text-serializer-legacy:$adventureVersion"
 
     // LWJGL, for map rendering
     lwjglApi platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
@@ -182,6 +206,11 @@ dependencies {
 
 
     generatorsImplementation("com.squareup:javapoet:1.13.0")
+}
+
+configurations.all {
+    // we use jetbrains annotations
+    exclude group: "org.checkerframework", module: "checker-qual"
 }
 
 publishing {

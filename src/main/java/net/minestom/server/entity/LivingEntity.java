@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import net.kyori.adventure.sound.Sound.Source;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeInstance;
 import net.minestom.server.attribute.Attributes;
@@ -15,15 +16,16 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.scoreboard.Team;
-import net.minestom.server.sound.Sound;
-import net.minestom.server.sound.SoundCategory;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.block.BlockIterator;
-import net.minestom.server.utils.time.CooldownUtils;
+import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
@@ -37,8 +39,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     // Item pickup
     protected boolean canPickupItem;
-    protected UpdateOption itemPickupCooldown = new UpdateOption(5, TimeUnit.TICK);
-    private long lastItemPickupCheckTime;
+    protected Cooldown itemPickupCooldown = new Cooldown(new UpdateOption(5, TimeUnit.TICK));
 
     protected boolean isDead;
 
@@ -86,7 +87,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid) {
         this(entityType, uuid, new Position());
-        setupAttributes();
         setGravity(0.02f, 0.08f, 3.92f);
         initEquipments();
     }
@@ -101,7 +101,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     @Deprecated
     public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
         super(entityType, uuid, spawnPosition);
-        setupAttributes();
         setGravity(0.02f, 0.08f, 3.92f);
         initEquipments();
     }
@@ -213,8 +212,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         }
 
         // Items picking
-        if (canPickupItem() && !CooldownUtils.hasCooldown(time, lastItemPickupCheckTime, itemPickupCooldown)) {
-            this.lastItemPickupCheckTime = time;
+        if (canPickupItem() && itemPickupCooldown.isReady(time)) {
+            itemPickupCooldown.refreshLastUpdate(time);
 
             final Chunk chunk = getChunk(); // TODO check surrounding chunks
             final Set<Entity> entities = instance.getChunkEntities(chunk);
@@ -233,9 +232,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                     if (expandedBoundingBox.intersect(itemBoundingBox)) {
                         if (itemEntity.shouldRemove() || itemEntity.isRemoveScheduled())
                             continue;
-                        final ItemStack item = itemEntity.getItemStack();
-                        PickupItemEvent pickupItemEvent = new PickupItemEvent(this, item);
+                        PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
                         callCancellableEvent(PickupItemEvent.class, pickupItemEvent, () -> {
+                            final ItemStack item = itemEntity.getItemStack();
+
                             CollectItemPacket collectItemPacket = new CollectItemPacket();
                             collectItemPacket.collectedEntityId = itemEntity.getEntityId();
                             collectItemPacket.collectorEntityId = getEntityId();
@@ -385,14 +385,14 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             setHealth(getHealth() - remainingDamage);
 
             // play damage sound
-            final Sound sound = type.getSound(this);
+            final SoundEvent sound = type.getSound(this);
             if (sound != null) {
-                SoundCategory soundCategory;
+                Source soundCategory;
                 if (this instanceof Player) {
-                    soundCategory = SoundCategory.PLAYERS;
+                    soundCategory = Source.PLAYER;
                 } else {
                     // TODO: separate living entity categories
-                    soundCategory = SoundCategory.HOSTILE;
+                    soundCategory = Source.HOSTILE;
                 }
 
                 SoundEffectPacket damageSoundPacket =
@@ -457,7 +457,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return the entity max health
      */
     public float getMaxHealth() {
-        return getAttributeValue(Attributes.MAX_HEALTH);
+        return getAttributeValue(Attribute.MAX_HEALTH);
     }
 
     /**
@@ -466,7 +466,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attributes#MAX_HEALTH}.
      */
     public void heal() {
-        setHealth(getAttributeValue(Attributes.MAX_HEALTH));
+        setHealth(getAttributeValue(Attribute.MAX_HEALTH));
     }
 
     /**
@@ -484,9 +484,23 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     /**
      * Callback used when an attribute instance has been modified.
      *
-     * @param instance the modified attribute instance
+     * @param attributeInstance the modified attribute instance
      */
-    protected void onAttributeChanged(@NotNull AttributeInstance instance) {
+    protected void onAttributeChanged(@NotNull AttributeInstance attributeInstance) {
+        if (attributeInstance.getAttribute().isShared()) {
+            boolean self = false;
+            if (this instanceof Player) {
+                Player player = (Player) this;
+                PlayerConnection playerConnection = player.playerConnection;
+                // connection null during Player initialization (due to #super call)
+                self = playerConnection != null && playerConnection.getConnectionState() == ConnectionState.PLAY;
+            }
+            if (self) {
+                sendPacketToViewersAndSelf(getPropertiesPacket());
+            } else {
+                sendPacketToViewers(getPropertiesPacket());
+            }
+        }
     }
 
     /**
@@ -532,7 +546,14 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         if (!super.addViewer0(player)) {
             return false;
         }
-        syncEquipments(player.getPlayerConnection());
+        final PlayerConnection playerConnection = player.getPlayerConnection();
+        playerConnection.sendPacket(getEquipmentsPacket());
+        playerConnection.sendPacket(getPropertiesPacket());
+
+        if (getTeam() != null) {
+            playerConnection.sendPacket(getTeam().createTeamsCreationPacket());
+        }
+
         return true;
     }
 
@@ -615,16 +636,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
         propertiesPacket.properties = properties;
         return propertiesPacket;
-    }
-
-    /**
-     * Sets all the attributes to {@link Attribute#getDefaultValue()}
-     */
-    private void setupAttributes() {
-        for (Attribute attribute : Attribute.values()) {
-            final AttributeInstance attributeInstance = new AttributeInstance(attribute, this::onAttributeChanged);
-            this.attributeModifiers.put(attribute.getKey(), attributeInstance);
-        }
     }
 
     @Override

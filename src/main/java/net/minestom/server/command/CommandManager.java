@@ -1,5 +1,6 @@
 package net.minestom.server.command;
 
+import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
@@ -7,11 +8,16 @@ import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.*;
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.condition.CommandCondition;
+import net.minestom.server.command.builder.parser.ArgumentQueryResult;
+import net.minestom.server.command.builder.parser.CommandParser;
+import net.minestom.server.command.builder.parser.CommandQueryResult;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.CommandCallback;
 import net.minestom.server.utils.validate.Check;
 import org.apache.commons.lang3.StringUtils;
@@ -99,7 +105,9 @@ public final class CommandManager {
      *
      * @param commandProcessor the command to register
      * @throws IllegalStateException if a command with the same name already exists
+     * @deprecated use {@link Command} or {@link SimpleCommand} instead
      */
+    @Deprecated
     public synchronized void register(@NotNull CommandProcessor commandProcessor) {
         final String commandName = commandProcessor.getCommandName().toLowerCase();
         Check.stateCondition(commandExists(commandName),
@@ -122,7 +130,9 @@ public final class CommandManager {
      *
      * @param commandName the command name
      * @return the command associated with the name, null if not any
+     * @deprecated use {@link #getCommand(String)} instead
      */
+    @Deprecated
     @Nullable
     public CommandProcessor getCommandProcessor(@NotNull String commandName) {
         return commandProcessorMap.get(commandName.toLowerCase());
@@ -305,9 +315,42 @@ public final class CommandManager {
         rootNode.flags = 0;
         nodes.add(rootNode);
 
+        Map<Command, Integer> commandIdentityMap = new IdentityHashMap<>();
+        Map<Argument<?>, Integer> argumentIdentityMap = new IdentityHashMap<>();
+
+        List<Pair<String, NodeMaker.Request>> nodeRequests = new ArrayList<>();
+
         // Brigadier-like commands
         for (Command command : dispatcher.getCommands()) {
-            serializeCommand(player, command, nodes, rootChildren);
+            final int commandNodeIndex = serializeCommand(player, command, nodes, rootChildren, commandIdentityMap, argumentIdentityMap, nodeRequests);
+            commandIdentityMap.put(command, commandNodeIndex);
+        }
+
+        // Answer to all node requests
+        for (Pair<String, NodeMaker.Request> pair : nodeRequests) {
+            String input = pair.left();
+            NodeMaker.Request request = pair.right();
+
+            final CommandQueryResult commandQueryResult = CommandParser.findCommand(input);
+            if (commandQueryResult == null) {
+                // Invalid command, return root node
+                request.retrieve(0);
+                continue;
+            }
+
+            final ArgumentQueryResult queryResult = CommandParser.findEligibleArgument(commandQueryResult.command,
+                    commandQueryResult.args, input, false, true, syntax -> true, argument -> true);
+            if (queryResult == null) {
+                // Invalid argument, return command node (default to root)
+                final int commandNode = commandIdentityMap.getOrDefault(commandQueryResult.command, 0);
+                request.retrieve(commandNode);
+                continue;
+            }
+
+            // Retrieve argument node
+            final Argument<?> argument = queryResult.argument;
+            final int argumentNode = argumentIdentityMap.getOrDefault(argument, 0);
+            request.retrieve(argumentNode);
         }
 
         // Pair<CommandName,EnabledTracking>
@@ -337,7 +380,7 @@ public final class CommandManager {
                         true, false, tracking);
                 tabNode.name = tracking ? "tab_completion" : "args";
                 tabNode.parser = "brigadier:string";
-                tabNode.properties = packetWriter -> packetWriter.writeVarInt(2); // Greedy phrase
+                tabNode.properties = BinaryWriter.makeArray(packetWriter -> packetWriter.writeVarInt(2)); // Greedy phrase
                 tabNode.children = new int[0];
                 if (tracking) {
                     tabNode.suggestionsType = "minecraft:ask_server";
@@ -366,7 +409,10 @@ public final class CommandManager {
 
     private int serializeCommand(CommandSender sender, Command command,
                                  List<DeclareCommandsPacket.Node> nodes,
-                                 IntList rootChildren) {
+                                 IntList rootChildren,
+                                 Map<Command, Integer> commandIdentityMap,
+                                 Map<Argument<?>, Integer> argumentIdentityMap,
+                                 List<Pair<String, NodeMaker.Request>> nodeRequests) {
         // Check if player should see this command
         final CommandCondition commandCondition = command.getCondition();
         if (commandCondition != null) {
@@ -381,15 +427,16 @@ public final class CommandManager {
         final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
 
         // Create command for main name
-        final DeclareCommandsPacket.Node mainNode = createCommand(sender, nodes, cmdChildren,
-                command.getName(), syntaxes, rootChildren);
+        final DeclareCommandsPacket.Node mainNode = createCommandNodes(sender, nodes, cmdChildren,
+                command.getName(), syntaxes, rootChildren, argumentIdentityMap, nodeRequests);
         final int mainNodeIndex = nodes.indexOf(mainNode);
 
         // Serialize all the subcommands
         for (Command subcommand : command.getSubcommands()) {
-            final int subNodeIndex = serializeCommand(sender, subcommand, nodes, cmdChildren);
+            final int subNodeIndex = serializeCommand(sender, subcommand, nodes, cmdChildren, commandIdentityMap, argumentIdentityMap, nodeRequests);
             if (subNodeIndex != -1) {
                 mainNode.children = ArrayUtils.concatenateIntArrays(mainNode.children, new int[]{subNodeIndex});
+                commandIdentityMap.put(subcommand, subNodeIndex);
             }
         }
 
@@ -421,12 +468,14 @@ public final class CommandManager {
      * @param rootChildren the children of the main node (all commands name)
      * @return The index of the main node for alias redirection
      */
-    private DeclareCommandsPacket.Node createCommand(@NotNull CommandSender sender,
-                                                     @NotNull List<DeclareCommandsPacket.Node> nodes,
-                                                     @NotNull IntList cmdChildren,
-                                                     @NotNull String name,
-                                                     @NotNull Collection<CommandSyntax> syntaxes,
-                                                     @NotNull IntList rootChildren) {
+    private DeclareCommandsPacket.Node createCommandNodes(@NotNull CommandSender sender,
+                                                          @NotNull List<DeclareCommandsPacket.Node> nodes,
+                                                          @NotNull IntList cmdChildren,
+                                                          @NotNull String name,
+                                                          @NotNull Collection<CommandSyntax> syntaxes,
+                                                          @NotNull IntList rootChildren,
+                                                          @NotNull Map<Argument<?>, Integer> argumentIdentityMap,
+                                                          @NotNull List<Pair<String, NodeMaker.Request>> nodeRequests) {
 
         DeclareCommandsPacket.Node literalNode = createMainNode(name, syntaxes.isEmpty());
 
@@ -460,7 +509,7 @@ public final class CommandManager {
                 final Argument<?> argument = arguments[i];
                 final boolean isLast = i == arguments.length - 1;
 
-                // Search previously parsed syntaxes to find identical part in order to create a node between those
+                // Search previously parsed syntaxes to find identical part in order to create a link between those
                 {
                     // Find shared part
                     boolean foundSharedPart = false;
@@ -486,7 +535,7 @@ public final class CommandManager {
 
                     // Each node array represent a layer
                     final List<DeclareCommandsPacket.Node[]> nodesLayer = nodeMaker.getNodes();
-                    storedArgumentsNodes.put(argument, nodesLayer);
+                    storedArgumentsNodes.put(argument, new ArrayList<>(nodesLayer));
                     for (int nodeIndex = lastArgumentNodeIndex; nodeIndex < nodesLayer.size(); nodeIndex++) {
                         final NodeMaker.ConfiguredNodes configuredNodes = nodeMaker.getConfiguredNodes().get(nodeIndex);
                         final NodeMaker.Options options = configuredNodes.getOptions();
@@ -496,6 +545,14 @@ public final class CommandManager {
                             final int childId = nodes.size();
                             nodeMaker.getNodeIdsMap().put(argumentNode, childId);
                             argChildren.add(childId);
+
+                            // Enable ASK_SERVER suggestion if required
+                            {
+                                if (argument.hasSuggestion()) {
+                                    argumentNode.flags |= 0x10; // Suggestion flag
+                                    argumentNode.suggestionsType = SuggestionType.ASK_SERVER.getIdentifier();
+                                }
+                            }
 
                             // Append to the last node
                             {
@@ -523,12 +580,24 @@ public final class CommandManager {
                     lastArgumentNodeIndex = nodesLayer.size();
                 }
             }
+
+            nodeRequests.addAll(nodeMaker.getNodeRequests());
+
             syntaxesArguments.add(arguments);
         }
 
+        storedArgumentsNodes.forEach((argument, argNodes) -> {
+            int value = 0;
+            for (DeclareCommandsPacket.Node[] n1 : argNodes) {
+                for (DeclareCommandsPacket.Node n2 : n1) {
+                    value = nodes.indexOf(n2);
+                }
+            }
+            argumentIdentityMap.put(argument, value);
+        });
+
         literalNode.children = ArrayUtils.toArray(cmdChildren);
         return literalNode;
-
     }
 
     @NotNull

@@ -14,9 +14,8 @@ public interface CommandExecutor {
     /**
      * Executes the command callback once the syntax has been called (or the default executor).
      *
-     * @param sender the sender of the command
-     * @param args   contains all the parsed arguments,
-     *               the id is the one initialized when creating the argument object
+     * @param sender  the sender of the command
+     * @param context the command context, used to retrieve the arguments and various other things
      */
-    void apply(@NotNull CommandSender sender, @NotNull Arguments args);
+    void apply(@NotNull CommandSender sender, @NotNull CommandContext context);
 }

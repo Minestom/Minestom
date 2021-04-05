@@ -1,11 +1,13 @@
 package net.minestom.server.utils;
 
+import net.kyori.adventure.nbt.api.BinaryTagHolder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.util.Codec;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeOperation;
-import net.minestom.server.chat.ChatParser;
-import net.minestom.server.chat.ColoredText;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataType;
 import net.minestom.server.inventory.Inventory;
@@ -19,6 +21,7 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.*;
@@ -26,15 +29,35 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.*;
 
 // for lack of a better name
 public final class NBTUtils {
-
     private final static Logger LOGGER = LoggerFactory.getLogger(NBTUtils.class);
+
+    /**
+     * An Adventure codec to convert between NBT and SNBT.
+     */
+    public static final Codec<NBT, String, NBTException, RuntimeException> SNBT_CODEC
+            = Codec.of(encoded -> new SNBTParser(new StringReader(encoded)).parse(), NBT::toSNBT);
 
     private NBTUtils() {
 
+    }
+
+    /**
+     * Turns an {@link NBTCompound} into an Adventure {@link BinaryTagHolder}.
+     * @param tag the tag, if any
+     * @return the binary tag holder, or {@code null} if the tag was null
+     */
+    @Contract("null -> null; !null -> !null")
+    public static BinaryTagHolder asBinaryTagHolder(@Nullable NBTCompound tag) {
+        if (tag == null) {
+            return null;
+        }
+
+        return BinaryTagHolder.encode(tag, SNBT_CODEC);
     }
 
     /**
@@ -130,14 +153,14 @@ public final class NBTUtils {
             final NBTCompound display = nbt.getCompound("display");
             if (display.containsKey("Name")) {
                 final String rawName = display.getString("Name");
-                final ColoredText displayName = ChatParser.toColoredText(rawName);
+                final Component displayName = GsonComponentSerializer.gson().deserialize(rawName);
                 item.setDisplayName(displayName);
             }
             if (display.containsKey("Lore")) {
                 NBTList<NBTString> loreList = display.getList("Lore");
-                List<JsonMessage> lore = new ArrayList<>();
+                List<Component> lore = new ArrayList<>();
                 for (NBTString s : loreList) {
-                    lore.add(ChatParser.toColoredText(s.getValue()));
+                    lore.add(GsonComponentSerializer.gson().deserialize(s.getValue()));
                 }
                 item.setLore(lore);
             }
@@ -295,16 +318,16 @@ public final class NBTUtils {
         if (hasDisplayName || hasLore) {
             NBTCompound displayNBT = new NBTCompound();
             if (hasDisplayName) {
-                final String name = itemStack.getDisplayName().toString();
+                final String name = AdventureSerializer.serialize(itemStack.getDisplayName());
                 displayNBT.setString("Name", name);
             }
 
             if (hasLore) {
-                final List<JsonMessage> lore = itemStack.getLore();
+                final List<Component> lore = itemStack.getLore();
 
                 final NBTList<NBTString> loreNBT = new NBTList<>(NBTTypes.TAG_String);
-                for (JsonMessage line : lore) {
-                    loreNBT.add(new NBTString(line.toString()));
+                for (Component line : lore) {
+                    loreNBT.add(new NBTString(GsonComponentSerializer.gson().serialize(line)));
                 }
                 displayNBT.set("Lore", loreNBT);
             }

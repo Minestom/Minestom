@@ -1,5 +1,6 @@
 package net.minestom.server.entity.metadata.minecart;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Entity;
@@ -21,12 +22,29 @@ public class CommandBlockMinecartMeta extends AbstractMinecartMeta {
         super.metadata.setIndex((byte) 13, Metadata.String(value));
     }
 
+    /**
+     * @deprecated Use {@link #getLastOutput()}
+     */
+    @Deprecated
     @NotNull
-    public JsonMessage getLastOutput() {
-        return super.metadata.getIndex((byte) 14, ColoredText.of(""));
+    public JsonMessage getLastOutputJson() {
+        return JsonMessage.fromComponent(getLastOutput());
     }
 
+    @NotNull
+    public Component getLastOutput() {
+        return super.metadata.getIndex((byte) 14, Component.empty());
+    }
+
+    /**
+     * @deprecated Use {@link #setLastOutput(Component)}
+     */
+    @Deprecated
     public void setLastOutput(@NotNull JsonMessage value) {
+        this.setLastOutput(value.asComponent());
+    }
+
+    public void setLastOutput(@NotNull Component value) {
         super.metadata.setIndex((byte) 14, Metadata.Chat(value));
     }
 

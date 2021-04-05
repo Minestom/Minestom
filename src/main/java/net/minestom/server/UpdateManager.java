@@ -24,7 +24,8 @@ import java.util.function.LongConsumer;
  */
 public final class UpdateManager {
 
-    private final ScheduledExecutorService updateExecutionService = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService updateExecutionService = Executors.newSingleThreadScheduledExecutor(r ->
+            new Thread(r, "tick-scheduler"));
 
     private volatile boolean stopRequested;
 

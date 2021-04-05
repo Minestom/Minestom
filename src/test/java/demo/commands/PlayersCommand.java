@@ -1,9 +1,10 @@
 package demo.commands;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.entity.Player;
 
 import java.util.Collection;
@@ -16,20 +17,20 @@ public class PlayersCommand extends Command {
         setDefaultExecutor(this::usage);
     }
 
-    private void usage(CommandSender sender, Arguments arguments) {
+    private void usage(CommandSender sender, CommandContext context) {
         final Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
         final int playerCount = players.size();
-        sender.sendMessage("Total players: " + playerCount);
+        sender.sendMessage(Component.text("Total players: " + playerCount));
         final int limit = 15;
         if (playerCount <= limit) {
             for (final Player player : players) {
-                sender.sendMessage(player.getUsername());
+                sender.sendMessage(Component.text(player.getUsername()));
             }
         } else {
             for (final Player player : players.stream().limit(limit).collect(Collectors.toList())) {
-                sender.sendMessage(player.getUsername());
+                sender.sendMessage(Component.text(player.getUsername()));
             }
-            sender.sendMessage("...");
+            sender.sendMessage(Component.text("..."));
         }
     }
 

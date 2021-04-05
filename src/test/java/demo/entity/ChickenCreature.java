@@ -1,25 +1,19 @@
 package demo.entity;
 
 import com.google.common.collect.ImmutableList;
-import net.minestom.server.attribute.Attributes;
+import net.minestom.server.attribute.Attribute;
+import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.entity.ai.EntityAIGroupBuilder;
-import net.minestom.server.entity.ai.goal.DoNothingGoal;
-import net.minestom.server.entity.ai.goal.MeleeAttackGoal;
 import net.minestom.server.entity.ai.goal.RandomStrollGoal;
-import net.minestom.server.entity.ai.target.ClosestEntityTarget;
-import net.minestom.server.entity.ai.target.LastEntityDamagerTarget;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.type.animal.EntityChicken;
 import net.minestom.server.event.entity.EntityAttackEvent;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
-import net.minestom.server.utils.time.TimeUnit;
 
-public class ChickenCreature extends EntityChicken {
+public class ChickenCreature extends EntityCreature {
 
-    public ChickenCreature(Position defaultPosition) {
-        super(defaultPosition);
+    public ChickenCreature() {
+        super(EntityType.CHICKEN);
 
         addAIGroup(
                 ImmutableList.of(
@@ -44,7 +38,7 @@ public class ChickenCreature extends EntityChicken {
 //                        .build()
 //        );
 
-        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1f);
+        getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1f);
 
         addEventCallback(EntityAttackEvent.class, event -> {
             //System.out.println("CALL ATTACK");

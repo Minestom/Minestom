@@ -6,7 +6,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.time.CooldownUtils;
+import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
@@ -75,7 +75,7 @@ public class ItemEntity extends ObjectEntity {
     @Override
     public void update(long time) {
         if (isMergeable() && isPickable() &&
-                (mergeUpdateOption == null || !CooldownUtils.hasCooldown(time, lastMergeCheck, mergeUpdateOption))) {
+                (mergeUpdateOption == null || !Cooldown.hasCooldown(time, lastMergeCheck, mergeUpdateOption))) {
             this.lastMergeCheck = time;
 
             final Chunk chunk = instance.getChunkAt(getPosition());

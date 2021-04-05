@@ -1,15 +1,26 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.chat.JsonMessage;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.adventure.AdventurePacketConvertor;
+import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.UnaryOperator;
 
 /**
  * The packet creates or updates teams
  */
-public class TeamsPacket implements ServerPacket {
+public class TeamsPacket implements ComponentHoldingServerPacket {
 
     /**
      * The registry name of the team
@@ -23,7 +34,7 @@ public class TeamsPacket implements ServerPacket {
     /**
      * The display name for the team
      */
-    public JsonMessage teamDisplayName;
+    public Component teamDisplayName;
     /**
      * The friendly flags to
      */
@@ -39,19 +50,24 @@ public class TeamsPacket implements ServerPacket {
     /**
      * The color of the team
      */
-    public int teamColor;
+    public NamedTextColor teamColor;
     /**
      * The prefix of the team
      */
-    public JsonMessage teamPrefix;
+    public Component teamPrefix;
     /**
      * The suffix of the team
      */
-    public JsonMessage teamSuffix;
+    public Component teamSuffix;
     /**
      * An array with all entities in the team
      */
     public String[] entities;
+
+    public TeamsPacket() {
+        teamName = "";
+        action = Action.REMOVE_TEAM;
+    }
 
     /**
      * Writes data into the {@link BinaryWriter}
@@ -66,13 +82,13 @@ public class TeamsPacket implements ServerPacket {
         switch (action) {
             case CREATE_TEAM:
             case UPDATE_TEAM_INFO:
-                writer.writeSizedString(this.teamDisplayName.toString());
+                writer.writeComponent(this.teamDisplayName);
                 writer.writeByte(this.friendlyFlags);
                 writer.writeSizedString(this.nameTagVisibility.getIdentifier());
                 writer.writeSizedString(this.collisionRule.getIdentifier());
-                writer.writeVarInt(this.teamColor);
-                writer.writeSizedString(this.teamPrefix.toString());
-                writer.writeSizedString(this.teamSuffix.toString());
+                writer.writeVarInt(AdventurePacketConvertor.getNamedTextColorValue(this.teamColor));
+                writer.writeComponent(this.teamPrefix);
+                writer.writeComponent(this.teamSuffix);
                 break;
             case REMOVE_TEAM:
 
@@ -89,6 +105,32 @@ public class TeamsPacket implements ServerPacket {
 
     }
 
+    @Override
+    public void read(@NotNull BinaryReader reader) {
+        teamName = reader.readSizedString(Integer.MAX_VALUE);
+        action = Action.values()[reader.readByte()];
+
+        switch (action) {
+            case CREATE_TEAM:
+            case UPDATE_TEAM_INFO:
+                this.teamDisplayName = reader.readComponent(Integer.MAX_VALUE);
+                this.friendlyFlags = reader.readByte();
+                nameTagVisibility = NameTagVisibility.fromIdentifier(reader.readSizedString(Integer.MAX_VALUE));
+                collisionRule = CollisionRule.fromIdentifier(reader.readSizedString(Integer.MAX_VALUE));
+                this.teamColor = NamedTextColor.ofExact(reader.readVarInt());
+                this.teamPrefix = reader.readComponent(Integer.MAX_VALUE);
+                this.teamSuffix = reader.readComponent(Integer.MAX_VALUE);
+                break;
+            case REMOVE_TEAM:
+
+                break;
+        }
+
+        if (action == Action.CREATE_TEAM || action == Action.ADD_PLAYERS_TEAM || action == Action.REMOVE_PLAYERS_TEAM) {
+            entities = reader.readSizedStringArray(Integer.MAX_VALUE);
+        }
+    }
+
     /**
      * Gets the identifier of the packet
      *
@@ -97,6 +139,35 @@ public class TeamsPacket implements ServerPacket {
     @Override
     public int getId() {
         return ServerPacketIdentifier.TEAMS;
+    }
+
+    @Override
+    public @NotNull Collection<Component> components() {
+        if (this.action == Action.UPDATE_TEAM_INFO || this.action == Action.CREATE_TEAM) {
+            return List.of(teamDisplayName, teamPrefix, teamSuffix);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        if (this.action == Action.UPDATE_TEAM_INFO || this.action == Action.CREATE_TEAM) {
+            TeamsPacket packet = new TeamsPacket();
+            packet.teamName = teamName;
+            packet.action = action;
+            packet.teamDisplayName = teamDisplayName == null ? null : operator.apply(teamDisplayName);
+            packet.friendlyFlags = friendlyFlags;
+            packet.nameTagVisibility = nameTagVisibility;
+            packet.collisionRule = collisionRule;
+            packet.teamColor = teamColor;
+            packet.teamPrefix = teamPrefix == null ? null : operator.apply(teamPrefix);
+            packet.teamSuffix = teamSuffix == null ? null : operator.apply(teamSuffix);
+            packet.entities = entities;
+            return packet;
+        } else {
+            return this;
+        }
     }
 
     /**
@@ -160,6 +231,16 @@ public class TeamsPacket implements ServerPacket {
             this.identifier = identifier;
         }
 
+        @NotNull
+        public static NameTagVisibility fromIdentifier(String identifier) {
+            for(NameTagVisibility v : values()) {
+                if(v.getIdentifier().equals(identifier))
+                    return v;
+            }
+            Check.fail("Identifier for NameTagVisibility is invalid: "+identifier);
+            return null;
+        }
+
         /**
          * Gets the client identifier
          *
@@ -204,6 +285,16 @@ public class TeamsPacket implements ServerPacket {
          */
         CollisionRule(String identifier) {
             this.identifier = identifier;
+        }
+
+        @NotNull
+        public static CollisionRule fromIdentifier(String identifier) {
+            for(CollisionRule v : values()) {
+                if(v.getIdentifier().equals(identifier))
+                    return v;
+            }
+            Check.fail("Identifier for CollisionRule is invalid: "+identifier);
+            return null;
         }
 
         /**

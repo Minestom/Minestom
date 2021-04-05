@@ -2,7 +2,9 @@ package demo;
 
 import demo.generator.ChunkGeneratorDemo;
 import demo.generator.NoiseTestGenerator;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Entity;
@@ -27,9 +29,7 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterPacket;
 import net.minestom.server.ping.ResponseDataConsumer;
-import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
@@ -78,16 +78,9 @@ public class PlayerInit {
             long ramUsage = benchmarkManager.getUsedMemory();
             ramUsage /= 1e6; // bytes to MB
 
-            final ColoredText header = ColoredText.of("RAM USAGE: " + ramUsage + " MB");
-            final ColoredText footer = ColoredText.of(benchmarkManager.getCpuMonitoringMessage());
-
-            {
-                PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket();
-                playerListHeaderAndFooterPacket.header = header;
-                playerListHeaderAndFooterPacket.footer = footer;
-
-                PacketUtils.sendGroupedPacket(players, playerListHeaderAndFooterPacket);
-            }
+            final Component header = Component.text("RAM USAGE: " + ramUsage + " MB");
+            final Component footer = benchmarkManager.getCpuMonitoringMessage();
+            Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
 
         }).repeat(10, TimeUnit.TICK).schedule();
 
@@ -163,7 +156,8 @@ public class PlayerInit {
             final Entity entity = event.getLivingEntity();
             if (entity instanceof Player) {
                 // Cancel event if player does not have enough inventory space
-                event.setCancelled(!((Player) entity).getInventory().addItemStack(event.getItemStack()));
+                final ItemStack itemStack = event.getItemEntity().getItemStack();
+                event.setCancelled(!((Player) entity).getInventory().addItemStack(itemStack));
             }
         });
 

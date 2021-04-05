@@ -2,12 +2,13 @@ package net.minestom.server.network.packet.client.play;
 
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 public class ClientEntityActionPacket extends ClientPlayPacket {
 
     public int playerId;
-    public Action action;
+    public Action action = Action.START_SNEAKING;
     public int horseJumpBoost;
 
     @Override
@@ -15,6 +16,13 @@ public class ClientEntityActionPacket extends ClientPlayPacket {
         this.playerId = reader.readVarInt();
         this.action = Action.values()[reader.readVarInt()];
         this.horseJumpBoost = reader.readVarInt();
+    }
+
+    @Override
+    public void write(@NotNull BinaryWriter writer) {
+        writer.writeVarInt(playerId);
+        writer.writeVarInt(action.ordinal());
+        writer.writeVarInt(horseJumpBoost);
     }
 
     public enum Action {

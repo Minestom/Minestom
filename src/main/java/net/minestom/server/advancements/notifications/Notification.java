@@ -1,5 +1,6 @@
 package net.minestom.server.advancements.notifications;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.advancements.FrameType;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.item.ItemStack;
@@ -11,20 +12,47 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Notification {
 
-    private final JsonMessage title;
+    private final Component title;
     private final FrameType frameType;
     private final ItemStack icon;
 
+    /**
+     * @deprecated Use {@link #Notification(Component, FrameType, ItemStack)}
+     */
+    @Deprecated
     public Notification(@NotNull JsonMessage title, @NotNull FrameType frameType, @NotNull ItemStack icon) {
+        this(title.asComponent(), frameType, icon);
+    }
+
+    /**
+     * @deprecated Use {@link #Notification(Component, FrameType, Material)}
+     */
+    @Deprecated
+    public Notification(@NotNull JsonMessage title, @NotNull FrameType frameType, @NotNull Material icon) {
+        this(title.asComponent(), frameType, icon);
+    }
+
+    public Notification(@NotNull Component title, @NotNull FrameType frameType, @NotNull Material icon) {
+        this(title, frameType, new ItemStack(icon, (byte) 1));
+    }
+
+    public Notification(@NotNull Component title, @NotNull FrameType frameType, @NotNull ItemStack icon) {
         this.title = title;
         this.frameType = frameType;
         this.icon = icon;
     }
 
-    public Notification(@NotNull JsonMessage title, @NotNull FrameType frameType, @NotNull Material icon) {
-        this.title = title;
-        this.frameType = frameType;
-        this.icon = new ItemStack(icon, (byte) 1);
+    /**
+     * Gets the title of the notification.
+     *
+     * @return the notification title
+     *
+     * @deprecated Use {@link #getTitle()}
+     */
+    @NotNull
+    @Deprecated
+    public JsonMessage getTitleJson() {
+        return JsonMessage.fromComponent(title);
     }
 
     /**
@@ -32,8 +60,7 @@ public class Notification {
      *
      * @return the notification title
      */
-    @NotNull
-    public JsonMessage getTitle() {
+    public Component getTitle() {
         return title;
     }
 

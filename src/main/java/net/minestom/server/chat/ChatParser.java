@@ -2,11 +2,14 @@ package net.minestom.server.chat;
 
 
 import com.google.gson.*;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Class used to convert JSON string to proper chat message representation.
+ * @deprecated Use {@link GsonComponentSerializer}
  */
+@Deprecated
 public final class ChatParser {
 
     public static final char COLOR_CHAR = (char) 0xA7; // Represent the character '§'

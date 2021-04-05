@@ -1,45 +1,31 @@
 package demo.commands;
 
-import net.minestom.server.chat.ChatColor;
-import net.minestom.server.chat.ColoredText;
+import net.kyori.adventure.inventory.Book;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.entity.Player;
-import net.minestom.server.item.metadata.WrittenBookMeta;
-
-import java.util.List;
 
 public class BookCommand extends Command {
     public BookCommand() {
         super("book");
 
-        setCondition(this::playerCondition);
+        setCondition(Conditions::playerOnly);
 
         setDefaultExecutor(this::execute);
     }
 
-    private boolean playerCondition(CommandSender sender, String commandString) {
-        if (!sender.isPlayer()) {
-            sender.sendMessage("The command is only available for players");
-            return false;
-        }
-        return true;
-    }
-
-    private void execute(CommandSender sender, Arguments args) {
+    private void execute(CommandSender sender, CommandContext context) {
         Player player = sender.asPlayer();
 
-        final WrittenBookMeta bookMeta = new WrittenBookMeta();
-        bookMeta.setAuthor(player.getUsername());
-        bookMeta.setGeneration(WrittenBookMeta.WrittenBookGeneration.ORIGINAL);
-        bookMeta.setTitle(player.getUsername() + "'s Book");
-        bookMeta.setPages(List.of(
-                ColoredText.of(ChatColor.RED, "Page one"),
-                ColoredText.of(ChatColor.BRIGHT_GREEN, "Page two"),
-                ColoredText.of(ChatColor.BLUE, "Page three")
-        ));
-
-        player.openBook(bookMeta);
+        player.openBook(Book.builder()
+                .author(Component.text(player.getUsername()))
+                .title(Component.text(player.getUsername() + "'s Book"))
+                .pages(Component.text("Page one", NamedTextColor.RED),
+                        Component.text("Page two", NamedTextColor.GREEN),
+                        Component.text("Page three", NamedTextColor.BLUE)));
     }
 }

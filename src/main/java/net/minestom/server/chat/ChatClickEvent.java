@@ -1,10 +1,13 @@
 package net.minestom.server.chat;
 
+import net.kyori.adventure.text.event.ClickEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a click event for a specific portion of the message.
+ * @deprecated Use {@link ClickEvent}
  */
+@Deprecated
 public class ChatClickEvent {
 
     private final String action;
@@ -46,6 +49,11 @@ public class ChatClickEvent {
     @NotNull
     public static ChatClickEvent suggestCommand(@NotNull String command) {
         return new ChatClickEvent("suggest_command", command);
+    }
+
+    @NotNull
+    public static ChatClickEvent copyToClipboard(@NotNull String text) {
+        return new ChatClickEvent("copy_to_clipboard", text);
     }
 
     @NotNull

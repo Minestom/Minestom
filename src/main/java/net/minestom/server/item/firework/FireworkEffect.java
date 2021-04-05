@@ -1,6 +1,8 @@
 package net.minestom.server.item.firework;
 
+import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.chat.ChatColor;
+import net.minestom.server.color.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
@@ -11,8 +13,23 @@ public class FireworkEffect {
     private final boolean flicker;
     private final boolean trail;
     private final FireworkEffectType type;
-    private final ChatColor color;
-    private final ChatColor fadeColor;
+    private final Color color;
+    private final Color fadeColor;
+
+    /**
+     * Initializes a new firework effect.
+     *
+     * @param flicker   {@code true} if this explosion has the Twinkle effect (glowstone dust), otherwise {@code false}.
+     * @param trail     {@code true} if this explosion hsa the Trail effect (diamond), otherwise {@code false}.
+     * @param type      The shape of this firework's explosion.
+     * @param color     The primary color of this firework effect.
+     * @param fadeColor The secondary color of this firework effect.
+     * @deprecated Use {@link #FireworkEffect(boolean, boolean, FireworkEffectType, Color, Color)}
+     */
+    @Deprecated
+    public FireworkEffect(boolean flicker, boolean trail, FireworkEffectType type, ChatColor color, ChatColor fadeColor) {
+        this(flicker, trail, type, color.asColor(), fadeColor.asColor());
+    }
 
     /**
      * Initializes a new firework effect.
@@ -23,7 +40,7 @@ public class FireworkEffect {
      * @param color     The primary color of this firework effect.
      * @param fadeColor The secondary color of this firework effect.
      */
-    public FireworkEffect(boolean flicker, boolean trail, FireworkEffectType type, ChatColor color, ChatColor fadeColor) {
+    public FireworkEffect(boolean flicker, boolean trail, FireworkEffectType type, Color color, Color fadeColor) {
         this.flicker = flicker;
         this.trail = trail;
         this.type = type;
@@ -39,17 +56,17 @@ public class FireworkEffect {
      */
     public static FireworkEffect fromCompound(@NotNull NBTCompound compound) {
 
-        ChatColor primaryColor = null;
-        ChatColor secondaryColor = null;
+        Color primaryColor = null;
+        Color secondaryColor = null;
 
         if (compound.containsKey("Colors")) {
             int[] color = compound.getIntArray("Colors");
-            primaryColor = ChatColor.fromRGB((byte) color[0], (byte) color[1], (byte) color[2]);
+            primaryColor = new Color(color[0], color[1], color[2]);
         }
 
         if (compound.containsKey("FadeColors")) {
             int[] fadeColor = compound.getIntArray("FadeColors");
-            secondaryColor = ChatColor.fromRGB((byte) fadeColor[0], (byte) fadeColor[1], (byte) fadeColor[2]);
+            secondaryColor = new Color(fadeColor[0], fadeColor[1], fadeColor[2]);
 
         }
 

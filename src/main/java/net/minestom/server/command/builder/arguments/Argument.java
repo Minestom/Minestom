@@ -1,13 +1,17 @@
 package net.minestom.server.command.builder.arguments;
 
+import com.google.common.annotations.Beta;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.suggestion.SuggestionCallback;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Supplier;
 
 /**
  * An argument is meant to be parsed when added into a {@link Command}'s syntax with {@link Command#addSyntax(CommandExecutor, Argument[])}.
@@ -21,12 +25,14 @@ import org.jetbrains.annotations.Nullable;
 public abstract class Argument<T> {
 
     private final String id;
-    private final boolean allowSpace;
-    private final boolean useRemaining;
+    protected final boolean allowSpace;
+    protected final boolean useRemaining;
 
     private ArgumentCallback callback;
 
-    private T defaultValue;
+    private Supplier<T> defaultValue;
+
+    private SuggestionCallback suggestionCallback;
 
     /**
      * Creates a new argument.
@@ -99,7 +105,7 @@ public abstract class Argument<T> {
 
     /**
      * Gets the ID of the argument, showed in-game above the chat bar
-     * and used to retrieve the data when the command is parsed in {@link net.minestom.server.command.builder.Arguments}.
+     * and used to retrieve the data when the command is parsed in {@link net.minestom.server.command.builder.CommandContext}.
      *
      * @return the argument id
      */
@@ -149,6 +155,15 @@ public abstract class Argument<T> {
     }
 
     /**
+     * Gets if the argument has any error callback.
+     *
+     * @return true if the argument has an error callback, false otherwise
+     */
+    public boolean hasErrorCallback() {
+        return callback != null;
+    }
+
+    /**
      * Gets if this argument is 'optional'.
      * <p>
      * Optional means that this argument can be put at the end of a syntax
@@ -160,18 +175,13 @@ public abstract class Argument<T> {
         return defaultValue != null;
     }
 
-    /**
-     * Gets the default value of this argument.
-     *
-     * @return the argument default value, null if the argument is not optional
-     */
     @Nullable
-    public T getDefaultValue() {
+    public Supplier<T> getDefaultValue() {
         return defaultValue;
     }
 
     /**
-     * Sets the default value of the argument.
+     * Sets the default value supplier of the argument.
      * <p>
      * A non-null value means that the argument can be put at the end of a syntax
      * to act as an optional one.
@@ -180,18 +190,34 @@ public abstract class Argument<T> {
      * @return 'this' for chaining
      */
     @NotNull
-    public Argument<T> setDefaultValue(@Nullable T defaultValue) {
+    public Argument<T> setDefaultValue(@Nullable Supplier<T> defaultValue) {
         this.defaultValue = defaultValue;
         return this;
     }
 
     /**
-     * Gets if the argument has any error callback.
-     *
-     * @return true if the argument has an error callback, false otherwise
+     * @deprecated use {@link #setDefaultValue(Supplier)}
      */
-    public boolean hasErrorCallback() {
-        return callback != null;
+    @NotNull
+    @Deprecated
+    public Argument<T> setDefaultValue(@Nullable T defaultValue) {
+        this.defaultValue = () -> defaultValue;
+        return this;
+    }
+
+    @Nullable
+    public SuggestionCallback getSuggestionCallback() {
+        return suggestionCallback;
+    }
+
+    @Beta
+    public Argument<T> setSuggestionCallback(@NotNull SuggestionCallback suggestionCallback) {
+        this.suggestionCallback = suggestionCallback;
+        return this;
+    }
+
+    public boolean hasSuggestion() {
+        return suggestionCallback != null;
     }
 
     @Override

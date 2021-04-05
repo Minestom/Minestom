@@ -1,5 +1,6 @@
 package net.minestom.server.advancements;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.item.ItemStack;
@@ -15,6 +16,10 @@ import org.jetbrains.annotations.Nullable;
  */
 public class AdvancementRoot extends Advancement {
 
+    /**
+     * @deprecated Use {@link #AdvancementRoot(Component, Component, ItemStack, FrameType, float, float, String)}
+     */
+    @Deprecated
     public AdvancementRoot(@NotNull JsonMessage title, @NotNull JsonMessage description,
                            @NotNull ItemStack icon, @NotNull FrameType frameType,
                            float x, float y,
@@ -23,7 +28,27 @@ public class AdvancementRoot extends Advancement {
         setBackground(background);
     }
 
+    /**
+     * @deprecated Use {@link #AdvancementRoot(Component, Component, Material, FrameType, float, float, String)}
+     */
+    @Deprecated
     public AdvancementRoot(@NotNull JsonMessage title, @NotNull JsonMessage description,
+                           @NotNull Material icon, FrameType frameType,
+                           float x, float y,
+                           @Nullable String background) {
+        super(title, description, icon, frameType, x, y);
+        setBackground(background);
+    }
+
+    public AdvancementRoot(@NotNull Component title, @NotNull Component description,
+                           @NotNull ItemStack icon, @NotNull FrameType frameType,
+                           float x, float y,
+                           @Nullable String background) {
+        super(title, description, icon, frameType, x, y);
+        setBackground(background);
+    }
+
+    public AdvancementRoot(@NotNull Component title, @NotNull Component description,
                            @NotNull Material icon, FrameType frameType,
                            float x, float y,
                            @Nullable String background) {

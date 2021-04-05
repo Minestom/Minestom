@@ -1,5 +1,6 @@
 package net.minestom.server.advancements;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
@@ -23,8 +24,8 @@ public class Advancement {
 
     private boolean achieved;
 
-    private JsonMessage title;
-    private JsonMessage description;
+    private Component title;
+    private Component description;
 
     private ItemStack icon;
 
@@ -42,7 +43,27 @@ public class Advancement {
     // Packet
     private AdvancementsPacket.Criteria criteria;
 
+    /**
+     * @deprecated Use {@link #Advancement(Component, Component, ItemStack, FrameType, float, float)}
+     */
+    @Deprecated
     public Advancement(@NotNull JsonMessage title, JsonMessage description,
+                       @NotNull ItemStack icon, @NotNull FrameType frameType,
+                       float x, float y) {
+        this(title.asComponent(), description.asComponent(), icon, frameType, x, y);
+    }
+
+    /**
+     * @deprecated Use {@link #Advancement(Component, Component, Material, FrameType, float, float)}
+     */
+    @Deprecated
+    public Advancement(@NotNull JsonMessage title, @NotNull JsonMessage description,
+                       @NotNull Material icon, @NotNull FrameType frameType,
+                       float x, float y) {
+        this(title, description, new ItemStack(icon, (byte) 1), frameType, x, y);
+    }
+
+    public Advancement(@NotNull Component title, Component description,
                        @NotNull ItemStack icon, @NotNull FrameType frameType,
                        float x, float y) {
         this.title = title;
@@ -53,7 +74,7 @@ public class Advancement {
         this.y = y;
     }
 
-    public Advancement(@NotNull JsonMessage title, @NotNull JsonMessage description,
+    public Advancement(@NotNull Component title, @NotNull Component description,
                        @NotNull Material icon, @NotNull FrameType frameType,
                        float x, float y) {
         this(title, description, new ItemStack(icon, (byte) 1), frameType, x, y);
@@ -97,11 +118,22 @@ public class Advancement {
     /**
      * Gets the title of the advancement.
      *
+     * @return the title
+     */
+    public Component getTitle() {
+        return title;
+    }
+
+    /**
+     * Gets the title of the advancement.
+     *
      * @return the advancement title
+     * @deprecated Use {@link #getTitle()}
      */
     @NotNull
-    public JsonMessage getTitle() {
-        return title;
+    @Deprecated
+    public JsonMessage getTitleJson() {
+        return JsonMessage.fromComponent(title);
     }
 
     /**
@@ -109,8 +141,20 @@ public class Advancement {
      *
      * @param title the new title
      */
-    public void setTitle(@NotNull JsonMessage title) {
+    public void setTitle(@NotNull Component title) {
         this.title = title;
+        update();
+    }
+
+    /**
+     * Changes the advancement title.
+     *
+     * @param title the new title
+     * @deprecated Use {@link #setTitle(Component)}
+     */
+    @Deprecated
+    public void setTitle(@NotNull JsonMessage title) {
+        this.title = title.asComponent();
         update();
     }
 
@@ -120,8 +164,20 @@ public class Advancement {
      * @return the description title
      */
     @NotNull
-    public JsonMessage getDescription() {
+    public Component getDescription() {
         return description;
+    }
+
+    /**
+     * Gets the description of the advancement.
+     *
+     * @return the description title
+     * @deprecated Use {@link #getDescription()}
+     */
+    @NotNull
+    @Deprecated
+    public JsonMessage getDescriptionJson() {
+        return JsonMessage.fromComponent(description);
     }
 
     /**
@@ -129,8 +185,20 @@ public class Advancement {
      *
      * @param description the new description
      */
-    public void setDescription(@NotNull JsonMessage description) {
+    public void setDescription(@NotNull Component description) {
         this.description = description;
+        update();
+    }
+
+    /**
+     * Changes the description title.
+     *
+     * @param description the new description
+     * @deprecated Use {@link #setDescription(Component)}
+     */
+    @Deprecated
+    public void setDescription(@NotNull JsonMessage description) {
+        this.description = description.asComponent();
         update();
     }
 
