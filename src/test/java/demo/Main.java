@@ -6,6 +6,7 @@ import demo.blocks.UpdatableBlockDemo;
 import demo.commands.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.event.server.HandshakeEvent;
@@ -66,10 +67,18 @@ public class Main {
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night")).schedule();
 
         MinecraftServer.getGlobalEventHandler().addEventCallback(StatusRequestEvent.class, event -> {
-            ResponseData responseData = event.getResponseData();
-            responseData.addPlayer("IP test: " + event.getConnection().getRemoteAddress().toString(), UUID.randomUUID());
-            responseData.addPlayer("Use " + (char)0x00a7 + "7section characters", UUID.randomUUID());
-            responseData.addPlayer((char)0x00a7 + "7" + (char)0x00a7 + "ofor formatting" + (char)0x00a7 + "r: (" + (char)0x00a7 + "6char" + (char)0x00a7 + "r)" + (char)0x00a7 + "90x00a7", UUID.randomUUID());
+            event.setMaxPlayer(0);
+            event.setOnline(MinecraftServer.getConnectionManager().getOnlinePlayers().size());
+            event.addPlayer("The first line is separated from the others", UUID.randomUUID());
+            event.addPlayer("Could be a name, or a message", UUID.randomUUID());
+            event.setDescription(Component.text("You can do ")
+                    .append(Component.text("RGB", TextColor.color(0x66b3ff)))
+                    .append(Component.text(" color here")));
+
+
+            event.addPlayer("IP test: " + event.getConnection().getRemoteAddress().toString(), UUID.randomUUID());
+            event.addPlayer("Use " + (char)0x00a7 + "7section characters", UUID.randomUUID());
+            event.addPlayer((char)0x00a7 + "7" + (char)0x00a7 + "ofor formatting" + (char)0x00a7 + "r: (" + (char)0x00a7 + "6char" + (char)0x00a7 + "r)" + (char)0x00a7 + "90x00a7", UUID.randomUUID());
 
 
         });
@@ -83,7 +92,7 @@ public class Main {
 
         //MojangAuth.init();
 
-        minecraftServer.start("0.0.0.0", 25565, PlayerInit.getResponseDataConsumer());
+        minecraftServer.start("0.0.0.0", 25565);
         //Runtime.getRuntime().addShutdownHook(new Thread(MinecraftServer::stopCleanly));
     }
 

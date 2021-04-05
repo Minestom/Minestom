@@ -249,17 +249,5 @@ public class PlayerInit {
         });
     }
 
-    public static ResponseDataConsumer getResponseDataConsumer() {
-        return (playerConnection, responseData) -> {
-            responseData.setMaxPlayer(0);
-            responseData.setOnline(MinecraftServer.getConnectionManager().getOnlinePlayers().size());
-            responseData.addPlayer("The first line is separated from the others", UUID.randomUUID());
-            responseData.addPlayer("Could be a name, or a message", UUID.randomUUID());
-            responseData.setDescription(Component.text("You can do ")
-                    .append(Component.text("RGB", TextColor.color(0x66b3ff)))
-                    .append(Component.text(" color here")));
-
-        };
-    }
 
 }
