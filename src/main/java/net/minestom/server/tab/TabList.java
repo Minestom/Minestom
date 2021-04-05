@@ -25,6 +25,9 @@ public class TabList implements Viewable {
     private boolean latencyUpdates = true;
     private boolean gamemodeUpdates = true;
 
+    /**
+     * You must use {@link TabListManager#createTabList()}
+     */
     TabList() {
     }
 
@@ -120,9 +123,7 @@ public class TabList implements Viewable {
         }
 
         playerInfoPacket.playerInfos.add(addPlayer);
-
         PacketUtils.sendGroupedPacket(this.viewers, playerInfoPacket);
-
         this.displayedPlayers.add(player);
     }
 

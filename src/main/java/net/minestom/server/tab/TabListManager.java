@@ -3,7 +3,6 @@ package net.minestom.server.tab;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
-import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.network.packet.server.play.PlayerInfoPacket;
 import net.minestom.server.tab.populators.DefaultTabPopulator;
@@ -80,7 +79,7 @@ public class TabListManager {
     }
 
     /**
-     * Updates a player's gamemode for all viewers of the tablist
+     * Updates a player's gamemode for all viewers of the TabList
      *
      * @param player The player to update the gamemode info for
      */
@@ -94,5 +93,4 @@ public class TabListManager {
             }
         }
     }
-
 }

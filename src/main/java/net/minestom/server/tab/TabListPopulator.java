@@ -19,6 +19,7 @@ public interface TabListPopulator {
 
     /**
      * Called when a player leaves the server.
+     * Not removing the player from their respective TabList will likely cause issues
      *
      * @param player the player the TabList will be set for
      */
