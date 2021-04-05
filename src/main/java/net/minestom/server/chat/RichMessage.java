@@ -2,6 +2,7 @@ package net.minestom.server.chat;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +19,7 @@ import java.util.List;
  * You will need to call the static method to initialize the message {@link #of(ColoredText)},
  * events can be assigned with {@link #setClickEvent(ChatClickEvent)} and {@link #setHoverEvent(ChatHoverEvent)}
  * and new text element can also be appended {@link #append(ColoredText)}.
+ * @deprecated Use {@link Component}
  */
 @Deprecated
 public class RichMessage extends JsonMessage {

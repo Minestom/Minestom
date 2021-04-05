@@ -1,10 +1,12 @@
 package net.minestom.server.chat;
 
+import net.kyori.adventure.text.TranslatableComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a translatable component which can be used in {@link ColoredText}.
+ * @deprecated Use {@link TranslatableComponent}
  */
 @Deprecated
 public class TranslatableText {
