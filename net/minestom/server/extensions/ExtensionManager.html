@@ -430,7 +430,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <pre class="methodSignature">public&nbsp;void&nbsp;loadExtensions()</pre>
 <div class="block">Loads all extensions in the extension folder into this server.
  <br><br>
-
+ <p>
  Pipeline:
  <br>
  Finds all .jar files in the extensions folder.
@@ -441,32 +441,32 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
  <br>
  Verifies that all properties of extension.json are correctly set.
  <br><br>
-
+ <p>
  It then sorts all those jars by their load order (making sure that an extension's dependencies load before it)
  <br>
  Note: Cyclic dependencies will stop both extensions from being loaded.
  <br><br>
-
+ <p>
  Afterwards, it loads all external dependencies and adds them to the extension's files
  <br><br>
-
+ <p>
  Then removes any invalid extensions (Invalid being its Load Status isn't SUCCESS)
  <br><br>
-
+ <p>
  After that, it set its classloaders so each extension is self-contained,
  <br><br>
-
+ <p>
  Removes invalid extensions again,
  <br><br>
-
+ <p>
  and loads all of those extensions into Minestom
  <br>
  (Extension fields are set via reflection after each extension is verified, then loaded.)
  <br><br>
-
+ <p>
  If the extension successfully loads, add it to the global extension Map (Name to Extension)
  <br><br>
-
+ <p>
  And finally make a scheduler to clean observers per extension.</div>
 </li>
 </ul>
