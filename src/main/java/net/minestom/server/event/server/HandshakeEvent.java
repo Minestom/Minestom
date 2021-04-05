@@ -2,7 +2,6 @@ package net.minestom.server.event.server;
 
 import net.minestom.server.event.Event;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.ping.ResponseData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

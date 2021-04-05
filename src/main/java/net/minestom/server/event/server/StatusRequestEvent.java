@@ -66,17 +66,6 @@ public class StatusRequestEvent extends Event implements CancellableEvent {
 
     // Shortcut Methods
     /**
-     * Sets the name for the response.
-     *
-     * @param name The name for the response data.
-     * @deprecated Use {@link #setVersion(String)}
-     */
-    @Deprecated
-    public void setName(String name) {
-        responseData.setVersion(name);
-    }
-
-    /**
      * Sets the version name for the response.
      *
      * @param version The version name for the response data.
@@ -118,9 +107,7 @@ public class StatusRequestEvent extends Event implements CancellableEvent {
      * @param players the players
      */
     public void addPlayer(Iterable<Player> players) {
-        for (Player player : players) {
-            addPlayer(player);
-        }
+        responseData.addPlayer(players);
     }
 
     /**
@@ -139,6 +126,7 @@ public class StatusRequestEvent extends Event implements CancellableEvent {
      * @param uuid The unique identifier of the player.
      */
     public void addPlayer(String name, UUID uuid) {
+        responseData.addPlayer(name, uuid);
     }
 
     /**
@@ -147,17 +135,6 @@ public class StatusRequestEvent extends Event implements CancellableEvent {
      */
     public void clearPlayers() {
         responseData.clearPlayers();
-    }
-
-    /**
-     * Sets the response description.
-     *
-     * @param description The description for the response data.
-     * @deprecated Use {@link #setDescription(Component)}
-     */
-    @Deprecated
-    public void setDescription(String description) {
-        responseData.setDescription(LegacyComponentSerializer.legacySection().deserialize(description));
     }
 
     /**
