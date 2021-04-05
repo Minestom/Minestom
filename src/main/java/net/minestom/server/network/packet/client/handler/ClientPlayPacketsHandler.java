@@ -35,8 +35,8 @@ public class ClientPlayPacketsHandler extends ClientPacketsHandler {
         register(0x1B, ClientPlayerDiggingPacket::new);
         register(0x1C, ClientEntityActionPacket::new);
         register(0x1D, ClientSteerVehiclePacket::new);
-        register(0x1E, ClientRecipeBookData::new);
-        register(0x1F, ClientRecipeBookData::new);
+        register(0x1E, ClientSetRecipeBookStatePacket::new);
+        register(0x1F, ClientSetDisplayedRecipePacket::new);
 
 
         register(0x20, ClientNameItemPacket::new);
