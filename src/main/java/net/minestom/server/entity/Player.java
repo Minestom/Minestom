@@ -622,7 +622,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             return false;
         }
         PlayerConnection viewerConnection = player.getPlayerConnection();
-        viewerConnection.sendPacket(getAddPlayerToList());
+        viewerConnection.sendPacket(getAddAllPlayerToList());
         return super.addViewer0(player);
     }
 
@@ -1350,7 +1350,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         destroyEntitiesPacket.entityIds = new int[]{getEntityId()};
 
         //final PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
-        //final PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
+        //final PlayerInfoPacket addPlayerPacket = getAddAllPlayerToList();
 
         RespawnPacket respawnPacket = new RespawnPacket();
         respawnPacket.dimensionType = getDimensionType();
@@ -2622,7 +2622,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param connection the connection to show the player to
      */
     protected void showPlayer(@NotNull PlayerConnection connection) {
-        //connection.sendPacket(getAddPlayerToList());
+        //connection.sendPacket(getAddAllPlayerToList());
         Set<TabList> displayedOn = new HashSet<>();
         for (TabList tabList : MinecraftServer.getTabListManager().getTabLists()) {
             if (tabList.getDisplayedPlayers().contains(this)) {
