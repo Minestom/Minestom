@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ClientSetRecipeBookStatePacket extends ClientPlayPacket {
 
-    public BookType type;
+    public BookType type = BookType.CRAFTING;
     public boolean bookOpen;
     public boolean filterActive;
 

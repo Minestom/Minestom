@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ClientSetDisplayedRecipePacket extends ClientPlayPacket {
 
-    public String recipeId;
+    public String recipeId = "";
 
     @Override
     public void read(@NotNull BinaryReader reader) {
