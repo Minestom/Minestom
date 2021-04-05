@@ -135,7 +135,7 @@ public final class MinecraftServer {
     private static int compressionThreshold = 256;
     private static boolean packetCaching = true;
     private static boolean groupedPacket = true;
-    @Deprecated private static ResponseDataConsumer responseDataConsumer;
+    private static ResponseDataConsumer responseDataConsumer;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
     private static LootTableManager lootTableManager;
