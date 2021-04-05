@@ -1,7 +1,7 @@
 package net.minestom.server.tab;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.PlayerInfoPacket;
@@ -19,8 +19,8 @@ public class TabList implements Viewable {
 
     private final List<Player> displayedPlayers = new CopyOnWriteArrayList<>();
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
-    private JsonMessage header;
-    private JsonMessage footer;
+    private Component header;
+    private Component footer;
 
     private boolean latencyUpdates = true;
     private boolean gamemodeUpdates = true;
@@ -54,7 +54,7 @@ public class TabList implements Viewable {
      * @return the content of the header
      */
     @Nullable
-    public JsonMessage getHeader() {
+    public Component getHeader() {
         return this.header;
     }
 
@@ -63,7 +63,7 @@ public class TabList implements Viewable {
      *
      * @param header the new header content
      */
-    public void setHeader(@Nullable JsonMessage header) {
+    public void setHeader(@Nullable Component header) {
         this.header = header;
         PacketUtils.sendGroupedPacket(this.viewers, this.generateHeaderAndFooterPacket());
     }
@@ -75,7 +75,7 @@ public class TabList implements Viewable {
      * @return the content of the footer
      */
     @Nullable
-    public JsonMessage getFooter() {
+    public Component getFooter() {
         return this.footer;
     }
 
@@ -85,7 +85,7 @@ public class TabList implements Viewable {
      *
      * @param footer the new footer content
      */
-    public void setFooter(@Nullable JsonMessage footer) {
+    public void setFooter(@Nullable Component footer) {
         this.footer = footer;
         PacketUtils.sendGroupedPacket(this.viewers, this.generateHeaderAndFooterPacket());
     }
@@ -220,7 +220,6 @@ public class TabList implements Viewable {
         infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateDisplayName(player.getUuid(), player.getDisplayName()));
         PacketUtils.sendGroupedPacket(this.viewers, infoPacket);
     }
-
 
 
     /**
