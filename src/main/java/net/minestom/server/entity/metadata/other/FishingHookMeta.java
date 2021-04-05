@@ -27,14 +27,15 @@ public class FishingHookMeta extends EntityMeta implements ObjectDataProvider {
         int entityID = value == null ? 0 : value.getEntityId() + 1;
         super.metadata.setIndex((byte) 7, Metadata.VarInt(entityID));
     }
-    @Nullable
-	public Entity getOwnerEntity() {
-		return owner;
-	}
+    
+    @NotNull
+    public Entity getOwnerEntity() {
+        return owner;
+    }
 
-	public void setOwnerEntity(@Nullable Entity value) {
-		this.owner = value;
-	}
+    public void setOwnerEntity(@NotNull Entity value) {
+        this.owner = value;
+    }
 
     public boolean isCatchable() {
         return super.metadata.getIndex((byte) 8, false);
@@ -44,13 +45,13 @@ public class FishingHookMeta extends EntityMeta implements ObjectDataProvider {
         super.metadata.setIndex((byte) 8, Metadata.Boolean(value));
     }
 
-	@Override
-	public int getObjectData() {
-		return owner.getEntityId();
-	}
+    @Override
+    public int getObjectData() {
+        return owner.getEntityId();
+    }
 
-	@Override
-	public boolean requiresVelocityPacketAtSpawn() {
-		return false;
-	}
+    @Override
+    public boolean requiresVelocityPacketAtSpawn() {
+        return false;
+    }
 }
