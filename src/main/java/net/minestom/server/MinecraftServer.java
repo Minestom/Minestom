@@ -135,7 +135,7 @@ public final class MinecraftServer {
     private static int compressionThreshold = 256;
     private static boolean packetCaching = true;
     private static boolean groupedPacket = true;
-    private static ResponseDataConsumer responseDataConsumer;
+    @Deprecated private static ResponseDataConsumer responseDataConsumer;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
     private static LootTableManager lootTableManager;
@@ -616,7 +616,10 @@ public final class MinecraftServer {
      * Gets the consumer executed to show server-list data.
      *
      * @return the response data consumer
+     *
+     * @deprecated listen to the {@link net.minestom.server.event.server.StatusRequestEvent} instead
      */
+    @Deprecated
     public static ResponseDataConsumer getResponseDataConsumer() {
         checkInitStatus(responseDataConsumer);
         return responseDataConsumer;
@@ -742,7 +745,10 @@ public final class MinecraftServer {
      * @param port                 the server port
      * @param responseDataConsumer the response data consumer, can be null
      * @throws IllegalStateException if called before {@link #init()} or if the server is already running
+     *
+     * @deprecated use {@link #start(String, int)} and listen to the {@link net.minestom.server.event.server.StatusRequestEvent} event instead of ResponseDataConsumer
      */
+    @Deprecated
     public void start(@NotNull String address, int port, @Nullable ResponseDataConsumer responseDataConsumer) {
         Check.stateCondition(!initialized, "#start can only be called after #init");
         Check.stateCondition(started, "The server is already started");
@@ -780,13 +786,46 @@ public final class MinecraftServer {
 
     /**
      * Starts the server.
+     * <p>
+     * It should be called after {@link #init()} and probably your own initialization code.
      *
      * @param address the server address
      * @param port    the server port
-     * @see #start(String, int, ResponseDataConsumer)
+     * @throws IllegalStateException if called before {@link #init()} or if the server is already running
      */
     public void start(@NotNull String address, int port) {
-        start(address, port, null);
+        Check.stateCondition(!initialized, "#start can only be called after #init");
+        Check.stateCondition(started, "The server is already started");
+
+        MinecraftServer.started = true;
+
+        LOGGER.info("Starting Minestom server.");
+        MinecraftServer.responseDataConsumer = null;
+
+        updateManager.start();
+
+        // Init & start the TCP server
+        nettyServer.init();
+        nettyServer.start(address, port);
+
+        if (extensionManager.shouldLoadOnStartup()) {
+            final long loadStartTime = System.nanoTime();
+            // Load extensions
+            extensionManager.loadExtensions();
+            // Init extensions
+            extensionManager.getExtensions().forEach(Extension::preInitialize);
+            extensionManager.getExtensions().forEach(Extension::initialize);
+            extensionManager.getExtensions().forEach(Extension::postInitialize);
+
+            final double loadTime = MathUtils.round((System.nanoTime() - loadStartTime) / 1_000_000D, 2);
+            LOGGER.info("Extensions loaded in {}ms", loadTime);
+        } else {
+            LOGGER.warn("Extension loadOnStartup option is set to false, extensions are therefore neither loaded or initialized.");
+        }
+
+        LOGGER.info("Minestom server started successfully.");
+
+        commandManager.startConsoleThread();
     }
 
     /**
