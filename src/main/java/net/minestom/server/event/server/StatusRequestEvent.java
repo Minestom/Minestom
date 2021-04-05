@@ -1,10 +1,15 @@
 package net.minestom.server.event.server;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.Event;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.ping.ResponseData;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 
 /**
@@ -57,5 +62,121 @@ public class StatusRequestEvent extends Event implements CancellableEvent {
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
+    }
+
+    // Shortcut Methods
+    /**
+     * Sets the name for the response.
+     *
+     * @param name The name for the response data.
+     * @deprecated Use {@link #setVersion(String)}
+     */
+    @Deprecated
+    public void setName(String name) {
+        responseData.setVersion(name);
+    }
+
+    /**
+     * Sets the version name for the response.
+     *
+     * @param version The version name for the response data.
+     */
+    public void setVersion(String version) {
+        responseData.setVersion(version);
+    }
+
+    /**
+     * Sets the response protocol version.
+     *
+     * @param protocol The protocol version for the response data.
+     */
+    public void setProtocol(int protocol) {
+        responseData.setProtocol(protocol);
+    }
+
+    /**
+     * Sets the response maximum player count.
+     *
+     * @param maxPlayer The maximum player count for the response data.
+     */
+    public void setMaxPlayer(int maxPlayer) {
+        responseData.setMaxPlayer(maxPlayer);
+    }
+
+    /**
+     * Sets the response online count.
+     *
+     * @param online The online count for the response data.
+     */
+    public void setOnline(int online) {
+        responseData.setOnline(online);
+    }
+
+    /**
+     * Adds some players to the response.
+     *
+     * @param players the players
+     */
+    public void addPlayer(Iterable<Player> players) {
+        for (Player player : players) {
+            addPlayer(player);
+        }
+    }
+
+    /**
+     * Adds a player to the response.
+     *
+     * @param player the player
+     */
+    public void addPlayer(Player player) {
+        addPlayer(player.getUsername(), player.getUuid());
+    }
+
+    /**
+     * Adds a player to the response.
+     *
+     * @param name The name of the player.
+     * @param uuid The unique identifier of the player.
+     */
+    public void addPlayer(String name, UUID uuid) {
+    }
+
+    /**
+     * Removes all of the ping players from this {@link #responseData#pingPlayers}. The {@link #responseData#pingPlayers} list
+     * will be empty this call returns.
+     */
+    public void clearPlayers() {
+        responseData.clearPlayers();
+    }
+
+    /**
+     * Sets the response description.
+     *
+     * @param description The description for the response data.
+     * @deprecated Use {@link #setDescription(Component)}
+     */
+    @Deprecated
+    public void setDescription(String description) {
+        responseData.setDescription(LegacyComponentSerializer.legacySection().deserialize(description));
+    }
+
+    /**
+     * Sets the response description.
+     *
+     * @param description The description for the response data.
+     */
+    public void setDescription(Component description) {
+        responseData.setDescription(description);
+    }
+
+    /**
+     * Sets the response favicon.
+     *
+     * MUST start with "data:image/png;base64,"
+     *
+     * @param favicon The favicon for the response data.
+     */
+    public void setFavicon(String favicon) {
+        responseData.setFavicon(favicon);
     }
 }
