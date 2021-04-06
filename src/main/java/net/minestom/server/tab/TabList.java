@@ -19,7 +19,9 @@ public class TabList implements Viewable {
 
     private final List<Player> displayedPlayers = new CopyOnWriteArrayList<>();
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    @Nullable
     private Component header;
+    @Nullable
     private Component footer;
 
     private boolean latencyUpdates = true;
@@ -105,7 +107,7 @@ public class TabList implements Viewable {
      *
      * @param player the player to be added
      */
-    public void addDisplayedPlayer(Player player) {
+    public void addDisplayedPlayer(@NotNull Player player) {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
 
         PlayerInfoPacket.AddPlayer addPlayer =
@@ -127,7 +129,7 @@ public class TabList implements Viewable {
      *
      * @param players the players to be added
      */
-    public void addDisplayedPlayers(Player... players) {
+    public void addDisplayedPlayers(@NotNull Player... players) {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
 
         for (Player player : players) {
@@ -152,7 +154,7 @@ public class TabList implements Viewable {
      *
      * @param player the player to be removed
      */
-    public void removeDisplayedPlayer(Player player) {
+    public void removeDisplayedPlayer(@NotNull Player player) {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
 
         PlayerInfoPacket.RemovePlayer removePlayer =
@@ -190,7 +192,6 @@ public class TabList implements Viewable {
             }
 
             playerInfoPacket.playerInfos.add(addPlayer);
-            //this.displayedPlayers.add(displayedPlayer);
         }
         player.getPlayerConnection().sendPacket(playerInfoPacket);
         PacketUtils.sendGroupedPacket(this.viewers, this.generateHeaderAndFooterPacket());
@@ -201,7 +202,13 @@ public class TabList implements Viewable {
         return this.viewers.remove(player);
     }
 
-    public void changeDisplayName(Player player) {
+    /**
+     * Updates the display name of a player to their current display name.
+     * This is automatically called when {@link Player#setDisplayName(Component)} is called.
+     *
+     * @param player The player to update the display name for
+     */
+    public void updateDisplayName(@NotNull Player player) {
         PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME);
         infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateDisplayName(player.getUuid(), player.getDisplayName()));
         PacketUtils.sendGroupedPacket(this.viewers, infoPacket);
@@ -218,7 +225,7 @@ public class TabList implements Viewable {
      * @param gameMode The gamemode to send for the specified player
      * @throws IllegalStateException if the player is not on the TabList or the TabList is set to automatically update gamemodes
      */
-    public void setDisplayedGamemode(Player player, GameMode gameMode) {
+    public void setDisplayedGamemode(@NotNull Player player, @NotNull GameMode gameMode) {
         if (this.gamemodeUpdates)
             throw new IllegalStateException("Cannot set fake gamemode unless gamemodeUpdates is set to false");
         if (!this.displayedPlayers.contains(player))
@@ -237,7 +244,7 @@ public class TabList implements Viewable {
      * @param latency The latency to send for the specified player
      * @throws IllegalStateException if the player is not on the TabList or the TabList is set to automatically update latency
      */
-    public void setDisplayedPing(Player player, int latency) {
+    public void setDisplayedPing(@NotNull Player player, int latency) {
         if (this.latencyUpdates)
             throw new IllegalStateException("Cannot set fake latency unless latencyUpdates is set to false");
         if (!this.displayedPlayers.contains(player))

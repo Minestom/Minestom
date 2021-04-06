@@ -1318,7 +1318,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.displayName = displayName;
 
         assert this.getTabList() != null;
-        this.getTabList().changeDisplayName(this);
+        this.getTabList().updateDisplayName(this);
     }
 
     /**
