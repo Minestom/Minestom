@@ -106,8 +106,6 @@ public class BinaryReader extends InputStream {
      */
     public String readSizedString(int maxLength) {
         final int length = readVarInt();
-        Check.stateCondition(length <= 0,
-                "Negative string size received");
         Check.stateCondition(!buffer.isReadable(length),
                 "Trying to read a string that is too long (wanted {0}, only have {1})",
                 length,
