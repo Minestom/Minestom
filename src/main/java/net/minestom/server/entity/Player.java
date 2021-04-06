@@ -257,9 +257,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         playerConnection.sendPacket(getAddAllPlayerToList());
 
-
-
-
         // Commands start
         {
             CommandManager commandManager = MinecraftServer.getCommandManager();
@@ -644,7 +641,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Team
         if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) {// If team only contains "this" player
-         //   viewerConnection.sendPacket(this.getTeam().createTeamDestructionPacket());
+         //   viewerConnection.sendPacket(this.getTeam().createTeamDestructionPacket()); // todo does this need to be changed before merge? What's up here
         }
         return true;
     }
@@ -1349,9 +1346,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
         destroyEntitiesPacket.entityIds = new int[]{getEntityId()};
 
-        //final PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
-        //final PlayerInfoPacket addPlayerPacket = getAddAllPlayerToList();
-
         RespawnPacket respawnPacket = new RespawnPacket();
         respawnPacket.dimensionType = getDimensionType();
         respawnPacket.gameMode = getGameMode();
@@ -1360,13 +1354,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         for (TabList tabList : MinecraftServer.getTabListManager().getTabLists()) {
             if (tabList.getDisplayedPlayers().contains(this)) {
                 tabList.removeDisplayedPlayer(this);
-                tabList.addDisplayedPlayer(this);
+                tabList.addDisplayedPlayer(this); // todo is there a way to just update the skin?
             } else {
                 tabList.addDisplayedPlayer(this);
                 tabList.removeDisplayedPlayer(this);
             }
         }
-
         //playerConnection.sendPacket(removePlayerPacket);
         playerConnection.sendPacket(destroyEntitiesPacket);
         playerConnection.sendPacket(respawnPacket);
@@ -2542,9 +2535,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Gets the packet to render all the player that are online.
+     * Gets the packet to render all the players that are online.
      *
-     * @return a {@link PlayerInfoPacket} to add the players
+     * @return a {@link PlayerInfoPacket} containing all online players
      */
     @NotNull
     protected PlayerInfoPacket getAddAllPlayerToList() {
@@ -2578,21 +2571,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     protected PlayerInfoPacket getRemoveAllPlayerToList() {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
         for (Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
-            PlayerInfoPacket.AddPlayer addPlayer =
-                    new PlayerInfoPacket.AddPlayer(player.getUuid(), player.getUsername(), player.getGameMode(), player.getLatency());
-            addPlayer.displayName = player.getDisplayName();
-
-            // Skin support
-            if (player.getSkin() != null) {
-                final String textures = player.getSkin().getTextures();
-                final String signature = player.getSkin().getSignature();
-
-                PlayerInfoPacket.AddPlayer.Property prop =
-                        new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
-                addPlayer.properties.add(prop);
-            }
-
-            playerInfoPacket.playerInfos.add(addPlayer);
+            PlayerInfoPacket.RemovePlayer removePlayer = new PlayerInfoPacket.RemovePlayer(player.getUuid());
+            playerInfoPacket.playerInfos.add(removePlayer);
         }
         return playerInfoPacket;
     }
@@ -2606,8 +2586,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     protected PlayerInfoPacket getRemovePlayerToList() {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
 
-        PlayerInfoPacket.RemovePlayer removePlayer =
-                new PlayerInfoPacket.RemovePlayer(getUuid());
+        PlayerInfoPacket.RemovePlayer removePlayer = new PlayerInfoPacket.RemovePlayer(getUuid());
 
         playerInfoPacket.playerInfos.add(removePlayer);
         return playerInfoPacket;
