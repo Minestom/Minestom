@@ -1359,20 +1359,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 tabList.removeDisplayedPlayer(this);
             }
         }
-        //playerConnection.sendPacket(removePlayerPacket);
         playerConnection.sendPacket(destroyEntitiesPacket);
         playerConnection.sendPacket(respawnPacket);
-
-        //playerConnection.sendPacket(addPlayerPacket);
-
-//        {
-//            // Remove player
-//            sendPacketToViewers(removePlayerPacket);
-//            sendPacketToViewers(destroyEntitiesPacket);
-//
-//            // Show player again
-//            getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
-//        }
 
         getInventory().update();
         teleport(getPosition());
@@ -2597,7 +2585,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param connection the connection to show the player to
      */
     protected void showPlayer(@NotNull PlayerConnection connection) {
-        //connection.sendPacket(getAddAllPlayerToList());
         Set<TabList> displayedOn = new HashSet<>();
         for (TabList tabList : MinecraftServer.getTabListManager().getTabLists()) {
             if (tabList.getDisplayedPlayers().contains(this)) {
