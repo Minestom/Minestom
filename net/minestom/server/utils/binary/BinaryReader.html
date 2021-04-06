@@ -223,14 +223,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>&lt;T extends <a href="Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a>&gt;<br>T</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(java.util.function.Supplier)">read</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;T&gt;&nbsp;supplier)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(java.util.function.Supplier)">read</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;@NotNull T&gt;&nbsp;supplier)</code></th>
 <td class="colLast">
-<div class="block">Creates a new object from the given supplier and calls its <a href="Readable.html#read(net.minestom.server.utils.binary.BinaryReader)"><code>Readable.read(BinaryReader)</code></a> method with this reader</div>
+<div class="block">Creates a new object from the given supplier and calls its <a href="Readable.html#read(net.minestom.server.utils.binary.BinaryReader)"><code>Readable.read(BinaryReader)</code></a> method with this reader.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>&lt;T extends <a href="Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a>&gt;<br>T[]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readArray(java.util.function.Supplier)">readArray</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;T&gt;&nbsp;supplier)</code></th>
+<td class="colFirst"><code>&lt;T extends <a href="Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a>&gt;<br>@NotNull T[]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readArray(java.util.function.Supplier)">readArray</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;@NotNull T&gt;&nbsp;supplier)</code></th>
 <td class="colLast">
 <div class="block">Reads the length of the array to read as a varint, creates the array to contain the readable objects and call
  their respective <a href="Readable.html#read(net.minestom.server.utils.binary.BinaryReader)"><code>Readable.read(BinaryReader)</code></a> methods.</div>
@@ -681,11 +681,12 @@ public&nbsp;<a href="../../chat/JsonMessage.html" title="class in net.minestom.s
 <ul class="blockList">
 <li class="blockList">
 <h4>read</h4>
-<pre class="methodSignature">public&nbsp;&lt;T extends <a href="Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a>&gt;&nbsp;T&nbsp;read&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;T&gt;&nbsp;supplier)</pre>
-<div class="block">Creates a new object from the given supplier and calls its <a href="Readable.html#read(net.minestom.server.utils.binary.BinaryReader)"><code>Readable.read(BinaryReader)</code></a> method with this reader</div>
+<pre class="methodSignature">public&nbsp;&lt;T extends <a href="Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a>&gt;&nbsp;T&nbsp;read&#8203;(@NotNull
+                                   @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;@NotNull T&gt;&nbsp;supplier)</pre>
+<div class="block">Creates a new object from the given supplier and calls its <a href="Readable.html#read(net.minestom.server.utils.binary.BinaryReader)"><code>Readable.read(BinaryReader)</code></a> method with this reader.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
-<dd><code>T</code> - </dd>
+<dd><code>T</code> - the readable object type</dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>supplier</code> - supplier to create new instances of your object</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -699,12 +700,14 @@ public&nbsp;<a href="../../chat/JsonMessage.html" title="class in net.minestom.s
 <ul class="blockList">
 <li class="blockList">
 <h4>readArray</h4>
-<pre class="methodSignature">public&nbsp;&lt;T extends <a href="Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a>&gt;&nbsp;T[]&nbsp;readArray&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;T&gt;&nbsp;supplier)</pre>
+<pre class="methodSignature">@NotNull
+public&nbsp;&lt;T extends <a href="Readable.html" title="interface in net.minestom.server.utils.binary">Readable</a>&gt;&nbsp;@NotNull T[]&nbsp;readArray&#8203;(@NotNull
+                                                   @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;@NotNull T&gt;&nbsp;supplier)</pre>
 <div class="block">Reads the length of the array to read as a varint, creates the array to contain the readable objects and call
  their respective <a href="Readable.html#read(net.minestom.server.utils.binary.BinaryReader)"><code>Readable.read(BinaryReader)</code></a> methods.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
-<dd><code>T</code> - </dd>
+<dd><code>T</code> - the readable object type</dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>supplier</code> - supplier to create new instances of your object</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
