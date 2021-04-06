@@ -3,7 +3,7 @@ package net.minestom.server.bossbar;
 /**
  * Used to define the number of segments on a {@link BossBar}.
  *
- * @deprecated Use {@link net.kyori.adventure.bossbar.BossBar}
+ * @deprecated Use {@link net.kyori.adventure.bossbar.BossBar.Overlay}
  */
 @Deprecated
 public enum BarDivision {

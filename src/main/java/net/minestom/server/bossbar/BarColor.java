@@ -2,7 +2,7 @@ package net.minestom.server.bossbar;
 
 /**
  * Represents the displayed color of a {@link BossBar}.
- * @deprecated Use {@link net.kyori.adventure.bossbar.BossBar}
+ * @deprecated Use {@link net.kyori.adventure.bossbar.BossBar.Color}
  */
 @Deprecated
 public enum BarColor {

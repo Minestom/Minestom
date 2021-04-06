@@ -25,7 +25,7 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.block.BlockIterator;
-import net.minestom.server.utils.time.CooldownUtils;
+import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
@@ -39,8 +39,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     // ItemStack pickup
     protected boolean canPickupItem;
-    protected UpdateOption itemPickupCooldown = new UpdateOption(5, TimeUnit.TICK);
-    private long lastItemPickupCheckTime;
+    protected Cooldown itemPickupCooldown = new Cooldown(new UpdateOption(5, TimeUnit.TICK));
 
     protected boolean isDead;
 
@@ -213,8 +212,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         }
 
         // Items picking
-        if (canPickupItem() && !CooldownUtils.hasCooldown(time, lastItemPickupCheckTime, itemPickupCooldown)) {
-            this.lastItemPickupCheckTime = time;
+        if (canPickupItem() && itemPickupCooldown.isReady(time)) {
+            itemPickupCooldown.refreshLastUpdate(time);
 
             final Chunk chunk = getChunk(); // TODO check surrounding chunks
             final Set<Entity> entities = instance.getChunkEntities(chunk);

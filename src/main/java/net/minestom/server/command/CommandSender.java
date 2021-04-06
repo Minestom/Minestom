@@ -18,21 +18,17 @@ public interface CommandSender extends PermissionHandler, Audience {
      * Sends a raw string message.
      *
      * @param message the message to send
-     *
-     * @deprecated Use {@link #sendMessage(Component)}
      */
-    @Deprecated
-    default void sendMessage(@NotNull String message) { this.sendMessage(Component.text(message)); }
+    default void sendMessage(@NotNull String message) {
+        this.sendMessage(Component.text(message));
+    }
 
     /**
      * Sends multiple raw string messages.
      *
      * @param messages the messages to send
-     *
-     * @deprecated Use {@link #sendMessage(Component)}
      */
-    @Deprecated
-    default void sendMessage(@NotNull String[] messages) {
+    default void sendMessage(@NotNull String @NotNull[] messages) {
         for (String message : messages) {
             sendMessage(message);
         }
@@ -57,7 +53,7 @@ public interface CommandSender extends PermissionHandler, Audience {
      * @return true if 'this' is a player, false otherwise
      */
     default boolean isPlayer() {
-        return this instanceof Player;
+        return false;
     }
 
     /**
@@ -66,7 +62,7 @@ public interface CommandSender extends PermissionHandler, Audience {
      * @return true if 'this' is the console, false otherwise
      */
     default boolean isConsole() {
-        return this instanceof ConsoleSender;
+        return false;
     }
 
     /**
@@ -77,7 +73,7 @@ public interface CommandSender extends PermissionHandler, Audience {
      * @see #isPlayer()
      */
     default Player asPlayer() {
-        return (Player) this;
+        throw new ClassCastException("CommandSender is not a Player");
     }
 
     /**
@@ -88,6 +84,6 @@ public interface CommandSender extends PermissionHandler, Audience {
      * @see #isConsole()
      */
     default ConsoleSender asConsole() {
-        return (ConsoleSender) this;
+        throw new ClassCastException("CommandSender is not the ConsoleSender");
     }
 }

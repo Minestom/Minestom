@@ -20,7 +20,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * <p>
  * You can retrieve all the boss bars of a {@link Player} with {@link #getBossBars(Player)}.
  *
- * @deprecated Use {@link net.kyori.adventure.audience.Audience#showBossBar(net.kyori.adventure.bossbar.BossBar)}
+ * @deprecated Use {@link net.kyori.adventure.bossbar.BossBar}
  */
 @Deprecated
 public class BossBar implements Viewable {

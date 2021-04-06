@@ -16,6 +16,7 @@ import java.util.UUID;
 
 /**
  * Represents a hover event for a specific portion of the message.
+ * @deprecated Use {@link HoverEvent}
  */
 @Deprecated
 public class ChatHoverEvent {

@@ -2,6 +2,8 @@ package net.minestom.server.chat;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.regex.Pattern;
  * <p>
  * To create one, you simply call one of the static methods like {@link #of(ChatColor, String)},
  * you can then continue to append text with {@link #append(ChatColor, String)}.
+ * @deprecated Use {@link Component#text(String, TextColor)}
  */
 @Deprecated
 public class ColoredText extends JsonMessage {
