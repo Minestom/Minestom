@@ -15,6 +15,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEventSource;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.title.Title;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
@@ -811,7 +812,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     @Deprecated
     public void sendJsonMessage(@NotNull String json) {
-        this.sendMessage(json);
+        this.sendMessage(GsonComponentSerializer.gson().deserialize(json));
     }
 
     @Override
@@ -2702,6 +2703,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         super.setUuid(uuid);
         // update identity
         this.identity = Identity.identity(uuid);
+    }
+
+    @Override
+    public boolean isPlayer() {
+        return true;
+    }
+
+    @Override
+    public Player asPlayer() {
+        return this;
     }
 
     /**

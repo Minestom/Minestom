@@ -77,7 +77,7 @@ public class ExtensionManager {
     /**
      * Loads all extensions in the extension folder into this server.
      * <br><br>
-     *
+     * <p>
      * Pipeline:
      * <br>
      * Finds all .jar files in the extensions folder.
@@ -88,32 +88,32 @@ public class ExtensionManager {
      * <br>
      * Verifies that all properties of extension.json are correctly set.
      * <br><br>
-     *
+     * <p>
      * It then sorts all those jars by their load order (making sure that an extension's dependencies load before it)
      * <br>
      * Note: Cyclic dependencies will stop both extensions from being loaded.
      * <br><br>
-     *
+     * <p>
      * Afterwards, it loads all external dependencies and adds them to the extension's files
      * <br><br>
-     *
+     * <p>
      * Then removes any invalid extensions (Invalid being its Load Status isn't SUCCESS)
      * <br><br>
-     *
+     * <p>
      * After that, it set its classloaders so each extension is self-contained,
      * <br><br>
-     *
+     * <p>
      * Removes invalid extensions again,
      * <br><br>
-     *
+     * <p>
      * and loads all of those extensions into Minestom
      * <br>
      * (Extension fields are set via reflection after each extension is verified, then loaded.)
      * <br><br>
-     *
+     * <p>
      * If the extension successfully loads, add it to the global extension Map (Name to Extension)
      * <br><br>
-     *
+     * <p>
      * And finally make a scheduler to clean observers per extension.
      */
     public void loadExtensions() {
@@ -193,7 +193,6 @@ public class ExtensionManager {
      * Loads an extension into Minestom.
      *
      * @param discoveredExtension The extension. Make sure to verify its integrity, set its class loader, and its files.
-     *
      * @return An extension object made from this DiscoveredExtension
      */
     @Nullable
@@ -213,7 +212,8 @@ public class ExtensionManager {
         try {
             jarClass = Class.forName(mainClass, true, loader);
         } catch (ClassNotFoundException e) {
-            LOGGER.error("Could not find main class '{}' in extension '{}'.", mainClass, extensionName, e);
+            LOGGER.error("Could not find main class '{}' in extension '{}'. If it is, be sure to run your server using Bootstrap#bootstrap",
+                    mainClass, extensionName, e);
             return null;
         }
 
@@ -295,7 +295,7 @@ public class ExtensionManager {
 
     /**
      * Get all extensions from the extensions folder and make them discovered.
-     *
+     * <p>
      * It skims the extension folder, discovers and verifies each extension, and returns those created DiscoveredExtensions.
      *
      * @return A list of discovered extensions from this folder.
@@ -354,7 +354,6 @@ public class ExtensionManager {
      * Grabs a discovered extension from a jar.
      *
      * @param file The jar to grab it from (a .jar is a formatted .zip file)
-     *
      * @return The created DiscoveredExtension.
      */
     @Nullable
@@ -391,7 +390,8 @@ public class ExtensionManager {
                 extensionMap.put(discoveredExtension.getName().toLowerCase(), discoveredExtension);
             }
 
-            allExtensions: // go through all the discovered extensions and get their dependencies as extensions
+            allExtensions:
+            // go through all the discovered extensions and get their dependencies as extensions
             for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
 
                 List<DiscoveredExtension> dependencies = new ArrayList<>(discoveredExtension.getDependencies().length);
@@ -481,6 +481,7 @@ public class ExtensionManager {
 
     /**
      * Checks if this list of extensions are loaded
+     *
      * @param extensions The list of extensions to check against.
      * @return If all of these extensions are loaded.
      */
@@ -603,7 +604,7 @@ public class ExtensionManager {
             try {
                 for (String codeModifierClass : extension.getCodeModifiers()) {
                     boolean loaded = modifiableClassLoader.loadModifier(extension.files.toArray(new URL[0]), codeModifierClass);
-                    if(!loaded) {
+                    if (!loaded) {
                         extension.addMissingCodeModifier(codeModifierClass);
                     }
                 }
@@ -613,17 +614,17 @@ public class ExtensionManager {
                         Mixins.addConfiguration(mixinConfigFile);
                         LOGGER.info("Found mixin in extension {}: {}", extension.getName(), mixinConfigFile);
                     } catch (ServiceNotAvailableError | MixinError | MixinException e) {
-                        if(MinecraftServer.getExceptionManager() != null) {
+                        if (MinecraftServer.getExceptionManager() != null) {
                             MinecraftServer.getExceptionManager().handleException(e);
                         } else {
                             e.printStackTrace();
                         }
-                        LOGGER.error("Could not load Mixin configuration: "+mixinConfigFile);
+                        LOGGER.error("Could not load Mixin configuration: " + mixinConfigFile);
                         extension.setFailedToLoadMixinFlag();
                     }
                 }
             } catch (Exception e) {
-                if(MinecraftServer.getExceptionManager() != null) {
+                if (MinecraftServer.getExceptionManager() != null) {
                     MinecraftServer.getExceptionManager().handleException(e);
                 } else {
                     e.printStackTrace();
