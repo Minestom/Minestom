@@ -23,4 +23,9 @@ public class ClientPluginMessagePacket extends ClientPlayPacket {
         writer.writeSizedString(channel);
         writer.writeBytes(data);
     }
+
+    @Override
+    public int getId() {
+        return 0x0B;
+    }
 }

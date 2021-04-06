@@ -34,4 +34,9 @@ public class ClientPlayerPositionAndRotationPacket extends ClientPlayPacket {
 
         writer.writeBoolean(onGround);
     }
+
+    @Override
+    public int getId() {
+        return 0x13;
+    }
 }

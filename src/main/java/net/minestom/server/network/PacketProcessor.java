@@ -5,13 +5,11 @@ import io.netty.channel.socket.SocketChannel;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.netty.packet.InboundPacket;
-import net.minestom.server.network.packet.client.ClientPlayPacket;
-import net.minestom.server.network.packet.client.ClientPreplayPacket;
+import net.minestom.server.network.packet.Packet;
 import net.minestom.server.network.packet.client.handler.ClientLoginPacketsHandler;
 import net.minestom.server.network.packet.client.handler.ClientPlayPacketsHandler;
-import net.minestom.server.network.packet.client.handler.ClientStatusPacketsHandler;
 import net.minestom.server.network.packet.client.handshake.HandshakePacket;
-import net.minestom.server.network.player.NettyPlayerConnection;
+import net.minestom.server.network.packet.handler.PacketsHandler;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.Readable;
@@ -20,41 +18,29 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-/**
- * Responsible for processing client packets.
- * <p>
- * You can retrieve the different packet handlers per state (status/login/play)
- * from the {@link net.minestom.server.network.packet.client.handler.ClientPacketsHandler} class.
- * <p>
- * Packet handlers are cached here and can be retrieved with {@link #getStatusPacketsHandler()}, {@link #getLoginPacketsHandler()}
- * and {@link #getPlayPacketsHandler()}. The one to use depend on the type of packet you need to retrieve (the packet id 0 does not have
- * the same meaning as it is a login or play packet).
- */
-public final class PacketProcessor {
+public abstract class PacketProcessor<PlayPacket extends Packet, PreplayPacket extends Packet> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PacketProcessor.class);
 
-    private final Map<ChannelHandlerContext, PlayerConnection> connectionPlayerConnectionMap = new ConcurrentHashMap<>();
-
-    // Protocols state
-    private final ClientStatusPacketsHandler statusPacketsHandler;
-    private final ClientLoginPacketsHandler loginPacketsHandler;
-    private final ClientPlayPacketsHandler playPacketsHandler;
+    private PacketsHandler<PlayPacket> playPacketsHandler;
+    private PacketsHandler<PreplayPacket> loginPacketsHandler;
+    private PacketsHandler<PreplayPacket> statusPacketsHandler;
 
     public PacketProcessor() {
-        this.statusPacketsHandler = new ClientStatusPacketsHandler();
-        this.loginPacketsHandler = new ClientLoginPacketsHandler();
-        this.playPacketsHandler = new ClientPlayPacketsHandler();
+        this.playPacketsHandler = createPlayPacketsHandler();
+        this.loginPacketsHandler = createLoginPacketsHandler();
+        this.statusPacketsHandler = createStatusPacketsHandler();
     }
+
+    protected abstract PacketsHandler<PlayPacket> createPlayPacketsHandler();
+    protected abstract PacketsHandler<PreplayPacket> createLoginPacketsHandler();
+    protected abstract PacketsHandler<PreplayPacket> createStatusPacketsHandler();
 
     public void process(@NotNull ChannelHandlerContext context, @NotNull InboundPacket packet) {
         final SocketChannel socketChannel = (SocketChannel) context.channel();
 
         // Create the netty player connection object if not existing
-        PlayerConnection playerConnection = connectionPlayerConnectionMap.get(context);
+        PlayerConnection playerConnection = getPlayerConnection(context);
         if (playerConnection == null) {
             // Should never happen
             context.close();
@@ -77,7 +63,7 @@ public final class PacketProcessor {
         final int packetId = packet.getPacketId();
         BinaryReader binaryReader = new BinaryReader(packet.getBody());
 
-        if (connectionState == ConnectionState.UNKNOWN) {
+        if (connectionState == ConnectionState.HANDSHAKE) {
             // Should be handshake packet
             if (packetId == 0) {
                 HandshakePacket handshakePacket = new HandshakePacket();
@@ -89,24 +75,28 @@ public final class PacketProcessor {
 
         switch (connectionState) {
             case PLAY:
-                final Player player = playerConnection.getPlayer();
-                ClientPlayPacket playPacket = (ClientPlayPacket) playPacketsHandler.getPacketInstance(packetId);
+                PlayPacket playPacket = (PlayPacket) playPacketsHandler.getPacketInstance(packetId);
                 safeRead(playerConnection, playPacket, binaryReader);
-                assert player != null;
-                player.addPacketToQueue(playPacket);
+                processPlayPacket(playerConnection, playPacket);
                 break;
             case LOGIN:
-                final ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.getPacketInstance(packetId);
+                final PreplayPacket loginPacket = (PreplayPacket) loginPacketsHandler.getPacketInstance(packetId);
                 safeRead(playerConnection, loginPacket, binaryReader);
-                loginPacket.process(playerConnection);
+                processLoginPacket(playerConnection, loginPacket);
                 break;
             case STATUS:
-                final ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusPacketsHandler.getPacketInstance(packetId);
+                final PreplayPacket statusPacket = (PreplayPacket) statusPacketsHandler.getPacketInstance(packetId);
                 safeRead(playerConnection, statusPacket, binaryReader);
-                statusPacket.process(playerConnection);
+                processStatusPacket(playerConnection, statusPacket);
                 break;
         }
     }
+
+    protected abstract void processPlayPacket(PlayerConnection playerConnection, PlayPacket playPacket);
+
+    protected abstract void processLoginPacket(PlayerConnection playerConnection, PreplayPacket statusPacket);
+
+    protected abstract void processStatusPacket(PlayerConnection playerConnection, PreplayPacket statusPacket);
 
     /**
      * Retrieves a player connection from its channel.
@@ -115,18 +105,7 @@ public final class PacketProcessor {
      * @return the connection of this channel, null if not found
      */
     @Nullable
-    public PlayerConnection getPlayerConnection(ChannelHandlerContext context) {
-        return connectionPlayerConnectionMap.get(context);
-    }
-
-    public void createPlayerConnection(@NotNull ChannelHandlerContext context) {
-        final PlayerConnection playerConnection = new NettyPlayerConnection((SocketChannel) context.channel());
-        connectionPlayerConnectionMap.put(context, playerConnection);
-    }
-
-    public PlayerConnection removePlayerConnection(@NotNull ChannelHandlerContext context) {
-        return connectionPlayerConnectionMap.remove(context);
-    }
+    public abstract PlayerConnection getPlayerConnection(ChannelHandlerContext context);
 
     /**
      * Gets the handler for client status packets.
@@ -135,7 +114,7 @@ public final class PacketProcessor {
      * @see <a href="https://wiki.vg/Protocol#Status">Status packets</a>
      */
     @NotNull
-    public ClientStatusPacketsHandler getStatusPacketsHandler() {
+    public PacketsHandler<PreplayPacket> getStatusPacketsHandler() {
         return statusPacketsHandler;
     }
 
@@ -146,7 +125,7 @@ public final class PacketProcessor {
      * @see <a href="https://wiki.vg/Protocol#Login">Login packets</a>
      */
     @NotNull
-    public ClientLoginPacketsHandler getLoginPacketsHandler() {
+    public PacketsHandler<PreplayPacket> getLoginPacketsHandler() {
         return loginPacketsHandler;
     }
 
@@ -157,7 +136,7 @@ public final class PacketProcessor {
      * @see <a href="https://wiki.vg/Protocol#Play">Play packets</a>
      */
     @NotNull
-    public ClientPlayPacketsHandler getPlayPacketsHandler() {
+    public PacketsHandler<PlayPacket> getPlayPacketsHandler() {
         return playPacketsHandler;
     }
 

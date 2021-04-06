@@ -18,4 +18,9 @@ public class ClientTeleportConfirmPacket extends ClientPlayPacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(teleportId);
     }
+
+    @Override
+    public int getId() {
+        return 0x00;
+    }
 }

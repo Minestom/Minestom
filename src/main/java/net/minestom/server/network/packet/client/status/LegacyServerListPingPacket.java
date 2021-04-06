@@ -24,4 +24,9 @@ public class LegacyServerListPingPacket implements ClientPreplayPacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeByte(payload);
     }
+
+    @Override
+    public int getId() {
+        return -1;
+    }
 }

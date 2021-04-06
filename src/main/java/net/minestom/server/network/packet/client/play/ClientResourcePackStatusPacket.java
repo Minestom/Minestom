@@ -19,4 +19,9 @@ public class ClientResourcePackStatusPacket extends ClientPlayPacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(result.ordinal());
     }
+
+    @Override
+    public int getId() {
+        return 0x21;
+    }
 }

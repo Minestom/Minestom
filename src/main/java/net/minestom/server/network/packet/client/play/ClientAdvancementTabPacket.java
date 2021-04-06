@@ -31,4 +31,9 @@ public class ClientAdvancementTabPacket extends ClientPlayPacket {
             writer.writeSizedString(tabIdentifier);
         }
     }
+
+    @Override
+    public int getId() {
+        return 0x22;
+    }
 }

@@ -18,4 +18,9 @@ public class ClientKeepAlivePacket extends ClientPlayPacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeLong(id);
     }
+
+    @Override
+    public int getId() {
+        return 0x10;
+    }
 }

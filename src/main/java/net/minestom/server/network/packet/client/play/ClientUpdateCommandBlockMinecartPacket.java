@@ -24,4 +24,9 @@ public class ClientUpdateCommandBlockMinecartPacket extends ClientPlayPacket {
         writer.writeSizedString(command);
         writer.writeBoolean(trackOutput);
     }
+
+    @Override
+    public int getId() {
+        return 0x27;
+    }
 }

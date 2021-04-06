@@ -35,6 +35,11 @@ public class ClientUpdateCommandBlockPacket extends ClientPlayPacket {
         writer.writeByte(flags);
     }
 
+    @Override
+    public int getId() {
+        return 0x26;
+    }
+
     public enum Mode {
         SEQUENCE, AUTO, REDSTONE
     }

@@ -21,4 +21,9 @@ public class ClientNameItemPacket extends ClientPlayPacket {
         }
         writer.writeSizedString(itemName);
     }
+
+    @Override
+    public int getId() {
+        return 0x20;
+    }
 }

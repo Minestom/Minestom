@@ -9,6 +9,7 @@ import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.netty.packet.FramedPacket;
+import net.minestom.server.network.packet.Packet;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
@@ -111,12 +112,12 @@ public final class PacketUtils {
     }
 
     /**
-     * Writes a {@link ServerPacket} into a {@link ByteBuf}.
+     * Writes a {@link Packet} into a {@link ByteBuf}.
      *
      * @param buf    the recipient of {@code packet}
      * @param packet the packet to write into {@code buf}
      */
-    public static void writePacket(@NotNull ByteBuf buf, @NotNull ServerPacket packet) {
+    public static void writePacket(@NotNull ByteBuf buf, @NotNull Packet packet) {
         Utils.writeVarIntBuf(buf, packet.getId());
         writePacketPayload(buf, packet);
     }
@@ -126,7 +127,7 @@ public final class PacketUtils {
      *
      * @param packet the packet to write
      */
-    private static void writePacketPayload(@NotNull ByteBuf buffer, @NotNull ServerPacket packet) {
+    private static void writePacketPayload(@NotNull ByteBuf buffer, @NotNull Packet packet) {
         BinaryWriter writer = new BinaryWriter(buffer);
         try {
             packet.write(writer);

@@ -30,6 +30,17 @@ public class HandshakePacket implements ClientPreplayPacket {
     private int serverPort;
     private int nextState;
 
+    public HandshakePacket() {}
+
+    public static HandshakePacket setupFromClient(int protocolVersion, String serverAddress, int serverPort, int nextState) {
+        HandshakePacket packet = new HandshakePacket();
+        packet.protocolVersion = protocolVersion;
+        packet.serverAddress = serverAddress;
+        packet.serverPort = serverPort;
+        packet.nextState = nextState;
+        return packet;
+    }
+
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.protocolVersion = reader.readVarInt();
@@ -115,5 +126,10 @@ public class HandshakePacket implements ClientPreplayPacket {
                 // Unexpected error
                 break;
         }
+    }
+
+    @Override
+    public int getId() {
+        return 0;
     }
 }

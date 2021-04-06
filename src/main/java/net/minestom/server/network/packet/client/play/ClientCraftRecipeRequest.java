@@ -27,4 +27,9 @@ public class ClientCraftRecipeRequest extends ClientPlayPacket {
         writer.writeSizedString(recipe);
         writer.writeBoolean(makeAll);
     }
+
+    @Override
+    public int getId() {
+        return 0x19;
+    }
 }

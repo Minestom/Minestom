@@ -36,4 +36,9 @@ public class ClientSettingsPacket extends ClientPlayPacket {
         writer.writeByte(displayedSkinParts);
         writer.writeVarInt(mainHand.ordinal());
     }
+
+    @Override
+    public int getId() {
+        return 0x05;
+    }
 }

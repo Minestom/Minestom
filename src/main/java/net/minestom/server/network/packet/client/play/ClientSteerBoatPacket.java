@@ -21,4 +21,9 @@ public class ClientSteerBoatPacket extends ClientPlayPacket {
         writer.writeBoolean(leftPaddleTurning);
         writer.writeBoolean(rightPaddleTurning);
     }
+
+    @Override
+    public int getId() {
+        return 0x17;
+    }
 }

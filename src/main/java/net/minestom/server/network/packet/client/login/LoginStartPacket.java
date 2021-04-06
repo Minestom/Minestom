@@ -27,6 +27,14 @@ public class LoginStartPacket implements ClientPreplayPacket {
 
     public String username = "";
 
+    public LoginStartPacket() {}
+
+    public static LoginStartPacket setupFromClient(String username) {
+        LoginStartPacket packet = new LoginStartPacket();
+        packet.username = username;
+        return packet;
+    }
+
     @Override
     public void process(@NotNull PlayerConnection connection) {
 
@@ -107,5 +115,10 @@ public class LoginStartPacket implements ClientPreplayPacket {
         if(username.length() > 16)
             throw new IllegalArgumentException("Username is not allowed to be longer than 16 characters");
         writer.writeSizedString(username);
+    }
+
+    @Override
+    public int getId() {
+        return 0;
     }
 }

@@ -22,4 +22,9 @@ public class ClientQueryBlockNbtPacket extends ClientPlayPacket {
         writer.writeVarInt(transactionId);
         writer.writeBlockPosition(blockPosition);
     }
+
+    @Override
+    public int getId() {
+        return 0x01;
+    }
 }

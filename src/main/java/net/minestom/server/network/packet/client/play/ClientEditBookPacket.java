@@ -26,4 +26,9 @@ public class ClientEditBookPacket extends ClientPlayPacket {
         writer.writeBoolean(isSigning);
         writer.writeVarInt(hand.ordinal());
     }
+
+    @Override
+    public int getId() {
+        return 0x0C;
+    }
 }

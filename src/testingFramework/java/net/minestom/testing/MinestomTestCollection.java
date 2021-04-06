@@ -1,4 +1,4 @@
-package net.minestom.testing.framework;
+package net.minestom.testing;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

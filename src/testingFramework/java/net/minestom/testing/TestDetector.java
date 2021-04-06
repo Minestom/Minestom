@@ -1,6 +1,5 @@
-package net.minestom.testing.framework;
+package net.minestom.testing;
 
-import com.google.common.reflect.ClassPath;
 import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicTest;
 import org.slf4j.Logger;

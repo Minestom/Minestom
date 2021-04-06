@@ -18,4 +18,9 @@ public class ClientPlayerAbilitiesPacket extends ClientPlayPacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeByte(flags);
     }
+
+    @Override
+    public int getId() {
+        return 0x1A;
+    }
 }

@@ -21,4 +21,9 @@ public class ClientQueryEntityNbtPacket extends ClientPlayPacket {
         writer.writeVarInt(transactionId);
         writer.writeVarInt(entityId);
     }
+
+    @Override
+    public int getId() {
+        return 0x0D;
+    }
 }

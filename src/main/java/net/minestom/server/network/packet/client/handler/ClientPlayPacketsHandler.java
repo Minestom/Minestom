@@ -1,8 +1,9 @@
 package net.minestom.server.network.packet.client.handler;
 
+import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.client.play.*;
 
-public class ClientPlayPacketsHandler extends ClientPacketsHandler {
+public class ClientPlayPacketsHandler extends ClientPacketsHandler<ClientPlayPacket> {
 
     public ClientPlayPacketsHandler() {
         register(0x00, ClientTeleportConfirmPacket::new);

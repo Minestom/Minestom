@@ -19,4 +19,9 @@ public class ClientUseItemPacket extends ClientPlayPacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(hand.ordinal());
     }
+
+    @Override
+    public int getId() {
+        return 0x2F;
+    }
 }

@@ -25,4 +25,9 @@ public class ClientGenerateStructurePacket extends ClientPlayPacket {
         writer.writeVarInt(level);
         writer.writeBoolean(keepJigsaws);
     }
+
+    @Override
+    public int getId() {
+        return 0x0F;
+    }
 }

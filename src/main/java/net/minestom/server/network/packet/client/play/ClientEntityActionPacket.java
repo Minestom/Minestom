@@ -25,6 +25,11 @@ public class ClientEntityActionPacket extends ClientPlayPacket {
         writer.writeVarInt(horseJumpBoost);
     }
 
+    @Override
+    public int getId() {
+        return 0x1C;
+    }
+
     public enum Action {
         START_SNEAKING,
         STOP_SNEAKING,

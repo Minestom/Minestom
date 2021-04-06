@@ -37,4 +37,9 @@ public class ClientPlayerBlockPlacementPacket extends ClientPlayPacket {
         writer.writeFloat(cursorPositionZ);
         writer.writeBoolean(insideBlock);
     }
+
+    @Override
+    public int getId() {
+        return 0x2E;
+    }
 }

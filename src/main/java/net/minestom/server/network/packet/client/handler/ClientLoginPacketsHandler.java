@@ -1,10 +1,11 @@
 package net.minestom.server.network.packet.client.handler;
 
+import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.client.login.EncryptionResponsePacket;
 import net.minestom.server.network.packet.client.login.LoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.LoginStartPacket;
 
-public class ClientLoginPacketsHandler extends ClientPacketsHandler {
+public class ClientLoginPacketsHandler extends ClientPacketsHandler<ClientPreplayPacket> {
 
     public ClientLoginPacketsHandler() {
         register(0, LoginStartPacket::new);

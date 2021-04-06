@@ -18,4 +18,9 @@ public class ClientCloseWindowPacket extends ClientPlayPacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(windowId);
     }
+
+    @Override
+    public int getId() {
+        return 0x0A;
+    }
 }

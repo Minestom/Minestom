@@ -18,4 +18,9 @@ public class ClientHeldItemChangePacket extends ClientPlayPacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeShort(slot);
     }
+
+    @Override
+    public int getId() {
+        return 0x25;
+    }
 }

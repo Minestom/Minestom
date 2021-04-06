@@ -21,4 +21,9 @@ public class ClientSetBeaconEffectPacket extends ClientPlayPacket {
         writer.writeVarInt(primaryEffect);
         writer.writeVarInt(secondaryEffect);
     }
+
+    @Override
+    public int getId() {
+        return 0x24;
+    }
 }

@@ -1,16 +1,24 @@
-package net.minestom.testing.framework;
+package net.minestom.testing;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
+import net.minestom.server.event.GlobalEventHandler;
+import net.minestom.server.event.player.PlayerLoginEvent;
+import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.utils.Position;
 import net.minestom.testing.miniclient.MiniClient;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Semaphore;
 import java.util.function.Supplier;
 
 public class TestEnvironment implements Closeable, AutoCloseable {
     private final Semaphore semaphore;
     private final int maxTestCount;
+    private final List<MiniClient> clients = new CopyOnWriteArrayList<>();
     // TODO: server, objects to create clients, etc.
     // TODO: find better name
 
@@ -20,12 +28,23 @@ public class TestEnvironment implements Closeable, AutoCloseable {
         semaphore.drainPermits();
         MinecraftServer server = MinecraftServer.init/*Isolated*/();
 
+        InstanceContainer container = MinecraftServer.getInstanceManager().createInstanceContainer();
+
+        GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
+        globalEventHandler.addEventCallback(PlayerLoginEvent.class, event -> {
+            final Player player = event.getPlayer();
+            event.setSpawningInstance(container);
+            System.out.println("Player "+player.getUsername()+" connected.");
+        });
+
         server.start("localhost", 25565); // TODO: random port?
     }
 
     public MiniClient newClient() {
-        // TODO
-        return null;
+        String testName = "TODO";
+        MiniClient client = new MiniClient(testName);
+        clients.add(client);
+        return client;
     }
 
     public void waitNetworkIdle() {
@@ -35,6 +54,10 @@ public class TestEnvironment implements Closeable, AutoCloseable {
     @Override
     public void close() throws IOException {
         semaphore.release();
+        for(MiniClient client : clients) {
+            client.stop();
+        }
+        clients.clear();
 
         // stop server when all tests using this environment are done
         if(semaphore.availablePermits() == maxTestCount) {

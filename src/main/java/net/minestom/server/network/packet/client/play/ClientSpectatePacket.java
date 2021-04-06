@@ -20,4 +20,9 @@ public class ClientSpectatePacket extends ClientPlayPacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeUuid(targetUuid);
     }
+
+    @Override
+    public int getId() {
+        return 0x2D;
+    }
 }

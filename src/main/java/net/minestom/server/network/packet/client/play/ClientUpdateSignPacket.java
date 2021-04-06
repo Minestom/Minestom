@@ -39,4 +39,9 @@ public class ClientUpdateSignPacket extends ClientPlayPacket {
         writer.writeSizedString(line3);
         writer.writeSizedString(line4);
     }
+
+    @Override
+    public int getId() {
+        return 0x2B;
+    }
 }

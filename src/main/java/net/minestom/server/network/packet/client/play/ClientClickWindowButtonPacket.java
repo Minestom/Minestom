@@ -21,4 +21,9 @@ public class ClientClickWindowButtonPacket extends ClientPlayPacket {
         writer.writeByte(windowId);
         writer.writeByte(buttonId);
     }
+
+    @Override
+    public int getId() {
+        return 0x08;
+    }
 }

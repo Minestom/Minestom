@@ -1,4 +1,4 @@
-package net.minestom.testing.framework;
+package net.minestom.testing;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

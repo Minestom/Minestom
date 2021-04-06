@@ -107,4 +107,9 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
             writer.writeBytes(data);
         }
     }
+
+    @Override
+    public int getId() {
+        return 2;
+    }
 }

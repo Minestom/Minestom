@@ -1,4 +1,4 @@
-package net.minestom.testing.framework;
+package net.minestom.testing;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface BeforeEachMinestomTest {
+public @interface MinestomTest {
 
 }

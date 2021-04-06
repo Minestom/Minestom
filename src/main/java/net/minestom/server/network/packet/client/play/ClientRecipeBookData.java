@@ -64,4 +64,10 @@ public class ClientRecipeBookData extends ClientPlayPacket {
                 break;
         }
     }
+
+    @Override
+    public int getId() {
+        // TODO: fix -> this packet is not correct according to wiki.vg protocol
+        return 0x1E;
+    }
 }

@@ -58,6 +58,11 @@ public class ClientInteractEntityPacket extends ClientPlayPacket {
         writer.writeBoolean(sneaking);
     }
 
+    @Override
+    public int getId() {
+        return 0x0E;
+    }
+
     public enum Type {
         INTERACT,
         ATTACK,

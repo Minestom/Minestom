@@ -21,4 +21,9 @@ public class ClientChatMessagePacket extends ClientPlayPacket {
         }
         writer.writeSizedString(message);
     }
+
+    @Override
+    public int getId() {
+        return 0x03;
+    }
 }

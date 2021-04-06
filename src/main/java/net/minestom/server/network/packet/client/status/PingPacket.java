@@ -29,4 +29,9 @@ public class PingPacket implements ClientPreplayPacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeLong(number);
     }
+
+    @Override
+    public int getId() {
+        return 0x01;
+    }
 }

@@ -24,4 +24,9 @@ public class ClientWindowConfirmationPacket extends ClientPlayPacket {
         writer.writeShort(actionNumber);
         writer.writeBoolean(accepted);
     }
+
+    @Override
+    public int getId() {
+        return 0x07;
+    }
 }

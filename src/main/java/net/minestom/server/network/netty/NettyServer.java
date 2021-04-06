@@ -19,7 +19,7 @@ import io.netty.incubator.channel.uring.IOUring;
 import io.netty.incubator.channel.uring.IOUringEventLoopGroup;
 import io.netty.incubator.channel.uring.IOUringServerSocketChannel;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.network.PacketProcessor;
+import net.minestom.server.network.ServerSidePacketProcessor;
 import net.minestom.server.network.netty.channel.ClientChannel;
 import net.minestom.server.network.netty.codec.*;
 import net.minestom.server.ping.ResponseDataConsumer;
@@ -62,7 +62,7 @@ public final class NettyServer {
 
     private boolean initialized = false;
 
-    private final PacketProcessor packetProcessor;
+    private final ServerSidePacketProcessor packetProcessor;
     private final GlobalChannelTrafficShapingHandler globalTrafficHandler;
 
     private EventLoopGroup boss, worker;
@@ -78,7 +78,7 @@ public final class NettyServer {
      */
     private final ScheduledExecutorService trafficScheduler = Executors.newScheduledThreadPool(1);
 
-    public NettyServer(@NotNull PacketProcessor packetProcessor) {
+    public NettyServer(@NotNull ServerSidePacketProcessor packetProcessor) {
         this.packetProcessor = packetProcessor;
 
         this.globalTrafficHandler = new GlobalChannelTrafficShapingHandler(trafficScheduler, 1000) {
@@ -182,7 +182,7 @@ public final class NettyServer {
                 pipeline.addLast(FRAMER_HANDLER_NAME, new PacketFramer(packetProcessor));
 
                 // Reads buffer and create inbound packet
-                pipeline.addLast(DECODER_HANDLER_NAME, new PacketDecoder());
+                pipeline.addLast(DECODER_HANDLER_NAME, new PacketDecoder("Minestom Server"));
 
                 // Writes packet to buffer
                 pipeline.addLast(ENCODER_HANDLER_NAME, new PacketEncoder());

@@ -24,4 +24,9 @@ public class ClientSteerVehiclePacket extends ClientPlayPacket {
         writer.writeFloat(forward);
         writer.writeByte(flags);
     }
+
+    @Override
+    public int getId() {
+        return 0x1D;
+    }
 }

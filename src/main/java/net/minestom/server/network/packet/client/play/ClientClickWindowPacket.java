@@ -34,4 +34,9 @@ public class ClientClickWindowPacket extends ClientPlayPacket {
         writer.writeVarInt(mode);
         writer.writeItemStack(item);
     }
+
+    @Override
+    public int getId() {
+        return 0x09;
+    }
 }

@@ -23,4 +23,9 @@ public class ClientPlayerRotationPacket extends ClientPlayPacket {
         writer.writeFloat(pitch);
         writer.writeBoolean(onGround);
     }
+
+    @Override
+    public int getId() {
+        return 0x14;
+    }
 }

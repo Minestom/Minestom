@@ -21,4 +21,9 @@ public class ClientTabCompletePacket extends ClientPlayPacket {
         writer.writeVarInt(transactionId);
         writer.writeSizedString(text);
     }
+
+    @Override
+    public int getId() {
+        return 0x06;
+    }
 }

@@ -23,6 +23,11 @@ public class ClientStatusPacket extends ClientPlayPacket {
         writer.writeVarInt(action.ordinal());
     }
 
+    @Override
+    public int getId() {
+        return 0x04;
+    }
+
     public enum Action {
         PERFORM_RESPAWN,
         REQUEST_STATS

@@ -6,7 +6,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.PacketProcessor;
+import net.minestom.server.network.ServerSidePacketProcessor;
 import net.minestom.server.network.netty.packet.InboundPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
@@ -19,9 +19,9 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
     private final static Logger LOGGER = LoggerFactory.getLogger(ClientChannel.class);
 
     private final static ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
-    private final PacketProcessor packetProcessor;
+    private final ServerSidePacketProcessor packetProcessor;
 
-    public ClientChannel(@NotNull PacketProcessor packetProcessor) {
+    public ClientChannel(@NotNull ServerSidePacketProcessor packetProcessor) {
         this.packetProcessor = packetProcessor;
     }
 

@@ -28,4 +28,9 @@ public class ClientVehicleMovePacket extends ClientPlayPacket {
         writer.writeFloat(yaw);
         writer.writeFloat(pitch);
     }
+
+    @Override
+    public int getId() {
+        return 0x16;
+    }
 }

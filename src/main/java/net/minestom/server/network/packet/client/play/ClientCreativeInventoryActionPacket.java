@@ -22,4 +22,9 @@ public class ClientCreativeInventoryActionPacket extends ClientPlayPacket {
         writer.writeShort(slot);
         writer.writeItemStack(item);
     }
+
+    @Override
+    public int getId() {
+        return 0x28;
+    }
 }

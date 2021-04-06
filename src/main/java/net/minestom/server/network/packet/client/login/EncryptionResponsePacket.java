@@ -88,4 +88,9 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
         return MojangAuth.getKeyPair().getPrivate() == null ?
                 this.verifyToken : MojangCrypt.decryptUsingKey(MojangAuth.getKeyPair().getPrivate(), this.verifyToken);
     }
+
+    @Override
+    public int getId() {
+        return 1;
+    }
 }

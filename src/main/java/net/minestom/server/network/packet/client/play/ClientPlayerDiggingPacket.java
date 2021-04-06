@@ -27,6 +27,11 @@ public class ClientPlayerDiggingPacket extends ClientPlayPacket {
         writer.writeByte((byte) blockFace.ordinal());
     }
 
+    @Override
+    public int getId() {
+        return 0x1B;
+    }
+
     public enum Status {
         STARTED_DIGGING,
         CANCELLED_DIGGING,

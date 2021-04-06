@@ -18,4 +18,9 @@ public class ClientPickItemPacket extends ClientPlayPacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(slotToUse);
     }
+
+    @Override
+    public int getId() {
+        return 0x18;
+    }
 }
