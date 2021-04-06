@@ -10,6 +10,7 @@ import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -34,19 +35,19 @@ public class TabList implements Viewable {
     /**
      * Gets all the players that are displayed on the TabList
      *
-     * @return A copied List of players that are displayed on the TabList, or empty List if none
+     * @return A copied unmodifiable List of players that are displayed on the TabList, or an empty List if none
      */
     public @NotNull List<Player> getDisplayedPlayers() {
-        return new CopyOnWriteArrayList<>(this.displayedPlayers);
+        return Collections.unmodifiableList(this.displayedPlayers);
     }
 
     /**
      * Gets all the players that are viewing this TabList
      *
-     * @return A copied Set of players that are viewing the TabList, or empty Set if none
+     * @return A copied unmodifiable Set of players that are viewing the TabList, or an empty Set if none
      */
     public @NotNull Set<Player> getViewers() {
-        return new CopyOnWriteArraySet<>(this.viewers);
+        return Collections.unmodifiableSet(this.viewers);
     }
 
     /**
