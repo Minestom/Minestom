@@ -3,12 +3,14 @@ package net.minestom.server.instance.block.rule.vanilla;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockAlternative;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -38,12 +40,12 @@ public class StairsPlacementRule extends BlockPlacementRule {
         );
     }
 
-    private Direction getDirection(Player player) {
+    private @NotNull Direction getDirection(@NotNull Player player) {
         float yaw = player.getPosition().getYaw();
         return Direction.valueOf(MathUtils.getHorizontalDirection(yaw).toString());
     }
 
-    private Shape getShape(Instance instance, BlockPosition position, Direction direction) {
+    private @NotNull Shape getShape(@NotNull Instance instance, @NotNull BlockPosition position, @NotNull Direction direction) {
         Shape shape = this.getOffsetShape(instance, direction, this.getOffset(position, direction), Shape.OUTER_RIGHT, Shape.OUTER_LEFT);
         if (shape == null) {
             shape = this.getOffsetShape(instance, direction, this.getOffset(position, direction.opposite()), Shape.INNER_RIGHT, Shape.INNER_LEFT);
@@ -51,10 +53,15 @@ public class StairsPlacementRule extends BlockPlacementRule {
         return shape == null ? Shape.STRAIGHT : shape;
     }
 
-    private Shape getOffsetShape(Instance instance, Direction direction, BlockPosition position, Shape right, Shape left) {
+    private @Nullable Shape getOffsetShape(@NotNull Instance instance, @NotNull Direction direction, @NotNull BlockPosition position, @NotNull Shape right, @NotNull Shape left) {
         Block block = instance.getBlock(position);
         if (block.getName().toUpperCase().contains("STAIRS")) {
-            Direction blockDirection = Direction.valueOf(block.getAlternative(instance.getBlockStateId(position)).getProperty("facing").toUpperCase());
+            short stateId = instance.getBlockStateId(position);
+            BlockAlternative properties = block.getAlternative(stateId);
+            if (properties == null) {
+                return null;
+            }
+            Direction blockDirection = Direction.valueOf(properties.getProperty("facing").toUpperCase());
             if (!this.areAxesSame(blockDirection, direction)) {
                 if (blockDirection.equals(this.rotate(direction))) {
                     return left;
@@ -65,16 +72,16 @@ public class StairsPlacementRule extends BlockPlacementRule {
         return null;
     }
 
-    private BlockPosition getOffset(BlockPosition position, Direction direction) {
+    private @NotNull BlockPosition getOffset(@NotNull BlockPosition position, @NotNull Direction direction) {
         return position.clone().add(direction.normalX(), direction.normalY(), direction.normalZ());
     }
 
-    private boolean areAxesSame(Direction direction1, Direction direction2) {
-        Predicate<Function<Direction, Integer>> compare = (axis) -> Math.abs(axis.apply(direction1)) == Math.abs(axis.apply(direction2));
+    private boolean areAxesSame(@NotNull Direction direction1, @NotNull Direction direction2) {
+        Predicate<@NotNull Function<@NotNull Direction, @NotNull Integer>> compare = (axis) -> Math.abs(axis.apply(direction1)) == Math.abs(axis.apply(direction2));
         return compare.test(Direction::normalX) && compare.test(Direction::normalY) && compare.test(Direction::normalZ);
     }
 
-    private Direction rotate(Direction direction) {
+    private @NotNull Direction rotate(@NotNull Direction direction) {
         switch (direction) {
             case NORTH:
                 return Direction.WEST;
