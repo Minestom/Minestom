@@ -19,9 +19,7 @@ public class TabList implements Viewable {
 
     private final List<Player> displayedPlayers = new CopyOnWriteArrayList<>();
     private final Set<Player> viewers = new CopyOnWriteArraySet<>();
-    @Nullable
     private Component header;
-    @Nullable
     private Component footer;
 
     private boolean latencyUpdates = true;
@@ -38,8 +36,7 @@ public class TabList implements Viewable {
      *
      * @return A copied List of players that are displayed on the TabList, or empty List if none
      */
-    @NotNull
-    public List<Player> getDisplayedPlayers() {
+    public @NotNull List<Player> getDisplayedPlayers() {
         return new CopyOnWriteArrayList<>(this.displayedPlayers);
     }
 
@@ -48,8 +45,7 @@ public class TabList implements Viewable {
      *
      * @return A copied Set of players that are viewing the TabList, or empty Set if none
      */
-    @NotNull
-    public Set<Player> getViewers() {
+    public @NotNull Set<Player> getViewers() {
         return new CopyOnWriteArraySet<>(this.viewers);
     }
 
@@ -58,8 +54,7 @@ public class TabList implements Viewable {
      *
      * @return the content of the header
      */
-    @Nullable
-    public Component getHeader() {
+    public @Nullable Component getHeader() {
         return this.header;
     }
 
@@ -79,8 +74,7 @@ public class TabList implements Viewable {
      *
      * @return the content of the footer
      */
-    @Nullable
-    public Component getFooter() {
+    public @Nullable Component getFooter() {
         return this.footer;
     }
 

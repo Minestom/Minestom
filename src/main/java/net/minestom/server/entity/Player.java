@@ -1324,8 +1324,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return the player skin object,
      * null means that the player has his {@link #getUuid()} default skin
      */
-    @Nullable
-    public PlayerSkin getSkin() {
+    public @Nullable PlayerSkin getSkin() {
         return skin;
     }
 
@@ -1431,8 +1430,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the viewed {@link TabList}
      */
-    @Nullable
-    public TabList getTabList() {
+    public @Nullable TabList getTabList() {
         return tabList;
     }
 
@@ -2539,8 +2537,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return a {@link PlayerInfoPacket} containing all online players
      */
-    @NotNull
-    protected PlayerInfoPacket getAddAllPlayerToList() {
+    protected @NotNull PlayerInfoPacket getAddAllPlayerToList() {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
         for (Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
             PlayerInfoPacket.AddPlayer addPlayer =
@@ -2567,8 +2564,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return a {@link PlayerInfoPacket} to remove the players
      */
-    @NotNull
-    protected PlayerInfoPacket getRemoveAllPlayerToList() {
+    protected @NotNull PlayerInfoPacket getRemoveAllPlayerToList() {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
         for (Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
             PlayerInfoPacket.RemovePlayer removePlayer = new PlayerInfoPacket.RemovePlayer(player.getUuid());
