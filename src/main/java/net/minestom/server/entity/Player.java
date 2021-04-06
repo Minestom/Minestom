@@ -99,6 +99,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     // All the entities that this player can see
     protected final Set<Entity> viewableEntities = ConcurrentHashMap.newKeySet();
 
+    private TabList tabList;
     private int latency;
     private Component displayName;
     private PlayerSkin skin;
@@ -121,9 +122,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private Inventory openInventory;
     // Used internally to allow the closing of inventory within the inventory listener
     private boolean didCloseInventory;
-
-    //TODO move to more reasonable spot?
-    private TabList tabList;
 
     private byte heldSlot;
 
