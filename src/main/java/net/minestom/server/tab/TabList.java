@@ -114,12 +114,7 @@ public class TabList implements Viewable {
 
         // Skin support
         if (player.getSkin() != null) {
-            final String textures = player.getSkin().getTextures();
-            final String signature = player.getSkin().getSignature();
-
-            PlayerInfoPacket.AddPlayer.Property prop =
-                    new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
-            addPlayer.properties.add(prop);
+            addPlayer.properties.add(this.createPropertyPacket(player));
         }
 
         playerInfoPacket.playerInfos.add(addPlayer);
@@ -142,12 +137,7 @@ public class TabList implements Viewable {
 
             // Skin support
             if (player.getSkin() != null) {
-                final String textures = player.getSkin().getTextures();
-                final String signature = player.getSkin().getSignature();
-
-                PlayerInfoPacket.AddPlayer.Property prop =
-                        new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
-                addPlayer.properties.add(prop);
+                addPlayer.properties.add(this.createPropertyPacket(player));
             }
 
             playerInfoPacket.playerInfos.add(addPlayer);
@@ -189,23 +179,18 @@ public class TabList implements Viewable {
 
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
 
-        for (Player playa : this.displayedPlayers) {
+        for (Player displayedPlayer : this.displayedPlayers) {
             PlayerInfoPacket.AddPlayer addPlayer =
-                    new PlayerInfoPacket.AddPlayer(playa.getUuid(), playa.getUsername(), playa.getGameMode(), playa.getLatency());
-            addPlayer.displayName = playa.getDisplayName();
+                    new PlayerInfoPacket.AddPlayer(displayedPlayer.getUuid(), displayedPlayer.getUsername(), displayedPlayer.getGameMode(), displayedPlayer.getLatency());
+            addPlayer.displayName = displayedPlayer.getDisplayName();
 
             // Skin support
-            if (playa.getSkin() != null) {
-                final String textures = playa.getSkin().getTextures();
-                final String signature = playa.getSkin().getSignature();
-
-                PlayerInfoPacket.AddPlayer.Property prop =
-                        new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
-                addPlayer.properties.add(prop);
+            if (displayedPlayer.getSkin() != null) {
+                addPlayer.properties.add(this.createPropertyPacket(player));
             }
 
             playerInfoPacket.playerInfos.add(addPlayer);
-            //this.displayedPlayers.add(playa);
+            //this.displayedPlayers.add(displayedPlayer);
         }
         player.getPlayerConnection().sendPacket(playerInfoPacket);
         PacketUtils.sendGroupedPacket(this.viewers, this.generateHeaderAndFooterPacket());
@@ -262,6 +247,13 @@ public class TabList implements Viewable {
         playerInfoPacket.playerInfos.add(new PlayerInfoPacket.UpdateLatency(player.getUuid(), latency));
 
         PacketUtils.sendGroupedPacket(this.viewers, playerInfoPacket);
+    }
+
+    private PlayerInfoPacket.AddPlayer.Property createPropertyPacket(Player player) {
+        final String textures = player.getSkin().getTextures();
+        final String signature = player.getSkin().getSignature();
+
+        return new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
     }
 
     /**
