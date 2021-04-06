@@ -309,6 +309,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
         getInventory().update();
+        MinecraftServer.getTabListManager().getTabListPopulator().onJoin(this);
     }
 
     /**
@@ -566,7 +567,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public void remove() {
         callEvent(PlayerDisconnectEvent.class, new PlayerDisconnectEvent(this));
-
+        MinecraftServer.getTabListManager().getTabListPopulator().onLeave(this);
         super.remove();
         this.packets.clear();
         if (getOpenInventory() != null)
@@ -630,7 +631,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         PlayerConnection viewerConnection = player.getPlayerConnection();
-        //viewerConnection.sendPacket(getRemovePlayerToList());
 
         for (TabList tabList : MinecraftServer.getTabListManager().getTabLists()) {
             if (tabList.getDisplayedPlayers().contains(this)) {
@@ -641,7 +641,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Team
         if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) {// If team only contains "this" player
-         //   viewerConnection.sendPacket(this.getTeam().createTeamDestructionPacket()); // todo does this need to be changed before merge? What's up here
+            viewerConnection.sendPacket(this.getTeam().createTeamDestructionPacket());
         }
         return true;
     }
@@ -1314,7 +1314,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void setDisplayName(@Nullable Component displayName) {
         this.displayName = displayName;
 
-        assert this.getTabList() != null;
         this.getTabList().updateDisplayName(this);
     }
 
@@ -1353,7 +1352,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         for (TabList tabList : MinecraftServer.getTabListManager().getTabLists()) {
             if (tabList.getDisplayedPlayers().contains(this)) {
                 tabList.removeDisplayedPlayer(this);
-                tabList.addDisplayedPlayer(this); // todo is there a way to just update the skin?
+                tabList.addDisplayedPlayer(this);
             } else {
                 tabList.addDisplayedPlayer(this);
                 tabList.removeDisplayedPlayer(this);
@@ -1418,7 +1417,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the viewed {@link TabList}
      */
-    public @Nullable TabList getTabList() {
+    public @NotNull TabList getTabList() {
         return tabList;
     }
 
@@ -2585,20 +2584,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param connection the connection to show the player to
      */
     protected void showPlayer(@NotNull PlayerConnection connection) {
-        Set<TabList> displayedOn = new HashSet<>();
+
         for (TabList tabList : MinecraftServer.getTabListManager().getTabLists()) {
-            if (tabList.getDisplayedPlayers().contains(this)) {
-                displayedOn.add(tabList);
-                tabList.removeDisplayedPlayer(this);
+            boolean isOnList = tabList.getDisplayedPlayers().contains(this);
+            if (isOnList) {
+                tabList.removeDisplayedPlayer(this); // Makes it so there arent duplicates of players
+            }
+            tabList.addDisplayedPlayer(this); // Adds on all tablists to cache skin
+            if (!isOnList) {
+                tabList.removeDisplayedPlayer(this); // Remove from tablists the player wasnt meant to be on
             }
         }
 
-        for (TabList tabList : MinecraftServer.getTabListManager().getTabLists()) {
-            tabList.addDisplayedPlayer(this);
-            if (!displayedOn.contains(tabList)) {
-                tabList.removeDisplayedPlayer(this);
-            }
-        }
 
         connection.sendPacket(getEntityType().getSpawnType().getSpawnPacket(this));
         connection.sendPacket(getVelocityPacket());

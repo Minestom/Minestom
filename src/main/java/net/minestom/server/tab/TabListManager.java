@@ -19,8 +19,6 @@ public class TabListManager {
 
     public TabListManager() {
         this.setTabListPopulator(new DefaultTabPopulator(this));
-        MinecraftServer.getGlobalEventHandler().addEventCallback(PlayerSpawnEvent.class, event -> this.tabListPopulator.onJoin(event.getPlayer()));
-        MinecraftServer.getGlobalEventHandler().addEventCallback(PlayerDisconnectEvent.class, event -> this.tabListPopulator.onLeave(event.getPlayer()));
     }
 
     /**
