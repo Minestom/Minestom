@@ -13,7 +13,7 @@ public class SetCompressionPacket implements ServerPacket {
     /**
      * DO NOT USE
      */
-    private SetCompressionPacket() {
+    public SetCompressionPacket() {
         threshold = 256;
     }
 

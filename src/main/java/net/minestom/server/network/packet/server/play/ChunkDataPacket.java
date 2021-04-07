@@ -69,7 +69,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
      */
     public NBTCompound heightmapsNBT;
 
-    private ChunkDataPacket() {
+    public ChunkDataPacket() {
         this(new UUID(0, 0), 0);
     }
 

@@ -24,7 +24,7 @@ public class EncryptionRequestPacket implements ServerPacket {
     /**
      * Only for testing purposes. DO NOT USE
      */
-    private EncryptionRequestPacket() {
+    public EncryptionRequestPacket() {
         MojangAuth.init();
         publicKey = new byte[0];
     }

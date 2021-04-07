@@ -15,7 +15,7 @@ import java.util.function.UnaryOperator;
 public class LoginDisconnectPacket implements ComponentHoldingServerPacket {
     public Component kickMessage;
 
-    private LoginDisconnectPacket() {
+    public LoginDisconnectPacket() {
         this(Component.text("This constructor should not be used, tell your server devs."));
     }
 

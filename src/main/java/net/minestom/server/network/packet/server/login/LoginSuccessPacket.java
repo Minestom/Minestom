@@ -16,7 +16,7 @@ public class LoginSuccessPacket implements ServerPacket {
     /**
      * DO NOT USE.
      */
-    private LoginSuccessPacket() {
+    public LoginSuccessPacket() {
         this(new UUID(0,0), "");
     }
 

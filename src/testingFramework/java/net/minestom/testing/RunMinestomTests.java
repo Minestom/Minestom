@@ -91,7 +91,7 @@ public class RunMinestomTests {
         };
 
         // TODO: might need to move loop body to method to be able to test it properly
-        return cp.getAllClasses().parallelStream().map(clazz -> {
+        return cp.getAllClasses().stream().map(clazz -> {
             try {
                 if(!preliminaryTest.test(clazz)) {
                     return null;

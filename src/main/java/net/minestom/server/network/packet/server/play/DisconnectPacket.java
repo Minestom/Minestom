@@ -23,7 +23,7 @@ public class DisconnectPacket implements ComponentHoldingServerPacket {
         this.message = message;
     }
 
-    private DisconnectPacket() {
+    public DisconnectPacket() {
         this(Component.text("Disconnected."));
     }
 

@@ -44,7 +44,7 @@ public class PacketsHandler<PacketType extends Packet> {
      */
     public PacketType getPacketInstance(int id) {
         if (id > maxSize)
-            throw new IllegalStateException("Packet ID 0x" + Integer.toHexString(id) + " has been tried to be parsed, debug needed");
+            throw new IllegalStateException("Packet ID 0x" + Integer.toHexString(id) + " is higher than maximum recognized for this handler (0x" + Integer.toHexString(maxSize) + "), debug needed");
 
         Supplier<PacketType> supplier = supplierAccesses[id];
         if (supplierAccesses[id] == null)

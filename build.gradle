@@ -77,6 +77,7 @@ sourceSets {
 
         compileClasspath += sourceSets.main.runtimeClasspath
         runtimeClasspath += sourceSets.main.runtimeClasspath
+
         runtimeClasspath += sourceSets.test.output
     }
     lwjgl {
