@@ -151,6 +151,16 @@ public final class SchedulerManager implements IExtensionObserver {
     public ObjectCollection<Task> getTasks() {
         return tasks.values();
     }
+    
+    /**
+     * Returns the task associated with this task id
+     * 
+     * @param id the id of the task
+     * @return task the task itself
+     */
+    public Task getTask(int id) {
+        return tasks.get(id);
+    }
 
     /**
      * Gets a {@link Collection} with all the registered shutdown {@link Task}.
@@ -160,6 +170,16 @@ public final class SchedulerManager implements IExtensionObserver {
     @NotNull
     public ObjectCollection<Task> getShutdownTasks() {
         return shutdownTasks.values();
+    }
+    
+    /**
+     * Returns the shutdown task associated with this task id
+     * 
+     * @param id the id of the task
+     * @return task the shutdown task itself
+     */
+    public Task getShutdownTask(int id) {
+        return shutdownTasks.get(id);
     }
 
     /**

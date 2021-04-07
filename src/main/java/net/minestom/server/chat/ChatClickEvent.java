@@ -1,10 +1,13 @@
 package net.minestom.server.chat;
 
+import net.kyori.adventure.text.event.ClickEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a click event for a specific portion of the message.
+ * @deprecated Use {@link ClickEvent}
  */
+@Deprecated
 public class ChatClickEvent {
 
     private final String action;

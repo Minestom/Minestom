@@ -4,10 +4,14 @@ import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.shorts.Short2ShortLinkedOpenHashMap;
 import net.minestom.server.instance.palette.Section;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
 public final class Utils {
+
+    // Do NOT modify
+    public static final int VARINT_HEADER_SIZE = 3;
 
     private Utils() {
 
@@ -43,6 +47,29 @@ public final class Utils {
         } while (value != 0);
     }
 
+    public static void overrideVarIntHeader(@NotNull ByteBuf buffer, int startIndex, int value) {
+        final int indexCache = buffer.writerIndex();
+        buffer.writerIndex(startIndex);
+
+        for (int i = 0; i < VARINT_HEADER_SIZE; i++) {
+            byte temp = (byte) (value & 0b01111111);
+            value >>>= 7;
+            if (value != 0 || i != VARINT_HEADER_SIZE - 1) {
+                temp |= 0b10000000;
+            }
+
+            buffer.writeByte(temp);
+        }
+
+        buffer.writerIndex(indexCache);
+    }
+
+    public static int writeEmptyVarIntHeader(@NotNull ByteBuf buffer) {
+        final int index = buffer.writerIndex();
+        buffer.writeMedium(0);
+        return index;
+    }
+
     public static int readVarInt(ByteBuf buffer) {
         int numRead = 0;
         int result = 0;
@@ -55,6 +82,24 @@ public final class Utils {
             numRead++;
             if (numRead > 5) {
                 throw new RuntimeException("VarInt is too big");
+            }
+        } while ((read & 0b10000000) != 0);
+
+        return result;
+    }
+
+    public static long readVarLong(ByteBuf buffer) {
+        int numRead = 0;
+        long result = 0;
+        byte read;
+        do {
+            read = buffer.readByte();
+            long value = (read & 0b01111111);
+            result |= (value << (7 * numRead));
+
+            numRead++;
+            if (numRead > 10) {
+                throw new RuntimeException("VarLong is too big");
             }
         } while ((read & 0b10000000) != 0);
 

@@ -2,8 +2,10 @@ package net.minestom.server.benchmark;
 
 import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.ChatColor;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
@@ -104,22 +106,27 @@ public final class BenchmarkManager {
     }
 
     @NotNull
-    public String getCpuMonitoringMessage() {
+    public Component getCpuMonitoringMessage() {
         Check.stateCondition(!enabled, "CPU monitoring is only possible when the benchmark manager is enabled.");
-        StringBuilder benchmarkMessage = new StringBuilder();
+        TextComponent.Builder benchmarkMessage = Component.text();
         for (Map.Entry<String, ThreadResult> resultEntry : resultMap.entrySet()) {
             final String name = resultEntry.getKey();
             final ThreadResult result = resultEntry.getValue();
 
-            benchmarkMessage.append(ChatColor.GRAY).append(name);
-            benchmarkMessage.append(": ");
-            benchmarkMessage.append(ChatColor.YELLOW.toString()).append(MathUtils.round(result.getCpuPercentage(), 2)).append("% CPU ");
-            benchmarkMessage.append(ChatColor.RED.toString()).append(MathUtils.round(result.getUserPercentage(), 2)).append("% USER ");
-            benchmarkMessage.append(ChatColor.PINK.toString()).append(MathUtils.round(result.getBlockedPercentage(), 2)).append("% BLOCKED ");
-            benchmarkMessage.append(ChatColor.BRIGHT_GREEN.toString()).append(MathUtils.round(result.getWaitedPercentage(), 2)).append("% WAITED ");
-            benchmarkMessage.append("\n");
+            benchmarkMessage.append(Component.text(name, NamedTextColor.GRAY));
+            benchmarkMessage.append(Component.text(": "));
+            benchmarkMessage.append(Component.text(MathUtils.round(result.getCpuPercentage(), 2), NamedTextColor.YELLOW));
+            benchmarkMessage.append(Component.text("% CPU ", NamedTextColor.YELLOW));
+            benchmarkMessage.append(Component.text(MathUtils.round(result.getUserPercentage(), 2), NamedTextColor.RED));
+            benchmarkMessage.append(Component.text("% USER ", NamedTextColor.RED));
+            benchmarkMessage.append(Component.text(MathUtils.round(result.getBlockedPercentage(), 2), NamedTextColor.LIGHT_PURPLE));
+            benchmarkMessage.append(Component.text("% BLOCKED ", NamedTextColor.LIGHT_PURPLE));
+            benchmarkMessage.append(Component.text(MathUtils.round(result.getWaitedPercentage(), 2), NamedTextColor.GREEN));
+            benchmarkMessage.append(Component.text("% WAITED ", NamedTextColor.GREEN));
+            benchmarkMessage.append(Component.newline());
         }
-        return benchmarkMessage.toString();
+
+        return benchmarkMessage.build();
     }
 
     private void refreshData() {

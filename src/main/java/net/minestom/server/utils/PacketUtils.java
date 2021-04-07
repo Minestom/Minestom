@@ -1,13 +1,16 @@
 package net.minestom.server.utils;
 
+import com.velocitypowered.natives.compression.VelocityCompressor;
+import com.velocitypowered.natives.util.Natives;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.netty.packet.FramedPacket;
+import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -16,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.zip.Deflater;
+import java.util.zip.DataFormatException;
 
 /**
  * Utils class for packets. Including writing a {@link ServerPacket} into a {@link ByteBuf}
@@ -25,7 +28,7 @@ import java.util.zip.Deflater;
 public final class PacketUtils {
 
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
-    private static final ThreadLocal<Deflater> DEFLATER = ThreadLocal.withInitial(() -> new Deflater(3));
+    private static final ThreadLocal<VelocityCompressor> COMPRESSOR = ThreadLocal.withInitial(() -> Natives.compress.get().create(4));
 
     private PacketUtils() {
 
@@ -45,7 +48,14 @@ public final class PacketUtils {
         if (players.isEmpty())
             return;
 
-        if (MinecraftServer.hasGroupedPacket()) {
+        // work out if the packet needs to be sent individually due to server-side translating
+        boolean needsTranslating = false;
+
+        if (AdventureSerializer.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ComponentHoldingServerPacket) {
+            needsTranslating = AdventureSerializer.areAnyTranslatable(((ComponentHoldingServerPacket) packet).components());
+        }
+
+        if (MinecraftServer.hasGroupedPacket() && !needsTranslating) {
             // Send grouped packet...
             final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
             if (success) {
@@ -67,7 +77,7 @@ public final class PacketUtils {
                     final PlayerConnection playerConnection = player.getPlayerConnection();
                     if (playerConnection instanceof NettyPlayerConnection) {
                         final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
-                        nettyPlayerConnection.write(framedPacket);
+                        nettyPlayerConnection.write(framedPacket, true);
                     } else {
                         playerConnection.sendPacket(packet);
                     }
@@ -85,7 +95,7 @@ public final class PacketUtils {
                     continue;
 
                 final PlayerConnection playerConnection = player.getPlayerConnection();
-                playerConnection.sendPacket(packet);
+                playerConnection.sendPacket(packet, false);
             }
         }
     }
@@ -107,65 +117,22 @@ public final class PacketUtils {
      * @param packet the packet to write into {@code buf}
      */
     public static void writePacket(@NotNull ByteBuf buf, @NotNull ServerPacket packet) {
-        final ByteBuf packetBuffer = getPacketBuffer(packet);
-
-        writePacket(buf, packetBuffer, packet.getId());
+        Utils.writeVarIntBuf(buf, packet.getId());
+        writePacketPayload(buf, packet);
     }
 
     /**
-     * Writes a {@link ServerPacket} into a newly created {@link ByteBuf}.
+     * Writes a packet payload.
      *
      * @param packet the packet to write
-     * @return a {@link ByteBuf} containing {@code packet}
      */
-    @NotNull
-    public static ByteBuf writePacket(@NotNull ServerPacket packet) {
-        final ByteBuf packetBuffer = getPacketBuffer(packet);
-
-        // Add 5 for the packet id and for the packet size
-        final int size = packetBuffer.writerIndex() + 5 + 5;
-        ByteBuf buffer = BufUtils.getBuffer(true, size);
-
-        writePacket(buffer, packetBuffer, packet.getId());
-
-        return buffer;
-    }
-
-    /**
-     * Writes a packet buffer into {@code buf}.
-     *
-     * @param buf          the buffer which will receive the packet id/data
-     * @param packetBuffer the buffer containing the raw packet data
-     * @param packetId     the packet id
-     */
-    private static void writePacket(@NotNull ByteBuf buf, @NotNull ByteBuf packetBuffer, int packetId) {
-        Utils.writeVarIntBuf(buf, packetId);
-        buf.writeBytes(packetBuffer);
-        packetBuffer.release();
-    }
-
-    /**
-     * Gets the buffer representing the raw packet data.
-     *
-     * @param packet the packet to write
-     * @return the {@link ByteBuf} containing the raw packet data
-     */
-    @NotNull
-    private static ByteBuf getPacketBuffer(@NotNull ServerPacket packet) {
-        BinaryWriter writer;
-        if (packet.getId() == ServerPacketIdentifier.CHUNK_DATA || packet.getId() == ServerPacketIdentifier.UPDATE_LIGHT) {
-            writer = new BinaryWriter(BufUtils.getBuffer(true, 40_000));
-        } else {
-            writer = new BinaryWriter(BufUtils.getBuffer(true));
-        }
-
+    private static void writePacketPayload(@NotNull ByteBuf buffer, @NotNull ServerPacket packet) {
+        BinaryWriter writer = new BinaryWriter(buffer);
         try {
             packet.write(writer);
         } catch (Exception e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
-
-        return writer.getBuffer();
     }
 
     /**
@@ -196,40 +163,84 @@ public final class PacketUtils {
      * <p>
      * {@code packetBuffer} needs to be the packet content without any header (if you want to use it to write a Minecraft packet).
      *
-     * @param deflater          the deflater for zlib compression
-     * @param buffer            a cached buffer which will be used to store temporary the deflater output,
-     *                          null if you prefer the buffer to be allocated dynamically when required
+     * @param compressor        the deflater for zlib compression
      * @param packetBuffer      the buffer containing all the packet fields
      * @param compressionTarget the buffer which will receive the compressed version of {@code packetBuffer}
      */
-    public static void compressBuffer(@NotNull Deflater deflater, @Nullable byte[] buffer,
-                                      @NotNull ByteBuf packetBuffer, @NotNull ByteBuf compressionTarget) {
+    public static void compressBuffer(@NotNull VelocityCompressor compressor, @NotNull ByteBuf packetBuffer, @NotNull ByteBuf compressionTarget) {
         final int packetLength = packetBuffer.readableBytes();
-
-        if (packetLength < MinecraftServer.getCompressionThreshold()) {
-            Utils.writeVarIntBuf(compressionTarget, 0);
-            compressionTarget.writeBytes(packetBuffer);
+        final boolean compression = packetLength > MinecraftServer.getCompressionThreshold();
+        Utils.writeVarIntBuf(compressionTarget, compression ? packetLength : 0);
+        if (compression) {
+            compress(compressor, packetBuffer, compressionTarget);
         } else {
+            compressionTarget.writeBytes(packetBuffer);
+        }
+    }
 
-            Utils.writeVarIntBuf(compressionTarget, packetLength);
+    private static void compress(@NotNull VelocityCompressor compressor, @NotNull ByteBuf uncompressed, @NotNull ByteBuf compressed) {
+        try {
+            compressor.deflate(uncompressed, compressed);
+        } catch (DataFormatException e) {
+            e.printStackTrace();
+        }
+    }
 
-            // Allocate buffer if not already
-            byte[] output = buffer != null ? buffer : new byte[8192];
+    public static void writeFramedPacket(@NotNull ByteBuf buffer,
+                                         @NotNull ServerPacket serverPacket) {
+        final int compressionThreshold = MinecraftServer.getCompressionThreshold();
+        final boolean compression = compressionThreshold > 0;
 
-            deflater.setInput(packetBuffer.nioBuffer());
-            deflater.finish();
+        if (compression) {
+            // Dummy varint
+            final int packetLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
+            final int dataLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
 
-            while (!deflater.finished()) {
-                final int length = deflater.deflate(output);
-                compressionTarget.writeBytes(output, 0, length);
+            // Write packet
+            final int contentIndex = buffer.writerIndex();
+            writePacket(buffer, serverPacket);
+            final int afterIndex = buffer.writerIndex();
+            final int packetSize = (afterIndex - dataLengthIndex) - Utils.VARINT_HEADER_SIZE;
+
+            if (packetSize >= compressionThreshold) {
+                // Packet large enough
+
+                final VelocityCompressor compressor = COMPRESSOR.get();
+                // Compress id + payload
+                ByteBuf uncompressedCopy = buffer.copy(contentIndex, packetSize);
+                buffer.writerIndex(contentIndex);
+                compress(compressor, uncompressedCopy, buffer);
+                uncompressedCopy.release();
+
+                final int totalPacketLength = buffer.writerIndex() - contentIndex + Utils.VARINT_HEADER_SIZE;
+
+                // Update header values
+                Utils.overrideVarIntHeader(buffer, packetLengthIndex, totalPacketLength);
+                Utils.overrideVarIntHeader(buffer, dataLengthIndex, packetSize);
+            } else {
+                // Packet too small, just override header values
+                final int totalPacketLength = packetSize + Utils.VARINT_HEADER_SIZE;
+                Utils.overrideVarIntHeader(buffer, packetLengthIndex, totalPacketLength);
+                Utils.overrideVarIntHeader(buffer, dataLengthIndex, 0); // -> Uncompressed
             }
+        } else {
+            // No compression
 
-            deflater.reset();
+            // Write dummy varint
+            final int index = Utils.writeEmptyVarIntHeader(buffer);
+
+            // Write packet id + payload
+            writePacket(buffer, serverPacket);
+
+            // Rewrite dummy varint to packet length
+            final int afterIndex = buffer.writerIndex();
+            final int packetSize = (afterIndex - index) - Utils.VARINT_HEADER_SIZE;
+            Utils.overrideVarIntHeader(buffer, index, packetSize);
         }
     }
 
     /**
-     * Writes a "framed packet" (packet which can be send and understood by a Minecraft client)
+     * Creates a "framed packet" (packet which can be send and understood by a Minecraft client)
      * from a server packet, directly into an output buffer.
      * <p>
      * Can be used if you want to store a raw buffer and send it later without the additional writing cost.
@@ -237,30 +248,11 @@ public final class PacketUtils {
      *
      * @param serverPacket the server packet to write
      */
-    public static void createFramedPacket(@NotNull ServerPacket serverPacket, boolean directBuffer, ByteBuf output) {
-        ByteBuf packetBuf = writePacket(serverPacket);
-
-        if (MinecraftServer.getCompressionThreshold() > 0) {
-            ByteBuf compressedBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
-
-            final Deflater deflater = DEFLATER.get();
-            compressBuffer(deflater, null, packetBuf, compressedBuf);
-
-            packetBuf.release();
-
-            frameBuffer(compressedBuf, output);
-            compressedBuf.release();
-        } else {
-            frameBuffer(packetBuf, output);
-            packetBuf.release();
-        }
-    }
-
     @NotNull
     public static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket, boolean directBuffer) {
-        ByteBuf framedBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
-        createFramedPacket(serverPacket, directBuffer, framedBuf);
-        return framedBuf;
+        ByteBuf packetBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
+        writeFramedPacket(packetBuf, serverPacket);
+        return packetBuf;
     }
 
 }

@@ -5,6 +5,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.socket.SocketChannel;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.extras.mojangAuth.Decrypter;
 import net.minestom.server.extras.mojangAuth.Encrypter;
@@ -13,13 +14,12 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.netty.NettyServer;
 import net.minestom.server.network.netty.codec.PacketCompressor;
 import net.minestom.server.network.netty.packet.FramedPacket;
+import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.utils.BufUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.cache.CacheablePacket;
-import net.minestom.server.utils.cache.TemporaryCache;
-import net.minestom.server.utils.cache.TimedBuffer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -60,20 +60,28 @@ public class NettyPlayerConnection extends PlayerConnection {
     private UUID bungeeUuid;
     private PlayerSkin bungeeSkin;
 
+    private final static int INITIAL_BUFFER_SIZE = 1_048_576; // 2^20
     private final ByteBuf tickBuffer = BufUtils.getBuffer(true);
 
     public NettyPlayerConnection(@NotNull SocketChannel channel) {
         super();
         this.channel = channel;
         this.remoteAddress = channel.remoteAddress();
+
+        this.tickBuffer.ensureWritable(INITIAL_BUFFER_SIZE);
     }
 
     @Override
     public void update() {
         // Flush
-        if (channel.isActive()) {
-            writeWaitingPackets();
-            this.channel.flush();
+        final int bufferSize = tickBuffer.writerIndex();
+        if (bufferSize > 0) {
+            this.channel.eventLoop().submit(() -> {
+                if (channel.isActive()) {
+                    writeWaitingPackets();
+                    channel.flush();
+                }
+            });
         }
         // Network stats
         super.update();
@@ -118,7 +126,7 @@ public class NettyPlayerConnection extends PlayerConnection {
      * @param serverPacket the packet to write
      */
     @Override
-    public void sendPacket(@NotNull ServerPacket serverPacket) {
+    public void sendPacket(@NotNull ServerPacket serverPacket, boolean skipTranslating) {
         if (!channel.isActive())
             return;
 
@@ -126,33 +134,15 @@ public class NettyPlayerConnection extends PlayerConnection {
             if (getPlayer() != null) {
                 // Flush happen during #update()
                 if (serverPacket instanceof CacheablePacket && MinecraftServer.hasPacketCaching()) {
-                    final CacheablePacket cacheablePacket = (CacheablePacket) serverPacket;
-                    final UUID identifier = cacheablePacket.getIdentifier();
-
-                    if (identifier == null) {
-                        // This packet explicitly asks to do not retrieve the cache
-                        write(serverPacket);
+                    // Check if the packet is cached or can be
+                    final FramedPacket cachedPacket = CacheablePacket.getCache(serverPacket);
+                    if (cachedPacket != null) {
+                        write(cachedPacket);
                     } else {
-                        final long timestamp = cacheablePacket.getTimestamp();
-                        // Try to retrieve the cached buffer
-                        TemporaryCache<TimedBuffer> temporaryCache = cacheablePacket.getCache();
-                        TimedBuffer timedBuffer = temporaryCache.retrieve(identifier);
-
-                        // Update the buffer if non-existent or outdated
-                        final boolean shouldUpdate = timedBuffer == null ||
-                                timestamp > timedBuffer.getTimestamp();
-
-                        if (shouldUpdate) {
-                            final ByteBuf buffer = PacketUtils.createFramedPacket(serverPacket, false);
-                            timedBuffer = new TimedBuffer(buffer, timestamp);
-                            temporaryCache.cache(identifier, timedBuffer);
-                        }
-
-                        write(new FramedPacket(timedBuffer.getBuffer()));
+                        write(serverPacket, skipTranslating);
                     }
-
                 } else {
-                    write(serverPacket);
+                    write(serverPacket, skipTranslating);
                 }
             } else {
                 // Player is probably not logged yet
@@ -162,6 +152,10 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     public void write(@NotNull Object message) {
+        this.write(message, false);
+    }
+
+    public void write(@NotNull Object message, boolean skipTranslating) {
         if (message instanceof FramedPacket) {
             final FramedPacket framedPacket = (FramedPacket) message;
             synchronized (tickBuffer) {
@@ -170,9 +164,14 @@ public class NettyPlayerConnection extends PlayerConnection {
             }
             return;
         } else if (message instanceof ServerPacket) {
-            final ServerPacket serverPacket = (ServerPacket) message;
+            ServerPacket serverPacket = (ServerPacket) message;
+
+            if ((AdventureSerializer.AUTOMATIC_COMPONENT_TRANSLATION && !skipTranslating) && getPlayer() != null && serverPacket instanceof ComponentHoldingServerPacket) {
+                serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component -> AdventureSerializer.translate(component, getPlayer()));
+            }
+
             synchronized (tickBuffer) {
-                PacketUtils.createFramedPacket(serverPacket, true, tickBuffer);
+                PacketUtils.writeFramedPacket(tickBuffer, serverPacket);
             }
             return;
         } else if (message instanceof ByteBuf) {
@@ -198,6 +197,11 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     private void writeWaitingPackets() {
+        if (tickBuffer.writerIndex() == 0) {
+            // Nothing to write
+            return;
+        }
+
         synchronized (tickBuffer) {
             final ByteBuf copy = tickBuffer.copy();
 

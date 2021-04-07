@@ -19,7 +19,7 @@ import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.time.CooldownUtils;
+import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biomes.Biome;
@@ -47,17 +47,20 @@ public class DynamicChunk extends Chunk {
 
     // Used to get all blocks with data (no null)
     // Key is still chunk coordinates (see #getBlockIndex)
-    protected final Int2ObjectMap<Data> blocksData = new Int2ObjectOpenHashMap<>();
+    protected final Int2ObjectOpenHashMap<Data> blocksData = new Int2ObjectOpenHashMap<>();
 
     // Contains CustomBlocks' block index which are updatable
-    protected final IntSet updatableBlocks = new IntOpenHashSet();
+    protected final IntOpenHashSet updatableBlocks = new IntOpenHashSet();
     // (block index)/(last update in ms)
     protected final Int2LongMap updatableBlocksLastUpdate = new Int2LongOpenHashMap();
 
     // Block entities
-    protected final IntSet blockEntities = new IntOpenHashSet();
+    protected final IntOpenHashSet blockEntities = new IntOpenHashSet();
 
     private long lastChangeTime;
+
+    private ChunkDataPacket cachedPacket;
+    private long cachedPacketTime;
 
     public DynamicChunk(@Nullable Biome[] biomes, int chunkX, int chunkZ,
                         @NotNull PaletteStorage blockPalette, @NotNull PaletteStorage customBlockPalette) {
@@ -142,7 +145,7 @@ public class DynamicChunk extends Chunk {
             final UpdateOption updateOption = customBlock.getUpdateOption();
             if (updateOption != null) {
                 final long lastUpdate = updatableBlocksLastUpdate.get(index);
-                final boolean hasCooldown = CooldownUtils.hasCooldown(time, lastUpdate, updateOption);
+                final boolean hasCooldown = Cooldown.hasCooldown(time, lastUpdate, updateOption);
                 if (hasCooldown)
                     continue;
 
@@ -383,14 +386,21 @@ public class DynamicChunk extends Chunk {
     @NotNull
     @Override
     protected ChunkDataPacket createFreshPacket() {
+        if (cachedPacket != null && cachedPacketTime == getLastChangeTime()) {
+            return cachedPacket;
+        }
         ChunkDataPacket fullDataPacket = new ChunkDataPacket(getIdentifier(), getLastChangeTime());
         fullDataPacket.biomes = biomes;
         fullDataPacket.chunkX = chunkX;
         fullDataPacket.chunkZ = chunkZ;
         fullDataPacket.paletteStorage = blockPalette.clone();
         fullDataPacket.customBlockPaletteStorage = customBlockPalette.clone();
-        fullDataPacket.blockEntities = new IntOpenHashSet(blockEntities);
-        fullDataPacket.blocksData = new Int2ObjectOpenHashMap<>(blocksData);
+        fullDataPacket.blockEntities = blockEntities.clone();
+        fullDataPacket.blocksData = blocksData.clone();
+
+        this.cachedPacketTime = getLastChangeTime();
+        this.cachedPacket = fullDataPacket;
+
         return fullDataPacket;
     }
 

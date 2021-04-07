@@ -1,6 +1,8 @@
 package net.minestom.server.utils;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -9,7 +11,7 @@ import java.util.Objects;
  * Represents a namespaced ID
  * https://minecraft.gamepedia.com/Namespaced_ID
  */
-public class NamespaceID implements CharSequence {
+public class NamespaceID implements CharSequence, Keyed {
     private static final Int2ObjectOpenHashMap<NamespaceID> cache = new Int2ObjectOpenHashMap<>();
     private static final String legalLetters = "[0123456789abcdefghijklmnopqrstuvwxyz_-]+";
     private static final String legalPathLetters = "[0123456789abcdefghijklmnopqrstuvwxyz./_-]+";
@@ -17,6 +19,7 @@ public class NamespaceID implements CharSequence {
     private final String domain;
     private final String path;
     private final String full;
+    private final Key key;
 
     /**
      * Extracts the domain from the namespace ID. "minecraft:stone" would return "minecraft".
@@ -62,6 +65,10 @@ public class NamespaceID implements CharSequence {
         return from(getDomain(id), getPath(id));
     }
 
+    public static NamespaceID from(Key key) {
+        return from(key.asString());
+    }
+
     private NamespaceID(@NotNull String path) {
         final int index = path.indexOf(':');
         if (index < 0) {
@@ -73,6 +80,7 @@ public class NamespaceID implements CharSequence {
         }
         this.full = toString();
         validate();
+        this.key = Key.key(this.domain, this.path);
     }
 
     private NamespaceID(String domain, String path) {
@@ -80,6 +88,7 @@ public class NamespaceID implements CharSequence {
         this.path = path;
         this.full = toString();
         validate();
+        this.key = Key.key(this.domain, this.path);
     }
 
     private void validate() {
@@ -131,4 +140,8 @@ public class NamespaceID implements CharSequence {
         return domain + ":" + path;
     }
 
+    @Override
+    public @NotNull Key key() {
+        return this.key;
+    }
 }

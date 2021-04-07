@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * Represents a command which has suggestion/auto-completion.
@@ -130,9 +131,9 @@ public class Command {
      * there can be multiple of them when optional arguments are used
      */
     @NotNull
-    public Collection<CommandSyntax> addSyntax(@Nullable CommandCondition commandCondition,
-                                               @NotNull CommandExecutor executor,
-                                               @NotNull Argument<?>... args) {
+    public Collection<CommandSyntax> addConditionalSyntax(@Nullable CommandCondition commandCondition,
+                                                          @NotNull CommandExecutor executor,
+                                                          @NotNull Argument<?>... args) {
         // Check optional argument(s)
         boolean hasOptional = false;
         {
@@ -157,14 +158,14 @@ public class Command {
 
             // the 'args' array starts by all the required arguments, followed by the optional ones
             List<Argument<?>> requiredArguments = new ArrayList<>();
-            Map<String, Object> defaultValuesMap = new HashMap<>();
+            Map<String, Supplier<Object>> defaultValuesMap = new HashMap<>();
             boolean optionalBranch = false;
             int i = 0;
             for (Argument<?> argument : args) {
                 final boolean isLast = ++i == args.length;
                 if (argument.isOptional()) {
                     // Set default value
-                    defaultValuesMap.put(argument.getId(), argument.getDefaultValue());
+                    defaultValuesMap.put(argument.getId(), (Supplier<Object>) argument.getDefaultValue());
 
                     if (!optionalBranch && !requiredArguments.isEmpty()) {
                         // First optional argument, create a syntax with current cached arguments
@@ -196,11 +197,11 @@ public class Command {
     /**
      * Adds a new syntax without condition.
      *
-     * @see #addSyntax(CommandCondition, CommandExecutor, Argument[])
+     * @see #addConditionalSyntax(CommandCondition, CommandExecutor, Argument[])
      */
     @NotNull
     public Collection<CommandSyntax> addSyntax(@NotNull CommandExecutor executor, @NotNull Argument<?>... args) {
-        return addSyntax(null, executor, args);
+        return addConditionalSyntax(null, executor, args);
     }
 
     /**
@@ -249,7 +250,7 @@ public class Command {
      * Gets all the syntaxes of this command.
      *
      * @return a collection containing all this command syntaxes
-     * @see #addSyntax(CommandCondition, CommandExecutor, Argument[])
+     * @see #addSyntax(CommandExecutor, Argument[])
      */
     @NotNull
     public Collection<CommandSyntax> getSyntaxes() {

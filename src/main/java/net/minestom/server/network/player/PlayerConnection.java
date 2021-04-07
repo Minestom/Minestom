@@ -1,8 +1,8 @@
 package net.minestom.server.network.player;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.ChatColor;
-import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.listener.manager.ServerPacketConsumer;
@@ -29,7 +29,7 @@ public abstract class PlayerConnection {
     private boolean online;
 
     // Text used to kick client sending too many packets
-    private static final ColoredText rateLimitKickMessage = ColoredText.of(ChatColor.RED + "Too Many Packets");
+    private static final Component rateLimitKickMessage = Component.text("Too Many Packets", NamedTextColor.RED);
 
     //Connection Stats
     private final AtomicInteger packetCounter = new AtomicInteger(0);
@@ -90,7 +90,19 @@ public abstract class PlayerConnection {
      * @param serverPacket the packet to send
      * @see #shouldSendPacket(ServerPacket)
      */
-    public abstract void sendPacket(@NotNull ServerPacket serverPacket);
+    public void sendPacket(@NotNull ServerPacket serverPacket) {
+        this.sendPacket(serverPacket, false);
+    }
+
+    /**
+     * Serializes the packet and send it to the client, skipping the translation phase.
+     * <p>
+     * Also responsible for executing {@link ConnectionManager#onPacketSend(ServerPacketConsumer)} consumers.
+     *
+     * @param serverPacket the packet to send
+     * @see #shouldSendPacket(ServerPacket)
+     */
+    public abstract void sendPacket(@NotNull ServerPacket serverPacket, boolean skipTranslating);
 
     protected boolean shouldSendPacket(@NotNull ServerPacket serverPacket) {
         return player == null ||

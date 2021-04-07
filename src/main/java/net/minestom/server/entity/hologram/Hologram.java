@@ -1,7 +1,7 @@
 package net.minestom.server.entity.hologram;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
-import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.type.decoration.EntityArmorStand;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 
 /**
- * Represents an invisible armor stand showing a {@link JsonMessage}.
+ * Represents an invisible armor stand showing a {@link Component}.
  */
 public class Hologram implements Viewable {
 
@@ -22,7 +22,7 @@ public class Hologram implements Viewable {
     private final HologramEntity entity;
 
     private Position position;
-    private JsonMessage text;
+    private Component text;
 
     private boolean removed;
 
@@ -33,14 +33,24 @@ public class Hologram implements Viewable {
      * @param spawnPosition The spawn position of this hologram.
      * @param text          The text of this hologram.
      * @param autoViewable  {@code true}if the hologram should be visible automatically, otherwise {@code false}.
+     * @deprecated Use {@link #Hologram(Instance, Position, Component, boolean)}
      */
+    @Deprecated
     public Hologram(Instance instance, Position spawnPosition, JsonMessage text, boolean autoViewable) {
-        this.entity = new HologramEntity(spawnPosition.clone().add(0, OFFSET_Y, 0));
-        this.entity.setInstance(instance);
-        this.entity.setAutoViewable(autoViewable);
+        this(instance, spawnPosition, text.asComponent(), autoViewable);
+    }
 
-        this.position = spawnPosition;
-        setText(text);
+    /**
+     * Constructs a new {@link Hologram} with the given parameters.
+     *
+     * @param instance      The instance where the hologram should be spawned.
+     * @param spawnPosition The spawn position of this hologram.
+     * @param text          The text of this hologram.
+     * @deprecated Use {@link #Hologram(Instance, Position, Component)}
+     */
+    @Deprecated
+    public Hologram(Instance instance, Position spawnPosition, JsonMessage text) {
+        this(instance, spawnPosition, text, true);
     }
 
     /**
@@ -50,8 +60,25 @@ public class Hologram implements Viewable {
      * @param spawnPosition The spawn position of this hologram.
      * @param text          The text of this hologram.
      */
-    public Hologram(Instance instance, Position spawnPosition, JsonMessage text) {
+    public Hologram(Instance instance, Position spawnPosition, Component text) {
         this(instance, spawnPosition, text, true);
+    }
+
+    /**
+     * Constructs a new {@link Hologram} with the given parameters.
+     *
+     * @param instance      The instance where the hologram should be spawned.
+     * @param spawnPosition The spawn position of this hologram.
+     * @param text          The text of this hologram.
+     * @param autoViewable  {@code true}if the hologram should be visible automatically, otherwise {@code false}.
+     */
+    public Hologram(Instance instance, Position spawnPosition, Component text, boolean autoViewable) {
+        this.entity = new HologramEntity(spawnPosition.clone().add(0, OFFSET_Y, 0));
+        this.entity.setInstance(instance);
+        this.entity.setAutoViewable(autoViewable);
+
+        this.position = spawnPosition;
+        setText(text);
     }
 
     /**
@@ -79,8 +106,19 @@ public class Hologram implements Viewable {
      * Gets the hologram text.
      *
      * @return the hologram text
+     * @deprecated Use {@link #getText()}
      */
-    public JsonMessage getText() {
+    @Deprecated
+    public JsonMessage getTextJson() {
+        return JsonMessage.fromComponent(text);
+    }
+
+    /**
+     * Gets the hologram text.
+     *
+     * @return the hologram text
+     */
+    public Component getText() {
         return text;
     }
 
@@ -88,8 +126,19 @@ public class Hologram implements Viewable {
      * Changes the hologram text.
      *
      * @param text the new hologram text
+     * @deprecated Use {@link #setText(Component)}
      */
+    @Deprecated
     public void setText(JsonMessage text) {
+        this.setText(text.asComponent());
+    }
+
+    /**
+     * Changes the hologram text.
+     *
+     * @param text the new hologram text
+     */
+    public void setText(Component text) {
         checkRemoved();
         this.text = text;
         this.entity.setCustomName(text);
@@ -166,7 +215,7 @@ public class Hologram implements Viewable {
             setSmall(true);
 
             setNoGravity(true);
-            setCustomName(ColoredText.of(""));
+            setCustomName(Component.empty());
             setCustomNameVisible(true);
             setInvisible(true);
         }

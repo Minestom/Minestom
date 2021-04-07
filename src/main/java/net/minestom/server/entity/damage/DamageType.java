@@ -1,14 +1,13 @@
 package net.minestom.server.entity.damage;
 
-import net.minestom.server.chat.ColoredText;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.JsonMessage;
-import net.minestom.server.chat.RichMessage;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.sound.Sound;
+import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,8 +25,8 @@ public class DamageType implements DataContainer {
     public static final DamageType GRAVITY = new DamageType("attack.fall");
     public static final DamageType ON_FIRE = new DamageType("attack.onFire") {
         @Override
-        protected Sound getPlayerSound(@NotNull Player player) {
-            return Sound.ENTITY_PLAYER_HURT_ON_FIRE;
+        protected SoundEvent getPlayerSound(@NotNull Player player) {
+            return SoundEvent.ENTITY_PLAYER_HURT_ON_FIRE;
         }
     };
     private final String identifier;
@@ -56,17 +55,24 @@ public class DamageType implements DataContainer {
     }
 
     /**
+     * @deprecated Use {@link #buildDeathMessage(Player)}
+     */
+    @Deprecated
+    public JsonMessage buildDeathMessageJson(@NotNull Player killed) {
+        return JsonMessage.fromComponent(this.buildDeathMessage(killed));
+    }
+
+    /**
      * Builds the death message linked to this damage type.
      * <p>
      * Used in {@link Player#kill()} to broadcast the proper message.
      *
      * @param killed the player who has been killed
-     * @return the death message, null to do not send anything.
-     * Can be for instance, of type {@link ColoredText} or {@link RichMessage}.
+     * @return the death message, null to do not send anything
      */
     @Nullable
-    public JsonMessage buildDeathMessage(@NotNull Player killed) {
-        return ColoredText.of("{@death." + identifier + "," + killed.getUsername() + "}");
+    public Component buildDeathMessage(@NotNull Player killed) {
+        return Component.translatable("death." + identifier, Component.text(killed.getUsername()));
     }
 
     /**
@@ -104,14 +110,22 @@ public class DamageType implements DataContainer {
     }
 
     /**
+     * @deprecated Use {@link #buildDeathScreenText(Player)}
+     */
+    @Deprecated
+    @Nullable
+    public JsonMessage buildDeathScreenTextJson(@NotNull Player killed) {
+        return JsonMessage.fromComponent(this.buildDeathScreenText(killed));
+    }
+
+    /**
      * Builds the text sent to a player in his death screen.
      *
      * @param killed the player who has been killed
      * @return the death screen text, null to do not send anything
      */
-    @Nullable
-    public JsonMessage buildDeathScreenText(@NotNull Player killed) {
-        return ColoredText.of("{@death." + identifier + "}");
+    public Component buildDeathScreenText(@NotNull Player killed) {
+        return Component.translatable("death." + identifier);
     }
 
     /**
@@ -121,19 +135,19 @@ public class DamageType implements DataContainer {
      * @return the sound to play when the given entity is hurt by this damage type. Can be null if no sound should play
      */
     @Nullable
-    public Sound getSound(@NotNull LivingEntity entity) {
+    public SoundEvent getSound(@NotNull LivingEntity entity) {
         if (entity instanceof Player) {
             return getPlayerSound((Player) entity);
         }
         return getGenericSound(entity);
     }
 
-    protected Sound getGenericSound(@NotNull LivingEntity entity) {
-        return Sound.ENTITY_GENERIC_HURT;
+    protected SoundEvent getGenericSound(@NotNull LivingEntity entity) {
+        return SoundEvent.ENTITY_GENERIC_HURT;
     }
 
-    protected Sound getPlayerSound(@NotNull Player player) {
-        return Sound.ENTITY_PLAYER_HURT;
+    protected SoundEvent getPlayerSound(@NotNull Player player) {
+        return SoundEvent.ENTITY_PLAYER_HURT;
     }
 
     @Override

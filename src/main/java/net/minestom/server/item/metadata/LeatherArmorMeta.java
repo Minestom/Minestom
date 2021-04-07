@@ -1,6 +1,7 @@
 package net.minestom.server.item.metadata;
 
 import net.minestom.server.chat.ChatColor;
+import net.minestom.server.color.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
@@ -8,25 +9,18 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
  * Represents the item meta for leather armor parts.
  */
 public class LeatherArmorMeta extends ItemMeta {
-
-    private static final int BIT_MASK = 0xFF;
-
     private boolean modified;
-    private byte red;
-    private byte green;
-    private byte blue;
+    private Color color;
 
     /**
      * Sets the color of the leather armor piece.
      *
      * @param color the color of the leather armor
+     * @deprecated Use {@link #setColor(Color)}
      */
+    @Deprecated
     public void setColor(ChatColor color) {
-        // TODO using "CHAT color" is pretty weird, maybe that the class should be renamed to "Color"
-        this.red = color.getRed();
-        this.green = color.getGreen();
-        this.blue = color.getBlue();
-        this.modified = true;
+        this.setColor(color.asColor());
     }
 
     /**
@@ -35,21 +29,37 @@ public class LeatherArmorMeta extends ItemMeta {
      * @param red   The red color of the leather armor piece.
      * @param green The green color of the leather armor piece.
      * @param blue  The blue color of the leather armor piece.
+     * @deprecated Use {@link #setColor(Color)}
      */
+    @Deprecated
     public void setColor(byte red, byte green, byte blue) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-        this.modified = true;
+        this.setColor(new Color(red, green, blue));
+    }
+
+    /**
+     * Sets the color of this leather armor piece.
+     *
+     * @param color the new color
+     */
+    public void setColor(@NotNull Color color) {
+        this.modified = !color.equals(this.color);
+        this.color = color;
+    }
+
+    /**
+     * Gets the color of this leather armor piece.
+     *
+     * @return the color
+     */
+    public @NotNull Color getColor() {
+        return this.color;
     }
 
     /**
      * Resets the color to the default leather one.
      */
     public void reset() {
-        this.red = 0;
-        this.green = 0;
-        this.blue = 0;
+        this.color = new Color(0, 0, 0);
         this.modified = false;
     }
 
@@ -57,27 +67,33 @@ public class LeatherArmorMeta extends ItemMeta {
      * Gets the red component.
      *
      * @return the red component
+     * @deprecated Use {@link #getColor}
      */
+    @Deprecated
     public int getRed() {
-        return BIT_MASK & red;
+        return this.color.getRed();
     }
 
     /**
      * Gets the green component.
      *
      * @return the green component
+     * @deprecated Use {@link #getColor}
      */
+    @Deprecated
     public int getGreen() {
-        return BIT_MASK & green;
+        return this.color.getGreen();
     }
 
     /**
      * Gets the blue component.
      *
      * @return the blue component
+     * @deprecated Use {@link #getColor}
      */
+    @Deprecated
     public int getBlue() {
-        return BIT_MASK & blue;
+        return this.color.getBlue();
     }
 
     /**
@@ -105,9 +121,7 @@ public class LeatherArmorMeta extends ItemMeta {
         if (!(itemMeta instanceof LeatherArmorMeta)) return false;
         final LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemMeta;
         return leatherArmorMeta.isModified() == isModified()
-                && leatherArmorMeta.getRed() == getRed()
-                && leatherArmorMeta.getGreen() == getGreen()
-                && leatherArmorMeta.getBlue() == getBlue();
+                && leatherArmorMeta.getColor().equals(getColor());
     }
 
     /**
@@ -123,10 +137,7 @@ public class LeatherArmorMeta extends ItemMeta {
                 // Sets the color of the leather armor piece
                 // This also fixes that the armor pieces do not decolorize again when you are in creative
                 // mode.
-                this.setColor(
-                        (byte) ((color >> 16) & BIT_MASK),
-                        (byte) ((color >> 8) & BIT_MASK),
-                        (byte) ((color) & BIT_MASK));
+                this.setColor(new Color(color));
             }
         }
     }
@@ -143,9 +154,7 @@ public class LeatherArmorMeta extends ItemMeta {
             } else {
                 displayCompound = compound.getCompound("display");
             }
-            final int color = this.getRed() << 16 | this.getGreen() << 8 | this.getBlue();
-
-            displayCompound.setInt("color", color);
+            displayCompound.setInt("color", color.asRGB());
             // Adds the color compound to the display compound
             compound.set("display", displayCompound);
         }
@@ -159,9 +168,7 @@ public class LeatherArmorMeta extends ItemMeta {
     public ItemMeta clone() {
         LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) super.clone();
         leatherArmorMeta.modified = this.isModified();
-        leatherArmorMeta.red = (byte) this.getRed();
-        leatherArmorMeta.green = (byte) this.getGreen();
-        leatherArmorMeta.blue = (byte) this.getBlue();
+        leatherArmorMeta.color = color;
 
         return leatherArmorMeta;
     }

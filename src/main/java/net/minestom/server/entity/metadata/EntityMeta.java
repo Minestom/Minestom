@@ -1,5 +1,6 @@
 package net.minestom.server.entity.metadata;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
@@ -106,11 +107,29 @@ public class EntityMeta {
         this.metadata.setIndex((byte) 1, Metadata.VarInt(value));
     }
 
-    public JsonMessage getCustomName() {
+    /**
+     * @deprecated Use {@link #getCustomName()}
+     */
+    @Deprecated
+    public JsonMessage getCustomNameJson() {
+        return JsonMessage.fromComponent(this.getCustomName());
+    }
+
+    /**
+     * @deprecated Use {@link #setCustomName(Component)}
+     */
+    @Deprecated
+    public void setCustomName(JsonMessage value) {
+        if (value != null) {
+            this.setCustomName(value.asComponent());
+        }
+    }
+
+    public Component getCustomName() {
         return this.metadata.getIndex((byte) 2, null);
     }
 
-    public void setCustomName(JsonMessage value) {
+    public void setCustomName(Component value) {
         this.metadata.setIndex((byte) 2, Metadata.OptChat(value));
     }
 

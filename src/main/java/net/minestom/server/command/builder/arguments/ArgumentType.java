@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import com.google.common.annotations.Beta;
 import net.minestom.server.command.builder.arguments.minecraft.*;
 import net.minestom.server.command.builder.arguments.minecraft.registry.*;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
@@ -9,6 +10,7 @@ import net.minestom.server.command.builder.arguments.number.ArgumentLong;
 import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeBlockPosition;
 import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec2;
 import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3;
+import net.minestom.server.command.builder.parser.ArgumentParser;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -135,6 +137,13 @@ public class ArgumentType {
     }
 
     /**
+     * @see ArgumentResourceLocation
+     */
+    public static ArgumentResourceLocation ResourceLocation(@NotNull String id) {
+        return new ArgumentResourceLocation(id);
+    }
+
+    /**
      * @see ArgumentPotionEffect
      */
     public static ArgumentPotionEffect Potion(@NotNull String id) {
@@ -191,6 +200,13 @@ public class ArgumentType {
     }
 
     /**
+     * @see ArgumentUUID
+     */
+    public static ArgumentUUID UUID(@NotNull String id) {
+        return new ArgumentUUID(id);
+    }
+
+    /**
      * @see ArgumentNbtTag
      */
     public static ArgumentNbtTag NBT(@NotNull String id) {
@@ -223,6 +239,18 @@ public class ArgumentType {
      */
     public static ArgumentRelativeVec2 RelativeVec2(@NotNull String id) {
         return new ArgumentRelativeVec2(id);
+    }
+
+    /**
+     * Generates arguments from a string format.
+     * <p>
+     * Example: "Entity&lt;targets&gt; Integer&lt;number&gt;"
+     * <p>
+     * Note: this feature is in beta and is very likely to change depending on feedback.
+     */
+    @Beta
+    public static Argument<?>[] generate(@NotNull String format) {
+        return ArgumentParser.generate(format);
     }
 
     /**

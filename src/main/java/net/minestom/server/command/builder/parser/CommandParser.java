@@ -7,7 +7,6 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.CommandSyntax;
 import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,6 +14,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 
+import static net.minestom.server.command.builder.parser.ArgumentParser.validate;
+
+/**
+ * Class used to parse complete command inputs.
+ */
 public class CommandParser {
 
     private static final CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();
@@ -62,7 +66,7 @@ public class CommandParser {
                              @NotNull String commandString,
                              @Nullable List<ValidSyntaxHolder> validSyntaxes,
                              @Nullable Int2ObjectRBTreeMap<CommandSuggestionHolder> syntaxesSuggestions) {
-        final Map<Argument<?>, ArgumentResult> argumentValueMap = new HashMap<>();
+        final Map<Argument<?>, ArgumentParser.ArgumentResult> argumentValueMap = new HashMap<>();
 
         boolean syntaxCorrect = true;
         // The current index in the raw command string arguments
@@ -72,7 +76,7 @@ public class CommandParser {
         // Check the validity of the arguments...
         for (int argIndex = 0; argIndex < commandArguments.length; argIndex++) {
             final Argument<?> argument = commandArguments[argIndex];
-            ArgumentResult argumentResult = validate(argument, commandArguments, argIndex, inputArguments, inputIndex);
+            ArgumentParser.ArgumentResult argumentResult = validate(argument, commandArguments, argIndex, inputArguments, inputIndex);
             if (argumentResult == null) {
                 break;
             }
@@ -133,7 +137,7 @@ public class CommandParser {
         CommandContext finalContext = null;
 
         for (ValidSyntaxHolder validSyntaxHolder : validSyntaxes) {
-            final Map<Argument<?>, ArgumentResult> argsValues = validSyntaxHolder.argumentResults;
+            final Map<Argument<?>, ArgumentParser.ArgumentResult> argsValues = validSyntaxHolder.argumentResults;
 
             final int argsSize = argsValues.size();
 
@@ -144,9 +148,9 @@ public class CommandParser {
 
                 // Fill arguments map
                 finalContext = new CommandContext(validSyntaxHolder.commandString);
-                for (Map.Entry<Argument<?>, ArgumentResult> entry : argsValues.entrySet()) {
+                for (Map.Entry<Argument<?>, ArgumentParser.ArgumentResult> entry : argsValues.entrySet()) {
                     final Argument<?> argument = entry.getKey();
-                    final ArgumentResult argumentResult = entry.getValue();
+                    final ArgumentParser.ArgumentResult argumentResult = entry.getValue();
 
                     finalContext.setArg(argument.getId(), argumentResult.parsedValue, argumentResult.rawArg);
                 }
@@ -184,9 +188,10 @@ public class CommandParser {
             int maxArgIndex = 0;
             for (int argIndex = 0; argIndex < commandArguments.length; argIndex++) {
                 Argument<?> argument = commandArguments[argIndex];
-                ArgumentResult argumentResult = validate(argument, commandArguments, argIndex, args, inputIndex);
+                ArgumentParser.ArgumentResult argumentResult = validate(argument, commandArguments, argIndex, args, inputIndex);
                 if (argumentResult == null) {
-                    argumentResult = new ArgumentResult();
+                    // Nothing to analyze, create a dummy object
+                    argumentResult = new ArgumentParser.ArgumentResult();
                     argumentResult.argument = argument;
                     argumentResult.correct = false;
                     argumentResult.inputIndex = inputIndex;
@@ -238,117 +243,6 @@ public class CommandParser {
 
         final int max = suggestions.firstIntKey();
         return suggestions.get(max);
-    }
-
-    @Nullable
-    private static ArgumentResult validate(@NotNull Argument<?> argument,
-                                           @NotNull Argument<?>[] arguments, int argIndex,
-                                           @NotNull String[] inputArguments, int inputIndex) {
-        final boolean end = inputIndex == inputArguments.length;
-        if (end) // Stop if there is no input to analyze left
-            return null;
-
-        // the parsed argument value, null if incorrect
-        Object parsedValue = null;
-        // the argument exception, null if the input is correct
-        ArgumentSyntaxException argumentSyntaxException = null;
-        // true if the arg is valid, false otherwise
-        boolean correct = false;
-        // The raw string value of the argument
-        String rawArg = null;
-
-        if (argument.useRemaining()) {
-            final boolean hasArgs = inputArguments.length > inputIndex;
-            // Verify if there is any string part available
-            if (hasArgs) {
-                StringBuilder builder = new StringBuilder();
-                // Argument is supposed to take the rest of the command input
-                for (int i = inputIndex; i < inputArguments.length; i++) {
-                    final String arg = inputArguments[i];
-                    if (builder.length() > 0)
-                        builder.append(StringUtils.SPACE);
-                    builder.append(arg);
-                }
-
-                rawArg = builder.toString();
-
-                try {
-                    parsedValue = argument.parse(rawArg);
-                    correct = true;
-                } catch (ArgumentSyntaxException exception) {
-                    argumentSyntaxException = exception;
-                }
-            }
-        } else {
-            // Argument is either single-word or can accept optional delimited space(s)
-            StringBuilder builder = new StringBuilder();
-            for (int i = inputIndex; i < inputArguments.length; i++) {
-                builder.append(inputArguments[i]);
-
-                rawArg = builder.toString();
-
-                try {
-                    parsedValue = argument.parse(rawArg);
-
-                    // Prevent quitting the parsing too soon if the argument
-                    // does not allow space
-                    final boolean lastArgumentIteration = argIndex + 1 == arguments.length;
-                    if (lastArgumentIteration && i + 1 < inputArguments.length) {
-                        if (!argument.allowSpace())
-                            break;
-                        builder.append(StringUtils.SPACE);
-                        continue;
-                    }
-
-                    correct = true;
-
-                    inputIndex = i + 1;
-                    break;
-                } catch (ArgumentSyntaxException exception) {
-                    argumentSyntaxException = exception;
-
-                    if (!argument.allowSpace()) {
-                        // rawArg should be the remaining
-                        for (int j = i + 1; j < inputArguments.length; j++) {
-                            final String arg = inputArguments[j];
-                            if (builder.length() > 0)
-                                builder.append(StringUtils.SPACE);
-                            builder.append(arg);
-                        }
-                        rawArg = builder.toString();
-                        break;
-                    }
-                    builder.append(StringUtils.SPACE);
-                }
-            }
-        }
-
-        ArgumentResult argumentResult = new ArgumentResult();
-        argumentResult.argument = argument;
-        argumentResult.correct = correct;
-        argumentResult.inputIndex = inputIndex;
-        argumentResult.argumentSyntaxException = argumentSyntaxException;
-
-        argumentResult.useRemaining = argument.useRemaining();
-
-        argumentResult.rawArg = rawArg;
-
-        argumentResult.parsedValue = parsedValue;
-        return argumentResult;
-    }
-
-    public static class ArgumentResult {
-        public Argument<?> argument;
-        public boolean correct;
-        public int inputIndex;
-        public ArgumentSyntaxException argumentSyntaxException;
-
-        public boolean useRemaining;
-
-        public String rawArg;
-
-        // If correct
-        public Object parsedValue;
     }
 
 }

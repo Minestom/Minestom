@@ -21,6 +21,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * @deprecated renamed to {@link CommandContext}
@@ -296,14 +297,17 @@ public class Arguments {
         this.args.clear();
     }
 
-    protected void retrieveDefaultValues(@Nullable Map<String, Object> defaultValuesMap) {
+    protected void retrieveDefaultValues(@Nullable Map<String, Supplier<Object>> defaultValuesMap) {
         if (defaultValuesMap == null)
             return;
 
-        for (Map.Entry<String, Object> entry : defaultValuesMap.entrySet()) {
+        for (Map.Entry<String, Supplier<Object>> entry : defaultValuesMap.entrySet()) {
             final String key = entry.getKey();
-            if (!args.containsKey(key))
-                this.args.put(key, entry.getValue());
+            if (!args.containsKey(key)) {
+                final var supplier = entry.getValue();
+                this.args.put(key, supplier.get());
+
+            }
         }
 
     }

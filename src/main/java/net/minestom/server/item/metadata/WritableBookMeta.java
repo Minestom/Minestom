@@ -1,5 +1,8 @@
 package net.minestom.server.item.metadata;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minestom.server.adventure.AdventureSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -14,7 +17,7 @@ public class WritableBookMeta extends ItemMeta {
 
     private String title;
     private String author;
-    private List<String> pages = new ArrayList<>();
+    private List<Component> pages = new ArrayList<>();
 
     @Nullable
     public String getTitle() {
@@ -42,7 +45,7 @@ public class WritableBookMeta extends ItemMeta {
      * @return a modifiable {@link ArrayList} containing the book pages
      */
     @NotNull
-    public List<String> getPages() {
+    public List<Component> getPages() {
         return pages;
     }
 
@@ -51,7 +54,7 @@ public class WritableBookMeta extends ItemMeta {
      *
      * @param pages the pages list
      */
-    public void setPages(@NotNull List<String> pages) {
+    public void setPages(@NotNull List<Component> pages) {
         this.pages = pages;
     }
 
@@ -82,7 +85,7 @@ public class WritableBookMeta extends ItemMeta {
         if (compound.containsKey("pages")) {
             final NBTList<NBTString> list = compound.getList("pages");
             for (NBTString page : list) {
-                this.pages.add(page.getValue());
+                this.pages.add(GsonComponentSerializer.gson().deserialize(page.getValue()));
             }
         }
     }
@@ -100,8 +103,8 @@ public class WritableBookMeta extends ItemMeta {
 
         if (!pages.isEmpty()) {
             NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-            for (String page : pages) {
-                list.add(new NBTString(page));
+            for (Component page : pages) {
+                list.add(new NBTString(AdventureSerializer.serialize(page)));
             }
             compound.set("pages", list);
         }

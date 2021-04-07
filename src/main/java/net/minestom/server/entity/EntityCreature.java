@@ -14,15 +14,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class EntityCreature extends LivingEntity implements NavigableEntity, EntityAI {
 
     private int removalAnimationDelay = 1000;
 
-    private final Set<EntityAIGroup> aiGroups = new HashSet<>();
+    private final Set<EntityAIGroup> aiGroups = new CopyOnWriteArraySet<>();
 
     private final Navigator navigator = new Navigator(this);
 
@@ -108,7 +108,7 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
 
     @Override
     public Collection<EntityAIGroup> getAIGroups() {
-        return this.aiGroups;
+        return aiGroups;
     }
 
     /**
