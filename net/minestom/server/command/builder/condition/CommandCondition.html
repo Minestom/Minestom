@@ -151,7 +151,7 @@ public interface <span class="typeNameLabel">CommandCondition</span></pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#canUse(net.minestom.server.command.CommandSender,java.lang.String)">canUse</a></span>&#8203;(@NotNull <a href="../../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#canUse(net.minestom.server.command.CommandSender,java.lang.String)">canUse</a></span>&#8203;(@NotNull <a href="../../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
       @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;commandString)</code></th>
 <td class="colLast">
 <div class="block">Called when the sender permission needs to be checked.</div>
@@ -181,7 +181,7 @@ public interface <span class="typeNameLabel">CommandCondition</span></pre>
 <li class="blockList">
 <h4>canUse</h4>
 <pre class="methodSignature">boolean&nbsp;canUse&#8203;(@NotNull
-               @NotNull <a href="../../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;source,
+               @NotNull <a href="../../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
                @Nullable
                @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;commandString)</pre>
 <div class="block">Called when the sender permission needs to be checked.
@@ -196,7 +196,7 @@ public interface <span class="typeNameLabel">CommandCondition</span></pre>
  You should in this case warn the sender (eg by sending a message) if the condition is unsuccessful.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>source</code> - the sender of the command</dd>
+<dd><code>sender</code> - the sender of the command</dd>
 <dd><code>commandString</code> - the raw command string,
                       null if this is an access request</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
