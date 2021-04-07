@@ -1,11 +1,7 @@
 package net.minestom.server.entity.damage;
 
-import com.google.gson.stream.JsonReader;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
-import net.minestom.server.chat.RichMessage;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Entity;

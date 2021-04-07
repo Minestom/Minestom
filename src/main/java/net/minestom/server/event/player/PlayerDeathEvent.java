@@ -1,6 +1,5 @@
 package net.minestom.server.event.player;
 
-import com.google.gson.stream.JsonReader;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
