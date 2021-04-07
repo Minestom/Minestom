@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Called every time a {@link Player} write and send something in the chat.
@@ -19,14 +20,18 @@ import java.util.function.Function;
 public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
 
     private final Collection<Player> recipients;
+    private final Supplier<Component> defaultChatFormat;
     private String message;
     private Function<PlayerChatEvent, Component> chatFormat;
 
     private boolean cancelled;
 
-    public PlayerChatEvent(@NotNull Player player, @NotNull Collection<Player> recipients, @NotNull String message) {
+    public PlayerChatEvent(@NotNull Player player, @NotNull Collection<Player> recipients,
+                           @NotNull Supplier<Component> defaultChatFormat,
+                           @NotNull String message) {
         super(player);
         this.recipients = new ArrayList<>(recipients);
+        this.defaultChatFormat = defaultChatFormat;
         this.message = message;
     }
 
@@ -57,8 +62,7 @@ public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
      *
      * @return a modifiable list of message targets
      */
-    @NotNull
-    public Collection<Player> getRecipients() {
+    public @NotNull Collection<Player> getRecipients() {
         return recipients;
     }
 
@@ -67,8 +71,7 @@ public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
      *
      * @return the sender's message
      */
-    @NotNull
-    public String getMessage() {
+    public @NotNull String getMessage() {
         return message;
     }
 
@@ -88,9 +91,12 @@ public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
      *
      * @return the chat format which will be used, null if this is the default one
      */
-    @Nullable
-    public Function<PlayerChatEvent, Component> getChatFormatFunction() {
+    public @Nullable Function<@NotNull PlayerChatEvent, @NotNull Component> getChatFormatFunction() {
         return chatFormat;
+    }
+
+    public @NotNull Supplier<@NotNull Component> getDefaultChatFormat() {
+        return defaultChatFormat;
     }
 
     @Override
