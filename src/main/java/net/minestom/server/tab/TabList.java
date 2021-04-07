@@ -152,8 +152,7 @@ public class TabList implements Viewable {
     public void removeDisplayedPlayer(@NotNull Player player) {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
 
-        PlayerInfoPacket.RemovePlayer removePlayer =
-                new PlayerInfoPacket.RemovePlayer(player.getUuid());
+        PlayerInfoPacket.RemovePlayer removePlayer = new PlayerInfoPacket.RemovePlayer(player.getUuid());
 
         playerInfoPacket.playerInfos.add(removePlayer);
 
@@ -168,9 +167,7 @@ public class TabList implements Viewable {
      * @return true
      */
     public boolean addViewer(@NotNull Player player) {
-        if (player.getTabList() != null) {
-            player.getTabList().removeViewer(player);
-        }
+        player.getTabList().removeViewer(player);
         this.viewers.add(player);
         player.setTabList(this);
 

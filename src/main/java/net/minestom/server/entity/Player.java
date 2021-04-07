@@ -253,7 +253,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
 
+        // tab list
+        this.tabList = MinecraftServer.getTabListManager().getDefaultTabList();
+        this.tabList.addViewer(this);
+        this.tabList.addDisplayedPlayer(this);
+
         playerConnection.sendPacket(getAddAllPlayerToList());
+
 
         // Commands start
         {
@@ -307,7 +313,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
         getInventory().update();
-        MinecraftServer.getTabListManager().getTabListPopulator().onJoin(this);
     }
 
     /**
@@ -565,7 +570,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public void remove() {
         callEvent(PlayerDisconnectEvent.class, new PlayerDisconnectEvent(this));
-        MinecraftServer.getTabListManager().getTabListPopulator().onLeave(this);
+
+        // todo issue not caused by any of this
+        // tab list
+        this.tabList.removeViewer(this);
+        for (TabList tabList : MinecraftServer.getTabListManager().getTabLists()) {
+            if (tabList.getDisplayedPlayers().contains(this)) {
+                tabList.removeDisplayedPlayer(this);
+            }
+        }
+
         super.remove();
         this.packets.clear();
         if (getOpenInventory() != null)
@@ -1411,7 +1425,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     /**
      * Gets the TabList the player is viewing
-     * Will be null if the {@link net.minestom.server.tab.TabListPopulator} has not assigned a TabList
      *
      * @return the viewed {@link TabList}
      */
@@ -2582,7 +2595,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param connection the connection to show the player to
      */
     protected void showPlayer(@NotNull PlayerConnection connection) {
-
         for (TabList tabList : MinecraftServer.getTabListManager().getTabLists()) {
             boolean isOnList = tabList.getDisplayedPlayers().contains(this);
             if (isOnList) {
