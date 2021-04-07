@@ -1,10 +1,7 @@
 package net.minestom.server.command.builder.arguments;
 
 import com.google.common.annotations.Beta;
-import net.minestom.server.command.builder.ArgumentCallback;
-import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.CommandExecutor;
-import net.minestom.server.command.builder.NodeMaker;
+import net.minestom.server.command.builder.*;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.suggestion.SuggestionCallback;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
@@ -218,6 +215,10 @@ public abstract class Argument<T> {
 
     public boolean hasSuggestion() {
         return suggestionCallback != null;
+    }
+
+    public <O> ArgumentMap<T, O> map(ArgumentMapper<T, O> mapper) {
+        return new ArgumentMap<>(this, mapper);
     }
 
     @Override
