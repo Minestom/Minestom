@@ -1,6 +1,5 @@
 package net.minestom.server.chat;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.kyori.adventure.text.Component;

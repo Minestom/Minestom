@@ -7,8 +7,6 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-
 public class PluginMessagePacket implements ServerPacket {
 
     public String channel = "none";

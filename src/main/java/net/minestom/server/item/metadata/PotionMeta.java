@@ -1,6 +1,5 @@
 package net.minestom.server.item.metadata;
 
-import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.color.Color;
 import net.minestom.server.potion.CustomPotionEffect;
