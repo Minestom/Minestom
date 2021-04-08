@@ -12,6 +12,7 @@ import net.minestom.server.network.packet.server.login.LoginDisconnectPacket
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket
 import net.minestom.server.network.packet.server.login.SetCompressionPacket
 import net.minestom.server.network.packet.server.play.DisconnectPacket
+import net.minestom.server.network.packet.server.play.JoinGamePacket
 import net.minestom.server.network.player.PlayerConnection
 
 class ClientSidePacketProcessor(val miniClient: MiniClient): PacketProcessor<ServerPacket, ServerPacket>() {
@@ -30,6 +31,10 @@ class ClientSidePacketProcessor(val miniClient: MiniClient): PacketProcessor<Ser
         miniClient.receivePacket(playPacket)
 
         when(playPacket) {
+            is JoinGamePacket -> {
+                miniClient.playerInfo.entityID = playPacket.entityId
+            }
+
             is DisconnectPacket -> {
                 error("Disconnected: ${PlainComponentSerializer.plain().serialize(playPacket.message)}")
             }

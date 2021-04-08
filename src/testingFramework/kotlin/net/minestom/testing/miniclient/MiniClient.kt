@@ -36,11 +36,13 @@ class MiniClient(val username: String): ChannelInitializer<SocketChannel>() {
     private var port = 25565 /*TODO: random port?*/
     private var packetQueue = LinkedTransferQueue<ClientPacket>()
     private val playerUUID: UUID
-    var entityId = -1
     var running = false
     var compressionThreshold = -1
     private val packetProcessor = ClientSidePacketProcessor(this)
+
     val playerInfo = PlayerInfo("", UUID(0,0))
+    val entityId get() = playerInfo.entityID
+
     val serverConnection = ServerConnection(this)
     var remoteAddress: SocketAddress = InetSocketAddress("localhost", 0)
         private set
@@ -92,7 +94,11 @@ class MiniClient(val username: String): ChannelInitializer<SocketChannel>() {
     }
 
     fun <Packet : ServerPacket> expect(toExpect: Class<Packet>): List<Packet> {
-        return receivedPackets.filterKeys { toExpect.isAssignableFrom(it) }.map { receivedPackets[it]!! }.flatten().toList() as List<Packet>
+        return receivedPackets
+                .filterKeys { toExpect.isAssignableFrom(it) }
+                .map { receivedPackets[it.key] ?: emptyList() }
+                .flatten()
+                .toList() as List<Packet>
     }
 
     fun <Packet : ServerPacket> expectSingle(toExpect: Class<Packet>): Packet? {
