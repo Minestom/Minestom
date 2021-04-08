@@ -13,15 +13,15 @@ public class PaletteGenerator {
     public static void main(String[] args) {
         Int2IntMap colors = new Int2IntOpenHashMap();
         int highestIndex = 0;
-        for(MapColors c : MapColors.values()) {
+        for(MapColor c : MapColors.values()) {
             if (c == MapColors.NONE)
                 continue;
-            for(MapColors.Multiplier m : MapColors.Multiplier.values()) {
+            for(MapColor.Multiplier m : MapColor.Multiplier.values()) {
                 int index = ((int)m.apply(c)) & 0xFF;
                 if(index > highestIndex) {
                     highestIndex = index;
                 }
-                int rgb = MapColors.PreciseMapColor.toRGB(c, m);
+                int rgb = MapColor.PreciseMapColor.toRGB(c, m);
                 colors.put(index, rgb);
             }
         }

@@ -2,7 +2,7 @@ package net.minestom.server.map.framebuffers;
 
 import net.minestom.server.map.Framebuffer;
 import net.minestom.server.map.LargeFramebuffer;
-import net.minestom.server.map.MapColors;
+import net.minestom.server.map.MapColor;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -62,6 +62,6 @@ public class LargeGraphics2DFramebuffer implements LargeFramebuffer {
 
     @Override
     public byte getMapColor(int x, int y) {
-        return MapColors.closestColor(get(x, y)).getIndex();
+         return MapColor.closestColor(get(x, y)).getIndex();
     }
 }
