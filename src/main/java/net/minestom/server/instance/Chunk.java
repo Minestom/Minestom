@@ -156,7 +156,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param blockStateId  the new block state id
      * @param customBlockId the new custom block id
      */
-    protected abstract void refreshBlockValue(int x, int y, int z, short blockStateId, short customBlockId);
+    public abstract void refreshBlockValue(int x, int y, int z, short blockStateId, short customBlockId);
 
     /**
      * Changes the block state id at a position (the custom block id stays the same).
@@ -166,7 +166,7 @@ public abstract class Chunk implements Viewable, DataContainer {
      * @param z            the block Z
      * @param blockStateId the new block state id
      */
-    protected abstract void refreshBlockStateId(int x, int y, int z, short blockStateId);
+    public abstract void refreshBlockStateId(int x, int y, int z, short blockStateId);
 
     /**
      * Gets the {@link Data} at a block index.
