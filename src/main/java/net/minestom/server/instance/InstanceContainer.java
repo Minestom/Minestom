@@ -123,6 +123,77 @@ public class InstanceContainer extends Instance {
         setBlock(x, y, z, blockStateId, customBlock, data);
     }
 
+    @Override
+    public void placeBlock(@NotNull Player player, @NotNull Chunk chunk, int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
+        setBlock(player, chunk, x, y, z, blockId, customBlockId, data);
+    }
+
+    @Override
+    public void setBlock(int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
+        final Chunk chunk = getChunkAt(x, z);
+
+        if (ChunkUtils.isLoaded(chunk)) {
+            setBlock(chunk, x, y, z, blockId, customBlockId, data);
+        } else {
+            Check.stateCondition(!hasEnabledAutoChunkLoad(),"Tried to set a block to an unloaded chunk with auto chunk load disabled");
+            final int chunkX = ChunkUtils.getChunkCoordinate(x);
+            final int chunkZ = ChunkUtils.getChunkCoordinate(z);
+            loadChunk(chunkX, chunkZ, c -> setBlock(c, x, y, z, blockId, customBlockId, data));
+        }
+    }
+
+    private void setBlock(@NotNull Player player, @NotNull Chunk chunk, int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
+        synchronized (chunk) {
+            this.lastBlockChangeTime = System.currentTimeMillis();
+
+            BlockPosition blockPosition = new BlockPosition(x, y, z);
+            if (isAlreadyChanged(blockPosition, blockId)) return; // No idea what this does but I guess we need it, at least for now.
+            setAlreadyChanged(blockPosition, blockId);
+
+            CustomBlock previousBlock = chunk.getCustomBlock(x, y, z);
+            if (previousBlock != null) {
+                previousBlock.removeDiggingInformation(this, blockPosition);
+                previousBlock.onDestroy(this, blockPosition, chunk.getBlockData(ChunkUtils.getBlockIndex(x, y, z)));
+            }
+
+            CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+            if (customBlock != null) {
+                customBlock.updateBlockVisual(this, chunk, player, blockPosition, blockId, data);
+                customBlock.onPlace(this, blockPosition, data);
+            } else {
+                chunk.UNSAFE_setBlock(x, y, z, blockId, (short) 0, data, false);
+                sendBlockChange(chunk, blockPosition, blockId);
+            }
+        }
+    }
+
+    private void setBlock(@NotNull Chunk chunk, int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
+        if (chunk.isReadOnly()) return;
+
+        synchronized (chunk) {
+            this.lastBlockChangeTime = System.currentTimeMillis();
+
+            BlockPosition blockPosition = new BlockPosition(x, y, z);
+            if (isAlreadyChanged(blockPosition, blockId)) return; // No idea what this does but I guess we need it, at least for now.
+            setAlreadyChanged(blockPosition, blockId);
+
+            CustomBlock previousBlock = chunk.getCustomBlock(x, y, z);
+            if (previousBlock != null) {
+                previousBlock.removeDiggingInformation(this, blockPosition);
+                previousBlock.onDestroy(this, blockPosition, chunk.getBlockData(ChunkUtils.getBlockIndex(x, y, z)));
+            }
+
+            CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+            if (customBlock != null) {
+                customBlock.updateBlockVisual(this, chunk, blockPosition, blockId, data);
+                customBlock.onPlace(this, blockPosition, data);
+            } else {
+                chunk.UNSAFE_setBlock(x, y, z, blockId, (short) 0, data, false);
+                sendBlockChange(chunk, blockPosition, blockId);
+            }
+        }
+    }
+
     /**
      * Set a block at the position
      * <p>

@@ -234,27 +234,25 @@ public abstract class CustomBlock {
      * Updates the visuals for the block with player context. In vanilla minecraft this is usually based off of the neighbouring blocks.
      *
      * @param instance           the {@link Instance} in which the block is being placed
+     * @param chunk              the {@link Chunk} in which the block is being placed
      * @param player             the {@link Player} that placed the block
      * @param blockPosition      the {@link BlockPosition} at which the block is placed
      * @param blockId            the base id of the block being placed
      * @param data               the {@link Data} of the block, can be null
      */
-    public void updateBlockVisual(@NotNull Instance instance, @NotNull Player player, @NotNull BlockPosition blockPosition, short blockId, @Nullable Data data) {
-
-    }
+    public void updateBlockVisual(@NotNull Instance instance, @NotNull Chunk chunk, @NotNull Player player, @NotNull BlockPosition blockPosition, short blockId, @Nullable Data data) {}
 
     /**
      *
      * Updates the visuals for the block. In vanilla minecraft this is usually based off of the neighbouring blocks.
      *
      * @param instance           the {@link Instance} in which the block is being placed
+     * @param chunk              the {@link Chunk} in which the block is being placed
      * @param blockPosition      the {@link BlockPosition} at which the block is placed
      * @param blockId            the base id of the block being placed
      * @param data               the {@link Data} of the block, can be null
      */
-    public void updateBlockVisual(@NotNull Instance instance, @NotNull BlockPosition blockPosition, short blockId, @Nullable Data data) {
-
-    }
+    public void updateBlockVisual(@NotNull Instance instance, @NotNull Chunk chunk, @NotNull BlockPosition blockPosition, short blockId, @Nullable Data data) {}
 
     /**
      * Updates this block from a neighbor. By default calls 'update' if directNeighbor is true.
@@ -264,6 +262,7 @@ public abstract class CustomBlock {
      * @param neighborPosition the neighboring block which triggered the update
      * @param directNeighbor   is the neighbor directly connected to this block? (No diagonals)
      */
+    @Deprecated
     public void updateFromNeighbor(@NotNull Instance instance, @NotNull BlockPosition thisPosition,
                                    @NotNull BlockPosition neighborPosition, boolean directNeighbor) {
         if (directNeighbor && hasUpdate()) {
