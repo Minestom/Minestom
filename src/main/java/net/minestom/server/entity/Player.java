@@ -253,8 +253,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
 
-        playerConnection.sendPacket(getAddAllPlayerToList());
-        playerConnection.sendPacket(getRemoveAllPlayerToList());
+        this.getAllPlayerToList();
         // tab list
         this.tabList = MinecraftServer.getTabListManager().getDefaultTabList();
         this.tabList.addViewer(this);
@@ -2531,12 +2530,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Gets the packet to render all the players that are online.
+     * Sends the packet to render all the players that are online.
      *
-     * @return a {@link PlayerInfoPacket} containing all online players
      */
-    protected @NotNull PlayerInfoPacket getAddAllPlayerToList() {
+    protected void getAllPlayerToList() {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
+        PlayerInfoPacket playerRemoveInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
         for (Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
             PlayerInfoPacket.AddPlayer addPlayer =
                     new PlayerInfoPacket.AddPlayer(player.getUuid(), player.getUsername(), player.getGameMode(), player.getLatency());
@@ -2553,23 +2552,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
 
             playerInfoPacket.playerInfos.add(addPlayer);
+
+            PlayerInfoPacket.RemovePlayer removePlayer = new PlayerInfoPacket.RemovePlayer(player.getUuid());
+            playerRemoveInfoPacket.playerInfos.add(removePlayer);
         }
-        return playerInfoPacket;
+
+        this.playerConnection.sendPacket(playerInfoPacket);
+        this.playerConnection.sendPacket(playerRemoveInfoPacket);
+
+
     }
 
-    /**
-     * Gets the packet to remove all the players from tablist.
-     *
-     * @return a {@link PlayerInfoPacket} to remove the players
-     */
-    protected @NotNull PlayerInfoPacket getRemoveAllPlayerToList() {
-        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
-        for (Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
-            PlayerInfoPacket.RemovePlayer removePlayer = new PlayerInfoPacket.RemovePlayer(player.getUuid());
-            playerInfoPacket.playerInfos.add(removePlayer);
-        }
-        return playerInfoPacket;
-    }
 
     /**
      * Gets the packet to remove the player from the tab-list.
