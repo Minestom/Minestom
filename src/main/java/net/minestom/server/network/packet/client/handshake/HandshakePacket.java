@@ -4,13 +4,13 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.PlayerSkin;
-import net.minestom.server.event.server.HandshakeEvent;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.ping.HandshakeData;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
@@ -88,15 +88,15 @@ public class HandshakePacket implements ClientPreplayPacket {
                     return;
                 }
             } else {
-                // Happen when a client ping the server, trigger HandshakeEvent
-                MinecraftServer.getGlobalEventHandler().callEvent(HandshakeEvent.class, new HandshakeEvent(null, serverPort, protocolVersion, connection));
+                // Happen when a client ping the server, ignore
                 return;
             }
         }
-
+        connection.setHandshakeData(new HandshakeData(
+                serverAddress, serverPort, protocolVersion
+        ));
         switch (nextState) {
             case 1:
-                MinecraftServer.getGlobalEventHandler().callEvent(HandshakeEvent.class, new HandshakeEvent(serverAddress, serverPort, protocolVersion, connection));
                 connection.setConnectionState(ConnectionState.STATUS);
                 break;
             case 2:

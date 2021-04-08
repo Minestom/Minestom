@@ -2,7 +2,7 @@ package net.minestom.server.network.packet.client.status;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.event.server.StatusRequestEvent;
+import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.handshake.ResponsePacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -31,8 +31,8 @@ public class StatusRequestPacket implements ClientPreplayPacket {
             consumer.accept(connection, responseData);
 
         // Call event
-        StatusRequestEvent statusRequestEvent = new StatusRequestEvent(responseData, connection);
-        MinecraftServer.getGlobalEventHandler().callEvent(StatusRequestEvent.class, statusRequestEvent);
+        ServerListPingEvent statusRequestEvent = new ServerListPingEvent(responseData, connection);
+        MinecraftServer.getGlobalEventHandler().callEvent(ServerListPingEvent.class, statusRequestEvent);
 
         // Send packet only if event has not been cancelled
         if (!statusRequestEvent.isCancelled()) {

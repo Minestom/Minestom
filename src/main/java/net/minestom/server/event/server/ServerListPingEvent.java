@@ -1,29 +1,23 @@
 package net.minestom.server.event.server;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.Event;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.ping.HandshakeData;
 import net.minestom.server.ping.ResponseData;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-
-/**
- * Called by a StatusRequestPacket.
- * Can be used to modify the {@link ResponseData} response data.
- */
-public class StatusRequestEvent extends Event implements CancellableEvent {
+public class ServerListPingEvent extends Event implements CancellableEvent {
+    private boolean cancelled = false;
 
     private final ResponseData responseData;
     private final PlayerConnection connection;
 
-    private boolean cancelled;
 
-    public StatusRequestEvent(@NotNull ResponseData responseData, @NotNull PlayerConnection connection) {
+    public ServerListPingEvent(ResponseData responseData, PlayerConnection connection) {
         this.responseData = responseData;
         this.connection = connection;
     }
@@ -35,6 +29,16 @@ public class StatusRequestEvent extends Event implements CancellableEvent {
      */
     public ResponseData getResponseData() {
         return responseData;
+    }
+
+    /**
+     * HandshakeData of previous handshake packet
+     *
+     * equivalent to {@link #getConnection()#getHandshakeData()}
+     * @return
+     */
+    public HandshakeData getHandshakeData() {
+        return connection.getHandshakeData();
     }
 
     /**
@@ -156,4 +160,6 @@ public class StatusRequestEvent extends Event implements CancellableEvent {
     public void setFavicon(String favicon) {
         responseData.setFavicon(favicon);
     }
+
+
 }

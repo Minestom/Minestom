@@ -9,6 +9,7 @@ import net.minestom.server.listener.manager.ServerPacketConsumer;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.ping.HandshakeData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,6 +27,7 @@ public abstract class PlayerConnection {
 
     private Player player;
     private volatile ConnectionState connectionState;
+    private HandshakeData handshakeData;
     private boolean online;
 
     // Text used to kick client sending too many packets
@@ -168,6 +170,23 @@ public abstract class PlayerConnection {
     @NotNull
     public ConnectionState getConnectionState() {
         return connectionState;
+    }
+
+    /**
+     * Gets the HandshakeData from the most recent HandshakePacket.
+     *
+     * @return the most recent HandshakeData
+     */
+    @Nullable
+    public HandshakeData getHandshakeData() {
+        return handshakeData;
+    }
+
+    /**
+     * Sets the HandshakeData - usually from a HandshakePacket
+     */
+    public void setHandshakeData(HandshakeData handshakeData) {
+        this.handshakeData = handshakeData;
     }
 
     /**
