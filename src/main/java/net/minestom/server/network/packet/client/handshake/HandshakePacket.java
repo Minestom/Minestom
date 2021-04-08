@@ -10,7 +10,6 @@ import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.ping.HandshakeData;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
@@ -67,7 +66,6 @@ public class HandshakePacket implements ClientPreplayPacket {
                     final SocketAddress socketAddress = new java.net.InetSocketAddress(split[1],
                             ((java.net.InetSocketAddress) connection.getRemoteAddress()).getPort());
                     nettyPlayerConnection.setRemoteAddress(socketAddress);
-
                     UUID playerUuid = UUID.fromString(
                             split[2]
                                     .replaceFirst(
@@ -92,9 +90,9 @@ public class HandshakePacket implements ClientPreplayPacket {
                 return;
             }
         }
-        connection.setHandshakeData(new HandshakeData(
-                serverAddress, serverPort, protocolVersion
-        ));
+        connection.setProtocolVersion(protocolVersion);
+        connection.setServerAddress(serverAddress);
+        connection.setServerPort(serverPort);
         switch (nextState) {
             case 1:
                 connection.setConnectionState(ConnectionState.STATUS);
@@ -103,10 +101,6 @@ public class HandshakePacket implements ClientPreplayPacket {
                 if (protocolVersion == MinecraftServer.PROTOCOL_VERSION) {
                     connection.setConnectionState(ConnectionState.LOGIN);
 
-                    if (connection instanceof NettyPlayerConnection) {
-                        // Give to the connection the server info that the client used
-                        ((NettyPlayerConnection) connection).refreshServerInformation(serverAddress, serverPort);
-                    }
                 } else {
                     // Incorrect client version
                     connection.sendPacket(new LoginDisconnectPacket(INVALID_VERSION_TEXT));

@@ -75,9 +75,9 @@ public class Main {
             event.addPlayer((char)0x00a7 + "7" + (char)0x00a7 + "ofor formatting" + (char)0x00a7 + "r: (" + (char)0x00a7 + "6char" + (char)0x00a7 + "r)" + (char)0x00a7 + "90x00a7", UUID.randomUUID());
 
             event.addPlayer("Connection Info:");
-            String ip = event.getClientServerAddress();
+            String ip = event.getRemoteServerAddress();
             event.addPlayer((char)0x00a7 + "8-  " + (char)0x00a7 +"7IP: " + (char)0x00a7 + "e" + (ip != null ? ip : "???"));
-            event.addPlayer((char)0x00a7 + "8-  " + (char)0x00a7 +"7PORT: " + (char)0x00a7 + "e" + event.getClientServerPort());
+            event.addPlayer((char)0x00a7 + "8-  " + (char)0x00a7 +"7PORT: " + (char)0x00a7 + "e" + event.getServerPort());
             event.addPlayer((char)0x00a7 + "8-  " + (char)0x00a7 +"7VERSION: " + (char)0x00a7 + "e" + event.getClientProtocolVersion());
 
             // Check if client supports RGB color

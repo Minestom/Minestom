@@ -41,6 +41,7 @@ public class NettyPlayerConnection extends PlayerConnection {
 
     private SocketAddress remoteAddress;
 
+
     private boolean encrypted = false;
     private boolean compressed = false;
 
@@ -51,6 +52,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     private String loginUsername;
     private String serverAddress;
     private int serverPort;
+    private int protocolVersion;
 
     // Used for the login plugin request packet, to retrieve the channel from a message id,
     // cleared once the player enters the play state
@@ -238,6 +240,24 @@ public class NettyPlayerConnection extends PlayerConnection {
         this.remoteAddress = remoteAddress;
     }
 
+    /**
+     * Gets the protocol version of a client.
+     *
+     * @return protocol version of client.
+     */
+    public int getProtocolVersion() {
+        return protocolVersion;
+    }
+
+    /**
+     * Changes the protocol version of a connecting client.
+     * @param protocolVersion the protocol version of the client
+     */
+    public void setProtocolVersion(int protocolVersion) {
+        this.protocolVersion = protocolVersion;
+    }
+
+
     @Override
     public void disconnect() {
         this.channel.close();
@@ -276,10 +296,19 @@ public class NettyPlayerConnection extends PlayerConnection {
      *
      * @return the server address used
      */
-    @Nullable
-    public String getServerAddress() {
+    public @Nullable String getServerAddress() {
         return serverAddress;
     }
+
+    /**
+     * Set the server address the client used to connect.
+     *
+     * @param serverAddress the server address
+     */
+    public void setServerAddress(@Nullable String serverAddress) {
+        this.serverAddress = serverAddress;
+    }
+
 
     /**
      * Gets the server port that the client used to connect.
@@ -290,6 +319,15 @@ public class NettyPlayerConnection extends PlayerConnection {
      */
     public int getServerPort() {
         return serverPort;
+    }
+
+    /**
+     * Set the server port the client used to connect.
+     *
+     * @param serverPort the server port
+     */
+    public void setServerPort(int serverPort) {
+        this.serverPort = serverPort;
     }
 
     @Nullable
@@ -349,16 +387,6 @@ public class NettyPlayerConnection extends PlayerConnection {
         }
     }
 
-    /**
-     * Used in {@link net.minestom.server.network.packet.client.handshake.HandshakePacket} to change the internal fields.
-     *
-     * @param serverAddress the server address which the client used
-     * @param serverPort    the server port which the client used
-     */
-    public void refreshServerInformation(@Nullable String serverAddress, int serverPort) {
-        this.serverAddress = serverAddress;
-        this.serverPort = serverPort;
-    }
 
     @NotNull
     public ByteBuf getTickBuffer() {

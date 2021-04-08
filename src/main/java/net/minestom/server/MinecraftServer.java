@@ -750,38 +750,8 @@ public final class MinecraftServer {
      */
     @Deprecated
     public void start(@NotNull String address, int port, @Nullable ResponseDataConsumer responseDataConsumer) {
-        Check.stateCondition(!initialized, "#start can only be called after #init");
-        Check.stateCondition(started, "The server is already started");
-
-        MinecraftServer.started = true;
-
-        LOGGER.info("Starting Minestom server.");
         MinecraftServer.responseDataConsumer = responseDataConsumer;
-
-        updateManager.start();
-
-        // Init & start the TCP server
-        nettyServer.init();
-        nettyServer.start(address, port);
-
-        if (extensionManager.shouldLoadOnStartup()) {
-            final long loadStartTime = System.nanoTime();
-            // Load extensions
-            extensionManager.loadExtensions();
-            // Init extensions
-            extensionManager.getExtensions().forEach(Extension::preInitialize);
-            extensionManager.getExtensions().forEach(Extension::initialize);
-            extensionManager.getExtensions().forEach(Extension::postInitialize);
-
-            final double loadTime = MathUtils.round((System.nanoTime() - loadStartTime) / 1_000_000D, 2);
-            LOGGER.info("Extensions loaded in {}ms", loadTime);
-        } else {
-            LOGGER.warn("Extension loadOnStartup option is set to false, extensions are therefore neither loaded or initialized.");
-        }
-
-        LOGGER.info("Minestom server started successfully.");
-
-        commandManager.startConsoleThread();
+        start(address, port);
     }
 
     /**
@@ -800,7 +770,6 @@ public final class MinecraftServer {
         MinecraftServer.started = true;
 
         LOGGER.info("Starting Minestom server.");
-        MinecraftServer.responseDataConsumer = null;
 
         updateManager.start();
 

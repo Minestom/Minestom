@@ -9,7 +9,6 @@ import net.minestom.server.listener.manager.ServerPacketConsumer;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.ping.HandshakeData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +26,6 @@ public abstract class PlayerConnection {
 
     private Player player;
     private volatile ConnectionState connectionState;
-    private HandshakeData handshakeData;
     private boolean online;
 
     // Text used to kick client sending too many packets
@@ -119,6 +117,55 @@ public abstract class PlayerConnection {
     @NotNull
     public abstract SocketAddress getRemoteAddress();
 
+
+    /**
+     * Changes the protocol version of the client.
+     *
+     * @param protocolVersion the protocol version
+     */
+    public abstract void setProtocolVersion(int protocolVersion);
+
+    /**
+     * Gets protocol version of client.
+     *
+     * @return the protocol version
+     */
+    public abstract int getProtocolVersion();
+
+    /**
+     * Gets the server address that the client used to connect.
+     * <p>
+     * WARNING: it is given by the client, it is possible for it to be wrong.
+     *
+     * @return the server address used
+     */
+    public abstract @Nullable String getServerAddress();
+
+    /**
+     * Set the server address the client used to connect.
+     *
+     * @param serverAddress the server address
+     */
+    public abstract void setServerAddress(@Nullable String serverAddress);
+
+
+    /**
+     * Gets the server port that the client used to connect.
+     * <p>
+     * WARNING: it is given by the client, it is possible for it to be wrong.
+     *
+     * @return the server port used
+     */
+    public abstract int getServerPort();
+
+    /**
+     * Set the server port the client used to connect.
+     *
+     * @param serverPort the server port
+     */
+    public abstract void setServerPort(int serverPort);
+
+
     /**
      * Forcing the player to disconnect.
      */
@@ -172,22 +219,6 @@ public abstract class PlayerConnection {
         return connectionState;
     }
 
-    /**
-     * Gets the HandshakeData from the most recent HandshakePacket.
-     *
-     * @return the most recent HandshakeData
-     */
-    @Nullable
-    public HandshakeData getHandshakeData() {
-        return handshakeData;
-    }
-
-    /**
-     * Sets the HandshakeData - usually from a HandshakePacket
-     */
-    public void setHandshakeData(HandshakeData handshakeData) {
-        this.handshakeData = handshakeData;
-    }
 
     /**
      * Gets the number of packet the client sent over the last second.

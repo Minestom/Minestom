@@ -1,14 +1,17 @@
 package net.minestom.server.event.server;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.Event;
+import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.ping.HandshakeData;
 import net.minestom.server.ping.ResponseData;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.net.InetSocketAddress;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -29,19 +32,10 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
      *
      * @return the response data being returned
      */
-    public ResponseData getResponseData() {
+    public @NotNull ResponseData getResponseData() {
         return responseData;
     }
 
-    /**
-     * HandshakeData of previous handshake packet
-     *
-     * equivalent to {@link #getConnection()#getHandshakeData()}
-     * @return
-     */
-    public HandshakeData getHandshakeData() {
-        return connection.getHandshakeData();
-    }
 
     /**
      * PlayerConnection of received packet.
@@ -51,7 +45,7 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
      * @return the playerConnection.
      */
 
-    public PlayerConnection getConnection() {
+    public @NotNull PlayerConnection getConnection() {
         return connection;
     }
 
@@ -76,7 +70,7 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
      *
      * @param version The version name for the response data.
      */
-    public void setVersion(String version) {
+    public void setVersion(@NotNull String version) {
         responseData.setVersion(version);
     }
 
@@ -112,7 +106,7 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
      *
      * @param players the players
      */
-    public void addPlayer(Iterable<Player> players) {
+    public void addPlayer(@NotNull Iterable<Player> players) {
         responseData.addPlayer(players);
     }
 
@@ -121,7 +115,7 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
      *
      * @param player the player
      */
-    public void addPlayer(Player player) {
+    public void addPlayer(@NotNull Player player) {
         addPlayer(player.getUsername(), player.getUuid());
     }
 
@@ -131,13 +125,15 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
      * @param name The name of the player.
      * @param uuid The unique identifier of the player.
      */
-    public void addPlayer(String name, UUID uuid) {
+    public void addPlayer(@NotNull String name, @NotNull UUID uuid) {
         responseData.addPlayer(name, uuid);
     }
 
     /**
      * Adds a player to the response.
      * {@link UUID#randomUUID()} is used as a default parameter for uuid
+     *
+     * @param name The name of the player.
      */
     public void addPlayer(String name) {
         responseData.addPlayer(name, UUID.randomUUID());
@@ -173,11 +169,11 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
 
     /**
      * Get the server address a client used to connect.
-     * may be null
+     *
      * @return the server address
      */
-    public @Nullable String getClientServerAddress() {
-        return Objects.requireNonNull(connection.getHandshakeData()).getServerAddress();
+    public @Nullable String getRemoteServerAddress() {
+        return connection.getServerAddress();
     }
 
     /**
@@ -185,8 +181,8 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
      *
      * @return the server port
      */
-    public int getClientServerPort() {
-        return Objects.requireNonNull(connection.getHandshakeData()).getServerPort();
+    public int getServerPort() {
+        return connection.getServerPort();
     }
 
     /**
@@ -195,7 +191,10 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
      * @return the protocol version
      */
     public int getClientProtocolVersion() {
-        return Objects.requireNonNull(connection.getHandshakeData()).getProtocolVersion();
+        if (connection instanceof NettyPlayerConnection) {
+            return connection.getProtocolVersion();
+        }
+        return MinecraftServer.PROTOCOL_VERSION;
     }
 
 }
