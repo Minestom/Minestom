@@ -261,7 +261,7 @@ public class TabList implements Viewable {
      *
      * @return boolean whether player latency will be auto-updated on TabLists
      */
-    public boolean isLatencyUpdates() {
+    public boolean doesLatencyUpdate() {
         return this.latencyUpdates;
     }
 

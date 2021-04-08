@@ -253,12 +253,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
 
+        playerConnection.sendPacket(getAddAllPlayerToList());
+        playerConnection.sendPacket(getRemoveAllPlayerToList());
         // tab list
         this.tabList = MinecraftServer.getTabListManager().getDefaultTabList();
         this.tabList.addViewer(this);
         this.tabList.addDisplayedPlayer(this);
 
-        playerConnection.sendPacket(getAddAllPlayerToList());
 
 
         // Commands start
@@ -631,8 +632,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (player == this) {
             return false;
         }
-        PlayerConnection viewerConnection = player.getPlayerConnection();
-        viewerConnection.sendPacket(getAddAllPlayerToList());
+        MinecraftServer.getTabListManager().handleSkinInView(this, player);
         return super.addViewer0(player);
     }
 
@@ -643,13 +643,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         PlayerConnection viewerConnection = player.getPlayerConnection();
-
-        for (TabList tabList : MinecraftServer.getTabListManager().getTabLists()) {
-            if (tabList.getDisplayedPlayers().contains(this)) {
-                tabList.removeDisplayedPlayer(this);
-            }
-        }
-
 
         // Team
         if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) {// If team only contains "this" player
@@ -1910,6 +1903,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final ConnectionState connectionState = playerConnection.getConnectionState();
 
         // Packet type depends on the current player connection state
+        this.tabList.removeViewer(this);
+        for (TabList tabList : MinecraftServer.getTabListManager().getTabLists()) {
+            if (tabList.getDisplayedPlayers().contains(this)) {
+                tabList.removeDisplayedPlayer(this);
+            }
+        }
+
         final ServerPacket disconnectPacket;
         if (connectionState == ConnectionState.LOGIN) {
             disconnectPacket = new LoginDisconnectPacket(component);

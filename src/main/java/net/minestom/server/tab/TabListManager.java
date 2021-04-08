@@ -1,5 +1,6 @@
 package net.minestom.server.tab;
 
+import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.PlayerInfoPacket;
 import net.minestom.server.utils.PacketUtils;
@@ -51,6 +52,37 @@ public class TabListManager {
     }
 
     /**
+     * This method sends the player info to the viewer if the displayedPlayer isn't on their TabList
+     *
+     * This resolves issues with skins not loading if the displayedPlayer isn't on the viewers TabList
+     *
+     * @param displayedPlayer the player being viewed
+     * @param viewer the player that is viewing the displayedPlayer
+     */
+    public void handleSkinInView(Player displayedPlayer, Player viewer) {
+        if (!viewer.getTabList().getDisplayedPlayers().contains(displayedPlayer)) {
+            PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
+            PlayerInfoPacket.AddPlayer addPlayer = new PlayerInfoPacket.AddPlayer(displayedPlayer.getUuid(), displayedPlayer.getUsername(), displayedPlayer.getGameMode(), displayedPlayer.getLatency());
+            addPlayer.displayName = displayedPlayer.getDisplayName();
+
+            // Skin support
+            if (displayedPlayer.getSkin() != null) {
+                final String textures = displayedPlayer.getSkin().getTextures();
+                final String signature = displayedPlayer.getSkin().getSignature();
+                new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
+                addPlayer.properties.add(new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature));
+            }
+            playerInfoPacket.playerInfos.add(addPlayer);
+            viewer.getPlayerConnection().sendPacket(playerInfoPacket);
+
+            PlayerInfoPacket playerRemoveInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
+            PlayerInfoPacket.RemovePlayer removePlayer = new PlayerInfoPacket.RemovePlayer(displayedPlayer.getUuid());
+            playerRemoveInfoPacket.playerInfos.add(removePlayer);
+            viewer.getPlayerConnection().sendPacket(playerRemoveInfoPacket);
+        }
+    }
+
+    /**
      * Updates the latency of the player in all TabLists that the player is displayed
      *
      * @param player the updated player
@@ -61,7 +93,7 @@ public class TabListManager {
 
 
         for (TabList tabList : this.tabLists) {
-            if (tabList.isLatencyUpdates() && tabList.getDisplayedPlayers().contains(player)) {
+            if (tabList.doesLatencyUpdate() && tabList.getDisplayedPlayers().contains(player)) {
                 PacketUtils.sendGroupedPacket(tabList.getViewers(), playerInfoPacket);
             }
         }
