@@ -9,16 +9,15 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
-import net.minestom.server.event.server.HandshakeEvent;
-import net.minestom.server.event.server.StatusRequestEvent;
+import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.optifine.OptifineSupport;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
-import net.minestom.server.ping.ResponseData;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.storage.systems.FileStorageSystem;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
+import org.w3c.dom.Text;
 
 import java.util.UUID;
 
@@ -66,19 +65,37 @@ public class Main {
 
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night")).schedule();
 
-        MinecraftServer.getGlobalEventHandler().addEventCallback(StatusRequestEvent.class, event -> {
+        MinecraftServer.getGlobalEventHandler().addEventCallback(ServerListPingEvent.class, event -> {
             event.setMaxPlayer(0);
             event.setOnline(MinecraftServer.getConnectionManager().getOnlinePlayers().size());
             event.addPlayer("The first line is separated from the others", UUID.randomUUID());
             event.addPlayer("Could be a name, or a message", UUID.randomUUID());
-            event.setDescription(Component.text("You can do ")
-                    .append(Component.text("RGB", TextColor.color(0x66b3ff)))
-                    .append(Component.text(" color here")));
-
-
             event.addPlayer("IP test: " + event.getConnection().getRemoteAddress().toString(), UUID.randomUUID());
             event.addPlayer("Use " + (char)0x00a7 + "7section characters", UUID.randomUUID());
             event.addPlayer((char)0x00a7 + "7" + (char)0x00a7 + "ofor formatting" + (char)0x00a7 + "r: (" + (char)0x00a7 + "6char" + (char)0x00a7 + "r)" + (char)0x00a7 + "90x00a7", UUID.randomUUID());
+
+            event.addPlayer("Connection Info:");
+            String ip = event.getClientServerAddress();
+            event.addPlayer((char)0x00a7 + "8-  " + (char)0x00a7 +"7IP: " + (char)0x00a7 + "e" + (ip != null ? ip : "???"));
+            event.addPlayer((char)0x00a7 + "8-  " + (char)0x00a7 +"7PORT: " + (char)0x00a7 + "e" + event.getClientServerPort());
+            event.addPlayer((char)0x00a7 + "8-  " + (char)0x00a7 +"7VERSION: " + (char)0x00a7 + "e" + event.getClientProtocolVersion());
+
+            // Check if client supports RGB color
+            if (event.getClientProtocolVersion() >= 713) { // Snapshot 20w17a
+                event.setDescription(Component.text("You can do ")
+                        .append(Component.text("RGB", TextColor.color(0x66b3ff)))
+                        .append(Component.text(" color here")));
+            } else {
+                event.setDescription(Component.text("You can do ")
+                        .append(Component.text("RGB", NamedTextColor.nearestTo(TextColor.color(0x66b3ff))))
+                        .append(Component.text(" color here,"))
+                        .append(Component.newline())
+                        .append(Component.text("if you are on 1.16 or up"))
+                );
+            }
+
+
+
 
 
         });

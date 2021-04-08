@@ -7,7 +7,9 @@ import net.minestom.server.event.Event;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.ping.HandshakeData;
 import net.minestom.server.ping.ResponseData;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class ServerListPingEvent extends Event implements CancellableEvent {
@@ -134,6 +136,14 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
     }
 
     /**
+     * Adds a player to the response.
+     * {@link UUID#randomUUID()} is used as a default parameter for uuid
+     */
+    public void addPlayer(String name) {
+        responseData.addPlayer(name, UUID.randomUUID());
+    }
+
+    /**
      * Removes all of the ping players from this {@link #responseData#pingPlayers}. The {@link #responseData#pingPlayers} list
      * will be empty this call returns.
      */
@@ -161,5 +171,31 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
         responseData.setFavicon(favicon);
     }
 
+    /**
+     * Get the server address a client used to connect.
+     * may be null
+     * @return the server address
+     */
+    public @Nullable String getClientServerAddress() {
+        return Objects.requireNonNull(connection.getHandshakeData()).getServerAddress();
+    }
+
+    /**
+     * Get the server port a client used to connect.
+     *
+     * @return the server port
+     */
+    public int getClientServerPort() {
+        return Objects.requireNonNull(connection.getHandshakeData()).getServerPort();
+    }
+
+    /**
+     * Get the protocol version a client used to connect.
+     *
+     * @return the protocol version
+     */
+    public int getClientProtocolVersion() {
+        return Objects.requireNonNull(connection.getHandshakeData()).getProtocolVersion();
+    }
 
 }
