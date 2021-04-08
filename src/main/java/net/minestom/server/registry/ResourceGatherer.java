@@ -94,6 +94,7 @@ public class ResourceGatherer {
     }
 
     private static void runDataGenerator(File serverJar) throws IOException {
+        // TODO: Use MinestomDataGenerator
         ProcessBuilder dataGenerator = new ProcessBuilder("java", "-cp", serverJar.getName(), "net.minecraft.data.Main", "--all", "--server", "--dev");
         dataGenerator.directory(TMP_FOLDER);
         LOGGER.info("Now running data generator with options '--dev', '--server', '--all'");

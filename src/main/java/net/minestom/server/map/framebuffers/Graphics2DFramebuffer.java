@@ -1,7 +1,7 @@
 package net.minestom.server.map.framebuffers;
 
 import net.minestom.server.map.Framebuffer;
-import net.minestom.server.map.MapColors;
+import net.minestom.server.map.MapColor;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -44,7 +44,7 @@ public class Graphics2DFramebuffer implements Framebuffer {
         // TODO: update subparts only
         for (int x = 0; x < 128; x++) {
             for (int z = 0; z < 128; z++) {
-                colors[Framebuffer.index(x, z)] = MapColors.closestColor(get(x, z)).getIndex();
+                colors[Framebuffer.index(x, z)] = MapColor.closestColor(get(x, z)).getIndex();
             }
         }
         return colors;
