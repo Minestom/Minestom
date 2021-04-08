@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
+import net.minestom.server.entity.Player;
 import net.minestom.server.instance.batch.Batch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
@@ -60,6 +61,33 @@ public interface BlockModifier {
      * @param data          the block {@link Data}, can be null
      */
     void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data);
+
+    /**
+     *
+     * Sets a block, possibly {@link CustomBlock}, with player context at a position.
+     *
+     * @param player             the {@link Player} that places the block
+     * @param x                  the x coordinates at which to place the block
+     * @param y                  the y coordinates at which to place the block
+     * @param z                  the z coordinates at which to place the block
+     * @param blockId            the base id of the block being placed (no properties)
+     * @param customBlockId      the id of the custom block, 0 if none
+     * @param data               the block {@link Data}, can be null
+     */
+    void placeBlock(@NotNull Player player, int x, int y, int z, short blockId, short customBlockId, @Nullable Data data);
+
+    /**
+     *
+     * Sets a block, possibly {@link CustomBlock}, at a position.
+     *
+     * @param x                  the x coordinates at which to place the block
+     * @param y                  the y coordinates at which to place the block
+     * @param z                  the z coordinates at which to place the block
+     * @param blockId            the base id of the block being placed (no properties)
+     * @param customBlockId      the id of the custom block, 0 if none
+     * @param data               the block {@link Data}, can be null
+     */
+    void setBlock(int x, int y, int z, short blockId, short customBlockId, @Nullable Data data);
 
     default void setBlockStateId(int x, int y, int z, short blockStateId) {
         setBlockStateId(x, y, z, blockStateId, null);
