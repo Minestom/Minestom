@@ -152,23 +152,11 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(boolean,boolean,net.minestom.server.item.firework.FireworkEffectType,net.minestom.server.chat.ChatColor,net.minestom.server.chat.ChatColor)">FireworkEffect</a></span>&#8203;(boolean&nbsp;flicker,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(boolean,boolean,net.minestom.server.item.firework.FireworkEffectType,java.util.List,java.util.List)">FireworkEffect</a></span>&#8203;(boolean&nbsp;flicker,
               boolean&nbsp;trail,
               <a href="FireworkEffectType.html" title="enum in net.minestom.server.item.firework">FireworkEffectType</a>&nbsp;type,
-              <a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;color,
-              <a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;fadeColor)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#%3Cinit%3E(boolean,boolean,net.minestom.server.item.firework.FireworkEffectType,net.minestom.server.color.Color,net.minestom.server.color.Color)"><code>FireworkEffect(boolean, boolean, FireworkEffectType, Color, Color)</code></a></div>
-</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(boolean,boolean,net.minestom.server.item.firework.FireworkEffectType,net.minestom.server.color.Color,net.minestom.server.color.Color)">FireworkEffect</a></span>&#8203;(boolean&nbsp;flicker,
-              boolean&nbsp;trail,
-              <a href="FireworkEffectType.html" title="enum in net.minestom.server.item.firework">FireworkEffectType</a>&nbsp;type,
-              <a href="../../color/Color.html" title="class in net.minestom.server.color">Color</a>&nbsp;color,
-              <a href="../../color/Color.html" title="class in net.minestom.server.color">Color</a>&nbsp;fadeColor)</code></th>
+              <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../color/Color.html" title="class in net.minestom.server.color">Color</a>&gt;&nbsp;color,
+              <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../color/Color.html" title="class in net.minestom.server.color">Color</a>&gt;&nbsp;fadeColor)</code></th>
 <td class="colLast">
 <div class="block">Initializes a new firework effect.</div>
 </td>
@@ -272,33 +260,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(boolean,boolean,net.minestom.server.item.firework.FireworkEffectType,net.minestom.server.chat.ChatColor,net.minestom.server.chat.ChatColor)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>FireworkEffect</h4>
-<pre><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;FireworkEffect&#8203;(boolean&nbsp;flicker,
-                      boolean&nbsp;trail,
-                      <a href="FireworkEffectType.html" title="enum in net.minestom.server.item.firework">FireworkEffectType</a>&nbsp;type,
-                      <a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;color,
-                      <a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;fadeColor)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#%3Cinit%3E(boolean,boolean,net.minestom.server.item.firework.FireworkEffectType,net.minestom.server.color.Color,net.minestom.server.color.Color)"><code>FireworkEffect(boolean, boolean, FireworkEffectType, Color, Color)</code></a></div>
-</div>
-<div class="block">Initializes a new firework effect.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>flicker</code> - <code>true</code> if this explosion has the Twinkle effect (glowstone dust), otherwise <code>false</code>.</dd>
-<dd><code>trail</code> - <code>true</code> if this explosion hsa the Trail effect (diamond), otherwise <code>false</code>.</dd>
-<dd><code>type</code> - The shape of this firework's explosion.</dd>
-<dd><code>color</code> - The primary color of this firework effect.</dd>
-<dd><code>fadeColor</code> - The secondary color of this firework effect.</dd>
-</dl>
-</li>
-</ul>
-<a id="&lt;init&gt;(boolean,boolean,net.minestom.server.item.firework.FireworkEffectType,net.minestom.server.color.Color,net.minestom.server.color.Color)">
+<a id="&lt;init&gt;(boolean,boolean,net.minestom.server.item.firework.FireworkEffectType,java.util.List,java.util.List)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -307,16 +269,16 @@ public&nbsp;FireworkEffect&#8203;(boolean&nbsp;flicker,
 <pre>public&nbsp;FireworkEffect&#8203;(boolean&nbsp;flicker,
                       boolean&nbsp;trail,
                       <a href="FireworkEffectType.html" title="enum in net.minestom.server.item.firework">FireworkEffectType</a>&nbsp;type,
-                      <a href="../../color/Color.html" title="class in net.minestom.server.color">Color</a>&nbsp;color,
-                      <a href="../../color/Color.html" title="class in net.minestom.server.color">Color</a>&nbsp;fadeColor)</pre>
+                      <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../color/Color.html" title="class in net.minestom.server.color">Color</a>&gt;&nbsp;color,
+                      <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../color/Color.html" title="class in net.minestom.server.color">Color</a>&gt;&nbsp;fadeColor)</pre>
 <div class="block">Initializes a new firework effect.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>flicker</code> - <code>true</code> if this explosion has the Twinkle effect (glowstone dust), otherwise <code>false</code>.</dd>
 <dd><code>trail</code> - <code>true</code> if this explosion hsa the Trail effect (diamond), otherwise <code>false</code>.</dd>
 <dd><code>type</code> - The shape of this firework's explosion.</dd>
-<dd><code>color</code> - The primary color of this firework effect.</dd>
-<dd><code>fadeColor</code> - The secondary color of this firework effect.</dd>
+<dd><code>color</code> - The primary colors of this firework effect.</dd>
+<dd><code>fadeColor</code> - The secondary colors of this firework effect.</dd>
 </dl>
 </li>
 </ul>
