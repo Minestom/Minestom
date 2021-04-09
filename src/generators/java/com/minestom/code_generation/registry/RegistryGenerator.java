@@ -27,7 +27,7 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
             new ObjectReferenceImmutablePair<>(ClassName.get("net.minestom.server.item", "Material"), "AIR"),
             new ObjectReferenceImmutablePair<>(ClassName.get("net.minestom.server.item", "Enchantment"), null),
             new ObjectReferenceImmutablePair<>(ClassName.get("net.minestom.server.attribute", "Attribute"), null),
-            new ObjectReferenceImmutablePair<>(ClassName.get("net.minestom.server.entity", ".EntityType"), null),
+            new ObjectReferenceImmutablePair<>(ClassName.get("net.minestom.server.entity", "EntityType"), null),
             new ObjectReferenceImmutablePair<>(ClassName.get("net.minestom.server.particle", "Particle"), null),
             new ObjectReferenceImmutablePair<>(ClassName.get("net.minestom.server.potion", "PotionType"), null),
             new ObjectReferenceImmutablePair<>(ClassName.get("net.minestom.server.potion", "PotionEffect"), null),
