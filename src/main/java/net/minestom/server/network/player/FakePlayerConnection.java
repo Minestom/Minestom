@@ -42,28 +42,5 @@ public class FakePlayerConnection extends PlayerConnection {
         Check.argCondition(!(player instanceof FakePlayer), "FakePlayerController needs a FakePlayer object");
         super.setPlayer(player);
     }
-
-    @Override
-    public void setProtocolVersion(int protocolVersion) {}
-
-    @Override
-    public int getProtocolVersion() {
-        return MinecraftServer.PROTOCOL_VERSION;
-    }
-
-    @Override
-    public @Nullable String getServerAddress() {
-        return MinecraftServer.getNettyServer().getAddress();
-    }
-
-    @Override
-    public void setServerAddress(@Nullable String serverAddress) {}
-
-    @Override
-    public int getServerPort() {
-        return MinecraftServer.getNettyServer().getPort();
-    }
-
-    @Override
-    public void setServerPort(int serverPort) {}
+    
 }
