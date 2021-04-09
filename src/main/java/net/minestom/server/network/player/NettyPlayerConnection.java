@@ -118,7 +118,9 @@ public class NettyPlayerConnection extends PlayerConnection {
             if (getPlayer() != null) {
                 // Flush happen during #update()
                 if (serverPacket instanceof CacheablePacket && MinecraftServer.hasPacketCaching()) {
-                    CacheablePacket.writeCache(tickBuffer, serverPacket);
+                    synchronized (tickBuffer) {
+                        CacheablePacket.writeCache(tickBuffer, serverPacket);
+                    }
                 } else {
                     write(serverPacket, skipTranslating);
                 }
