@@ -1,7 +1,10 @@
 package net.minestom.server.command.builder.arguments;
 
 import com.google.common.annotations.Beta;
-import net.minestom.server.command.builder.*;
+import net.minestom.server.command.builder.ArgumentCallback;
+import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandExecutor;
+import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.suggestion.SuggestionCallback;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
@@ -221,12 +224,11 @@ public abstract class Argument<T> {
      * Maps this argument's output to another result.
      *
      * @param mapper The mapper to use (this argument's input --> desired output)
-     * @param <O> The type of output expected.
-     *
+     * @param <O>    The type of output expected.
      * @return A new ArgumentMap that can get this complex object type.
      */
     @Beta
-    public <O> ArgumentMap<T, O> map(ArgumentMap.ArgumentMapper<T, O> mapper) {
+    public <O> @NotNull ArgumentMap<T, O> map(@NotNull ArgumentMap.Mapper<T, O> mapper) {
         return new ArgumentMap<>(this, mapper);
     }
 

@@ -13,10 +13,10 @@ import org.jetbrains.annotations.NotNull;
 public class ArgumentMap<I, O> extends Argument<O> {
 
     final Argument<I> argument;
-    final ArgumentMapper<I, O> mapper;
+    final Mapper<I, O> mapper;
 
-    protected ArgumentMap(Argument<I> argument, ArgumentMapper<I, O> mapper) {
-        super(argument.getId());
+    protected ArgumentMap(@NotNull Argument<I> argument, @NotNull Mapper<I, O> mapper) {
+        super(argument.getId(), argument.allowSpace(), argument.useRemaining());
 
         this.argument = argument;
         this.mapper = mapper;
@@ -40,16 +40,15 @@ public class ArgumentMap<I, O> extends Argument<O> {
      * @param <O> The desired output type from this lambda.
      */
     @FunctionalInterface
-    public interface ArgumentMapper<I, O> {
+    public interface Mapper<I, O> {
 
         /**
-         * Accept's I data from the argument and returns O output
+         * Accepts I data from the argument and returns O output
          *
          * @param i The input processed from an argument
-         *
          * @return The complex data type that came as a result from this argument
          * @throws ArgumentSyntaxException If the input can not be turned into the desired output
-         *          (E.X. an invalid extension name)
+         *                                 (E.X. an invalid extension name)
          */
         O accept(I i) throws ArgumentSyntaxException;
 
