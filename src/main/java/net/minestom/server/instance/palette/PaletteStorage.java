@@ -10,8 +10,6 @@ import net.minestom.server.utils.clone.PublicCloneable;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-
 import static net.minestom.server.instance.Chunk.CHUNK_SECTION_COUNT;
 import static net.minestom.server.instance.Chunk.CHUNK_SECTION_SIZE;
 

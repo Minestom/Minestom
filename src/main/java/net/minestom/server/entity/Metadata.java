@@ -163,9 +163,8 @@ public class Metadata {
     }
 
     public static Value<NBT> NBT(@NotNull NBT nbt) {
-        return new Value<>(TYPE_NBT, nbt, writer -> {
-            writer.writeNBT("", nbt);
-        }, reader -> {
+        return new Value<>(TYPE_NBT, nbt, writer ->
+                writer.writeNBT("", nbt), reader -> {
             try {
                 return reader.readTag();
             } catch (IOException | NBTException e) {

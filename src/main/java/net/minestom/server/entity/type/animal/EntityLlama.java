@@ -2,7 +2,6 @@ package net.minestom.server.entity.type.animal;
 
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.Metadata;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;

@@ -281,8 +281,12 @@ public class BinaryWriter extends OutputStream {
      *
      * @param writeable the object to write
      */
-    public void write(Writeable writeable) {
+    public void write(@NotNull Writeable writeable) {
         writeable.write(this);
+    }
+
+    public void write(@NotNull BinaryWriter writer) {
+        this.buffer.writeBytes(writer.getBuffer());
     }
 
     /**
@@ -291,7 +295,7 @@ public class BinaryWriter extends OutputStream {
      *
      * @param writeables the array of writeables to write
      */
-    public void writeArray(Writeable[] writeables) {
+    public void writeArray(@NotNull Writeable[] writeables) {
         writeVarInt(writeables.length);
         for (Writeable w : writeables) {
             write(w);
@@ -343,7 +347,7 @@ public class BinaryWriter extends OutputStream {
      *
      * @return the raw buffer
      */
-    public ByteBuf getBuffer() {
+    public @NotNull ByteBuf getBuffer() {
         return buffer;
     }
 
@@ -368,7 +372,7 @@ public class BinaryWriter extends OutputStream {
     /**
      * Returns a byte[] with the contents written via BinaryWriter
      */
-    public static byte[] makeArray(Consumer<BinaryWriter> writing) {
+    public static byte[] makeArray(@NotNull Consumer<@NotNull BinaryWriter> writing) {
         BinaryWriter writer = new BinaryWriter();
         writing.accept(writer);
         return writer.toByteArray();

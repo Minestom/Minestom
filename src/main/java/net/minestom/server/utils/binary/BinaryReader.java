@@ -102,13 +102,19 @@ public class BinaryReader extends InputStream {
      *
      * @param maxLength the max length of the string
      * @return the string
-     * @throws IllegalStateException if the string length is higher than {@code maxLength}
+     * @throws IllegalStateException if the string length is invalid or higher than {@code maxLength}
      */
     public String readSizedString(int maxLength) {
         final int length = readVarInt();
-        Check.stateCondition(length > maxLength,
+        Check.stateCondition(!buffer.isReadable(length),
+                "Trying to read a string that is too long (wanted {0}, only have {1})",
+                length,
+                buffer.readableBytes());
+        final String str = buffer.toString(buffer.readerIndex(), length, StandardCharsets.UTF_8);
+        buffer.skipBytes(length);
+        Check.stateCondition(str.length() > maxLength,
                 "String length ({0}) was higher than the max length of {1}", length, maxLength);
-        return buffer.readCharSequence(length, StandardCharsets.UTF_8).toString();
+        return str;
     }
 
     public byte[] readBytes(int length) {
@@ -146,7 +152,7 @@ public class BinaryReader extends InputStream {
     }
 
     public byte[] readRemainingBytes() {
-        return readBytes(buffer.readableBytes());
+        return readBytes(available());
     }
 
     public BlockPosition readBlockPosition() {
@@ -195,13 +201,13 @@ public class BinaryReader extends InputStream {
     }
 
     /**
-     * Creates a new object from the given supplier and calls its {@link Readable#read(BinaryReader)} method with this reader
+     * Creates a new object from the given supplier and calls its {@link Readable#read(BinaryReader)} method with this reader.
      *
      * @param supplier supplier to create new instances of your object
-     * @param <T>
+     * @param <T>      the readable object type
      * @return the read object
      */
-    public <T extends Readable> T read(Supplier<T> supplier) {
+    public <T extends Readable> T read(@NotNull Supplier<@NotNull T> supplier) {
         T result = supplier.get();
         result.read(this);
         return result;
@@ -212,16 +218,16 @@ public class BinaryReader extends InputStream {
      * their respective {@link Readable#read(BinaryReader)} methods.
      *
      * @param supplier supplier to create new instances of your object
-     * @param <T>
+     * @param <T>      the readable object type
      * @return the read objects
      */
-    public <T extends Readable> T[] readArray(Supplier<T> supplier) {
-        T[] result = (T[]) new Object[readVarInt()];
+    public <T extends Readable> @NotNull T[] readArray(@NotNull Supplier<@NotNull T> supplier) {
+        Readable[] result = new Readable[readVarInt()];
         for (int i = 0; i < result.length; i++) {
             result[i] = supplier.get();
             result[i].read(this);
         }
-        return result;
+        return (T[]) result;
     }
 
     public ByteBuf getBuffer() {

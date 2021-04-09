@@ -1,6 +1,7 @@
 package net.minestom.server.entity.pathfinding;
 
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
+import com.extollit.gaming.ai.path.PathOptions;
 import com.extollit.gaming.ai.path.model.IPath;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.entity.Entity;
@@ -140,11 +141,14 @@ public class Navigator {
 
         final Position targetPosition = position.clone();
 
+        final PathOptions pathOptions = new PathOptions()
+                .targetingStrategy(bestEffort ? PathOptions.TargetingStrategy.gravitySnap :
+                        PathOptions.TargetingStrategy.none);
         final IPath path = pathFinder.initiatePathTo(
                 targetPosition.getX(),
                 targetPosition.getY(),
                 targetPosition.getZ(),
-                bestEffort);
+                pathOptions);
         this.path = path;
 
         final boolean success = path != null;

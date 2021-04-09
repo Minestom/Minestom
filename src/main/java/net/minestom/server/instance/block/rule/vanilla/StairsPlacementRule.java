@@ -42,7 +42,7 @@ public class StairsPlacementRule extends BlockPlacementRule {
         OUTER_LEFT,
         OUTER_RIGHT,
         INNER_LEFT,
-        INNER_RIGHT;
+        INNER_RIGHT
     }
 
     private enum Facing {

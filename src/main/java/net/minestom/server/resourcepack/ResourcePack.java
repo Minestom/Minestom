@@ -1,7 +1,6 @@
 package net.minestom.server.resourcepack;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

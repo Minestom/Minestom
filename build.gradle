@@ -124,17 +124,17 @@ dependencies {
     testCompileOnly "org.mockito:mockito-core:2.28.2"
 
     // Netty
-    api 'io.netty:netty-handler:4.1.59.Final'
-    api 'io.netty:netty-codec:4.1.59.Final'
-    api 'io.netty:netty-transport-native-epoll:4.1.59.Final:linux-x86_64'
-    api 'io.netty:netty-transport-native-kqueue:4.1.59.Final:osx-x86_64'
+    api 'io.netty:netty-handler:4.1.63.Final'
+    api 'io.netty:netty-codec:4.1.63.Final'
+    api 'io.netty:netty-transport-native-epoll:4.1.63.Final:linux-x86_64'
+    api 'io.netty:netty-transport-native-kqueue:4.1.63.Final:osx-x86_64'
     api 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.4.Final:linux-x86_64'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     compile group: 'org.apache.commons', name: 'commons-text', version: '1.9'
 
     // https://mvnrepository.com/artifact/it.unimi.dsi/fastutil
-    api 'it.unimi.dsi:fastutil:8.5.2'
+    api 'it.unimi.dsi:fastutil:8.5.4'
 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     api 'com.google.code.gson:gson:2.8.6'
@@ -144,7 +144,7 @@ dependencies {
     api 'com.github.Articdive:Jnoise:1.0.0'
 
     // https://mvnrepository.com/artifact/org.rocksdb/rocksdbjni
-    api 'org.rocksdb:rocksdbjni:6.15.2'
+    api 'org.rocksdb:rocksdbjni:6.16.4'
 
     // Logging
     api 'org.apache.logging.log4j:log4j-core:2.14.0'
@@ -167,7 +167,7 @@ dependencies {
     implementation "com.velocitypowered:velocity-native:1.1.0-SNAPSHOT"
 
     // Path finding
-    api 'com.github.MadMartian:hydrazine-path-finding:1.5.4'
+    api 'com.github.MadMartian:hydrazine-path-finding:1.6.0'
 
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${project.kotlinVersion}"
     api "org.jetbrains.kotlin:kotlin-reflect:${project.kotlinVersion}"

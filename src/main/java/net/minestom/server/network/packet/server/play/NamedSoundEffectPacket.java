@@ -4,7 +4,6 @@ import net.kyori.adventure.sound.Sound.Source;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;

@@ -46,6 +46,11 @@ public class PFPathingEntity implements IPathingEntity {
     }
 
     @Override
+    public boolean bound() {
+        return entity.hasVelocity();
+    }
+
+    @Override
     public float searchRange() {
         return searchRange;
     }
