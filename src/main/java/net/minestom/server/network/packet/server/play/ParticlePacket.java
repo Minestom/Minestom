@@ -6,8 +6,6 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Consumer;
-
 public class ParticlePacket implements ServerPacket {
 
     public int particleId;

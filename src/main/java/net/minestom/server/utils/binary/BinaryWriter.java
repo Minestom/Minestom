@@ -180,6 +180,7 @@ public class BinaryWriter extends OutputStream {
     /**
      * Writes a JsonMessage to the buffer.
      * Simply a writeSizedString with message.toString()
+     *
      * @param message
      */
     public void writeJsonMessage(JsonMessage message) {
@@ -277,20 +278,26 @@ public class BinaryWriter extends OutputStream {
 
     /**
      * Writes the given writeable object into this writer.
+     *
      * @param writeable the object to write
      */
-    public void write(Writeable writeable) {
+    public void write(@NotNull Writeable writeable) {
         writeable.write(this);
+    }
+
+    public void write(@NotNull BinaryWriter writer) {
+        this.buffer.writeBytes(writer.getBuffer());
     }
 
     /**
      * Writes an array of writeable objects to this writer. Will prepend the binary stream with a var int to denote the
      * length of the array.
+     *
      * @param writeables the array of writeables to write
      */
-    public void writeArray(Writeable[] writeables) {
+    public void writeArray(@NotNull Writeable[] writeables) {
         writeVarInt(writeables.length);
-        for(Writeable w : writeables) {
+        for (Writeable w : writeables) {
             write(w);
         }
     }
@@ -340,7 +347,7 @@ public class BinaryWriter extends OutputStream {
      *
      * @return the raw buffer
      */
-    public ByteBuf getBuffer() {
+    public @NotNull ByteBuf getBuffer() {
         return buffer;
     }
 
@@ -365,7 +372,7 @@ public class BinaryWriter extends OutputStream {
     /**
      * Returns a byte[] with the contents written via BinaryWriter
      */
-    public static byte[] makeArray(Consumer<BinaryWriter> writing) {
+    public static byte[] makeArray(@NotNull Consumer<@NotNull BinaryWriter> writing) {
         BinaryWriter writer = new BinaryWriter();
         writing.accept(writer);
         return writer.toByteArray();

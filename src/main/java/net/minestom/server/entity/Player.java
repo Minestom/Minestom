@@ -2753,8 +2753,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         private byte displayedSkinParts;
         private MainHand mainHand;
 
-        private boolean firstRefresh = true;
-
         /**
          * The player game language.
          *
@@ -2829,8 +2827,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             this.mainHand = mainHand;
 
             metadata.setIndex((byte) 16, Metadata.Byte(displayedSkinParts));
-
-            this.firstRefresh = false;
 
             // Client changed his view distance in the settings
             if (viewDistanceChanged) {

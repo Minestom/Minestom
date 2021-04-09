@@ -1,10 +1,8 @@
 package net.minestom.server.item.metadata;
 
-import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
 import net.minestom.server.color.Color;
-import net.minestom.server.color.DyeColor;
 import net.minestom.server.utils.clone.CloneUtils;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;

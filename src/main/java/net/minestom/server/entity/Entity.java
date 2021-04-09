@@ -1538,10 +1538,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     }
 
     private UpdateOption getSynchronizationCooldown() {
-        if (this.customSynchronizationCooldown != null) {
-            return this.customSynchronizationCooldown;
-        }
-        return SYNCHRONIZATION_COOLDOWN;
+        return Objects.requireNonNullElse(this.customSynchronizationCooldown, SYNCHRONIZATION_COOLDOWN);
     }
 
     public enum Pose {

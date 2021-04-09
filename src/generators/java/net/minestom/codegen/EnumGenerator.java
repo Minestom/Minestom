@@ -139,8 +139,7 @@ public class EnumGenerator implements CodeGenerator {
 
             // constructor
             MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder();
-            for (int i = 0; i < parameters.length; i++) {
-                ParameterSpec param = parameters[i];
+            for (ParameterSpec param : parameters) {
                 constructorBuilder.addParameter(param);
 
                 // property assignment
