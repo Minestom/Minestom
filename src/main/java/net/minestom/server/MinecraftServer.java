@@ -746,7 +746,7 @@ public final class MinecraftServer {
      * @param responseDataConsumer the response data consumer, can be null
      * @throws IllegalStateException if called before {@link #init()} or if the server is already running
      *
-     * @deprecated use {@link #start(String, int)} and listen to the {@link net.minestom.server.event.server.StatusRequestEvent} event instead of ResponseDataConsumer
+     * @deprecated use {@link #start(String, int)} and listen to the {@link net.minestom.server.event.server.ServerListPingEvent} event instead of ResponseDataConsumer
      */
     @Deprecated
     public void start(@NotNull String address, int port, @Nullable ResponseDataConsumer responseDataConsumer) {

@@ -240,23 +240,6 @@ public class NettyPlayerConnection extends PlayerConnection {
         this.remoteAddress = remoteAddress;
     }
 
-    /**
-     * Gets the protocol version of a client.
-     *
-     * @return protocol version of client.
-     */
-    public int getProtocolVersion() {
-        return protocolVersion;
-    }
-
-    /**
-     * Changes the protocol version of a connecting client.
-     * @param protocolVersion the protocol version of the client
-     */
-    public void setProtocolVersion(int protocolVersion) {
-        this.protocolVersion = protocolVersion;
-    }
-
 
     @Override
     public void disconnect() {
@@ -313,6 +296,30 @@ public class NettyPlayerConnection extends PlayerConnection {
         return serverPort;
     }
 
+    /**
+     * Gets the protocol version of a client.
+     *
+     * @return protocol version of client.
+     */
+    @Override
+    public int getProtocolVersion() {
+        return protocolVersion;
+    }
+
+
+    /**
+     * Used in {@link net.minestom.server.network.packet.client.handshake.HandshakePacket} to change the internal fields.
+     *
+     * @param serverAddress   the server address which the client used
+     * @param serverPort      the server port which the client used
+     * @param protocolVersion the protocol version which the client used
+     */
+    public void refreshServerInformation(@Nullable String serverAddress, int serverPort, int protocolVersion) {
+        this.serverAddress = serverAddress;
+        this.serverPort = serverPort;
+        this.protocolVersion = protocolVersion;
+    }
+
 
     @Nullable
     public UUID getBungeeUuid() {
@@ -332,17 +339,6 @@ public class NettyPlayerConnection extends PlayerConnection {
         this.bungeeSkin = bungeeSkin;
     }
 
-
-    /**
-     * Used in {@link net.minestom.server.network.packet.client.handshake.HandshakePacket} to change the internal fields.
-     *
-     * @param serverAddress the server address which the client used
-     * @param serverPort    the server port which the client used
-     */
-    public void refreshServerInformation(@Nullable String serverAddress, int serverPort) {
-        this.serverAddress = serverAddress;
-        this.serverPort = serverPort;
-    }
     /**
      * Adds an entry to the plugin request map.
      * <p>

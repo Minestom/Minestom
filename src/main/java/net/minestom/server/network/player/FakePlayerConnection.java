@@ -42,5 +42,5 @@ public class FakePlayerConnection extends PlayerConnection {
         Check.argCondition(!(player instanceof FakePlayer), "FakePlayerController needs a FakePlayer object");
         super.setPlayer(player);
     }
-    
+
 }

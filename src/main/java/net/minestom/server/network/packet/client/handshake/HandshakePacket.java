@@ -66,6 +66,7 @@ public class HandshakePacket implements ClientPreplayPacket {
                     final SocketAddress socketAddress = new java.net.InetSocketAddress(split[1],
                             ((java.net.InetSocketAddress) connection.getRemoteAddress()).getPort());
                     nettyPlayerConnection.setRemoteAddress(socketAddress);
+
                     UUID playerUuid = UUID.fromString(
                             split[2]
                                     .replaceFirst(
@@ -90,18 +91,19 @@ public class HandshakePacket implements ClientPreplayPacket {
                 return;
             }
         }
+
+        if (connection instanceof NettyPlayerConnection) {
+            // Give to the connection the server info that the client used
+            ((NettyPlayerConnection) connection).refreshServerInformation(serverAddress, serverPort, protocolVersion);
+        }
+
         switch (nextState) {
             case 1:
                 connection.setConnectionState(ConnectionState.STATUS);
                 break;
             case 2:
-                if (connection instanceof NettyPlayerConnection) {
-                    ((NettyPlayerConnection) connection).setProtocolVersion(protocolVersion);
-                    ((NettyPlayerConnection) connection).refreshServerInformation(serverAddress, serverPort);
-                }
                 if (protocolVersion == MinecraftServer.PROTOCOL_VERSION) {
                     connection.setConnectionState(ConnectionState.LOGIN);
-
                 } else {
                     // Incorrect client version
                     connection.sendPacket(new LoginDisconnectPacket(INVALID_VERSION_TEXT));
