@@ -133,7 +133,7 @@ public class BlockPlacementListener {
         Data blockData = playerBlockPlaceEvent.getBlockData(); // Possibly null
 
         // Place the block
-        instance.placeBlock(player, chunk, offsetX, offsetY, offsetZ, blockStateId, customBlockId, blockData);
+        instance.placeBlock(player, chunk, blockFace, offsetX, offsetY, offsetZ, blockStateId, customBlockId, blockData);
 
         // Block consuming
         if (playerBlockPlaceEvent.doesConsumeBlock()) {

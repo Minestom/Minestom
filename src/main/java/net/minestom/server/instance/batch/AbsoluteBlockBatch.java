@@ -3,9 +3,11 @@ package net.minestom.server.instance.batch;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.data.Data;
+import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,6 +61,16 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
         final int relativeX = x - (chunkX * Chunk.CHUNK_SIZE_X);
         final int relativeZ = z - (chunkZ * Chunk.CHUNK_SIZE_Z);
         chunkBatch.setSeparateBlocks(relativeX, y, relativeZ, blockStateId, customBlockId, data);
+    }
+
+    @Override
+    public void placeBlock(@NotNull Player player, @NotNull Chunk chunk, @NotNull BlockFace blockFace, int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
+        throw new UnsupportedOperationException("Unsupported for now.");
+    }
+
+    @Override
+    public void setBlock(int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
+        throw new UnsupportedOperationException("Unsupported for now.");
     }
 
     @Override

@@ -7,9 +7,11 @@ import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongList;
 import net.minestom.server.data.Data;
+import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.block.CustomBlockUtils;
@@ -88,6 +90,16 @@ public class ChunkBatch implements Batch<ChunkCallback> {
                 this.blockDataMap.put(index, data);
             }
         }
+    }
+
+    @Override
+    public void placeBlock(@NotNull Player player, @NotNull Chunk chunk, @NotNull BlockFace blockFace, int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
+        throw new UnsupportedOperationException("Unsupported for now.");
+    }
+
+    @Override
+    public void setBlock(int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
+        throw new UnsupportedOperationException("Unsupported for now.");
     }
 
     @Override

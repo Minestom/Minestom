@@ -5,6 +5,7 @@ import net.minestom.server.data.Data;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.batch.Batch;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
@@ -68,6 +69,7 @@ public interface BlockModifier {
      *
      * @param player             the {@link Player} that places the block
      * @param chunk              the {@link Chunk} in which the block is being placed
+     * @param blockFace          the {@link BlockFace} of the block that the block being placed was placed against
      * @param x                  the x coordinates at which to place the block
      * @param y                  the y coordinates at which to place the block
      * @param z                  the z coordinates at which to place the block
@@ -75,7 +77,7 @@ public interface BlockModifier {
      * @param customBlockId      the id of the custom block, 0 if none
      * @param data               the block {@link Data}, can be null
      */
-    void placeBlock(@NotNull Player player, @NotNull Chunk chunk, int x, int y, int z, short blockId, short customBlockId, @Nullable Data data);
+    void placeBlock(@NotNull Player player, @NotNull Chunk chunk, @NotNull BlockFace blockFace, int x, int y, int z, short blockId, short customBlockId, @Nullable Data data);
 
     /**
      *

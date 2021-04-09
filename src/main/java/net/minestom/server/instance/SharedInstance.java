@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.data.Data;
 import net.minestom.server.entity.Player;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
@@ -130,6 +131,16 @@ public class SharedInstance extends Instance {
     @Override
     public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, Data data) {
         this.instanceContainer.setSeparateBlocks(x, y, z, blockStateId, customBlockId, data);
+    }
+
+    @Override
+    public void placeBlock(@NotNull Player player, @NotNull Chunk chunk, @NotNull BlockFace blockFace, int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
+        this.instanceContainer.placeBlock(player, chunk, blockFace, x, y, z, blockId, customBlockId, data);
+    }
+
+    @Override
+    public void setBlock(int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
+        this.instanceContainer.setBlock(x, y, z, blockId, customBlockId, data);
     }
 
     @Override

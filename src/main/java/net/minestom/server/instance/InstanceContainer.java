@@ -12,6 +12,7 @@ import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.batch.ChunkGenerationBatch;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
@@ -124,8 +125,8 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void placeBlock(@NotNull Player player, @NotNull Chunk chunk, int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
-        setBlock(player, chunk, x, y, z, blockId, customBlockId, data);
+    public void placeBlock(@NotNull Player player, @NotNull Chunk chunk, @NotNull BlockFace blockFace,  int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
+        setBlock(player, chunk, blockFace, x, y, z, blockId, customBlockId, data);
     }
 
     @Override
@@ -142,7 +143,7 @@ public class InstanceContainer extends Instance {
         }
     }
 
-    private void setBlock(@NotNull Player player, @NotNull Chunk chunk, int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
+    private void setBlock(@NotNull Player player, @NotNull Chunk chunk, @NotNull BlockFace blockFace, int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
         synchronized (chunk) {
             this.lastBlockChangeTime = System.currentTimeMillis();
 
@@ -158,7 +159,7 @@ public class InstanceContainer extends Instance {
 
             CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
             if (customBlock != null) {
-                customBlock.updateBlockVisual(this, chunk, player, blockPosition, blockId, data);
+                customBlock.updateBlockVisual(this, chunk, player, blockFace, blockPosition, blockId, data);
                 customBlock.onPlace(this, blockPosition, data);
             } else {
                 chunk.UNSAFE_setBlock(x, y, z, blockId, (short) 0, data, false);

@@ -236,11 +236,12 @@ public abstract class CustomBlock {
      * @param instance           the {@link Instance} in which the block is being placed
      * @param chunk              the {@link Chunk} in which the block is being placed
      * @param player             the {@link Player} that placed the block
+     * @param blockFace          the {@link BlockFace} of the block that the block being placed was placed against
      * @param blockPosition      the {@link BlockPosition} at which the block is placed
      * @param blockId            the base id of the block being placed
      * @param data               the {@link Data} of the block, can be null
      */
-    public void updateBlockVisual(@NotNull Instance instance, @NotNull Chunk chunk, @NotNull Player player, @NotNull BlockPosition blockPosition, short blockId, @Nullable Data data) {}
+    public void updateBlockVisual(@NotNull Instance instance, @NotNull Chunk chunk, @NotNull Player player, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition, short blockId, @Nullable Data data) {}
 
     /**
      *
