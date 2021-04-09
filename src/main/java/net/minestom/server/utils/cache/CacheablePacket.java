@@ -46,6 +46,9 @@ public interface CacheablePacket {
 
     @Nullable
     static FramedPacket getCache(@NotNull ServerPacket serverPacket) {
+        if (!(serverPacket instanceof CacheablePacket))
+            return null;
+
         final CacheablePacket cacheablePacket = (CacheablePacket) serverPacket;
         final UUID identifier = cacheablePacket.getIdentifier();
         if (identifier == null) {
@@ -69,6 +72,22 @@ public interface CacheablePacket {
             }
 
             return new FramedPacket(timedBuffer.getBuffer());
+        }
+    }
+
+    static void writeCache(@NotNull ByteBuf buffer, @NotNull ServerPacket serverPacket) {
+        FramedPacket framedPacket = CacheablePacket.getCache(serverPacket);
+        if (framedPacket == null) {
+            PacketUtils.writeFramedPacket(buffer, serverPacket);
+            return;
+        }
+        final ByteBuf body = framedPacket.getBody();
+        synchronized (body) {
+            if (framedPacket.getBody().refCnt() != 0) {
+                buffer.writeBytes(body, body.readerIndex(), body.readableBytes());
+            } else {
+                PacketUtils.writeFramedPacket(buffer, serverPacket);
+            }
         }
     }
 

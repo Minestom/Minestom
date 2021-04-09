@@ -71,22 +71,6 @@ public class NettyPlayerConnection extends PlayerConnection {
         this.tickBuffer.ensureWritable(INITIAL_BUFFER_SIZE);
     }
 
-    @Override
-    public void update() {
-        // Flush
-        final int bufferSize = tickBuffer.writerIndex();
-        if (bufferSize > 0) {
-            this.channel.eventLoop().submit(() -> {
-                if (channel.isActive()) {
-                    writeWaitingPackets();
-                    channel.flush();
-                }
-            });
-        }
-        // Network stats
-        super.update();
-    }
-
     /**
      * Sets the encryption key and add the codecs to the pipeline.
      *
@@ -196,7 +180,7 @@ public class NettyPlayerConnection extends PlayerConnection {
         }
     }
 
-    private void writeWaitingPackets() {
+    public void writeWaitingPackets() {
         if (tickBuffer.writerIndex() == 0) {
             // Nothing to write
             return;
@@ -218,6 +202,16 @@ public class NettyPlayerConnection extends PlayerConnection {
             }
 
             tickBuffer.clear();
+        }
+    }
+
+    public void flush() {
+        final int bufferSize = tickBuffer.writerIndex();
+        if (bufferSize > 0) {
+            if (channel.isActive()) {
+                writeWaitingPackets();
+                channel.flush();
+            }
         }
     }
 
