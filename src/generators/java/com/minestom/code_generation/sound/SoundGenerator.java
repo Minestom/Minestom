@@ -49,7 +49,6 @@ public final class SoundGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
-        ClassName keyIDClassName = ClassName.get("net.kyori.adventure.key", "Key");
 
         JsonArray sounds;
         try {
@@ -69,25 +68,20 @@ public final class SoundGenerator extends MinestomCodeGenerator {
                 FieldSpec.builder(namespaceIDClassName, "id")
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL).addAnnotation(NotNull.class).build()
         );
-        soundClass.addField(
-                FieldSpec.builder(keyIDClassName, "key")
-                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL).addAnnotation(NotNull.class).build()
-        );
         soundClass.addMethod(
                 MethodSpec.constructorBuilder()
                         .addParameter(ParameterSpec.builder(namespaceIDClassName, "id").addAnnotation(NotNull.class).build())
                         .addStatement("this.id = id")
-                        .addStatement("this.key = id.key()")
                         .addModifiers(Modifier.PROTECTED)
                         .build()
         );
         // Override key method (adventure)
         soundClass.addMethod(
                 MethodSpec.methodBuilder("key")
-                        .returns(keyIDClassName)
+                        .returns(ClassName.get("net.kyori.adventure.key", "Key"))
                         .addAnnotation(Override.class)
                         .addAnnotation(NotNull.class)
-                        .addStatement("return this.key")
+                        .addStatement("return this.id")
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
