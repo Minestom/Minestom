@@ -225,6 +225,7 @@ public abstract class Argument<T> {
      *
      * @return A new ArgumentMap that can get this complex object type.
      */
+    @Beta
     public <O> ArgumentMap<T, O> map(ArgumentMapper<T, O> mapper) {
         return new ArgumentMap<>(this, mapper);
     }
