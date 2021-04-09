@@ -198,18 +198,16 @@ extends <a href="ThreadProvider.html" title="class in net.minestom.server.thread
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onChunkLoad(net.minestom.server.instance.Instance,int,int)">onChunkLoad</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-           int&nbsp;chunkX,
-           int&nbsp;chunkZ)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onChunkLoad(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)">onChunkLoad</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+           @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">
 <div class="block">Called when a chunk is loaded.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onChunkUnload(net.minestom.server.instance.Instance,int,int)">onChunkUnload</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-             int&nbsp;chunkX,
-             int&nbsp;chunkZ)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onChunkUnload(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)">onChunkUnload</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+             @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">
 <div class="block">Called when a chunk is unloaded.</div>
 </td>
@@ -241,7 +239,7 @@ extends <a href="ThreadProvider.html" title="class in net.minestom.server.thread
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.thread.<a href="ThreadProvider.html" title="class in net.minestom.server.thread">ThreadProvider</a></h3>
-<code><a href="ThreadProvider.html#conditionalEntityUpdate(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long,net.minestom.server.utils.callback.validator.EntityValidator)">conditionalEntityUpdate</a>, <a href="ThreadProvider.html#getThreadCount()">getThreadCount</a>, <a href="ThreadProvider.html#processChunkTick(net.minestom.server.instance.Instance,long,long)">processChunkTick</a>, <a href="ThreadProvider.html#setThreadCount(int)">setThreadCount</a>, <a href="ThreadProvider.html#updateChunk(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateChunk</a>, <a href="ThreadProvider.html#updateCreatures(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateCreatures</a>, <a href="ThreadProvider.html#updateEntities(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateEntities</a>, <a href="ThreadProvider.html#updateInstance(net.minestom.server.instance.Instance,long)">updateInstance</a>, <a href="ThreadProvider.html#updateLivingEntities(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateLivingEntities</a>, <a href="ThreadProvider.html#updateObjectEntities(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateObjectEntities</a>, <a href="ThreadProvider.html#updatePlayers(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updatePlayers</a></code></li>
+<code><a href="ThreadProvider.html#conditionalEntityUpdate(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long,net.minestom.server.utils.callback.validator.EntityValidator)">conditionalEntityUpdate</a>, <a href="ThreadProvider.html#getThreadCount()">getThreadCount</a>, <a href="ThreadProvider.html#processChunkTick(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">processChunkTick</a>, <a href="ThreadProvider.html#setThreadCount(int)">setThreadCount</a>, <a href="ThreadProvider.html#updateChunk(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateChunk</a>, <a href="ThreadProvider.html#updateCreatures(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateCreatures</a>, <a href="ThreadProvider.html#updateEntities(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateEntities</a>, <a href="ThreadProvider.html#updateInstance(net.minestom.server.instance.Instance,long)">updateInstance</a>, <a href="ThreadProvider.html#updateLivingEntities(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateLivingEntities</a>, <a href="ThreadProvider.html#updateObjectEntities(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updateObjectEntities</a>, <a href="ThreadProvider.html#updatePlayers(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">updatePlayers</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -321,7 +319,7 @@ extends <a href="ThreadProvider.html" title="class in net.minestom.server.thread
 </dl>
 </li>
 </ul>
-<a id="onChunkLoad(net.minestom.server.instance.Instance,int,int)">
+<a id="onChunkLoad(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -329,23 +327,22 @@ extends <a href="ThreadProvider.html" title="class in net.minestom.server.thread
 <h4>onChunkLoad</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;onChunkLoad&#8203;(@NotNull
                         @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                        int&nbsp;chunkX,
-                        int&nbsp;chunkZ)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ThreadProvider.html#onChunkLoad(net.minestom.server.instance.Instance,int,int)">ThreadProvider</a></code></span></div>
+                        @NotNull
+                        @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ThreadProvider.html#onChunkLoad(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)">ThreadProvider</a></code></span></div>
 <div class="block">Called when a chunk is loaded.
  <p>
  Be aware that this is possible for an instance to load chunks before being registered.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="ThreadProvider.html#onChunkLoad(net.minestom.server.instance.Instance,int,int)">onChunkLoad</a></code>&nbsp;in class&nbsp;<code><a href="ThreadProvider.html" title="class in net.minestom.server.thread">ThreadProvider</a></code></dd>
+<dd><code><a href="ThreadProvider.html#onChunkLoad(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)">onChunkLoad</a></code>&nbsp;in class&nbsp;<code><a href="ThreadProvider.html" title="class in net.minestom.server.thread">ThreadProvider</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>instance</code> - the instance of the chunk</dd>
-<dd><code>chunkX</code> - the chunk X</dd>
-<dd><code>chunkZ</code> - the chunk Z</dd>
+<dd><code>chunk</code> - the loaded chunk</dd>
 </dl>
 </li>
 </ul>
-<a id="onChunkUnload(net.minestom.server.instance.Instance,int,int)">
+<a id="onChunkUnload(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -353,17 +350,16 @@ extends <a href="ThreadProvider.html" title="class in net.minestom.server.thread
 <h4>onChunkUnload</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;onChunkUnload&#8203;(@NotNull
                           @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                          int&nbsp;chunkX,
-                          int&nbsp;chunkZ)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ThreadProvider.html#onChunkUnload(net.minestom.server.instance.Instance,int,int)">ThreadProvider</a></code></span></div>
+                          @NotNull
+                          @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ThreadProvider.html#onChunkUnload(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)">ThreadProvider</a></code></span></div>
 <div class="block">Called when a chunk is unloaded.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="ThreadProvider.html#onChunkUnload(net.minestom.server.instance.Instance,int,int)">onChunkUnload</a></code>&nbsp;in class&nbsp;<code><a href="ThreadProvider.html" title="class in net.minestom.server.thread">ThreadProvider</a></code></dd>
+<dd><code><a href="ThreadProvider.html#onChunkUnload(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)">onChunkUnload</a></code>&nbsp;in class&nbsp;<code><a href="ThreadProvider.html" title="class in net.minestom.server.thread">ThreadProvider</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>instance</code> - the instance of the chunk</dd>
-<dd><code>chunkX</code> - the chunk X</dd>
-<dd><code>chunkZ</code> - the chunk Z</dd>
+<dd><code>chunk</code> - the unloaded chunk</dd>
 </dl>
 </li>
 </ul>

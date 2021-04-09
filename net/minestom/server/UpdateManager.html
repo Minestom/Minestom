@@ -225,18 +225,16 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#signalChunkLoad(net.minestom.server.instance.Instance,int,int)">signalChunkLoad</a></span>&#8203;(<a href="instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-               int&nbsp;chunkX,
-               int&nbsp;chunkZ)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#signalChunkLoad(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)">signalChunkLoad</a></span>&#8203;(<a href="instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+               @NotNull <a href="instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">
 <div class="block">Signals the <a href="thread/ThreadProvider.html" title="class in net.minestom.server.thread"><code>ThreadProvider</code></a> that a chunk has been loaded.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#signalChunkUnload(net.minestom.server.instance.Instance,int,int)">signalChunkUnload</a></span>&#8203;(<a href="instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                 int&nbsp;chunkX,
-                 int&nbsp;chunkZ)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#signalChunkUnload(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)">signalChunkUnload</a></span>&#8203;(<a href="instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                 @NotNull <a href="instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">
 <div class="block">Signals the <a href="thread/ThreadProvider.html" title="class in net.minestom.server.thread"><code>ThreadProvider</code></a> that a chunk has been unloaded.</div>
 </td>
@@ -385,43 +383,41 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
-<a id="signalChunkLoad(net.minestom.server.instance.Instance,int,int)">
+<a id="signalChunkLoad(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>signalChunkLoad</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;signalChunkLoad&#8203;(<a href="instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                            int&nbsp;chunkX,
-                            int&nbsp;chunkZ)</pre>
+                            @NotNull
+                            @NotNull <a href="instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
 <div class="block">Signals the <a href="thread/ThreadProvider.html" title="class in net.minestom.server.thread"><code>ThreadProvider</code></a> that a chunk has been loaded.
  <p>
  WARNING: should be automatically done by the <a href="instance/Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> implementation.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>instance</code> - the instance of the chunk</dd>
-<dd><code>chunkX</code> - the chunk X</dd>
-<dd><code>chunkZ</code> - the chunk Z</dd>
+<dd><code>chunk</code> - the loaded chunk</dd>
 </dl>
 </li>
 </ul>
-<a id="signalChunkUnload(net.minestom.server.instance.Instance,int,int)">
+<a id="signalChunkUnload(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>signalChunkUnload</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;signalChunkUnload&#8203;(<a href="instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                              int&nbsp;chunkX,
-                              int&nbsp;chunkZ)</pre>
+                              @NotNull
+                              @NotNull <a href="instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
 <div class="block">Signals the <a href="thread/ThreadProvider.html" title="class in net.minestom.server.thread"><code>ThreadProvider</code></a> that a chunk has been unloaded.
  <p>
  WARNING: should be automatically done by the <a href="instance/Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> implementation.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>instance</code> - the instance of the chunk</dd>
-<dd><code>chunkX</code> - the chunk X</dd>
-<dd><code>chunkZ</code> - the chunk Z</dd>
+<dd><code>chunk</code> - the unloaded chunk</dd>
 </dl>
 </li>
 </ul>

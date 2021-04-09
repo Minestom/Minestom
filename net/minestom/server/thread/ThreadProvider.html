@@ -131,7 +131,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><code><a href="PerGroupChunkProvider.html" title="class in net.minestom.server.thread">PerGroupChunkProvider</a></code>, <code><a href="PerInstanceThreadProvider.html" title="class in net.minestom.server.thread">PerInstanceThreadProvider</a></code>, <code><a href="SingleThreadProvider.html" title="class in net.minestom.server.thread">SingleThreadProvider</a></code></dd>
+<dd><code><a href="PerInstanceThreadProvider.html" title="class in net.minestom.server.thread">PerInstanceThreadProvider</a></code>, <code><a href="SingleThreadProvider.html" title="class in net.minestom.server.thread">SingleThreadProvider</a></code></dd>
 </dl>
 <hr>
 <pre>public abstract class <span class="typeNameLabel">ThreadProvider</span>
@@ -225,18 +225,16 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onChunkLoad(net.minestom.server.instance.Instance,int,int)">onChunkLoad</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-           int&nbsp;chunkX,
-           int&nbsp;chunkZ)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onChunkLoad(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)">onChunkLoad</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+           @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">
 <div class="block">Called when a chunk is loaded.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>abstract void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onChunkUnload(net.minestom.server.instance.Instance,int,int)">onChunkUnload</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-             int&nbsp;chunkX,
-             int&nbsp;chunkZ)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onChunkUnload(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)">onChunkUnload</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+             @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">
 <div class="block">Called when a chunk is unloaded.</div>
 </td>
@@ -257,8 +255,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processChunkTick(net.minestom.server.instance.Instance,long,long)">processChunkTick</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                long&nbsp;chunkIndex,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processChunkTick(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">processChunkTick</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                 long&nbsp;time)</code></th>
 <td class="colLast">
 <div class="block">Processes a whole tick for a chunk.</div>
@@ -433,7 +431,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
-<a id="onChunkLoad(net.minestom.server.instance.Instance,int,int)">
+<a id="onChunkLoad(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -441,20 +439,19 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <h4>onChunkLoad</h4>
 <pre class="methodSignature">public abstract&nbsp;void&nbsp;onChunkLoad&#8203;(@NotNull
                                  @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                                 int&nbsp;chunkX,
-                                 int&nbsp;chunkZ)</pre>
+                                 @NotNull
+                                 @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
 <div class="block">Called when a chunk is loaded.
  <p>
  Be aware that this is possible for an instance to load chunks before being registered.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>instance</code> - the instance of the chunk</dd>
-<dd><code>chunkX</code> - the chunk X</dd>
-<dd><code>chunkZ</code> - the chunk Z</dd>
+<dd><code>chunk</code> - the loaded chunk</dd>
 </dl>
 </li>
 </ul>
-<a id="onChunkUnload(net.minestom.server.instance.Instance,int,int)">
+<a id="onChunkUnload(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -462,14 +459,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <h4>onChunkUnload</h4>
 <pre class="methodSignature">public abstract&nbsp;void&nbsp;onChunkUnload&#8203;(@NotNull
                                    @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                                   int&nbsp;chunkX,
-                                   int&nbsp;chunkZ)</pre>
+                                   @NotNull
+                                   @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
 <div class="block">Called when a chunk is unloaded.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>instance</code> - the instance of the chunk</dd>
-<dd><code>chunkX</code> - the chunk X</dd>
-<dd><code>chunkZ</code> - the chunk Z</dd>
+<dd><code>chunk</code> - the unloaded chunk</dd>
 </dl>
 </li>
 </ul>
@@ -518,7 +514,7 @@ public abstract&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11
 </dl>
 </li>
 </ul>
-<a id="processChunkTick(net.minestom.server.instance.Instance,long,long)">
+<a id="processChunkTick(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk,long)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -526,13 +522,14 @@ public abstract&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11
 <h4>processChunkTick</h4>
 <pre class="methodSignature">protected&nbsp;void&nbsp;processChunkTick&#8203;(@NotNull
                                 @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                                long&nbsp;chunkIndex,
+                                @NotNull
+                                @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
                                 long&nbsp;time)</pre>
 <div class="block">Processes a whole tick for a chunk.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>instance</code> - the instance of the chunk</dd>
-<dd><code>chunkIndex</code> - the index of the chunk <a href="../utils/chunk/ChunkUtils.html#getChunkIndex(int,int)"><code>ChunkUtils.getChunkIndex(int, int)</code></a></dd>
+<dd><code>chunk</code> - the chunk to update</dd>
 <dd><code>time</code> - the time of the update in milliseconds</dd>
 </dl>
 </li>
