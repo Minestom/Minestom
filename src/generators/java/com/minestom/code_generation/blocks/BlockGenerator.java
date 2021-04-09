@@ -51,7 +51,6 @@ public final class BlockGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
-        ClassName keyIDClassName = ClassName.get("net.kyori.adventure.key", "Key");
 
         List<JavaFile> filesToWrite = new ArrayList<>();
 
@@ -75,10 +74,6 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL).addAnnotation(NotNull.class).build()
         );
         blockClass.addField(
-                FieldSpec.builder(keyIDClassName, "key")
-                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL).addAnnotation(NotNull.class).build()
-        );
-        blockClass.addField(
                 FieldSpec.builder(TypeName.SHORT, "defaultBlockState")
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL).build()
         );
@@ -96,7 +91,6 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .addParameter(TypeName.SHORT, "defaultBlockState")
 
                         .addStatement("this.id = id")
-                        .addStatement("this.key = id.key()")
                         .addStatement("this.defaultBlockState = defaultBlockState")
                         .addModifiers(Modifier.PROTECTED)
                         .build()
@@ -104,10 +98,10 @@ public final class BlockGenerator extends MinestomCodeGenerator {
         // Override key method (adventure)
         blockClass.addMethod(
                 MethodSpec.methodBuilder("key")
-                        .returns(keyIDClassName)
+                        .returns(ClassName.get("net.kyori.adventure.key", "Key"))
                         .addAnnotation(Override.class)
                         .addAnnotation(NotNull.class)
-                        .addStatement("return this.key")
+                        .addStatement("return this.id")
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );

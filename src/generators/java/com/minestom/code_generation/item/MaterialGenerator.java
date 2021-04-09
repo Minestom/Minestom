@@ -49,7 +49,6 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
-        ClassName keyIDClassName = ClassName.get("net.kyori.adventure.key", "Key");
 
         JsonArray items;
         try {
@@ -70,10 +69,6 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL).addAnnotation(NotNull.class).build()
         );
         itemClass.addField(
-                FieldSpec.builder(keyIDClassName, "key")
-                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL).addAnnotation(NotNull.class).build()
-        );
-        itemClass.addField(
                 FieldSpec.builder(TypeName.BYTE, "maxDefaultStackSize")
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL).build()
         );
@@ -82,7 +77,6 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                         .addParameter(ParameterSpec.builder(namespaceIDClassName, "id").addAnnotation(NotNull.class).build())
                         .addParameter(TypeName.BYTE, "maxDefaultStackSize")
                         .addStatement("this.id = id")
-                        .addStatement("this.key = id.key()")
                         .addStatement("this.maxDefaultStackSize = maxDefaultStackSize")
                         .addModifiers(Modifier.PROTECTED)
                         .build()
@@ -90,10 +84,10 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
         // Override key method (adventure)
         itemClass.addMethod(
                 MethodSpec.methodBuilder("key")
-                        .returns(keyIDClassName)
+                        .returns(ClassName.get("net.kyori.adventure.key", "Key"))
                         .addAnnotation(Override.class)
                         .addAnnotation(NotNull.class)
-                        .addStatement("return this.key")
+                        .addStatement("return this.id")
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );

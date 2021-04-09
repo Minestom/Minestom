@@ -50,7 +50,6 @@ public final class AttributeGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
-        ClassName keyIDClassName = ClassName.get("net.kyori.adventure.key", "Key");
 
         JsonArray attributes;
         try {
@@ -73,10 +72,6 @@ public final class AttributeGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL).addAnnotation(NotNull.class).build()
         );
         attributeClass.addField(
-                FieldSpec.builder(keyIDClassName, "key")
-                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL).addAnnotation(NotNull.class).build()
-        );
-        attributeClass.addField(
                 FieldSpec.builder(TypeName.DOUBLE, "defaultValue")
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL).build()
         );
@@ -90,7 +85,6 @@ public final class AttributeGenerator extends MinestomCodeGenerator {
                         .addParameter(ParameterSpec.builder(TypeName.BOOLEAN, "clientSyncable").build())
                         .addParameter(ParameterSpec.builder(TypeName.DOUBLE, "defaultValue").build())
                         .addStatement("this.id = id")
-                        .addStatement("this.key = id.key()")
                         .addStatement("this.clientSyncable = clientSyncable")
                         .addStatement("this.defaultValue = defaultValue")
                         .addModifiers(Modifier.PROTECTED)
@@ -99,10 +93,10 @@ public final class AttributeGenerator extends MinestomCodeGenerator {
         // Override key method (adventure)
         attributeClass.addMethod(
                 MethodSpec.methodBuilder("key")
-                        .returns(keyIDClassName)
+                        .returns(ClassName.get("net.kyori.adventure.key", "Key"))
                         .addAnnotation(Override.class)
                         .addAnnotation(NotNull.class)
-                        .addStatement("return this.key")
+                        .addStatement("return this.id")
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );

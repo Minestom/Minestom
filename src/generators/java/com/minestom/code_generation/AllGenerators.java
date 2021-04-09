@@ -11,6 +11,7 @@ import com.minestom.code_generation.map.MapColorsGenerator;
 import com.minestom.code_generation.particle.ParticleGenerator;
 import com.minestom.code_generation.registry.RegistryGenerator;
 import com.minestom.code_generation.sound.SoundGenerator;
+import net.kyori.adventure.sound.Sound;
 
 import java.io.File;
 
