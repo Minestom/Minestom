@@ -5,11 +5,13 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.util.Codec;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.inventory.Inventory;
-import net.minestom.server.item.*;
+import net.minestom.server.item.Enchantment;
+import net.minestom.server.item.ItemMetaBuilder;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
 import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.registry.Registries;
@@ -86,7 +88,7 @@ public final class NBTUtils {
             final ItemStack stack = inventory.getItemStack(i);
             NBTCompound nbt = new NBTCompound();
 
-            NBTCompound tag = getMetaNBT(stack.getMeta());
+            NBTCompound tag = stack.getMeta().nbt();
 
             nbt.set("tag", tag);
             nbt.setByte("Slot", (byte) i);
@@ -288,103 +290,6 @@ public final class NBTUtils {
 
             packet.writeNBT("", itemStack.getMeta().nbt());
         }
-    }
-
-    public static void writeMetaNBT(@NotNull ItemMeta itemMeta, @NotNull NBTCompound itemNBT) {
-        // Unbreakable
-        if (itemMeta.isUnbreakable()) {
-            itemNBT.setInt("Unbreakable", 1);
-        }
-
-        // Damage
-        {
-            final int damage = itemMeta.getDamage();
-            if (damage > 0) {
-                itemNBT.setInt("Damage", damage);
-            }
-        }
-
-        // Start display
-        {
-            final var displayName = itemMeta.getDisplayName();
-            final var lore = itemMeta.getLore();
-            final boolean hasDisplayName = displayName != null;
-            final boolean hasLore = !lore.isEmpty();
-            if (hasDisplayName || hasLore) {
-                NBTCompound displayNBT = new NBTCompound();
-                if (hasDisplayName) {
-                    final String name = AdventureSerializer.serialize(displayName);
-                    displayNBT.setString("Name", name);
-                }
-
-                if (hasLore) {
-                    final NBTList<NBTString> loreNBT = new NBTList<>(NBTTypes.TAG_String);
-                    for (Component line : lore) {
-                        loreNBT.add(new NBTString(GsonComponentSerializer.gson().serialize(line)));
-                    }
-                    displayNBT.set("Lore", loreNBT);
-                }
-
-                itemNBT.set("display", displayNBT);
-            }
-        }
-        // End display
-
-        // Start enchantment
-        {
-            final var enchantmentMap = itemMeta.getEnchantmentMap();
-            if (!enchantmentMap.isEmpty()) {
-                NBTUtils.writeEnchant(itemNBT, "Enchantments", enchantmentMap);
-            }
-        }
-        // End enchantment
-
-        // Start attribute
-        {
-            final var attributes = itemMeta.getAttributes();
-            if (!attributes.isEmpty()) {
-                NBTList<NBTCompound> attributesNBT = new NBTList<>(NBTTypes.TAG_Compound);
-
-                for (ItemAttribute itemAttribute : attributes) {
-                    final UUID uuid = itemAttribute.getUuid();
-                    attributesNBT.add(
-                            new NBTCompound()
-                                    .setIntArray("UUID", Utils.uuidToIntArray(uuid))
-                                    .setDouble("Amount", itemAttribute.getValue())
-                                    .setString("Slot", itemAttribute.getSlot().name().toLowerCase())
-                                    .setString("AttributeName", itemAttribute.getAttribute().getKey())
-                                    .setInt("Operation", itemAttribute.getOperation().getId())
-                                    .setString("Name", itemAttribute.getInternalName())
-                    );
-                }
-                itemNBT.set("AttributeModifiers", attributesNBT);
-            }
-        }
-        // End attribute
-
-        // Start hide flag
-        {
-            final int hideFlag = itemMeta.getHideFlag();
-            if (hideFlag != 0) {
-                itemNBT.setInt("HideFlags", hideFlag);
-            }
-        }
-        // End hide flag
-
-        // Start custom model data
-        {
-            final int customModelData = itemMeta.getCustomModelData();
-            if (customModelData != 0) {
-                itemNBT.setInt("CustomModelData", customModelData);
-            }
-        }
-        // End custom model data
-    }
-
-    public static @NotNull NBTCompound getMetaNBT(@NotNull ItemMeta itemMeta) {
-        var nbt = new NBTCompound();
-        writeMetaNBT(itemMeta, nbt);
-        return nbt;
     }
 
     @FunctionalInterface

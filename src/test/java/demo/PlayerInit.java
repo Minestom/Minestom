@@ -243,9 +243,11 @@ public class PlayerInit {
                         .displayName(Component.text("test"))
                         .lore(Component.text("lore"))
                         .build();
+
+                //inventory.setChestplate(item);
+
                 inventory.setChestplate(item.with(itemStackBuilder -> {
-                    itemStackBuilder.lore(Collections.emptyList())
-                            .displayName(null);
+                    itemStackBuilder.lore(Collections.emptyList());
                 }));
             }
         });

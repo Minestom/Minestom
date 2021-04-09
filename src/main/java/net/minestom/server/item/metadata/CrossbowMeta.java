@@ -193,7 +193,7 @@ public class CrossbowMeta extends ItemMeta {
 
     @NotNull
     private NBTCompound getItemCompound(@NotNull ItemStack itemStack) {
-        NBTCompound compound = NBTUtils.getMetaNBT(itemStack.getMeta());
+        NBTCompound compound = itemStack.getMeta().nbt();
         compound.setByte("Count", (byte) itemStack.getAmount());
         compound.setString("id", itemStack.getMaterial().getName());
         return compound;

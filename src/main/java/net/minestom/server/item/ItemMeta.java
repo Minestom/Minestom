@@ -2,7 +2,6 @@ package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.attribute.ItemAttribute;
-import net.minestom.server.utils.NBTUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,7 +10,6 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 public class ItemMeta {
@@ -40,13 +38,8 @@ public class ItemMeta {
         this.attributes = Collections.unmodifiableList(metaBuilder.attributes);
         this.customModelData = metaBuilder.customModelData;
 
-        // nbt
-        {
-            this.nbt = Objects.requireNonNullElseGet(metaBuilder.originalNBT, NBTCompound::new);
-            NBTUtils.writeMetaNBT(this, nbt);
-
-            this.emptyBuilder = metaBuilder.getSupplier().get();
-        }
+        this.nbt = metaBuilder.nbt;
+        this.emptyBuilder = metaBuilder.getSupplier().get();
     }
 
     @Contract(value = "_, -> new", pure = true)

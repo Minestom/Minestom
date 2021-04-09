@@ -90,21 +90,47 @@ public class MapMeta extends ItemMeta {
 
         public Builder mapId(int value) {
             this.mapId = value;
+            this.nbt.setInt("map", mapId);
             return this;
         }
 
         public Builder mapScaleDirection(int value) {
             this.mapScaleDirection = value;
+            this.nbt.setInt("map_scale_direction", value);
             return this;
         }
 
         public Builder decorations(List<MapDecoration> value) {
             this.decorations = value;
+
+            NBTList<NBTCompound> decorationsList = new NBTList<>(NBTTypes.TAG_Compound);
+            for (MapDecoration decoration : decorations) {
+                NBTCompound decorationCompound = new NBTCompound();
+                decorationCompound.setString("id", decoration.getId());
+                decorationCompound.setByte("type", decoration.getType());
+                decorationCompound.setByte("x", decoration.getX());
+                decorationCompound.setByte("z", decoration.getZ());
+                decorationCompound.setDouble("rot", decoration.getRotation());
+
+                decorationsList.add(decorationCompound);
+            }
+            this.nbt.set("Decorations", decorationsList);
+
             return this;
         }
 
         public Builder mapColor(Color value) {
             this.mapColor = value;
+
+            NBTCompound displayCompound;
+            if (nbt.containsKey("display")) {
+                displayCompound = nbt.getCompound("display");
+            } else {
+                displayCompound = new NBTCompound();
+                this.nbt.set("display", displayCompound);
+            }
+            displayCompound.setInt("MapColor", mapColor.asRGB());
+
             return this;
         }
 
@@ -116,11 +142,11 @@ public class MapMeta extends ItemMeta {
         @Override
         public void read(@NotNull NBTCompound compound) {
             if (compound.containsKey("map")) {
-                this.mapId = compound.getAsInt("map");
+                mapId(compound.getAsInt("map"));
             }
 
             if (compound.containsKey("map_scale_direction")) {
-                this.mapScaleDirection = compound.getAsInt("map_scale_direction");
+                mapScaleDirection(compound.getAsInt("map_scale_direction"));
             }
 
             if (compound.containsKey("Decorations")) {
@@ -153,38 +179,6 @@ public class MapMeta extends ItemMeta {
                 if (displayCompound.containsKey("MapColor")) {
                     this.mapColor = new Color(displayCompound.getAsInt("MapColor"));
                 }
-            }
-        }
-
-        @Override
-        public void write(@NotNull NBTCompound compound) {
-            compound.setInt("map", mapId);
-
-            compound.setInt("map_scale_direction", mapScaleDirection);
-
-            if (!decorations.isEmpty()) {
-                NBTList<NBTCompound> decorationsList = new NBTList<>(NBTTypes.TAG_Compound);
-                for (MapDecoration decoration : decorations) {
-                    NBTCompound decorationCompound = new NBTCompound();
-                    decorationCompound.setString("id", decoration.getId());
-                    decorationCompound.setByte("type", decoration.getType());
-                    decorationCompound.setByte("x", decoration.getX());
-                    decorationCompound.setByte("z", decoration.getZ());
-                    decorationCompound.setDouble("rot", decoration.getRotation());
-
-                    decorationsList.add(decorationCompound);
-                }
-                compound.set("Decorations", decorationsList);
-            }
-
-            {
-                NBTCompound displayCompound;
-                if (compound.containsKey("display")) {
-                    displayCompound = compound.getCompound("display");
-                } else {
-                    displayCompound = new NBTCompound();
-                }
-                displayCompound.setInt("MapColor", mapColor.asRGB());
             }
         }
 
