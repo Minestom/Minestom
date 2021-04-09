@@ -6,8 +6,6 @@ import net.minestom.server.utils.binary.Readable;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.CharBuffer;
-
 /**
  * Represents a packet which can be sent to a player using {@link PlayerConnection#sendPacket(ServerPacket)}.
  */

@@ -1,11 +1,7 @@
 package net.minestom.server.item;
 
-import com.google.gson.JsonNull;
-import com.google.gson.stream.JsonReader;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.JsonMessage;
-
-import java.util.stream.Stream;
 
 public class ItemDisplay {
 

@@ -1,15 +1,14 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Direction;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -21,8 +20,8 @@ import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTEnd;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
 
-import java.util.*;
 import java.io.IOException;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -61,14 +60,14 @@ public class Metadata {
                 writer.writeSizedString(value.toString());
             }
         },
-        reader -> {
-            boolean present = reader.readBoolean();
-            if(present) {
-                return reader.readJsonMessage(Integer.MAX_VALUE);
-            } else {
-                return null;
-            }
-        });
+                reader -> {
+                    boolean present = reader.readBoolean();
+                    if (present) {
+                        return reader.readJsonMessage(Integer.MAX_VALUE);
+                    } else {
+                        return null;
+                    }
+                });
     }
 
     public static Value<Component> Chat(@NotNull Component value) {
@@ -84,7 +83,7 @@ public class Metadata {
             }
         }, reader -> {
             boolean present = reader.readBoolean();
-            if(present) {
+            if (present) {
                 return reader.readComponent(Integer.MAX_VALUE);
             }
             return null;
@@ -120,7 +119,7 @@ public class Metadata {
             }
         }, reader -> {
             boolean present = reader.readBoolean();
-            if(present) {
+            if (present) {
                 return reader.readBlockPosition();
             } else {
                 return null;
@@ -141,7 +140,7 @@ public class Metadata {
             }
         }, reader -> {
             boolean present = reader.readBoolean();
-            if(present) {
+            if (present) {
                 return reader.readUuid();
             } else {
                 return null;
@@ -155,7 +154,7 @@ public class Metadata {
             writer.writeVarInt(present ? value : 0);
         }, reader -> {
             boolean present = reader.readBoolean();
-            if(present) {
+            if (present) {
                 return reader.readVarInt();
             } else {
                 return null;
@@ -164,9 +163,8 @@ public class Metadata {
     }
 
     public static Value<NBT> NBT(@NotNull NBT nbt) {
-        return new Value<>(TYPE_NBT, nbt, writer -> {
-            writer.writeNBT("", nbt);
-        }, reader -> {
+        return new Value<>(TYPE_NBT, nbt, writer ->
+                writer.writeNBT("", nbt), reader -> {
             try {
                 return reader.readTag();
             } catch (IOException | NBTException e) {
@@ -183,7 +181,7 @@ public class Metadata {
             writer.writeVarInt(villagerType);
             writer.writeVarInt(villagerProfession);
             writer.writeVarInt(level);
-        }, reader -> new int[] {
+        }, reader -> new int[]{
                 reader.readVarInt(),
                 reader.readVarInt(),
                 reader.readVarInt()
@@ -196,7 +194,7 @@ public class Metadata {
             writer.writeVarInt(present ? value + 1 : 0);
         }, reader -> {
             boolean present = reader.readBoolean();
-            if(present) {
+            if (present) {
                 return reader.readVarInt();
             } else {
                 return null;
@@ -331,7 +329,7 @@ public class Metadata {
     }
 
     private static <T> Value<T> getCorrespondingNewEmptyValue(int type) {
-        switch(type) {
+        switch (type) {
             case TYPE_BYTE:
                 return (Value<T>) Byte((byte) 0);
             case TYPE_VARINT:
@@ -351,7 +349,7 @@ public class Metadata {
             case TYPE_ROTATION:
                 return (Value<T>) Rotation(new Vector());
             case TYPE_POSITION:
-                return (Value<T>) Position(new BlockPosition(0,0,0));
+                return (Value<T>) Position(new BlockPosition(0, 0, 0));
             case TYPE_OPTPOSITION:
                 return (Value<T>) OptPosition(null);
             case TYPE_DIRECTION:
@@ -365,7 +363,7 @@ public class Metadata {
             case TYPE_PARTICLE:
                 throw new UnsupportedOperationException();
             case TYPE_VILLAGERDATA:
-                return (Value<T>) VillagerData(0,0,0);
+                return (Value<T>) VillagerData(0, 0, 0);
             case TYPE_OPTVARINT:
                 return (Value<T>) OptVarInt(null);
             case TYPE_POSE:

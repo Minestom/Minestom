@@ -59,8 +59,8 @@ import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
-import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.sound.SoundCategory;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.PlayerStatistic;
 import net.minestom.server.tab.TabList;
 import net.minestom.server.utils.*;
@@ -2725,8 +2725,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         private byte displayedSkinParts;
         private MainHand mainHand;
 
-        private boolean firstRefresh = true;
-
         /**
          * The player game language.
          *
@@ -2801,8 +2799,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             this.mainHand = mainHand;
 
             metadata.setIndex((byte) 16, Metadata.Byte(displayedSkinParts));
-
-            this.firstRefresh = false;
 
             // Client changed his view distance in the settings
             if (viewDistanceChanged) {

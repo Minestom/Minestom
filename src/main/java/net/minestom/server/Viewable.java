@@ -7,7 +7,6 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.Set;
 
 /**

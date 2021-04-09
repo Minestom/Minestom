@@ -43,7 +43,7 @@ public class EntityMetaDataPacket implements ServerPacket {
                 break;
             }
 
-            entries.add(new Metadata.Entry<Object>(reader));
+            entries.add(new Metadata.Entry<>(reader));
         }
     }
 

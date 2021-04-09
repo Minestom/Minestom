@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Stream;
 
@@ -52,7 +51,7 @@ public interface EventHandler extends IExtensionObserver {
         if(extensionSource != null) {
             MinecraftServer.getExtensionManager().getExtension(extensionSource).observe(this);
             getExtensionCallbacks(extensionSource).add(eventCallback);
-        };
+        }
 
         Collection<EventCallback> callbacks = getEventCallbacks(eventClass);
         return callbacks.add(eventCallback);
@@ -71,7 +70,7 @@ public interface EventHandler extends IExtensionObserver {
         String extensionSource = MinestomRootClassLoader.findExtensionObjectOwner(eventCallback);
         if(extensionSource != null) {
             getExtensionCallbacks(extensionSource).remove(eventCallback);
-        };
+        }
 
         return callbacks.remove(eventCallback);
     }

@@ -6,7 +6,6 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.entity.EntityFinder;
 
 import java.util.List;

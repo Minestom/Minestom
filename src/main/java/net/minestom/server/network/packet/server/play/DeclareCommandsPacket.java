@@ -8,8 +8,6 @@ import net.minestom.server.utils.binary.Readable;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Consumer;
-
 public class DeclareCommandsPacket implements ServerPacket {
 
     public Node[] nodes = new Node[0];
