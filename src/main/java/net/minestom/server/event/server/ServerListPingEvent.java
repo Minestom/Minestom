@@ -11,8 +11,6 @@ import net.minestom.server.ping.ResponseData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.net.InetSocketAddress;
-import java.util.Objects;
 import java.util.UUID;
 
 public class ServerListPingEvent extends Event implements CancellableEvent {

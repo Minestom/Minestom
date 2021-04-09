@@ -296,19 +296,10 @@ public class NettyPlayerConnection extends PlayerConnection {
      *
      * @return the server address used
      */
+    @Override
     public @Nullable String getServerAddress() {
         return serverAddress;
     }
-
-    /**
-     * Set the server address the client used to connect.
-     *
-     * @param serverAddress the server address
-     */
-    public void setServerAddress(@Nullable String serverAddress) {
-        this.serverAddress = serverAddress;
-    }
-
 
     /**
      * Gets the server port that the client used to connect.
@@ -317,18 +308,11 @@ public class NettyPlayerConnection extends PlayerConnection {
      *
      * @return the server port used
      */
+    @Override
     public int getServerPort() {
         return serverPort;
     }
 
-    /**
-     * Set the server port the client used to connect.
-     *
-     * @param serverPort the server port
-     */
-    public void setServerPort(int serverPort) {
-        this.serverPort = serverPort;
-    }
 
     @Nullable
     public UUID getBungeeUuid() {
@@ -348,6 +332,17 @@ public class NettyPlayerConnection extends PlayerConnection {
         this.bungeeSkin = bungeeSkin;
     }
 
+
+    /**
+     * Used in {@link net.minestom.server.network.packet.client.handshake.HandshakePacket} to change the internal fields.
+     *
+     * @param serverAddress the server address which the client used
+     * @param serverPort    the server port which the client used
+     */
+    public void refreshServerInformation(@Nullable String serverAddress, int serverPort) {
+        this.serverAddress = serverAddress;
+        this.serverPort = serverPort;
+    }
     /**
      * Adds an entry to the plugin request map.
      * <p>

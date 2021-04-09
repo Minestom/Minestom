@@ -119,18 +119,13 @@ public abstract class PlayerConnection {
 
 
     /**
-     * Changes the protocol version of the client.
-     *
-     * @param protocolVersion the protocol version
-     */
-    public abstract void setProtocolVersion(int protocolVersion);
-
-    /**
      * Gets protocol version of client.
      *
      * @return the protocol version
      */
-    public abstract int getProtocolVersion();
+    public int getProtocolVersion() {
+        return MinecraftServer.PROTOCOL_VERSION;
+    }
 
     /**
      * Gets the server address that the client used to connect.
@@ -139,14 +134,9 @@ public abstract class PlayerConnection {
      *
      * @return the server address used
      */
-    public abstract @Nullable String getServerAddress();
-
-    /**
-     * Set the server address the client used to connect.
-     *
-     * @param serverAddress the server address
-     */
-    public abstract void setServerAddress(@Nullable String serverAddress);
+    public @Nullable String getServerAddress() {
+        return MinecraftServer.getNettyServer().getAddress();
+    }
 
 
     /**
@@ -156,14 +146,9 @@ public abstract class PlayerConnection {
      *
      * @return the server port used
      */
-    public abstract int getServerPort();
-
-    /**
-     * Set the server port the client used to connect.
-     *
-     * @param serverPort the server port
-     */
-    public abstract void setServerPort(int serverPort);
+    public int getServerPort() {
+        return MinecraftServer.getNettyServer().getPort();
+    }
 
 
     /**

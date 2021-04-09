@@ -17,7 +17,6 @@ import net.minestom.server.storage.StorageManager;
 import net.minestom.server.storage.systems.FileStorageSystem;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
-import org.w3c.dom.Text;
 
 import java.util.UUID;
 

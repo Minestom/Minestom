@@ -90,14 +90,15 @@ public class HandshakePacket implements ClientPreplayPacket {
                 return;
             }
         }
-        connection.setProtocolVersion(protocolVersion);
-        connection.setServerAddress(serverAddress);
-        connection.setServerPort(serverPort);
         switch (nextState) {
             case 1:
                 connection.setConnectionState(ConnectionState.STATUS);
                 break;
             case 2:
+                if (connection instanceof NettyPlayerConnection) {
+                    ((NettyPlayerConnection) connection).setProtocolVersion(protocolVersion);
+                    ((NettyPlayerConnection) connection).refreshServerInformation(serverAddress, serverPort);
+                }
                 if (protocolVersion == MinecraftServer.PROTOCOL_VERSION) {
                     connection.setConnectionState(ConnectionState.LOGIN);
 
