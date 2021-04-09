@@ -223,7 +223,7 @@ public abstract class Argument<T> {
     /**
      * Maps this argument's output to another result.
      *
-     * @param mapper The mapper to use (this argument's input --> desired output)
+     * @param mapper The mapper to use (this argument's input = desired output)
      * @param <O>    The type of output expected.
      * @return A new ArgumentMap that can get this complex object type.
      */
