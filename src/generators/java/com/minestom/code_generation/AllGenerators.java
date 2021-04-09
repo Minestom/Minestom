@@ -2,6 +2,8 @@ package com.minestom.code_generation;
 
 import com.minestom.code_generation.attribute.AttributeGenerator;
 import com.minestom.code_generation.blocks.BlockGenerator;
+import com.minestom.code_generation.entity.EntityGenerator;
+import com.minestom.code_generation.entity.VillagerProfessionGenerator;
 import com.minestom.code_generation.fluid.FluidGenerator;
 import com.minestom.code_generation.item.EnchantmentGenerator;
 import com.minestom.code_generation.item.MaterialGenerator;
@@ -68,8 +70,19 @@ public class AllGenerators {
                 new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_attributes.json"),
                 outputFolder
         ).generate();
+        // Generate entities
+        new EntityGenerator(
+                new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_entities.json"),
+                outputFolder
+        ).generate();
+        // Generate villager professions
+        new VillagerProfessionGenerator(
+                new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_villager_professions.json"),
+                outputFolder
+        ).generate();
 
         // FINISHED
+        // Generate map colours
         new MapColorsGenerator(
                 new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_map_colors.json"),
                 DEFAULT_OUTPUT_FOLDER
