@@ -11,6 +11,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
@@ -151,6 +152,7 @@ public class MapMeta extends ItemMeta {
 
             if (compound.containsKey("Decorations")) {
                 final NBTList<NBTCompound> decorationsList = compound.getList("Decorations");
+                List<MapDecoration> mapDecorations = new ArrayList<>();
                 for (NBTCompound decorationCompound : decorationsList) {
                     final String id = decorationCompound.getString("id");
                     final byte type = decorationCompound.getAsByte("type");
@@ -170,14 +172,15 @@ public class MapMeta extends ItemMeta {
                         rotation = decorationCompound.getAsDouble("rot");
                     }
 
-                    this.decorations.add(new MapDecoration(id, type, x, z, rotation));
+                    mapDecorations.add(new MapDecoration(id, type, x, z, rotation));
                 }
+                decorations(mapDecorations);
             }
 
             if (compound.containsKey("display")) {
                 final NBTCompound displayCompound = compound.getCompound("display");
                 if (displayCompound.containsKey("MapColor")) {
-                    this.mapColor = new Color(displayCompound.getAsInt("MapColor"));
+                    mapColor(new Color(displayCompound.getAsInt("MapColor")));
                 }
             }
         }

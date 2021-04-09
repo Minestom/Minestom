@@ -85,18 +85,17 @@ public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<Co
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
             if (nbtCompound.containsKey("LodestoneTracked")) {
-                this.lodestoneTracked = nbtCompound.getByte("LodestoneTracked") == 1;
+                lodestoneTracked(nbtCompound.getByte("LodestoneTracked") == 1);
             }
             if (nbtCompound.containsKey("LodestoneDimension")) {
-                this.lodestoneDimension = nbtCompound.getString("LodestoneDimension");
+                lodestoneDimension(nbtCompound.getString("LodestoneDimension"));
             }
             if (nbtCompound.containsKey("LodestonePos")) {
                 final NBTCompound posCompound = nbtCompound.getCompound("LodestonePos");
                 final int x = posCompound.getInt("X");
                 final int y = posCompound.getInt("Y");
                 final int z = posCompound.getInt("Z");
-
-                this.lodestonePosition = new Position(x, y, z);
+                lodestonePosition(new Position(x, y, z));
             }
         }
 
