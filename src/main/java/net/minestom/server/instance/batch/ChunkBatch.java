@@ -13,6 +13,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
+import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
@@ -93,12 +94,12 @@ public class ChunkBatch implements Batch<ChunkCallback> {
     }
 
     @Override
-    public void placeBlock(@NotNull Player player, @NotNull Chunk chunk, @NotNull BlockFace blockFace, int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
+    public void placeBlock(@NotNull Player player, @NotNull Chunk chunk, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition, short blockId, short customBlockId, @Nullable Data data) {
         throw new UnsupportedOperationException("Unsupported for now.");
     }
 
     @Override
-    public void setBlock(int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
+    public void setBlock(@NotNull BlockPosition blockPosition, short blockId, short customBlockId, @Nullable Data data) {
         throw new UnsupportedOperationException("Unsupported for now.");
     }
 

@@ -125,56 +125,63 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void placeBlock(@NotNull Player player, @NotNull Chunk chunk, @NotNull BlockFace blockFace,  int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
-        setBlock(player, chunk, blockFace, x, y, z, blockId, customBlockId, data);
+    public void placeBlock(@NotNull Player player, @NotNull Chunk chunk, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition, short blockId, short customBlockId, @Nullable Data data) {
+        setBlock(player, chunk, blockFace, blockPosition, blockId, customBlockId, data);
     }
 
     @Override
-    public void setBlock(int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
-        final Chunk chunk = getChunkAt(x, z);
+    public void setBlock(@NotNull BlockPosition blockPosition, short blockId, short customBlockId, @Nullable Data data) {
+        final Chunk chunk = getChunkAt(blockPosition.getX(), blockPosition.getZ());
 
         if (ChunkUtils.isLoaded(chunk)) {
-            setBlock(chunk, x, y, z, blockId, customBlockId, data);
+            setBlock(chunk, blockPosition, blockId, customBlockId, data);
         } else {
             Check.stateCondition(!hasEnabledAutoChunkLoad(),"Tried to set a block to an unloaded chunk with auto chunk load disabled");
-            final int chunkX = ChunkUtils.getChunkCoordinate(x);
-            final int chunkZ = ChunkUtils.getChunkCoordinate(z);
-            loadChunk(chunkX, chunkZ, c -> setBlock(c, x, y, z, blockId, customBlockId, data));
+            final int chunkX = ChunkUtils.getChunkCoordinate(blockPosition.getX());
+            final int chunkZ = ChunkUtils.getChunkCoordinate(blockPosition.getZ());
+            loadChunk(chunkX, chunkZ, c -> setBlock(c, blockPosition, blockId, customBlockId, data));
         }
     }
 
-    private void setBlock(@NotNull Player player, @NotNull Chunk chunk, @NotNull BlockFace blockFace, int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
+    private synchronized void setBlock(@NotNull Player player, @NotNull Chunk chunk, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition, short blockId, short customBlockId, @Nullable Data data) {
+        int x = blockPosition.getX();
+        int y = blockPosition.getY();
+        int z = blockPosition.getZ();
+
         synchronized (chunk) {
             this.lastBlockChangeTime = System.currentTimeMillis();
 
-            BlockPosition blockPosition = new BlockPosition(x, y, z);
             if (isAlreadyChanged(blockPosition, blockId)) return; // No idea what this does but I guess we need it, at least for now.
             setAlreadyChanged(blockPosition, blockId);
 
             CustomBlock previousBlock = chunk.getCustomBlock(x, y, z);
-            if (previousBlock != null) {
+            if (previousBlock != null) { // This even necessary? I guess if the player has a client that allows it?
                 previousBlock.removeDiggingInformation(this, blockPosition);
                 previousBlock.onDestroy(this, blockPosition, chunk.getBlockData(ChunkUtils.getBlockIndex(x, y, z)));
             }
 
             CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
             if (customBlock != null) {
-                customBlock.updateBlockVisual(this, chunk, player, blockFace, blockPosition, blockId, data);
+                Data newData = customBlock.createData(this, blockPosition, data);
+                customBlock.updateBlockVisual(this, chunk, player, blockFace, blockPosition, blockId, newData);
                 customBlock.onPlace(this, blockPosition, data);
             } else {
-                chunk.UNSAFE_setBlock(x, y, z, blockId, (short) 0, data, false);
+                chunk.UNSAFE_setBlock(x, y, z, blockId, customBlockId, data, false);
                 sendBlockChange(chunk, blockPosition, blockId);
             }
         }
     }
 
-    private void setBlock(@NotNull Chunk chunk, int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
+    private synchronized void setBlock(@NotNull Chunk chunk, @NotNull BlockPosition blockPosition, short blockId, short customBlockId, @Nullable Data data) {
         if (chunk.isReadOnly()) return;
+
+        int x = blockPosition.getX();
+        int y = blockPosition.getY();
+        int z = blockPosition.getZ();
 
         synchronized (chunk) {
             this.lastBlockChangeTime = System.currentTimeMillis();
 
-            BlockPosition blockPosition = new BlockPosition(x, y, z);
             if (isAlreadyChanged(blockPosition, blockId)) return; // No idea what this does but I guess we need it, at least for now.
             setAlreadyChanged(blockPosition, blockId);
 
@@ -186,10 +193,11 @@ public class InstanceContainer extends Instance {
 
             CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
             if (customBlock != null) {
-                customBlock.updateBlockVisual(this, chunk, blockPosition, blockId, data);
+                Data newData = customBlock.createData(this, blockPosition, data);
+                customBlock.updateBlockVisual(this, chunk, blockPosition, blockId, newData);
                 customBlock.onPlace(this, blockPosition, data);
             } else {
-                chunk.UNSAFE_setBlock(x, y, z, blockId, (short) 0, data, false);
+                chunk.UNSAFE_setBlock(x, y, z, blockId, customBlockId, data, false);
                 sendBlockChange(chunk, blockPosition, blockId);
             }
         }

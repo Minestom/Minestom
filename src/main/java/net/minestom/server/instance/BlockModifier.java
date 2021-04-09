@@ -70,27 +70,23 @@ public interface BlockModifier {
      * @param player             the {@link Player} that places the block
      * @param chunk              the {@link Chunk} in which the block is being placed
      * @param blockFace          the {@link BlockFace} of the block that the block being placed was placed against
-     * @param x                  the x coordinates at which to place the block
-     * @param y                  the y coordinates at which to place the block
-     * @param z                  the z coordinates at which to place the block
+     * @param blockPosition      the {@link BlockPosition} at which the block is being placed
      * @param blockId            the base id of the block being placed (no properties)
      * @param customBlockId      the id of the custom block, 0 if none
      * @param data               the block {@link Data}, can be null
      */
-    void placeBlock(@NotNull Player player, @NotNull Chunk chunk, @NotNull BlockFace blockFace, int x, int y, int z, short blockId, short customBlockId, @Nullable Data data);
+    void placeBlock(@NotNull Player player, @NotNull Chunk chunk, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition, short blockId, short customBlockId, @Nullable Data data);
 
     /**
      *
      * Sets a block, possibly {@link CustomBlock}, at a position.
      *
-     * @param x                  the x coordinates at which to place the block
-     * @param y                  the y coordinates at which to place the block
-     * @param z                  the z coordinates at which to place the block
+     * @param blockPosition      the {@link BlockPosition} at which the block is being placed
      * @param blockId            the base id of the block being placed (no properties)
      * @param customBlockId      the id of the custom block, 0 if none
      * @param data               the block {@link Data}, can be null
      */
-    void setBlock(int x, int y, int z, short blockId, short customBlockId, @Nullable Data data);
+    void setBlock(@NotNull BlockPosition blockPosition, short blockId, short customBlockId, @Nullable Data data);
 
     default void setBlockStateId(int x, int y, int z, short blockStateId) {
         setBlockStateId(x, y, z, blockStateId, null);

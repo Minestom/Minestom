@@ -49,6 +49,7 @@ public class BlockPlacementListener {
         PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, blockPosition, hand, blockFace);
         playerBlockInteractEvent.setCancelled(cancel);
         playerBlockInteractEvent.setBlockingItemUse(cancel);
+
         player.callCancellableEvent(PlayerBlockInteractEvent.class, playerBlockInteractEvent, () -> {
             final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
             if (customBlock == null) return;
@@ -64,7 +65,8 @@ public class BlockPlacementListener {
         if (useMaterial == Material.AIR) return;
 
         // Verify if the player can place the block
-        if (player.getGameMode() == GameMode.SPECTATOR || !usedItem.canPlaceOn(instance.getBlock(blockPosition).getName())) {
+//        if (player.getGameMode() == GameMode.SPECTATOR || !usedItem.canPlaceOn(instance.getBlock(blockPosition).getName())) { Investigate what canPlaceOn does.
+        if (player.getGameMode() == GameMode.SPECTATOR) {
             BlockChangePacket blockChangePacket = new BlockChangePacket();
             blockChangePacket.blockPosition = blockPosition;
             blockChangePacket.blockStateId = Block.AIR.getBlockId();
@@ -133,7 +135,7 @@ public class BlockPlacementListener {
         Data blockData = playerBlockPlaceEvent.getBlockData(); // Possibly null
 
         // Place the block
-        instance.placeBlock(player, chunk, blockFace, offsetX, offsetY, offsetZ, blockStateId, customBlockId, blockData);
+        instance.placeBlock(player, chunk, blockFace, blockPosition, blockStateId, customBlockId, blockData);
 
         // Block consuming
         if (playerBlockPlaceEvent.doesConsumeBlock()) {

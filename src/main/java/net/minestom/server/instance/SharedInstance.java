@@ -134,13 +134,13 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void placeBlock(@NotNull Player player, @NotNull Chunk chunk, @NotNull BlockFace blockFace, int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
-        this.instanceContainer.placeBlock(player, chunk, blockFace, x, y, z, blockId, customBlockId, data);
+    public void placeBlock(@NotNull Player player, @NotNull Chunk chunk, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition, short blockId, short customBlockId, @Nullable Data data) {
+        this.instanceContainer.placeBlock(player, chunk, blockFace, blockPosition, blockId, customBlockId, data);
     }
 
     @Override
-    public void setBlock(int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
-        this.instanceContainer.setBlock(x, y, z, blockId, customBlockId, data);
+    public void setBlock(@NotNull BlockPosition blockPosition, short blockId, short customBlockId, @Nullable Data data) {
+        this.instanceContainer.setBlock(blockPosition, blockId, customBlockId, data);
     }
 
     @Override

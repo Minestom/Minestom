@@ -8,6 +8,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -64,12 +65,12 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
     }
 
     @Override
-    public void placeBlock(@NotNull Player player, @NotNull Chunk chunk, @NotNull BlockFace blockFace, int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
+    public void placeBlock(@NotNull Player player, @NotNull Chunk chunk, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition, short blockId, short customBlockId, @Nullable Data data) {
         throw new UnsupportedOperationException("Unsupported for now.");
     }
 
     @Override
-    public void setBlock(int x, int y, int z, short blockId, short customBlockId, @Nullable Data data) {
+    public void setBlock(@NotNull BlockPosition blockPosition, short blockId, short customBlockId, @Nullable Data data) {
         throw new UnsupportedOperationException("Unsupported for now.");
     }
 
