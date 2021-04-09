@@ -9,7 +9,6 @@ import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
 import org.jetbrains.annotations.NotNull;
@@ -264,7 +263,14 @@ public class BinaryWriter extends OutputStream {
     }
 
     public void writeItemStack(@NotNull ItemStack itemStack) {
-        NBTUtils.writeItemStack(this, itemStack);
+        if (itemStack.isAir()) {
+            writeBoolean(false);
+        } else {
+            writeBoolean(true);
+            writeVarInt(itemStack.getMaterial().getId());
+            writeByte((byte) itemStack.getAmount());
+            write(itemStack.getMeta());
+        }
     }
 
     public void writeNBT(@NotNull String name, @NotNull NBT tag) {

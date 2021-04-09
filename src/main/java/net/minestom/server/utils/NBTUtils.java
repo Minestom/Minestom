@@ -16,7 +16,6 @@ import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -277,18 +276,6 @@ public final class NBTUtils {
             } else {
                 LOGGER.warn("Unknown enchantment type: {}", id);
             }
-        }
-    }
-
-    public static void writeItemStack(@NotNull BinaryWriter packet, @NotNull ItemStack itemStack) {
-        if (itemStack.isAir()) {
-            packet.writeBoolean(false);
-        } else {
-            packet.writeBoolean(true);
-            packet.writeVarInt(itemStack.getMaterial().getId());
-            packet.writeByte((byte) itemStack.getAmount());
-
-            packet.writeNBT("", itemStack.getMeta().toNBT());
         }
     }
 

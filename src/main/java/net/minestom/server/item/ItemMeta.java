@@ -2,6 +2,8 @@ package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.attribute.ItemAttribute;
+import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class ItemMeta {
+public class ItemMeta implements Writeable {
 
     private final int damage;
     private final boolean unbreakable;
@@ -27,6 +29,8 @@ public class ItemMeta {
 
     private final NBTCompound nbt;
     private final ItemMetaBuilder emptyBuilder;
+
+    private BinaryWriter cachedBuffer;
 
     protected ItemMeta(@NotNull ItemMetaBuilder metaBuilder) {
         this.damage = metaBuilder.damage;
@@ -123,5 +127,16 @@ public class ItemMeta {
     @Contract(value = "-> new", pure = true)
     protected @NotNull ItemMetaBuilder builder() {
         return ItemMetaBuilder.fromNBT(emptyBuilder, nbt);
+    }
+
+    @Override
+    public synchronized void write(@NotNull BinaryWriter writer) {
+        if (cachedBuffer == null) {
+            BinaryWriter w = new BinaryWriter();
+            w.writeNBT("", nbt);
+            this.cachedBuffer = w;
+        }
+        writer.write(cachedBuffer);
+        cachedBuffer.getBuffer().resetReaderIndex();
     }
 }
