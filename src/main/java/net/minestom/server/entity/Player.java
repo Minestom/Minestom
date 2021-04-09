@@ -253,7 +253,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
 
-        this.getAllPlayerToList();
         // tab list
         this.tabList = MinecraftServer.getTabListManager().getDefaultTabList();
         this.tabList.addViewer(this);
@@ -571,8 +570,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void remove() {
         callEvent(PlayerDisconnectEvent.class, new PlayerDisconnectEvent(this));
 
-        // todo issue not caused by any of this
-        // tab list
         this.tabList.removeViewer(this);
         for (TabList tabList : MinecraftServer.getTabListManager().getTabLists()) {
             if (tabList.getDisplayedPlayers().contains(this)) {
@@ -2529,39 +2526,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return HoverEvent.showEntity(ShowEntity.of(EntityType.PLAYER, this.uuid, this.displayName));
     }
 
-    /**
-     * Sends the packet to render all the players that are online.
-     *
-     */
-    protected void getAllPlayerToList() {
-        PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.ADD_PLAYER);
-        PlayerInfoPacket playerRemoveInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.REMOVE_PLAYER);
-        for (Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
-            PlayerInfoPacket.AddPlayer addPlayer =
-                    new PlayerInfoPacket.AddPlayer(player.getUuid(), player.getUsername(), player.getGameMode(), player.getLatency());
-            addPlayer.displayName = player.getDisplayName();
-
-            // Skin support
-            if (player.getSkin() != null) {
-                final String textures = player.getSkin().getTextures();
-                final String signature = player.getSkin().getSignature();
-
-                PlayerInfoPacket.AddPlayer.Property prop =
-                        new PlayerInfoPacket.AddPlayer.Property("textures", textures, signature);
-                addPlayer.properties.add(prop);
-            }
-
-            playerInfoPacket.playerInfos.add(addPlayer);
-
-            PlayerInfoPacket.RemovePlayer removePlayer = new PlayerInfoPacket.RemovePlayer(player.getUuid());
-            playerRemoveInfoPacket.playerInfos.add(removePlayer);
-        }
-
-        this.playerConnection.sendPacket(playerInfoPacket);
-        this.playerConnection.sendPacket(playerRemoveInfoPacket);
-
-
-    }
 
 
     /**

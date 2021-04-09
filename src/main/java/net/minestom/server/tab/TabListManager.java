@@ -1,6 +1,5 @@
 package net.minestom.server.tab;
 
-import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.PlayerInfoPacket;
 import net.minestom.server.utils.PacketUtils;
@@ -109,7 +108,7 @@ public class TabListManager {
         playerInfoPacket.playerInfos.add(new PlayerInfoPacket.UpdateGamemode(player.getUuid(), player.getGameMode()));
 
         for (TabList tabList : this.tabLists) {
-            if (tabList.isGamemodeUpdates() && tabList.getDisplayedPlayers().contains(player)) {
+            if (tabList.doesGamemodeUpdates() && tabList.getDisplayedPlayers().contains(player)) {
                 PacketUtils.sendGroupedPacket(tabList.getViewers(), playerInfoPacket);
             }
         }

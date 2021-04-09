@@ -66,7 +66,7 @@ public class TabList implements Viewable {
      */
     public void setHeader(@Nullable Component header) {
         this.header = header;
-        PacketUtils.sendGroupedPacket(this.viewers, this.generateHeaderAndFooterPacket());
+        this.sendPacketToViewers(this.generateHeaderAndFooterPacket());
     }
 
     /**
@@ -87,7 +87,7 @@ public class TabList implements Viewable {
      */
     public void setFooter(@Nullable Component footer) {
         this.footer = footer;
-        PacketUtils.sendGroupedPacket(this.viewers, this.generateHeaderAndFooterPacket());
+        this.sendPacketToViewers(this.generateHeaderAndFooterPacket());
     }
 
     private PlayerListHeaderAndFooterPacket generateHeaderAndFooterPacket() {
@@ -115,7 +115,7 @@ public class TabList implements Viewable {
         }
 
         playerInfoPacket.playerInfos.add(addPlayer);
-        PacketUtils.sendGroupedPacket(this.viewers, playerInfoPacket);
+        this.sendPacketToViewers(playerInfoPacket);
         this.displayedPlayers.add(player);
     }
 
@@ -141,7 +141,7 @@ public class TabList implements Viewable {
             this.displayedPlayers.add(player);
         }
 
-        PacketUtils.sendGroupedPacket(this.viewers, playerInfoPacket);
+        this.sendPacketToViewers(playerInfoPacket);
     }
 
     /**
@@ -156,7 +156,7 @@ public class TabList implements Viewable {
 
         playerInfoPacket.playerInfos.add(removePlayer);
 
-        PacketUtils.sendGroupedPacket(this.viewers, playerInfoPacket);
+        this.sendPacketToViewers(playerInfoPacket);
         this.displayedPlayers.remove(player);
     }
 
@@ -186,7 +186,7 @@ public class TabList implements Viewable {
             playerInfoPacket.playerInfos.add(addPlayer);
         }
         player.getPlayerConnection().sendPacket(playerInfoPacket);
-        PacketUtils.sendGroupedPacket(this.viewers, this.generateHeaderAndFooterPacket());
+        this.sendPacketToViewers(this.generateHeaderAndFooterPacket());
         return true;
     }
 
@@ -203,7 +203,7 @@ public class TabList implements Viewable {
     public void updateDisplayName(@NotNull Player player) {
         PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME);
         infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateDisplayName(player.getUuid(), player.getDisplayName()));
-        PacketUtils.sendGroupedPacket(this.viewers, infoPacket);
+        this.sendPacketToViewers(infoPacket);
     }
 
 
@@ -225,7 +225,7 @@ public class TabList implements Viewable {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE);
         playerInfoPacket.playerInfos.add(new PlayerInfoPacket.UpdateGamemode(player.getUuid(), gameMode));
 
-        PacketUtils.sendGroupedPacket(this.viewers, playerInfoPacket);
+        this.sendPacketToViewers(playerInfoPacket);
     }
 
     /**
@@ -245,7 +245,8 @@ public class TabList implements Viewable {
         PlayerInfoPacket playerInfoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_LATENCY);
         playerInfoPacket.playerInfos.add(new PlayerInfoPacket.UpdateLatency(player.getUuid(), latency));
 
-        PacketUtils.sendGroupedPacket(this.viewers, playerInfoPacket);
+
+        this.sendPacketToViewers(playerInfoPacket);
     }
 
     private PlayerInfoPacket.AddPlayer.Property createPropertyPacket(Player player) {
@@ -281,7 +282,7 @@ public class TabList implements Viewable {
      *
      * @return boolean whether player gamemode will be auto-updated on TabLists
      */
-    public boolean isGamemodeUpdates() {
+    public boolean doesGamemodeUpdates() {
         return this.gamemodeUpdates;
     }
 
