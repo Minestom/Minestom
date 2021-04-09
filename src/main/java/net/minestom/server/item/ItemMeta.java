@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.lang.ref.SoftReference;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,8 @@ public class ItemMeta {
 
     private final NBTCompound nbt;
     private final ItemMetaBuilder emptyBuilder;
+
+    private SoftReference<NBTCompound> nbtCache;
 
     protected ItemMeta(@NotNull ItemMetaBuilder metaBuilder) {
         this.damage = metaBuilder.damage;
@@ -92,18 +95,23 @@ public class ItemMeta {
     public <T> T getOrDefault(@NotNull ItemTag<T> tag, @Nullable T defaultValue) {
         var key = tag.getKey();
         if (nbt.containsKey(key)) {
-            return tag.read(nbt);
+            return tag.read(toNBT());
         } else {
             return defaultValue;
         }
     }
 
     public <T> @Nullable T get(@NotNull ItemTag<T> tag) {
-        return tag.read(nbt);
+        return tag.read(toNBT());
     }
 
-    public @NotNull NBTCompound nbt() {
-        return nbt;
+    public @NotNull NBTCompound toNBT() {
+        NBTCompound cache = nbtCache.get();
+        if (cache == null) {
+            cache = nbt.deepClone();
+            nbtCache = new SoftReference<>(cache);
+        }
+        return cache;
     }
 
     @Override
@@ -112,7 +120,7 @@ public class ItemMeta {
         if (o == null || getClass() != o.getClass()) return false;
 
         ItemMeta itemMeta = (ItemMeta) o;
-        return nbt.equals(itemMeta.nbt());
+        return nbt.equals(itemMeta.nbt);
     }
 
     @Override

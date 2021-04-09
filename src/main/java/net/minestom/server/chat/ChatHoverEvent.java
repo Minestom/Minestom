@@ -93,7 +93,7 @@ public class ChatHoverEvent {
         JsonObject obj = GsonComponentSerializer.gson().serializer().toJsonTree(Component.empty().hoverEvent(event)).getAsJsonObject();
         obj = obj.get("hoverEvent").getAsJsonObject().get("contents").getAsJsonObject();
 
-        NBTCompound compound = itemStack.getMeta().nbt();
+        NBTCompound compound = itemStack.getMeta().toNBT();
         obj.add("tag", new JsonPrimitive(compound.toSNBT()));
 
         return new ChatHoverEvent("show_item", obj);

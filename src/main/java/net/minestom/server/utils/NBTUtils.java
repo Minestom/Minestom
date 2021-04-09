@@ -88,7 +88,7 @@ public final class NBTUtils {
             final ItemStack stack = inventory.getItemStack(i);
             NBTCompound nbt = new NBTCompound();
 
-            NBTCompound tag = stack.getMeta().nbt();
+            NBTCompound tag = stack.getMeta().toNBT();
 
             nbt.set("tag", tag);
             nbt.setByte("Slot", (byte) i);
@@ -288,7 +288,7 @@ public final class NBTUtils {
             packet.writeVarInt(itemStack.getMaterial().getId());
             packet.writeByte((byte) itemStack.getAmount());
 
-            packet.writeNBT("", itemStack.getMeta().nbt());
+            packet.writeNBT("", itemStack.getMeta().toNBT());
         }
     }
 
