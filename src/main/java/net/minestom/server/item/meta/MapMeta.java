@@ -189,15 +189,6 @@ public class MapMeta extends ItemMeta {
         }
 
         @Override
-        protected void deepClone(@NotNull ItemMetaBuilder metaBuilder) {
-            var mapBuilder = (MapMeta.Builder) metaBuilder;
-            mapBuilder.mapId = mapId;
-            mapBuilder.mapScaleDirection = mapScaleDirection;
-            mapBuilder.decorations = decorations;
-            mapBuilder.mapColor = mapColor;
-        }
-
-        @Override
         protected @NotNull Supplier<@NotNull ItemMetaBuilder> getSupplier() {
             return Builder::new;
         }

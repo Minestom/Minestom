@@ -286,7 +286,7 @@ public final class NBTUtils {
             packet.writeVarInt(itemStack.getMaterial().getId());
             packet.writeByte((byte) itemStack.getAmount());
 
-            packet.writeNBT("", itemStack.getMeta().toNBT());
+            packet.writeNBT("", itemStack.getMeta().nbt());
         }
     }
 

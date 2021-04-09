@@ -8,13 +8,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.lang.ref.SoftReference;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class ItemMeta {
-
-    private final ItemMetaBuilder builder;
 
     private final int damage;
     private final boolean unbreakable;
@@ -27,22 +27,26 @@ public class ItemMeta {
 
     private final int customModelData;
 
-    private final @Nullable NBTCompound originalNbt;
-    private SoftReference<NBTCompound> cache;
+    private final NBTCompound nbt;
+    private final ItemMetaBuilder emptyBuilder;
 
     protected ItemMeta(@NotNull ItemMetaBuilder metaBuilder) {
-        this.builder = metaBuilder.clone();
-        this.damage = 0;
-        this.unbreakable = false;
-        this.hideFlag = 0;
+        this.damage = metaBuilder.damage;
+        this.unbreakable = metaBuilder.unbreakable;
+        this.hideFlag = metaBuilder.hideFlag;
         this.displayName = metaBuilder.displayName;
         this.lore = Collections.unmodifiableList(metaBuilder.lore);
         this.enchantmentMap = Collections.unmodifiableMap(metaBuilder.enchantmentMap);
-        this.attributes = new ArrayList<>();
-        this.customModelData = 0;
+        this.attributes = Collections.unmodifiableList(metaBuilder.attributes);
+        this.customModelData = metaBuilder.customModelData;
 
-        // Can be null
-        this.originalNbt = metaBuilder.originalNBT;
+        // nbt
+        {
+            this.nbt = Objects.requireNonNullElseGet(metaBuilder.originalNBT, NBTCompound::new);
+            NBTUtils.writeMetaNBT(this, nbt);
+
+            this.emptyBuilder = metaBuilder.getSupplier().get();
+        }
     }
 
     @Contract(value = "_, -> new", pure = true)
@@ -93,28 +97,19 @@ public class ItemMeta {
     }
 
     public <T> T getOrDefault(@NotNull ItemTag<T> tag, @Nullable T defaultValue) {
-        var nbt = toNBT();
         var key = tag.getKey();
         if (nbt.containsKey(key)) {
-            return tag.read(toNBT());
+            return tag.read(nbt);
         } else {
             return defaultValue;
         }
     }
 
     public <T> @Nullable T get(@NotNull ItemTag<T> tag) {
-        return tag.read(toNBT());
+        return tag.read(nbt);
     }
 
-    public @NotNull NBTCompound toNBT() {
-        var nbt = cache != null ? cache.get() : null;
-        if (nbt == null) {
-            nbt = Objects.requireNonNullElseGet(originalNbt, NBTCompound::new);
-            NBTUtils.writeMetaNBT(this, nbt);
-            this.builder.write(nbt);
-            this.cache = new SoftReference<>(nbt);
-        }
-
+    public @NotNull NBTCompound nbt() {
         return nbt;
     }
 
@@ -124,16 +119,16 @@ public class ItemMeta {
         if (o == null || getClass() != o.getClass()) return false;
 
         ItemMeta itemMeta = (ItemMeta) o;
-        return toNBT().equals(itemMeta.toNBT());
+        return nbt.equals(itemMeta.nbt());
     }
 
     @Override
     public int hashCode() {
-        return toNBT().hashCode();
+        return nbt.hashCode();
     }
 
     @Contract(value = "-> new", pure = true)
     protected @NotNull ItemMetaBuilder builder() {
-        return ItemMetaBuilder.fromNBT(builder, toNBT());
+        return ItemMetaBuilder.fromNBT(emptyBuilder, nbt);
     }
 }

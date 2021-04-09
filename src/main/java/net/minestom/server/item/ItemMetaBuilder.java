@@ -110,7 +110,7 @@ public abstract class ItemMetaBuilder implements Cloneable {
             return this;
         } else {
             // Create item meta based on nbt
-            var currentNbt = build().toNBT();
+            var currentNbt = build().nbt();
             return fromNBT(this, currentNbt).set(tag, value);
         }
     }
@@ -121,8 +121,6 @@ public abstract class ItemMetaBuilder implements Cloneable {
     public abstract void read(@NotNull NBTCompound nbtCompound);
 
     public abstract void write(@NotNull NBTCompound nbtCompound);
-
-    protected abstract void deepClone(@NotNull ItemMetaBuilder metaBuilder);
 
     protected abstract @NotNull Supplier<@NotNull ItemMetaBuilder> getSupplier();
 
@@ -137,11 +135,10 @@ public abstract class ItemMetaBuilder implements Cloneable {
     @Override
     protected ItemMetaBuilder clone() {
         try {
+            NBTCompound nbtCompound = new NBTCompound();
+            write(nbtCompound);
             var builder = (ItemMetaBuilder) super.clone();
-            builder.displayName = displayName;
-            builder.lore = new ArrayList<>(lore);
-            builder.enchantmentMap = new HashMap<>(enchantmentMap);
-            deepClone(builder);
+            builder.read(nbtCompound);
             return builder;
         } catch (CloneNotSupportedException e) {
             // Should never happen, because ItemMetaBuilder implements Cloneable

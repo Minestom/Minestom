@@ -98,14 +98,6 @@ public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<Co
         }
 
         @Override
-        protected void deepClone(@NotNull ItemMetaBuilder metaBuilder) {
-            var compassBuilder = (CompassMeta.Builder) metaBuilder;
-            compassBuilder.lodestoneTracked = lodestoneTracked;
-            compassBuilder.lodestoneDimension = lodestoneDimension;
-            compassBuilder.lodestonePosition = lodestonePosition;
-        }
-
-        @Override
         protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
             return Builder::new;
         }

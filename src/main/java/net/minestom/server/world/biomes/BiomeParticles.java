@@ -100,7 +100,7 @@ public class BiomeParticles {
         @Override
         public NBTCompound toNbt() {
             //todo test count might be wrong type
-            NBTCompound nbtCompound = item.getMeta().toNBT();
+            NBTCompound nbtCompound = item.getMeta().nbt();
             nbtCompound.setString("type", type);
             return nbtCompound;
         }

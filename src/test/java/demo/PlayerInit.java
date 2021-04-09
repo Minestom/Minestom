@@ -37,8 +37,8 @@ import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -243,10 +243,9 @@ public class PlayerInit {
                         .displayName(Component.text("test"))
                         .lore(Component.text("lore"))
                         .build();
-                inventory.setChestplate(item.withLore(components -> {
-                    var list = new ArrayList<>(components);
-                    list.add(Component.text("hey"));
-                    return list;
+                inventory.setChestplate(item.with(itemStackBuilder -> {
+                    itemStackBuilder.lore(Collections.emptyList())
+                            .displayName(null);
                 }));
             }
         });
