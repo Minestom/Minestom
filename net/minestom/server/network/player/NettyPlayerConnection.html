@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -214,66 +214,71 @@ extends <a href="PlayerConnection.html" title="class in net.minestom.server.netw
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flush()">flush</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>@Nullable <a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBungeeSkin()">getBungeeSkin</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBungeeUuid()">getBungeeUuid</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>@NotNull io.netty.channel.Channel</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChannel()">getChannel</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLoginUsername()">getLoginUsername</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Retrieves the username received from the client during connection.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNonce()">getNonce</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPluginRequestChannel(int)">getPluginRequestChannel</a></span>&#8203;(int&nbsp;messageId)</code></th>
 <td class="colLast">
 <div class="block">Gets a request channel from a message id, previously cached using <a href="#addPluginRequestEntry(int,java.lang.String)"><code>addPluginRequestEntry(int, String)</code></a>.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/SocketAddress.html?is-external=true" title="class or interface in java.net" class="externalLink">SocketAddress</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRemoteAddress()">getRemoteAddress</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the remote address of the client.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getServerAddress()">getServerAddress</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the server address that the client used to connect.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getServerPort()">getServerPort</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the server port that the client used to connect.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>@NotNull io.netty.buffer.ByteBuf</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTickBuffer()">getTickBuffer</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshServerInformation(java.lang.String,int)">refreshServerInformation</a></span>&#8203;(@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;serverAddress,
                         int&nbsp;serverPort)</code></th>
@@ -281,7 +286,7 @@ extends <a href="PlayerConnection.html" title="class in net.minestom.server.netw
 <div class="block">Used in <a href="../packet/client/handshake/HandshakePacket.html" title="class in net.minestom.server.network.packet.client.handshake"><code>HandshakePacket</code></a> to change the internal fields.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacket(net.minestom.server.network.packet.server.ServerPacket,boolean)">sendPacket</a></span>&#8203;(@NotNull <a href="../packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket,
           boolean&nbsp;skipTranslating)</code></th>
@@ -289,59 +294,52 @@ extends <a href="PlayerConnection.html" title="class in net.minestom.server.netw
 <div class="block">Writes a packet to the connection channel.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setConnectionState(net.minestom.server.network.ConnectionState)">setConnectionState</a></span>&#8203;(@NotNull <a href="../ConnectionState.html" title="enum in net.minestom.server.network">ConnectionState</a>&nbsp;connectionState)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEncryptionKey(javax.crypto.SecretKey)">setEncryptionKey</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/javax/crypto/SecretKey.html?is-external=true" title="class or interface in javax.crypto" class="externalLink">SecretKey</a>&nbsp;secretKey)</code></th>
 <td class="colLast">
 <div class="block">Sets the encryption key and add the codecs to the pipeline.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setNonce(byte%5B%5D)">setNonce</a></span>&#8203;(byte[]&nbsp;nonce)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRemoteAddress(java.net.SocketAddress)">setRemoteAddress</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/SocketAddress.html?is-external=true" title="class or interface in java.net" class="externalLink">SocketAddress</a>&nbsp;remoteAddress)</code></th>
 <td class="colLast">
 <div class="block">Changes the internal remote address field.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#startCompression()">startCompression</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Enables compression and add a new codec to the pipeline.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#UNSAFE_setBungeeSkin(net.minestom.server.entity.PlayerSkin)">UNSAFE_setBungeeSkin</a></span>&#8203;(<a href="../../entity/PlayerSkin.html" title="class in net.minestom.server.entity">PlayerSkin</a>&nbsp;bungeeSkin)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#UNSAFE_setBungeeUuid(java.util.UUID)">UNSAFE_setBungeeUuid</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;bungeeUuid)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#UNSAFE_setLoginUsername(java.lang.String)">UNSAFE_setLoginUsername</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;loginUsername)</code></th>
 <td class="colLast">
 <div class="block">Sets the internal login username field.</div>
-</td>
-</tr>
-<tr id="i22" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update()">update</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Updates values related to the network connection.</div>
 </td>
 </tr>
 <tr id="i23" class="rowColor">
@@ -360,13 +358,18 @@ extends <a href="PlayerConnection.html" title="class in net.minestom.server.netw
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeAndFlush(java.lang.Object)">writeAndFlush</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;message)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr id="i26" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeWaitingPackets()">writeWaitingPackets</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.network.player.PlayerConnection">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.network.player.<a href="PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a></h3>
-<code><a href="PlayerConnection.html#getConnectionState()">getConnectionState</a>, <a href="PlayerConnection.html#getIdentifier()">getIdentifier</a>, <a href="PlayerConnection.html#getLastPacketCounter()">getLastPacketCounter</a>, <a href="PlayerConnection.html#getPacketCounter()">getPacketCounter</a>, <a href="PlayerConnection.html#getPlayer()">getPlayer</a>, <a href="PlayerConnection.html#isOnline()">isOnline</a>, <a href="PlayerConnection.html#refreshOnline(boolean)">refreshOnline</a>, <a href="PlayerConnection.html#sendPacket(net.minestom.server.network.packet.server.ServerPacket)">sendPacket</a>, <a href="PlayerConnection.html#setPlayer(net.minestom.server.entity.Player)">setPlayer</a>, <a href="PlayerConnection.html#shouldSendPacket(net.minestom.server.network.packet.server.ServerPacket)">shouldSendPacket</a>, <a href="PlayerConnection.html#toString()">toString</a></code></li>
+<code><a href="PlayerConnection.html#getConnectionState()">getConnectionState</a>, <a href="PlayerConnection.html#getIdentifier()">getIdentifier</a>, <a href="PlayerConnection.html#getLastPacketCounter()">getLastPacketCounter</a>, <a href="PlayerConnection.html#getPacketCounter()">getPacketCounter</a>, <a href="PlayerConnection.html#getPlayer()">getPlayer</a>, <a href="PlayerConnection.html#isOnline()">isOnline</a>, <a href="PlayerConnection.html#refreshOnline(boolean)">refreshOnline</a>, <a href="PlayerConnection.html#sendPacket(net.minestom.server.network.packet.server.ServerPacket)">sendPacket</a>, <a href="PlayerConnection.html#setPlayer(net.minestom.server.entity.Player)">setPlayer</a>, <a href="PlayerConnection.html#shouldSendPacket(net.minestom.server.network.packet.server.ServerPacket)">shouldSendPacket</a>, <a href="PlayerConnection.html#toString()">toString</a>, <a href="PlayerConnection.html#update()">update</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -411,21 +414,6 @@ extends <a href="PlayerConnection.html" title="class in net.minestom.server.netw
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="update()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>update</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;update()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="PlayerConnection.html#update()">PlayerConnection</a></code></span></div>
-<div class="block">Updates values related to the network connection.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="PlayerConnection.html#update()">update</a></code>&nbsp;in class&nbsp;<code><a href="PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a></code></dd>
-</dl>
-</li>
-</ul>
 <a id="setEncryptionKey(javax.crypto.SecretKey)">
 <!--   -->
 </a>
@@ -508,6 +496,24 @@ extends <a href="PlayerConnection.html" title="class in net.minestom.server.netw
 <h4>writeAndFlush</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;writeAndFlush&#8203;(@NotNull
                           @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;message)</pre>
+</li>
+</ul>
+<a id="writeWaitingPackets()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeWaitingPackets</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;writeWaitingPackets()</pre>
+</li>
+</ul>
+<a id="flush()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>flush</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;flush()</pre>
 </li>
 </ul>
 <a id="getRemoteAddress()">

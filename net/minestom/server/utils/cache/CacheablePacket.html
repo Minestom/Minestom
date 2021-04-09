@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":1,"i2":6,"i3":6};
+var data = {"i0":6,"i1":1,"i2":6,"i3":6,"i4":1};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -177,6 +177,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Gets the last time this packet changed.</div>
 </td>
 </tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeCache(io.netty.buffer.ByteBuf,net.minestom.server.network.packet.server.ServerPacket)">writeCache</a></span>&#8203;(@NotNull io.netty.buffer.ByteBuf&nbsp;buffer,
+          @NotNull <a href="../../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -245,12 +251,24 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <a id="getCache(net.minestom.server.network.packet.server.ServerPacket)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getCache</h4>
 <pre class="methodSignature">@Nullable
 static&nbsp;@Nullable <a href="../../network/netty/packet/FramedPacket.html" title="class in net.minestom.server.network.netty.packet">FramedPacket</a>&nbsp;getCache&#8203;(@NotNull
                                        @NotNull <a href="../../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</pre>
+</li>
+</ul>
+<a id="writeCache(io.netty.buffer.ByteBuf,net.minestom.server.network.packet.server.ServerPacket)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>writeCache</h4>
+<pre class="methodSignature">static&nbsp;void&nbsp;writeCache&#8203;(@NotNull
+                       @NotNull io.netty.buffer.ByteBuf&nbsp;buffer,
+                       @NotNull
+                       @NotNull <a href="../../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</pre>
 </li>
 </ul>
 </li>
