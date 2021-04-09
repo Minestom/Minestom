@@ -11,7 +11,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.util.*;
 import java.util.function.Supplier;
 
-public abstract class ItemMetaBuilder implements Cloneable {
+public abstract class ItemMetaBuilder {
 
     protected int damage;
     protected boolean unbreakable;
@@ -130,21 +130,6 @@ public abstract class ItemMetaBuilder implements Cloneable {
         NBTUtils.loadDataIntoMeta(dest, nbtCompound);
         dest.originalNBT = nbtCompound;
         return dest;
-    }
-
-    @Override
-    protected ItemMetaBuilder clone() {
-        try {
-            NBTCompound nbtCompound = new NBTCompound();
-            write(nbtCompound);
-            var builder = (ItemMetaBuilder) super.clone();
-            builder.read(nbtCompound);
-            return builder;
-        } catch (CloneNotSupportedException e) {
-            // Should never happen, because ItemMetaBuilder implements Cloneable
-            e.printStackTrace();
-            throw new UnsupportedOperationException("Weird thing happened");
-        }
     }
 
     public interface Provider<T> {
