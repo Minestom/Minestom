@@ -485,8 +485,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @return an unmodifiable {@link Set} containing all the entities in a chunk,
      * if {@code chunk} is unloaded, return an empty {@link HashSet}
      */
-    @NotNull
-    public Set<Entity> getChunkEntities(Chunk chunk) {
+    public @NotNull Set<Entity> getChunkEntities(Chunk chunk) {
         if (!ChunkUtils.isLoaded(chunk))
             return new HashSet<>();
 
