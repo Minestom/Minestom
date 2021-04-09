@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.lang.ref.SoftReference;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -28,8 +27,6 @@ public class ItemMeta {
 
     private final NBTCompound nbt;
     private final ItemMetaBuilder emptyBuilder;
-
-    private SoftReference<NBTCompound> nbtCache;
 
     protected ItemMeta(@NotNull ItemMetaBuilder metaBuilder) {
         this.damage = metaBuilder.damage;
@@ -106,12 +103,7 @@ public class ItemMeta {
     }
 
     public @NotNull NBTCompound toNBT() {
-        NBTCompound cache = nbtCache.get();
-        if (cache == null) {
-            cache = nbt.deepClone();
-            nbtCache = new SoftReference<>(cache);
-        }
-        return cache;
+        return nbt.deepClone();
     }
 
     @Override
