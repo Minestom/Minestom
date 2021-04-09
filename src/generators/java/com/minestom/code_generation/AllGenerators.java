@@ -4,6 +4,7 @@ import com.minestom.code_generation.attribute.AttributeGenerator;
 import com.minestom.code_generation.blocks.BlockGenerator;
 import com.minestom.code_generation.entity.EntityGenerator;
 import com.minestom.code_generation.entity.VillagerProfessionGenerator;
+import com.minestom.code_generation.entity.VillagerTypeGenerator;
 import com.minestom.code_generation.fluid.FluidGenerator;
 import com.minestom.code_generation.item.EnchantmentGenerator;
 import com.minestom.code_generation.item.MaterialGenerator;
@@ -11,7 +12,6 @@ import com.minestom.code_generation.map.MapColorsGenerator;
 import com.minestom.code_generation.particle.ParticleGenerator;
 import com.minestom.code_generation.registry.RegistryGenerator;
 import com.minestom.code_generation.sound.SoundGenerator;
-import net.kyori.adventure.sound.Sound;
 
 import java.io.File;
 
@@ -79,6 +79,11 @@ public class AllGenerators {
         // Generate villager professions
         new VillagerProfessionGenerator(
                 new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_villager_professions.json"),
+                outputFolder
+        ).generate();
+        // Generate villager types
+        new VillagerTypeGenerator(
+                new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_villager_types.json"),
                 outputFolder
         ).generate();
 
