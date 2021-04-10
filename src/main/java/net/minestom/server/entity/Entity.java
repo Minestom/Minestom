@@ -568,7 +568,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
                 // World border collision
                 final Position finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
-                final Chunk finalChunk;
+                Chunk finalChunk = currentChunk;
                 if (!ChunkUtils.same(position, finalVelocityPosition)) {
                     finalChunk = instance.getChunkAt(finalVelocityPosition);
 
@@ -576,8 +576,6 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                     if (!ChunkUtils.isLoaded(finalChunk)) {
                         return;
                     }
-                } else {
-                    finalChunk = getChunk();
                 }
 
                 // Apply the position if changed
@@ -644,9 +642,12 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
             for (int y = minY; y <= maxY; y++) {
                 for (int x = minX; x <= maxX; x++) {
                     for (int z = minZ; z <= maxZ; z++) {
-                        final Chunk chunk = instance.getChunkAt(x, z);
-                        if (!ChunkUtils.isLoaded(chunk))
-                            continue;
+                        Chunk chunk = currentChunk;
+                        if (!ChunkUtils.same(currentChunk, x, z)) {
+                            chunk = instance.getChunkAt(x, z);
+                            if (!ChunkUtils.isLoaded(chunk))
+                                continue;
+                        }
 
                         final CustomBlock customBlock = chunk.getCustomBlock(x, y, z);
                         if (customBlock != null) {
@@ -1323,13 +1324,10 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
             if (lastChunkX != newChunkX || lastChunkZ != newChunkZ) {
                 // Entity moved in a new chunk
-                final Chunk lastChunk = instance.getChunk(lastChunkX, lastChunkZ);
                 final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
-
-                Check.notNull(lastChunk, "The entity {0} was in an unloaded chunk at {1};{2}", getEntityId(), lastX, lastZ);
                 Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1};{2}", getEntityId(), x, z);
 
-                instance.UNSAFE_switchEntityChunk(this, lastChunk, newChunk);
+                instance.UNSAFE_switchEntityChunk(this, currentChunk, newChunk);
                 if (this instanceof Player) {
                     // Refresh player view
                     final Player player = (Player) this;

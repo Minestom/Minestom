@@ -84,6 +84,12 @@ public final class ChunkUtils {
         return isLoaded(chunk);
     }
 
+    public static boolean same(@NotNull Chunk chunk, double x, double z) {
+        final int chunkX = ChunkUtils.getChunkCoordinate(x);
+        final int chunkZ = ChunkUtils.getChunkCoordinate(z);
+        return chunk.getChunkX() != chunkX || chunk.getChunkZ() != chunkZ;
+    }
+
     public static boolean same(@NotNull Position pos1, @NotNull Position pos2) {
         final int x1 = ChunkUtils.getChunkCoordinate(pos1.getX());
         final int z1 = ChunkUtils.getChunkCoordinate(pos1.getZ());
