@@ -64,6 +64,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
 
     protected Instance instance;
+    protected Chunk currentChunk;
     protected final Position position;
     protected double lastX, lastY, lastZ;
     protected double cacheX, cacheY, cacheZ; // Used to synchronize with #getPosition
@@ -566,11 +567,16 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
                 // World border collision
                 final Position finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
-                final Chunk finalChunk = instance.getChunkAt(finalVelocityPosition);
+                final Chunk finalChunk;
+                if (!ChunkUtils.same(position, finalVelocityPosition)) {
+                    finalChunk = instance.getChunkAt(finalVelocityPosition);
 
-                // Entity shouldn't be updated when moving in an unloaded chunk
-                if (!ChunkUtils.isLoaded(finalChunk)) {
-                    return;
+                    // Entity shouldn't be updated when moving in an unloaded chunk
+                    if (!ChunkUtils.isLoaded(finalChunk)) {
+                        return;
+                    }
+                } else {
+                    finalChunk = getChunk();
                 }
 
                 // Apply the position if changed
@@ -816,9 +822,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      *
      * @return the entity chunk, can be null even if unlikely
      */
-    @Nullable
-    public Chunk getChunk() {
-        return instance.getChunkAt(position.getX(), position.getZ());
+    public @Nullable Chunk getChunk() {
+        return currentChunk;
     }
 
     /**
@@ -826,8 +831,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      *
      * @return the entity instance, can be null if the entity doesn't have an instance yet
      */
-    @Nullable
-    public Instance getInstance() {
+    public @Nullable Instance getInstance() {
         return instance;
     }
 
@@ -855,6 +859,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
         this.isActive = true;
         this.instance = instance;
+        this.currentChunk = instance.getChunkAt(position.getX(), position.getZ());
         instance.UNSAFE_addEntity(this);
         spawn();
         EntitySpawnEvent entitySpawnEvent = new EntitySpawnEvent(this, instance);
@@ -1309,8 +1314,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
         final Instance instance = getInstance();
         if (instance != null) {
-            final int lastChunkX = ChunkUtils.getChunkCoordinate(lastX);
-            final int lastChunkZ = ChunkUtils.getChunkCoordinate(lastZ);
+            final int lastChunkX = currentChunk.getChunkX();
+            final int lastChunkZ = currentChunk.getChunkZ();
 
             final int newChunkX = ChunkUtils.getChunkCoordinate(x);
             final int newChunkZ = ChunkUtils.getChunkCoordinate(z);
@@ -1330,6 +1335,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                     player.refreshVisibleChunks(newChunk);
                     player.refreshVisibleEntities(newChunk);
                 }
+
+                this.currentChunk = newChunk;
             }
         }
 
