@@ -588,15 +588,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
         }
 
-        // ItemStack ownership cache
-        {
-            ItemStack[] itemStacks = inventory.getItemStacks();
-            for (ItemStack itemStack : itemStacks) {
-                // FIXME: item data
-                //ItemStack.DATA_OWNERSHIP.clearCache(itemStack.getIdentifier());
-            }
-        }
-
         // Clear all viewable entities
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         // Clear all viewable chunks
