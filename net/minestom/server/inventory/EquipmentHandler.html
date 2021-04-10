@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6,"i2":18,"i3":18,"i4":6,"i5":18,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":18,"i13":6,"i14":6,"i15":6,"i16":18};
+var data = {"i0":6,"i1":6,"i2":18,"i3":18,"i4":6,"i5":18,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":18,"i12":6,"i13":18,"i14":6,"i15":6,"i16":6,"i17":18};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -226,13 +226,19 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </td>
 </tr>
 <tr id="i11" class="rowColor">
+<td class="colFirst"><code>default void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEquipment(net.minestom.server.network.packet.server.play.EntityEquipmentPacket.Slot,net.minestom.server.item.ItemStack)">setEquipment</a></span>&#8203;(<a href="../network/packet/server/play/EntityEquipmentPacket.Slot.html" title="enum in net.minestom.server.network.packet.server.play">EntityEquipmentPacket.Slot</a>&nbsp;slot,
+            @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setHelmet(net.minestom.server.item.ItemStack)">setHelmet</a></span>&#8203;(@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Changes the helmet.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>default void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setItemInHand(net.minestom.server.entity.Player.Hand,net.minestom.server.item.ItemStack)">setItemInHand</a></span>&#8203;(<a href="../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
              @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;stack)</code></th>
@@ -240,28 +246,28 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Changes the <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> in the specific hand.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setItemInMainHand(net.minestom.server.item.ItemStack)">setItemInMainHand</a></span>&#8203;(@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Changes the main hand <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a>.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setItemInOffHand(net.minestom.server.item.ItemStack)">setItemInOffHand</a></span>&#8203;(@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Changes the off hand <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a>.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLeggings(net.minestom.server.item.ItemStack)">setLeggings</a></span>&#8203;(@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">
 <div class="block">Changes the leggings.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>default void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#syncEquipment(net.minestom.server.network.packet.server.play.EntityEquipmentPacket.Slot)">syncEquipment</a></span>&#8203;(<a href="../network/packet/server/play/EntityEquipmentPacket.Slot.html" title="enum in net.minestom.server.network.packet.server.play">EntityEquipmentPacket.Slot</a>&nbsp;slot)</code></th>
 <td class="colLast">
@@ -517,6 +523,18 @@ default&nbsp;@NotNull <a href="../item/ItemStack.html" title="class in net.mines
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the equipment <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a></dd>
 </dl>
+</li>
+</ul>
+<a id="setEquipment(net.minestom.server.network.packet.server.play.EntityEquipmentPacket.Slot,net.minestom.server.item.ItemStack)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setEquipment</h4>
+<pre class="methodSignature">default&nbsp;void&nbsp;setEquipment&#8203;(@NotNull
+                          <a href="../network/packet/server/play/EntityEquipmentPacket.Slot.html" title="enum in net.minestom.server.network.packet.server.play">EntityEquipmentPacket.Slot</a>&nbsp;slot,
+                          @NotNull
+                          @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
 </li>
 </ul>
 <a id="syncEquipment(net.minestom.server.network.packet.server.play.EntityEquipmentPacket.Slot)">
