@@ -62,19 +62,17 @@ public abstract class ThreadProvider {
      * Be aware that this is possible for an instance to load chunks before being registered.
      *
      * @param instance the instance of the chunk
-     * @param chunkX   the chunk X
-     * @param chunkZ   the chunk Z
+     * @param chunk    the loaded chunk
      */
-    public abstract void onChunkLoad(@NotNull Instance instance, int chunkX, int chunkZ);
+    public abstract void onChunkLoad(@NotNull Instance instance, @NotNull Chunk chunk);
 
     /**
      * Called when a chunk is unloaded.
      *
      * @param instance the instance of the chunk
-     * @param chunkX   the chunk X
-     * @param chunkZ   the chunk Z
+     * @param chunk    the unloaded chunk
      */
-    public abstract void onChunkUnload(@NotNull Instance instance, int chunkX, int chunkZ);
+    public abstract void onChunkUnload(@NotNull Instance instance, @NotNull Chunk chunk);
 
     /**
      * Performs a server tick for all chunks based on their linked thread.
@@ -116,20 +114,15 @@ public abstract class ThreadProvider {
     /**
      * Processes a whole tick for a chunk.
      *
-     * @param instance   the instance of the chunk
-     * @param chunkIndex the index of the chunk {@link ChunkUtils#getChunkIndex(int, int)}
-     * @param time       the time of the update in milliseconds
+     * @param instance the instance of the chunk
+     * @param chunk    the chunk to update
+     * @param time     the time of the update in milliseconds
      */
-    protected void processChunkTick(@NotNull Instance instance, long chunkIndex, long time) {
-        final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-        final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-
-        final Chunk chunk = instance.getChunk(chunkX, chunkZ);
+    protected void processChunkTick(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
         if (!ChunkUtils.isLoaded(chunk))
             return;
 
         updateChunk(instance, chunk, time);
-
         updateEntities(instance, chunk, time);
 
         // TODO: find a better place
@@ -225,13 +218,15 @@ public abstract class ThreadProvider {
      */
     protected void conditionalEntityUpdate(@NotNull Instance instance, @NotNull Chunk chunk, long time,
                                            @Nullable EntityValidator condition) {
-        final Set<Entity> entities = instance.getChunkEntities(chunk);
+        if (!instance.getEntities().isEmpty()) {
+            final Set<Entity> entities = instance.getChunkEntities(chunk);
 
-        if (!entities.isEmpty()) {
-            for (Entity entity : entities) {
-                if (condition != null && !condition.isValid(entity))
-                    continue;
-                entity.tick(time);
+            if (!entities.isEmpty()) {
+                for (Entity entity : entities) {
+                    if (condition != null && !condition.isValid(entity))
+                        continue;
+                    entity.tick(time);
+                }
             }
         }
 

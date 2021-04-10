@@ -1,15 +1,14 @@
 package net.minestom.server.thread;
 
-import it.unimi.dsi.fastutil.longs.LongArraySet;
-import it.unimi.dsi.fastutil.longs.LongSet;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 
 /**
@@ -17,11 +16,11 @@ import java.util.concurrent.Future;
  */
 public class PerInstanceThreadProvider extends ThreadProvider {
 
-    private final Map<Instance, LongSet> instanceChunkMap = new HashMap<>();
+    private final Map<Instance, Set<Chunk>> instanceChunkMap = new ConcurrentHashMap<>();
 
     @Override
     public void onInstanceCreate(@NotNull Instance instance) {
-        this.instanceChunkMap.putIfAbsent(instance, new LongArraySet());
+        this.instanceChunkMap.putIfAbsent(instance, ConcurrentHashMap.newKeySet());
     }
 
     @Override
@@ -30,20 +29,16 @@ public class PerInstanceThreadProvider extends ThreadProvider {
     }
 
     @Override
-    public void onChunkLoad(@NotNull Instance instance, int chunkX, int chunkZ) {
+    public void onChunkLoad(@NotNull Instance instance, @NotNull Chunk chunk) {
         // Add the loaded chunk to the instance chunks list
-        LongSet chunkCoordinates = getChunkCoordinates(instance);
-        final long index = ChunkUtils.getChunkIndex(chunkX, chunkZ);
-        chunkCoordinates.add(index);
+        Set<Chunk> chunks = getChunks(instance);
+        chunks.add(chunk);
     }
 
     @Override
-    public void onChunkUnload(@NotNull Instance instance, int chunkX, int chunkZ) {
-        LongSet chunkCoordinates = getChunkCoordinates(instance);
-        final long index = ChunkUtils.getChunkIndex(chunkX, chunkZ);
-        // Remove the unloaded chunk from the instance list
-        chunkCoordinates.remove(index);
-
+    public void onChunkUnload(@NotNull Instance instance, @NotNull Chunk chunk) {
+        Set<Chunk> chunks = getChunks(instance);
+        chunks.remove(chunk);
     }
 
     @NotNull
@@ -51,17 +46,19 @@ public class PerInstanceThreadProvider extends ThreadProvider {
     public List<Future<?>> update(long time) {
         List<Future<?>> futures = new ArrayList<>();
 
-        instanceChunkMap.forEach((instance, chunkIndexes) -> futures.add(pool.submit(() -> {
+        instanceChunkMap.forEach((instance, chunks) -> futures.add(pool.submit(() -> {
             // Tick instance
             updateInstance(instance, time);
             // Tick chunks
-            chunkIndexes.forEach((long chunkIndex) -> processChunkTick(instance, chunkIndex, time));
+            for (Chunk chunk : chunks) {
+                processChunkTick(instance, chunk, time);
+            }
         })));
         return futures;
     }
 
-    private LongSet getChunkCoordinates(Instance instance) {
-        return instanceChunkMap.computeIfAbsent(instance, inst -> new LongArraySet());
+    private Set<Chunk> getChunks(Instance instance) {
+        return instanceChunkMap.computeIfAbsent(instance, inst -> ConcurrentHashMap.newKeySet());
     }
 
 }

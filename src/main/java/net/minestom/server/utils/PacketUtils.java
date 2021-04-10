@@ -292,7 +292,7 @@ public final class PacketUtils {
         final boolean compression = compressionThreshold > 0;
 
         if (compression) {
-            // Dummy varint
+            // Dummy var-int
             final int packetLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
             final int dataLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
 
@@ -326,13 +326,13 @@ public final class PacketUtils {
         } else {
             // No compression
 
-            // Write dummy varint
+            // Write dummy var-int
             final int index = Utils.writeEmptyVarIntHeader(buffer);
 
             // Write packet id + payload
             writePacket(buffer, serverPacket);
 
-            // Rewrite dummy varint to packet length
+            // Rewrite dummy var-int to packet length
             final int afterIndex = buffer.writerIndex();
             final int packetSize = (afterIndex - index) - Utils.VARINT_HEADER_SIZE;
             Utils.overrideVarIntHeader(buffer, index, packetSize);

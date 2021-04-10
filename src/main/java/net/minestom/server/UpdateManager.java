@@ -1,6 +1,7 @@
 package net.minestom.server;
 
 import com.google.common.collect.Queues;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.network.ConnectionManager;
@@ -185,13 +186,12 @@ public final class UpdateManager {
      * WARNING: should be automatically done by the {@link Instance} implementation.
      *
      * @param instance the instance of the chunk
-     * @param chunkX   the chunk X
-     * @param chunkZ   the chunk Z
+     * @param chunk    the loaded chunk
      */
-    public synchronized void signalChunkLoad(Instance instance, int chunkX, int chunkZ) {
+    public synchronized void signalChunkLoad(Instance instance, @NotNull Chunk chunk) {
         if (this.threadProvider == null)
             return;
-        this.threadProvider.onChunkLoad(instance, chunkX, chunkZ);
+        this.threadProvider.onChunkLoad(instance, chunk);
     }
 
     /**
@@ -200,13 +200,12 @@ public final class UpdateManager {
      * WARNING: should be automatically done by the {@link Instance} implementation.
      *
      * @param instance the instance of the chunk
-     * @param chunkX   the chunk X
-     * @param chunkZ   the chunk Z
+     * @param chunk    the unloaded chunk
      */
-    public synchronized void signalChunkUnload(Instance instance, int chunkX, int chunkZ) {
+    public synchronized void signalChunkUnload(Instance instance, @NotNull Chunk chunk) {
         if (this.threadProvider == null)
             return;
-        this.threadProvider.onChunkUnload(instance, chunkX, chunkZ);
+        this.threadProvider.onChunkUnload(instance, chunk);
     }
 
     /**
