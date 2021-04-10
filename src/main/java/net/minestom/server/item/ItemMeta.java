@@ -9,7 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -38,9 +39,9 @@ public class ItemMeta implements Writeable {
         this.unbreakable = metaBuilder.unbreakable;
         this.hideFlag = metaBuilder.hideFlag;
         this.displayName = metaBuilder.displayName;
-        this.lore = Collections.unmodifiableList(metaBuilder.lore);
-        this.enchantmentMap = Collections.unmodifiableMap(metaBuilder.enchantmentMap);
-        this.attributes = Collections.unmodifiableList(metaBuilder.attributes);
+        this.lore = new ArrayList<>(metaBuilder.lore);
+        this.enchantmentMap = new HashMap<>(metaBuilder.enchantmentMap);
+        this.attributes = new ArrayList<>(metaBuilder.attributes);
         this.customModelData = metaBuilder.customModelData;
 
         this.nbt = metaBuilder.nbt;
