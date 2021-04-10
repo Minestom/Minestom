@@ -176,9 +176,9 @@ extends <a href="../GoalSelector.html" title="class in net.minestom.server.entit
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.EntityCreature,int,int,net.minestom.server.utils.time.TimeUnit)">MeleeAttackGoal</a></span>&#8203;(@NotNull <a href="../../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.EntityCreature,double,int,net.minestom.server.utils.time.TimeUnit)">MeleeAttackGoal</a></span>&#8203;(@NotNull <a href="../../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature,
+               double&nbsp;range,
                int&nbsp;delay,
-               int&nbsp;range,
                @NotNull <a href="../../../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;timeUnit)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -208,7 +208,7 @@ extends <a href="../GoalSelector.html" title="class in net.minestom.server.entit
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../utils/time/Cooldown.html" title="class in net.minestom.server.utils.time">Cooldown</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../../utils/time/Cooldown.html" title="class in net.minestom.server.utils.time">Cooldown</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCooldown()">getCooldown</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -271,7 +271,7 @@ extends <a href="../GoalSelector.html" title="class in net.minestom.server.entit
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.entity.EntityCreature,int,int,net.minestom.server.utils.time.TimeUnit)">
+<a id="&lt;init&gt;(net.minestom.server.entity.EntityCreature,double,int,net.minestom.server.utils.time.TimeUnit)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -279,15 +279,15 @@ extends <a href="../GoalSelector.html" title="class in net.minestom.server.entit
 <h4>MeleeAttackGoal</h4>
 <pre>public&nbsp;MeleeAttackGoal&#8203;(@NotNull
                        @NotNull <a href="../../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature,
+                       double&nbsp;range,
                        int&nbsp;delay,
-                       int&nbsp;range,
                        @NotNull
                        @NotNull <a href="../../../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;timeUnit)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>entityCreature</code> - the entity to add the goal to</dd>
-<dd><code>delay</code> - the delay between each attacks</dd>
 <dd><code>range</code> - the allowed range the entity can attack others.</dd>
+<dd><code>delay</code> - the delay between each attacks</dd>
 <dd><code>timeUnit</code> - the unit of the delay</dd>
 </dl>
 </li>
@@ -308,7 +308,8 @@ extends <a href="../GoalSelector.html" title="class in net.minestom.server.entit
 <ul class="blockList">
 <li class="blockList">
 <h4>getCooldown</h4>
-<pre class="methodSignature">public&nbsp;<a href="../../../utils/time/Cooldown.html" title="class in net.minestom.server.utils.time">Cooldown</a>&nbsp;getCooldown()</pre>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="../../../utils/time/Cooldown.html" title="class in net.minestom.server.utils.time">Cooldown</a>&nbsp;getCooldown()</pre>
 </li>
 </ul>
 <a id="shouldStart()">
