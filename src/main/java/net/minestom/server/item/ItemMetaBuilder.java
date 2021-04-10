@@ -61,7 +61,6 @@ public abstract class ItemMetaBuilder {
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder displayName(@Nullable Component displayName) {
         this.displayName = displayName;
-
         handleCompound("display", nbtCompound -> {
             if (displayName != null) {
                 final String name = AdventureSerializer.serialize(displayName);
@@ -70,14 +69,12 @@ public abstract class ItemMetaBuilder {
                 nbtCompound.removeTag("Name");
             }
         });
-
         return this;
     }
 
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder lore(@NotNull List<@NotNull Component> lore) {
         this.lore = lore;
-
         handleCompound("display", nbtCompound -> {
             final NBTList<NBTString> loreNBT = new NBTList<>(NBTTypes.TAG_String);
             for (Component line : lore) {
@@ -85,7 +82,6 @@ public abstract class ItemMetaBuilder {
             }
             nbtCompound.set("Lore", loreNBT);
         });
-
         return this;
     }
 

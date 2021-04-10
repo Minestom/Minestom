@@ -11,6 +11,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTString;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
@@ -27,7 +28,7 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
         super(metaBuilder);
         this.author = author;
         this.title = title;
-        this.pages = Collections.unmodifiableList(pages);
+        this.pages = new ArrayList<>(pages);
     }
 
     public String getAuthor() {
@@ -38,15 +39,15 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
         return title;
     }
 
-    public List<Component> getPages() {
-        return pages;
+    public @NotNull List<@NotNull Component> getPages() {
+        return Collections.unmodifiableList(pages);
     }
 
     public static class Builder extends ItemMetaBuilder {
 
         private String author;
         private String title;
-        private List<Component> pages;
+        private List<Component> pages = new ArrayList<>();
 
         public Builder author(String author) {
             this.author = author;

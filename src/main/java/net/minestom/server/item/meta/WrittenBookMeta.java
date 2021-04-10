@@ -13,6 +13,8 @@ import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTString;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
@@ -33,7 +35,7 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
         this.generation = generation;
         this.author = author;
         this.title = title;
-        this.pages = Collections.unmodifiableList(pages);
+        this.pages = new ArrayList<>(pages);
     }
 
     public boolean isResolved() {
@@ -52,8 +54,8 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
         return title;
     }
 
-    public List<Component> getPages() {
-        return pages;
+    public @NotNull List<@NotNull Component> getPages() {
+        return Collections.unmodifiableList(pages);
     }
 
     public enum WrittenBookGeneration {
@@ -84,7 +86,7 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
         private WrittenBookGeneration generation;
         private String author;
         private String title;
-        private List<Component> pages;
+        private List<Component> pages = new ArrayList<>();
 
         public Builder resolved(boolean resolved) {
             this.resolved = resolved;
@@ -121,6 +123,10 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
             this.nbt.set("pages", list);
 
             return this;
+        }
+
+        public Builder pages(Component... pages) {
+            return pages(Arrays.asList(pages));
         }
 
         @Override
