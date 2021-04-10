@@ -567,7 +567,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
                 // World border collision
                 final Position finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
-                final Chunk finalChunk;
+                Chunk finalChunk = currentChunk;
                 if (!ChunkUtils.same(position, finalVelocityPosition)) {
                     finalChunk = instance.getChunkAt(finalVelocityPosition);
 
@@ -575,8 +575,6 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                     if (!ChunkUtils.isLoaded(finalChunk)) {
                         return;
                     }
-                } else {
-                    finalChunk = getChunk();
                 }
 
                 // Apply the position if changed
@@ -643,9 +641,12 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
             for (int y = minY; y <= maxY; y++) {
                 for (int x = minX; x <= maxX; x++) {
                     for (int z = minZ; z <= maxZ; z++) {
-                        final Chunk chunk = instance.getChunkAt(x, z);
-                        if (!ChunkUtils.isLoaded(chunk))
-                            continue;
+                        Chunk chunk = currentChunk;
+                        if (!ChunkUtils.same(currentChunk, x, z)) {
+                            chunk = instance.getChunkAt(x, z);
+                            if (!ChunkUtils.isLoaded(chunk))
+                                continue;
+                        }
 
                         final CustomBlock customBlock = chunk.getCustomBlock(x, y, z);
                         if (customBlock != null) {
