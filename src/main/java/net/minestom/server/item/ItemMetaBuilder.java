@@ -3,6 +3,7 @@ package net.minestom.server.item;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.adventure.AdventureSerializer;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.Utils;
@@ -27,6 +28,8 @@ public abstract class ItemMetaBuilder {
     protected Map<Enchantment, Short> enchantmentMap = new HashMap<>();
     protected List<ItemAttribute> attributes = new ArrayList<>();
     protected int customModelData;
+    protected Set<Block> canDestroy = new HashSet<>();
+    protected Set<Block> canPlaceOn = new HashSet<>();
 
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder damage(int damage) {
@@ -143,6 +146,30 @@ public abstract class ItemMetaBuilder {
     public @NotNull ItemMetaBuilder customModelData(int customModelData) {
         this.customModelData = customModelData;
         this.nbt.setInt("CustomModelData", customModelData);
+        return this;
+    }
+
+    @Contract("_ -> this")
+    public @NotNull ItemMetaBuilder canPlaceOn(@NotNull Set<@NotNull Block> blocks) {
+        this.canPlaceOn = blocks;
+        handleCollection(canPlaceOn, "CanPlaceOn", nbt, () -> {
+            NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
+            canPlaceOn.forEach(block -> list.add(new NBTString(block.getName())));
+            nbt.set("CanPlaceOn", list);
+            return list;
+        });
+        return this;
+    }
+
+    @Contract("_ -> this")
+    public @NotNull ItemMetaBuilder canDestroy(@NotNull Set<@NotNull Block> blocks) {
+        this.canDestroy = blocks;
+        handleCollection(canDestroy, "CanDestroy", nbt, () -> {
+            NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
+            canDestroy.forEach(block -> list.add(new NBTString(block.getName())));
+            nbt.set("CanDestroy", list);
+            return list;
+        });
         return this;
     }
 

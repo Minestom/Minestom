@@ -86,8 +86,8 @@ public class BlockPlacementListener {
                 canPlaceBlock = false; //Spectators can't place blocks
             } else if (player.getGameMode() == GameMode.ADVENTURE) {
                 //Check if the block can placed on the block
-                // FIXME: canPlaceOn
-                canPlaceBlock = true;//usedItem.canPlaceOn(instance.getBlock(blockPosition).getName());
+                Block placeBlock = instance.getBlock(blockPosition);
+                canPlaceBlock = usedItem.getMeta().getCanPlaceOn().contains(placeBlock);
             }
         }
 

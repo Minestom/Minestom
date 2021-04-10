@@ -39,6 +39,7 @@ import net.minestom.server.world.DimensionType;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -229,12 +230,17 @@ public class PlayerInit {
             PlayerInventory inventory = player.getInventory();
             ItemStack itemStack = ItemStack.builder(Material.STONE)
                     .amount(64)
+                    .meta(itemMetaBuilder ->
+                            itemMetaBuilder.canPlaceOn(Set.of(Block.STONE))
+                                    .canDestroy(Set.of(Block.DIAMOND_ORE)))
                     .store(store -> {
                         store.set("key", 5, Integer::sum);
                     })
                     .build();
 
-            itemStack = itemStack.withStore(storeBuilder -> storeBuilder.set("key2", 25, Integer::sum));
+            System.out.println(itemStack.getMeta().toSNBT());
+
+            //itemStack = itemStack.withStore(storeBuilder -> storeBuilder.set("key2", 25, Integer::sum));
 
             inventory.addItemStack(itemStack);
 

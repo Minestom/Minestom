@@ -7,6 +7,7 @@ import net.kyori.adventure.util.Codec;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeOperation;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemMetaBuilder;
@@ -25,10 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 // for lack of a better name
 public final class NBTUtils {
@@ -236,34 +234,30 @@ public final class NBTUtils {
         // Meta specific fields
         metaBuilder.read(nbt);
 
-        // Ownership
+        // CanPlaceOn
         {
-            // FIXME: custom data
-            /*if (nbt.containsKey(ItemStack.OWNERSHIP_DATA_KEY)) {
-                final String identifierString = nbt.getString(ItemStack.OWNERSHIP_DATA_KEY);
-                final UUID identifier = UUID.fromString(identifierString);
-                final Data data = ItemStack.DATA_OWNERSHIP.getOwnObject(identifier);
-                if (data != null) {
-                    item.setData(data);
-                }
-            }*/
-        }
-
-        //CanPlaceOn
-        // FIXME: PlaceOn/CanDestroy
-        /*{
             if (nbt.containsKey("CanPlaceOn")) {
                 NBTList<NBTString> canPlaceOn = nbt.getList("CanPlaceOn");
-                canPlaceOn.forEach(x -> item.getCanPlaceOn().add(x.getValue()));
+                Set<Block> blocks = new HashSet<>();
+                for (NBTString blockNamespace : canPlaceOn) {
+                    Block block = Registries.getBlock(blockNamespace.getValue());
+                    blocks.add(block);
+                }
+                metaBuilder.canPlaceOn(blocks);
             }
         }
-        //CanDestroy
+        // CanDestroy
         {
             if (nbt.containsKey("CanDestroy")) {
-                NBTList<NBTString> canPlaceOn = nbt.getList("CanDestroy");
-                canPlaceOn.forEach(x -> item.getCanDestroy().add(x.getValue()));
+                NBTList<NBTString> canDestroy = nbt.getList("CanDestroy");
+                Set<Block> blocks = new HashSet<>();
+                for (NBTString blockNamespace : canDestroy) {
+                    Block block = Registries.getBlock(blockNamespace.getValue());
+                    blocks.add(block);
+                }
+                metaBuilder.canDestroy(blocks);
             }
-        }*/
+        }
     }
 
     public static void loadEnchantments(NBTList<NBTCompound> enchantments, EnchantmentSetter setter) {

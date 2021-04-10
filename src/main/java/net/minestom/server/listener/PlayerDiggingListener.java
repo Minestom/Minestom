@@ -47,12 +47,12 @@ public class PlayerDiggingListener {
             } else if (player.getGameMode() == GameMode.ADVENTURE) {
                 //Check if the item can break the block with the current item
                 ItemStack itemInMainHand = player.getItemInMainHand();
-                // FIXME: canDestroy
-                /*if (!itemInMainHand.canDestroy(instance.getBlock(blockPosition).getName())) {
+                Block destroyedBlock = instance.getBlock(blockPosition);
+                if (!itemInMainHand.getMeta().getCanDestroy().contains(destroyedBlock)) {
                     sendAcknowledgePacket(player, blockPosition, blockStateId,
                             ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
                     return;
-                }*/
+                }
             }
 
             final boolean instantBreak = player.isCreative() ||

@@ -1,6 +1,7 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
@@ -9,10 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class ItemMeta implements Writeable {
@@ -27,6 +25,9 @@ public class ItemMeta implements Writeable {
     private final List<ItemAttribute> attributes;
 
     private final int customModelData;
+
+    private final Set<Block> canDestroy;
+    private final Set<Block> canPlaceOn;
 
     private final NBTCompound nbt;
     private final ItemMetaBuilder emptyBuilder;
@@ -43,6 +44,8 @@ public class ItemMeta implements Writeable {
         this.enchantmentMap = new HashMap<>(metaBuilder.enchantmentMap);
         this.attributes = new ArrayList<>(metaBuilder.attributes);
         this.customModelData = metaBuilder.customModelData;
+        this.canDestroy = new HashSet<>(metaBuilder.canDestroy);
+        this.canPlaceOn = new HashSet<>(metaBuilder.canPlaceOn);
 
         this.nbt = metaBuilder.nbt;
         this.emptyBuilder = metaBuilder.getSupplier().get();
@@ -77,22 +80,32 @@ public class ItemMeta implements Writeable {
 
     @Contract(pure = true)
     public @NotNull List<@NotNull Component> getLore() {
-        return lore;
+        return Collections.unmodifiableList(lore);
     }
 
     @Contract(pure = true)
     public @NotNull Map<Enchantment, Short> getEnchantmentMap() {
-        return enchantmentMap;
+        return Collections.unmodifiableMap(enchantmentMap);
     }
 
     @Contract(pure = true)
-    public @NotNull List<ItemAttribute> getAttributes() {
-        return attributes;
+    public @NotNull List<@NotNull ItemAttribute> getAttributes() {
+        return Collections.unmodifiableList(attributes);
     }
 
     @Contract(pure = true)
     public int getCustomModelData() {
         return customModelData;
+    }
+
+    @Contract(pure = true)
+    public @NotNull Set<@NotNull Block> getCanDestroy() {
+        return Collections.unmodifiableSet(canDestroy);
+    }
+
+    @Contract(pure = true)
+    public @NotNull Set<@NotNull Block> getCanPlaceOn() {
+        return Collections.unmodifiableSet(canPlaceOn);
     }
 
     public <T> T getOrDefault(@NotNull ItemTag<T> tag, @Nullable T defaultValue) {
