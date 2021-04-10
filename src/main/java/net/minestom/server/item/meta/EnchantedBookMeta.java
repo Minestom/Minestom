@@ -35,13 +35,13 @@ public class EnchantedBookMeta extends ItemMeta implements ItemMetaBuilder.Provi
 
         private Map<Enchantment, Short> enchantments = new HashMap<>();
 
-        public Builder enchantments(Map<Enchantment, Short> enchantments) {
+        public @NotNull Builder enchantments(Map<Enchantment, Short> enchantments) {
             this.enchantments = enchantments;
             NBTUtils.writeEnchant(nbt, "StoredEnchantments", enchantments);
             return this;
         }
 
-        public Builder enchantment(Enchantment enchantment, short level) {
+        public @NotNull Builder enchantment(Enchantment enchantment, short level) {
             this.enchantments.put(enchantment, level);
             enchantments(enchantments);
             return this;

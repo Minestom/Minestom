@@ -6,6 +6,7 @@ import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTString;
@@ -14,6 +15,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provider<WritableBookMeta.Builder> {
@@ -23,19 +25,19 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
     private final List<Component> pages;
 
     protected WritableBookMeta(@NotNull ItemMetaBuilder metaBuilder,
-                               String author, String title,
-                               List<Component> pages) {
+                               @Nullable String author, @Nullable String title,
+                               @NotNull List<@NotNull Component> pages) {
         super(metaBuilder);
         this.author = author;
         this.title = title;
         this.pages = new ArrayList<>(pages);
     }
 
-    public String getAuthor() {
+    public @Nullable String getAuthor() {
         return author;
     }
 
-    public String getTitle() {
+    public @Nullable String getTitle() {
         return title;
     }
 
@@ -49,27 +51,30 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
         private String title;
         private List<Component> pages = new ArrayList<>();
 
-        public Builder author(String author) {
+        public Builder author(@Nullable String author) {
             this.author = author;
-            this.nbt.setString("author", author);
+            handleNullable(author, "author", nbt,
+                    () -> new NBTString(Objects.requireNonNull(author)));
             return this;
         }
 
-        public Builder title(String title) {
+        public Builder title(@Nullable String title) {
             this.title = title;
-            this.nbt.setString("title", author);
+            handleNullable(title, "title", nbt,
+                    () -> new NBTString(Objects.requireNonNull(title)));
             return this;
         }
 
-        public Builder pages(List<Component> pages) {
+        public Builder pages(@NotNull List<@NotNull Component> pages) {
             this.pages = pages;
-            this.nbt.setString("title", author);
 
-            NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-            for (Component page : pages) {
-                list.add(new NBTString(AdventureSerializer.serialize(page)));
-            }
-            this.nbt.set("pages", list);
+            handleCollection(pages, "pages", nbt, () -> {
+                NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
+                for (Component page : pages) {
+                    list.add(new NBTString(AdventureSerializer.serialize(page)));
+                }
+                return list;
+            });
 
             return this;
         }

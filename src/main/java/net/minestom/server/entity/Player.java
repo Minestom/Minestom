@@ -42,6 +42,7 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.meta.WrittenBookMeta;
 import net.minestom.server.listener.PlayerDiggingListener;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
@@ -67,6 +68,7 @@ import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.instance.InstanceUtils;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -1100,15 +1102,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void openBook(@NotNull Book book) {
-        // make the book
-        ItemStack writtenBook = ItemStack.of(Material.WRITTEN_BOOK);
-        // TODO: WRITTEN_BOOK meta
-        //writtenBook.setItemMeta(WrittenBookMeta.fromAdventure(book, this));
+        ItemStack writtenBook = ItemStack.builder(Material.WRITTEN_BOOK)
+                .meta(WrittenBookMeta.fromAdventure(book, this))
+                .build();
 
         // Set book in offhand
         SetSlotPacket setBookPacket = new SetSlotPacket();
         setBookPacket.windowId = 0;
-        setBookPacket.slot = 45;
+        setBookPacket.slot = PlayerInventoryUtils.OFFHAND_SLOT;
         setBookPacket.itemStack = writtenBook;
         playerConnection.sendPacket(setBookPacket);
 
@@ -1120,7 +1121,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Restore the item in offhand
         SetSlotPacket restoreItemPacket = new SetSlotPacket();
         restoreItemPacket.windowId = 0;
-        restoreItemPacket.slot = 45;
+        restoreItemPacket.slot = PlayerInventoryUtils.OFFHAND_SLOT;
         restoreItemPacket.itemStack = getItemInOffHand();
         playerConnection.sendPacket(restoreItemPacket);
     }

@@ -94,13 +94,10 @@ public abstract class ItemMetaBuilder {
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder enchantments(@NotNull Map<Enchantment, Short> enchantments) {
         this.enchantmentMap = enchantments;
-
-        if (!enchantmentMap.isEmpty()) {
+        handleMap(enchantmentMap, "Enchantments", nbt, () -> {
             NBTUtils.writeEnchant(nbt, "Enchantments", enchantmentMap);
-        } else {
-            this.nbt.removeTag("Enchantments");
-        }
-
+            return nbt.get("Enchantments");
+        });
         return this;
     }
 
@@ -114,6 +111,7 @@ public abstract class ItemMetaBuilder {
     @Contract("-> this")
     public @NotNull ItemMetaBuilder clearEnchantment() {
         this.enchantmentMap.clear();
+        enchantments(enchantmentMap);
         return this;
     }
 
@@ -121,10 +119,8 @@ public abstract class ItemMetaBuilder {
     public @NotNull ItemMetaBuilder attributes(@NotNull List<@NotNull ItemAttribute> attributes) {
         this.attributes = attributes;
 
-
-        if (!attributes.isEmpty()) {
+        handleCollection(attributes, "AttributeModifiers", nbt, () -> {
             NBTList<NBTCompound> attributesNBT = new NBTList<>(NBTTypes.TAG_Compound);
-
             for (ItemAttribute itemAttribute : attributes) {
                 final UUID uuid = itemAttribute.getUuid();
                 attributesNBT.add(
@@ -137,10 +133,8 @@ public abstract class ItemMetaBuilder {
                                 .setString("Name", itemAttribute.getInternalName())
                 );
             }
-            this.nbt.set("AttributeModifiers", attributesNBT);
-        } else {
-            this.nbt.removeTag("AttributeModifiers");
-        }
+            return attributesNBT;
+        });
 
         return this;
     }
@@ -191,6 +185,39 @@ public abstract class ItemMetaBuilder {
                 this.nbt.removeTag(key);
             }
 
+        }
+    }
+
+    protected void handleNullable(@Nullable Object value,
+                                  @NotNull String key,
+                                  @NotNull NBTCompound nbtCompound,
+                                  @NotNull Supplier<@NotNull NBT> supplier) {
+        if (value != null) {
+            nbtCompound.set(key, supplier.get());
+        } else {
+            nbtCompound.removeTag(key);
+        }
+    }
+
+    protected void handleCollection(@NotNull Collection<?> objects,
+                                    @NotNull String key,
+                                    @NotNull NBTCompound nbtCompound,
+                                    @NotNull Supplier<@NotNull NBT> supplier) {
+        if (!objects.isEmpty()) {
+            nbtCompound.set(key, supplier.get());
+        } else {
+            nbtCompound.removeTag(key);
+        }
+    }
+
+    protected void handleMap(@NotNull Map<?, ?> objects,
+                             @NotNull String key,
+                             @NotNull NBTCompound nbtCompound,
+                             @NotNull Supplier<@NotNull NBT> supplier) {
+        if (!objects.isEmpty()) {
+            nbtCompound.set(key, supplier.get());
+        } else {
+            nbtCompound.removeTag(key);
         }
     }
 

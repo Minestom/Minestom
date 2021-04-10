@@ -8,15 +8,10 @@ import net.minestom.server.adventure.Localizable;
 import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTString;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provider<WrittenBookMeta.Builder> {
@@ -28,8 +23,9 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
     private final List<Component> pages;
 
     protected WrittenBookMeta(@NotNull ItemMetaBuilder metaBuilder, boolean resolved,
-                              WrittenBookGeneration generation, String author, String title,
-                              List<Component> pages) {
+                              @Nullable WrittenBookGeneration generation,
+                              @Nullable String author, @Nullable String title,
+                              @NotNull List<@NotNull Component> pages) {
         super(metaBuilder);
         this.resolved = resolved;
         this.generation = generation;
@@ -42,15 +38,15 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
         return resolved;
     }
 
-    public WrittenBookGeneration getGeneration() {
+    public @Nullable WrittenBookGeneration getGeneration() {
         return generation;
     }
 
-    public String getAuthor() {
+    public @Nullable String getAuthor() {
         return author;
     }
 
-    public String getTitle() {
+    public @Nullable String getTitle() {
         return title;
     }
 
@@ -94,33 +90,37 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
             return this;
         }
 
-        public Builder generation(WrittenBookGeneration generation) {
+        public Builder generation(@Nullable WrittenBookGeneration generation) {
             this.generation = generation;
-            this.nbt.setInt("generation", generation.ordinal());
+            handleNullable(generation, "generation", nbt,
+                    () -> new NBTInt(Objects.requireNonNull(generation).ordinal()));
             return this;
         }
 
-        public Builder author(String author) {
+        public Builder author(@Nullable String author) {
             this.author = author;
-            this.nbt.setString("author", author);
+            handleNullable(author, "author", nbt,
+                    () -> new NBTString(Objects.requireNonNull(author)));
             return this;
         }
 
-        public Builder title(String title) {
+        public Builder title(@Nullable String title) {
             this.title = title;
-            this.nbt.setString("title", author);
+            handleNullable(title, "title", nbt,
+                    () -> new NBTString(Objects.requireNonNull(title)));
             return this;
         }
 
-        public Builder pages(List<Component> pages) {
+        public Builder pages(@NotNull List<@NotNull Component> pages) {
             this.pages = pages;
-            this.nbt.setString("title", author);
 
-            NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-            for (Component page : pages) {
-                list.add(new NBTString(AdventureSerializer.serialize(page)));
-            }
-            this.nbt.set("pages", list);
+            handleCollection(pages, "pages", nbt, () -> {
+                NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
+                for (Component page : pages) {
+                    list.add(new NBTString(AdventureSerializer.serialize(page)));
+                }
+                return list;
+            });
 
             return this;
         }
