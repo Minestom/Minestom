@@ -1,7 +1,10 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.item.rule.VanillaStackingRule;
+import net.minestom.server.utils.NBTUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +21,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * An item stack cannot be null, {@link ItemStack#AIR} should be used instead.
  */
-public class ItemStack {
+public class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
 
     /**
      * Constant AIR item. Should be used instead of 'null'.
@@ -193,5 +196,12 @@ public class ItemStack {
     protected @NotNull ItemStackBuilder builder() {
         return new ItemStackBuilder(material, meta.builder(), store.builder())
                 .amount(amount);
+    }
+
+    @Override
+    public @NotNull HoverEvent<HoverEvent.ShowItem> asHoverEvent(@NotNull UnaryOperator<HoverEvent.ShowItem> op) {
+        return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.of(this.material,
+                this.amount,
+                NBTUtils.asBinaryTagHolder(this.meta.toNBT().getCompound("tag")))));
     }
 }

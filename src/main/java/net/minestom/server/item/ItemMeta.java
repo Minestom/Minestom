@@ -30,6 +30,7 @@ public class ItemMeta implements Writeable {
     private final NBTCompound nbt;
     private final ItemMetaBuilder emptyBuilder;
 
+    private String cachedSNBT;
     private BinaryWriter cachedBuffer;
 
     protected ItemMeta(@NotNull ItemMetaBuilder metaBuilder) {
@@ -108,6 +109,13 @@ public class ItemMeta implements Writeable {
 
     public @NotNull NBTCompound toNBT() {
         return nbt.deepClone();
+    }
+
+    public @NotNull String toSNBT() {
+        if (cachedSNBT == null) {
+            this.cachedSNBT = nbt.toSNBT();
+        }
+        return cachedSNBT;
     }
 
     @Override
