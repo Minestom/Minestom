@@ -24,8 +24,7 @@ public interface CacheablePacket {
      *
      * @return the temporary packet cache
      */
-    @NotNull
-    TemporaryCache<TimedBuffer> getCache();
+    @NotNull TemporaryPacketCache getCache();
 
     /**
      * Gets the identifier of this packet.
@@ -34,8 +33,7 @@ public interface CacheablePacket {
      *
      * @return this packet identifier, null to prevent caching
      */
-    @Nullable
-    UUID getIdentifier();
+    @Nullable UUID getIdentifier();
 
     /**
      * Gets the last time this packet changed.
@@ -44,8 +42,7 @@ public interface CacheablePacket {
      */
     long getTimestamp();
 
-    @Nullable
-    static FramedPacket getCache(@NotNull ServerPacket serverPacket) {
+    static @Nullable FramedPacket getCache(@NotNull ServerPacket serverPacket) {
         if (!(serverPacket instanceof CacheablePacket))
             return null;
 
