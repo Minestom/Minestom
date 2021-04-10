@@ -1322,13 +1322,10 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
             if (lastChunkX != newChunkX || lastChunkZ != newChunkZ) {
                 // Entity moved in a new chunk
-                final Chunk lastChunk = instance.getChunk(lastChunkX, lastChunkZ);
                 final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
-
-                Check.notNull(lastChunk, "The entity {0} was in an unloaded chunk at {1};{2}", getEntityId(), lastX, lastZ);
                 Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1};{2}", getEntityId(), x, z);
 
-                instance.UNSAFE_switchEntityChunk(this, lastChunk, newChunk);
+                instance.UNSAFE_switchEntityChunk(this, currentChunk, newChunk);
                 if (this instanceof Player) {
                     // Refresh player view
                     final Player player = (Player) this;
