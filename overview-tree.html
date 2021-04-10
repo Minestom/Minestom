@@ -102,7 +102,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="net/minestom/server/adventure/audience/package-tree.html">net.minestom.server.adventure.audience</a>, </li>
 <li><a href="net/minestom/server/adventure/bossbar/package-tree.html">net.minestom.server.adventure.bossbar</a>, </li>
 <li><a href="net/minestom/server/attribute/package-tree.html">net.minestom.server.attribute</a>, </li>
-<li><a href="net/minestom/server/benchmark/package-tree.html">net.minestom.server.benchmark</a>, </li>
 <li><a href="net/minestom/server/bossbar/package-tree.html">net.minestom.server.bossbar</a>, </li>
 <li><a href="net/minestom/server/chat/package-tree.html">net.minestom.server.chat</a>, </li>
 <li><a href="net/minestom/server/collision/package-tree.html">net.minestom.server.collision</a>, </li>
@@ -198,6 +197,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="net/minestom/server/listener/manager/package-tree.html">net.minestom.server.listener.manager</a>, </li>
 <li><a href="net/minestom/server/map/package-tree.html">net.minestom.server.map</a>, </li>
 <li><a href="net/minestom/server/map/framebuffers/package-tree.html">net.minestom.server.map.framebuffers</a>, </li>
+<li><a href="net/minestom/server/monitoring/package-tree.html">net.minestom.server.monitoring</a>, </li>
 <li><a href="net/minestom/server/network/package-tree.html">net.minestom.server.network</a>, </li>
 <li><a href="net/minestom/server/network/netty/package-tree.html">net.minestom.server.network.netty</a>, </li>
 <li><a href="net/minestom/server/network/netty/channel/package-tree.html">net.minestom.server.network.netty.channel</a>, </li>
@@ -406,7 +406,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">net.minestom.server.instance.block.states.<a href="net/minestom/server/instance/block/states/Beetroots.html" title="class in net.minestom.server.instance.block.states"><span class="typeNameLink">Beetroots</span></a></li>
 <li class="circle">net.minestom.server.instance.block.states.<a href="net/minestom/server/instance/block/states/Bell.html" title="class in net.minestom.server.instance.block.states"><span class="typeNameLink">Bell</span></a></li>
 <li class="circle">net.minestom.server.scoreboard.<a href="net/minestom/server/scoreboard/BelowNameTag.html" title="class in net.minestom.server.scoreboard"><span class="typeNameLink">BelowNameTag</span></a> (implements net.minestom.server.scoreboard.<a href="net/minestom/server/scoreboard/Scoreboard.html" title="interface in net.minestom.server.scoreboard">Scoreboard</a>)</li>
-<li class="circle">net.minestom.server.benchmark.<a href="net/minestom/server/benchmark/BenchmarkManager.html" title="class in net.minestom.server.benchmark"><span class="typeNameLink">BenchmarkManager</span></a></li>
+<li class="circle">net.minestom.server.monitoring.<a href="net/minestom/server/monitoring/BenchmarkManager.html" title="class in net.minestom.server.monitoring"><span class="typeNameLink">BenchmarkManager</span></a></li>
 <li class="circle">net.minestom.server.world.biomes.<a href="net/minestom/server/world/biomes/Biome.html" title="class in net.minestom.server.world.biomes"><span class="typeNameLink">Biome</span></a></li>
 <li class="circle">net.minestom.server.world.biomes.<a href="net/minestom/server/world/biomes/Biome.BiomeBuilder.html" title="class in net.minestom.server.world.biomes"><span class="typeNameLink">Biome.BiomeBuilder</span></a></li>
 <li class="circle">net.minestom.server.world.biomes.<a href="net/minestom/server/world/biomes/BiomeEffects.html" title="class in net.minestom.server.world.biomes"><span class="typeNameLink">BiomeEffects</span></a></li>
@@ -1832,7 +1832,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="circle">net.minestom.server.thread.<a href="net/minestom/server/thread/SingleThreadProvider.html" title="class in net.minestom.server.thread"><span class="typeNameLink">SingleThreadProvider</span></a></li>
 </ul>
 </li>
-<li class="circle">net.minestom.server.benchmark.<a href="net/minestom/server/benchmark/ThreadResult.html" title="class in net.minestom.server.benchmark"><span class="typeNameLink">ThreadResult</span></a></li>
+<li class="circle">net.minestom.server.monitoring.<a href="net/minestom/server/monitoring/ThreadResult.html" title="class in net.minestom.server.monitoring"><span class="typeNameLink">ThreadResult</span></a></li>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Throwable.html?is-external=true" title="class or interface in java.lang" class="externalLink"><span class="typeNameLink">Throwable</span></a> (implements java.io.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>)
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Exception.html?is-external=true" title="class or interface in java.lang" class="externalLink"><span class="typeNameLink">Exception</span></a>
@@ -1842,6 +1842,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </li>
 </ul>
 </li>
+<li class="circle">net.minestom.server.monitoring.<a href="net/minestom/server/monitoring/TickMonitor.html" title="class in net.minestom.server.monitoring"><span class="typeNameLink">TickMonitor</span></a></li>
 <li class="circle">net.minestom.server.utils.<a href="net/minestom/server/utils/TickUtils.html" title="class in net.minestom.server.utils"><span class="typeNameLink">TickUtils</span></a></li>
 <li class="circle">net.minestom.server.utils.cache.<a href="net/minestom/server/utils/cache/TimedBuffer.html" title="class in net.minestom.server.utils.cache"><span class="typeNameLink">TimedBuffer</span></a></li>
 <li class="circle">net.minestom.server.potion.<a href="net/minestom/server/potion/TimedPotion.html" title="class in net.minestom.server.potion"><span class="typeNameLink">TimedPotion</span></a></li>

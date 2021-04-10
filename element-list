@@ -5,7 +5,6 @@ net.minestom.server.adventure
 net.minestom.server.adventure.audience
 net.minestom.server.adventure.bossbar
 net.minestom.server.attribute
-net.minestom.server.benchmark
 net.minestom.server.bossbar
 net.minestom.server.chat
 net.minestom.server.collision
@@ -101,6 +100,7 @@ net.minestom.server.listener
 net.minestom.server.listener.manager
 net.minestom.server.map
 net.minestom.server.map.framebuffers
+net.minestom.server.monitoring
 net.minestom.server.network
 net.minestom.server.network.netty
 net.minestom.server.network.netty.channel
