@@ -22,8 +22,6 @@ public class Main {
     public static void main(String[] args) {
         MinecraftServer minecraftServer = MinecraftServer.init();
 
-        // MinecraftServer.setShouldProcessNettyErrors(true);
-
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerCustomBlock(new CustomBlockSample());
         blockManager.registerCustomBlock(new UpdatableBlockDemo());

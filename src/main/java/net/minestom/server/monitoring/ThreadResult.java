@@ -1,4 +1,4 @@
-package net.minestom.server.benchmark;
+package net.minestom.server.monitoring;
 
 public class ThreadResult {
 
