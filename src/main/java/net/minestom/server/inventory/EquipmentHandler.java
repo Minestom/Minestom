@@ -157,6 +157,31 @@ public interface EquipmentHandler {
         throw new IllegalStateException("Something weird happened");
     }
 
+    default void setEquipment(@NotNull EntityEquipmentPacket.Slot slot, @NotNull ItemStack itemStack) {
+        switch (slot) {
+            case MAIN_HAND:
+                setItemInMainHand(itemStack);
+                break;
+            case OFF_HAND:
+                setItemInOffHand(itemStack);
+                break;
+            case HELMET:
+                setHelmet(itemStack);
+                break;
+            case CHESTPLATE:
+                setChestplate(itemStack);
+                break;
+            case LEGGINGS:
+                setLeggings(itemStack);
+                break;
+            case BOOTS:
+                setBoots(itemStack);
+                break;
+            default:
+                throw new IllegalStateException("Something weird happened");
+        }
+    }
+
     /**
      * Sends a specific equipment to viewers.
      *
