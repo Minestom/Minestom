@@ -13,7 +13,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -28,7 +28,7 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
                          Color color) {
         super(metaBuilder);
         this.potionType = potionType;
-        this.customPotionEffects = Collections.unmodifiableList(customPotionEffects);
+        this.customPotionEffects = new ArrayList<>(customPotionEffects);
         this.color = color;
     }
 
@@ -40,7 +40,6 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
         return customPotionEffects;
     }
 
-
     public Color getColor() {
         return color;
     }
@@ -48,7 +47,7 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
     public static class Builder extends ItemMetaBuilder {
 
         private PotionType potionType;
-        private List<CustomPotionEffect> customPotionEffects;
+        private List<CustomPotionEffect> customPotionEffects = new ArrayList<>();
         private Color color;
 
         public Builder potionType(@NotNull PotionType potionType) {

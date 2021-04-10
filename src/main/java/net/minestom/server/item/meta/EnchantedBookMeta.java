@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -17,7 +18,7 @@ public class EnchantedBookMeta extends ItemMeta implements ItemMetaBuilder.Provi
 
     protected EnchantedBookMeta(@NotNull ItemMetaBuilder metaBuilder, Map<Enchantment, Short> storedEnchantmentMap) {
         super(metaBuilder);
-        this.storedEnchantmentMap = storedEnchantmentMap;
+        this.storedEnchantmentMap = new HashMap<>(storedEnchantmentMap);
     }
 
     /**
@@ -32,7 +33,7 @@ public class EnchantedBookMeta extends ItemMeta implements ItemMetaBuilder.Provi
 
     public static class Builder extends ItemMetaBuilder {
 
-        private Map<Enchantment, Short> enchantments;
+        private Map<Enchantment, Short> enchantments = new HashMap<>();
 
         public Builder enchantments(Map<Enchantment, Short> enchantments) {
             this.enchantments = enchantments;
