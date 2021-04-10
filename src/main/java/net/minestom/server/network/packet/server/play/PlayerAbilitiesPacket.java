@@ -22,13 +22,13 @@ public class PlayerAbilitiesPacket implements ServerPacket {
     public void write(@NotNull BinaryWriter writer) {
         byte flags = 0;
         if (invulnerable)
-            flags += 1;
+            flags |= 0x01;
         if (flying)
-            flags += 2;
+            flags |= 0x02;
         if (allowFlying)
-            flags += 4;
+            flags |= 0x04;
         if (instantBreak)
-            flags += 8;
+            flags |= 0x08;
 
         writer.writeByte(flags);
         writer.writeFloat(flyingSpeed);
