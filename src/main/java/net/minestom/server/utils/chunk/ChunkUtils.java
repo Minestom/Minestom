@@ -84,6 +84,14 @@ public final class ChunkUtils {
         return isLoaded(chunk);
     }
 
+    public static boolean same(@NotNull Position pos1, @NotNull Position pos2) {
+        final int x1 = ChunkUtils.getChunkCoordinate(pos1.getX());
+        final int z1 = ChunkUtils.getChunkCoordinate(pos1.getZ());
+        final int x2 = ChunkUtils.getChunkCoordinate(pos2.getX());
+        final int z2 = ChunkUtils.getChunkCoordinate(pos2.getZ());
+        return x1 != x2 || z1 != z2;
+    }
+
     /**
      * @param xz the instance coordinate to convert
      * @return the chunk X or Z based on the argument
