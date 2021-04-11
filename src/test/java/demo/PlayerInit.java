@@ -76,9 +76,6 @@ public class PlayerInit {
                         builder.lodestonePosition(new Position(0, 0, 0));
                         builder.set(ItemTag.Integer("int"), 25);
                     })
-                    .store(store -> {
-                        store.set("key", 5, Integer::sum);
-                    })
                     .build();
 
             itemStack = itemStack.with(itemBuilder -> itemBuilder
@@ -207,6 +204,7 @@ public class PlayerInit {
 
         globalEventHandler.addEventCallback(PlayerLoginEvent.class, event -> {
             final Player player = event.getPlayer();
+            player.sendMessage("test");
 
             event.setSpawningInstance(instanceContainer);
             int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 - 250;
@@ -233,9 +231,6 @@ public class PlayerInit {
                     .meta(itemMetaBuilder ->
                             itemMetaBuilder.canPlaceOn(Set.of(Block.STONE))
                                     .canDestroy(Set.of(Block.DIAMOND_ORE)))
-                    .store(store -> {
-                        store.set("key", 5, Integer::sum);
-                    })
                     .build();
 
             System.out.println(itemStack.getMeta().toSNBT());
@@ -265,7 +260,6 @@ public class PlayerInit {
 
         globalEventHandler.addEventCallback(PlayerUseItemEvent.class, useEvent -> {
             final Player player = useEvent.getPlayer();
-            System.out.println("test: " + player.getItemInMainHand().getStore().get("key2"));
             player.sendMessage("Using item in air: " + useEvent.getItemStack().getMaterial());
         });
 

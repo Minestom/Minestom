@@ -265,7 +265,7 @@ public abstract class ItemMetaBuilder {
         return dest;
     }
 
-    public interface Provider<T> {
+    public interface Provider<T extends ItemMetaBuilder> {
     }
 
 }

@@ -19,13 +19,11 @@ public class ItemStackBuilder {
     private final Material material;
     private int amount;
     protected ItemMetaBuilder metaBuilder;
-    protected ItemStoreBuilder storeBuilder;
 
-    protected ItemStackBuilder(@NotNull Material material, @NotNull ItemMetaBuilder metaBuilder, @NotNull ItemStoreBuilder storeBuilder) {
+    protected ItemStackBuilder(@NotNull Material material, @NotNull ItemMetaBuilder metaBuilder) {
         this.material = material;
         this.amount = 1;
         this.metaBuilder = metaBuilder;
-        this.storeBuilder = storeBuilder;
     }
 
     private static final Map<Material, Supplier<ItemMetaBuilder>> MATERIAL_SUPPLIER_MAP = new ConcurrentHashMap<>();
@@ -54,8 +52,7 @@ public class ItemStackBuilder {
 
     protected ItemStackBuilder(@NotNull Material material) {
         this(material,
-                MATERIAL_SUPPLIER_MAP.getOrDefault(material, DefaultMeta::new).get(),
-                new ItemStoreBuilder());
+                MATERIAL_SUPPLIER_MAP.getOrDefault(material, DefaultMeta::new).get());
     }
 
     @Contract(value = "_ -> this")
@@ -100,21 +97,9 @@ public class ItemStackBuilder {
         return this;
     }
 
-    @Contract(value = "_ -> this")
-    public @NotNull ItemStackBuilder store(@NotNull ItemStore store) {
-        this.storeBuilder = store.builder();
-        return this;
-    }
-
-    @Contract(value = "_ -> this")
-    public @NotNull ItemStackBuilder store(@NotNull Consumer<@NotNull ItemStoreBuilder> consumer) {
-        consumer.accept(storeBuilder);
-        return this;
-    }
-
     @Contract(value = "-> new", pure = true)
     public @NotNull ItemStack build() {
-        return new ItemStack(material, amount, metaBuilder.build(), storeBuilder.build());
+        return new ItemStack(material, amount, metaBuilder.build());
     }
 
     private static final class DefaultMeta extends ItemMetaBuilder {

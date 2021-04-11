@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.IntUnaryOperator;
 import java.util.function.UnaryOperator;
@@ -28,22 +27,17 @@ public class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
      */
     public static final @NotNull ItemStack AIR = ItemStack.of(Material.AIR);
 
-    private final UUID uuid = UUID.randomUUID();
     private final StackingRule stackingRule = new VanillaStackingRule(64);
 
     private final Material material;
     private final int amount;
     private final ItemMeta meta;
 
-    private final ItemStore store;
-
     protected ItemStack(@NotNull Material material, int amount,
-                        @NotNull ItemMeta meta,
-                        @NotNull ItemStore store) {
+                        @NotNull ItemMeta meta) {
         this.material = material;
         this.amount = amount;
         this.meta = meta;
-        this.store = store;
     }
 
     @Contract(value = "_ -> new", pure = true)
@@ -59,11 +53,6 @@ public class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
     @Contract(value = "_ -> new", pure = true)
     public static @NotNull ItemStack of(@NotNull Material material) {
         return of(material, 1);
-    }
-
-    @Contract(pure = true)
-    public @NotNull UUID getUuid() {
-        return uuid;
     }
 
     @Contract(pure = true)
@@ -101,16 +90,6 @@ public class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
     @Contract(value = "_ -> new", pure = true)
     public @NotNull ItemStack withMeta(@NotNull UnaryOperator<@NotNull ItemMetaBuilder> metaOperator) {
         return builder().meta(metaOperator).build();
-    }
-
-    @Contract(value = "_, -> new", pure = true)
-    public @NotNull ItemStack withStore(@NotNull ItemStore store) {
-        return builder().store(store).build();
-    }
-
-    @Contract(value = "_ -> new", pure = true)
-    public @NotNull ItemStack withStore(@NotNull Consumer<@NotNull ItemStoreBuilder> storeConsumer) {
-        return builder().store(storeConsumer).build();
     }
 
     @Contract(pure = true)
@@ -154,11 +133,6 @@ public class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
     }
 
     @Contract(pure = true)
-    public @NotNull ItemStore getStore() {
-        return store;
-    }
-
-    @Contract(pure = true)
     public boolean isAir() {
         return material.equals(Material.AIR);
     }
@@ -175,7 +149,6 @@ public class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
         if (o == null || getClass() != o.getClass()) return false;
 
         ItemStack itemStack = (ItemStack) o;
-        if (uuid.equals(itemStack.uuid)) return true;
 
         if (amount != itemStack.amount) return false;
         if (!stackingRule.equals(itemStack.stackingRule)) return false;
@@ -194,7 +167,7 @@ public class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
 
     @Contract(value = "-> new", pure = true)
     protected @NotNull ItemStackBuilder builder() {
-        return new ItemStackBuilder(material, meta.builder(), store.builder())
+        return new ItemStackBuilder(material, meta.builder())
                 .amount(amount);
     }
 
