@@ -12,6 +12,7 @@ import java.util.Map;
 /**
  * Represents a type of transaction that you can apply to an {@link AbstractInventory}.
  */
+@FunctionalInterface
 public interface TransactionType {
 
     /**
