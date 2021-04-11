@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.inventory.FillOption;
+import net.minestom.server.inventory.TransactionOption;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.entity.EntityFinder;
 
@@ -44,7 +44,7 @@ public class GiveCommand extends Command {
             for (Entity target : targets) {
                 if (target instanceof Player) {
                     Player player = (Player) target;
-                    player.getInventory().addItemStacks(itemStacks, FillOption.ALL);
+                    player.getInventory().addItemStacks(itemStacks, TransactionOption.ALL);
                 }
             }
 

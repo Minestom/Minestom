@@ -53,11 +53,11 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
     /**
      * Adds an {@link ItemStack} to the inventory and sends relevant update to the viewer(s).
      *
-     * @param itemStack  the item to add
-     * @param fillOption the filling option
+     * @param itemStack         the item to add
+     * @param transactionOption the transaction option
      * @return true if the item has been successfully added, false otherwise
      */
-    public synchronized <T> @NotNull T addItemStack(@NotNull ItemStack itemStack, @NotNull FillOption<T> fillOption) {
+    public synchronized <T> @NotNull T addItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> transactionOption) {
         Int2ObjectMap<ItemStack> itemChangesMap = new Int2ObjectOpenHashMap<>();
 
         final StackingRule stackingRule = itemStack.getStackingRule();
@@ -99,25 +99,25 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
             break;
         }
 
-        return fillOption.fill(this, itemStack, itemChangesMap);
+        return transactionOption.fill(this, itemStack, itemChangesMap);
     }
 
     public synchronized boolean addItemStack(@NotNull ItemStack itemStack) {
-        return addItemStack(itemStack, FillOption.ALL_OR_NOTHING);
+        return addItemStack(itemStack, TransactionOption.ALL_OR_NOTHING);
     }
 
     /**
      * Adds {@link ItemStack}s to the inventory and sends relevant updates to the viewer(s).
      *
-     * @param itemStacks items to add
-     * @param fillOption the filling option
+     * @param itemStacks        items to add
+     * @param transactionOption the transaction option
      * @return the operation results
      */
-    public <T> @NotNull List<@NotNull T> addItemStacks(@NotNull List<ItemStack> itemStacks, @NotNull FillOption<T> fillOption) {
+    public <T> @NotNull List<@NotNull T> addItemStacks(@NotNull List<ItemStack> itemStacks, @NotNull TransactionOption<T> transactionOption) {
         List<T> result = new ArrayList<>(itemStacks.size());
         itemStacks.forEach(itemStack -> {
-            T fillResult = addItemStack(itemStack, fillOption);
-            result.add(fillResult);
+            T transactionResult = addItemStack(itemStack, transactionOption);
+            result.add(transactionResult);
         });
         return result;
     }
@@ -128,7 +128,7 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
      * @param itemStack the item to take
      * @return true if the item has been successfully fully taken, false otherwise
      */
-    public <T> T takeItemStack(@NotNull ItemStack itemStack, @NotNull FillOption<T> fillOption) {
+    public <T> T takeItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> transactionOption) {
         Int2ObjectMap<ItemStack> itemChangesMap = new Int2ObjectOpenHashMap<>();
         final StackingRule stackingRule = itemStack.getStackingRule();
         for (int i = 0; i < getInnerSize(); i++) {
@@ -153,7 +153,7 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
             }
         }
 
-        return fillOption.fill(this, itemStack, itemChangesMap);
+        return transactionOption.fill(this, itemStack, itemChangesMap);
     }
 
     /**
@@ -162,11 +162,11 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
      * @param itemStacks items to take
      * @return the operation results
      */
-    public <T> @NotNull List<T> takeItemStacks(@NotNull List<ItemStack> itemStacks, @NotNull FillOption<T> fillOption) {
+    public <T> @NotNull List<T> takeItemStacks(@NotNull List<ItemStack> itemStacks, @NotNull TransactionOption<T> transactionOption) {
         List<T> result = new ArrayList<>(itemStacks.size());
         itemStacks.forEach(itemStack -> {
-            T fillResult = takeItemStack(itemStack, fillOption);
-            result.add(fillResult);
+            T transactionResult = takeItemStack(itemStack, transactionOption);
+            result.add(transactionResult);
         });
         return result;
     }
