@@ -16,7 +16,7 @@ public class ClientUpdateStructureBlockPacket extends ClientPlayPacket {
      */
     public static final byte SHOW_BOUNDING_BOX = 0x4;
 
-    public BlockPosition location;
+    public BlockPosition location = new BlockPosition(0, 0, 0);
     public Action action = Action.UPDATE_DATA;
     public Mode mode = Mode.DATA;
     public String name = "";
