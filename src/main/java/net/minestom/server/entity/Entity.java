@@ -463,7 +463,6 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         }
 
         // Check if the entity chunk is loaded
-        final Chunk currentChunk = getChunk();
         if (!ChunkUtils.isLoaded(currentChunk)) {
             // No update for entities in unloaded chunk
             return;
