@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -200,11 +200,19 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacket(net.kyori.adventure.audience.Audience,net.minestom.server.network.packet.server.ServerPacket)">sendPacket</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a>&nbsp;audience,
+          @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
+<td class="colLast">
+<div class="block">Sends a packet to an audience.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeFramedPacket(io.netty.buffer.ByteBuf,net.minestom.server.network.packet.server.ServerPacket)">writeFramedPacket</a></span>&#8203;(@NotNull io.netty.buffer.ByteBuf&nbsp;buffer,
                  @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writePacket(io.netty.buffer.ByteBuf,net.minestom.server.network.packet.server.ServerPacket)">writePacket</a></span>&#8203;(@NotNull io.netty.buffer.ByteBuf&nbsp;buf,
            @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
@@ -236,6 +244,36 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="sendPacket(net.kyori.adventure.audience.Audience,net.minestom.server.network.packet.server.ServerPacket)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sendPacket</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;sendPacket&#8203;(@NotNull
+                              @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a>&nbsp;audience,
+                              @NotNull
+                              @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</pre>
+<div class="block">Sends a packet to an audience. This method performs the following steps in the
+ following order:
+ <ol>
+     <li>If <code>audience</code> is a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a>, send the packet to them.</li>
+     <li>Otherwise, if <code>audience</code> is a <a href="../adventure/audience/PacketGroupingAudience.html" title="interface in net.minestom.server.adventure.audience"><code>PacketGroupingAudience</code></a>, call
+     <a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket)"><code>sendGroupedPacket(Collection, ServerPacket)</code></a> on the players that the
+     grouping audience contains.</li>
+     <li>Otherwise, if <code>audience</code> is a <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/ForwardingAudience.Single.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>ForwardingAudience.Single</code></a>,
+     call this method on the single audience inside the forwarding audience.</li>
+     <li>Otherwise, if <code>audience</code> is a <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/ForwardingAudience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>ForwardingAudience</code></a>, call this
+     method for each audience member of the forwarding audience.</li>
+     <li>Otherwise, do nothing.</li>
+ </ol></div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>audience</code> - the audience</dd>
+<dd><code>packet</code> - the packet</dd>
+</dl>
+</li>
+</ul>
 <a id="sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket,net.minestom.server.utils.callback.validator.PlayerValidator)">
 <!--   -->
 </a>
