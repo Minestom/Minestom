@@ -9,6 +9,7 @@ import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,6 +56,14 @@ public class ResponseData {
     }
 
     /**
+     * Get the version name for the response.
+     * @return the version name for the response.
+     */
+    public String getVersion() {
+        return version;
+    }
+
+    /**
      * Sets the response protocol version.
      *
      * @param protocol The protocol version for the response data.
@@ -63,6 +72,13 @@ public class ResponseData {
         this.protocol = protocol;
     }
 
+    /**
+     * Get the response protocol version.
+     * @return the response protocol version.
+     */
+    public int getProtocol() {
+        return protocol;
+    }
     /**
      * Sets the response maximum player count.
      *
@@ -73,12 +89,28 @@ public class ResponseData {
     }
 
     /**
+     * Get the response maximum player count.
+     * @return the response maximum player count.
+     */
+    public int getMaxPlayer() {
+        return maxPlayer;
+    }
+    /**
      * Sets the response online count.
      *
      * @param online The online count for the response data.
      */
     public void setOnline(int online) {
         this.online = online;
+    }
+
+    /**
+     * Get the response online count.
+     *
+     * @return the response online count.
+     */
+    public int getOnline() {
+        return online;
     }
 
     /**
@@ -137,6 +169,14 @@ public class ResponseData {
     }
 
     /**
+     * Get the list of the response players.
+     * @return the list of the response players.
+     */
+    public List<PingPlayer> getPlayers() {
+        return pingPlayers;
+    }
+
+    /**
      * Sets the response description.
      *
      * @param description The description for the response data.
@@ -157,6 +197,15 @@ public class ResponseData {
     }
 
     /**
+     * Get the response description
+     *
+     * @return the response description
+     */
+    public Component getDescription() {
+        return description;
+    }
+
+    /**
      * Sets the response favicon.
      *
      * MUST start with "data:image/png;base64,"
@@ -166,6 +215,15 @@ public class ResponseData {
     public void setFavicon(String favicon) {
         this.favicon = favicon;
     }
+
+    /**
+     * Get the response favicon.
+     * @return the response favicon.
+     */
+    public String getFavicon() {
+        return favicon;
+    }
+
 
     /**
      * Converts the response data into a {@link JsonObject}.
@@ -208,8 +266,8 @@ public class ResponseData {
     /**
      * Represents a player line in the server list hover.
      */
-    private static class PingPlayer {
-        private String name;
-        private UUID uuid;
+    public static class PingPlayer {
+        public String name;
+        public UUID uuid;
     }
 }
