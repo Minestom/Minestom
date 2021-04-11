@@ -162,6 +162,11 @@ public abstract class ItemMetaBuilder {
     }
 
     @Contract("_ -> this")
+    public @NotNull ItemMetaBuilder canPlaceOn(@NotNull Block... blocks) {
+        return canPlaceOn(Set.of(blocks));
+    }
+
+    @Contract("_ -> this")
     public @NotNull ItemMetaBuilder canDestroy(@NotNull Set<@NotNull Block> blocks) {
         this.canDestroy = blocks;
         handleCollection(canDestroy, "CanDestroy", nbt, () -> {
@@ -171,6 +176,11 @@ public abstract class ItemMetaBuilder {
             return list;
         });
         return this;
+    }
+
+    @Contract("_ -> this")
+    public @NotNull ItemMetaBuilder canDestroy(@NotNull Block... blocks) {
+        return canDestroy(Set.of(blocks));
     }
 
     public <T> @NotNull ItemMetaBuilder set(@NotNull ItemTag<T> tag, @Nullable T value) {
