@@ -32,15 +32,14 @@ public class StatusRequestPacket implements ClientPreplayPacket {
 
         // Call event
         ServerListPingEvent statusRequestEvent = new ServerListPingEvent(responseData, connection);
-        MinecraftServer.getGlobalEventHandler().callEvent(ServerListPingEvent.class, statusRequestEvent);
+        MinecraftServer.getGlobalEventHandler().callCancellableEvent(ServerListPingEvent.class, statusRequestEvent,
+                () -> {
+                    ResponsePacket responsePacket = new ResponsePacket();
+                    responsePacket.jsonResponse = responseData.build().toString();
 
-        // Send packet only if event has not been cancelled
-        if (!statusRequestEvent.isCancelled()) {
-            ResponsePacket responsePacket = new ResponsePacket();
-            responsePacket.jsonResponse = responseData.build().toString();
+                    connection.sendPacket(responsePacket);
+                });
 
-            connection.sendPacket(responsePacket);
-        }
     }
 
     @Override

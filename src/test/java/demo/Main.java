@@ -13,6 +13,7 @@ import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.optifine.OptifineSupport;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
+import net.minestom.server.ping.ResponseData;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.storage.systems.FileStorageSystem;
 import net.minestom.server.utils.time.TimeUnit;
@@ -65,27 +66,28 @@ public class Main {
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night")).schedule();
 
         MinecraftServer.getGlobalEventHandler().addEventCallback(ServerListPingEvent.class, event -> {
-            event.setMaxPlayer(0);
-            event.setOnline(MinecraftServer.getConnectionManager().getOnlinePlayers().size());
-            event.addPlayer("The first line is separated from the others", UUID.randomUUID());
-            event.addPlayer("Could be a name, or a message", UUID.randomUUID());
-            event.addPlayer("IP test: " + event.getConnection().getRemoteAddress().toString(), UUID.randomUUID());
-            event.addPlayer("Use " + (char)0x00a7 + "7section characters", UUID.randomUUID());
-            event.addPlayer((char)0x00a7 + "7" + (char)0x00a7 + "ofor formatting" + (char)0x00a7 + "r: (" + (char)0x00a7 + "6char" + (char)0x00a7 + "r)" + (char)0x00a7 + "90x00a7", UUID.randomUUID());
+            ResponseData responseData = event.getResponseData();
+            responseData.setMaxPlayer(0);
+            responseData.setOnline(MinecraftServer.getConnectionManager().getOnlinePlayers().size());
+            responseData.addPlayer("The first line is separated from the others", UUID.randomUUID());
+            responseData.addPlayer("Could be a name, or a message", UUID.randomUUID());
+            responseData.addPlayer("IP test: " + event.getConnection().getRemoteAddress().toString(), UUID.randomUUID());
+            responseData.addPlayer("Use " + (char)0x00a7 + "7section characters", UUID.randomUUID());
+            responseData.addPlayer((char)0x00a7 + "7" + (char)0x00a7 + "ofor formatting" + (char)0x00a7 + "r: (" + (char)0x00a7 + "6char" + (char)0x00a7 + "r)" + (char)0x00a7 + "90x00a7", UUID.randomUUID());
 
-            event.addPlayer("Connection Info:");
-            String ip = event.getRemoteServerAddress();
-            event.addPlayer((char)0x00a7 + "8-  " + (char)0x00a7 +"7IP: " + (char)0x00a7 + "e" + (ip != null ? ip : "???"));
-            event.addPlayer((char)0x00a7 + "8-  " + (char)0x00a7 +"7PORT: " + (char)0x00a7 + "e" + event.getServerPort());
-            event.addPlayer((char)0x00a7 + "8-  " + (char)0x00a7 +"7VERSION: " + (char)0x00a7 + "e" + event.getClientProtocolVersion());
+            responseData.addPlayer("Connection Info:");
+            String ip = event.getConnection().getServerAddress();
+            responseData.addPlayer((char)0x00a7 + "8-  " + (char)0x00a7 +"7IP: " + (char)0x00a7 + "e" + (ip != null ? ip : "???"));
+            responseData.addPlayer((char)0x00a7 + "8-  " + (char)0x00a7 +"7PORT: " + (char)0x00a7 + "e" + event.getConnection().getServerPort());
+            responseData.addPlayer((char)0x00a7 + "8-  " + (char)0x00a7 +"7VERSION: " + (char)0x00a7 + "e" + event.getConnection().getProtocolVersion());
 
             // Check if client supports RGB color
-            if (event.getClientProtocolVersion() >= 713) { // Snapshot 20w17a
-                event.setDescription(Component.text("You can do ")
+            if (event.getConnection().getProtocolVersion() >= 713) { // Snapshot 20w17a
+                responseData.setDescription(Component.text("You can do ")
                         .append(Component.text("RGB", TextColor.color(0x66b3ff)))
                         .append(Component.text(" color here")));
             } else {
-                event.setDescription(Component.text("You can do ")
+                responseData.setDescription(Component.text("You can do ")
                         .append(Component.text("RGB", NamedTextColor.nearestTo(TextColor.color(0x66b3ff))))
                         .append(Component.text(" color here,"))
                         .append(Component.newline())

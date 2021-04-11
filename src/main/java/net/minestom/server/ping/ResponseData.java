@@ -15,8 +15,7 @@ import java.util.UUID;
 /**
  * Represents the data sent to the player when refreshing the server list.
  *
- * <p>Filled by {@link ResponseDataConsumer} and specified in {@link
- * net.minestom.server.MinecraftServer#start(String, int, ResponseDataConsumer)}.
+ * <p>Edited by listening to the {@link net.minestom.server.event.server.ServerListPingEvent}.
  */
 public class ResponseData {
     private final List<PingPlayer> pingPlayers;
@@ -112,6 +111,20 @@ public class ResponseData {
         PingPlayer pingPlayer = new PingPlayer();
         pingPlayer.name = name;
         pingPlayer.uuid = uuid;
+        this.pingPlayers.add(pingPlayer);
+    }
+
+    /**
+     * Adds a player to the response.
+     *
+     * {@link UUID#randomUUID()} is used as the player's UUID.
+     *
+     * @param name The name of the player.
+     */
+    public void addPlayer(String name) {
+        PingPlayer pingPlayer = new PingPlayer();
+        pingPlayer.name = name;
+        pingPlayer.uuid = UUID.randomUUID();
         this.pingPlayers.add(pingPlayer);
     }
 
