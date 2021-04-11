@@ -53,13 +53,16 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
     /**
      * Adds an {@link ItemStack} to the inventory and sends relevant update to the viewer(s).
      *
-     * @param itemStack the item to add
+     * @param itemStack  the item to add
+     * @param fillOption the filling option
      * @return true if the item has been successfully added, false otherwise
      */
-    public synchronized <T> T addItemStack(@NotNull ItemStack itemStack, FillOption<T> fillOption) {
+    public synchronized <T> @NotNull T addItemStack(@NotNull ItemStack itemStack, @NotNull FillOption<T> fillOption) {
         Int2ObjectMap<ItemStack> itemChangesMap = new Int2ObjectOpenHashMap<>();
 
         final StackingRule stackingRule = itemStack.getStackingRule();
+
+        // Check filled slot (not air)
         for (int i = 0; i < getInnerSize(); i++) {
             ItemStack inventoryItem = getItemStack(i);
             if (inventoryItem.isAir()) {
@@ -78,11 +81,13 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
                 } else {
                     // Slot can accept the whole item
                     itemChangesMap.put(i, stackingRule.apply(inventoryItem, totalAmount));
-                    itemStack = ItemStack.AIR;
+                    itemStack = stackingRule.apply(itemStack, 0);
                     break;
                 }
             }
         }
+
+        // Check air slot to fill
         for (int i = 0; i < getInnerSize(); i++) {
             ItemStack inventoryItem = getItemStack(i);
             if (!inventoryItem.isAir()) {
@@ -90,7 +95,7 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
             }
             // Fill the slot
             itemChangesMap.put(i, itemStack);
-            itemStack = ItemStack.AIR;
+            itemStack = stackingRule.apply(itemStack, 0);
             break;
         }
 
@@ -105,9 +110,10 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
      * Adds {@link ItemStack}s to the inventory and sends relevant updates to the viewer(s).
      *
      * @param itemStacks items to add
+     * @param fillOption the filling option
      * @return the operation results
      */
-    public <T> @NotNull List<T> addItemStacks(@NotNull List<ItemStack> itemStacks, @NotNull FillOption<T> fillOption) {
+    public <T> @NotNull List<@NotNull T> addItemStacks(@NotNull List<ItemStack> itemStacks, @NotNull FillOption<T> fillOption) {
         List<T> result = new ArrayList<>(itemStacks.size());
         itemStacks.forEach(itemStack -> {
             T fillResult = addItemStack(itemStack, fillOption);
@@ -135,13 +141,13 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
                 final int itemStackAmount = stackingRule.getAmount(itemStack);
                 if (itemStackAmount < itemAmount) {
                     itemChangesMap.put(i, stackingRule.apply(inventoryItem, itemAmount - itemStackAmount));
-                    itemStack = ItemStack.AIR;
+                    itemStack = stackingRule.apply(itemStack, 0);
                     break;
                 }
-                itemChangesMap.put(i, ItemStack.AIR);
+                itemChangesMap.put(i, stackingRule.apply(inventoryItem, 0));
                 itemStack = stackingRule.apply(itemStack, itemStackAmount - itemAmount);
                 if (stackingRule.getAmount(itemStack) == 0) {
-                    itemStack = ItemStack.AIR;
+                    itemStack = stackingRule.apply(itemStack, 0);
                     break;
                 }
             }

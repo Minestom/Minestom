@@ -13,7 +13,7 @@ public interface FillOption<T> {
      * <p>
      * The remaining, can be air.
      */
-    FillOption<ItemStack> ALL = (inventory, result, itemChangesMap) -> {
+    FillOption<@NotNull ItemStack> ALL = (inventory, result, itemChangesMap) -> {
         itemChangesMap.forEach(inventory::safeItemInsert);
         return result;
     };
@@ -23,7 +23,7 @@ public interface FillOption<T> {
      * <p>
      * Returns true if the item has been added, false if nothing changed.
      */
-    FillOption<Boolean> ALL_OR_NOTHING = (inventory, result, itemChangesMap) -> {
+    FillOption<@NotNull Boolean> ALL_OR_NOTHING = (inventory, result, itemChangesMap) -> {
         if (result.isAir()) {
             // Item can be fully placed inside the inventory, do so
             itemChangesMap.forEach(inventory::safeItemInsert);
@@ -39,9 +39,9 @@ public interface FillOption<T> {
      * <p>
      * Returns true if the item can be fully added, false otherwise.
      */
-    FillOption<Boolean> DRY_RUN = (inventory, result, itemChangesMap) -> result.isAir();
+    FillOption<@NotNull Boolean> DRY_RUN = (inventory, result, itemChangesMap) -> result.isAir();
 
-    T fill(@NotNull AbstractInventory inventory,
-           @NotNull ItemStack result,
-           @NotNull Map<@NotNull Integer, @NotNull ItemStack> itemChangesMap);
+    @NotNull T fill(@NotNull AbstractInventory inventory,
+                    @NotNull ItemStack result,
+                    @NotNull Map<@NotNull Integer, @NotNull ItemStack> itemChangesMap);
 }

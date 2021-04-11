@@ -44,7 +44,7 @@ public class GiveCommand extends Command {
             for (Entity target : targets) {
                 if (target instanceof Player) {
                     Player player = (Player) target;
-                    player.getInventory().addItemStacks(itemStacks, FillOption.ALL_OR_NOTHING);
+                    player.getInventory().addItemStacks(itemStacks, FillOption.ALL);
                 }
             }
 
