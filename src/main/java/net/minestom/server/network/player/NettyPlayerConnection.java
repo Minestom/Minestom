@@ -41,7 +41,6 @@ public class NettyPlayerConnection extends PlayerConnection {
 
     private SocketAddress remoteAddress;
 
-
     private boolean encrypted = false;
     private boolean compressed = false;
 

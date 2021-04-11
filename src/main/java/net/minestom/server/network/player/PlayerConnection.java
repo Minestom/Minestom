@@ -204,7 +204,6 @@ public abstract class PlayerConnection {
         return connectionState;
     }
 
-
     /**
      * Gets the number of packet the client sent over the last second.
      *

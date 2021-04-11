@@ -6,7 +6,6 @@ import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;

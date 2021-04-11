@@ -9,7 +9,6 @@ import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,6 +56,7 @@ public class ResponseData {
 
     /**
      * Get the version name for the response.
+     *
      * @return the version name for the response.
      */
     public String getVersion() {
@@ -74,11 +74,13 @@ public class ResponseData {
 
     /**
      * Get the response protocol version.
+     *
      * @return the response protocol version.
      */
     public int getProtocol() {
         return protocol;
     }
+
     /**
      * Sets the response maximum player count.
      *
@@ -90,11 +92,13 @@ public class ResponseData {
 
     /**
      * Get the response maximum player count.
+     *
      * @return the response maximum player count.
      */
     public int getMaxPlayer() {
         return maxPlayer;
     }
+
     /**
      * Sets the response online count.
      *
@@ -140,23 +144,19 @@ public class ResponseData {
      * @param uuid The unique identifier of the player.
      */
     public void addPlayer(String name, UUID uuid) {
-        PingPlayer pingPlayer = new PingPlayer();
-        pingPlayer.name = name;
-        pingPlayer.uuid = uuid;
+        PingPlayer pingPlayer = PingPlayer.of(name, uuid);
         this.pingPlayers.add(pingPlayer);
     }
 
     /**
      * Adds a player to the response.
-     *
+     * <p>
      * {@link UUID#randomUUID()} is used as the player's UUID.
      *
      * @param name The name of the player.
      */
     public void addPlayer(String name) {
-        PingPlayer pingPlayer = new PingPlayer();
-        pingPlayer.name = name;
-        pingPlayer.uuid = UUID.randomUUID();
+        PingPlayer pingPlayer = PingPlayer.of(name, UUID.randomUUID());
         this.pingPlayers.add(pingPlayer);
     }
 
@@ -170,6 +170,7 @@ public class ResponseData {
 
     /**
      * Get the list of the response players.
+     *
      * @return the list of the response players.
      */
     public List<PingPlayer> getPlayers() {
@@ -207,7 +208,7 @@ public class ResponseData {
 
     /**
      * Sets the response favicon.
-     *
+     * <p>
      * MUST start with "data:image/png;base64,"
      *
      * @param favicon The favicon for the response data.
@@ -218,6 +219,7 @@ public class ResponseData {
 
     /**
      * Get the response favicon.
+     *
      * @return the response favicon.
      */
     public String getFavicon() {
@@ -267,7 +269,25 @@ public class ResponseData {
      * Represents a player line in the server list hover.
      */
     public static class PingPlayer {
-        public String name;
-        public UUID uuid;
+
+        private static @NotNull PingPlayer of(@NotNull String name, @NotNull UUID uuid) {
+            return new PingPlayer(name, uuid);
+        }
+
+        private final String name;
+        private final UUID uuid;
+
+        private PingPlayer(@NotNull String name, @NotNull UUID uuid) {
+            this.name = name;
+            this.uuid = uuid;
+        }
+
+        public @NotNull String getName() {
+            return name;
+        }
+
+        public @NotNull UUID getUuid() {
+            return uuid;
+        }
     }
 }
