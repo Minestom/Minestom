@@ -4,6 +4,7 @@ import com.google.common.collect.Queues;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.thread.PerInstanceThreadProvider;
@@ -13,10 +14,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
+import java.util.function.Consumer;
 import java.util.function.LongConsumer;
 
 /**
@@ -36,6 +35,7 @@ public final class UpdateManager {
 
     private final Queue<LongConsumer> tickStartCallbacks = Queues.newConcurrentLinkedQueue();
     private final Queue<LongConsumer> tickEndCallbacks = Queues.newConcurrentLinkedQueue();
+    private final List<Consumer<TickMonitor>> tickMonitors = new CopyOnWriteArrayList<>();
 
     {
         // DEFAULT THREAD PROVIDER
@@ -81,7 +81,14 @@ public final class UpdateManager {
                 final long tickTime = System.nanoTime() - currentTime;
 
                 // Tick end callbacks
-                doTickCallback(tickEndCallbacks, tickTime / 1000000L);
+                doTickCallback(tickEndCallbacks, tickTime);
+
+                // Monitoring
+                if (!tickMonitors.isEmpty()) {
+                    final double tickTimeMs = tickTime / 1e6D;
+                    final TickMonitor tickMonitor = new TickMonitor(tickTimeMs);
+                    this.tickMonitors.forEach(consumer -> consumer.accept(tickMonitor));
+                }
 
                 // Flush all waiting packets
                 AsyncUtils.runAsync(() -> connectionManager.getOnlinePlayers().stream()
@@ -244,6 +251,14 @@ public final class UpdateManager {
      */
     public void removeTickEndCallback(@NotNull LongConsumer callback) {
         this.tickEndCallbacks.remove(callback);
+    }
+
+    public void addTickMonitor(@NotNull Consumer<TickMonitor> consumer) {
+        this.tickMonitors.add(consumer);
+    }
+
+    public void removeTickMonitor(@NotNull Consumer<TickMonitor> consumer) {
+        this.tickMonitors.remove(consumer);
     }
 
     /**
