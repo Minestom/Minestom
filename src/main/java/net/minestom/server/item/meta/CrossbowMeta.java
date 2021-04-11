@@ -8,7 +8,6 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
@@ -47,27 +46,27 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
     /**
      * Gets the first projectile.
      *
-     * @return the first projectile, null if not present
+     * @return the first projectile
      */
-    public @Nullable ItemStack getProjectile1() {
+    public @NotNull ItemStack getProjectile1() {
         return projectile1;
     }
 
     /**
      * Gets the second projectile.
      *
-     * @return the second projectile, null if not present
+     * @return the second projectile
      */
-    public @Nullable ItemStack getProjectile2() {
+    public @NotNull ItemStack getProjectile2() {
         return projectile2;
     }
 
     /**
      * Gets the third projectile.
      *
-     * @return the third projectile, null if not present
+     * @return the third projectile
      */
-    public @Nullable ItemStack getProjectile3() {
+    public @NotNull ItemStack getProjectile3() {
         return projectile3;
     }
 
@@ -83,21 +82,22 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
     public static class Builder extends ItemMetaBuilder {
 
         private boolean triple;
-        private ItemStack projectile1, projectile2, projectile3;
+        private ItemStack projectile1, projectile2, projectile3 = ItemStack.AIR;
         private boolean charged;
 
         /**
          * Sets the projectile of this crossbow.
          *
-         * @param projectile the projectile of the crossbow
+         * @param projectile the projectile of the crossbow, air to remove
          */
         public Builder projectile(@NotNull ItemStack projectile) {
-            Check.argCondition(projectile.isAir(), "the projectile of your crossbow isn't visible");
             this.projectile1 = projectile;
             this.triple = false;
 
             NBTList<NBTCompound> chargedProjectiles = new NBTList<>(NBTTypes.TAG_Compound);
-            chargedProjectiles.add(getItemCompound(projectile));
+            if (!projectile.isAir()) {
+                chargedProjectiles.add(getItemCompound(projectile));
+            }
             this.nbt.set("ChargedProjectiles", chargedProjectiles);
 
             return this;
