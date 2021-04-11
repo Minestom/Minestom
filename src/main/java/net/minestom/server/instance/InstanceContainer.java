@@ -12,6 +12,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.instance.lighting.ChunkLightEngine;
+import net.minestom.server.instance.lighting.DefaultChunkLightEngine;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
@@ -106,6 +107,9 @@ public class InstanceContainer extends Instance {
             final Data data = storageLocation.getOrDefault(DATA_KEY, SerializableData.class, null);
             setData(data);
         }
+
+        // Set the light engine to the default implementation
+        setChunkLightEngine(new DefaultChunkLightEngine());
     }
 
     @Override
@@ -540,9 +544,6 @@ public class InstanceContainer extends Instance {
         cacheChunk(chunk);
 
         if (chunkGenerator != null && chunk.shouldGenerate()) {
-            // Initialize the lighting engine
-            chunk.setChunkLightEngine(chunkLightEngine);
-
             // Execute the chunk generator to populate the chunk
             final ChunkGenerationBatch chunkBatch = new ChunkGenerationBatch(this, chunk);
 

@@ -81,18 +81,17 @@ public abstract class Chunk implements Viewable, DataContainer {
     // Path finding
     protected PFColumnarSpace columnarSpace;
 
+    protected final ChunkLightEngine chunkLightEngine;
+
     // Data
     protected Data data;
 
-    // Generators
-    protected ChunkLightEngine chunkLightEngine;
-
-    public Chunk(@Nullable Biome[] biomes, int chunkX, int chunkZ, boolean shouldGenerate) {
+    public Chunk(@Nullable Biome[] biomes, ChunkLightEngine chunkLightEngine, int chunkX, int chunkZ, boolean shouldGenerate) {
         this.identifier = UUID.randomUUID();
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.shouldGenerate = shouldGenerate;
-        this.chunkLightEngine = new DefaultChunkLightEngine();
+        this.chunkLightEngine = chunkLightEngine != null ? chunkLightEngine : new DefaultChunkLightEngine();
 
         if (biomes != null && biomes.length == BIOME_COUNT) {
             this.biomes = biomes;
@@ -400,25 +399,18 @@ public abstract class Chunk implements Viewable, DataContainer {
     }
 
     /**
-     * Gets the light packet of this chunk.
-     *
-     * @return the light packet
-     */
-    @NotNull
-    public UpdateLightPacket getLightPacket() {
-        ChunkLight lightData = new ChunkLight(this);
-        chunkLightEngine.lightChunk(lightData);
-        return lightData.convertDataIntoPacket();
-    }
-
-    /**
-     * Sets the chunk light engine
+     * Gets the {@link ChunkLight} at the given {@link Chunk}.
      * 
-     * @param chunkLightEngine The ChunkLightEngine implementation
+     * @param chunk the current chunk
+     * @return the chunk light data for a given chunk
      */
     @NotNull
-    public void setChunkLightEngine(@Nullable ChunkLightEngine chunkLightEngine) {
-        this.chunkLightEngine = chunkLightEngine;
+    public UpdateLightPacket getChunkLightPacket()
+    {
+        ChunkLightEngine engine = chunkLightEngine;
+        ChunkLight data = new ChunkLight(this);
+        engine.lightChunk(data);
+        return data.getLightPacket();
     }
 
     /**
@@ -510,7 +502,7 @@ public abstract class Chunk implements Viewable, DataContainer {
             return;
 
         final PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(getLightPacket());
+        playerConnection.sendPacket(getChunkLightPacket());
         playerConnection.sendPacket(getFreshFullDataPacket());
     }
 
@@ -518,7 +510,7 @@ public abstract class Chunk implements Viewable, DataContainer {
         if (!isLoaded()) {
             return;
         }
-        sendPacketToViewers(getLightPacket());
+        sendPacketToViewers(getChunkLightPacket());
         sendPacketToViewers(getFreshFullDataPacket());
     }
 

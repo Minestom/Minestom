@@ -10,6 +10,7 @@ import net.minestom.server.data.SerializableData;
 import net.minestom.server.data.SerializableDataImpl;
 import net.minestom.server.entity.pathfinding.PFBlockDescription;
 import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.instance.lighting.ChunkLightEngine;
 import net.minestom.server.instance.palette.PaletteStorage;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.utils.BlockPosition;
@@ -62,15 +63,21 @@ public class DynamicChunk extends Chunk {
     private ChunkDataPacket cachedPacket;
     private long cachedPacketTime;
 
-    public DynamicChunk(@Nullable Biome[] biomes, int chunkX, int chunkZ,
+    public DynamicChunk(@Nullable Biome[] biomes, @Nullable ChunkLightEngine chunkLightEngine, int chunkX, int chunkZ,
                         @NotNull PaletteStorage blockPalette, @NotNull PaletteStorage customBlockPalette) {
-        super(biomes, chunkX, chunkZ, true);
+        super(biomes, chunkLightEngine, chunkX, chunkZ, true);
         this.blockPalette = blockPalette;
         this.customBlockPalette = customBlockPalette;
     }
 
+    public DynamicChunk(@Nullable Biome[] biomes, @Nullable ChunkLightEngine chunkLightEngine, int chunkX, int chunkZ) {
+        this(biomes, chunkLightEngine, chunkX, chunkZ,
+                new PaletteStorage(8, 2),
+                new PaletteStorage(8, 2));
+    }
+
     public DynamicChunk(@Nullable Biome[] biomes, int chunkX, int chunkZ) {
-        this(biomes, chunkX, chunkZ,
+        this(biomes, null, chunkX, chunkZ,
                 new PaletteStorage(8, 2),
                 new PaletteStorage(8, 2));
     }
@@ -407,7 +414,7 @@ public class DynamicChunk extends Chunk {
     @NotNull
     @Override
     public Chunk copy(int chunkX, int chunkZ) {
-        DynamicChunk dynamicChunk = new DynamicChunk(biomes.clone(), chunkX, chunkZ);
+        DynamicChunk dynamicChunk = new DynamicChunk(biomes.clone(), chunkLightEngine, chunkX, chunkZ);
         dynamicChunk.blockPalette = blockPalette.clone();
         dynamicChunk.customBlockPalette = customBlockPalette.clone();
         dynamicChunk.blocksData.putAll(blocksData);
