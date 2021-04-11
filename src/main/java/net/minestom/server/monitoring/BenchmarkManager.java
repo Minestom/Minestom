@@ -1,4 +1,4 @@
-package net.minestom.server.benchmark;
+package net.minestom.server.monitoring;
 
 import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;

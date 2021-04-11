@@ -20,7 +20,7 @@ public class Position implements PublicCloneable<Position> {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.yaw = yaw;
+        this.yaw = fixYaw(yaw);
         this.pitch = pitch;
     }
 
@@ -356,7 +356,24 @@ public class Position implements PublicCloneable<Position> {
      * @param yaw the new yaw
      */
     public void setYaw(float yaw) {
-        this.yaw = yaw;
+        this.yaw = fixYaw(yaw);
+    }
+
+    /**
+     * Fixes a yaw value that is not between -180.0F and 180.0F
+     * So for example -1355.0F becomes 85.0F and 225.0F becomes -135.0F
+     *
+     * @param yaw The possible "wrong" yaw
+     * @return a fixed yaw
+     */
+    private float fixYaw(float yaw) {
+        yaw = yaw % 360;
+        if(yaw < -180.0F) {
+            yaw += 360.0F;
+        } else if(yaw > 180.0F) {
+            yaw -= 360.0F;
+        }
+        return yaw;
     }
 
     /**

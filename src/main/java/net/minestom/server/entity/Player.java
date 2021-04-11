@@ -671,17 +671,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             // Load all the required chunks
             final long[] visibleChunks = ChunkUtils.getChunksInRange(spawnPosition, getChunkRange());
 
-            final ChunkCallback eachCallback = chunk -> {
-                if (chunk != null) {
-                    final int chunkX = ChunkUtils.getChunkCoordinate(spawnPosition.getX());
-                    final int chunkZ = ChunkUtils.getChunkCoordinate(spawnPosition.getZ());
-                    if (chunk.getChunkX() == chunkX &&
-                            chunk.getChunkZ() == chunkZ) {
-                        updateViewPosition(chunkX, chunkZ);
-                    }
-                }
-            };
-
             final ChunkCallback endCallback = chunk -> {
                 // This is the last chunk to be loaded , spawn player
                 spawnPlayer(instance, spawnPosition, firstSpawn, true, dimensionChange);
@@ -690,7 +679,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             // Chunk 0;0 always needs to be loaded
             instance.loadChunk(0, 0, chunk ->
                     // Load all the required chunks
-                    ChunkUtils.optionalLoadAll(instance, visibleChunks, eachCallback, endCallback));
+                    ChunkUtils.optionalLoadAll(instance, visibleChunks, null, endCallback));
 
         } else {
             // The player already has the good version of all the chunks.
