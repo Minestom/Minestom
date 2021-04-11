@@ -1,4 +1,4 @@
-package net.minestom.server.item.meta;
+package net.minestom.server.item.metadata;
 
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.text.Component;

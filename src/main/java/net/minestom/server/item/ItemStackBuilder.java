@@ -1,7 +1,7 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.item.meta.*;
+import net.minestom.server.item.metadata.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

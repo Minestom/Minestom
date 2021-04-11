@@ -1,4 +1,4 @@
-package net.minestom.server.item.meta;
+package net.minestom.server.item.metadata;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;

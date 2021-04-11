@@ -29,7 +29,7 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.ItemTag;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.meta.CompassMeta;
+import net.minestom.server.item.metadata.CompassMeta;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.Position;

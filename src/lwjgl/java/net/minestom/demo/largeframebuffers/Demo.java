@@ -8,7 +8,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.meta.MapMeta;
+import net.minestom.server.item.metadata.MapMeta;
 import net.minestom.server.map.Framebuffer;
 import net.minestom.server.map.LargeFramebuffer;
 import net.minestom.server.map.MapColors;

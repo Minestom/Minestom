@@ -1,4 +1,4 @@
-package net.minestom.server.item.meta;
+package net.minestom.server.item.metadata;
 
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemMeta;
