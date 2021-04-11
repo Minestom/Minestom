@@ -1,13 +1,11 @@
 package net.minestom.server.inventory;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.StackingRule;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,80 +44,56 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
      * @param slot      the slot to set the item
      * @param itemStack the item to set
      */
-    public abstract void setItemStack(int slot, @NotNull ItemStack itemStack);
+    public synchronized void setItemStack(int slot, @NotNull ItemStack itemStack) {
+        Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
+                "Inventory does not have the slot " + slot);
+        safeItemInsert(slot, itemStack);
+    }
 
     protected abstract void safeItemInsert(int slot, @NotNull ItemStack itemStack);
+
+    public synchronized <T> @NotNull T processItemStack(@NotNull ItemStack itemStack,
+                                                        @NotNull TransactionType type,
+                                                        @NotNull TransactionOption<T> option) {
+        var pair = type.process(this, itemStack);
+        return option.fill(this, pair.left(), pair.right());
+    }
+
+    public synchronized <T> @NotNull List<@NotNull T> processItemStacks(@NotNull List<ItemStack> itemStacks,
+                                                                        @NotNull TransactionType type,
+                                                                        @NotNull TransactionOption<T> option) {
+        List<T> result = new ArrayList<>(itemStacks.size());
+        itemStacks.forEach(itemStack -> {
+            T transactionResult = processItemStack(itemStack, type, option);
+            result.add(transactionResult);
+        });
+        return result;
+    }
 
     /**
      * Adds an {@link ItemStack} to the inventory and sends relevant update to the viewer(s).
      *
-     * @param itemStack         the item to add
-     * @param transactionOption the transaction option
+     * @param itemStack the item to add
+     * @param option    the transaction option
      * @return true if the item has been successfully added, false otherwise
      */
-    public synchronized <T> @NotNull T addItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> transactionOption) {
-        Int2ObjectMap<ItemStack> itemChangesMap = new Int2ObjectOpenHashMap<>();
-
-        final StackingRule stackingRule = itemStack.getStackingRule();
-
-        // Check filled slot (not air)
-        for (int i = 0; i < getInnerSize(); i++) {
-            ItemStack inventoryItem = getItemStack(i);
-            if (inventoryItem.isAir()) {
-                continue;
-            }
-            if (stackingRule.canBeStacked(itemStack, inventoryItem)) {
-                final int itemAmount = stackingRule.getAmount(inventoryItem);
-                if (itemAmount == stackingRule.getMaxSize())
-                    continue;
-                final int itemStackAmount = stackingRule.getAmount(itemStack);
-                final int totalAmount = itemStackAmount + itemAmount;
-                if (!stackingRule.canApply(itemStack, totalAmount)) {
-                    // Slot cannot accept the whole item, reduce amount to 'itemStack'
-                    itemChangesMap.put(i, stackingRule.apply(inventoryItem, stackingRule.getMaxSize()));
-                    itemStack = stackingRule.apply(itemStack, totalAmount - stackingRule.getMaxSize());
-                } else {
-                    // Slot can accept the whole item
-                    itemChangesMap.put(i, stackingRule.apply(inventoryItem, totalAmount));
-                    itemStack = stackingRule.apply(itemStack, 0);
-                    break;
-                }
-            }
-        }
-
-        // Check air slot to fill
-        for (int i = 0; i < getInnerSize(); i++) {
-            ItemStack inventoryItem = getItemStack(i);
-            if (!inventoryItem.isAir()) {
-                continue;
-            }
-            // Fill the slot
-            itemChangesMap.put(i, itemStack);
-            itemStack = stackingRule.apply(itemStack, 0);
-            break;
-        }
-
-        return transactionOption.fill(this, itemStack, itemChangesMap);
+    public <T> @NotNull T addItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> option) {
+        return processItemStack(itemStack, TransactionType.ADD, option);
     }
 
-    public synchronized boolean addItemStack(@NotNull ItemStack itemStack) {
+    public boolean addItemStack(@NotNull ItemStack itemStack) {
         return addItemStack(itemStack, TransactionOption.ALL_OR_NOTHING);
     }
 
     /**
      * Adds {@link ItemStack}s to the inventory and sends relevant updates to the viewer(s).
      *
-     * @param itemStacks        items to add
-     * @param transactionOption the transaction option
+     * @param itemStacks items to add
+     * @param option     the transaction option
      * @return the operation results
      */
-    public <T> @NotNull List<@NotNull T> addItemStacks(@NotNull List<ItemStack> itemStacks, @NotNull TransactionOption<T> transactionOption) {
-        List<T> result = new ArrayList<>(itemStacks.size());
-        itemStacks.forEach(itemStack -> {
-            T transactionResult = addItemStack(itemStack, transactionOption);
-            result.add(transactionResult);
-        });
-        return result;
+    public <T> @NotNull List<@NotNull T> addItemStacks(@NotNull List<ItemStack> itemStacks, @NotNull TransactionOption<T> option) {
+        return processItemStacks(itemStacks, TransactionType.ADD, option);
     }
 
     /**
@@ -128,32 +102,8 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
      * @param itemStack the item to take
      * @return true if the item has been successfully fully taken, false otherwise
      */
-    public <T> T takeItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> transactionOption) {
-        Int2ObjectMap<ItemStack> itemChangesMap = new Int2ObjectOpenHashMap<>();
-        final StackingRule stackingRule = itemStack.getStackingRule();
-        for (int i = 0; i < getInnerSize(); i++) {
-            ItemStack inventoryItem = getItemStack(i);
-            if (inventoryItem.isAir()) {
-                continue;
-            }
-            if (stackingRule.canBeStacked(itemStack, inventoryItem)) {
-                final int itemAmount = stackingRule.getAmount(inventoryItem);
-                final int itemStackAmount = stackingRule.getAmount(itemStack);
-                if (itemStackAmount < itemAmount) {
-                    itemChangesMap.put(i, stackingRule.apply(inventoryItem, itemAmount - itemStackAmount));
-                    itemStack = stackingRule.apply(itemStack, 0);
-                    break;
-                }
-                itemChangesMap.put(i, stackingRule.apply(inventoryItem, 0));
-                itemStack = stackingRule.apply(itemStack, itemStackAmount - itemAmount);
-                if (stackingRule.getAmount(itemStack) == 0) {
-                    itemStack = stackingRule.apply(itemStack, 0);
-                    break;
-                }
-            }
-        }
-
-        return transactionOption.fill(this, itemStack, itemChangesMap);
+    public <T> @NotNull T takeItemStack(@NotNull ItemStack itemStack, @NotNull TransactionOption<T> option) {
+        return processItemStack(itemStack, TransactionType.TAKE, option);
     }
 
     /**
@@ -162,13 +112,8 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
      * @param itemStacks items to take
      * @return the operation results
      */
-    public <T> @NotNull List<T> takeItemStacks(@NotNull List<ItemStack> itemStacks, @NotNull TransactionOption<T> transactionOption) {
-        List<T> result = new ArrayList<>(itemStacks.size());
-        itemStacks.forEach(itemStack -> {
-            T transactionResult = takeItemStack(itemStack, transactionOption);
-            result.add(transactionResult);
-        });
-        return result;
+    public <T> @NotNull List<@NotNull T> takeItemStacks(@NotNull List<ItemStack> itemStacks, @NotNull TransactionOption<T> option) {
+        return processItemStacks(itemStacks, TransactionType.TAKE, option);
     }
 
     public synchronized void replaceItemStack(int slot, @NotNull UnaryOperator<@NotNull ItemStack> operator) {

@@ -12,9 +12,7 @@ import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -121,14 +119,6 @@ public class Inventory extends AbstractInventory implements Viewable {
      */
     public byte getWindowId() {
         return id;
-    }
-
-    @Override
-    public void setItemStack(int slot, @NotNull ItemStack itemStack) {
-        Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
-                inventoryType.toString() + " does not have slot " + slot);
-
-        safeItemInsert(slot, itemStack);
     }
 
     /**

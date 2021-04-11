@@ -2,8 +2,6 @@ package net.minestom.server.inventory;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.item.ArmorEquipEvent;
-import net.minestom.server.event.player.PlayerAddItemStackEvent;
-import net.minestom.server.event.player.PlayerSetItemStackEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickLoopHandler;
 import net.minestom.server.inventory.click.InventoryClickResult;
@@ -43,29 +41,6 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         };
 
         super.addInventoryCondition(condition);
-    }
-
-    @Override
-    public synchronized void setItemStack(int slot, @NotNull ItemStack itemStack) {
-        PlayerSetItemStackEvent setItemStackEvent = new PlayerSetItemStackEvent(player, slot, itemStack);
-        player.callEvent(PlayerSetItemStackEvent.class, setItemStackEvent);
-        if (setItemStackEvent.isCancelled())
-            return;
-        slot = setItemStackEvent.getSlot();
-        itemStack = setItemStackEvent.getItemStack();
-
-        safeItemInsert(slot, itemStack);
-    }
-
-    @Override
-    public synchronized boolean addItemStack(@NotNull ItemStack itemStack) {
-        PlayerAddItemStackEvent addItemStackEvent = new PlayerAddItemStackEvent(player, itemStack);
-        player.callEvent(PlayerAddItemStackEvent.class, addItemStackEvent);
-        if (addItemStackEvent.isCancelled())
-            return false;
-
-        itemStack = addItemStackEvent.getItemStack();
-        return super.addItemStack(itemStack);
     }
 
     @Override
