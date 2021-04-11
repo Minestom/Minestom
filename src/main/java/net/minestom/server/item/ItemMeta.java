@@ -108,6 +108,7 @@ public class ItemMeta implements Writeable {
         return Collections.unmodifiableSet(canPlaceOn);
     }
 
+    @Contract(pure = true)
     public <T> T getOrDefault(@NotNull ItemTag<T> tag, @Nullable T defaultValue) {
         var key = tag.getKey();
         if (nbt.containsKey(key)) {
