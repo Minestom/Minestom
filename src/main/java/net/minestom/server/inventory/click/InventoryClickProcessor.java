@@ -95,18 +95,17 @@ public class InventoryClickProcessor {
             if (!clickedRule.canApply(clicked, amount)) {
                 return clickResult;
             } else {
-                resultCursor = cursorRule.apply(cursor, cursorRule.getAmount(cursor) - 1);
+                resultCursor = cursorRule.apply(cursor, operand -> operand - 1);
                 resultClicked = clickedRule.apply(clicked, amount);
             }
         } else {
             if (cursor.isAir()) {
                 final int amount = (int) Math.ceil((double) clickedRule.getAmount(clicked) / 2d);
                 resultCursor = cursorRule.apply(clicked, amount);
-                resultClicked = clickedRule.apply(clicked, clickedRule.getAmount(clicked) / 2);
+                resultClicked = clickedRule.apply(clicked, operand -> operand / 2);
             } else {
                 if (clicked.isAir()) {
-                    final int amount = cursorRule.getAmount(cursor);
-                    resultCursor = cursorRule.apply(cursor, amount - 1);
+                    resultCursor = cursorRule.apply(cursor, operand -> operand - 1);
                     resultClicked = clickedRule.apply(cursor, 1);
                 } else {
                     resultCursor = clicked;
@@ -573,6 +572,7 @@ public class InventoryClickProcessor {
                                 @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         InventoryClickEvent inventoryClickEvent = new InventoryClickEvent(inventory, player, slot, clickType, clicked, cursor);
         player.callEvent(InventoryClickEvent.class, inventoryClickEvent);
+        System.out.println("click");
     }
 
     public void clearCache(@NotNull Player player) {

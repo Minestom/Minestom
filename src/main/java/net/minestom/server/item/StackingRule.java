@@ -3,6 +3,8 @@ package net.minestom.server.item;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.IntUnaryOperator;
+
 /**
  * Represents the stacking rule of an {@link ItemStack}.
  * This can be used to mimic the vanilla one (using the displayed item quantity)
@@ -45,6 +47,11 @@ public abstract class StackingRule {
      */
     @Contract("_, _ -> new")
     public abstract @NotNull ItemStack apply(@NotNull ItemStack item, int newAmount);
+
+    @Contract("_, _ -> new")
+    public @NotNull ItemStack apply(@NotNull ItemStack item, @NotNull IntUnaryOperator amountOperator) {
+        return apply(item, amountOperator.applyAsInt(getAmount(item)));
+    }
 
     /**
      * Used to determine the current stack size of an {@link ItemStack}.
