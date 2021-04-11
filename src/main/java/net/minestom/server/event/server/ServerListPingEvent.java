@@ -6,6 +6,10 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.ping.ResponseData;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Called when a {@link PlayerConnection} sends a status packet,
+ * usually to display information on the server list.
+ */
 public class ServerListPingEvent extends Event implements CancellableEvent {
     private boolean cancelled = false;
 
