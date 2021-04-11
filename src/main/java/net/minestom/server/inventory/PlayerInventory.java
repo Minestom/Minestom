@@ -46,6 +46,8 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
     @Override
     public synchronized void clear() {
         super.clear();
+        // Reset cursor
+        setCursorItem(ItemStack.AIR);
         // Update equipments
         this.player.sendPacketToViewersAndSelf(player.getEquipmentsPacket());
     }

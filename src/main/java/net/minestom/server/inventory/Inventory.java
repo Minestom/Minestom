@@ -121,6 +121,14 @@ public class Inventory extends AbstractInventory implements Viewable {
         return id;
     }
 
+    @Override
+    public synchronized void clear() {
+        super.clear();
+        // Clear cursor
+        getViewers().forEach(player ->
+                setCursorItem(player, ItemStack.AIR));
+    }
+
     /**
      * Refreshes the inventory for all viewers.
      */
@@ -265,7 +273,7 @@ public class Inventory extends AbstractInventory implements Viewable {
      * @param player    the player to change the cursor item
      * @param itemStack the cursor item
      */
-    private void setCursorPlayerItem(@NotNull Player player, @NotNull ItemStack itemStack) {
+    private void refreshPlayerCursorItem(@NotNull Player player, @NotNull ItemStack itemStack) {
         this.cursorPlayersItem.put(player, itemStack);
     }
 
@@ -292,7 +300,7 @@ public class Inventory extends AbstractInventory implements Viewable {
         } else {
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
-        setCursorPlayerItem(player, clickResult.getCursor());
+        refreshPlayerCursorItem(player, clickResult.getCursor());
 
         if (!clickResult.isCancel())
             callClickEvent(player, isInWindow ? this : null, slot, ClickType.LEFT_CLICK, clicked, cursor);
@@ -319,7 +327,7 @@ public class Inventory extends AbstractInventory implements Viewable {
         } else {
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
-        setCursorPlayerItem(player, clickResult.getCursor());
+        refreshPlayerCursorItem(player, clickResult.getCursor());
 
         if (!clickResult.isCancel())
             callClickEvent(player, isInWindow ? this : null, slot, ClickType.RIGHT_CLICK, clicked, cursor);
@@ -377,7 +385,7 @@ public class Inventory extends AbstractInventory implements Viewable {
             updateFromClick(clickResult, player);
         }
 
-        setCursorPlayerItem(player, clickResult.getCursor());
+        refreshPlayerCursorItem(player, clickResult.getCursor());
         playerInventory.update();
         update();
 
@@ -446,7 +454,7 @@ public class Inventory extends AbstractInventory implements Viewable {
             }
         }
 
-        setCursorPlayerItem(player, clickResult.getCursor());
+        refreshPlayerCursorItem(player, clickResult.getCursor());
 
         return !clickResult.isCancel();
     }
@@ -484,7 +492,7 @@ public class Inventory extends AbstractInventory implements Viewable {
             updateFromClick(clickResult, player);
         }
 
-        setCursorPlayerItem(player, clickResult.getCursor());
+        refreshPlayerCursorItem(player, clickResult.getCursor());
 
         return !clickResult.isCancel();
     }
@@ -513,7 +521,7 @@ public class Inventory extends AbstractInventory implements Viewable {
         if (clickResult.doRefresh())
             updateFromClick(clickResult, player);
 
-        setCursorPlayerItem(player, clickResult.getCursor());
+        refreshPlayerCursorItem(player, clickResult.getCursor());
 
         return !clickResult.isCancel();
     }

@@ -59,7 +59,7 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
         return option.fill(this, pair.left(), pair.right());
     }
 
-    public synchronized <T> @NotNull List<@NotNull T> processItemStacks(@NotNull List<ItemStack> itemStacks,
+    public synchronized <T> @NotNull List<@NotNull T> processItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
                                                                         @NotNull TransactionType type,
                                                                         @NotNull TransactionOption<T> option) {
         List<T> result = new ArrayList<>(itemStacks.size());
@@ -92,7 +92,8 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
      * @param option     the transaction option
      * @return the operation results
      */
-    public <T> @NotNull List<@NotNull T> addItemStacks(@NotNull List<ItemStack> itemStacks, @NotNull TransactionOption<T> option) {
+    public <T> @NotNull List<@NotNull T> addItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
+                                                       @NotNull TransactionOption<T> option) {
         return processItemStacks(itemStacks, TransactionType.ADD, option);
     }
 
@@ -112,7 +113,8 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
      * @param itemStacks items to take
      * @return the operation results
      */
-    public <T> @NotNull List<@NotNull T> takeItemStacks(@NotNull List<ItemStack> itemStacks, @NotNull TransactionOption<T> option) {
+    public <T> @NotNull List<@NotNull T> takeItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,
+                                                        @NotNull TransactionOption<T> option) {
         return processItemStacks(itemStacks, TransactionType.TAKE, option);
     }
 
@@ -178,7 +180,7 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
      *
      * @return a modifiable {@link List} containing all the inventory conditions
      */
-    public @NotNull List<InventoryCondition> getInventoryConditions() {
+    public @NotNull List<@NotNull InventoryCondition> getInventoryConditions() {
         return inventoryConditions;
     }
 
