@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
 
-public class MapMeta extends ItemMeta {
+public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMeta.Builder> {
 
     private final int mapId;
     private final int mapScaleDirection;
