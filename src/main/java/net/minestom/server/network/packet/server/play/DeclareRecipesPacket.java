@@ -14,7 +14,8 @@ public class DeclareRecipesPacket implements ServerPacket {
 
     public DeclaredRecipe[] recipes = new DeclaredRecipe[0];
 
-    public DeclareRecipesPacket() {}
+    public DeclareRecipesPacket() {
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -68,7 +69,7 @@ public class DeclareRecipesPacket implements ServerPacket {
                     break;
 
                 default:
-                    throw new UnsupportedOperationException("Unrecognized type: "+type+" (id is "+id+")");
+                    throw new UnsupportedOperationException("Unrecognized type: " + type + " (id is " + id + ")");
             }
         }
     }
@@ -193,7 +194,7 @@ public class DeclareRecipesPacket implements ServerPacket {
             width = reader.readVarInt();
             height = reader.readVarInt();
             group = reader.readSizedString(Integer.MAX_VALUE);
-            ingredients = new Ingredient[width*height];
+            ingredients = new Ingredient[width * height];
             for (int i = 0; i < width * height; i++) {
                 ingredients[i] = new Ingredient();
                 ingredients[i].read(reader);
@@ -442,7 +443,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         public void read(@NotNull BinaryReader reader) {
             group = reader.readSizedString(Integer.MAX_VALUE);
             ingredient = new Ingredient();
-            ingredient.read( reader);
+            ingredient.read(reader);
             result = reader.readItemStack();
         }
     }

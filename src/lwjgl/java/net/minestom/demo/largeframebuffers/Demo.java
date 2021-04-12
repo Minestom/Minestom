@@ -68,8 +68,9 @@ public class Demo {
     private static void createFrame(Instance instance, int id, int x, int y, int z) {
         EntityItemFrame itemFrame = new EntityItemFrame(new Position(x, y, z), EntityItemFrame.ItemFrameOrientation.NORTH);
         itemFrame.getPosition().setYaw(180f);
-        ItemStack map = new ItemStack(Material.FILLED_MAP, (byte) 1);
-        map.setItemMeta(new MapMeta(id));
+        ItemStack map = ItemStack.builder(Material.FILLED_MAP)
+                .meta(new MapMeta.Builder().mapId(id).build())
+                .build();
         itemFrame.setItemStack(map);
         itemFrame.setInstance(instance);
         itemFrame.setCustomNameVisible(true);

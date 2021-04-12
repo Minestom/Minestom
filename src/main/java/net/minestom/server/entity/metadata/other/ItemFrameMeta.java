@@ -19,7 +19,7 @@ public class ItemFrameMeta extends EntityMeta implements ObjectDataProvider {
 
     @NotNull
     public ItemStack getItem() {
-        return super.metadata.getIndex((byte) 7, ItemStack.getAirItem());
+        return super.metadata.getIndex((byte) 7, ItemStack.AIR);
     }
 
     public void setItem(@NotNull ItemStack value) {

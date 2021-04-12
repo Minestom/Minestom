@@ -68,6 +68,7 @@ import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.instance.InstanceUtils;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -589,14 +590,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
         }
 
-        // Item ownership cache
-        {
-            ItemStack[] itemStacks = inventory.getItemStacks();
-            for (ItemStack itemStack : itemStacks) {
-                ItemStack.DATA_OWNERSHIP.clearCache(itemStack.getIdentifier());
-            }
-        }
-
         // Clear all viewable entities
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         // Clear all viewable chunks
@@ -1096,42 +1089,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         MinecraftServer.getBossBarManager().removeBossBar(this, bar);
     }
 
-    /**
-     * Opens a book ui for the player with the given book metadata.
-     *
-     * @param bookMeta The metadata of the book to open
-     * @deprecated Use {@link #openBook(Book)}
-     */
-    @Deprecated
-    public void openBook(@NotNull WrittenBookMeta bookMeta) {
-        // Set book in offhand
-        final ItemStack writtenBook = new ItemStack(Material.WRITTEN_BOOK, (byte) 1);
-        writtenBook.setItemMeta(bookMeta);
-        final SetSlotPacket setSlotPacket = new SetSlotPacket();
-        setSlotPacket.windowId = 0;
-        setSlotPacket.slot = 45;
-        setSlotPacket.itemStack = writtenBook;
-        this.playerConnection.sendPacket(setSlotPacket);
-
-        // Open the book
-        final OpenBookPacket openBookPacket = new OpenBookPacket();
-        openBookPacket.hand = Hand.OFF;
-        this.playerConnection.sendPacket(openBookPacket);
-
-        // Update inventory to remove book (which the actual inventory does not have)
-        this.inventory.update();
-    }
-
     @Override
     public void openBook(@NotNull Book book) {
-        // make the book
-        ItemStack writtenBook = new ItemStack(Material.WRITTEN_BOOK, (byte) 1);
-        writtenBook.setItemMeta(WrittenBookMeta.fromAdventure(book, this));
+        ItemStack writtenBook = ItemStack.builder(Material.WRITTEN_BOOK)
+                .meta(WrittenBookMeta.fromAdventure(book, this))
+                .build();
 
         // Set book in offhand
         SetSlotPacket setBookPacket = new SetSlotPacket();
         setBookPacket.windowId = 0;
-        setBookPacket.slot = 45;
+        setBookPacket.slot = PlayerInventoryUtils.OFFHAND_SLOT;
         setBookPacket.itemStack = writtenBook;
         playerConnection.sendPacket(setBookPacket);
 
@@ -1143,7 +1110,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Restore the item in offhand
         SetSlotPacket restoreItemPacket = new SetSlotPacket();
         restoreItemPacket.windowId = 0;
-        restoreItemPacket.slot = 45;
+        restoreItemPacket.slot = PlayerInventoryUtils.OFFHAND_SLOT;
         restoreItemPacket.itemStack = getItemInOffHand();
         playerConnection.sendPacket(restoreItemPacket);
     }
@@ -1996,10 +1963,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         ItemStack cursorItem;
         if (openInventory == null) {
             cursorItem = getInventory().getCursorItem();
-            getInventory().setCursorItem(ItemStack.getAirItem());
+            getInventory().setCursorItem(ItemStack.AIR);
         } else {
             cursorItem = openInventory.getCursorItem(this);
-            openInventory.setCursorItem(this, ItemStack.getAirItem());
+            openInventory.setCursorItem(this, ItemStack.AIR);
         }
         if (!cursorItem.isAir()) {
             // Add item to inventory if he hasn't been able to drop it
