@@ -84,7 +84,7 @@ public final class MapColorsGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
-        CodeBlock.Builder code = CodeBlock.builder();
+        CodeBlock.Builder staticBlock = CodeBlock.builder();
         // Use data
         for (JsonElement mc : mapColors) {
             JsonObject mapColor = mc.getAsJsonObject();
@@ -108,10 +108,10 @@ public final class MapColorsGenerator extends MinestomCodeGenerator {
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
             // Add to static init.
-            code.addStatement("mapColors.add($N)", mapColorName);
+            staticBlock.addStatement("mapColors.add($N)", mapColorName);
         }
 
-        mapColorsClass.addStaticBlock(code.build());
+        mapColorsClass.addStaticBlock(staticBlock.build());
 
         // Write files to outputFolder
         writeFiles(

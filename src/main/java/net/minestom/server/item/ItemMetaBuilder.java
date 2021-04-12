@@ -131,7 +131,7 @@ public abstract class ItemMetaBuilder {
                                 .setIntArray("UUID", Utils.uuidToIntArray(uuid))
                                 .setDouble("Amount", itemAttribute.getValue())
                                 .setString("Slot", itemAttribute.getSlot().name().toLowerCase())
-                                .setString("AttributeName", itemAttribute.getAttribute().getKey())
+                                .setString("AttributeName", itemAttribute.getAttribute().key().asString())
                                 .setInt("Operation", itemAttribute.getOperation().getId())
                                 .setString("Name", itemAttribute.getInternalName())
                 );

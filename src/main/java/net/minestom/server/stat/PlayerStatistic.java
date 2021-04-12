@@ -1,6 +1,7 @@
 package net.minestom.server.stat;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.statistic.StatisticType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -19,7 +20,7 @@ public class PlayerStatistic {
     }
 
     public PlayerStatistic(@NotNull StatisticType type) {
-        this(StatisticCategory.CUSTOM, type.getId());
+        this(StatisticCategory.CUSTOM, type.getNumericalId());
     }
 
     @NotNull

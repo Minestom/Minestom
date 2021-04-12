@@ -4,11 +4,13 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MapRegistry<T extends Keyed> implements Registry.Writable<T> {
-    private final Map<Key, T> namespaceToValue = new HashMap<>();
+    private final Map<Key, T> namespaceToValue = new ConcurrentHashMap<>();
 
     @Override
     public T get(@NotNull Key id) {
@@ -16,8 +18,17 @@ public class MapRegistry<T extends Keyed> implements Registry.Writable<T> {
     }
 
     @Override
+    public List<T> values() {
+        return new ArrayList<>(namespaceToValue.values());
+    }
+
+    @Override
     public boolean register(@NotNull T value) {
-        if (namespaceToValue.containsKey(value.key())) return false;
+        if (namespaceToValue.containsKey(value.key())) {
+            return false;
+        } else if (namespaceToValue.containsValue(value)) {
+            return false;
+        }
         namespaceToValue.put(value.key(), value);
         return true;
     }

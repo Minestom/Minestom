@@ -47,7 +47,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     // Bounding box used for items' pickup (see LivingEntity#setBoundingBox)
     protected BoundingBox expandedBoundingBox;
 
-    private final Map<String, AttributeInstance> attributeModifiers = new ConcurrentHashMap<>(Attribute.values().length);
+    private final Map<String, AttributeInstance> attributeModifiers = new ConcurrentHashMap<>(Attribute.values().size());
 
     // Abilities
     protected boolean invulnerable;
@@ -456,7 +456,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return the entity max health
      */
     public float getMaxHealth() {
-        return getAttributeValue(Attribute.MAX_HEALTH);
+        return (float) getAttributeValue(Attribute.MAX_HEALTH);
     }
 
     /**
@@ -465,7 +465,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attribute#MAX_HEALTH}.
      */
     public void heal() {
-        setHealth(getAttributeValue(Attribute.MAX_HEALTH));
+        setHealth((float) getAttributeValue(Attribute.MAX_HEALTH));
     }
 
     /**
@@ -476,7 +476,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     @NotNull
     public AttributeInstance getAttribute(@NotNull Attribute attribute) {
-        return attributeModifiers.computeIfAbsent(attribute.getKey(),
+        return attributeModifiers.computeIfAbsent(attribute.getId().getDomain(),
                 s -> new AttributeInstance(attribute, this::onAttributeChanged));
     }
 
@@ -508,8 +508,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param attribute the attribute value to get
      * @return the attribute value
      */
-    public float getAttributeValue(@NotNull Attribute attribute) {
-        AttributeInstance instance = attributeModifiers.get(attribute.getKey());
+    public double getAttributeValue(@NotNull Attribute attribute) {
+        AttributeInstance instance = attributeModifiers.get(attribute.getId().getDomain());
         return (instance != null) ? instance.getValue() : attribute.getDefaultValue();
     }
 
@@ -624,7 +624,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         for (int i = 0; i < properties.length; ++i) {
             EntityPropertiesPacket.Property property = new EntityPropertiesPacket.Property();
 
-            final float value = instances[i].getBaseValue();
+            final double value = instances[i].getBaseValue();
 
             property.instance = instances[i];
             property.attribute = instances[i].getAttribute();

@@ -2,7 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.fluids.Fluid;
+import net.minestom.server.fluid.Fluid;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
@@ -40,18 +40,18 @@ public class TagsPacket implements ServerPacket {
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writeTags(writer, blockTags, name -> Registries.getBlock(name).ordinal());
-        writeTags(writer, itemTags, name -> Registries.getMaterial(name).ordinal());
-        writeTags(writer, fluidTags, name -> Registries.getFluid(name).ordinal());
-        writeTags(writer, entityTags, name -> Registries.getEntityType(name).ordinal());
+        writeTags(writer, blockTags, name -> Registries.getBlock(name).getNumericalId());
+        writeTags(writer, itemTags, name -> Registries.getMaterial(name).getNumericalId());
+        writeTags(writer, fluidTags, name -> Registries.getFluid(name).getNumericalId());
+        writeTags(writer, entityTags, name -> Registries.getEntityType(name).getNumericalId()); // Not defaulted, so can be null.
     }
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        readTags(reader, blockTags, id -> NamespaceID.from("minecraft", Block.values()[id].getName()));
-        readTags(reader, itemTags, id -> NamespaceID.from("minecraft", Material.values()[id].getName()));
-        readTags(reader, fluidTags, id -> NamespaceID.from(Fluid.values()[id].getNamespaceID()));
-        readTags(reader, entityTags, id -> NamespaceID.from(EntityType.values()[id].getNamespaceID()));
+        readTags(reader, blockTags, id -> Block.values().get(id).getId());
+        readTags(reader, itemTags, id -> Material.values().get(id).getId());
+        readTags(reader, fluidTags, id -> Fluid.values().get(id).getId());
+        readTags(reader, entityTags, id -> EntityType.values().get(id).getId());
     }
 
     private void writeTags(BinaryWriter writer, List<Tag> tags, Function<NamespaceID, Integer> idSupplier) {

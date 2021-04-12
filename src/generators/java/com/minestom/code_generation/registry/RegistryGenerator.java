@@ -1,11 +1,8 @@
 package com.minestom.code_generation.registry;
 
 import com.minestom.code_generation.MinestomCodeGenerator;
-import com.minestom.code_generation.blocks.BlockGenerator;
 import com.squareup.javapoet.*;
-import it.unimi.dsi.fastutil.Pair;
-import it.unimi.dsi.fastutil.objects.ObjectReferenceImmutablePair;
-import net.minestom.server.utils.NamespaceID;
+import kotlin.Triple;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -14,25 +11,29 @@ import org.slf4j.LoggerFactory;
 import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.lang.annotation.Annotation;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 public final class RegistryGenerator extends MinestomCodeGenerator {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BlockGenerator.class);
-    // List of registeries.
-    @SuppressWarnings("unchecked")
-    private static final Pair<ClassName, String>[] registries = new Pair[]{
-            new ObjectReferenceImmutablePair<>(ClassName.get("net.minestom.server.instance", "Block"), "AIR"),
-            new ObjectReferenceImmutablePair<>(ClassName.get("net.minestom.server.fluid", "Fluid"), "EMPTY"),
-            new ObjectReferenceImmutablePair<>(ClassName.get("net.minestom.server.item", "Material"), "AIR"),
-            new ObjectReferenceImmutablePair<>(ClassName.get("net.minestom.server.item", "Enchantment"), null),
-            new ObjectReferenceImmutablePair<>(ClassName.get("net.minestom.server.attribute", "Attribute"), null),
-            new ObjectReferenceImmutablePair<>(ClassName.get("net.minestom.server.entity", "EntityType"), null),
-            new ObjectReferenceImmutablePair<>(ClassName.get("net.minestom.server.particle", "Particle"), null),
-            new ObjectReferenceImmutablePair<>(ClassName.get("net.minestom.server.potion", "PotionType"), null),
-            new ObjectReferenceImmutablePair<>(ClassName.get("net.minestom.server.potion", "PotionEffect"), null),
-            new ObjectReferenceImmutablePair<>(ClassName.get("net.minestom.server.sound", "SoundEvent"), null),
-            new ObjectReferenceImmutablePair<>(ClassName.get("net.minestom.server.statistic", "StatisticType"), null)
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegistryGenerator.class);
+    // Map of registry defaults
+    // MainTypeClassName - DefaultValue - RegistryClassName
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static final Triple<ClassName, String, ClassName>[] registries = new Triple[]{
+            new Triple(ClassName.get("net.minestom.server.instance.block", "Block"), "AIR", ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry", "Defaulted")),
+            new Triple(ClassName.get("net.minestom.server.fluid", "Fluid"), "EMPTY", ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry", "Defaulted")),
+            new Triple(ClassName.get("net.minestom.server.item", "Material"), "AIR", ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry", "Defaulted")),
+            new Triple(ClassName.get("net.minestom.server.item", "Enchantment"), null, ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry")),
+            new Triple(ClassName.get("net.minestom.server.attribute", "Attribute"), null, ClassName.get("net.minestom.server.registry", "MapRegistry")),
+            new Triple(ClassName.get("net.minestom.server.entity", "EntityType"), null, ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry")),
+            new Triple(ClassName.get("net.minestom.server.entity.metadata.villager", "VillagerProfession"), null, ClassName.get("net.minestom.server.registry", "MapRegistry")),
+            new Triple(ClassName.get("net.minestom.server.entity.metadata.villager", "VillagerType"), null, ClassName.get("net.minestom.server.registry", "MapRegistry")),
+            new Triple(ClassName.get("net.minestom.server.particle", "Particle"), null, ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry")),
+            new Triple(ClassName.get("net.minestom.server.potion", "PotionType"), "EMPTY", ClassName.get("net.minestom.server.registry", "MapRegistry", "Defaulted")),
+            new Triple(ClassName.get("net.minestom.server.potion", "PotionEffect"), null, ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry")),
+            new Triple(ClassName.get("net.minestom.server.sound", "SoundEvent"), null, ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry")),
+            new Triple(ClassName.get("net.minestom.server.statistic", "StatisticType"), null, ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry"))
     };
     private final File outputFolder;
 
@@ -58,42 +59,45 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
                 .addModifiers(Modifier.PUBLIC).addModifiers(Modifier.FINAL)
                 .addJavadoc("AUTOGENERATED");
 
-
         FieldSpec[] registryFields = new FieldSpec[registries.length];
-        FieldSpec[] simpleRegistryFields = new FieldSpec[registries.length];
-        // Hashmaps
+        // Generate Registries
         for (int i = 0; i < registries.length; i++) {
-            ClassName type = registries[i].first();
-
+            ClassName type = registries[i].getFirst();
+            String defaultValue = registries[i].getSecond();
+            ClassName registryType = registries[i].getThird();
+            CodeBlock init;
+            if (defaultValue != null) {
+                init = CodeBlock.builder()
+                        .addStatement(
+                                "new $T<>($T.$N)",
+                                registryType,
+                                type,
+                                defaultValue
+                        )
+                        .build();
+            } else {
+                init = CodeBlock.builder()
+                        .addStatement(
+                                "new $T<>()",
+                                registryType
+                        )
+                        .build();
+            }
             FieldSpec registryField = FieldSpec.builder(
                     ParameterizedTypeName.get(
-                            ClassName.get(Map.class),
-                            ClassName.get(NamespaceID.class),
+                            registryType,
                             type
                     ),
                     decapitalizeString(type.simpleName()) + "Registry" // e.g. blockRegistry, potionEffectRegistry
             )
                     .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
-                    .initializer("new $T<>()", ClassName.get(ConcurrentHashMap.class))
-                    .build();
-            FieldSpec simpleRegistryField = FieldSpec.builder(
-                    ParameterizedTypeName.get(
-                            ClassName.get(List.class),
-                            type
-                    ),
-                    decapitalizeString(type.simpleName()) + "SimpleRegistry" // e.g. blockSimpleRegistry, potionEffectSimpleRegistry
-            )
-                    .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
-                    .initializer("new $T<>()", ClassName.get(ArrayList.class))
+                    .initializer(init)
                     .build();
 
             registryFields[i] = registryField;
             registriesClass.addField(registryField);
-
-            simpleRegistryFields[i] = simpleRegistryField;
-            registriesClass.addField(simpleRegistryField);
         }
-
+        // Generate methods
 /*
             // Get examples:
             /** Returns 'AIR' if none match
@@ -114,10 +118,10 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
  */
 
         for (int i = 0; i < registries.length; i++) {
-            ClassName type = registries[i].first();
-            String defaultValue = registries[i].second();
+            ClassName type = registries[i].getFirst();
+            String defaultValue = registries[i].getSecond();
+            ClassName registryType = registries[i].getThird();
             FieldSpec registryField = registryFields[i];
-            FieldSpec simpleRegistryField = simpleRegistryFields[i];
             String typeName = type.simpleName();
 
             ParameterSpec namespaceIDParam = ParameterSpec.builder(namespaceIDClassName, "id").addAnnotation(NotNull.class).build();
@@ -128,14 +132,11 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
             // Getting
             {
                 // code
-                CodeBlock.Builder code = CodeBlock.builder();
                 Class<? extends Annotation> annotation;
                 if (defaultValue != null) {
                     annotation = NotNull.class;
-                    code.addStatement("return $N.getOrDefault($N, $T.$N)", registryField, namespaceIDParam, type, defaultValue);
                 } else {
                     annotation = Nullable.class;
-                    code.addStatement("return $N.get($N)", registryField, namespaceIDParam);
                 }
                 // javadoc
                 StringBuilder javadoc = new StringBuilder("Returns the corresponding ");
@@ -152,7 +153,7 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
                         .returns(type)
                         .addAnnotation(annotation)
                         .addParameter(stringIDParam)
-                        .addStatement("return get$N(NamespaceID.from($N))", typeName, stringIDParam)
+                        .addStatement("return $N.get($T.key($N))", registryField, ClassName.get("net.kyori.adventure.key", "Key"), stringIDParam)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .addJavadoc(javadoc.toString())
                         .build();
@@ -163,7 +164,7 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
                         .returns(type)
                         .addAnnotation(annotation)
                         .addParameter(namespaceIDParam)
-                        .addCode(code.build())
+                        .addStatement("return $N.get($N)", registryField, namespaceIDParam)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .addJavadoc(javadoc.toString())
                         .build());
@@ -173,93 +174,68 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
                         .returns(type)
                         .addAnnotation(annotation)
                         .addParameter(keyIDParam)
-                        .addStatement("return get$N(NamespaceID.from($N))", typeName, keyIDParam)
+                        .addStatement("return $N.get($N)", registryField, keyIDParam)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .addJavadoc(javadoc.toString().replace(" id.", " key."))
                         .build());
             }
-            // Registering
+            // Registration
             {
                 ParameterSpec typeParam = ParameterSpec.builder(type, typeName.toLowerCase()).addAnnotation(NotNull.class).build();
-                // code
-                CodeBlock.Builder code = CodeBlock.builder();
-                // check if key already exists
-                code.beginControlFlow("if ($N.containsKey($N))", registryField, namespaceIDParam);
-                code.addStatement("return false");
-                code.endControlFlow();
-                // check if value already exists
-                code.beginControlFlow("if ($N.containsValue($N))", registryField, typeParam);
-                code.addStatement("return false");
-                code.endControlFlow();
-                // Add value to hashmap
-                code.addStatement("$N.put($N, $N)", registryField, namespaceIDParam, typeParam);
-                code.addStatement("$N.add($N)", simpleRegistryField, typeParam);
-                code.addStatement("return true");
 
                 // javadoc
-                StringBuilder javadoc = new StringBuilder("Adds the given ");
-                javadoc.append(typeName).append(" to the registiry with the given id. ");
-                javadoc.append("Returns false if the ").append(typeName).append(" or the id is already registered.");
 
-                // string variant
+                // register method
+                String javadoc = "Adds the given " + typeName + " to the registiry with the given id. " +
+                        "Returns false if the " + typeName + " or the id is already registered.";
                 registriesClass.addMethod(MethodSpec.methodBuilder("register" + typeName)
                         .returns(TypeName.BOOLEAN)
-                        .addParameter(stringIDParam)
                         .addParameter(typeParam)
-                        .addStatement("return register$N(NamespaceID.from($N), $N)", typeName, stringIDParam, typeParam)
+                        .addStatement("return $N.register($N)", registryField, typeParam)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                        .addJavadoc(javadoc.toString())
-                        .build()
-                );
-
-                // NamespaceID variant
-                registriesClass.addMethod(MethodSpec.methodBuilder("register" + typeName)
-                        .returns(TypeName.BOOLEAN)
-                        .addParameter(namespaceIDParam)
-                        .addParameter(typeParam)
-                        .addCode(code.build())
-                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                        .addJavadoc(javadoc.toString())
-                        .build()
-                );
-
-                // Key variant
-                registriesClass.addMethod(MethodSpec.methodBuilder("register" + typeName)
-                        .returns(TypeName.BOOLEAN)
-                        .addParameter(keyIDParam)
-                        .addParameter(typeParam)
-                        .addStatement("return register$N(NamespaceID.from($N), $N)", typeName, keyIDParam, typeParam)
-                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                        .addJavadoc(javadoc.toString().replace(" id\\.", " key."))
+                        .addJavadoc(javadoc)
                         .build()
                 );
             }
 
-            // getNumericalId & fromNumericalId methods
-            {
-                registriesClass.addMethod(MethodSpec.methodBuilder("get" + typeName + "NumericalId")
-                        .returns(TypeName.INT)
-                        .addParameter(ParameterSpec.builder(type, typeName.toLowerCase()).addAnnotation(NotNull.class).build())
-                        .addStatement(
-                                "return $N.indexOf(" + typeName.toLowerCase() + ")",
-                                simpleRegistryField
-                        )
-                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                        .build()
+            // Is it an IDMapRegistry
+            if (registryType.topLevelClassName().simpleName().contains("Id")) {
+                // getNumericalId & fromNumericalId methods
+                registriesClass.addMethod(
+                        MethodSpec.methodBuilder("get" + typeName + "Id")
+                                .returns(TypeName.INT)
+                                .addParameter(ParameterSpec.builder(type, typeName.toLowerCase()).addAnnotation(NotNull.class).build())
+                                .addStatement(
+                                        "return $N.getId(" + typeName.toLowerCase() + ")",
+                                        registryField
+                                )
+                                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                                .build()
                 );
-                registriesClass.addMethod(MethodSpec.methodBuilder("from" + typeName + "NumericalId")
-                        .returns(type).addAnnotation(Nullable.class)
-                        .addParameter(TypeName.INT, "id")
-                        .beginControlFlow("try")
-                        .addStatement(
-                                "return $N.get(id)",
-                                simpleRegistryField
-                        )
-                        .nextControlFlow("catch ($T e)", ClassName.get(IndexOutOfBoundsException.class))
-                        .addStatement("return null")
-                        .endControlFlow()
-                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                        .build()
+                registriesClass.addMethod(
+                        MethodSpec.methodBuilder("get" + typeName)
+                                .returns(type).addAnnotation(Nullable.class)
+                                .addParameter(TypeName.INT, "id")
+                                .addStatement(
+                                        "return $N.get((short) id)",
+                                        registryField
+                                )
+                                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                                .build()
+                );
+            }
+            // Values method
+            {
+                registriesClass.addMethod(
+                        MethodSpec.methodBuilder("get" + typeName + "s")
+                                .returns(ParameterizedTypeName.get(ClassName.get(List.class), type))
+                                .addAnnotation(Nullable.class)
+                                .addStatement(
+                                        "return $N.values()",
+                                        registryField
+                                )
+                                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                                .build()
                 );
             }
         }

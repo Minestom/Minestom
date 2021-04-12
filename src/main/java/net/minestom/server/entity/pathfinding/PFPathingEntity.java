@@ -33,7 +33,7 @@ public class PFPathingEntity implements IPathingEntity {
         this.navigator = navigator;
         this.entity = navigator.getEntity();
 
-        this.searchRange = getAttributeValue(Attribute.FOLLOW_RANGE);
+        this.searchRange = (float) getAttributeValue(Attribute.FOLLOW_RANGE);
     }
 
     public Position getTargetPosition() {
@@ -141,7 +141,7 @@ public class PFPathingEntity implements IPathingEntity {
         return new Capabilities() {
             @Override
             public float speed() {
-                return getAttributeValue(Attribute.MOVEMENT_SPEED);
+                return (float) getAttributeValue(Attribute.MOVEMENT_SPEED);
             }
 
             @Override
@@ -217,7 +217,7 @@ public class PFPathingEntity implements IPathingEntity {
         return (float) entity.getBoundingBox().getHeight();
     }
 
-    private float getAttributeValue(@NotNull Attribute attribute) {
+    private double getAttributeValue(@NotNull Attribute attribute) {
         if (entity instanceof LivingEntity) {
             return ((LivingEntity) entity).getAttributeValue(attribute);
         }

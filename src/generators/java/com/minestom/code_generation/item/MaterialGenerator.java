@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public final class MaterialGenerator extends MinestomCodeGenerator {
@@ -100,6 +101,49 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
+        // getName method
+        itemClass.addMethod(
+                MethodSpec.methodBuilder("getName")
+                        .addAnnotation(NotNull.class)
+                        .returns(ClassName.get(String.class))
+                        .addStatement("return this.id.asString()")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // getNumericalId
+        itemClass.addMethod(
+                MethodSpec.methodBuilder("getNumericalId")
+                        .returns(TypeName.INT)
+                        .addStatement(
+                                "return $T.getMaterialId(this)",
+                                ClassName.get("net.minestom.server.registry", "Registries")
+                        )
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // fromId Method
+        itemClass.addMethod(
+                MethodSpec.methodBuilder("fromId")
+                        .returns(itemClassName)
+                        .addAnnotation(Nullable.class)
+                        .addParameter(TypeName.INT, "id")
+                        .addStatement(
+                                "return $T.getMaterial(id)",
+                                ClassName.get("net.minestom.server.registry", "Registries")
+                        )
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        // values method
+        itemClass.addMethod(
+                MethodSpec.methodBuilder("values")
+                        .returns(ParameterizedTypeName.get(ClassName.get(List.class), itemClassName))
+                        .addStatement("return $T.getMaterials()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+
+        CodeBlock.Builder staticBlock = CodeBlock.builder();
         // Use data
         for (JsonElement i : items) {
             JsonObject item = i.getAsJsonObject();
@@ -118,7 +162,11 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                             item.get("maxStackSize").getAsInt()
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
+            // Add to static init.
+            staticBlock.addStatement("$T.registerMaterial($N)", ClassName.get("net.minestom.server.registry", "Registries"), itemName);
         }
+
+        itemClass.addStaticBlock(staticBlock.build());
 
         // Write files to outputFolder
         writeFiles(

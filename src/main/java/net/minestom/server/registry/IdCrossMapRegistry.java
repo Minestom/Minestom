@@ -1,25 +1,58 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class IdCrossMapRegistry<T extends ShortKeyed> extends MapRegistry<T> implements IdCrossRegistry.Writable<T> {
-    private final T[] idToValue = (T[]) new Object[Short.MAX_VALUE];
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class IdCrossMapRegistry<T extends Keyed> extends MapRegistry<T> implements IdCrossRegistry.Writable<T> {
+    private final List<T> values = Collections.synchronizedList(new ArrayList<>(Short.MAX_VALUE));
 
     @Override
+    @Nullable
     public T get(short id) {
-        return idToValue[id];
+        try {
+            return values.get(id);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public short getId(T obj) {
+        return (short) values.indexOf(obj);
+    }
+
+    @Override
+    public boolean register(short id, @NotNull T value) {
+        if (!super.register(value)) {
+            return false;
+        } else if (values.contains(value)) {
+            return false;
+        } else if (values.get(id) != null) {
+            return false;
+        }
+        values.add(id, value);
+        return true;
     }
 
     @Override
     public boolean register(@NotNull T value) {
-        if (!super.register(value))
+        if (!super.register(value)) {
             return false;
-        idToValue[value.getShortId()] = value;
+        } else if (values.contains(value)) {
+            return false;
+        }
+        // We don't care about the id of this time just take the next possible Id.
+        values.add(value);
         return true;
     }
 
-    public static class Defaulted<T extends ShortKeyed> extends IdCrossMapRegistry<T> {
+    public static class Defaulted<T extends Keyed> extends IdCrossMapRegistry<T> {
         private final T defaultValue;
 
         public Defaulted(T defaultValue) {

@@ -2,7 +2,7 @@ package com.minestom.code_generation;
 
 import com.minestom.code_generation.attribute.AttributeGenerator;
 import com.minestom.code_generation.blocks.BlockGenerator;
-import com.minestom.code_generation.entity.EntityGenerator;
+import com.minestom.code_generation.entity.EntityTypeGenerator;
 import com.minestom.code_generation.entity.VillagerProfessionGenerator;
 import com.minestom.code_generation.entity.VillagerTypeGenerator;
 import com.minestom.code_generation.fluid.FluidGenerator;
@@ -10,12 +10,14 @@ import com.minestom.code_generation.item.EnchantmentGenerator;
 import com.minestom.code_generation.item.MaterialGenerator;
 import com.minestom.code_generation.map.MapColorsGenerator;
 import com.minestom.code_generation.particle.ParticleGenerator;
+import com.minestom.code_generation.potion.PotionEffectGenerator;
+import com.minestom.code_generation.potion.PotionTypeGenerator;
 import com.minestom.code_generation.registry.RegistryGenerator;
 import com.minestom.code_generation.sound.SoundGenerator;
+import com.minestom.code_generation.statistics.StatisticGenerator;
 
 import java.io.File;
 
-import static com.minestom.code_generation.MinestomCodeGenerator.DEFAULT_OUTPUT_FOLDER;
 import static com.minestom.code_generation.MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT;
 
 public class AllGenerators {
@@ -32,6 +34,8 @@ public class AllGenerators {
         if (args.length >= 2) {
             outputFolder = new File(args[1]);
         }
+
+        // FINISHED
         // Generate registries
         new RegistryGenerator(
                 outputFolder
@@ -46,6 +50,13 @@ public class AllGenerators {
                 new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_fluids.json"),
                 outputFolder
         ).generate();
+        // Generate block entities
+
+        // Generate entities
+        new EntityTypeGenerator(
+                new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_entities.json"),
+                outputFolder
+        ).generate();
         // Generate items
         new MaterialGenerator(
                 new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_items.json"),
@@ -54,6 +65,21 @@ public class AllGenerators {
         // Generate enchantments
         new EnchantmentGenerator(
                 new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_enchantments.json"),
+                outputFolder
+        ).generate();
+        // Generate attributes
+        new AttributeGenerator(
+                new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_attributes.json"),
+                outputFolder
+        ).generate();
+        // Generate potion effects
+        new PotionEffectGenerator(
+                new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_potion_effects.json"),
+                outputFolder
+        ).generate();
+        // Generate potions
+        new PotionTypeGenerator(
+                new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_potions.json"),
                 outputFolder
         ).generate();
         // Generate particles
@@ -66,16 +92,6 @@ public class AllGenerators {
                 new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_sounds.json"),
                 outputFolder
         ).generate();
-        // Generate attributes
-        new AttributeGenerator(
-                new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_attributes.json"),
-                outputFolder
-        ).generate();
-        // Generate entities
-        new EntityGenerator(
-                new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_entities.json"),
-                outputFolder
-        ).generate();
         // Generate villager professions
         new VillagerProfessionGenerator(
                 new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_villager_professions.json"),
@@ -86,12 +102,15 @@ public class AllGenerators {
                 new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_villager_types.json"),
                 outputFolder
         ).generate();
-
-        // FINISHED
+        // Generate statistics
+        new StatisticGenerator(
+                new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_custom_statistics.json"),
+                outputFolder
+        ).generate();
         // Generate map colours
         new MapColorsGenerator(
                 new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_map_colors.json"),
-                DEFAULT_OUTPUT_FOLDER
+                outputFolder
         ).generate();
     }
 }

@@ -25,7 +25,7 @@ public class SoundEffectPacket implements ServerPacket {
     @NotNull
     public static SoundEffectPacket create(Source category, SoundEvent sound, Position position, float volume, float pitch) {
         SoundEffectPacket packet = new SoundEffectPacket();
-        packet.soundId = sound.getId();
+        packet.soundId = sound.getNumericalId();
         packet.soundSource = category;
         // *8 converts to fixed-point representation with 3 bits for fractional part
         packet.x = (int) position.getX();

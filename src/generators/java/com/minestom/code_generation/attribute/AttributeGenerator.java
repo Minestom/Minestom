@@ -125,6 +125,23 @@ public final class AttributeGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
+        // isShared
+        attributeClass.addMethod(
+                MethodSpec.methodBuilder("isShared")
+                        .addAnnotation(Deprecated.class)
+                        .returns(TypeName.BOOLEAN)
+                        .addStatement("return this.clientSyncable")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // values method
+        attributeClass.addMethod(
+                MethodSpec.methodBuilder("values")
+                        .returns(ParameterizedTypeName.get(ClassName.get(List.class), attributeClassName))
+                        .addStatement("return $T.getAttributes()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
         // Creating ClampedAttribute
         ClassName clampedAttributeClassName = ClassName.get("net.minestom.server.attribute", "ClampedAttribute");
 
@@ -169,6 +186,7 @@ public final class AttributeGenerator extends MinestomCodeGenerator {
                         .build()
         );
 
+        CodeBlock.Builder staticBlock = CodeBlock.builder();
         // Use data
         for (JsonElement a : attributes) {
             JsonObject attribute = a.getAsJsonObject();
@@ -208,7 +226,11 @@ public final class AttributeGenerator extends MinestomCodeGenerator {
                         ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
                 );
             }
+            // Add to static init.
+            staticBlock.addStatement("$T.registerAttribute($N)", ClassName.get("net.minestom.server.registry", "Registries"), attributeName);
         }
+        attributeClass.addStaticBlock(staticBlock.build());
+
         filesToWrite.add(JavaFile.builder("net.minestom.server.attribute", attributeClass.build()).build());
         filesToWrite.add(JavaFile.builder("net.minestom.server.attribute", clampedAttributeClass.build()).build());
 

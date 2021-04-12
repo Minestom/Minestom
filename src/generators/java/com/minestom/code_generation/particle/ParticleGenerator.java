@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public final class ParticleGenerator extends MinestomCodeGenerator {
@@ -94,17 +95,26 @@ public final class ParticleGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
-        CodeBlock.Builder code = CodeBlock.builder();
+        // values method
+        particleClass.addMethod(
+                MethodSpec.methodBuilder("values")
+                        .returns(ParameterizedTypeName.get(ClassName.get(List.class), particleClassName))
+                        .addStatement("return $T.getParticles()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+
+        CodeBlock.Builder staticBlock = CodeBlock.builder();
         // Use data
         for (JsonElement p : particles) {
             JsonObject particle = p.getAsJsonObject();
 
-            String itemName = particle.get("name").getAsString();
+            String particleName = particle.get("name").getAsString();
 
             particleClass.addField(
                     FieldSpec.builder(
                             particleClassName,
-                            itemName
+                            particleName
                     ).initializer(
                             "new $T($T.from($S))",
                             particleClassName,
@@ -112,12 +122,11 @@ public final class ParticleGenerator extends MinestomCodeGenerator {
                             particle.get("id").getAsString()
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
-            ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registries");
             // Add to static init.
-            code.addStatement("$T.registerParticle($N.getId(), $N)", registryClassName, itemName, itemName);
+            staticBlock.addStatement("$T.registerParticle($N)", ClassName.get("net.minestom.server.registry", "Registries"), particleName);
         }
 
-        particleClass.addStaticBlock(code.build());
+        particleClass.addStaticBlock(staticBlock.build());
 
         // Write files to outputFolder
         writeFiles(

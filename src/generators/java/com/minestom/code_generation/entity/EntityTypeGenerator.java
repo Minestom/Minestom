@@ -14,14 +14,11 @@ import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.BiFunction;
 
-public final class EntityGenerator extends MinestomCodeGenerator {
-    private static final Logger LOGGER = LoggerFactory.getLogger(EntityGenerator.class);
+public final class EntityTypeGenerator extends MinestomCodeGenerator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(EntityTypeGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", "particles.json");
     private static final Map<String, String> metadata = new HashMap<>() {{
@@ -177,15 +174,15 @@ public final class EntityGenerator extends MinestomCodeGenerator {
     private final File entitiesFile;
     private final File outputFolder;
 
-    public EntityGenerator() {
+    public EntityTypeGenerator() {
         this(null, null);
     }
 
-    public EntityGenerator(@Nullable File entitiesFile) {
+    public EntityTypeGenerator(@Nullable File entitiesFile) {
         this(entitiesFile, null);
     }
 
-    public EntityGenerator(@Nullable File entitiesFile, @Nullable File outputFolder) {
+    public EntityTypeGenerator(@Nullable File entitiesFile, @Nullable File outputFolder) {
         this.entitiesFile = Objects.requireNonNullElse(entitiesFile, DEFAULT_INPUT_FILE);
         this.outputFolder = Objects.requireNonNullElse(outputFolder, DEFAULT_OUTPUT_FOLDER);
     }
@@ -306,7 +303,78 @@ public final class EntityGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
-        CodeBlock.Builder code = CodeBlock.builder();
+        // getWidth method
+        entityClass.addMethod(
+                MethodSpec.methodBuilder("getWidth")
+                        .returns(TypeName.DOUBLE)
+                        .addStatement("return this.width")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // getHeight method
+        entityClass.addMethod(
+                MethodSpec.methodBuilder("getHeight")
+                        .returns(TypeName.DOUBLE)
+                        .addStatement("return this.height")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // getMetaConstructor method
+        entityClass.addMethod(
+                MethodSpec.methodBuilder("getMetaConstructor")
+                        .returns(
+                                ParameterizedTypeName.get(
+                                        ClassName.get(BiFunction.class),
+                                        ClassName.get("net.minestom.server.entity", "Entity"),
+                                        ClassName.get("net.minestom.server.entity", "Metadata"),
+                                        ClassName.get("net.minestom.server.entity.metadata", "EntityMeta")
+                                )
+                        )
+                        .addStatement("return this.metaConstructor")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // getSpawnType method
+        entityClass.addMethod(
+                MethodSpec.methodBuilder("getSpawnType")
+                        .returns(ClassName.get("net.minestom.server.entity", "EntitySpawnType"))
+                        .addStatement("return this.spawnType")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // getNumericalId
+        entityClass.addMethod(
+                MethodSpec.methodBuilder("getNumericalId")
+                        .returns(TypeName.INT)
+                        .addStatement(
+                                "return $T.getEntityTypeId(this)",
+                                ClassName.get("net.minestom.server.registry", "Registries")
+                        )
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // fromId Method
+        entityClass.addMethod(
+                MethodSpec.methodBuilder("fromId")
+                        .returns(entityClassName)
+                        .addAnnotation(Nullable.class)
+                        .addParameter(TypeName.INT, "id")
+                        .addStatement(
+                                "return $T.getEntityType(id)",
+                                ClassName.get("net.minestom.server.registry", "Registries")
+                        )
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        // values method
+        entityClass.addMethod(
+                MethodSpec.methodBuilder("values")
+                        .returns(ParameterizedTypeName.get(ClassName.get(List.class), entityClassName))
+                        .addStatement("return $T.getEntityTypes()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        CodeBlock.Builder staticBlock = CodeBlock.builder();
         // Use data
         for (JsonElement e : entities) {
             JsonObject entity = e.getAsJsonObject();
@@ -356,10 +424,10 @@ public final class EntityGenerator extends MinestomCodeGenerator {
             );
             ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registries");
             // Add to static init.
-            code.addStatement("$T.registerEntity($N.getId(), $N)", registryClassName, entityName, entityName);
+            staticBlock.addStatement("$T.registerEntityType($N)", registryClassName, entityName);
         }
 
-        entityClass.addStaticBlock(code.build());
+        entityClass.addStaticBlock(staticBlock.build());
 
         // Write files to outputFolder
         writeFiles(

@@ -114,7 +114,7 @@ public class AdventurePacketConvertor {
             return packet;
         } else {
             SoundEffectPacket packet = new SoundEffectPacket();
-            packet.soundId = minestomSound.getId();
+            packet.soundId = minestomSound.getNumericalId();
             packet.soundSource = sound.source();
             packet.x = (int) x;
             packet.y = (int) y;
@@ -138,7 +138,7 @@ public class AdventurePacketConvertor {
             throw new IllegalArgumentException("Sound must be a valid sound event.");
         } else {
             EntitySoundEffectPacket packet = new EntitySoundEffectPacket();
-            packet.soundId = soundEvent.getId();
+            packet.soundId = soundEvent.getNumericalId();
             packet.soundSource = sound.source();
             packet.entityId = entity.getEntityId();
             packet.volume = sound.volume();

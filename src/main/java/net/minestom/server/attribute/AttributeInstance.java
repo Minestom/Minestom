@@ -17,13 +17,13 @@ public class AttributeInstance {
     private final Attribute attribute;
     private final Map<UUID, AttributeModifier> modifiers = new HashMap<>();
     private final Consumer<AttributeInstance> propertyChangeListener;
-    private float baseValue;
-    private float cachedValue = 0.0f;
+    private double baseValue;
+    private double cachedValue = 0.0f;
 
     public AttributeInstance(@NotNull Attribute attribute, @Nullable Consumer<AttributeInstance> listener) {
         this.attribute = attribute;
         this.propertyChangeListener = listener;
-        this.baseValue = attribute.getDefaultValue();
+        this.baseValue = (float) attribute.getDefaultValue();
         refreshCachedValue();
     }
 
@@ -43,7 +43,7 @@ public class AttributeInstance {
      * @return the instance base value
      * @see #setBaseValue(float)
      */
-    public float getBaseValue() {
+    public double getBaseValue() {
         return baseValue;
     }
 
@@ -97,7 +97,7 @@ public class AttributeInstance {
      *
      * @return the attribute value
      */
-    public float getValue() {
+    public double getValue() {
         return cachedValue;
     }
 
@@ -106,13 +106,13 @@ public class AttributeInstance {
      */
     protected void refreshCachedValue() {
         final Collection<AttributeModifier> modifiers = getModifiers();
-        float base = getBaseValue();
+        double base = getBaseValue();
 
         for (var modifier : modifiers.stream().filter(mod -> mod.getOperation() == AttributeOperation.ADDITION).toArray(AttributeModifier[]::new)) {
             base += modifier.getAmount();
         }
 
-        float result = base;
+        double result = base;
 
         for (var modifier : modifiers.stream().filter(mod -> mod.getOperation() == AttributeOperation.MULTIPLY_BASE).toArray(AttributeModifier[]::new)) {
             result += (base * modifier.getAmount());
@@ -120,8 +120,14 @@ public class AttributeInstance {
         for (var modifier : modifiers.stream().filter(mod -> mod.getOperation() == AttributeOperation.MULTIPLY_TOTAL).toArray(AttributeModifier[]::new)) {
             result *= (1.0f + modifier.getAmount());
         }
-
-        this.cachedValue = Math.min(result, getAttribute().getMaxValue());
+        double v = result;
+        if (attribute instanceof ClampedAttribute) {
+            double maxValue = ((ClampedAttribute) attribute).getMaxValue();
+            double minValue = ((ClampedAttribute) attribute).getMinValue();
+            // Bypass vanilla limit client-side if needed (by sending the max/min value allowed)
+            v = Math.max(Math.min(result, maxValue), minValue);
+        }
+        this.cachedValue = v;
 
         // Signal entity
         if (propertyChangeListener != null) {

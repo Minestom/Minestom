@@ -7,13 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import com.minestom.code_generation.MinestomCodeGenerator;
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.CodeBlock;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -24,6 +18,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
@@ -59,7 +54,6 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
-        ClassName keyIDClassName = ClassName.get("net.kyori.adventure.key", "Key");
 
         JsonArray villagerProfessions;
         try {
@@ -89,7 +83,7 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
         // Override key method (adventure)
         villagerProfessionClass.addMethod(
                 MethodSpec.methodBuilder("key")
-                        .returns(keyIDClassName)
+                        .returns(ClassName.get("net.kyori.adventure.key", "Key"))
                         .addAnnotation(Override.class)
                         .addAnnotation(NotNull.class)
                         .addStatement("return this.id")
@@ -105,7 +99,15 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
-        CodeBlock.Builder code = CodeBlock.builder();
+        // values method
+        villagerProfessionClass.addMethod(
+                MethodSpec.methodBuilder("values")
+                        .returns(ParameterizedTypeName.get(ClassName.get(List.class), villagerProfessionClassName))
+                        .addStatement("return $T.getVillagerProfessions()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        CodeBlock.Builder staticBlock = CodeBlock.builder();
         // Use data
         for (JsonElement vp : villagerProfessions) {
             JsonObject villagerProfession = vp.getAsJsonObject();
@@ -125,10 +127,10 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
             );
             ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registries");
             // Add to static init.
-            code.addStatement("$T.registerVillagerProfession($N.getId(), $N)", registryClassName, villagerProfessionName, villagerProfessionName);
+            staticBlock.addStatement("$T.registerVillagerProfession($N)", registryClassName, villagerProfessionName);
         }
 
-        villagerProfessionClass.addStaticBlock(code.build());
+        villagerProfessionClass.addStaticBlock(staticBlock.build());
 
         // Write files to outputFolder
         writeFiles(

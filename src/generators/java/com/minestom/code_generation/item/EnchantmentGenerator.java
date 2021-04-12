@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public final class EnchantmentGenerator extends MinestomCodeGenerator {
@@ -94,6 +95,40 @@ public final class EnchantmentGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
+        // getNumericalId
+        enchantmentClass.addMethod(
+                MethodSpec.methodBuilder("getNumericalId")
+                        .returns(TypeName.INT)
+                        .addStatement(
+                                "return $T.getEnchantmentId(this)",
+                                ClassName.get("net.minestom.server.registry", "Registries")
+                        )
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // fromId Method
+        enchantmentClass.addMethod(
+                MethodSpec.methodBuilder("fromId")
+                        .returns(enchantmentClassName)
+                        .addAnnotation(Nullable.class)
+                        .addParameter(TypeName.INT, "id")
+                        .addStatement(
+                                "return $T.getEnchantment(id)",
+                                ClassName.get("net.minestom.server.registry", "Registries")
+                        )
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        // values method
+        enchantmentClass.addMethod(
+                MethodSpec.methodBuilder("values")
+                        .returns(ParameterizedTypeName.get(ClassName.get(List.class), enchantmentClassName))
+                        .addStatement("return $T.getEnchantments()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+
+        CodeBlock.Builder staticBlock = CodeBlock.builder();
         // Use data
         for (JsonElement e : enchantments) {
             JsonObject item = e.getAsJsonObject();
@@ -111,7 +146,11 @@ public final class EnchantmentGenerator extends MinestomCodeGenerator {
                             item.get("id").getAsString()
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
+            // Add to static init.
+            staticBlock.addStatement("$T.registerEnchantment($N)", ClassName.get("net.minestom.server.registry", "Registries"), enchantmentName);
         }
+
+        enchantmentClass.addStaticBlock(staticBlock.build());
 
         // Write files to outputFolder
         writeFiles(

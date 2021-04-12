@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public final class VillagerTypeGenerator extends MinestomCodeGenerator {
@@ -49,7 +50,6 @@ public final class VillagerTypeGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
-        ClassName keyIDClassName = ClassName.get("net.kyori.adventure.key", "Key");
 
         JsonArray villagerTypes;
         try {
@@ -79,7 +79,7 @@ public final class VillagerTypeGenerator extends MinestomCodeGenerator {
         // Override key method (adventure)
         villagerTypeClass.addMethod(
                 MethodSpec.methodBuilder("key")
-                        .returns(keyIDClassName)
+                        .returns(ClassName.get("net.kyori.adventure.key", "Key"))
                         .addAnnotation(Override.class)
                         .addAnnotation(NotNull.class)
                         .addStatement("return this.id")
@@ -95,7 +95,15 @@ public final class VillagerTypeGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
-        CodeBlock.Builder code = CodeBlock.builder();
+        // values method
+        villagerTypeClass.addMethod(
+                MethodSpec.methodBuilder("values")
+                        .returns(ParameterizedTypeName.get(ClassName.get(List.class), villagerTypeClassName))
+                        .addStatement("return $T.getVillagerTypes()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        CodeBlock.Builder staticBlock = CodeBlock.builder();
         // Use data
         for (JsonElement vp : villagerTypes) {
             JsonObject villagerProfession = vp.getAsJsonObject();
@@ -115,10 +123,10 @@ public final class VillagerTypeGenerator extends MinestomCodeGenerator {
             );
             ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registries");
             // Add to static init.
-            code.addStatement("$T.registerVillagerType($N.getId(), $N)", registryClassName, villagerProfessionName, villagerProfessionName);
+            staticBlock.addStatement("$T.registerVillagerType($N)", registryClassName, villagerProfessionName);
         }
 
-        villagerTypeClass.addStaticBlock(code.build());
+        villagerTypeClass.addStaticBlock(staticBlock.build());
 
         // Write files to outputFolder
         writeFiles(

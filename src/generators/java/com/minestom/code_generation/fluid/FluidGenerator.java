@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public final class FluidGenerator extends MinestomCodeGenerator {
@@ -94,16 +95,50 @@ public final class FluidGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
+        // getNumericalId
+        fluidClass.addMethod(
+                MethodSpec.methodBuilder("getNumericalId")
+                        .returns(TypeName.INT)
+                        .addStatement(
+                                "return $T.getFluidId(this)",
+                                ClassName.get("net.minestom.server.registry", "Registries")
+                        )
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // fromId Method
+        fluidClass.addMethod(
+                MethodSpec.methodBuilder("fromId")
+                        .returns(fluidClassName)
+                        .addAnnotation(Nullable.class)
+                        .addParameter(TypeName.INT, "id")
+                        .addStatement(
+                                "return $T.getFluid(id)",
+                                ClassName.get("net.minestom.server.registry", "Registries")
+                        )
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        // values method
+        fluidClass.addMethod(
+                MethodSpec.methodBuilder("values")
+                        .returns(ParameterizedTypeName.get(ClassName.get(List.class), fluidClassName))
+                        .addStatement("return $T.getFluids()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+
+        CodeBlock.Builder staticBlock = CodeBlock.builder();
         // Use data
         for (JsonElement f : fluids) {
             JsonObject fluid = f.getAsJsonObject();
 
-            String itemName = fluid.get("name").getAsString();
+            String fluidName = fluid.get("name").getAsString();
 
             fluidClass.addField(
                     FieldSpec.builder(
                             fluidClassName,
-                            itemName
+                            fluidName
                     ).initializer(
                             "new $T($T.from($S))",
                             fluidClassName,
@@ -111,7 +146,11 @@ public final class FluidGenerator extends MinestomCodeGenerator {
                             fluid.get("id").getAsString()
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
+            // Add to static init.
+            staticBlock.addStatement("$T.registerFluid($N)", ClassName.get("net.minestom.server.registry", "Registries"), fluidName);
         }
+
+        fluidClass.addStaticBlock(staticBlock.build());
 
         // Write files to outputFolder
         writeFiles(

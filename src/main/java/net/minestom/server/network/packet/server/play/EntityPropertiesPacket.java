@@ -1,11 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.attribute.Attribute;
-import net.minestom.server.attribute.AttributeInstance;
-import net.minestom.server.attribute.AttributeModifier;
-import net.minestom.server.attribute.AttributeOperation;
+import net.minestom.server.attribute.*;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Readable;
@@ -53,12 +51,16 @@ public class EntityPropertiesPacket implements ServerPacket {
         public AttributeInstance instance;
 
         public void write(BinaryWriter writer) {
-            float maxValue = attribute.getMaxValue();
+            double v = value;
+            if (attribute instanceof ClampedAttribute) {
+                double maxValue = ((ClampedAttribute) attribute).getMaxValue();
+                double minValue = ((ClampedAttribute) attribute).getMinValue();
+                // Bypass vanilla limit client-side if needed (by sending the max/min value allowed)
+                v = Math.max(Math.min(value, maxValue), minValue);
+            }
 
-            // Bypass vanilla limit client-side if needed (by sending the max value allowed)
-            final double v = value > maxValue ? maxValue : value;
 
-            writer.writeSizedString(attribute.getKey());
+            writer.writeSizedString(attribute.getId().getDomain());
             writer.writeDouble(v);
 
             {
@@ -76,7 +78,7 @@ public class EntityPropertiesPacket implements ServerPacket {
         @Override
         public void read(@NotNull BinaryReader reader) {
             String key = reader.readSizedString(Integer.MAX_VALUE);
-            attribute = Attribute.fromKey(key);
+            attribute = Registries.getAttribute(key); //TODO: Static
 
             value = reader.readDouble();
 

@@ -20,7 +20,7 @@ public class EntityEffectPacket implements ServerPacket {
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);
-        writer.writeByte((byte) potion.getEffect().getId());
+        writer.writeByte((byte) potion.getEffect().getNumericalId());
         writer.writeByte(potion.getAmplifier());
         writer.writeVarInt(potion.getDuration());
         writer.writeByte(potion.getFlags());
