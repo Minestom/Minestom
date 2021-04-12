@@ -56,10 +56,6 @@ public class Inventory extends AbstractInventory implements Viewable {
         this.offset = getSize();
     }
 
-    /**
-     * @deprecated use {@link Inventory#Inventory(InventoryType, Component)}
-     */
-    @Deprecated
     public Inventory(@NotNull InventoryType inventoryType, @NotNull String title) {
         this(inventoryType, Component.text(title));
     }
