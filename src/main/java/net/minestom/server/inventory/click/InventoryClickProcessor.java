@@ -572,7 +572,6 @@ public class InventoryClickProcessor {
                                 @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         InventoryClickEvent inventoryClickEvent = new InventoryClickEvent(inventory, player, slot, clickType, clicked, cursor);
         player.callEvent(InventoryClickEvent.class, inventoryClickEvent);
-        System.out.println("click");
     }
 
     public void clearCache(@NotNull Player player) {
