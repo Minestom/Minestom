@@ -97,6 +97,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private boolean answerKeepAlive;
 
     private String username;
+    private Component usernameComponent;
     protected final PlayerConnection playerConnection;
     // All the entities that this player can see
     protected final Set<Entity> viewableEntities = ConcurrentHashMap.newKeySet();
@@ -1283,13 +1284,22 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Gets the player's username.
+     * Gets the player's name as a component. This will either return the display name
+     * (if set) or a component holding the username.
      *
-     * @return the player's username
+     * @return the name
      */
     @Override
-    public @NotNull String getName() {
-        return username;
+    public @NotNull Component getName() {
+        if (this.displayName != null) {
+            return this.displayName;
+        } else {
+            if (this.usernameComponent == null) {
+                this.usernameComponent = Component.text(this.username);
+            }
+
+            return this.usernameComponent;
+        }
     }
 
     /**
@@ -1309,6 +1319,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setUsernameField(@NotNull String username) {
         this.username = username;
+        this.usernameComponent = null;
     }
 
     private void sendChangeGameStatePacket(@NotNull ChangeGameStatePacket.Reason reason, float value) {

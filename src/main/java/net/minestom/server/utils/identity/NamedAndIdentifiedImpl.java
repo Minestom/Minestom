@@ -1,5 +1,6 @@
 package net.minestom.server.utils.identity;
 
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -9,7 +10,9 @@ import java.util.UUID;
  * Simple implementation of {@link NamedAndIdentified}.
  */
 class NamedAndIdentifiedImpl implements NamedAndIdentified {
-    private final String name;
+    static final Component EMPTY = Component.empty();
+
+    private final Component name;
     private final UUID uuid;
 
     /**
@@ -17,15 +20,15 @@ class NamedAndIdentifiedImpl implements NamedAndIdentified {
      *
      * @param name the name
      * @param uuid the uuid
-     * @see NamedAndIdentified#of(String, UUID)
+     * @see NamedAndIdentified#of(Component, UUID)
      */
-    NamedAndIdentifiedImpl(@NotNull String name, @NotNull UUID uuid) {
+    NamedAndIdentifiedImpl(@NotNull Component name, @NotNull UUID uuid) {
         this.name = Objects.requireNonNull(name, "name cannot be null");
         this.uuid = Objects.requireNonNull(uuid, "uuid cannot be null");
     }
 
     @Override
-    public @NotNull String getName() {
+    public @NotNull Component getName() {
         return this.name;
     }
 

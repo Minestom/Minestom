@@ -1,13 +1,16 @@
 package net.minestom.server.utils.identity;
 
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
+import static net.minestom.server.utils.identity.NamedAndIdentifiedImpl.EMPTY;
+
 /**
  * An object with a string name and a {@link UUID} identity.
  */
-public interface NamedAndIdentified extends Named<String>, Identified {
+public interface NamedAndIdentified extends Named<Component>, Identified {
 
     /**
      * Creates a {@link NamedAndIdentified} instance with an empty name and a random UUID.
@@ -15,7 +18,7 @@ public interface NamedAndIdentified extends Named<String>, Identified {
      * @return the named and identified instance
      */
     static @NotNull NamedAndIdentified empty() {
-        return of("", UUID.randomUUID());
+        return of(EMPTY, UUID.randomUUID());
     }
 
     /**
@@ -24,7 +27,7 @@ public interface NamedAndIdentified extends Named<String>, Identified {
      * @param name the name
      * @return the named and identified instance
      */
-    static @NotNull NamedAndIdentified named(@NotNull String name) {
+    static @NotNull NamedAndIdentified named(@NotNull Component name) {
         return of(name, UUID.randomUUID());
     }
 
@@ -35,7 +38,7 @@ public interface NamedAndIdentified extends Named<String>, Identified {
      * @return the named and identified instance
      */
     static @NotNull NamedAndIdentified identified(@NotNull UUID uuid) {
-        return of("", uuid);
+        return of(EMPTY, uuid);
     }
 
     /**
@@ -45,7 +48,7 @@ public interface NamedAndIdentified extends Named<String>, Identified {
      * @param uuid the uuid
      * @return the named and identified instance
      */
-    static @NotNull NamedAndIdentified of(@NotNull String name, @NotNull UUID uuid) {
+    static @NotNull NamedAndIdentified of(@NotNull Component name, @NotNull UUID uuid) {
         return new NamedAndIdentifiedImpl(name, uuid);
     }
 }
