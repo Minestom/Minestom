@@ -66,6 +66,7 @@ import net.minestom.server.utils.*;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
+import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.instance.InstanceUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.player.PlayerUtils;
@@ -90,7 +91,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
-public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified {
+public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -1282,12 +1283,21 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Gets the player username.
+     * Gets the player's username.
      *
-     * @return the player username
+     * @return the player's username
      */
-    @NotNull
-    public String getUsername() {
+    @Override
+    public @NotNull String getName() {
+        return username;
+    }
+
+    /**
+     * Gets the player's username.
+     *
+     * @return the player's username
+     */
+    public @NotNull String getUsername() {
         return username;
     }
 
