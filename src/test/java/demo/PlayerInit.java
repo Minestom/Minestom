@@ -1,5 +1,6 @@
 package demo;
 
+import com.google.common.util.concurrent.AtomicDouble;
 import demo.generator.ChunkGeneratorDemo;
 import demo.generator.NoiseTestGenerator;
 import net.kyori.adventure.text.Component;
@@ -32,6 +33,7 @@ import net.minestom.server.item.metadata.CompassMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
@@ -88,9 +90,14 @@ public class PlayerInit {
 
     }
 
+    private static AtomicDouble LAST_TICK_TIME = new AtomicDouble();
+
     public static void init() {
         ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
         BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
+
+        MinecraftServer.getUpdateManager().addTickMonitor(tickMonitor ->
+                LAST_TICK_TIME.set(tickMonitor.getTickTime()));
 
         MinecraftServer.getSchedulerManager().buildTask(() -> {
 
@@ -102,7 +109,9 @@ public class PlayerInit {
             long ramUsage = benchmarkManager.getUsedMemory();
             ramUsage /= 1e6; // bytes to MB
 
-            final Component header = Component.text("RAM USAGE: " + ramUsage + " MB");
+            final Component header = Component.text("RAM USAGE: " + ramUsage + " MB")
+                    .append(Component.newline())
+                    .append(Component.text("TICK TIME: " + MathUtils.round(LAST_TICK_TIME.get(), 2) + "ms"));
             final Component footer = benchmarkManager.getCpuMonitoringMessage();
             Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
 
