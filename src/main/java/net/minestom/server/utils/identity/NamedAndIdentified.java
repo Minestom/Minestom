@@ -8,7 +8,7 @@ import java.util.UUID;
 import static net.minestom.server.utils.identity.NamedAndIdentifiedImpl.EMPTY;
 
 /**
- * An object with a string name and a {@link UUID} identity.
+ * An object with a {@link Component} name and a {@link UUID} identity.
  */
 public interface NamedAndIdentified extends Named<Component>, Identified {
 
