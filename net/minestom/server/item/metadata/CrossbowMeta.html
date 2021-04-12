@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
@@ -122,7 +122,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">net.minestom.server.item.metadata.ItemMeta</a></li>
+<li><a href="../ItemMeta.html" title="class in net.minestom.server.item">net.minestom.server.item.ItemMeta</a></li>
 <li>
 <ul class="inheritance">
 <li>net.minestom.server.item.metadata.CrossbowMeta</li>
@@ -136,17 +136,41 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Cloneable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Cloneable</a></code>, <code><a href="../../utils/clone/PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&lt;<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&gt;</code></dd>
+<dd><code><a href="../ItemMetaBuilder.Provider.html" title="interface in net.minestom.server.item">ItemMetaBuilder.Provider</a>&lt;<a href="SpawnEggMeta.Builder.html" title="class in net.minestom.server.item.metadata">SpawnEggMeta.Builder</a>&gt;</code>, <code><a href="../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a></code></dd>
 </dl>
 <hr>
 <pre>public class <span class="typeNameLabel">CrossbowMeta</span>
-extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></pre>
+extends <a href="../ItemMeta.html" title="class in net.minestom.server.item">ItemMeta</a>
+implements <a href="../ItemMetaBuilder.Provider.html" title="interface in net.minestom.server.item">ItemMetaBuilder.Provider</a>&lt;<a href="SpawnEggMeta.Builder.html" title="class in net.minestom.server.item.metadata">SpawnEggMeta.Builder</a>&gt;</pre>
 </li>
 </ul>
 </div>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="nested.class.summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<table class="memberSummary">
+<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Class</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="CrossbowMeta.Builder.html" title="class in net.minestom.server.item.metadata">CrossbowMeta.Builder</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -157,11 +181,18 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <table class="memberSummary">
 <caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
-<th class="colFirst" scope="col">Constructor</th>
+<th class="colFirst" scope="col">Modifier</th>
+<th class="colSecond" scope="col">Constructor</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">CrossbowMeta</a></span>()</code></th>
+<td class="colFirst"><code>protected </code></td>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.item.ItemMetaBuilder,boolean,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,boolean)">CrossbowMeta</a></span>&#8203;(@NotNull <a href="../ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a>&nbsp;metaBuilder,
+            boolean&nbsp;triple,
+            <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;projectile1,
+            <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;projectile2,
+            <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;projectile3,
+            boolean&nbsp;charged)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -183,105 +214,54 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clone()">clone</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Creates and returns a copy of this object.</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getProjectile1()">getProjectile1</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the first projectile.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>@NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getProjectile2()">getProjectile2</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the second projectile.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>@NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getProjectile3()">getProjectile3</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the third projectile.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasNbt()">hasNbt</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets if this meta object contains any useful data to send to the client.</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isCharged()">isCharged</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the crossbow is currently charged.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSimilar(net.minestom.server.item.metadata.ItemMeta)">isSimilar</a></span>&#8203;(@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</code></th>
-<td class="colLast">
-<div class="block">Gets if the two ItemMeta are similar.</div>
-</td>
-</tr>
-<tr id="i7" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isTriple()">isTriple</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if this crossbow is charged with 3 projectiles.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">read</a></span>&#8203;(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
-<td class="colLast">
-<div class="block">Reads nbt data from a compound.</div>
-</td>
-</tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCharged(boolean)">setCharged</a></span>&#8203;(boolean&nbsp;charged)</code></th>
-<td class="colLast">
-<div class="block">Makes the bow charged or uncharged.</div>
-</td>
-</tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setProjectile(net.minestom.server.item.ItemStack)">setProjectile</a></span>&#8203;(@NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;projectile)</code></th>
-<td class="colLast">
-<div class="block">Sets the projectile of this crossbow.</div>
-</td>
-</tr>
-<tr id="i11" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setProjectiles(net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">setProjectiles</a></span>&#8203;(@NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;projectile1,
-              @NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;projectile2,
-              @NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;projectile3)</code></th>
-<td class="colLast">
-<div class="block">Sets the triple projectiles of this crossbow.</div>
-</td>
-</tr>
-<tr id="i12" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">write</a></span>&#8203;(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</code></th>
-<td class="colLast">
-<div class="block">Writes nbt data to a compound.</div>
-</td>
-</tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.item.ItemMeta">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;net.minestom.server.item.<a href="../ItemMeta.html" title="class in net.minestom.server.item">ItemMeta</a></h3>
+<code><a href="../ItemMeta.html#builder()">builder</a>, <a href="../ItemMeta.html#equals(java.lang.Object)">equals</a>, <a href="../ItemMeta.html#get(net.minestom.server.item.ItemTag)">get</a>, <a href="../ItemMeta.html#getAttributes()">getAttributes</a>, <a href="../ItemMeta.html#getCanDestroy()">getCanDestroy</a>, <a href="../ItemMeta.html#getCanPlaceOn()">getCanPlaceOn</a>, <a href="../ItemMeta.html#getCustomModelData()">getCustomModelData</a>, <a href="../ItemMeta.html#getDamage()">getDamage</a>, <a href="../ItemMeta.html#getDisplayName()">getDisplayName</a>, <a href="../ItemMeta.html#getEnchantmentMap()">getEnchantmentMap</a>, <a href="../ItemMeta.html#getHideFlag()">getHideFlag</a>, <a href="../ItemMeta.html#getLore()">getLore</a>, <a href="../ItemMeta.html#getOrDefault(net.minestom.server.item.ItemTag,T)">getOrDefault</a>, <a href="../ItemMeta.html#hashCode()">hashCode</a>, <a href="../ItemMeta.html#isUnbreakable()">isUnbreakable</a>, <a href="../ItemMeta.html#toNBT()">toNBT</a>, <a href="../ItemMeta.html#toSNBT()">toSNBT</a>, <a href="../ItemMeta.html#with(java.util.function.Consumer)">with</a>, <a href="../ItemMeta.html#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
+<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
 </ul>
 </li>
 </ul>
@@ -299,13 +279,19 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;()">
+<a id="&lt;init&gt;(net.minestom.server.item.ItemMetaBuilder,boolean,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,boolean)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>CrossbowMeta</h4>
-<pre>public&nbsp;CrossbowMeta()</pre>
+<pre>protected&nbsp;CrossbowMeta&#8203;(@NotNull
+                       @NotNull <a href="../ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a>&nbsp;metaBuilder,
+                       boolean&nbsp;triple,
+                       <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;projectile1,
+                       <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;projectile2,
+                       <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;projectile3,
+                       boolean&nbsp;charged)</pre>
 </li>
 </ul>
 </li>
@@ -318,42 +304,6 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="setProjectile(net.minestom.server.item.ItemStack)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setProjectile</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setProjectile&#8203;(@NotNull
-                          @NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;projectile)</pre>
-<div class="block">Sets the projectile of this crossbow.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>projectile</code> - the projectile of the crossbow</dd>
-</dl>
-</li>
-</ul>
-<a id="setProjectiles(net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setProjectiles</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setProjectiles&#8203;(@NotNull
-                           @NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;projectile1,
-                           @NotNull
-                           @NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;projectile2,
-                           @NotNull
-                           @NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;projectile3)</pre>
-<div class="block">Sets the triple projectiles of this crossbow.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>projectile1</code> - the projectile 1</dd>
-<dd><code>projectile2</code> - the projectile 2</dd>
-<dd><code>projectile3</code> - the projectile 3</dd>
-</dl>
-</li>
-</ul>
 <a id="isTriple()">
 <!--   -->
 </a>
@@ -374,11 +324,12 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <ul class="blockList">
 <li class="blockList">
 <h4>getProjectile1</h4>
-<pre class="methodSignature">public&nbsp;<a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getProjectile1()</pre>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getProjectile1()</pre>
 <div class="block">Gets the first projectile.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the first projectile, null if not present</dd>
+<dd>the first projectile</dd>
 </dl>
 </li>
 </ul>
@@ -388,11 +339,12 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <ul class="blockList">
 <li class="blockList">
 <h4>getProjectile2</h4>
-<pre class="methodSignature">public&nbsp;<a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getProjectile2()</pre>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getProjectile2()</pre>
 <div class="block">Gets the second projectile.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the second projectile, null if not present</dd>
+<dd>the second projectile</dd>
 </dl>
 </li>
 </ul>
@@ -402,18 +354,19 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <ul class="blockList">
 <li class="blockList">
 <h4>getProjectile3</h4>
-<pre class="methodSignature">public&nbsp;<a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getProjectile3()</pre>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getProjectile3()</pre>
 <div class="block">Gets the third projectile.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the third projectile, null if not present</dd>
+<dd>the third projectile</dd>
 </dl>
 </li>
 </ul>
 <a id="isCharged()">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>isCharged</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isCharged()</pre>
@@ -421,118 +374,6 @@ extends <a href="ItemMeta.html" title="class in net.minestom.server.item.metadat
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the crossbow is charged, false otherwise</dd>
-</dl>
-</li>
-</ul>
-<a id="setCharged(boolean)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setCharged</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setCharged&#8203;(boolean&nbsp;charged)</pre>
-<div class="block">Makes the bow charged or uncharged.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>charged</code> - true to make the crossbow charged, false otherwise</dd>
-</dl>
-</li>
-</ul>
-<a id="hasNbt()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>hasNbt</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;hasNbt()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#hasNbt()">ItemMeta</a></code></span></div>
-<div class="block">Gets if this meta object contains any useful data to send to the client.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="ItemMeta.html#hasNbt()">hasNbt</a></code>&nbsp;in class&nbsp;<code><a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if this item has nbt data, false otherwise</dd>
-</dl>
-</li>
-</ul>
-<a id="isSimilar(net.minestom.server.item.metadata.ItemMeta)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isSimilar</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;isSimilar&#8203;(@NotNull
-                         @NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;itemMeta)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#isSimilar(net.minestom.server.item.metadata.ItemMeta)">ItemMeta</a></code></span></div>
-<div class="block">Gets if the two ItemMeta are similar.
- <p>
- It is used by <a href="../ItemStack.html#isSimilar(net.minestom.server.item.ItemStack)"><code>ItemStack.isSimilar(ItemStack)</code></a>.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="ItemMeta.html#isSimilar(net.minestom.server.item.metadata.ItemMeta)">isSimilar</a></code>&nbsp;in class&nbsp;<code><a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>itemMeta</code> - the second item meta to check</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the two meta are similar, false otherwise</dd>
-</dl>
-</li>
-</ul>
-<a id="read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>read</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;read&#8203;(@NotNull
-                 @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">ItemMeta</a></code></span></div>
-<div class="block">Reads nbt data from a compound.
- <p>
- WARNING: it is possible that it contains no useful data,
- it has to be checked before getting anything.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="ItemMeta.html#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">read</a></code>&nbsp;in class&nbsp;<code><a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>compound</code> - the compound containing the data</dd>
-</dl>
-</li>
-</ul>
-<a id="write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>write</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
-                  @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;compound)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">ItemMeta</a></code></span></div>
-<div class="block">Writes nbt data to a compound.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="ItemMeta.html#write(org.jglrxavpok.hephaistos.nbt.NBTCompound)">write</a></code>&nbsp;in class&nbsp;<code><a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>compound</code> - the compound receiving the item meta data</dd>
-</dl>
-</li>
-</ul>
-<a id="clone()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>clone</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&nbsp;clone()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ItemMeta.html#clone()">ItemMeta</a></code></span></div>
-<div class="block">Creates and returns a copy of this object.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../utils/clone/PublicCloneable.html#clone()">clone</a></code>&nbsp;in interface&nbsp;<code><a href="../../utils/clone/PublicCloneable.html" title="interface in net.minestom.server.utils.clone">PublicCloneable</a>&lt;<a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a>&gt;</code></dd>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="ItemMeta.html#clone()">clone</a></code>&nbsp;in class&nbsp;<code><a href="ItemMeta.html" title="class in net.minestom.server.item.metadata">ItemMeta</a></code></dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>A clone of this instance.</dd>
 </dl>
 </li>
 </ul>
@@ -587,7 +428,7 @@ public&nbsp;@NotNull <a href="ItemMeta.html" title="class in net.minestom.server
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>

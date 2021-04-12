@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -208,13 +208,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromNBT(org.jglrxavpok.hephaistos.nbt.NBT)">fromNBT</a></span>&#8203;(@NotNull org.jglrxavpok.hephaistos.nbt.NBT&nbsp;nbt)</code></th>
-<td class="colLast">
-<div class="block">Converts a nbt object to its raw value.</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadAllItems(org.jglrxavpok.hephaistos.nbt.NBTList,net.minestom.server.inventory.Inventory)">loadAllItems</a></span>&#8203;(@NotNull org.jglrxavpok.hephaistos.nbt.NBTList&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound&gt;&nbsp;items,
             @NotNull <a href="../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;destination)</code></th>
@@ -222,20 +215,27 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <div class="block">Loads all the items from the 'items' list into the given inventory</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadDataIntoItem(net.minestom.server.item.ItemStack,org.jglrxavpok.hephaistos.nbt.NBTCompound)">loadDataIntoItem</a></span>&#8203;(@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;item,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadDataIntoMeta(net.minestom.server.item.ItemMetaBuilder,org.jglrxavpok.hephaistos.nbt.NBTCompound)">loadDataIntoMeta</a></span>&#8203;(@NotNull <a href="../item/ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a>&nbsp;metaBuilder,
                 @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbt)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadEnchantments(org.jglrxavpok.hephaistos.nbt.NBTList,net.minestom.server.utils.NBTUtils.EnchantmentSetter)">loadEnchantments</a></span>&#8203;(org.jglrxavpok.hephaistos.nbt.NBTList&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound&gt;&nbsp;enchantments,
                 <a href="NBTUtils.EnchantmentSetter.html" title="interface in net.minestom.server.utils">NBTUtils.EnchantmentSetter</a>&nbsp;setter)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>static @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadItem(net.minestom.server.item.Material,int,org.jglrxavpok.hephaistos.nbt.NBTCompound)">loadItem</a></span>&#8203;(@NotNull <a href="../item/Material.html" title="enum in net.minestom.server.item">Material</a>&nbsp;material,
+        int&nbsp;count,
+        @Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbtCompound)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code>static @Nullable <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<td class="colFirst"><code>static @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readItemStack(net.minestom.server.utils.binary.BinaryReader)">readItemStack</a></span>&#8203;(@NotNull <a href="binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -247,30 +247,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveDataIntoNBT(net.minestom.server.item.ItemStack,org.jglrxavpok.hephaistos.nbt.NBTCompound)">saveDataIntoNBT</a></span>&#8203;(@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
-               @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;itemNBT)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>static @Nullable org.jglrxavpok.hephaistos.nbt.NBT</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toNBT(java.lang.Object,java.lang.Class,boolean)">toNBT</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;value,
-     @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&nbsp;type,
-     boolean&nbsp;supportDataType)</code></th>
-<td class="colLast">
-<div class="block">Converts an object into its <code>NBT</code> equivalent.</div>
-</td>
-</tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeEnchant(org.jglrxavpok.hephaistos.nbt.NBTCompound,java.lang.String,java.util.Map)">writeEnchant</a></span>&#8203;(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbt,
             @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;listName,
             @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="../item/Enchantment.html" title="enum in net.minestom.server.item">Enchantment</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Short.html?is-external=true" title="class or interface in java.lang" class="externalLink">Short</a>&gt;&nbsp;enchantmentMap)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeItemStack(net.minestom.server.utils.binary.BinaryWriter,net.minestom.server.item.ItemStack)">writeItemStack</a></span>&#8203;(<a href="binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;packet,
-              <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -385,19 +364,33 @@ public static&nbsp;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/a
 <ul class="blockList">
 <li class="blockList">
 <h4>readItemStack</h4>
-<pre class="methodSignature">@Nullable
-public static&nbsp;@Nullable <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;readItemStack&#8203;(@NotNull
-                                                @NotNull <a href="binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</pre>
+<pre class="methodSignature">@NotNull
+public static&nbsp;@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;readItemStack&#8203;(@NotNull
+                                               @NotNull <a href="binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</pre>
 </li>
 </ul>
-<a id="loadDataIntoItem(net.minestom.server.item.ItemStack,org.jglrxavpok.hephaistos.nbt.NBTCompound)">
+<a id="loadItem(net.minestom.server.item.Material,int,org.jglrxavpok.hephaistos.nbt.NBTCompound)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>loadDataIntoItem</h4>
-<pre class="methodSignature">public static&nbsp;void&nbsp;loadDataIntoItem&#8203;(@NotNull
-                                    @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;item,
+<h4>loadItem</h4>
+<pre class="methodSignature">@NotNull
+public static&nbsp;@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;loadItem&#8203;(@NotNull
+                                          @NotNull <a href="../item/Material.html" title="enum in net.minestom.server.item">Material</a>&nbsp;material,
+                                          int&nbsp;count,
+                                          @Nullable
+                                          @Nullable org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbtCompound)</pre>
+</li>
+</ul>
+<a id="loadDataIntoMeta(net.minestom.server.item.ItemMetaBuilder,org.jglrxavpok.hephaistos.nbt.NBTCompound)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>loadDataIntoMeta</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;loadDataIntoMeta&#8203;(@NotNull
+                                    @NotNull <a href="../item/ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a>&nbsp;metaBuilder,
                                     @NotNull
                                     @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbt)</pre>
 </li>
@@ -405,81 +398,11 @@ public static&nbsp;@Nullable <a href="../item/ItemStack.html" title="class in ne
 <a id="loadEnchantments(org.jglrxavpok.hephaistos.nbt.NBTList,net.minestom.server.utils.NBTUtils.EnchantmentSetter)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>loadEnchantments</h4>
 <pre class="methodSignature">public static&nbsp;void&nbsp;loadEnchantments&#8203;(org.jglrxavpok.hephaistos.nbt.NBTList&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound&gt;&nbsp;enchantments,
                                     <a href="NBTUtils.EnchantmentSetter.html" title="interface in net.minestom.server.utils">NBTUtils.EnchantmentSetter</a>&nbsp;setter)</pre>
-</li>
-</ul>
-<a id="writeItemStack(net.minestom.server.utils.binary.BinaryWriter,net.minestom.server.item.ItemStack)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>writeItemStack</h4>
-<pre class="methodSignature">public static&nbsp;void&nbsp;writeItemStack&#8203;(<a href="binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;packet,
-                                  <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
-</li>
-</ul>
-<a id="saveDataIntoNBT(net.minestom.server.item.ItemStack,org.jglrxavpok.hephaistos.nbt.NBTCompound)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>saveDataIntoNBT</h4>
-<pre class="methodSignature">public static&nbsp;void&nbsp;saveDataIntoNBT&#8203;(@NotNull
-                                   @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
-                                   @NotNull
-                                   @NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;itemNBT)</pre>
-</li>
-</ul>
-<a id="toNBT(java.lang.Object,java.lang.Class,boolean)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>toNBT</h4>
-<pre class="methodSignature">@Nullable
-public static&nbsp;@Nullable org.jglrxavpok.hephaistos.nbt.NBT&nbsp;toNBT&#8203;(@NotNull
-                                                                @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;value,
-                                                                @NotNull
-                                                                @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&nbsp;type,
-                                                                boolean&nbsp;supportDataType)</pre>
-<div class="block">Converts an object into its <code>NBT</code> equivalent.
- <p>
- If <code>type</code> is not a primitive type or primitive array and <code>supportDataType</code> is true,
- the data will be encoded with the appropriate <a href="../data/DataType.html" title="class in net.minestom.server.data"><code>DataType</code></a> into a byte array.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>value</code> - the value to convert</dd>
-<dd><code>type</code> - the type of the value, used to know which <a href="../data/DataType.html" title="class in net.minestom.server.data"><code>DataType</code></a> to use if <code>value</code> is not a primitive type</dd>
-<dd><code>supportDataType</code> - true to allow using a <a href="../data/DataType.html" title="class in net.minestom.server.data"><code>DataType</code></a> to encode <code>value</code> into a byte array if not a primitive type</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the converted value, null if <code>type</code> is not a primitive type and <code>supportDataType</code> is false</dd>
-</dl>
-</li>
-</ul>
-<a id="fromNBT(org.jglrxavpok.hephaistos.nbt.NBT)">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>fromNBT</h4>
-<pre class="methodSignature">@NotNull
-public static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;fromNBT&#8203;(@NotNull
-                                      @NotNull org.jglrxavpok.hephaistos.nbt.NBT&nbsp;nbt)</pre>
-<div class="block">Converts a nbt object to its raw value.
- <p>
- Currently support number, string, byte/int/long array.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>nbt</code> - the nbt tag to convert</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the value representation of a tag</dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - if the tag type is not supported</dd>
-</dl>
 </li>
 </ul>
 </li>
