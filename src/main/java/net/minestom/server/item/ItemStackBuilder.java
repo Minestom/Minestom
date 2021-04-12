@@ -99,6 +99,9 @@ public class ItemStackBuilder {
 
     @Contract(value = "-> new", pure = true)
     public @NotNull ItemStack build() {
+        if (amount <= 0)
+            return ItemStack.AIR;
+
         return new ItemStack(material, amount, metaBuilder.build());
     }
 

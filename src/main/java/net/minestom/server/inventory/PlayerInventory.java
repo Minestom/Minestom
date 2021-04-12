@@ -168,7 +168,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
     @Override
     protected synchronized void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
         Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
-                "The slot " + slot + " does not exist for player");
+                "The slot {0} does not exist for player", slot);
         Check.notNull(itemStack, "The ItemStack cannot be null, you can set air instead");
 
         EntityEquipmentPacket.Slot equipmentSlot;
