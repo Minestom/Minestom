@@ -60,6 +60,9 @@ public class CommandDispatcher {
         }
 
         this.commands.remove(command);
+
+        // Clear cache
+        this.cache.invalidateAll();
     }
 
     @NotNull
