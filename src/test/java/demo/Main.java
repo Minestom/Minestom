@@ -22,8 +22,6 @@ public class Main {
     public static void main(String[] args) {
         MinecraftServer minecraftServer = MinecraftServer.init();
 
-        // MinecraftServer.setShouldProcessNettyErrors(true);
-
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerCustomBlock(new CustomBlockSample());
         blockManager.registerCustomBlock(new UpdatableBlockDemo());
@@ -49,6 +47,7 @@ public class Main {
         commandManager.register(new EchoCommand());
         commandManager.register(new SummonCommand());
         commandManager.register(new RemoveCommand());
+        commandManager.register(new GiveCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 

@@ -79,10 +79,10 @@ public class ArgumentEntity extends Argument<EntityFinder> {
         argumentNode.properties = BinaryWriter.makeArray(packetWriter -> {
             byte mask = 0;
             if (this.isOnlySingleEntity()) {
-                mask += 1;
+                mask |= 0x01;
             }
             if (this.isOnlyPlayers()) {
-                mask += 2;
+                mask |= 0x02;
             }
             packetWriter.writeByte(mask);
         });

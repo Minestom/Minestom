@@ -49,7 +49,7 @@ public class ClientPlayPacketsHandler extends ClientPacketsHandler {
         register(0x27, ClientUpdateCommandBlockMinecartPacket::new);
         register(0x28, ClientCreativeInventoryActionPacket::new);
         //Update Jigsaw Block??
-        //Update Structure Block??
+        register(0x2A, ClientUpdateStructureBlockPacket::new);
         register(0x2B, ClientUpdateSignPacket::new);
         register(0x2C, ClientAnimationPacket::new);
         register(0x2D, ClientSpectatePacket::new);

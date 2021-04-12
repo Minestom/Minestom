@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 @SuppressWarnings("rawtypes")
 public class ArgumentEnum<E extends Enum> extends Argument<E> {
@@ -61,9 +61,9 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
         LOWER_CASED(name -> name.toLowerCase(Locale.ROOT)),
         UPPER_CASED(name -> name.toUpperCase(Locale.ROOT));
 
-        private final Function<String, String> formatter;
+        private final UnaryOperator<String> formatter;
 
-        Format(Function<String, String> formatter) {
+        Format(@NotNull UnaryOperator<String> formatter) {
             this.formatter = formatter;
         }
     }

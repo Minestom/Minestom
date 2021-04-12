@@ -14,7 +14,7 @@ public class SetSlotPacket implements ServerPacket {
     public ItemStack itemStack;
 
     public SetSlotPacket() {
-        itemStack = ItemStack.getAirItem();
+        itemStack = ItemStack.AIR;
     }
 
     @Override

@@ -5,192 +5,53 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.adventure.Localizable;
+import net.minestom.server.item.ItemMeta;
+import net.minestom.server.item.ItemMetaBuilder;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTString;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Supplier;
 
-public class WrittenBookMeta extends ItemMeta {
+public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provider<WrittenBookMeta.Builder> {
 
-    private boolean resolved;
-    private WrittenBookGeneration generation;
-    private String author;
-    private String title;
-    private List<Component> pages = new ArrayList<>();
+    private final boolean resolved;
+    private final WrittenBookGeneration generation;
+    private final String author;
+    private final String title;
+    private final List<Component> pages;
 
-    /**
-     * Gets if the book is resolved.
-     *
-     * @return true if the book is resolved, false otherwise
-     */
+    protected WrittenBookMeta(@NotNull ItemMetaBuilder metaBuilder, boolean resolved,
+                              @Nullable WrittenBookGeneration generation,
+                              @Nullable String author, @Nullable String title,
+                              @NotNull List<@NotNull Component> pages) {
+        super(metaBuilder);
+        this.resolved = resolved;
+        this.generation = generation;
+        this.author = author;
+        this.title = title;
+        this.pages = new ArrayList<>(pages);
+    }
+
     public boolean isResolved() {
         return resolved;
     }
 
-    /**
-     * Sets to true when the book (or a book from the stack)
-     * is opened for the first time after being created.
-     *
-     * @param resolved true to make the book resolved, false otherwise
-     */
-    public void setResolved(boolean resolved) {
-        this.resolved = resolved;
-    }
-
-    /**
-     * Gets the copy tier of the book.
-     *
-     * @return the copy tier of the book
-     */
-    public WrittenBookGeneration getGeneration() {
+    public @Nullable WrittenBookGeneration getGeneration() {
         return generation;
     }
 
-    /**
-     * Sets the copy tier of the book.
-     *
-     * @param generation the copy tier of the book
-     */
-    public void setGeneration(WrittenBookGeneration generation) {
-        this.generation = generation;
-    }
-
-    /**
-     * Gets the author of the book.
-     *
-     * @return the author of the book
-     */
-    public String getAuthor() {
+    public @Nullable String getAuthor() {
         return author;
     }
 
-    /**
-     * Sets the author of the book.
-     *
-     * @param author the author of the book
-     */
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    /**
-     * Gets the title of the book.
-     *
-     * @return the title of the book
-     */
-    public String getTitle() {
+    public @Nullable String getTitle() {
         return title;
     }
 
-    /**
-     * Sets the title of the book.
-     *
-     * @param title the title of the book
-     */
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    /**
-     * Gets an {@link ArrayList} containing all the pages.
-     * <p>
-     * The list is not modifiable as it is .
-     *
-     * @return a modifiable {@link ArrayList} with the pages of the book
-     */
-    @Deprecated
-    public List<Component> getPagesJson() {
-        return pages;
-    }
-
-    /**
-     * Sets the {@link ArrayList} containing the book pages.
-     *
-     * @param pages the array list containing the book pages
-     */
-    public void setPages(List<Component> pages) {
-        this.pages = pages;
-    }
-
-    @Override
-    public boolean hasNbt() {
-        return resolved || generation != null ||
-                author != null || title != null ||
-                !pages.isEmpty();
-    }
-
-    @Override
-    public boolean isSimilar(@NotNull ItemMeta itemMeta) {
-        if (!(itemMeta instanceof WrittenBookMeta))
-            return false;
-        final WrittenBookMeta writtenBookMeta = (WrittenBookMeta) itemMeta;
-        return writtenBookMeta.resolved == resolved &&
-                writtenBookMeta.generation == generation &&
-                writtenBookMeta.author.equals(author) &&
-                writtenBookMeta.title.equals(title) &&
-                writtenBookMeta.pages.equals(pages);
-    }
-
-    @Override
-    public void read(@NotNull NBTCompound compound) {
-        if (compound.containsKey("resolved")) {
-            this.resolved = compound.getByte("resolved") == 1;
-        }
-        if (compound.containsKey("generation")) {
-            this.generation = WrittenBookGeneration.values()[compound.getInt("generation")];
-        }
-        if (compound.containsKey("author")) {
-            this.author = compound.getString("author");
-        }
-        if (compound.containsKey("title")) {
-            this.title = compound.getString("title");
-        }
-        if (compound.containsKey("pages")) {
-            final NBTList<NBTString> list = compound.getList("pages");
-            for (NBTString page : list) {
-                this.pages.add(GsonComponentSerializer.gson().deserialize(page.getValue()));
-            }
-        }
-    }
-
-    @Override
-    public void write(@NotNull NBTCompound compound) {
-        if (resolved) {
-            compound.setByte("resolved", (byte) 1);
-        }
-        if (generation != null) {
-            compound.setInt("generation", generation.ordinal());
-        }
-        if (author != null) {
-            compound.setString("author", author);
-        }
-        if (title != null) {
-            compound.setString("title", title);
-        }
-        if (!pages.isEmpty()) {
-            NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-            for (Component page : pages) {
-                list.add(new NBTString(AdventureSerializer.serialize(page)));
-            }
-            compound.set("pages", list);
-        }
-    }
-
-    @NotNull
-    @Override
-    public ItemMeta clone() {
-        WrittenBookMeta writtenBookMeta = (WrittenBookMeta) super.clone();
-        writtenBookMeta.resolved = resolved;
-        writtenBookMeta.generation = generation;
-        writtenBookMeta.author = author;
-        writtenBookMeta.title = title;
-        writtenBookMeta.pages.addAll(pages);
-
-        return writtenBookMeta;
+    public @NotNull List<@NotNull Component> getPages() {
+        return Collections.unmodifiableList(pages);
     }
 
     public enum WrittenBookGeneration {
@@ -201,21 +62,104 @@ public class WrittenBookMeta extends ItemMeta {
      * Creates a written book meta from an Adventure book. This meta will not be
      * resolved and the generation will default to {@link WrittenBookGeneration#ORIGINAL}.
      *
-     * @param book the book
+     * @param book        the book
      * @param localizable who the book is for
-     *
      * @return the meta
      */
     public static @NotNull WrittenBookMeta fromAdventure(@NotNull Book book, @NotNull Localizable localizable) {
-        // make the book
-        WrittenBookMeta meta = new WrittenBookMeta();
-        meta.resolved = false;
-        meta.generation = WrittenBookGeneration.ORIGINAL;
-        meta.author = AdventureSerializer.translateAndSerialize(book.author(), localizable);
-        meta.title = AdventureSerializer.translateAndSerialize(book.title(), localizable);
-        meta.pages = new ArrayList<>();
-        meta.pages.addAll(book.pages());
+        return new Builder()
+                .resolved(false)
+                .generation(WrittenBookGeneration.ORIGINAL)
+                .author(AdventureSerializer.translateAndSerialize(book.author(), localizable))
+                .title(AdventureSerializer.translateAndSerialize(book.title(), localizable))
+                .pages(book.pages())
+                .build();
+    }
 
-        return meta;
+    public static class Builder extends ItemMetaBuilder {
+
+        private boolean resolved;
+        private WrittenBookGeneration generation;
+        private String author;
+        private String title;
+        private List<Component> pages = new ArrayList<>();
+
+        public Builder resolved(boolean resolved) {
+            this.resolved = resolved;
+            this.nbt.setByte("resolved", (byte) (resolved ? 1 : 0));
+            return this;
+        }
+
+        public Builder generation(@Nullable WrittenBookGeneration generation) {
+            this.generation = generation;
+            handleNullable(generation, "generation", nbt,
+                    () -> new NBTInt(Objects.requireNonNull(generation).ordinal()));
+            return this;
+        }
+
+        public Builder author(@Nullable String author) {
+            this.author = author;
+            handleNullable(author, "author", nbt,
+                    () -> new NBTString(Objects.requireNonNull(author)));
+            return this;
+        }
+
+        public Builder title(@Nullable String title) {
+            this.title = title;
+            handleNullable(title, "title", nbt,
+                    () -> new NBTString(Objects.requireNonNull(title)));
+            return this;
+        }
+
+        public Builder pages(@NotNull List<@NotNull Component> pages) {
+            this.pages = pages;
+
+            handleCollection(pages, "pages", nbt, () -> {
+                NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
+                for (Component page : pages) {
+                    list.add(new NBTString(AdventureSerializer.serialize(page)));
+                }
+                return list;
+            });
+
+            return this;
+        }
+
+        public Builder pages(Component... pages) {
+            return pages(Arrays.asList(pages));
+        }
+
+        @Override
+        public @NotNull WrittenBookMeta build() {
+            return new WrittenBookMeta(this, resolved, generation, author, title, pages);
+        }
+
+        @Override
+        public void read(@NotNull NBTCompound nbtCompound) {
+            if (nbtCompound.containsKey("resolved")) {
+                resolved(nbtCompound.getByte("resolved") == 1);
+            }
+            if (nbtCompound.containsKey("generation")) {
+                generation(WrittenBookGeneration.values()[nbtCompound.getInt("generation")]);
+            }
+            if (nbtCompound.containsKey("author")) {
+                author(nbtCompound.getString("author"));
+            }
+            if (nbtCompound.containsKey("title")) {
+                title(nbtCompound.getString("title"));
+            }
+            if (nbtCompound.containsKey("pages")) {
+                final NBTList<NBTString> list = nbtCompound.getList("pages");
+                for (NBTString page : list) {
+                    this.pages.add(GsonComponentSerializer.gson().deserialize(page.getValue()));
+                }
+                pages(pages);
+            }
+        }
+
+        @Override
+        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
+            return Builder::new;
+        }
     }
 }

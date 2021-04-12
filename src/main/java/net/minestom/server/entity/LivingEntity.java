@@ -36,7 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
 //TODO: Default attributes registration (and limitation ?)
 public class LivingEntity extends Entity implements EquipmentHandler {
 
-    // Item pickup
+    // ItemStack pickup
     protected boolean canPickupItem;
     protected Cooldown itemPickupCooldown = new Cooldown(new UpdateOption(5, TimeUnit.TICK));
 
@@ -110,13 +110,13 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     private void initEquipments() {
-        this.mainHandItem = ItemStack.getAirItem();
-        this.offHandItem = ItemStack.getAirItem();
+        this.mainHandItem = ItemStack.AIR;
+        this.offHandItem = ItemStack.AIR;
 
-        this.helmet = ItemStack.getAirItem();
-        this.chestplate = ItemStack.getAirItem();
-        this.leggings = ItemStack.getAirItem();
-        this.boots = ItemStack.getAirItem();
+        this.helmet = ItemStack.AIR;
+        this.chestplate = ItemStack.AIR;
+        this.leggings = ItemStack.AIR;
+        this.boots = ItemStack.AIR;
     }
 
     @NotNull

@@ -1,7 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.chat.ColoredText;
-import net.minestom.server.chat.JsonMessage;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
@@ -12,26 +11,27 @@ public class OpenWindowPacket implements ServerPacket {
 
     public int windowId;
     public int windowType;
-    public JsonMessage title = ColoredText.of("");
+    public Component title = Component.text("");
 
-    public OpenWindowPacket() {}
+    public OpenWindowPacket() {
+    }
 
-    public OpenWindowPacket(String title) {
-        this.title = ColoredText.of(title);
+    public OpenWindowPacket(Component title) {
+        this.title = title;
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(windowId);
         writer.writeVarInt(windowType);
-        writer.writeJsonMessage(title);
+        writer.writeComponent(title);
     }
 
     @Override
     public void read(@NotNull BinaryReader reader) {
         windowId = reader.readVarInt();
         windowType = reader.readVarInt();
-        title = reader.readJsonMessage(Integer.MAX_VALUE);
+        title = reader.readComponent(Integer.MAX_VALUE);
     }
 
     @Override

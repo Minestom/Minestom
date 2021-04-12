@@ -343,7 +343,7 @@ public class Metadata {
             case TYPE_OPTCHAT:
                 return (Value<T>) OptChat((Component) null);
             case TYPE_SLOT:
-                return (Value<T>) Slot(ItemStack.getAirItem());
+                return (Value<T>) Slot(ItemStack.AIR);
             case TYPE_BOOLEAN:
                 return (Value<T>) Boolean(false);
             case TYPE_ROTATION:
