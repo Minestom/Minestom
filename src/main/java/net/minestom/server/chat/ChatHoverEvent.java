@@ -10,12 +10,12 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.UUID;
 
 /**
  * Represents a hover event for a specific portion of the message.
+ *
  * @deprecated Use {@link HoverEvent}
  */
 @Deprecated
@@ -93,11 +93,8 @@ public class ChatHoverEvent {
         JsonObject obj = GsonComponentSerializer.gson().serializer().toJsonTree(Component.empty().hoverEvent(event)).getAsJsonObject();
         obj = obj.get("hoverEvent").getAsJsonObject().get("contents").getAsJsonObject();
 
-        if (itemStack.getItemMeta() != null) {
-            NBTCompound compound = new NBTCompound();
-            itemStack.getItemMeta().write(compound);
-            obj.add("tag", new JsonPrimitive(compound.toSNBT()));
-        }
+        final String snbt = itemStack.getMeta().toSNBT();
+        obj.add("tag", new JsonPrimitive(snbt));
 
         return new ChatHoverEvent("show_item", obj);
     }

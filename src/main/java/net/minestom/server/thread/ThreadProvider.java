@@ -39,7 +39,7 @@ public abstract class ThreadProvider {
 
     {
         // Default thread count in the pool (cores * 2)
-        setThreadCount(NettyRuntime.availableProcessors() * 2);
+        setThreadCount(1);
     }
 
     /**

@@ -23,11 +23,11 @@ public class ItemEntry extends LootTable.Entry {
 
     @Override
     public void generate(List<ItemStack> output, Data arguments) {
-        ItemStack stack = new ItemStack(item, (byte)1);
+        ItemStack stack = ItemStack.of(item);
         for (LootTableFunction function : functions) {
             stack = function.apply(stack, arguments);
         }
-        if(!stack.isAir()) {
+        if (!stack.isAir()) {
             output.add(stack);
         }
     }

@@ -13,7 +13,7 @@ public class ClientClickWindowPacket extends ClientPlayPacket {
     public byte button;
     public short actionNumber;
     public int mode;
-    public ItemStack item = ItemStack.getAirItem();
+    public ItemStack item = ItemStack.AIR;
 
     @Override
     public void read(@NotNull BinaryReader reader) {

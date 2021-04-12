@@ -33,7 +33,7 @@ public class Notification {
     }
 
     public Notification(@NotNull Component title, @NotNull FrameType frameType, @NotNull Material icon) {
-        this(title, frameType, new ItemStack(icon, (byte) 1));
+        this(title, frameType, ItemStack.of(icon));
     }
 
     public Notification(@NotNull Component title, @NotNull FrameType frameType, @NotNull ItemStack icon) {
@@ -46,7 +46,6 @@ public class Notification {
      * Gets the title of the notification.
      *
      * @return the notification title
-     *
      * @deprecated Use {@link #getTitle()}
      */
     @NotNull

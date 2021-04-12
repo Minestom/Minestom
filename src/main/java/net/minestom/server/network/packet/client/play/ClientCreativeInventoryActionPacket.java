@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public class ClientCreativeInventoryActionPacket extends ClientPlayPacket {
 
     public short slot;
-    public ItemStack item = ItemStack.getAirItem();
+    public ItemStack item = ItemStack.AIR;
 
     @Override
     public void read(@NotNull BinaryReader reader) {

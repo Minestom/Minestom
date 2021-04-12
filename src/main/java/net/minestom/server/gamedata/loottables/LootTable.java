@@ -31,10 +31,10 @@ public class LootTable {
     }
 
     public List<ItemStack> generate(Data arguments) {
-        if(arguments == null)
+        if (arguments == null)
             arguments = Data.EMPTY;
         List<ItemStack> output = new LinkedList<>();
-        for(Pool p : pools) {
+        for (Pool p : pools) {
             p.generate(output, arguments);
         }
         return output;
@@ -74,18 +74,18 @@ public class LootTable {
         }
 
         public void generate(List<ItemStack> output, Data arguments) {
-            for(Condition c : conditions) {
-                if(!c.test(arguments))
+            for (Condition c : conditions) {
+                if (!c.test(arguments))
                     return;
             }
             Random rng = new Random();
             int luck = arguments.getOrDefault(LUCK_KEY, 0);
-            int rollCount = rng.nextInt(maxRollCount - minRollCount +1 /*inclusive*/) + minRollCount;
-            int bonusRollCount = rng.nextInt(bonusMaxRollCount - bonusMinRollCount +1 /*inclusive*/) + bonusMinRollCount;
+            int rollCount = rng.nextInt(maxRollCount - minRollCount + 1 /*inclusive*/) + minRollCount;
+            int bonusRollCount = rng.nextInt(bonusMaxRollCount - bonusMinRollCount + 1 /*inclusive*/) + bonusMinRollCount;
             bonusRollCount *= luck;
             // TODO: implement luck (quality/weight) weight=floor( weight + (quality * generic.luck))
             WeightedRandom<Entry> weightedRandom = new WeightedRandom<>(entries);
-            for (int i = 0; i < rollCount+bonusRollCount; i++) {
+            for (int i = 0; i < rollCount + bonusRollCount; i++) {
                 Entry entry = weightedRandom.get(rng);
                 entry.generateStacks(output, arguments);
             }
@@ -122,8 +122,8 @@ public class LootTable {
         }
 
         public final void generateStacks(List<ItemStack> output, Data arguments) {
-            for(Condition c : conditions) {
-                if(!c.test(arguments))
+            for (Condition c : conditions) {
+                if (!c.test(arguments))
                     return;
             }
             generate(output, arguments);
