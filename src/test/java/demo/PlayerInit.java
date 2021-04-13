@@ -242,8 +242,6 @@ public class PlayerInit {
                                     .canDestroy(Set.of(Block.DIAMOND_ORE)))
                     .build();
 
-            System.out.println(itemStack.getMeta().toSNBT());
-
             //itemStack = itemStack.withStore(storeBuilder -> storeBuilder.set("key2", 25, Integer::sum));
 
             inventory.addItemStack(itemStack);
