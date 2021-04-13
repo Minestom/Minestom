@@ -29,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.zip.DataFormatException;
 
 /**
@@ -80,7 +81,67 @@ public final class PacketUtils {
     private static volatile Map<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new ConcurrentHashMap<>();
 
     private static class ViewableStorage {
-        Int2ObjectMap<Entry> entries = new Int2ObjectRBTreeMap<>();
+        private final Viewable viewable;
+        private final Map<Integer, Entry> entries = new ConcurrentSkipListMap<>();
+
+        private ViewableStorage(Viewable viewable) {
+            this.viewable = viewable;
+        }
+
+        private synchronized void append(int priority, PlayerConnection playerConnection, ServerPacket serverPacket) {
+            ViewableStorage.Entry entry = entries.computeIfAbsent(priority, integer -> new ViewableStorage.Entry());
+            final boolean hasConnection = playerConnection != null;
+            var entityIdMap = entry.entityIdMap;
+            if (hasConnection && entityIdMap.containsKey(playerConnection))
+                return;
+
+            ByteBuf buffer = entry.buffer;
+            final int start = buffer.writerIndex();
+            writeFramedPacket(buffer, serverPacket);
+            final int end = buffer.writerIndex();
+
+            if (hasConnection) {
+                entityIdMap.put(playerConnection, IntIntPair.of(start, end));
+            }
+        }
+
+        private void process() {
+            entries.forEach((integer, entry) -> {
+                var entityIdMap = entry.entityIdMap;
+                if (entityIdMap.isEmpty())
+                    return;
+
+                ByteBuf buffer = entry.buffer;
+                final int readable = buffer.readableBytes();
+
+                var viewers = viewable.getViewers();
+
+                viewers.forEach(player -> {
+                    var connection = player.getPlayerConnection();
+                    final var pair = entityIdMap.get(connection);
+                    ByteBuf result = buffer;
+                    if (pair != null) {
+                        final int start = pair.leftInt();
+                        final int end = pair.rightInt();
+
+                        if (start == 0) {
+                            result = buffer.retainedSlice(end, readable - end);
+                        } else if (end == readable) {
+                            result = buffer.retainedSlice(0, start);
+                        } else {
+                            final var slice1 = buffer.retainedSlice(0, start);
+                            final var slice2 = buffer.retainedSlice(end, readable - end);
+                            result = Unpooled.wrappedBuffer(slice1, slice2);
+                        }
+                    }
+                    if (connection instanceof NettyPlayerConnection) {
+                        var nettyPlayerConnection = (NettyPlayerConnection) connection;
+                        var framedPacket = new FramedPacket(result);
+                        nettyPlayerConnection.write(framedPacket); // Sync write
+                    }
+                });
+            });
+        }
 
         private static class Entry {
             Map<PlayerConnection, IntIntPair> entityIdMap = new ConcurrentHashMap<>();
@@ -96,24 +157,9 @@ public final class PacketUtils {
         }
 
         final PlayerConnection playerConnection = entity instanceof Player ? ((Player) entity).getPlayerConnection() : null;
-        ViewableStorage viewableStorage = VIEWABLE_STORAGE_MAP.computeIfAbsent(viewable, c -> new ViewableStorage());
+        ViewableStorage viewableStorage = VIEWABLE_STORAGE_MAP.computeIfAbsent(viewable, c -> new ViewableStorage(viewable));
         final int priority = serverPacket.getNetworkHint().getPriority();
-        synchronized (viewableStorage) {
-            ViewableStorage.Entry entry = viewableStorage.entries.computeIfAbsent(priority, integer -> new ViewableStorage.Entry());
-            final boolean hasConnection = playerConnection != null;
-            var entityIdMap = entry.entityIdMap;
-            if (hasConnection && entityIdMap.containsKey(playerConnection))
-                return;
-
-            ByteBuf buffer = entry.buffer;
-            final int start = buffer.writerIndex();
-            writeFramedPacket(buffer, serverPacket);
-            final int end = buffer.writerIndex();
-
-            if (hasConnection) {
-                entityIdMap.put(playerConnection, IntIntPair.of(start, end));
-            }
-        }
+        viewableStorage.append(priority, playerConnection, serverPacket);
     }
 
     public static void prepareGroupedPacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket) {
@@ -123,55 +169,13 @@ public final class PacketUtils {
     public static void flush() {
         var map = VIEWABLE_STORAGE_MAP;
         VIEWABLE_STORAGE_MAP = new ConcurrentHashMap<>();
-        map.entrySet().parallelStream().forEach(mapStorageEntry -> {
-            Viewable viewable = mapStorageEntry.getKey();
-            ViewableStorage viewableStorage = mapStorageEntry.getValue();
-
+        map.values().parallelStream().forEach(viewableStorage -> {
             if (viewableStorage.entries.isEmpty()) {
                 return; // nothing to flush
             }
-            flush(viewable, viewableStorage);
+
+            viewableStorage.process();
         });
-    }
-
-    private static void flush(@NotNull Viewable viewable, @NotNull ViewableStorage storage) {
-        var entries = storage.entries;
-        entries.forEach((integer, entry) -> {
-            var entityIdMap = entry.entityIdMap;
-            if (entityIdMap.isEmpty())
-                return;
-
-            ByteBuf buffer = entry.buffer;
-            final int readable = buffer.readableBytes();
-
-            var viewers = viewable.getViewers();
-
-            viewers.forEach(player -> {
-                var connection = player.getPlayerConnection();
-                final var pair = entityIdMap.get(connection);
-                ByteBuf result = buffer;
-                if (pair != null) {
-                    final int start = pair.leftInt();
-                    final int end = pair.rightInt();
-
-                    if (start == 0) {
-                        result = buffer.retainedSlice(end, readable - end);
-                    } else if (end == readable) {
-                        result = buffer.retainedSlice(0, start);
-                    } else {
-                        final var slice1 = buffer.retainedSlice(0, start);
-                        final var slice2 = buffer.retainedSlice(end, readable - end);
-                        result = Unpooled.wrappedBuffer(slice1, slice2);
-                    }
-                }
-                if (connection instanceof NettyPlayerConnection) {
-                    var nettyPlayerConnection = (NettyPlayerConnection) connection;
-                    var framedPacket = new FramedPacket(result);
-                    nettyPlayerConnection.write(framedPacket); // Sync write
-                }
-            });
-        });
-        entries.clear();
     }
 
     /**
