@@ -15,7 +15,6 @@ import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.netty.packet.FramedPacket;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
@@ -117,8 +116,8 @@ public final class PacketUtils {
         }
     }
 
-    public static void prepareGroupedPacket(@NotNull Chunk chunk, @NotNull ServerPacket serverPacket) {
-        prepareGroupedPacket(chunk, serverPacket, null);
+    public static void prepareGroupedPacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket) {
+        prepareGroupedPacket(viewable, serverPacket, null);
     }
 
     public static void flush() {
