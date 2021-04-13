@@ -186,7 +186,8 @@ public final class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
     @Contract(value = "-> new", pure = true)
     protected @NotNull ItemStackBuilder builder() {
         return new ItemStackBuilder(material, meta.builder())
-                .amount(amount);
+                .amount(amount)
+                .stackingRule(stackingRule);
     }
 
     @Override
