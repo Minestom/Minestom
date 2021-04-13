@@ -8,6 +8,7 @@ import net.minestom.server.utils.NBTUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -53,6 +54,22 @@ public final class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
     @Contract(value = "_ -> new", pure = true)
     public static @NotNull ItemStack of(@NotNull Material material) {
         return of(material, 1);
+    }
+
+    @Contract(value = "_, _, _ -> new", pure = true)
+    public static @NotNull ItemStack fromNBT(@NotNull Material material, @NotNull NBTCompound nbtCompound, int amount) {
+        return ItemStack.builder(material)
+                .amount(amount)
+                .meta(metaBuilder -> {
+                    metaBuilder.nbt = nbtCompound.deepClone();
+                    NBTUtils.loadDataIntoMeta(metaBuilder, nbtCompound);
+                    return metaBuilder;
+                }).build();
+    }
+
+    @Contract(value = "_, _ -> new", pure = true)
+    public static @NotNull ItemStack fromNBT(@NotNull Material material, @NotNull NBTCompound nbtCompound) {
+        return fromNBT(material, nbtCompound, 1);
     }
 
     @Contract(pure = true)
