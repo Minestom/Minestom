@@ -20,6 +20,8 @@ public class ItemStackBuilder {
     private int amount;
     protected ItemMetaBuilder metaBuilder;
 
+    private StackingRule stackingRule;
+
     protected ItemStackBuilder(@NotNull Material material, @NotNull ItemMetaBuilder metaBuilder) {
         this.material = material;
         this.amount = 1;
@@ -97,12 +99,18 @@ public class ItemStackBuilder {
         return this;
     }
 
+    @Contract(value = "_ -> this")
+    public @NotNull ItemStackBuilder stackingRule(@Nullable StackingRule stackingRule) {
+        this.stackingRule = stackingRule;
+        return this;
+    }
+
     @Contract(value = "-> new", pure = true)
     public @NotNull ItemStack build() {
         if (amount <= 0)
             return ItemStack.AIR;
 
-        return new ItemStack(material, amount, metaBuilder.build());
+        return new ItemStack(material, amount, metaBuilder.build(), stackingRule);
     }
 
     private static final class DefaultMeta extends ItemMetaBuilder {

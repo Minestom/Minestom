@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.IntUnaryOperator;
 import java.util.function.UnaryOperator;
@@ -28,17 +29,20 @@ public final class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
      */
     public static final @NotNull ItemStack AIR = ItemStack.of(Material.AIR);
 
-    private final StackingRule stackingRule = new VanillaStackingRule(64);
+    private final StackingRule stackingRule;
 
     private final Material material;
     private final int amount;
     private final ItemMeta meta;
 
     protected ItemStack(@NotNull Material material, int amount,
-                        @NotNull ItemMeta meta) {
+                        @NotNull ItemMeta meta,
+                        @NotNull StackingRule stackingRule) {
         this.material = material;
         this.amount = amount;
         this.meta = meta;
+        this.stackingRule = Objects.requireNonNullElseGet(stackingRule,
+                () -> new VanillaStackingRule(64));
     }
 
     @Contract(value = "_ -> new", pure = true)
