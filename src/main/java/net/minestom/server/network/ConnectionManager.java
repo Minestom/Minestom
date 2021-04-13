@@ -46,6 +46,7 @@ public final class ConnectionManager {
 
     private final Queue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
     private final Set<Player> players = new CopyOnWriteArraySet<>();
+    private final Set<Player> unmodifiablePlayers = Collections.unmodifiableSet(players);
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
 
     // All the consumers to call once a packet is received
@@ -76,9 +77,8 @@ public final class ConnectionManager {
      *
      * @return an unmodifiable collection containing all the online players
      */
-    @NotNull
-    public Collection<Player> getOnlinePlayers() {
-        return Collections.unmodifiableCollection(players);
+    public @NotNull Collection<@NotNull Player> getOnlinePlayers() {
+        return unmodifiablePlayers;
     }
 
     /**
@@ -88,8 +88,7 @@ public final class ConnectionManager {
      * @param username the player username (can be partial)
      * @return the closest match, null if no players are online
      */
-    @Nullable
-    public Player findPlayer(@NotNull String username) {
+    public @Nullable Player findPlayer(@NotNull String username) {
         Player exact = getPlayer(username);
         if (exact != null) return exact;
 
@@ -145,7 +144,6 @@ public final class ConnectionManager {
      *
      * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
      * @param condition   the condition to receive the message
-     *
      * @deprecated Use {@link Audiences#players(Predicate)}
      */
     @Deprecated
@@ -315,7 +313,6 @@ public final class ConnectionManager {
      * Gets the kick reason when the server is shutdown using {@link MinecraftServer#stopCleanly()}.
      *
      * @return the kick reason in case on a shutdown
-     *
      * @deprecated Use {@link #getShutdownText()}
      */
     @Deprecated
