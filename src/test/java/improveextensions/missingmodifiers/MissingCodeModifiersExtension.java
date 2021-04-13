@@ -12,9 +12,9 @@ public class MissingCodeModifiersExtension extends Extension {
         // force load of InstanceContainer class
         try {
             Assertions.assertFalse(areCodeModifiersAllLoadedCorrectly(), "Mixin configuration could not be loaded and code modifiers are unavailable, the failure should be reported");
-            Assertions.assertTrue(getDescription().hasFailedToLoadMixin(), "Mixin configuration does not exist and should not be loaded");
-            Assertions.assertEquals(1, getDescription().getMissingCodeModifiers().size(), "Code modifier does not exist, it should be reported as missing");
-            Assertions.assertEquals("InvalidCodeModifierClass", getDescription().getMissingCodeModifiers().get(0));
+            Assertions.assertTrue(getOrigin().hasFailedToLoadMixin(), "Mixin configuration does not exist and should not be loaded");
+            Assertions.assertEquals(1, getOrigin().getMissingCodeModifiers().size(), "Code modifier does not exist, it should be reported as missing");
+            Assertions.assertEquals("InvalidCodeModifierClass", getOrigin().getMissingCodeModifiers().get(0));
             System.out.println("All tests passed.");
         } catch (AssertionFailedError e) {
             e.printStackTrace();

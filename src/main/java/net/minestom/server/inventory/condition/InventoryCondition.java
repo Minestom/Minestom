@@ -1,11 +1,11 @@
 package net.minestom.server.inventory.condition;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.inventory.InventoryModifier;
+import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.click.ClickType;
 
 /**
- * Can be added to any {@link InventoryModifier}
+ * Can be added to any {@link AbstractInventory}
  * using {@link net.minestom.server.inventory.Inventory#addInventoryCondition(InventoryCondition)}
  * or {@link net.minestom.server.inventory.PlayerInventory#addInventoryCondition(InventoryCondition)}
  * in order to listen to any issued clicks.

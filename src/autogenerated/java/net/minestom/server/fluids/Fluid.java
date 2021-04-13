@@ -1,5 +1,7 @@
 package net.minestom.server.fluids;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
@@ -9,7 +11,7 @@ import net.minestom.server.utils.NamespaceID;
  * //==============================
  */
 @SuppressWarnings({"deprecation"})
-public enum Fluid {
+public enum Fluid implements Keyed {
     EMPTY("minecraft:empty"),
 
     FLOWING_WATER("minecraft:flowing_water"),
@@ -20,11 +22,14 @@ public enum Fluid {
 
     LAVA("minecraft:lava");
 
-    private String namespaceID;
+    private final String namespaceID;
+
+    private final Key key;
 
     Fluid(String namespaceID) {
         this.namespaceID = namespaceID;
         Registries.fluids.put(NamespaceID.from(namespaceID), this);
+        this.key = Key.key(this.namespaceID);
     }
 
     public int getId() {
@@ -33,6 +38,10 @@ public enum Fluid {
 
     public String getNamespaceID() {
         return namespaceID;
+    }
+
+    public Key key() {
+        return this.key;
     }
 
     public static Fluid fromId(int id) {

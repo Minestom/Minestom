@@ -1,6 +1,6 @@
 package net.minestom.server.advancements.notifications;
 
-import net.minestom.server.chat.ColoredText;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -84,7 +84,7 @@ public class NotificationCenter {
             {
                 displayData.title = notification.getTitle();
                 // Description is required, but never shown/seen so, small Easter egg.
-                displayData.description = ColoredText.of("Articdive was here. #Minestom");
+                displayData.description = Component.text("Articdive was here. #Minestom");
                 displayData.icon = notification.getIcon();
                 displayData.frameType = notification.getFrameType();
                 displayData.flags = 0x6;

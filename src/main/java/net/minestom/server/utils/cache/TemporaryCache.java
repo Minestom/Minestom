@@ -2,6 +2,7 @@ package net.minestom.server.utils.cache;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.RemovalListener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,19 +17,17 @@ import java.util.concurrent.TimeUnit;
 public class TemporaryCache<T> {
 
     private final Cache<UUID, T> cache;
-    private final long keepTime;
 
     /**
      * Creates a new temporary cache.
      *
-     * @param keepTime the time before considering an object unused in milliseconds
-     * @see #getKeepTime()
+     * @param duration the time before considering an object unused
      */
-    public TemporaryCache(long keepTime) {
-        this.keepTime = keepTime;
+    public TemporaryCache(long duration, TimeUnit timeUnit, RemovalListener<UUID, T> removalListener) {
         this.cache = CacheBuilder.newBuilder()
-                .expireAfterWrite(keepTime, TimeUnit.MILLISECONDS)
+                .expireAfterWrite(duration, timeUnit)
                 .softValues()
+                .removalListener(removalListener)
                 .build();
     }
 
@@ -51,14 +50,5 @@ public class TemporaryCache<T> {
     @Nullable
     public T retrieve(@NotNull UUID identifier) {
         return cache.getIfPresent(identifier);
-    }
-
-    /**
-     * Gets the time an object will be kept without being retrieved.
-     *
-     * @return the keep time in milliseconds
-     */
-    public long getKeepTime() {
-        return keepTime;
     }
 }

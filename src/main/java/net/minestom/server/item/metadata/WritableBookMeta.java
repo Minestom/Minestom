@@ -1,5 +1,10 @@
 package net.minestom.server.item.metadata;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minestom.server.adventure.AdventureSerializer;
+import net.minestom.server.item.ItemMeta;
+import net.minestom.server.item.ItemMetaBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -8,110 +13,97 @@ import org.jglrxavpok.hephaistos.nbt.NBTString;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Supplier;
 
-public class WritableBookMeta extends ItemMeta {
+public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provider<WritableBookMeta.Builder> {
 
-    private String title;
-    private String author;
-    private List<String> pages = new ArrayList<>();
+    private final String author;
+    private final String title;
+    private final List<Component> pages;
 
-    @Nullable
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(@Nullable String title) {
+    protected WritableBookMeta(@NotNull ItemMetaBuilder metaBuilder,
+                               @Nullable String author, @Nullable String title,
+                               @NotNull List<@NotNull Component> pages) {
+        super(metaBuilder);
+        this.author = author;
         this.title = title;
+        this.pages = new ArrayList<>(pages);
     }
 
-    @Nullable
-    public String getAuthor() {
+    public @Nullable String getAuthor() {
         return author;
     }
 
-    public void setAuthor(@Nullable String author) {
-        this.author = author;
+    public @Nullable String getTitle() {
+        return title;
     }
 
-    /**
-     * Gets an array list containing the book pages.
-     * <p>
-     * The list is modifiable.
-     *
-     * @return a modifiable {@link ArrayList} containing the book pages
-     */
-    @NotNull
-    public List<String> getPages() {
-        return pages;
+    public @NotNull List<@NotNull Component> getPages() {
+        return Collections.unmodifiableList(pages);
     }
 
-    /**
-     * Sets the pages list of this book.
-     *
-     * @param pages the pages list
-     */
-    public void setPages(@NotNull List<String> pages) {
-        this.pages = pages;
-    }
+    public static class Builder extends ItemMetaBuilder {
 
-    @Override
-    public boolean hasNbt() {
-        return !pages.isEmpty();
-    }
+        private String author;
+        private String title;
+        private List<Component> pages = new ArrayList<>();
 
-    @Override
-    public boolean isSimilar(@NotNull ItemMeta itemMeta) {
-        if (!(itemMeta instanceof WritableBookMeta))
-            return false;
-        final WritableBookMeta writableBookMeta = (WritableBookMeta) itemMeta;
-        return writableBookMeta.pages.equals(pages);
-    }
-
-    @Override
-    public void read(@NotNull NBTCompound compound) {
-
-        if (compound.containsKey("title")) {
-            this.title = compound.getString("title");
+        public Builder author(@Nullable String author) {
+            this.author = author;
+            handleNullable(author, "author", nbt,
+                    () -> new NBTString(Objects.requireNonNull(author)));
+            return this;
         }
 
-        if (compound.containsKey("author")) {
-            this.author = compound.getString("author");
+        public Builder title(@Nullable String title) {
+            this.title = title;
+            handleNullable(title, "title", nbt,
+                    () -> new NBTString(Objects.requireNonNull(title)));
+            return this;
         }
 
-        if (compound.containsKey("pages")) {
-            final NBTList<NBTString> list = compound.getList("pages");
-            for (NBTString page : list) {
-                this.pages.add(page.getValue());
+        public Builder pages(@NotNull List<@NotNull Component> pages) {
+            this.pages = pages;
+
+            handleCollection(pages, "pages", nbt, () -> {
+                NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
+                for (Component page : pages) {
+                    list.add(new NBTString(AdventureSerializer.serialize(page)));
+                }
+                return list;
+            });
+
+            return this;
+        }
+
+        @Override
+        public @NotNull WritableBookMeta build() {
+            return new WritableBookMeta(this, author, title, pages);
+        }
+
+        @Override
+        public void read(@NotNull NBTCompound nbtCompound) {
+            if (nbtCompound.containsKey("author")) {
+                author(nbtCompound.getString("author"));
+            }
+            if (nbtCompound.containsKey("title")) {
+                title(nbtCompound.getString("title"));
+            }
+            if (nbtCompound.containsKey("pages")) {
+                final NBTList<NBTString> list = nbtCompound.getList("pages");
+                for (NBTString page : list) {
+                    this.pages.add(GsonComponentSerializer.gson().deserialize(page.getValue()));
+                }
+                pages(pages);
             }
         }
-    }
 
-    @Override
-    public void write(@NotNull NBTCompound compound) {
-
-        if (title != null) {
-            compound.setString("title", title);
+        @Override
+        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
+            return WritableBookMeta.Builder::new;
         }
-
-        if (author != null) {
-            compound.setString("author", author);
-        }
-
-        if (!pages.isEmpty()) {
-            NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-            for (String page : pages) {
-                list.add(new NBTString(page));
-            }
-            compound.set("pages", list);
-        }
-    }
-
-    @NotNull
-    @Override
-    public ItemMeta clone() {
-        WritableBookMeta writableBookMeta = (WritableBookMeta) super.clone();
-        writableBookMeta.pages = new ArrayList<>(pages);
-        return writableBookMeta;
     }
 }

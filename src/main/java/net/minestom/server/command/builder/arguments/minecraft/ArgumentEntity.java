@@ -7,6 +7,7 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.entity.EntityFinder;
 import net.minestom.server.utils.math.IntRange;
 import org.apache.commons.lang3.StringUtils;
@@ -75,16 +76,16 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
         argumentNode.parser = "minecraft:entity";
-        argumentNode.properties = packetWriter -> {
+        argumentNode.properties = BinaryWriter.makeArray(packetWriter -> {
             byte mask = 0;
             if (this.isOnlySingleEntity()) {
-                mask += 1;
+                mask |= 0x01;
             }
             if (this.isOnlyPlayers()) {
-                mask += 2;
+                mask |= 0x02;
             }
             packetWriter.writeByte(mask);
-        };
+        });
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }

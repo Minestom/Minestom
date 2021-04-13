@@ -1,168 +1,61 @@
 package net.minestom.server.item.metadata;
 
-import net.minestom.server.chat.ChatColor;
+import net.minestom.server.color.Color;
+import net.minestom.server.item.ItemMeta;
+import net.minestom.server.item.ItemMetaBuilder;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-/**
- * Represents the item meta for leather armor parts.
- */
-public class LeatherArmorMeta extends ItemMeta {
+import java.util.function.Supplier;
 
-    private static final int BIT_MASK = 0xFF;
+public class LeatherArmorMeta extends ItemMeta implements ItemMetaBuilder.Provider<LeatherArmorMeta.Builder> {
 
-    private boolean modified;
-    private byte red;
-    private byte green;
-    private byte blue;
+    private final Color color;
 
-    /**
-     * Sets the color of the leather armor piece.
-     *
-     * @param color the color of the leather armor
-     */
-    public void setColor(ChatColor color) {
-        // TODO using "CHAT color" is pretty weird, maybe that the class should be renamed to "Color"
-        this.red = color.getRed();
-        this.green = color.getGreen();
-        this.blue = color.getBlue();
-        this.modified = true;
+    protected LeatherArmorMeta(@NotNull ItemMetaBuilder metaBuilder, @Nullable Color color) {
+        super(metaBuilder);
+        this.color = color;
     }
 
-    /**
-     * Changes the color of the leather armor piece.
-     *
-     * @param red   The red color of the leather armor piece.
-     * @param green The green color of the leather armor piece.
-     * @param blue  The blue color of the leather armor piece.
-     */
-    public void setColor(byte red, byte green, byte blue) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-        this.modified = true;
+    public @Nullable Color getColor() {
+        return color;
     }
 
-    /**
-     * Resets the color to the default leather one.
-     */
-    public void reset() {
-        this.red = 0;
-        this.green = 0;
-        this.blue = 0;
-        this.modified = false;
-    }
+    public static class Builder extends ItemMetaBuilder {
 
-    /**
-     * Gets the red component.
-     *
-     * @return the red component
-     */
-    public int getRed() {
-        return BIT_MASK & red;
-    }
+        private Color color;
 
-    /**
-     * Gets the green component.
-     *
-     * @return the green component
-     */
-    public int getGreen() {
-        return BIT_MASK & green;
-    }
+        public Builder color(@Nullable Color color) {
+            this.color = color;
+            handleCompound("display", nbtCompound -> {
+                if (color != null) {
+                    nbtCompound.setInt("color", color.asRGB());
+                } else {
+                    nbtCompound.removeTag("color");
+                }
+            });
+            return this;
+        }
 
-    /**
-     * Gets the blue component.
-     *
-     * @return the blue component
-     */
-    public int getBlue() {
-        return BIT_MASK & blue;
-    }
+        @Override
+        public @NotNull LeatherArmorMeta build() {
+            return new LeatherArmorMeta(this, color);
+        }
 
-    /**
-     * Gets if the color of this armor piece have been changed.
-     *
-     * @return true if the color has been changed, false otherwise
-     */
-    public boolean isModified() {
-        return modified;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean hasNbt() {
-        return modified;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isSimilar(@NotNull ItemMeta itemMeta) {
-        if (!(itemMeta instanceof LeatherArmorMeta)) return false;
-        final LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemMeta;
-        return leatherArmorMeta.isModified() == isModified()
-                && leatherArmorMeta.getRed() == getRed()
-                && leatherArmorMeta.getGreen() == getGreen()
-                && leatherArmorMeta.getBlue() == getBlue();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void read(@NotNull NBTCompound compound) {
-        if (compound.containsKey("display")) {
-            final NBTCompound nbtCompound = compound.getCompound("display");
-            if (nbtCompound.containsKey("color")) {
-                final int color = nbtCompound.getInt("color");
-
-                // Sets the color of the leather armor piece
-                // This also fixes that the armor pieces do not decolorize again when you are in creative
-                // mode.
-                this.setColor(
-                        (byte) ((color >> 16) & BIT_MASK),
-                        (byte) ((color >> 8) & BIT_MASK),
-                        (byte) ((color) & BIT_MASK));
+        @Override
+        public void read(@NotNull NBTCompound nbtCompound) {
+            if (nbtCompound.containsKey("display")) {
+                final NBTCompound displayCompound = nbtCompound.getCompound("display");
+                if (displayCompound.containsKey("color")) {
+                    color(new Color(displayCompound.getInt("color")));
+                }
             }
         }
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void write(@NotNull NBTCompound compound) {
-        if (modified) {
-            NBTCompound displayCompound;
-            if (!compound.containsKey("display")) {
-                displayCompound = new NBTCompound();
-            } else {
-                displayCompound = compound.getCompound("display");
-            }
-            final int color = this.getRed() << 16 | this.getGreen() << 8 | this.getBlue();
-
-            displayCompound.setInt("color", color);
-            // Adds the color compound to the display compound
-            compound.set("display", displayCompound);
+        @Override
+        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
+            return Builder::new;
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public ItemMeta clone() {
-        LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) super.clone();
-        leatherArmorMeta.modified = this.isModified();
-        leatherArmorMeta.red = (byte) this.getRed();
-        leatherArmorMeta.green = (byte) this.getGreen();
-        leatherArmorMeta.blue = (byte) this.getBlue();
-
-        return leatherArmorMeta;
     }
 }

@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ConcurrentHashMap;
 
 // TODO light data & API
 
@@ -72,7 +72,7 @@ public abstract class Chunk implements Viewable, DataContainer {
     private boolean readOnly;
 
     protected volatile boolean loaded = true;
-    protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    protected final Set<Player> viewers = ConcurrentHashMap.newKeySet();
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
 
     // Path finding
@@ -512,20 +512,16 @@ public abstract class Chunk implements Viewable, DataContainer {
             return;
 
         final PlayerConnection playerConnection = player.getPlayerConnection();
-
-        // Retrieve & send the buffer to the connection
-        playerConnection.sendPacket(getFreshFullDataPacket());
-
         playerConnection.sendPacket(getLightPacket());
+        playerConnection.sendPacket(getFreshFullDataPacket());
     }
 
     public synchronized void sendChunk() {
         if (!isLoaded()) {
             return;
         }
-
-        sendPacketToViewers(getFreshFullDataPacket());
         sendPacketToViewers(getLightPacket());
+        sendPacketToViewers(getFreshFullDataPacket());
     }
 
     /**

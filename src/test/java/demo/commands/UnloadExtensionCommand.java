@@ -1,15 +1,15 @@
 package demo.commands;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.ArgumentMap;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -17,62 +17,55 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
 public class UnloadExtensionCommand extends Command {
+
+    private final ArgumentMap<String, Extension> extensionName;
+
     public UnloadExtensionCommand() {
         super("unload");
 
         setDefaultExecutor(this::usage);
 
-        Argument extension = ArgumentType.DynamicStringArray("extensionName");
+        extensionName = ArgumentType.String("extensionName").map((input) -> {
+            Extension extension = MinecraftServer.getExtensionManager().getExtension(input);
 
-        setArgumentCallback(this::extensionCallback, extension);
+            if (extension == null) throw new ArgumentSyntaxException("The specified extension was not found", input, 1);
 
-        addSyntax(this::execute, extension);
+            return extension;
+        });
+
+        setArgumentCallback(this::extensionCallback, extensionName);
+
+        addSyntax(this::execute, extensionName);
     }
 
     private void usage(CommandSender sender, CommandContext context) {
-        sender.sendMessage("Usage: /unload <extension name>");
+        sender.sendMessage(Component.text("Usage: /unload <extension name>"));
     }
 
     private void execute(CommandSender sender, CommandContext context) {
-        String name = join(context.getStringArray("extensionName"));
-        sender.sendMessage("extensionName = " + name + "....");
+        final Extension ext = context.get(extensionName);
+        sender.sendMessage(Component.text("extensionName = " + ext.getOrigin().getName() + "...."));
 
         ExtensionManager extensionManager = MinecraftServer.getExtensionManager();
-        Extension ext = extensionManager.getExtension(name);
-        if (ext != null) {
+
+        try {
+            extensionManager.unloadExtension(ext.getOrigin().getName());
+        } catch (Throwable t) {
             try {
-                extensionManager.unloadExtension(name);
-            } catch (Throwable t) {
-                try {
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    t.printStackTrace();
-                    t.printStackTrace(new PrintStream(baos));
-                    baos.flush();
-                    baos.close();
-                    String contents = baos.toString(StandardCharsets.UTF_8);
-                    contents.lines().forEach(sender::sendMessage);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                t.printStackTrace();
+                t.printStackTrace(new PrintStream(baos));
+                baos.flush();
+                baos.close();
+                String contents = baos.toString(StandardCharsets.UTF_8);
+                contents.lines().map(Component::text).forEach(sender::sendMessage);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } else {
-            sender.sendMessage("Extension '" + name + "' does not exist.");
         }
     }
 
     private void extensionCallback(CommandSender sender, ArgumentSyntaxException exception) {
-        sender.sendMessage("'" + exception.getInput() + "' is not a valid extension name!");
-    }
-
-    private String join(String[] extensionNameParts) {
-        StringBuilder b = new StringBuilder();
-        for (int i = 0; i < extensionNameParts.length; i++) {
-            String s = extensionNameParts[i];
-            if (i != 0) {
-                b.append(StringUtils.SPACE);
-            }
-            b.append(s);
-        }
-        return b.toString();
+        sender.sendMessage(Component.text("'" + exception.getInput() + "' is not a valid extension name!"));
     }
 }

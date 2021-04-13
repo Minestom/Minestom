@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.client.status;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.handshake.ResponsePacket;
@@ -7,6 +8,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 public class StatusRequestPacket implements ClientPreplayPacket {
@@ -17,11 +19,11 @@ public class StatusRequestPacket implements ClientPreplayPacket {
         ResponseData responseData = new ResponseData();
 
         // Fill default params
-        responseData.setName(MinecraftServer.VERSION_NAME);
+        responseData.setVersion(MinecraftServer.VERSION_NAME);
         responseData.setProtocol(MinecraftServer.PROTOCOL_VERSION);
         responseData.setMaxPlayer(0);
         responseData.setOnline(0);
-        responseData.setDescription("Minestom Server");
+        responseData.setDescription(Component.text("Minestom Server"));
         responseData.setFavicon("");
 
         if (consumer != null)
@@ -35,6 +37,11 @@ public class StatusRequestPacket implements ClientPreplayPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
+        // Empty
+    }
+
+    @Override
+    public void write(@NotNull BinaryWriter writer) {
         // Empty
     }
 }

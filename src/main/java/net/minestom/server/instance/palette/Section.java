@@ -121,7 +121,7 @@ public class Section implements PublicCloneable<Section> {
      *
      * @param newBitsPerEntry the new bits per entry count
      */
-    private void resize(int newBitsPerEntry) {
+    public void resize(int newBitsPerEntry) {
         newBitsPerEntry = fixBitsPerEntry(newBitsPerEntry);
 
         Section section = new Section(newBitsPerEntry, bitsIncrement);

@@ -1,6 +1,10 @@
 package net.minestom.server.entity;
 
 import com.google.common.collect.Queues;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
+import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Viewable;
 import net.minestom.server.chat.JsonMessage;
@@ -33,7 +37,7 @@ import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
-import net.minestom.server.utils.time.CooldownUtils;
+import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
@@ -46,19 +50,21 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 /**
  * Could be a player, a monster, or an object.
  * <p>
- * To create your own entity you probably want to extends {@link ObjectEntity} or {@link EntityCreature} instead.
+ * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler {
+public class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler, HoverEventSource<ShowEntity> {
 
-    private static final Map<Integer, Entity> entityById = new ConcurrentHashMap<>();
-    private static final Map<UUID, Entity> entityByUuid = new ConcurrentHashMap<>();
-    private static final AtomicInteger lastEntityId = new AtomicInteger();
+    private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
+    private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
+    private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
 
     protected Instance instance;
+    protected Chunk currentChunk;
     protected final Position position;
     protected double lastX, lastY, lastZ;
     protected double cacheX, cacheY, cacheZ; // Used to synchronize with #getPosition
@@ -81,7 +87,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
     private boolean autoViewable;
     private final int id;
-    protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    protected final Set<Player> viewers = ConcurrentHashMap.newKeySet();
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
     private Data data;
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
@@ -133,8 +139,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
         setAutoViewable(true);
 
-        Entity.entityById.put(id, this);
-        Entity.entityByUuid.put(uuid, this);
+        Entity.ENTITY_BY_ID.put(id, this);
+        Entity.ENTITY_BY_UUID.put(uuid, this);
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -175,7 +181,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      */
     @Nullable
     public static Entity getEntity(int id) {
-        return Entity.entityById.getOrDefault(id, null);
+        return Entity.ENTITY_BY_ID.getOrDefault(id, null);
     }
 
     /**
@@ -186,7 +192,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      */
     @Nullable
     public static Entity getEntity(@NotNull UUID uuid) {
-        return Entity.entityByUuid.getOrDefault(uuid, null);
+        return Entity.ENTITY_BY_UUID.getOrDefault(uuid, null);
     }
 
 
@@ -198,7 +204,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      * @return a newly generated entity id
      */
     public static int generateId() {
-        return lastEntityId.incrementAndGet();
+        return LAST_ENTITY_ID.incrementAndGet();
     }
 
     /**
@@ -345,11 +351,22 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
         PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getEntityType().getSpawnType().getSpawnPacket(this));
-        playerConnection.sendPacket(getVelocityPacket());
+        if (hasVelocity()) {
+            playerConnection.sendPacket(getVelocityPacket());
+        }
         playerConnection.sendPacket(getMetadataPacket());
 
+        // Passenger
         if (hasPassenger()) {
             playerConnection.sendPacket(getPassengersPacket());
+        }
+
+        // Head position
+        {
+            EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
+            entityHeadLookPacket.entityId = getEntityId();
+            entityHeadLookPacket.yaw = position.getYaw();
+            playerConnection.sendPacket(entityHeadLookPacket);
         }
 
         return true;
@@ -445,8 +462,12 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
             return;
         }
 
+        // Fix current chunk being null if the entity has been spawned before
+        if (currentChunk == null) {
+            currentChunk = instance.getChunkAt(position);
+        }
+
         // Check if the entity chunk is loaded
-        final Chunk currentChunk = getChunk();
         if (!ChunkUtils.isLoaded(currentChunk)) {
             // No update for entities in unloaded chunk
             return;
@@ -550,11 +571,14 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
                 // World border collision
                 final Position finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
-                final Chunk finalChunk = instance.getChunkAt(finalVelocityPosition);
+                Chunk finalChunk = currentChunk;
+                if (!ChunkUtils.same(position, finalVelocityPosition)) {
+                    finalChunk = instance.getChunkAt(finalVelocityPosition);
 
-                // Entity shouldn't be updated when moving in an unloaded chunk
-                if (!ChunkUtils.isLoaded(finalChunk)) {
-                    return;
+                    // Entity shouldn't be updated when moving in an unloaded chunk
+                    if (!ChunkUtils.isLoaded(finalChunk)) {
+                        return;
+                    }
                 }
 
                 // Apply the position if changed
@@ -621,9 +645,12 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
             for (int y = minY; y <= maxY; y++) {
                 for (int x = minX; x <= maxX; x++) {
                     for (int z = minZ; z <= maxZ; z++) {
-                        final Chunk chunk = instance.getChunkAt(x, z);
-                        if (!ChunkUtils.isLoaded(chunk))
-                            continue;
+                        Chunk chunk = currentChunk;
+                        if (!ChunkUtils.same(currentChunk, x, z)) {
+                            chunk = instance.getChunkAt(x, z);
+                            if (!ChunkUtils.isLoaded(chunk))
+                                continue;
+                        }
 
                         final CustomBlock customBlock = chunk.getCustomBlock(x, y, z);
                         if (customBlock != null) {
@@ -668,7 +695,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         }
 
         // Scheduled synchronization
-        if (!CooldownUtils.hasCooldown(time, lastAbsoluteSynchronizationTime, getSynchronizationCooldown())) {
+        if (!Cooldown.hasCooldown(time, lastAbsoluteSynchronizationTime, getSynchronizationCooldown())) {
             this.lastAbsoluteSynchronizationTime = time;
             sendSynchronization();
         }
@@ -746,8 +773,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      */
     public void setUuid(@NotNull UUID uuid) {
         // Refresh internal map
-        Entity.entityByUuid.remove(this.uuid);
-        Entity.entityByUuid.put(uuid, this);
+        Entity.ENTITY_BY_UUID.remove(this.uuid);
+        Entity.ENTITY_BY_UUID.put(uuid, this);
 
         this.uuid = uuid;
     }
@@ -800,9 +827,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      *
      * @return the entity chunk, can be null even if unlikely
      */
-    @Nullable
-    public Chunk getChunk() {
-        return instance.getChunkAt(position.getX(), position.getZ());
+    public @Nullable Chunk getChunk() {
+        return currentChunk;
     }
 
     /**
@@ -810,8 +836,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      *
      * @return the entity instance, can be null if the entity doesn't have an instance yet
      */
-    @Nullable
-    public Instance getInstance() {
+    public @Nullable Instance getInstance() {
         return instance;
     }
 
@@ -839,6 +864,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
         this.isActive = true;
         this.instance = instance;
+        this.currentChunk = instance.getChunkAt(position.getX(), position.getZ());
         instance.UNSAFE_addEntity(this);
         spawn();
         EntitySpawnEvent entitySpawnEvent = new EntitySpawnEvent(this, instance);
@@ -1182,9 +1208,21 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      * Gets the entity custom name.
      *
      * @return the custom name of the entity, null if there is not
+     * @deprecated Use {@link #getCustomName()}
+     */
+    @Deprecated
+    @Nullable
+    public JsonMessage getCustomNameJson() {
+        return this.entityMeta.getCustomNameJson();
+    }
+
+    /**
+     * Gets the entity custom name.
+     *
+     * @return the custom name of the entity, null if there is not
      */
     @Nullable
-    public JsonMessage getCustomName() {
+    public Component getCustomName() {
         return this.entityMeta.getCustomName();
     }
 
@@ -1192,8 +1230,19 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      * Changes the entity custom name.
      *
      * @param customName the custom name of the entity, null to remove it
+     * @deprecated Use {@link #setCustomName(Component)}
      */
+    @Deprecated
     public void setCustomName(@Nullable JsonMessage customName) {
+        this.entityMeta.setCustomName(customName);
+    }
+
+    /**
+     * Changes the entity custom name.
+     *
+     * @param customName the custom name of the entity, null to remove it
+     */
+    public void setCustomName(@Nullable Component customName) {
         this.entityMeta.setCustomName(customName);
     }
 
@@ -1270,20 +1319,26 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
         final Instance instance = getInstance();
         if (instance != null) {
-            final Chunk lastChunk = instance.getChunkAt(lastX, lastZ);
-            final Chunk newChunk = instance.getChunkAt(x, z);
+            final int lastChunkX = currentChunk.getChunkX();
+            final int lastChunkZ = currentChunk.getChunkZ();
 
-            Check.notNull(lastChunk, "The entity " + getEntityId() + " was in an unloaded chunk at " + lastX + ";" + lastZ);
-            Check.notNull(newChunk, "The entity " + getEntityId() + " tried to move in an unloaded chunk at " + x + ";" + z);
+            final int newChunkX = ChunkUtils.getChunkCoordinate(x);
+            final int newChunkZ = ChunkUtils.getChunkCoordinate(z);
 
-            if (lastChunk != newChunk) {
-                instance.switchEntityChunk(this, lastChunk, newChunk);
+            if (lastChunkX != newChunkX || lastChunkZ != newChunkZ) {
+                // Entity moved in a new chunk
+                final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
+                Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1};{2}", getEntityId(), x, z);
+
+                instance.UNSAFE_switchEntityChunk(this, currentChunk, newChunk);
                 if (this instanceof Player) {
                     // Refresh player view
                     final Player player = (Player) this;
                     player.refreshVisibleChunks(newChunk);
                     player.refreshVisibleEntities(newChunk);
                 }
+
+                this.currentChunk = newChunk;
             }
         }
 
@@ -1401,8 +1456,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     public void remove() {
         this.removed = true;
         this.shouldRemove = true;
-        Entity.entityById.remove(id);
-        Entity.entityByUuid.remove(uuid);
+        Entity.ENTITY_BY_ID.remove(id);
+        Entity.ENTITY_BY_UUID.remove(uuid);
         if (instance != null)
             instance.UNSAFE_removeEntity(this);
     }
@@ -1493,11 +1548,13 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         this.customSynchronizationCooldown = cooldown;
     }
 
+    @Override
+    public @NotNull HoverEvent<ShowEntity> asHoverEvent(@NotNull UnaryOperator<ShowEntity> op) {
+        return HoverEvent.showEntity(ShowEntity.of(this.entityType, this.uuid));
+    }
+
     private UpdateOption getSynchronizationCooldown() {
-        if (this.customSynchronizationCooldown != null) {
-            return this.customSynchronizationCooldown;
-        }
-        return SYNCHRONIZATION_COOLDOWN;
+        return Objects.requireNonNullElse(this.customSynchronizationCooldown, SYNCHRONIZATION_COOLDOWN);
     }
 
     public enum Pose {

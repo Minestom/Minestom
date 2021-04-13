@@ -1,29 +1,33 @@
 package net.minestom.server.item.firework;
 
 import net.minestom.server.chat.ChatColor;
+import net.minestom.server.color.Color;
+import net.minestom.server.exception.ExceptionManager;
+import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.*;
 
-import java.util.Objects;
+import java.util.*;
 
 public class FireworkEffect {
 
     private final boolean flicker;
     private final boolean trail;
     private final FireworkEffectType type;
-    private final ChatColor color;
-    private final ChatColor fadeColor;
+    private final List<Color> color;
+    private final List<Color> fadeColor;
 
+    //FIXME: fix javadoc
     /**
      * Initializes a new firework effect.
      *
      * @param flicker   {@code true} if this explosion has the Twinkle effect (glowstone dust), otherwise {@code false}.
      * @param trail     {@code true} if this explosion hsa the Trail effect (diamond), otherwise {@code false}.
      * @param type      The shape of this firework's explosion.
-     * @param color     The primary color of this firework effect.
-     * @param fadeColor The secondary color of this firework effect.
+     * @param color     The primary colors of this firework effect.
+     * @param fadeColor The secondary colors of this firework effect.
      */
-    public FireworkEffect(boolean flicker, boolean trail, FireworkEffectType type, ChatColor color, ChatColor fadeColor) {
+    public FireworkEffect(boolean flicker, boolean trail, FireworkEffectType type, List<Color> color, List<Color> fadeColor) {
         this.flicker = flicker;
         this.trail = trail;
         this.type = type;
@@ -39,18 +43,21 @@ public class FireworkEffect {
      */
     public static FireworkEffect fromCompound(@NotNull NBTCompound compound) {
 
-        ChatColor primaryColor = null;
-        ChatColor secondaryColor = null;
+        List<Color> primaryColor = new ArrayList<>();
+        List<Color> secondaryColor = new ArrayList<>();
 
         if (compound.containsKey("Colors")) {
             int[] color = compound.getIntArray("Colors");
-            primaryColor = ChatColor.fromRGB((byte) color[0], (byte) color[1], (byte) color[2]);
+            for (int i = 0; i < color.length; i++) {
+                primaryColor.add(new Color(color[i]));
+            }
         }
 
         if (compound.containsKey("FadeColors")) {
             int[] fadeColor = compound.getIntArray("FadeColors");
-            secondaryColor = ChatColor.fromRGB((byte) fadeColor[0], (byte) fadeColor[1], (byte) fadeColor[2]);
-
+            for (int i = 0; i < fadeColor.length; i++) {
+                secondaryColor.add(new Color(fadeColor[i]));
+            }
         }
 
         boolean flicker = compound.containsKey("Flicker") && compound.getByte("Flicker") == 1;
@@ -102,11 +109,11 @@ public class FireworkEffect {
      * @return An array of integer values corresponding to the primary colors of this firework's explosion.
      */
     public int[] getColors() {
-        return new int[]{
-                this.color.getRed(),
-                this.color.getGreen(),
-                this.color.getBlue()
-        };
+        int[] primary = new int[color.size()];
+        for (int i = 0; i < color.size(); i++) {
+            primary[i] = color.get(i).asRGB();
+        }
+        return primary;
     }
 
     /**
@@ -117,11 +124,11 @@ public class FireworkEffect {
      * @return An array of integer values corresponding to the fading colors of this firework's explosion.
      */
     public int[] getFadeColors() {
-        return new int[]{
-                this.fadeColor.getRed(),
-                this.fadeColor.getGreen(),
-                this.fadeColor.getBlue()
-        };
+        int[] secondary = new int[fadeColor.size()];
+        for (int i = 0; i < fadeColor.size(); i++) {
+            secondary[i] = fadeColor.get(i).asRGB();
+        }
+        return secondary;
     }
 
     /**

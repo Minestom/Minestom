@@ -7,14 +7,17 @@ import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.entity.type.projectile.EntityProjectile;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.time.CooldownUtils;
+import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
 public class RangedAttackGoal extends GoalSelector {
+
+    private final Cooldown cooldown = new Cooldown(new UpdateOption(5, TimeUnit.TICK));
 
     private long lastShot;
     private final int delay;
@@ -52,6 +55,10 @@ public class RangedAttackGoal extends GoalSelector {
         Check.argCondition(desirableRange > attackRange, "Desirable range can not exceed attack range!");
     }
 
+    public Cooldown getCooldown() {
+        return this.cooldown;
+    }
+
     public void setProjectileGenerator(Function<Entity, EntityProjectile> projectileGenerator) {
         this.projectileGenerator = projectileGenerator;
     }
@@ -83,7 +90,7 @@ public class RangedAttackGoal extends GoalSelector {
         double distanceSquared = this.entityCreature.getDistanceSquared(target);
         boolean comeClose = false;
         if (distanceSquared <= this.attackRangeSquared) {
-            if (!CooldownUtils.hasCooldown(time, this.lastShot, this.timeUnit, this.delay)) {
+            if (!Cooldown.hasCooldown(time, this.lastShot, this.timeUnit, this.delay)) {
                 if (this.entityCreature.hasLineOfSight(target)) {
                     Position to = target.getPosition().clone().add(0D, target.getEyeHeight(), 0D);
 
@@ -111,7 +118,10 @@ public class RangedAttackGoal extends GoalSelector {
         }
         Position targetPosition = target.getPosition();
         if (pathPosition == null || !pathPosition.isSimilar(targetPosition)) {
-            navigator.setPathTo(targetPosition);
+            if (this.cooldown.isReady(time)) {
+                this.cooldown.refreshLastUpdate(time);
+                navigator.setPathTo(targetPosition);
+            }
         }
     }
 

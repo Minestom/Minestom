@@ -2,28 +2,37 @@ package net.minestom.server.item.metadata;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ChatColor;
-import net.minestom.server.utils.clone.CloneUtils;
+import net.minestom.server.color.Color;
+import net.minestom.server.item.ItemMeta;
+import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Supplier;
 
-public class MapMeta extends ItemMeta {
+public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMeta.Builder> {
 
-    private int mapId;
-    private int mapScaleDirection = 1;
-    private List<MapDecoration> decorations = new CopyOnWriteArrayList<>();
-    private ChatColor mapColor = ChatColor.NO_COLOR;
+    private final int mapId;
+    private final int mapScaleDirection;
+    private final List<MapDecoration> decorations;
+    private final Color mapColor;
 
-    public MapMeta() {
-    }
-
-    public MapMeta(int id) {
-        this.mapId = id;
+    protected MapMeta(ItemMetaBuilder metaBuilder,
+                      int mapId,
+                      int mapScaleDirection,
+                      @NotNull List<MapDecoration> decorations,
+                      @NotNull Color mapColor) {
+        super(metaBuilder);
+        this.mapId = mapId;
+        this.mapScaleDirection = mapScaleDirection;
+        this.decorations = decorations;
+        this.mapColor = mapColor;
     }
 
     /**
@@ -36,30 +45,12 @@ public class MapMeta extends ItemMeta {
     }
 
     /**
-     * Changes the map id.
-     *
-     * @param mapId the new map id
-     */
-    public void setMapId(int mapId) {
-        this.mapId = mapId;
-    }
-
-    /**
      * Gets the map scale direction.
      *
      * @return the map scale direction
      */
     public int getMapScaleDirection() {
         return mapScaleDirection;
-    }
-
-    /**
-     * Changes the map scale direction.
-     *
-     * @param mapScaleDirection the new map scale direction
-     */
-    public void setMapScaleDirection(int mapScaleDirection) {
-        this.mapScaleDirection = mapScaleDirection;
     }
 
     /**
@@ -72,12 +63,14 @@ public class MapMeta extends ItemMeta {
     }
 
     /**
-     * Changes the map decorations list.
+     * Gets the map color.
      *
-     * @param decorations the new map decorations list
+     * @return the map color
+     * @deprecated Use {@link #getMapColor()}
      */
-    public void setDecorations(List<MapDecoration> decorations) {
-        this.decorations = decorations;
+    @Deprecated
+    public ChatColor getLegacyMapColor() {
+        return this.mapColor.asLegacyChatColor();
     }
 
     /**
@@ -85,91 +78,32 @@ public class MapMeta extends ItemMeta {
      *
      * @return the map color
      */
-    public ChatColor getMapColor() {
-        return mapColor;
+    public @NotNull Color getMapColor() {
+        return this.mapColor;
     }
 
-    /**
-     * Changes the map color.
-     * <p>
-     * WARNING: RGB colors are not supported.
-     *
-     * @param mapColor the new map color
-     */
-    public void setMapColor(ChatColor mapColor) {
-        mapColor.getId(); // used to throw an error if rgb color is used
-        this.mapColor = mapColor;
-    }
+    public static class Builder extends ItemMetaBuilder {
 
-    @Override
-    public boolean hasNbt() {
-        return true;
-    }
+        private int mapId;
+        private int mapScaleDirection = 1;
+        private List<MapDecoration> decorations = new CopyOnWriteArrayList<>();
+        private Color mapColor = new Color(0, 0, 0);
 
-    @Override
-    public boolean isSimilar(@NotNull ItemMeta itemMeta) {
-        if (!(itemMeta instanceof MapMeta))
-            return false;
-
-        final MapMeta mapMeta = (MapMeta) itemMeta;
-        return mapMeta.mapId == mapId &&
-                mapMeta.mapScaleDirection == mapScaleDirection &&
-                mapMeta.decorations.equals(decorations) &&
-                mapMeta.mapColor == mapColor;
-    }
-
-    @Override
-    public void read(@NotNull NBTCompound compound) {
-        if (compound.containsKey("map")) {
-            this.mapId = compound.getAsInt("map");
+        public Builder mapId(int value) {
+            this.mapId = value;
+            this.nbt.setInt("map", mapId);
+            return this;
         }
 
-        if (compound.containsKey("map_scale_direction")) {
-            this.mapScaleDirection = compound.getAsInt("map_scale_direction");
+        public Builder mapScaleDirection(int value) {
+            this.mapScaleDirection = value;
+            this.nbt.setInt("map_scale_direction", value);
+            return this;
         }
 
-        if (compound.containsKey("Decorations")) {
-            final NBTList<NBTCompound> decorationsList = compound.getList("Decorations");
-            for (NBTCompound decorationCompound : decorationsList) {
-                final String id = decorationCompound.getString("id");
-                final byte type = decorationCompound.getAsByte("type");
-                byte x = 0;
+        public Builder decorations(List<MapDecoration> value) {
+            this.decorations = value;
 
-                if (decorationCompound.containsKey("x")) {
-                    x = decorationCompound.getAsByte("x");
-                }
-
-                byte z = 0;
-                if (decorationCompound.containsKey("z")) {
-                    z = decorationCompound.getAsByte("z");
-                }
-
-                double rotation = 0.0;
-                if (decorationCompound.containsKey("rot")) {
-                    rotation = decorationCompound.getAsDouble("rot");
-                }
-
-                this.decorations.add(new MapDecoration(id, type, x, z, rotation));
-            }
-        }
-
-        if (compound.containsKey("display")) {
-            final NBTCompound displayCompound = compound.getCompound("display");
-            if (displayCompound.containsKey("MapColor")) {
-                final int color = displayCompound.getAsInt("MapColor");
-                this.mapColor = ChatColor.fromId(color);
-            }
-        }
-
-    }
-
-    @Override
-    public void write(@NotNull NBTCompound compound) {
-        compound.setInt("map", mapId);
-
-        compound.setInt("map_scale_direction", mapScaleDirection);
-
-        if (!decorations.isEmpty()) {
             NBTList<NBTCompound> decorationsList = new NBTList<>(NBTTypes.TAG_Compound);
             for (MapDecoration decoration : decorations) {
                 NBTCompound decorationCompound = new NBTCompound();
@@ -181,29 +115,80 @@ public class MapMeta extends ItemMeta {
 
                 decorationsList.add(decorationCompound);
             }
-            compound.set("Decorations", decorationsList);
+            this.nbt.set("Decorations", decorationsList);
+
+            return this;
         }
 
-        {
+        public Builder mapColor(Color value) {
+            this.mapColor = value;
+
             NBTCompound displayCompound;
-            if (compound.containsKey("display")) {
-                displayCompound = compound.getCompound("display");
+            if (nbt.containsKey("display")) {
+                displayCompound = nbt.getCompound("display");
             } else {
                 displayCompound = new NBTCompound();
+                this.nbt.set("display", displayCompound);
             }
-            displayCompound.setInt("MapColor", mapColor.getId());
-        }
-    }
+            displayCompound.setInt("MapColor", mapColor.asRGB());
 
-    @NotNull
-    @Override
-    public ItemMeta clone() {
-        MapMeta mapMeta = (MapMeta) super.clone();
-        mapMeta.setMapId(mapId);
-        mapMeta.setMapScaleDirection(mapScaleDirection);
-        mapMeta.decorations = CloneUtils.cloneCopyOnWriteArrayList(decorations);
-        mapMeta.setMapColor(mapColor);
-        return mapMeta;
+            return this;
+        }
+
+        @Override
+        public @NotNull ItemMeta build() {
+            return new MapMeta(this, mapId, mapScaleDirection, decorations, mapColor);
+        }
+
+        @Override
+        public void read(@NotNull NBTCompound compound) {
+            if (compound.containsKey("map")) {
+                mapId(compound.getAsInt("map"));
+            }
+
+            if (compound.containsKey("map_scale_direction")) {
+                mapScaleDirection(compound.getAsInt("map_scale_direction"));
+            }
+
+            if (compound.containsKey("Decorations")) {
+                final NBTList<NBTCompound> decorationsList = compound.getList("Decorations");
+                List<MapDecoration> mapDecorations = new ArrayList<>();
+                for (NBTCompound decorationCompound : decorationsList) {
+                    final String id = decorationCompound.getString("id");
+                    final byte type = decorationCompound.getAsByte("type");
+                    byte x = 0;
+
+                    if (decorationCompound.containsKey("x")) {
+                        x = decorationCompound.getAsByte("x");
+                    }
+
+                    byte z = 0;
+                    if (decorationCompound.containsKey("z")) {
+                        z = decorationCompound.getAsByte("z");
+                    }
+
+                    double rotation = 0.0;
+                    if (decorationCompound.containsKey("rot")) {
+                        rotation = decorationCompound.getAsDouble("rot");
+                    }
+
+                    mapDecorations.add(new MapDecoration(id, type, x, z, rotation));
+                }
+                decorations(mapDecorations);
+            }
+
+            if (compound.containsKey("display")) {
+                final NBTCompound displayCompound = compound.getCompound("display");
+                if (displayCompound.containsKey("MapColor")) {
+                    mapColor(new Color(displayCompound.getAsInt("MapColor")));
+                }
+            }
+        }
+
+        @Override
+        protected @NotNull Supplier<@NotNull ItemMetaBuilder> getSupplier() {
+            return Builder::new;
+        }
     }
 
     public static class MapDecoration implements PublicCloneable<MapDecoration> {

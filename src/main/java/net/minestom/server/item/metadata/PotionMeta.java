@@ -1,10 +1,11 @@
 package net.minestom.server.item.metadata;
 
-import net.minestom.server.chat.ChatColor;
+import net.minestom.server.color.Color;
+import net.minestom.server.item.ItemMeta;
+import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.utils.clone.CloneUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,130 +13,53 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Supplier;
 
-/**
- * Item meta for
- * {@link net.minestom.server.item.Material#POTION},
- * {@link net.minestom.server.item.Material#LINGERING_POTION},
- * {@link net.minestom.server.item.Material#SPLASH_POTION},
- * {@link net.minestom.server.item.Material#TIPPED_ARROW}.
- */
-public class PotionMeta extends ItemMeta {
+public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<PotionMeta.Builder> {
 
-    private PotionType potionType;
+    private final PotionType potionType;
+    private final List<CustomPotionEffect> customPotionEffects;
+    private final Color color;
 
-    // Not final because of #clone()
-    private List<CustomPotionEffect> customPotionEffects = new CopyOnWriteArrayList<>();
+    protected PotionMeta(@NotNull ItemMetaBuilder metaBuilder, @Nullable PotionType potionType,
+                         List<CustomPotionEffect> customPotionEffects,
+                         Color color) {
+        super(metaBuilder);
+        this.potionType = potionType;
+        this.customPotionEffects = new ArrayList<>(customPotionEffects);
+        this.color = color;
+    }
 
-    private boolean hasColor;
-    private byte red, green, blue;
-
-    /**
-     * Gets the potion type.
-     *
-     * @return the potion type
-     */
-    @Nullable
     public PotionType getPotionType() {
         return potionType;
     }
 
-    /**
-     * Changes the potion type.
-     *
-     * @param potionType the new potion type
-     */
-    public void setPotionType(@Nullable PotionType potionType) {
-        this.potionType = potionType;
-    }
-
-    /**
-     * Get a list of {@link CustomPotionEffect}.
-     *
-     * @return the custom potion effect list
-     */
-    @NotNull
     public List<CustomPotionEffect> getCustomPotionEffects() {
         return customPotionEffects;
     }
 
-    /**
-     * Changes the color of the potion.
-     *
-     * @param color the new color of the potion
-     */
-    public void setColor(ChatColor color) {
-        // FIXME: weird usage of ChatColor, should maybe rename
-
-        if (color == null) {
-            this.hasColor = false;
-            return;
-        }
-
-        this.red = color.getRed();
-        this.green = color.getGreen();
-        this.blue = color.getBlue();
-        this.hasColor = true;
+    public Color getColor() {
+        return color;
     }
 
-    @Override
-    public boolean hasNbt() {
-        return potionType != null ||
-                !customPotionEffects.isEmpty();
-    }
+    public static class Builder extends ItemMetaBuilder {
 
-    @Override
-    public boolean isSimilar(@NotNull ItemMeta itemMeta) {
-        if (!(itemMeta instanceof PotionMeta))
-            return false;
-        PotionMeta potionMeta = (PotionMeta) itemMeta;
-        return potionMeta.potionType == potionType &&
-                potionMeta.customPotionEffects.equals(customPotionEffects) &&
-                potionMeta.hasColor == hasColor &&
-                potionMeta.red == red &&
-                potionMeta.green == green &&
-                potionMeta.blue == blue;
-    }
+        private PotionType potionType;
+        private List<CustomPotionEffect> customPotionEffects = new ArrayList<>();
+        private Color color;
 
-    @Override
-    public void read(@NotNull NBTCompound compound) {
-        if (compound.containsKey("Potion")) {
-            this.potionType = Registries.getPotionType(compound.getString("Potion"));
+        public Builder potionType(@NotNull PotionType potionType) {
+            this.potionType = potionType;
+            this.nbt.setString("Potion", potionType.getNamespaceID());
+            return this;
         }
 
-        if (compound.containsKey("CustomPotionEffects")) {
-            NBTList<NBTCompound> customEffectList = compound.getList("CustomPotionEffects");
-            for (NBTCompound potionCompound : customEffectList) {
-                final byte id = potionCompound.getAsByte("Id");
-                final byte amplifier = potionCompound.getAsByte("Amplifier");
-                final int duration = potionCompound.containsKey("Duration") ? potionCompound.getNumber("Duration").intValue() : (int) TimeUnit.SECOND.toMilliseconds(30);
-                final boolean ambient = potionCompound.containsKey("Ambient") ? potionCompound.getAsByte("Ambient") == 1 : false;
-                final boolean showParticles = potionCompound.containsKey("ShowParticles") ? potionCompound.getAsByte("ShowParticles") == 1 : true;
-                final boolean showIcon = potionCompound.containsKey("ShowIcon") ? potionCompound.getAsByte("ShowIcon") == 1 : true;
+        public Builder effects(@NotNull List<CustomPotionEffect> customPotionEffects) {
+            this.customPotionEffects = customPotionEffects;
 
-                this.customPotionEffects.add(
-                        new CustomPotionEffect(id, amplifier, duration, ambient, showParticles, showIcon));
-            }
-        }
-
-        if (compound.containsKey("CustomPotionColor")) {
-            final int color = compound.getInt("CustomPotionColor");
-            this.red = (byte) ((color >> 16) & 0x000000FF);
-            this.green = (byte) ((color >> 8) & 0x000000FF);
-            this.blue = (byte) ((color) & 0x000000FF);
-        }
-    }
-
-    @Override
-    public void write(@NotNull NBTCompound compound) {
-        if (potionType != null) {
-            compound.setString("Potion", potionType.getNamespaceID());
-        }
-        if (!customPotionEffects.isEmpty()) {
             NBTList<NBTCompound> potionList = new NBTList<>(NBTTypes.TAG_Compound);
-
             for (CustomPotionEffect customPotionEffect : customPotionEffects) {
                 NBTCompound potionCompound = new NBTCompound();
                 potionCompound.setByte("Id", customPotionEffect.getId());
@@ -147,29 +71,52 @@ public class PotionMeta extends ItemMeta {
 
                 potionList.add(potionCompound);
             }
+            this.nbt.set("CustomPotionEffects", potionList);
 
-            compound.set("CustomPotionEffects", potionList);
+            return this;
         }
 
-        if (hasColor) {
-            final int color = red << 16 + green << 8 + blue;
-            compound.setInt("CustomPotionColor", color);
+        public Builder color(@NotNull Color color) {
+            this.color = color;
+            this.nbt.setInt("CustomPotionColor", color.asRGB());
+            return this;
         }
 
-    }
+        @Override
+        public @NotNull PotionMeta build() {
+            return new PotionMeta(this, potionType, customPotionEffects, color);
+        }
 
-    @NotNull
-    @Override
-    public ItemMeta clone() {
-        PotionMeta potionMeta = (PotionMeta) super.clone();
-        potionMeta.potionType = potionType;
-        potionMeta.customPotionEffects = CloneUtils.cloneCopyOnWriteArrayList(customPotionEffects);
+        @Override
+        public void read(@NotNull NBTCompound nbtCompound) {
+            if (nbtCompound.containsKey("Potion")) {
+                potionType(Registries.getPotionType(nbtCompound.getString("Potion")));
+            }
 
-        potionMeta.hasColor = hasColor;
-        potionMeta.red = red;
-        potionMeta.green = green;
-        potionMeta.blue = blue;
+            if (nbtCompound.containsKey("CustomPotionEffects")) {
+                NBTList<NBTCompound> customEffectList = nbtCompound.getList("CustomPotionEffects");
+                for (NBTCompound potionCompound : customEffectList) {
+                    final byte id = potionCompound.getAsByte("Id");
+                    final byte amplifier = potionCompound.getAsByte("Amplifier");
+                    final int duration = potionCompound.containsKey("Duration") ? potionCompound.getNumber("Duration").intValue() : (int) TimeUnit.SECOND.toMilliseconds(30);
+                    final boolean ambient = potionCompound.containsKey("Ambient") ? potionCompound.getAsByte("Ambient") == 1 : false;
+                    final boolean showParticles = potionCompound.containsKey("ShowParticles") ? potionCompound.getAsByte("ShowParticles") == 1 : true;
+                    final boolean showIcon = potionCompound.containsKey("ShowIcon") ? potionCompound.getAsByte("ShowIcon") == 1 : true;
 
-        return potionMeta;
+                    this.customPotionEffects.add(
+                            new CustomPotionEffect(id, amplifier, duration, ambient, showParticles, showIcon));
+                }
+                effects(customPotionEffects);
+            }
+
+            if (nbtCompound.containsKey("CustomPotionColor")) {
+                color(new Color(nbtCompound.getInt("CustomPotionColor")));
+            }
+        }
+
+        @Override
+        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
+            return Builder::new;
+        }
     }
 }

@@ -26,7 +26,7 @@ public class EntityEyeOfEnder extends Entity {
      * @return the item
      */
     public ItemStack getItemStack() {
-        return metadata.getIndex((byte) 7, ItemStack.getAirItem());
+        return metadata.getIndex((byte) 7, ItemStack.AIR);
     }
 
     /**

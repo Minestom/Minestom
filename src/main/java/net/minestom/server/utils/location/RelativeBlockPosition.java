@@ -1,6 +1,5 @@
 package net.minestom.server.utils.location;
 
-import net.minestom.server.entity.Entity;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.Nullable;

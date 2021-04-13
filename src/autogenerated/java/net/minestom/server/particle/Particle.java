@@ -1,5 +1,7 @@
 package net.minestom.server.particle;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
@@ -9,7 +11,7 @@ import net.minestom.server.utils.NamespaceID;
  * //==============================
  */
 @SuppressWarnings({"deprecation"})
-public enum Particle {
+public enum Particle implements Keyed {
     AMBIENT_ENTITY_EFFECT("minecraft:ambient_entity_effect"),
 
     ANGRY_VILLAGER("minecraft:angry_villager"),
@@ -154,11 +156,14 @@ public enum Particle {
 
     WHITE_ASH("minecraft:white_ash");
 
-    private String namespaceID;
+    private final String namespaceID;
+
+    private final Key key;
 
     Particle(String namespaceID) {
         this.namespaceID = namespaceID;
         Registries.particles.put(NamespaceID.from(namespaceID), this);
+        this.key = Key.key(this.namespaceID);
     }
 
     public int getId() {
@@ -167,6 +172,10 @@ public enum Particle {
 
     public String getNamespaceID() {
         return namespaceID;
+    }
+
+    public Key key() {
+        return this.key;
     }
 
     public static Particle fromId(int id) {

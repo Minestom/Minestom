@@ -84,6 +84,20 @@ public final class ChunkUtils {
         return isLoaded(chunk);
     }
 
+    public static boolean same(@NotNull Chunk chunk, double x, double z) {
+        final int chunkX = getChunkCoordinate(x);
+        final int chunkZ = getChunkCoordinate(z);
+        return chunk.getChunkX() == chunkX && chunk.getChunkZ() == chunkZ;
+    }
+
+    public static boolean same(@NotNull Position pos1, @NotNull Position pos2) {
+        final int x1 = getChunkCoordinate(pos1.getX());
+        final int z1 = getChunkCoordinate(pos1.getZ());
+        final int x2 = getChunkCoordinate(pos2.getX());
+        final int z2 = getChunkCoordinate(pos2.getZ());
+        return x1 == x2 && z1 == z2;
+    }
+
     /**
      * @param xz the instance coordinate to convert
      * @return the chunk X or Z based on the argument
@@ -296,4 +310,24 @@ public final class ChunkUtils {
         return (byte) (index >> 12 & 0xF);
     }
 
+    /**
+     * Returns the section, from a chunk index encoded with {@link #getChunkIndexWithSection(int, int, int)}
+     */
+    public static int getSectionFromChunkIndexWithSection(long index) {
+        return (int) (index & 1048575L);
+    }
+
+    /**
+     * Returns the chunk X, from a chunk index encoded with {@link #getChunkIndexWithSection(int, int, int)}
+     */
+    public static int getChunkXFromChunkIndexWithSection(long index) {
+        return (int) ((index >> 42) & 4194303L);
+    }
+
+    /**
+     * Returns the chunk Z, from a chunk index encoded with {@link #getChunkIndexWithSection(int, int, int)}
+     */
+    public static int getChunkZFromChunkIndexWithSection(long index) {
+        return (int) ((index >> 20) & 4194303L);
+    }
 }

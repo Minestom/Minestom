@@ -16,6 +16,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.CommandCallback;
 import net.minestom.server.utils.validate.Check;
 import org.apache.commons.lang3.StringUtils;
@@ -327,7 +328,7 @@ public final class CommandManager {
                         true, false, tracking);
                 tabNode.name = tracking ? "tab_completion" : "args";
                 tabNode.parser = "brigadier:string";
-                tabNode.properties = packetWriter -> packetWriter.writeVarInt(2); // Greedy phrase
+                tabNode.properties = BinaryWriter.makeArray(packetWriter -> packetWriter.writeVarInt(2)); // Greedy phrase
                 tabNode.children = new int[0];
                 if (tracking) {
                     tabNode.suggestionsType = "minecraft:ask_server";
@@ -545,7 +546,6 @@ public final class CommandManager {
 
         literalNode.children = ArrayUtils.toArray(cmdChildren);
         return literalNode;
-
     }
 
     @NotNull

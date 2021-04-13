@@ -1,16 +1,18 @@
 # Minestom
 ![banner](banner.png)
 
-[![license](https://img.shields.io/github/license/Minestom/Minestom.svg)](../LICENSE)
-[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)  
-[![discord-banner](https://discordapp.com/api/guilds/706185253441634317/widget.png?style=banner2)](https://discord.gg/pkFRvqB)
+[![license](https://img.shields.io/github/license/Minestom/Minestom?style=for-the-badge&color=b2204c)](../LICENSE)
+[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=for-the-badge)](https://github.com/RichardLitt/standard-readme)  
+[![javadocs](https://img.shields.io/badge/documentation-javadocs-4d7a97?style=for-the-badge)](https://minestom.github.io/Minestom/)
+[![wiki](https://img.shields.io/badge/documentation-wiki-74aad6?style=for-the-badge)](https://wiki.minestom.com/)
+[![discord-banner](https://img.shields.io/discord/706185253441634317?label=discord&style=for-the-badge&color=7289da)](https://discord.gg/pkFRvqB)
 
 Minestom is a complete rewrite of Minecraft server software, open-source and without any code from Mojang.
 
-The main difference compared to it is that our implementation of the Notchian server does not contain any features by default!
-However, we have a complete API which allows you to make anything possible with current spigot plugins.
+The main difference compared to it is that our implementation of the Minecraft server does not contain any features by default!
+However, we have a complete API which allows you to make anything possible with extensions, similar to plugins and mods.
 
-This is a developer API not meant to be used by the end-users. Replacing Spigot/Paper with this will **not** work since we do not implement the Bukkit API.
+This is a developer API not meant to be used by the end-users. Replacing Bukkit/Forge/Sponge with this will **not** work since we do not implement any of their APIs.
 
 # Table of contents
 - [Install](#install)
@@ -23,7 +25,7 @@ This is a developer API not meant to be used by the end-users. Replacing Spigot/
 - [License](#license)
 
 # Install
-Minestom is similar to Bukkit in the fact that it is not a standlone program, it must be expanded upon.
+Minestom is similar to Bukkit in the fact that it is not a standalone program, it must be expanded upon.
 It is the base for interfacing between the server and client.
 Our own expanded version for Vanilla can be found [here](https://github.com/Minestom/VanillaReimplementation).
 
@@ -31,11 +33,11 @@ This means you need to add Minestom as a dependency, add your code and compile b
 
 # Usage
 An example of how to use the Minestom library is available [here](/src/test/java/demo).
-Alternatively you can check the official wiki [here](https://wiki.minestom.com/).
+Alternatively you can check the official [wiki](https://wiki.minestom.com/) or the [javadocs](https://minestom.github.io/Minestom/).
 
 # Why Minestom?
-Minecraft evolved a lot since its release, most of the servers today do not take advantage of vanilla features and even have to struggle because of them. Our target audience is those who want to make a completely different server compared to default Minecraft gamemode such as survival or creative building.
-The goal is to offer more performance for those who need it, Minecraft being single-threaded is the most important problem for them.
+Minecraft has evolved a lot since its release, most of the servers today do not take advantage of vanilla features and even have to struggle because of them. Our target audience is those who want to make a completely different server compared to vanilla Minecraft such as survival or creative building.
+The goal is to offer more performance for those who need it. Minecraft being single-threaded is the biggest problem for them.
 
 In other words, it makes sense to use Minestom when it takes less time to implement everything you want than removing everything you don't need.
 
@@ -51,7 +53,7 @@ Minestom isn't perfect, our choices make it much better for some cases, worse fo
 * No more disgusting NMS
 
 ## Disadvantages
-* Does not work with Bukkit/Spigot plugins
+* Does not work with Bukkit/Forge/Sponge plugins or mods
 * Does not work with older clients (using a proxy with ViaBackwards is possible)
 * Bad for those who want a vanilla experience
 * Longer to develop something playable

@@ -11,6 +11,8 @@ import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Supplier;
+
 /**
  * An argument is meant to be parsed when added into a {@link Command}'s syntax with {@link Command#addSyntax(CommandExecutor, Argument[])}.
  * <p>
@@ -23,12 +25,12 @@ import org.jetbrains.annotations.Nullable;
 public abstract class Argument<T> {
 
     private final String id;
-    private final boolean allowSpace;
-    private final boolean useRemaining;
+    protected final boolean allowSpace;
+    protected final boolean useRemaining;
 
     private ArgumentCallback callback;
 
-    private T defaultValue;
+    private Supplier<T> defaultValue;
 
     private SuggestionCallback suggestionCallback;
 
@@ -173,18 +175,13 @@ public abstract class Argument<T> {
         return defaultValue != null;
     }
 
-    /**
-     * Gets the default value of this argument.
-     *
-     * @return the argument default value, null if the argument is not optional
-     */
     @Nullable
-    public T getDefaultValue() {
+    public Supplier<T> getDefaultValue() {
         return defaultValue;
     }
 
     /**
-     * Sets the default value of the argument.
+     * Sets the default value supplier of the argument.
      * <p>
      * A non-null value means that the argument can be put at the end of a syntax
      * to act as an optional one.
@@ -193,8 +190,18 @@ public abstract class Argument<T> {
      * @return 'this' for chaining
      */
     @NotNull
-    public Argument<T> setDefaultValue(@Nullable T defaultValue) {
+    public Argument<T> setDefaultValue(@Nullable Supplier<T> defaultValue) {
         this.defaultValue = defaultValue;
+        return this;
+    }
+
+    /**
+     * @deprecated use {@link #setDefaultValue(Supplier)}
+     */
+    @NotNull
+    @Deprecated
+    public Argument<T> setDefaultValue(@Nullable T defaultValue) {
+        this.defaultValue = () -> defaultValue;
         return this;
     }
 
@@ -211,6 +218,18 @@ public abstract class Argument<T> {
 
     public boolean hasSuggestion() {
         return suggestionCallback != null;
+    }
+
+    /**
+     * Maps this argument's output to another result.
+     *
+     * @param mapper The mapper to use (this argument's input = desired output)
+     * @param <O>    The type of output expected.
+     * @return A new ArgumentMap that can get this complex object type.
+     */
+    @Beta
+    public <O> @NotNull ArgumentMap<T, O> map(@NotNull ArgumentMap.Mapper<T, O> mapper) {
+        return new ArgumentMap<>(this, mapper);
     }
 
     @Override

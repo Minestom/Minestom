@@ -212,18 +212,6 @@ public class BlockPosition implements PublicCloneable<BlockPosition> {
                 MathUtils.square(getZ() - blockPosition.getZ());
     }
 
-    /**
-     * Copies this block position.
-     *
-     * @return the cloned block position
-     * @deprecated use {@link #clone()}
-     */
-    @Deprecated
-    @NotNull
-    public BlockPosition copy() {
-        return clone();
-    }
-
     @NotNull
     @Override
     public BlockPosition clone() {

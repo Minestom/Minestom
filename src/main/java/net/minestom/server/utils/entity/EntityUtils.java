@@ -29,7 +29,7 @@ public final class EntityUtils {
             final Chunk chunk = instance.getChunk(chunkX, chunkZ);
             if (chunk == null)
                 continue;
-            instance.getChunkEntities(chunk).forEach(consumer::accept);
+            instance.getChunkEntities(chunk).forEach(consumer);
         }
     }
 
@@ -53,8 +53,8 @@ public final class EntityUtils {
     }
 
     public static boolean isOnGround(@NotNull Entity entity) {
-        final Instance instance = entity.getInstance();
-        if (instance == null)
+        final Chunk chunk = entity.getChunk();
+        if (chunk == null)
             return false;
 
         final Position entityPosition = entity.getPosition();
@@ -62,7 +62,9 @@ public final class EntityUtils {
         // TODO: check entire bounding box
         final BlockPosition blockPosition = entityPosition.toBlockPosition().subtract(0, 1, 0);
         try {
-            final short blockStateId = instance.getBlockStateId(blockPosition);
+            final short blockStateId = chunk.getBlockStateId(blockPosition.getX(),
+                    blockPosition.getY(),
+                    blockPosition.getZ());
             final Block block = Block.fromStateId(blockStateId);
             return block.isSolid();
         } catch (NullPointerException e) {

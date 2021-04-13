@@ -1,14 +1,15 @@
 package net.minestom.server.instance;
 
 import com.google.common.collect.Queues;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.UpdateManager;
+import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
-import net.minestom.server.entity.*;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.entity.ExperienceOrb;
+import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFInstanceSpace;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
@@ -29,18 +30,18 @@ import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
-import net.minestom.server.utils.time.CooldownUtils;
+import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
 /**
@@ -52,9 +53,9 @@ import java.util.function.Consumer;
  * WARNING: when making your own implementation registering the instance manually is required
  * with {@link InstanceManager#registerInstance(Instance)}, and
  * you need to be sure to signal the {@link UpdateManager} of the changes using
- * {@link UpdateManager#signalChunkLoad(Instance, int, int)} and {@link UpdateManager#signalChunkUnload(Instance, int, int)}.
+ * {@link UpdateManager#signalChunkLoad(Instance, Chunk)} and {@link UpdateManager#signalChunkUnload(Instance, Chunk)}.
  */
-public abstract class Instance implements BlockModifier, EventHandler, DataContainer {
+public abstract class Instance implements BlockModifier, EventHandler, DataContainer, PacketGroupingAudience {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
@@ -81,14 +82,13 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     private final Map<String, Collection<EventCallback<?>>> extensionCallbacks = new ConcurrentHashMap<>();
 
     // Entities present in this instance
-    protected final Set<Entity> entities = new CopyOnWriteArraySet<>();
-    protected final Set<Player> players = new CopyOnWriteArraySet<>();
-    protected final Set<EntityCreature> creatures = new CopyOnWriteArraySet<>();
-    protected final Set<ObjectEntity> objectEntities = new CopyOnWriteArraySet<>();
-    protected final Set<ExperienceOrb> experienceOrbs = new CopyOnWriteArraySet<>();
+    protected final Set<Entity> entities = ConcurrentHashMap.newKeySet();
+    protected final Set<Player> players = ConcurrentHashMap.newKeySet();
+    protected final Set<EntityCreature> creatures = ConcurrentHashMap.newKeySet();
+    protected final Set<ExperienceOrb> experienceOrbs = ConcurrentHashMap.newKeySet();
     // Entities per chunk
-    protected final Long2ObjectMap<Set<Entity>> chunkEntities = Long2ObjectMaps.synchronize(new Long2ObjectOpenHashMap<>());
-    private Object entitiesLock = new Object(); // Lock used to prevent the entities Set and Map to be subject to race condition
+    protected final Map<Long, Set<Entity>> chunkEntities = new ConcurrentHashMap<>();
+    private final Object entitiesLock = new Object(); // Lock used to prevent the entities Set and Map to be subject to race condition
 
     // the uuid of this instance
     protected UUID uniqueId;
@@ -252,7 +252,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * Used when a {@link Chunk} is not currently loaded in memory and need to be retrieved from somewhere else.
      * Could be read from disk, or generated from scratch.
      * <p>
-     * Be sure to signal the chunk using {@link UpdateManager#signalChunkLoad(Instance, int, int)} and to cache
+     * Be sure to signal the chunk using {@link UpdateManager#signalChunkLoad(Instance, Chunk)} and to cache
      * that this chunk has been loaded.
      * <p>
      * WARNING: it has to retrieve a chunk, this is not optional and should execute the callback in all case.
@@ -266,7 +266,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     /**
      * Called to generated a new {@link Chunk} from scratch.
      * <p>
-     * Be sure to signal the chunk using {@link UpdateManager#signalChunkLoad(Instance, int, int)} and to cache
+     * Be sure to signal the chunk using {@link UpdateManager#signalChunkLoad(Instance, Chunk)} and to cache
      * that this chunk has been loaded.
      * <p>
      * This is where you can put your chunk generation code.
@@ -452,6 +452,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @return an unmodifiable {@link Set} containing all the players in the instance
      */
+    @Override
     @NotNull
     public Set<Player> getPlayers() {
         return Collections.unmodifiableSet(players);
@@ -465,16 +466,6 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     @NotNull
     public Set<EntityCreature> getCreatures() {
         return Collections.unmodifiableSet(creatures);
-    }
-
-    /**
-     * Gets the object entities in the instance;
-     *
-     * @return an unmodifiable {@link Set} containing all the object entities in the instance
-     */
-    @NotNull
-    public Set<ObjectEntity> getObjectEntities() {
-        return Collections.unmodifiableSet(objectEntities);
     }
 
     /**
@@ -494,8 +485,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @return an unmodifiable {@link Set} containing all the entities in a chunk,
      * if {@code chunk} is unloaded, return an empty {@link HashSet}
      */
-    @NotNull
-    public Set<Entity> getChunkEntities(Chunk chunk) {
+    public @NotNull Set<Entity> getChunkEntities(Chunk chunk) {
         if (!ChunkUtils.isLoaded(chunk))
             return new HashSet<>();
 
@@ -864,6 +854,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param entity the entity to add
      */
+    @ApiStatus.Internal
     public void UNSAFE_addEntity(@NotNull Entity entity) {
         final Instance lastInstance = entity.getInstance();
         if (lastInstance != null && lastInstance != this) {
@@ -892,9 +883,11 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
                 }
             });
 
-            final Chunk chunk = getChunkAt(entityPosition);
-            Check.notNull(chunk, "You tried to spawn an entity in an unloaded chunk, " + entityPosition);
-            addEntityToChunk(entity, chunk);
+            // Load the chunk if not already (or throw an error if auto chunk load is disabled)
+            loadOptionalChunk(entityPosition, chunk -> {
+                Check.notNull(chunk, "You tried to spawn an entity in an unloaded chunk, " + entityPosition);
+                UNSAFE_addEntityToChunk(entity, chunk);
+            });
         });
     }
 
@@ -905,6 +898,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param entity the entity to remove
      */
+    @ApiStatus.Internal
     public void UNSAFE_removeEntity(@NotNull Entity entity) {
         final Instance entityInstance = entity.getInstance();
         if (entityInstance != this)
@@ -918,21 +912,22 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
             // Remove the entity from cache
             final Chunk chunk = getChunkAt(entity.getPosition());
             Check.notNull(chunk, "Tried to interact with an unloaded chunk.");
-            removeEntityFromChunk(entity, chunk);
+            UNSAFE_removeEntityFromChunk(entity, chunk);
         });
     }
 
     /**
-     * Synchronized method to execute {@link #removeEntityFromChunk(Entity, Chunk)}
-     * and {@link #addEntityToChunk(Entity, Chunk)} simultaneously.
+     * Synchronized method to execute {@link #UNSAFE_removeEntityFromChunk(Entity, Chunk)}
+     * and {@link #UNSAFE_addEntityToChunk(Entity, Chunk)} simultaneously.
      *
      * @param entity    the entity to change its chunk
      * @param lastChunk the last entity chunk
      * @param newChunk  the new entity chunk
      */
-    public synchronized void switchEntityChunk(@NotNull Entity entity, @NotNull Chunk lastChunk, @NotNull Chunk newChunk) {
-        removeEntityFromChunk(entity, lastChunk);
-        addEntityToChunk(entity, newChunk);
+    @ApiStatus.Internal
+    public synchronized void UNSAFE_switchEntityChunk(@NotNull Entity entity, @NotNull Chunk lastChunk, @NotNull Chunk newChunk) {
+        UNSAFE_removeEntityFromChunk(entity, lastChunk);
+        UNSAFE_addEntityToChunk(entity, newChunk);
     }
 
     /**
@@ -943,7 +938,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param entity the entity to add
      * @param chunk  the chunk where the entity will be added
      */
-    public void addEntityToChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
+    @ApiStatus.Internal
+    public void UNSAFE_addEntityToChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
         Check.notNull(chunk,
                 "The chunk " + chunk + " is not loaded, you can make it automatic by using Instance#enableAutoChunkLoad(true)");
         Check.argCondition(!chunk.isLoaded(), "Chunk " + chunk + " has been unloaded previously");
@@ -957,8 +953,6 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
                 this.players.add((Player) entity);
             } else if (entity instanceof EntityCreature) {
                 this.creatures.add((EntityCreature) entity);
-            } else if (entity instanceof ObjectEntity) {
-                this.objectEntities.add((ObjectEntity) entity);
             } else if (entity instanceof ExperienceOrb) {
                 this.experienceOrbs.add((ExperienceOrb) entity);
             }
@@ -973,7 +967,8 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @param entity the entity to remove
      * @param chunk  the chunk where the entity will be removed
      */
-    public void removeEntityFromChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
+    @ApiStatus.Internal
+    public void UNSAFE_removeEntityFromChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
         synchronized (entitiesLock) {
             final long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
             Set<Entity> entities = getEntitiesInChunk(chunkIndex);
@@ -984,8 +979,6 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
                 this.players.remove(entity);
             } else if (entity instanceof EntityCreature) {
                 this.creatures.remove(entity);
-            } else if (entity instanceof ObjectEntity) {
-                this.objectEntities.remove(entity);
             } else if (entity instanceof ExperienceOrb) {
                 this.experienceOrbs.remove(entity);
             }
@@ -994,7 +987,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
 
     @NotNull
     private Set<Entity> getEntitiesInChunk(long index) {
-        return chunkEntities.computeIfAbsent(index, i -> new CopyOnWriteArraySet<>());
+        return chunkEntities.computeIfAbsent(index, i -> ConcurrentHashMap.newKeySet());
     }
 
     /**
@@ -1032,7 +1025,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
             this.time += timeRate;
 
             // time needs to be send to players
-            if (timeUpdate != null && !CooldownUtils.hasCooldown(time, lastTimeUpdate, timeUpdate)) {
+            if (timeUpdate != null && !Cooldown.hasCooldown(time, lastTimeUpdate, timeUpdate)) {
                 PacketUtils.sendGroupedPacket(getPlayers(), createTimePacket());
                 this.lastTimeUpdate = time;
             }

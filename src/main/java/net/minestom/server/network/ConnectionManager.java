@@ -1,9 +1,11 @@
 package net.minestom.server.network;
 
 import io.netty.channel.Channel;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.ChatColor;
-import net.minestom.server.chat.ColoredText;
+import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
@@ -14,12 +16,10 @@ import net.minestom.server.listener.manager.ClientPacketConsumer;
 import net.minestom.server.listener.manager.ServerPacketConsumer;
 import net.minestom.server.network.packet.client.login.LoginStartPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
-import net.minestom.server.network.packet.server.play.ChatMessagePacket;
 import net.minestom.server.network.packet.server.play.DisconnectPacket;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
 import net.minestom.server.utils.validate.Check;
@@ -33,6 +33,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * Manages the connected clients.
@@ -41,7 +42,7 @@ public final class ConnectionManager {
 
     private static final long KEEP_ALIVE_DELAY = 10_000;
     private static final long KEEP_ALIVE_KICK = 30_000;
-    private static final ColoredText TIMEOUT_TEXT = ColoredText.of(ChatColor.RED + "Timeout");
+    private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
 
     private final Queue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
     private final Set<Player> players = new CopyOnWriteArraySet<>();
@@ -58,7 +59,7 @@ public final class ConnectionManager {
     // The consumers to call once a player connect, mostly used to init events
     private final List<Consumer<Player>> playerInitializations = new CopyOnWriteArrayList<>();
 
-    private JsonMessage shutdownText = ColoredText.of(ChatColor.RED, "The server is shutting down.");
+    private Component shutdownText = Component.text("The server is shutting down.", NamedTextColor.RED);
 
     /**
      * Gets the {@link Player} linked to a {@link PlayerConnection}.
@@ -144,13 +145,15 @@ public final class ConnectionManager {
      *
      * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
      * @param condition   the condition to receive the message
+     *
+     * @deprecated Use {@link Audiences#players(Predicate)}
      */
+    @Deprecated
     public void broadcastMessage(@NotNull JsonMessage jsonMessage, @Nullable PlayerValidator condition) {
-        final Collection<Player> recipients = getRecipients(condition);
-
-        if (!recipients.isEmpty()) {
-            final String jsonText = jsonMessage.toString();
-            broadcastJson(jsonText, recipients);
+        if (condition == null) {
+            Audiences.players().sendMessage(jsonMessage);
+        } else {
+            Audiences.players(condition).sendMessage(jsonMessage);
         }
     }
 
@@ -158,16 +161,11 @@ public final class ConnectionManager {
      * Sends a {@link JsonMessage} to all online players.
      *
      * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
+     * @deprecated Use {@link Audience#sendMessage(Component)} on {@link Audiences#players()}
      */
+    @Deprecated
     public void broadcastMessage(@NotNull JsonMessage jsonMessage) {
-        broadcastMessage(jsonMessage, null);
-    }
-
-    private void broadcastJson(@NotNull String json, @NotNull Collection<Player> recipients) {
-        ChatMessagePacket chatMessagePacket =
-                new ChatMessagePacket(json, ChatMessagePacket.Position.SYSTEM_MESSAGE);
-
-        PacketUtils.sendGroupedPacket(recipients, chatMessagePacket);
+        this.broadcastMessage(jsonMessage, null);
     }
 
     private Collection<Player> getRecipients(@Nullable PlayerValidator condition) {
@@ -303,13 +301,49 @@ public final class ConnectionManager {
     }
 
     /**
+     * Removes an existing player initialization consumer.
+     * <p>
+     * Removal of player initializations should be done by reference, and not cloning.
+     *
+     * @param playerInitialization the {@link Player} initialization consumer
+     */
+    public void removePlayerInitialization(@NotNull Consumer<Player> playerInitialization) {
+        this.playerInitializations.remove(playerInitialization);
+    }
+
+    /**
+     * Gets the kick reason when the server is shutdown using {@link MinecraftServer#stopCleanly()}.
+     *
+     * @return the kick reason in case on a shutdown
+     *
+     * @deprecated Use {@link #getShutdownText()}
+     */
+    @Deprecated
+    @NotNull
+    public JsonMessage getShutdownTextJson() {
+        return JsonMessage.fromComponent(shutdownText);
+    }
+
+    /**
      * Gets the kick reason when the server is shutdown using {@link MinecraftServer#stopCleanly()}.
      *
      * @return the kick reason in case on a shutdown
      */
     @NotNull
-    public JsonMessage getShutdownText() {
+    public Component getShutdownText() {
         return shutdownText;
+    }
+
+    /**
+     * Changes the kick reason in case of a shutdown.
+     *
+     * @param shutdownText the new shutdown kick reason
+     * @see #getShutdownTextJson()
+     * @deprecated Use {@link #setShutdownText(Component)}
+     */
+    @Deprecated
+    public void setShutdownText(@NotNull JsonMessage shutdownText) {
+        this.shutdownText = shutdownText.asComponent();
     }
 
     /**
@@ -318,7 +352,7 @@ public final class ConnectionManager {
      * @param shutdownText the new shutdown kick reason
      * @see #getShutdownText()
      */
-    public void setShutdownText(@NotNull JsonMessage shutdownText) {
+    public void setShutdownText(@NotNull Component shutdownText) {
         this.shutdownText = shutdownText;
     }
 
@@ -448,7 +482,7 @@ public final class ConnectionManager {
      * Shutdowns the connection manager by kicking all the currently connected players.
      */
     public void shutdown() {
-        DisconnectPacket disconnectPacket = new DisconnectPacket(getShutdownText());
+        DisconnectPacket disconnectPacket = new DisconnectPacket(shutdownText);
         for (Player player : getOnlinePlayers()) {
             final PlayerConnection playerConnection = player.getPlayerConnection();
             if (playerConnection instanceof NettyPlayerConnection) {
