@@ -20,7 +20,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * An item stack cannot be null, {@link ItemStack#AIR} should be used instead.
  */
-public class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
+public final class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
 
     /**
      * Constant AIR item. Should be used instead of 'null'.
