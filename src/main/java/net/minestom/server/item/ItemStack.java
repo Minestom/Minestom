@@ -62,7 +62,7 @@ public final class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
                 .amount(amount)
                 .meta(metaBuilder -> {
                     metaBuilder.nbt = nbtCompound.deepClone();
-                    NBTUtils.loadDataIntoMeta(metaBuilder, nbtCompound);
+                    NBTUtils.loadDataIntoMeta(metaBuilder, metaBuilder.nbt);
                     return metaBuilder;
                 }).build();
     }

@@ -262,7 +262,7 @@ public abstract class ItemMetaBuilder {
     public static @NotNull ItemMetaBuilder fromNBT(@NotNull ItemMetaBuilder src, @NotNull NBTCompound nbtCompound) {
         ItemMetaBuilder dest = src.getSupplier().get();
         dest.nbt = nbtCompound.deepClone();
-        NBTUtils.loadDataIntoMeta(dest, nbtCompound);
+        NBTUtils.loadDataIntoMeta(dest, dest.nbt);
         return dest;
     }
 
