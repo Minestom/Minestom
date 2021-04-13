@@ -2,6 +2,7 @@ package net.minestom.server.terminal;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import org.jetbrains.annotations.ApiStatus;
 import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
@@ -18,6 +19,7 @@ public class MinestomTerminal {
 
     private static volatile boolean running = false;
 
+    @ApiStatus.Internal
     public static void start() {
         Terminal terminal = null;
         try {
@@ -42,6 +44,7 @@ public class MinestomTerminal {
         }
     }
 
+    @ApiStatus.Internal
     public static void stop() {
         running = false;
     }
