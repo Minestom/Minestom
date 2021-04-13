@@ -37,7 +37,7 @@ public final class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
 
     protected ItemStack(@NotNull Material material, int amount,
                         @NotNull ItemMeta meta,
-                        @NotNull StackingRule stackingRule) {
+                        @Nullable StackingRule stackingRule) {
         this.material = material;
         this.amount = amount;
         this.meta = meta;
