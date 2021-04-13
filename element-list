@@ -130,6 +130,7 @@ net.minestom.server.sound
 net.minestom.server.stat
 net.minestom.server.storage
 net.minestom.server.storage.systems
+net.minestom.server.terminal
 net.minestom.server.thread
 net.minestom.server.timer
 net.minestom.server.utils

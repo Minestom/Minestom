@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":42,"i6":10,"i7":10,"i8":10,"i9":10,"i10":42,"i11":10,"i12":10,"i13":10,"i14":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":42,"i6":10,"i7":10,"i8":10,"i9":10,"i10":42,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -132,7 +132,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public final class <span class="typeNameLabel">CommandManager</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
-<div class="block">Manager used to register <a href="builder/Command.html" title="class in net.minestom.server.command.builder"><code>Command</code></a> and <a href="CommandProcessor.html" title="interface in net.minestom.server.command"><code>CommandProcessor</code></a>.
+<div class="block">Manager used to register <a href="builder/Command.html" title="class in net.minestom.server.command.builder"><code>commands</code></a>.
  <p>
  It is also possible to simulate a command using <a href="#execute(net.minestom.server.command.CommandSender,java.lang.String)"><code>execute(CommandSender, String)</code></a>.</div>
 </li>
@@ -289,20 +289,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#startConsoleThread()">startConsoleThread</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Starts the thread responsible for executing commands from the console.</div>
-</td>
-</tr>
-<tr id="i13" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stopConsoleThread()">stopConsoleThread</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Stops the console responsible for the console commands processing.</div>
-</td>
-</tr>
-<tr id="i14" class="altColor">
-<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unregister(net.minestom.server.command.builder.Command)">unregister</a></span>&#8203;(@NotNull <a href="builder/Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</code></th>
 <td class="colLast">
 <div class="block">Removes a command from the currently registered commands.</div>
@@ -374,18 +360,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="stopConsoleThread()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>stopConsoleThread</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;stopConsoleThread()</pre>
-<div class="block">Stops the console responsible for the console commands processing.
- <p>
- WARNING: it cannot be re-run later.</div>
-</li>
-</ul>
 <a id="register(net.minestom.server.command.builder.Command)">
 <!--   -->
 </a>
@@ -589,16 +563,6 @@ public&nbsp;@NotNull <a href="ConsoleSender.html" title="class in net.minestom.s
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the <a href="ConsoleSender.html" title="class in net.minestom.server.command"><code>ConsoleSender</code></a></dd>
 </dl>
-</li>
-</ul>
-<a id="startConsoleThread()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>startConsoleThread</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;startConsoleThread()</pre>
-<div class="block">Starts the thread responsible for executing commands from the console.</div>
 </li>
 </ul>
 <a id="createDeclareCommandsPacket(net.minestom.server.entity.Player)">
