@@ -9,6 +9,7 @@ import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.thread.PerInstanceThreadProvider;
 import net.minestom.server.thread.ThreadProvider;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -89,6 +90,8 @@ public final class UpdateManager {
                     final TickMonitor tickMonitor = new TickMonitor(tickTimeMs);
                     this.tickMonitors.forEach(consumer -> consumer.accept(tickMonitor));
                 }
+
+                PacketUtils.flush();
 
                 // Flush all waiting packets
                 AsyncUtils.runAsync(() -> connectionManager.getOnlinePlayers().stream()
