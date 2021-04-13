@@ -234,16 +234,6 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Consumer this object to write at a different time
-     *
-     * @param consumer the writer consumer
-     */
-    public void write(Consumer<BinaryWriter> consumer) {
-        if (consumer != null)
-            consumer.accept(this);
-    }
-
-    /**
      * Writes an {@link UUID}.
      * It is done by writing both long, the most and least significant bits.
      *
@@ -293,6 +283,10 @@ public class BinaryWriter extends OutputStream {
 
     public void write(@NotNull BinaryWriter writer) {
         this.buffer.writeBytes(writer.getBuffer());
+    }
+
+    public void write(@NotNull ByteBuf buffer) {
+        this.buffer.writeBytes(buffer);
     }
 
     /**
