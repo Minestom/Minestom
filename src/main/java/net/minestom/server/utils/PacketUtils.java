@@ -10,6 +10,7 @@ import it.unimi.dsi.fastutil.ints.IntIntPair;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.Viewable;
 import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Entity;
@@ -27,7 +28,6 @@ import net.minestom.server.utils.callback.validator.PlayerValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.Duration;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -62,7 +62,7 @@ public final class PacketUtils {
      * </ol>
      *
      * @param audience the audience
-     * @param packet the packet
+     * @param packet   the packet
      */
     @SuppressWarnings("OverrideOnly") // we need to access the audiences inside ForwardingAudience
     public static void sendPacket(@NotNull Audience audience, @NotNull ServerPacket packet) {
@@ -79,9 +79,9 @@ public final class PacketUtils {
         }
     }
 
-    private static final Map<Chunk, ChunkStorage> CHUNK_STORAGE_MAP = new ConcurrentHashMap<>();
+    private static final Map<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = new ConcurrentHashMap<>();
 
-    private static class ChunkStorage {
+    private static class ViewableStorage {
         Int2ObjectMap<Entry> entries = new Int2ObjectRBTreeMap<>();
 
         private static class Entry {
@@ -90,7 +90,7 @@ public final class PacketUtils {
         }
     }
 
-    public static void prepareGroupedPacket(@NotNull Chunk chunk, @NotNull ServerPacket serverPacket, @Nullable Entity entity) {
+    public static void prepareGroupedPacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket, @Nullable Entity entity) {
         if (entity != null && !entity.isAutoViewable()) {
             // Operation cannot be optimized
             entity.sendPacketToViewers(serverPacket);
@@ -98,10 +98,10 @@ public final class PacketUtils {
         }
 
         final PlayerConnection playerConnection = entity instanceof Player ? ((Player) entity).getPlayerConnection() : null;
-        ChunkStorage chunkStorage = CHUNK_STORAGE_MAP.computeIfAbsent(chunk, c -> new ChunkStorage());
+        ViewableStorage viewableStorage = VIEWABLE_STORAGE_MAP.computeIfAbsent(viewable, c -> new ViewableStorage());
         final int priority = serverPacket.getNetworkHint().getPriority();
-        synchronized (chunkStorage) {
-            ChunkStorage.Entry entry = chunkStorage.entries.computeIfAbsent(priority, integer -> new ChunkStorage.Entry());
+        synchronized (viewableStorage) {
+            ViewableStorage.Entry entry = viewableStorage.entries.computeIfAbsent(priority, integer -> new ViewableStorage.Entry());
             final boolean hasConnection = playerConnection != null;
             var entityIdMap = entry.entityIdMap;
             if (hasConnection && entityIdMap.containsKey(playerConnection))
@@ -123,14 +123,14 @@ public final class PacketUtils {
     }
 
     public static void flush(@NotNull Chunk chunk) {
-        ChunkStorage chunkStorage = CHUNK_STORAGE_MAP.get(chunk);
-        if (chunkStorage == null || chunkStorage.entries.isEmpty()) {
+        ViewableStorage viewableStorage = VIEWABLE_STORAGE_MAP.get(chunk);
+        if (viewableStorage == null || viewableStorage.entries.isEmpty()) {
             return; // nothing to flush
         }
 
         AsyncUtils.runAsync(() -> {
-            synchronized (chunkStorage) {
-                var entries = chunkStorage.entries;
+            synchronized (viewableStorage) {
+                var entries = viewableStorage.entries;
                 entries.forEach((integer, entry) -> {
                     var entityIdMap = entry.entityIdMap;
                     if (entityIdMap.isEmpty())

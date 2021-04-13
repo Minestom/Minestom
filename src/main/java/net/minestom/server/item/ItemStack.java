@@ -8,8 +8,10 @@ import net.minestom.server.utils.NBTUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.IntUnaryOperator;
 import java.util.function.UnaryOperator;
@@ -20,24 +22,27 @@ import java.util.function.UnaryOperator;
  * <p>
  * An item stack cannot be null, {@link ItemStack#AIR} should be used instead.
  */
-public class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
+public final class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
 
     /**
      * Constant AIR item. Should be used instead of 'null'.
      */
     public static final @NotNull ItemStack AIR = ItemStack.of(Material.AIR);
 
-    private final StackingRule stackingRule = new VanillaStackingRule(64);
+    private final StackingRule stackingRule;
 
     private final Material material;
     private final int amount;
     private final ItemMeta meta;
 
     protected ItemStack(@NotNull Material material, int amount,
-                        @NotNull ItemMeta meta) {
+                        @NotNull ItemMeta meta,
+                        @NotNull StackingRule stackingRule) {
         this.material = material;
         this.amount = amount;
         this.meta = meta;
+        this.stackingRule = Objects.requireNonNullElseGet(stackingRule,
+                () -> new VanillaStackingRule(64));
     }
 
     @Contract(value = "_ -> new", pure = true)
@@ -53,6 +58,19 @@ public class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
     @Contract(value = "_ -> new", pure = true)
     public static @NotNull ItemStack of(@NotNull Material material) {
         return of(material, 1);
+    }
+
+    @Contract(value = "_, _, _ -> new", pure = true)
+    public static @NotNull ItemStack fromNBT(@NotNull Material material, @NotNull NBTCompound nbtCompound, int amount) {
+        return ItemStack.builder(material)
+                .amount(amount)
+                .meta(metaBuilder -> ItemMetaBuilder.fromNBT(metaBuilder, nbtCompound))
+                .build();
+    }
+
+    @Contract(value = "_, _ -> new", pure = true)
+    public static @NotNull ItemStack fromNBT(@NotNull Material material, @NotNull NBTCompound nbtCompound) {
+        return fromNBT(material, nbtCompound, 1);
     }
 
     @Contract(pure = true)
@@ -168,7 +186,8 @@ public class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
     @Contract(value = "-> new", pure = true)
     protected @NotNull ItemStackBuilder builder() {
         return new ItemStackBuilder(material, meta.builder())
-                .amount(amount);
+                .amount(amount)
+                .stackingRule(stackingRule);
     }
 
     @Override

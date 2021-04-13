@@ -80,8 +80,6 @@ public final class UpdateManager {
                 // the time that the tick took in nanoseconds
                 final long tickTime = System.nanoTime() - currentTime;
 
-                System.out.println("TPS: " + tickTime / 1e6D + "ms");
-
                 // Tick end callbacks
                 doTickCallback(tickEndCallbacks, tickTime);
 
