@@ -239,21 +239,19 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(@NotNull <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(io.netty.buffer.ByteBuf)">write</a></span>&#8203;(@NotNull io.netty.buffer.ByteBuf&nbsp;buffer)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.Writeable)">write</a></span>&#8203;(@NotNull <a href="Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a>&nbsp;writeable)</code></th>
-<td class="colLast">
-<div class="block">Writes the given writeable object into this writer.</div>
-</td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(@NotNull <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(java.util.function.Consumer)">write</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Consumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Consumer</a>&lt;<a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&gt;&nbsp;consumer)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.Writeable)">write</a></span>&#8203;(@NotNull <a href="Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a>&nbsp;writeable)</code></th>
 <td class="colLast">
-<div class="block">Consumer this object to write at a different time</div>
+<div class="block">Writes the given writeable object into this writer.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -756,20 +754,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
-<a id="write(java.util.function.Consumer)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>write</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Consumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Consumer</a>&lt;<a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&gt;&nbsp;consumer)</pre>
-<div class="block">Consumer this object to write at a different time</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>consumer</code> - the writer consumer</dd>
-</dl>
-</li>
-</ul>
 <a id="writeUuid(java.util.UUID)">
 <!--   -->
 </a>
@@ -852,6 +836,16 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <h4>write</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
                   @NotNull <a href="BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</pre>
+</li>
+</ul>
+<a id="write(io.netty.buffer.ByteBuf)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>write</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
+                  @NotNull io.netty.buffer.ByteBuf&nbsp;buffer)</pre>
 </li>
 </ul>
 <a id="writeArray(net.minestom.server.utils.binary.Writeable[])">
