@@ -336,7 +336,8 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>@Nullable <a href="../event/item/ItemUpdateStateEvent.html" title="class in net.minestom.server.event.item">ItemUpdateStateEvent</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#callItemUpdateStateEvent(boolean)">callItemUpdateStateEvent</a></span>&#8203;(boolean&nbsp;allowFood)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#callItemUpdateStateEvent(boolean,net.minestom.server.entity.Player.Hand)">callItemUpdateStateEvent</a></span>&#8203;(boolean&nbsp;allowFood,
+                        @Nullable <a href="Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</code></th>
 <td class="colLast">
 <div class="block">Used to call <a href="../event/item/ItemUpdateStateEvent.html" title="class in net.minestom.server.event.item"><code>ItemUpdateStateEvent</code></a> with the proper item
  It does check which hand to get the item to update.</div>
@@ -927,12 +928,12 @@ implements <a href="../command/CommandSender.html" title="interface in net.mines
 </tr>
 <tr id="i85" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshEating(boolean)">refreshEating</a></span>&#8203;(boolean&nbsp;isEating)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshEating(net.minestom.server.entity.Player.Hand)">refreshEating</a></span>&#8203;(@Nullable <a href="Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;eatingHand)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i86" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshEating(boolean,long)">refreshEating</a></span>&#8203;(boolean&nbsp;isEating,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshEating(net.minestom.server.entity.Player.Hand,long)">refreshEating</a></span>&#8203;(@Nullable <a href="Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;eatingHand,
              long&nbsp;eatingTime)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -3992,33 +3993,37 @@ public&nbsp;@NotNull <a href="vehicle/PlayerVehicleInformation.html" title="clas
 </dl>
 </li>
 </ul>
-<a id="refreshEating(boolean,long)">
+<a id="refreshEating(net.minestom.server.entity.Player.Hand,long)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>refreshEating</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;refreshEating&#8203;(boolean&nbsp;isEating,
+<pre class="methodSignature">public&nbsp;void&nbsp;refreshEating&#8203;(@Nullable
+                          @Nullable <a href="Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;eatingHand,
                           long&nbsp;eatingTime)</pre>
 </li>
 </ul>
-<a id="refreshEating(boolean)">
+<a id="refreshEating(net.minestom.server.entity.Player.Hand)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>refreshEating</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;refreshEating&#8203;(boolean&nbsp;isEating)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;refreshEating&#8203;(@Nullable
+                          @Nullable <a href="Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;eatingHand)</pre>
 </li>
 </ul>
-<a id="callItemUpdateStateEvent(boolean)">
+<a id="callItemUpdateStateEvent(boolean,net.minestom.server.entity.Player.Hand)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>callItemUpdateStateEvent</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;@Nullable <a href="../event/item/ItemUpdateStateEvent.html" title="class in net.minestom.server.event.item">ItemUpdateStateEvent</a>&nbsp;callItemUpdateStateEvent&#8203;(boolean&nbsp;allowFood)</pre>
+public&nbsp;@Nullable <a href="../event/item/ItemUpdateStateEvent.html" title="class in net.minestom.server.event.item">ItemUpdateStateEvent</a>&nbsp;callItemUpdateStateEvent&#8203;(boolean&nbsp;allowFood,
+                                                               @Nullable
+                                                               @Nullable <a href="Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</pre>
 <div class="block">Used to call <a href="../event/item/ItemUpdateStateEvent.html" title="class in net.minestom.server.event.item"><code>ItemUpdateStateEvent</code></a> with the proper item
  It does check which hand to get the item to update.</div>
 <dl>

@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10};
+var data = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -180,8 +180,9 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.item.ItemStack)">PlayerEatEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-              @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;foodItem)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.item.ItemStack,net.minestom.server.entity.Player.Hand)">PlayerEatEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+              @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;foodItem,
+              <a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -208,6 +209,11 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <td class="colLast">
 <div class="block">Gets the food item that has been eaten.</div>
 </td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getHand()">getHand</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -240,7 +246,7 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.item.ItemStack)">
+<a id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.item.ItemStack,net.minestom.server.entity.Player.Hand)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -249,7 +255,9 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <pre>public&nbsp;PlayerEatEvent&#8203;(@NotNull
                       @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                       @NotNull
-                      @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;foodItem)</pre>
+                      @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;foodItem,
+                      @NotNull
+                      <a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</pre>
 </li>
 </ul>
 </li>
@@ -265,7 +273,7 @@ extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event"
 <a id="getFoodItem()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getFoodItem</h4>
 <pre class="methodSignature">@NotNull
@@ -275,6 +283,16 @@ public&nbsp;@NotNull <a href="../../item/ItemStack.html" title="class in net.min
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the food item</dd>
 </dl>
+</li>
+</ul>
+<a id="getHand()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getHand</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;getHand()</pre>
 </li>
 </ul>
 </li>

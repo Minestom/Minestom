@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -187,8 +187,9 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.item.ItemStack,long)">PlayerPreEatEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.item.ItemStack,net.minestom.server.entity.Player.Hand,long)">PlayerPreEatEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                  @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;foodItem,
+                 <a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
                  long&nbsp;eatingTime)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -225,20 +226,25 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getHand()">getHand</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isCancelled()">isCancelled</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCancelled(boolean)">setCancelled</a></span>&#8203;(boolean&nbsp;cancel)</code></th>
 <td class="colLast">
 <div class="block">Marks the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEatingTime(long)">setEatingTime</a></span>&#8203;(long&nbsp;eatingTime)</code></th>
 <td class="colLast">
@@ -276,7 +282,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.item.ItemStack,long)">
+<a id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.item.ItemStack,net.minestom.server.entity.Player.Hand,long)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -286,6 +292,8 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
                          @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                          @NotNull
                          @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;foodItem,
+                         @NotNull
+                         <a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
                          long&nbsp;eatingTime)</pre>
 </li>
 </ul>
@@ -312,6 +320,16 @@ public&nbsp;@NotNull <a href="../../item/ItemStack.html" title="class in net.min
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the food item</dd>
 </dl>
+</li>
+</ul>
+<a id="getHand()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHand</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;<a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;getHand()</pre>
 </li>
 </ul>
 <a id="getEatingTime()">
