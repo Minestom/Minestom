@@ -60,11 +60,8 @@ public final class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
     public static @NotNull ItemStack fromNBT(@NotNull Material material, @NotNull NBTCompound nbtCompound, int amount) {
         return ItemStack.builder(material)
                 .amount(amount)
-                .meta(metaBuilder -> {
-                    metaBuilder.nbt = nbtCompound.deepClone();
-                    NBTUtils.loadDataIntoMeta(metaBuilder, metaBuilder.nbt);
-                    return metaBuilder;
-                }).build();
+                .meta(metaBuilder -> ItemMetaBuilder.fromNBT(metaBuilder, nbtCompound))
+                .build();
     }
 
     @Contract(value = "_, _ -> new", pure = true)
