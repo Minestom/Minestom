@@ -42,6 +42,7 @@ import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.StatisticType;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.storage.StorageManager;
+import net.minestom.server.terminal.MinestomTerminal;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
@@ -775,7 +776,7 @@ public final class MinecraftServer {
 
         LOGGER.info("Minestom server started successfully.");
 
-        commandManager.startConsoleThread();
+        MinestomTerminal.start();
     }
 
     /**
@@ -805,7 +806,7 @@ public final class MinecraftServer {
         extensionManager.shutdown();
         LOGGER.info("Shutting down all thread pools.");
         benchmarkManager.disable();
-        commandManager.stopConsoleThread();
+        MinestomTerminal.stop();
         MinestomThread.shutdownAll();
         LOGGER.info("Minestom server stopped successfully.");
     }

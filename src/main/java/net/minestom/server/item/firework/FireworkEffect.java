@@ -1,13 +1,12 @@
 package net.minestom.server.item.firework;
 
-import net.minestom.server.chat.ChatColor;
 import net.minestom.server.color.Color;
-import net.minestom.server.exception.ExceptionManager;
-import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.*;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class FireworkEffect {
 
@@ -18,6 +17,7 @@ public class FireworkEffect {
     private final List<Color> fadeColor;
 
     //FIXME: fix javadoc
+
     /**
      * Initializes a new firework effect.
      *
@@ -60,9 +60,9 @@ public class FireworkEffect {
             }
         }
 
-        boolean flicker = compound.containsKey("Flicker") && compound.getByte("Flicker") == 1;
-        boolean trail = compound.containsKey("Trail") && compound.getByte("Trail") == 1;
-        FireworkEffectType type = compound.containsKey("Type") ? FireworkEffectType.byId(compound.getByte("Type")) : FireworkEffectType.SMALL_BALL;
+        boolean flicker = compound.containsKey("Flicker") && compound.getAsByte("Flicker") == 1;
+        boolean trail = compound.containsKey("Trail") && compound.getAsByte("Trail") == 1;
+        FireworkEffectType type = compound.containsKey("Type") ? FireworkEffectType.byId(compound.getAsByte("Type")) : FireworkEffectType.SMALL_BALL;
 
 
         return new FireworkEffect(

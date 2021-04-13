@@ -261,7 +261,8 @@ public abstract class ItemMetaBuilder {
     @Contract(value = "_, _ -> new", pure = true)
     public static @NotNull ItemMetaBuilder fromNBT(@NotNull ItemMetaBuilder src, @NotNull NBTCompound nbtCompound) {
         ItemMetaBuilder dest = src.getSupplier().get();
-        NBTUtils.loadDataIntoMeta(dest, nbtCompound);
+        dest.nbt = nbtCompound.deepClone();
+        NBTUtils.loadDataIntoMeta(dest, dest.nbt);
         return dest;
     }
 

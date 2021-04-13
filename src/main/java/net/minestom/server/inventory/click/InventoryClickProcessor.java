@@ -289,12 +289,12 @@ public class InventoryClickProcessor {
 
                     final int maxSize = stackingRule.getMaxSize();
                     if (stackingRule.canBeStacked(cursor, slotItem)) {
-                        final int amount = slotItemRule.getAmount(slotItem) + slotSize;
-                        if (stackingRule.canApply(slotItem, amount)) {
-                            slotItem = stackingRule.apply(slotItem, amount);
+                        final int amount = slotItemRule.getAmount(slotItem);
+                        if (stackingRule.canApply(slotItem, amount + slotSize)) {
+                            slotItem = stackingRule.apply(slotItem, a -> a + slotSize);
                             finalCursorAmount -= slotSize;
                         } else {
-                            final int removedAmount = amount - maxSize;
+                            final int removedAmount = maxSize - amount;
                             slotItem = stackingRule.apply(slotItem, maxSize);
                             finalCursorAmount -= removedAmount;
                         }
