@@ -7,6 +7,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.parser.CommandParser;
+import net.minestom.server.command.builder.parser.CommandQueryResult;
 import net.minestom.server.command.builder.parser.CommandSuggestionHolder;
 import net.minestom.server.command.builder.parser.ValidSyntaxHolder;
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 /**
  * Class responsible for parsing {@link Command}.
@@ -60,6 +60,9 @@ public class CommandDispatcher {
         }
 
         this.commands.remove(command);
+
+        // Clear cache
+        this.cache.invalidateAll();
     }
 
     @NotNull
@@ -91,7 +94,7 @@ public class CommandDispatcher {
         CommandResult commandResult = parse(commandString);
         ParsedCommand parsedCommand = commandResult.parsedCommand;
         if (parsedCommand != null) {
-            commandResult.commandData = parsedCommand.execute(source, commandString);
+            commandResult.commandData = parsedCommand.execute(source);
         }
         return commandResult;
     }
@@ -118,22 +121,17 @@ public class CommandDispatcher {
         final String[] parts = commandString.split(StringUtils.SPACE);
         final String commandName = parts[0];
 
-        final Command command = findCommand(commandName);
+        final CommandQueryResult commandQueryResult = CommandParser.findCommand(commandString);
         // Check if the command exists
-        if (command == null) {
+        if (commandQueryResult == null) {
             return CommandResult.of(CommandResult.Type.UNKNOWN, commandName);
         }
-
-        // Removes the command's name + the space after
-        String[] args = commandString.replaceFirst(Pattern.quote(commandName), "").trim().split(StringUtils.SPACE);
-        if (args.length == 1 && args[0].length() == 0) {
-            args = new String[0];
-        }
+        final Command command = commandQueryResult.command;
 
         CommandResult result = new CommandResult();
         result.input = commandString;
         // Find the used syntax and fill CommandResult#type and CommandResult#parsedCommand
-        findParsedCommand(command, args, result);
+        findParsedCommand(command, commandName, commandQueryResult.args, commandString, result);
 
         // Cache result
         {
@@ -144,7 +142,10 @@ public class CommandDispatcher {
     }
 
     @Nullable
-    private ParsedCommand findParsedCommand(@NotNull Command command, @NotNull String[] args, @NotNull CommandResult result) {
+    private ParsedCommand findParsedCommand(@NotNull Command command,
+                                            @NotNull String commandName, @NotNull String[] args,
+                                            @NotNull String commandString,
+                                            @NotNull CommandResult result) {
         final boolean hasArgument = args.length > 0;
 
         // Search for subcommand
@@ -152,25 +153,51 @@ public class CommandDispatcher {
             final String firstArgument = args[0];
             for (Command subcommand : command.getSubcommands()) {
                 if (Command.isValidName(subcommand, firstArgument)) {
-                    return findParsedCommand(subcommand, Arrays.copyOfRange(args, 1, args.length), result);
+                    return findParsedCommand(subcommand,
+                            firstArgument, Arrays.copyOfRange(args, 1, args.length),
+                            commandString, result);
                 }
             }
         }
 
+        final String input = commandName + StringUtils.SPACE + String.join(StringUtils.SPACE, args);
+
 
         ParsedCommand parsedCommand = new ParsedCommand();
         parsedCommand.command = command;
+        parsedCommand.commandString = commandString;
 
         // The default executor should be used if no argument is provided
         {
-            final CommandExecutor defaultExecutor = command.getDefaultExecutor();
-            if (defaultExecutor != null && !hasArgument) {
-                parsedCommand.executor = defaultExecutor;
-                parsedCommand.arguments = new Arguments();
+            if (!hasArgument) {
+                Optional<CommandSyntax> optionalSyntax = command.getSyntaxes()
+                        .stream()
+                        .filter(syntax -> syntax.getArguments().length == 0)
+                        .findFirst();
 
-                result.type = CommandResult.Type.SUCCESS;
-                result.parsedCommand = parsedCommand;
-                return parsedCommand;
+                if (optionalSyntax.isPresent()) {
+                    // Empty syntax found
+                    final CommandSyntax syntax = optionalSyntax.get();
+
+                    parsedCommand.syntax = syntax;
+                    parsedCommand.executor = syntax.getExecutor();
+                    parsedCommand.context = new CommandContext(input);
+
+                    result.type = CommandResult.Type.SUCCESS;
+                    result.parsedCommand = parsedCommand;
+                    return parsedCommand;
+                } else {
+                    // No empty syntax, use default executor if any
+                    final CommandExecutor defaultExecutor = command.getDefaultExecutor();
+                    if (defaultExecutor != null) {
+                        parsedCommand.executor = defaultExecutor;
+                        parsedCommand.context = new CommandContext(input);
+
+                        result.type = CommandResult.Type.SUCCESS;
+                        result.parsedCommand = parsedCommand;
+                        return parsedCommand;
+                    }
+                }
             }
         }
 
@@ -186,21 +213,21 @@ public class CommandDispatcher {
         Int2ObjectRBTreeMap<CommandSuggestionHolder> syntaxesSuggestions = new Int2ObjectRBTreeMap<>(Collections.reverseOrder());
 
         for (CommandSyntax syntax : syntaxes) {
-            CommandParser.parse(syntax, syntax.getArguments(), args, validSyntaxes, syntaxesSuggestions);
+            CommandParser.parse(syntax, syntax.getArguments(), args, commandString, validSyntaxes, syntaxesSuggestions);
         }
 
         // Check if there is at least one correct syntax
         if (!validSyntaxes.isEmpty()) {
-            Arguments executorArgs = new Arguments();
+            CommandContext context = new CommandContext(input);
             // Search the syntax with all perfect args
-            final ValidSyntaxHolder finalValidSyntax = CommandParser.findMostCorrectSyntax(validSyntaxes, executorArgs);
+            final ValidSyntaxHolder finalValidSyntax = CommandParser.findMostCorrectSyntax(validSyntaxes, context);
             if (finalValidSyntax != null) {
                 // A fully correct syntax has been found, use it
                 final CommandSyntax syntax = finalValidSyntax.syntax;
 
                 parsedCommand.syntax = syntax;
                 parsedCommand.executor = syntax.getExecutor();
-                parsedCommand.arguments = executorArgs;
+                parsedCommand.context = context;
 
                 result.type = CommandResult.Type.SUCCESS;
                 result.parsedCommand = parsedCommand;
@@ -234,7 +261,7 @@ public class CommandDispatcher {
 
         // No syntax found
         result.type = CommandResult.Type.INVALID_SYNTAX;
-        result.parsedCommand = ParsedCommand.withDefaultExecutor(command);
+        result.parsedCommand = ParsedCommand.withDefaultExecutor(command, input);
         return result.parsedCommand;
     }
 }

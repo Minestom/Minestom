@@ -19,11 +19,20 @@ public class Tag {
     private Set<NamespaceID> values;
 
     /**
-     * Creates a new empty tag
+     * Creates a new empty tag. This does not cache the tag.
      */
     public Tag(NamespaceID name) {
         this.name = name;
         values = new HashSet<>();
+        lockValues();
+    }
+
+    /**
+     * Creates a new tag with the given values. This does not cache the tag.
+     */
+    public Tag(NamespaceID name, Set<NamespaceID> values) {
+        this.name = name;
+        this.values = new HashSet<>(values);
         lockValues();
     }
 

@@ -2,6 +2,7 @@
 package net.minestom.server.registry;
 
 import java.util.HashMap;
+import net.kyori.adventure.key.Key;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.fluids.Fluid;
 import net.minestom.server.instance.block.Block;
@@ -10,7 +11,7 @@ import net.minestom.server.item.Material;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
-import net.minestom.server.sound.Sound;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.StatisticType;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
@@ -66,7 +67,7 @@ public final class Registries {
      * Should only be used for internal code, please use the get* methods.
      */
     @Deprecated
-    public static final HashMap<NamespaceID, Sound> sounds = new HashMap<>();
+    public static final HashMap<NamespaceID, SoundEvent> soundEvents = new HashMap<>();
 
     /**
      * Should only be used for internal code, please use the get* methods.
@@ -97,6 +98,14 @@ public final class Registries {
     }
 
     /**
+     * Returns the corresponding Block matching the given key. Returns 'AIR' if none match.
+     */
+    @NotNull
+    public static Block getBlock(Key key) {
+        return getBlock(NamespaceID.from(key));
+    }
+
+    /**
      * Returns the corresponding Material matching the given id. Returns 'AIR' if none match.
      */
     @NotNull
@@ -110,6 +119,14 @@ public final class Registries {
     @NotNull
     public static Material getMaterial(NamespaceID id) {
         return materials.getOrDefault(id, Material.AIR);
+    }
+
+    /**
+     * Returns the corresponding Material matching the given key. Returns 'AIR' if none match.
+     */
+    @NotNull
+    public static Material getMaterial(Key key) {
+        return getMaterial(NamespaceID.from(key));
     }
 
     /**
@@ -129,6 +146,14 @@ public final class Registries {
     }
 
     /**
+     * Returns the corresponding Enchantment matching the given key. Returns null if none match.
+     */
+    @Nullable
+    public static Enchantment getEnchantment(Key key) {
+        return getEnchantment(NamespaceID.from(key));
+    }
+
+    /**
      * Returns the corresponding EntityType matching the given id. Returns null if none match.
      */
     @Nullable
@@ -142,6 +167,14 @@ public final class Registries {
     @Nullable
     public static EntityType getEntityType(NamespaceID id) {
         return entityTypes.get(id);
+    }
+
+    /**
+     * Returns the corresponding EntityType matching the given key. Returns null if none match.
+     */
+    @Nullable
+    public static EntityType getEntityType(Key key) {
+        return getEntityType(NamespaceID.from(key));
     }
 
     /**
@@ -161,6 +194,14 @@ public final class Registries {
     }
 
     /**
+     * Returns the corresponding Particle matching the given key. Returns null if none match.
+     */
+    @Nullable
+    public static Particle getParticle(Key key) {
+        return getParticle(NamespaceID.from(key));
+    }
+
+    /**
      * Returns the corresponding PotionType matching the given id. Returns null if none match.
      */
     @Nullable
@@ -174,6 +215,14 @@ public final class Registries {
     @Nullable
     public static PotionType getPotionType(NamespaceID id) {
         return potionTypes.get(id);
+    }
+
+    /**
+     * Returns the corresponding PotionType matching the given key. Returns null if none match.
+     */
+    @Nullable
+    public static PotionType getPotionType(Key key) {
+        return getPotionType(NamespaceID.from(key));
     }
 
     /**
@@ -193,19 +242,35 @@ public final class Registries {
     }
 
     /**
-     * Returns the corresponding Sound matching the given id. Returns null if none match.
+     * Returns the corresponding PotionEffect matching the given key. Returns null if none match.
      */
     @Nullable
-    public static Sound getSound(String id) {
-        return getSound(NamespaceID.from(id));
+    public static PotionEffect getPotionEffect(Key key) {
+        return getPotionEffect(NamespaceID.from(key));
     }
 
     /**
-     * Returns the corresponding Sound matching the given id. Returns null if none match.
+     * Returns the corresponding SoundEvent matching the given id. Returns null if none match.
      */
     @Nullable
-    public static Sound getSound(NamespaceID id) {
-        return sounds.get(id);
+    public static SoundEvent getSoundEvent(String id) {
+        return getSoundEvent(NamespaceID.from(id));
+    }
+
+    /**
+     * Returns the corresponding SoundEvent matching the given id. Returns null if none match.
+     */
+    @Nullable
+    public static SoundEvent getSoundEvent(NamespaceID id) {
+        return soundEvents.get(id);
+    }
+
+    /**
+     * Returns the corresponding SoundEvent matching the given key. Returns null if none match.
+     */
+    @Nullable
+    public static SoundEvent getSoundEvent(Key key) {
+        return getSoundEvent(NamespaceID.from(key));
     }
 
     /**
@@ -225,6 +290,14 @@ public final class Registries {
     }
 
     /**
+     * Returns the corresponding StatisticType matching the given key. Returns null if none match.
+     */
+    @Nullable
+    public static StatisticType getStatisticType(Key key) {
+        return getStatisticType(NamespaceID.from(key));
+    }
+
+    /**
      * Returns the corresponding Fluid matching the given id. Returns 'EMPTY' if none match.
      */
     @NotNull
@@ -238,5 +311,13 @@ public final class Registries {
     @NotNull
     public static Fluid getFluid(NamespaceID id) {
         return fluids.getOrDefault(id, Fluid.EMPTY);
+    }
+
+    /**
+     * Returns the corresponding Fluid matching the given key. Returns 'EMPTY' if none match.
+     */
+    @NotNull
+    public static Fluid getFluid(Key key) {
+        return getFluid(NamespaceID.from(key));
     }
 }

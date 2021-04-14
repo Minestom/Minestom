@@ -3,6 +3,7 @@ package net.minestom.server.command.builder.arguments;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -90,9 +91,9 @@ public class ArgumentWord extends Argument<String> {
             // Can be any word, add only one argument node
             DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
             argumentNode.parser = "brigadier:string";
-            argumentNode.properties = packetWriter -> {
+            argumentNode.properties = BinaryWriter.makeArray(packetWriter -> {
                 packetWriter.writeVarInt(0); // Single word
-            };
+            });
             nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
         }
     }

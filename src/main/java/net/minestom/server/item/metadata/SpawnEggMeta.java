@@ -1,50 +1,50 @@
 package net.minestom.server.item.metadata;
 
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.item.ItemMeta;
+import net.minestom.server.item.ItemMetaBuilder;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-// TODO for which item
-public class SpawnEggMeta extends ItemMeta {
+import java.util.function.Supplier;
 
-    private EntityType entityType;
+public class SpawnEggMeta extends ItemMeta implements ItemMetaBuilder.Provider<SpawnEggMeta.Builder> {
 
-    @Override
-    public boolean hasNbt() {
-        return entityType != null;
+    private final EntityType entityType;
+
+    protected SpawnEggMeta(@NotNull ItemMetaBuilder metaBuilder, @Nullable EntityType entityType) {
+        super(metaBuilder);
+        this.entityType = entityType;
     }
 
-    @Override
-    public boolean isSimilar(@NotNull ItemMeta itemMeta) {
-        if (!(itemMeta instanceof SpawnEggMeta))
-            return false;
-        final SpawnEggMeta spawnEggMeta = (SpawnEggMeta) itemMeta;
-        return spawnEggMeta.entityType == entityType;
+    public @Nullable EntityType getEntityType() {
+        return entityType;
     }
 
-    @Override
-    public void read(@NotNull NBTCompound compound) {
-        if (compound.containsKey("EntityTag")) {
+    public static class Builder extends ItemMetaBuilder {
+
+        private EntityType entityType;
+
+        public Builder entityType(@Nullable EntityType entityType) {
+            this.entityType = entityType;
+            // TODO nbt
+            return this;
+        }
+
+        @Override
+        public @NotNull SpawnEggMeta build() {
+            return new SpawnEggMeta(this, entityType);
+        }
+
+        @Override
+        public void read(@NotNull NBTCompound nbtCompound) {
             // TODO
         }
-    }
 
-    @Override
-    public void write(@NotNull NBTCompound compound) {
-        if (!hasNbt())
-            return;
-        NBTCompound entityCompound = new NBTCompound();
-        if (entityType != null) {
-            entityCompound.setString("id", entityType.getNamespaceID());
+        @Override
+        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
+            return Builder::new;
         }
-
-    }
-
-    @NotNull
-    @Override
-    public ItemMeta clone() {
-        SpawnEggMeta spawnEggMeta = (SpawnEggMeta) super.clone();
-        spawnEggMeta.entityType = entityType;
-        return spawnEggMeta;
     }
 }

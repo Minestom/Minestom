@@ -2,7 +2,6 @@ package net.minestom.server.thread;
 
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -33,12 +32,12 @@ public class SingleThreadProvider extends ThreadProvider {
     }
 
     @Override
-    public void onChunkLoad(@NotNull Instance instance, int chunkX, int chunkZ) {
+    public void onChunkLoad(@NotNull Instance instance, @NotNull Chunk chunk) {
 
     }
 
     @Override
-    public void onChunkUnload(@NotNull Instance instance, int chunkX, int chunkZ) {
+    public void onChunkUnload(@NotNull Instance instance, @NotNull Chunk chunk) {
 
     }
 
@@ -49,8 +48,7 @@ public class SingleThreadProvider extends ThreadProvider {
             for (Instance instance : instances) {
                 updateInstance(instance, time);
                 for (Chunk chunk : instance.getChunks()) {
-                    final long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
-                    processChunkTick(instance, index, time);
+                    processChunkTick(instance, chunk, time);
                 }
             }
         }));

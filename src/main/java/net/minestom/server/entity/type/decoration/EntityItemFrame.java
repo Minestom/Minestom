@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 // FIXME: https://wiki.vg/Object_Data#Item_Frame_.28id_71.29
 // "You have to set both Orientation and Yaw/Pitch accordingly, otherwise it will not work."
+
 /**
  * @deprecated Use {@link net.minestom.server.entity.metadata.other.ItemFrameMeta} instead.
  */
@@ -37,7 +38,7 @@ public class EntityItemFrame extends ObjectEntity {
      */
     @NotNull
     public ItemStack getItemStack() {
-        return metadata.getIndex((byte) 7, ItemStack.getAirItem());
+        return metadata.getIndex((byte) 7, ItemStack.AIR);
     }
 
     /**

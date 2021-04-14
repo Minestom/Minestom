@@ -1,15 +1,28 @@
 package net.minestom.server.entity;
 
 import com.google.common.collect.Queues;
+import net.kyori.adventure.audience.MessageType;
+import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.identity.Identified;
+import net.kyori.adventure.identity.Identity;
+import net.kyori.adventure.inventory.Book;
+import net.kyori.adventure.sound.Sound;
+import net.kyori.adventure.sound.SoundStop;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
+import net.kyori.adventure.text.event.HoverEventSource;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.title.Title;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
+import net.minestom.server.adventure.AdventurePacketConvertor;
+import net.minestom.server.adventure.Localizable;
+import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.attribute.Attribute;
-import net.minestom.server.attribute.AttributeInstance;
-import net.minestom.server.bossbar.BossBar;
 import net.minestom.server.chat.ChatParser;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
-import net.minestom.server.chat.RichMessage;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.CommandSender;
@@ -46,8 +59,8 @@ import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
-import net.minestom.server.sound.Sound;
 import net.minestom.server.sound.SoundCategory;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.PlayerStatistic;
 import net.minestom.server.utils.*;
 import net.minestom.server.utils.callback.OptionalCallback;
@@ -55,7 +68,8 @@ import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.instance.InstanceUtils;
-import net.minestom.server.utils.time.CooldownUtils;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
+import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
@@ -65,8 +79,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.UnaryOperator;
 
 /**
  * Those are the major actors of the server,
@@ -74,7 +89,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <p>
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
-public class Player extends LivingEntity implements CommandSender {
+public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified {
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -82,15 +97,16 @@ public class Player extends LivingEntity implements CommandSender {
     private String username;
     protected final PlayerConnection playerConnection;
     // All the entities that this player can see
-    protected final Set<Entity> viewableEntities = new CopyOnWriteArraySet<>();
+    protected final Set<Entity> viewableEntities = ConcurrentHashMap.newKeySet();
 
     private int latency;
-    private JsonMessage displayName;
+    private Component displayName;
     private PlayerSkin skin;
 
     private DimensionType dimensionType;
     private GameMode gameMode;
-    protected final Set<Chunk> viewableChunks = new CopyOnWriteArraySet<>();
+    // Chunks that the player can view
+    protected final Set<Chunk> viewableChunks = ConcurrentHashMap.newKeySet();
 
     private final AtomicInteger teleportId = new AtomicInteger();
     private int receivedTeleportId;
@@ -115,7 +131,7 @@ public class Player extends LivingEntity implements CommandSender {
     private long startEatingTime;
     private long defaultEatingTime = 1000L;
     private long eatingTime;
-    private boolean isEating;
+    private Hand eatingHand;
 
     // Game state (https://wiki.vg/Protocol#Change_Game_State)
     private boolean enableRespawnScreen;
@@ -123,19 +139,21 @@ public class Player extends LivingEntity implements CommandSender {
     // CustomBlock break delay
     private CustomBlock targetCustomBlock;
     private BlockPosition targetBlockPosition;
-    private long targetBreakDelay; // The last break delay requested
-    private long targetBlockBreakCount; // Number of tick since the last stage change
-    private byte targetStage; // The current stage of the target block, only if multi player breaking is disabled
-    private final Set<Player> targetBreakers = Collections.singleton(this); // Only used if multi player breaking is disabled, contains only this player
+    // The last break delay requested
+    private long targetBreakDelay;
+    // Number of tick since the last stage change
+    private long targetBlockBreakCount;
+    // The current stage of the target block, only if multi player breaking is disabled
+    private byte targetStage;
+    // Only used if multi player breaking is disabled, contains only this player
+    private final Set<Player> targetBreakers = Collections.singleton(this);
 
     // Position synchronization with viewers
-    private long lastPlayerSynchronizationTime;
     private double lastPlayerSyncX, lastPlayerSyncY, lastPlayerSyncZ;
     private float lastPlayerSyncYaw, lastPlayerSyncPitch;
 
     // Experience orb pickup
-    protected UpdateOption experiencePickupCooldown = new UpdateOption(10, TimeUnit.TICK);
-    private long lastExperiencePickupCheckTime;
+    protected Cooldown experiencePickupCooldown = new Cooldown(new UpdateOption(10, TimeUnit.TICK));
 
     private BelowNameTag belowNameTag;
 
@@ -158,6 +176,9 @@ public class Player extends LivingEntity implements CommandSender {
 
     // Tick related
     private final PlayerTickEvent playerTickEvent = new PlayerTickEvent(this);
+
+    // Adventure
+    private Identity identity;
 
     public Player(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
         super(EntityType.PLAYER, uuid);
@@ -183,6 +204,8 @@ public class Player extends LivingEntity implements CommandSender {
 
         // FakePlayer init its connection there
         playerConnectionInit();
+
+        this.identity = Identity.identity(uuid);
     }
 
     /**
@@ -319,7 +342,7 @@ public class Player extends LivingEntity implements CommandSender {
                 // Should increment the target block stage
                 if (targetCustomBlock.enableMultiPlayerBreaking()) {
                     // Let the custom block object manages the breaking
-                    final boolean canContinue = this.targetCustomBlock.processStage(instance, targetBlockPosition, this, stageIncrease);
+                    final boolean canContinue = targetCustomBlock.processStage(instance, targetBlockPosition, this, stageIncrease);
                     if (canContinue) {
                         final Set<Player> breakers = targetCustomBlock.getBreakers(instance, targetBlockPosition);
                         refreshBreakDelay(breakers);
@@ -351,9 +374,8 @@ public class Player extends LivingEntity implements CommandSender {
         }
 
         // Experience orb pickup
-        if (!CooldownUtils.hasCooldown(time, lastExperiencePickupCheckTime, experiencePickupCooldown)) {
-            this.lastExperiencePickupCheckTime = time;
-
+        if (experiencePickupCooldown.isReady(time)) {
+            experiencePickupCooldown.refreshLastUpdate(time);
             final Chunk chunk = getChunk(); // TODO check surrounding chunks
             final Set<Entity> entities = instance.getChunkEntities(chunk);
             for (Entity entity : entities) {
@@ -376,10 +398,8 @@ public class Player extends LivingEntity implements CommandSender {
         // Eating animation
         if (isEating()) {
             if (time - startEatingTime >= eatingTime) {
-                refreshEating(false);
-
                 triggerStatus((byte) 9); // Mark item use as finished
-                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(true);
+                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(true, eatingHand);
 
                 Check.notNull(itemUpdateStateEvent, "#callItemUpdateStateEvent returned null.");
 
@@ -391,9 +411,11 @@ public class Player extends LivingEntity implements CommandSender {
                 final boolean isFood = foodItem.getMaterial().isFood();
 
                 if (isFood) {
-                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem);
+                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem, eatingHand);
                     callEvent(PlayerEatEvent.class, playerEatEvent);
                 }
+
+                refreshEating(null);
             }
         }
 
@@ -402,8 +424,6 @@ public class Player extends LivingEntity implements CommandSender {
 
         // Multiplayer sync
         if (!viewers.isEmpty()) {
-            this.lastPlayerSynchronizationTime = time;
-
             final boolean positionChanged = position.getX() != lastPlayerSyncX ||
                     position.getY() != lastPlayerSyncY ||
                     position.getZ() != lastPlayerSyncZ;
@@ -462,15 +482,15 @@ public class Player extends LivingEntity implements CommandSender {
     public void kill() {
         if (!isDead()) {
 
-            JsonMessage deathText;
-            JsonMessage chatMessage;
+            Component deathText;
+            Component chatMessage;
 
             // get death screen text to the killed player
             {
                 if (lastDamageSource != null) {
                     deathText = lastDamageSource.buildDeathScreenText(this);
                 } else { // may happen if killed by the server without applying damage
-                    deathText = ColoredText.of("Killed by poor programming.");
+                    deathText = Component.text("Killed by poor programming.");
                 }
             }
 
@@ -479,7 +499,7 @@ public class Player extends LivingEntity implements CommandSender {
                 if (lastDamageSource != null) {
                     chatMessage = lastDamageSource.buildDeathMessage(this);
                 } else { // may happen if killed by the server without applying damage
-                    chatMessage = ColoredText.of(getUsername() + " was killed by poor programming.");
+                    chatMessage = Component.text(getUsername() + " was killed by poor programming.");
                 }
             }
 
@@ -498,7 +518,7 @@ public class Player extends LivingEntity implements CommandSender {
 
             // #buildDeathMessage can return null, check here
             if (chatMessage != null) {
-                MinecraftServer.getConnectionManager().broadcastMessage(chatMessage);
+                Audiences.players().sendMessage(chatMessage);
             }
 
         }
@@ -550,13 +570,15 @@ public class Player extends LivingEntity implements CommandSender {
 
         // Boss bars cache
         {
-            Set<BossBar> bossBars = BossBar.getBossBars(this);
+            Set<net.minestom.server.bossbar.BossBar> bossBars = net.minestom.server.bossbar.BossBar.getBossBars(this);
             if (bossBars != null) {
-                for (BossBar bossBar : bossBars) {
+                for (net.minestom.server.bossbar.BossBar bossBar : bossBars) {
                     bossBar.removeViewer(this);
                 }
             }
         }
+
+        MinecraftServer.getBossBarManager().removeAllBossBars(this);
 
         // Advancement tabs cache
         {
@@ -565,14 +587,6 @@ public class Player extends LivingEntity implements CommandSender {
                 for (AdvancementTab advancementTab : advancementTabs) {
                     advancementTab.removeViewer(this);
                 }
-            }
-        }
-
-        // Item ownership cache
-        {
-            ItemStack[] itemStacks = inventory.getItemStacks();
-            for (ItemStack itemStack : itemStacks) {
-                ItemStack.DATA_OWNERSHIP.clearCache(itemStack.getIdentifier());
             }
         }
 
@@ -589,13 +603,12 @@ public class Player extends LivingEntity implements CommandSender {
 
     @Override
     public boolean addViewer0(@NotNull Player player) {
-        if (player == this || !super.addViewer0(player)) {
+        if (player == this) {
             return false;
         }
-
         PlayerConnection viewerConnection = player.getPlayerConnection();
-        showPlayer(viewerConnection);
-        return true;
+        viewerConnection.sendPacket(getAddPlayerToList());
+        return super.addViewer0(player);
     }
 
     @Override
@@ -612,6 +625,12 @@ public class Player extends LivingEntity implements CommandSender {
             viewerConnection.sendPacket(this.getTeam().createTeamDestructionPacket());
         }
         return true;
+    }
+
+    @Override
+    public void sendPacketToViewersAndSelf(@NotNull ServerPacket packet) {
+        this.playerConnection.sendPacket(packet);
+        super.sendPacketToViewersAndSelf(packet);
     }
 
     /**
@@ -632,7 +651,8 @@ public class Player extends LivingEntity implements CommandSender {
                 !spawnPosition.inSameChunk(this.position);
 
         if (needWorldRefresh) {
-            final boolean firstSpawn = this.instance == null; // TODO: Handle player reconnections, must be false in that case too
+            // TODO: Handle player reconnections, must be false in that case too
+            final boolean firstSpawn = this.instance == null;
 
             // Send the new dimension if player isn't in any instance or if the dimension is different
             final DimensionType instanceDimensionType = instance.getDimensionType();
@@ -644,17 +664,6 @@ public class Player extends LivingEntity implements CommandSender {
             // Load all the required chunks
             final long[] visibleChunks = ChunkUtils.getChunksInRange(spawnPosition, getChunkRange());
 
-            final ChunkCallback eachCallback = chunk -> {
-                if (chunk != null) {
-                    final int chunkX = ChunkUtils.getChunkCoordinate((int) spawnPosition.getX());
-                    final int chunkZ = ChunkUtils.getChunkCoordinate((int) spawnPosition.getZ());
-                    if (chunk.getChunkX() == chunkX &&
-                            chunk.getChunkZ() == chunkZ) {
-                        updateViewPosition(chunkX, chunkZ);
-                    }
-                }
-            };
-
             final ChunkCallback endCallback = chunk -> {
                 // This is the last chunk to be loaded , spawn player
                 spawnPlayer(instance, spawnPosition, firstSpawn, true, dimensionChange);
@@ -663,7 +672,7 @@ public class Player extends LivingEntity implements CommandSender {
             // Chunk 0;0 always needs to be loaded
             instance.loadChunk(0, 0, chunk ->
                     // Load all the required chunks
-                    ChunkUtils.optionalLoadAll(instance, visibleChunks, eachCallback, endCallback));
+                    ChunkUtils.optionalLoadAll(instance, visibleChunks, null, endCallback));
 
         } else {
             // The player already has the good version of all the chunks.
@@ -747,27 +756,14 @@ public class Player extends LivingEntity implements CommandSender {
         sendPluginMessage(channel, bytes);
     }
 
-    @Override
-    public void sendMessage(@NotNull String message) {
-        sendMessage(ColoredText.of(message));
-    }
-
-    /**
-     * Sends a message to the player.
-     *
-     * @param message the message to send,
-     *                you can use {@link ColoredText} and/or {@link RichMessage} to create it easily
-     */
-    public void sendMessage(@NotNull JsonMessage message) {
-        sendJsonMessage(message.toString());
-    }
-
     /**
      * Sends a legacy message with the specified color char.
      *
      * @param text      the text with the legacy color formatting
      * @param colorChar the color character
+     * @deprecated Use {@link #sendMessage(Component)}
      */
+    @Deprecated
     public void sendLegacyMessage(@NotNull String text, char colorChar) {
         ColoredText coloredText = ColoredText.ofLegacy(text, colorChar);
         sendJsonMessage(coloredText.toString());
@@ -777,15 +773,25 @@ public class Player extends LivingEntity implements CommandSender {
      * Sends a legacy message with the default color char {@link ChatParser#COLOR_CHAR}.
      *
      * @param text the text with the legacy color formatting
+     * @deprecated Use {@link #sendMessage(Component)}
      */
+    @Deprecated
     public void sendLegacyMessage(@NotNull String text) {
         ColoredText coloredText = ColoredText.ofLegacy(text, ChatParser.COLOR_CHAR);
         sendJsonMessage(coloredText.toString());
     }
 
+    /**
+     * @deprecated Use {@link #sendMessage(Component)}
+     */
+    @Deprecated
     public void sendJsonMessage(@NotNull String json) {
-        ChatMessagePacket chatMessagePacket =
-                new ChatMessagePacket(json, ChatMessagePacket.Position.CHAT);
+        this.sendMessage(GsonComponentSerializer.gson().deserialize(json));
+    }
+
+    @Override
+    public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
+        ChatMessagePacket chatMessagePacket = new ChatMessagePacket(message, ChatMessagePacket.Position.fromMessageType(type), source.uuid());
         playerConnection.sendPacket(chatMessagePacket);
     }
 
@@ -801,7 +807,7 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Plays a sound from the {@link Sound} enum.
+     * Plays a sound from the {@link SoundEvent} enum.
      *
      * @param sound         the sound to play
      * @param soundCategory the sound category
@@ -810,11 +816,13 @@ public class Player extends LivingEntity implements CommandSender {
      * @param z             the effect Z
      * @param volume        the volume of the sound (1 is 100%)
      * @param pitch         the pitch of the sound, between 0.5 and 2.0
+     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
      */
-    public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
+    @Deprecated
+    public void playSound(@NotNull SoundEvent sound, @NotNull SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
         SoundEffectPacket soundEffectPacket = new SoundEffectPacket();
         soundEffectPacket.soundId = sound.getId();
-        soundEffectPacket.soundCategory = soundCategory;
+        soundEffectPacket.soundSource = soundCategory.asSource();
         soundEffectPacket.x = x;
         soundEffectPacket.y = y;
         soundEffectPacket.z = z;
@@ -824,11 +832,13 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Plays a sound from the {@link Sound} enum.
+     * Plays a sound from the {@link SoundEvent} enum.
      *
-     * @see #playSound(Sound, SoundCategory, int, int, int, float, float)
+     * @see #playSound(SoundEvent, SoundCategory, int, int, int, float, float)
+     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
      */
-    public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
+    @Deprecated
+    public void playSound(@NotNull SoundEvent sound, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
         playSound(sound, soundCategory, position.getX(), position.getY(), position.getZ(), volume, pitch);
     }
 
@@ -842,11 +852,13 @@ public class Player extends LivingEntity implements CommandSender {
      * @param z             the effect Z
      * @param volume        the volume of the sound (1 is 100%)
      * @param pitch         the pitch of the sound, between 0.5 and 2.0
+     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
      */
+    @Deprecated
     public void playSound(@NotNull String identifier, @NotNull SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
         NamedSoundEffectPacket namedSoundEffectPacket = new NamedSoundEffectPacket();
         namedSoundEffectPacket.soundName = identifier;
-        namedSoundEffectPacket.soundCategory = soundCategory;
+        namedSoundEffectPacket.soundSource = soundCategory.asSource();
         namedSoundEffectPacket.x = x;
         namedSoundEffectPacket.y = y;
         namedSoundEffectPacket.z = z;
@@ -859,7 +871,9 @@ public class Player extends LivingEntity implements CommandSender {
      * Plays a sound from an identifier (represents a custom sound in a resource pack).
      *
      * @see #playSound(String, SoundCategory, int, int, int, float, float)
+     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
      */
+    @Deprecated
     public void playSound(@NotNull String identifier, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
         playSound(identifier, soundCategory, position.getX(), position.getY(), position.getZ(), volume, pitch);
     }
@@ -871,15 +885,32 @@ public class Player extends LivingEntity implements CommandSender {
      * @param soundCategory the sound category
      * @param volume        the volume of the sound (1 is 100%)
      * @param pitch         the pitch of the sound, between 0.5 and 2.0
+     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound)}
      */
-    public void playSound(@NotNull Sound sound, @NotNull SoundCategory soundCategory, float volume, float pitch) {
+    @Deprecated
+    public void playSound(@NotNull SoundEvent sound, @NotNull SoundCategory soundCategory, float volume, float pitch) {
         EntitySoundEffectPacket entitySoundEffectPacket = new EntitySoundEffectPacket();
         entitySoundEffectPacket.entityId = getEntityId();
         entitySoundEffectPacket.soundId = sound.getId();
-        entitySoundEffectPacket.soundCategory = soundCategory;
+        entitySoundEffectPacket.soundSource = soundCategory.asSource();
         entitySoundEffectPacket.volume = volume;
         entitySoundEffectPacket.pitch = pitch;
         playerConnection.sendPacket(entitySoundEffectPacket);
+    }
+
+    @Override
+    public void playSound(@NotNull Sound sound) {
+        playerConnection.sendPacket(AdventurePacketConvertor.createEntitySoundPacket(sound, this));
+    }
+
+    @Override
+    public void playSound(@NotNull Sound sound, double x, double y, double z) {
+        playerConnection.sendPacket(AdventurePacketConvertor.createSoundPacket(sound, x, y, z));
+    }
+
+    @Override
+    public void stopSound(@NotNull SoundStop stop) {
+        playerConnection.sendPacket(AdventurePacketConvertor.createSoundStopPacket(stop));
     }
 
     /**
@@ -903,7 +934,10 @@ public class Player extends LivingEntity implements CommandSender {
 
     /**
      * Sends a {@link StopSoundPacket} packet.
+     *
+     * @deprecated Use {@link #stopSound(SoundStop)} with {@link SoundStop#all()}
      */
+    @Deprecated
     public void stopSound() {
         StopSoundPacket stopSoundPacket = new StopSoundPacket();
         stopSoundPacket.flags = 0x00;
@@ -915,13 +949,18 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param header the header text, null to set empty
      * @param footer the footer text, null to set empty
+     * @deprecated Use {@link #sendPlayerListHeaderAndFooter(Component, Component)}
      */
+    @Deprecated
     public void sendHeaderFooter(@Nullable JsonMessage header, @Nullable JsonMessage footer) {
-        PlayerListHeaderAndFooterPacket playerListHeaderAndFooterPacket = new PlayerListHeaderAndFooterPacket();
-        playerListHeaderAndFooterPacket.header = header;
-        playerListHeaderAndFooterPacket.footer = footer;
+        this.sendPlayerListHeaderAndFooter(header == null ? Component.empty() : header.asComponent(),
+                footer == null ? Component.empty() : footer.asComponent());
+    }
 
-        playerConnection.sendPacket(playerListHeaderAndFooterPacket);
+    @Override
+    public void sendPlayerListHeaderAndFooter(@NotNull Component header, @NotNull Component footer) {
+        PlayerListHeaderAndFooterPacket packet = new PlayerListHeaderAndFooterPacket(header, footer);
+        playerConnection.sendPacket(packet);
     }
 
     /**
@@ -930,25 +969,11 @@ public class Player extends LivingEntity implements CommandSender {
      * @param text   the text of the title
      * @param action the action of the title (where to show it)
      * @see #sendTitleTime(int, int, int) to specify the display time
+     * @deprecated Use {@link #showTitle(Title)} and {@link #sendActionBar(Component)}
      */
+    @Deprecated
     private void sendTitle(@NotNull JsonMessage text, @NotNull TitlePacket.Action action) {
-        TitlePacket titlePacket = new TitlePacket();
-        titlePacket.action = action;
-
-        switch (action) {
-            case SET_TITLE:
-                titlePacket.titleText = text;
-                break;
-            case SET_SUBTITLE:
-                titlePacket.subtitleText = text;
-                break;
-            case SET_ACTION_BAR:
-                titlePacket.actionBarText = text;
-                break;
-            default:
-                throw new UnsupportedOperationException("Invalid TitlePacket.Action type!");
-        }
-
+        TitlePacket titlePacket = new TitlePacket(action, text.asComponent());
         playerConnection.sendPacket(titlePacket);
     }
 
@@ -958,10 +983,11 @@ public class Player extends LivingEntity implements CommandSender {
      * @param title    the title message
      * @param subtitle the subtitle message
      * @see #sendTitleTime(int, int, int) to specify the display time
+     * @deprecated Use {@link #showTitle(Title)}
      */
+    @Deprecated
     public void sendTitleSubtitleMessage(@NotNull JsonMessage title, @NotNull JsonMessage subtitle) {
-        sendTitle(title, TitlePacket.Action.SET_TITLE);
-        sendTitle(subtitle, TitlePacket.Action.SET_SUBTITLE);
+        this.showTitle(Title.title(title.asComponent(), subtitle.asComponent()));
     }
 
     /**
@@ -969,9 +995,11 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param title the title message
      * @see #sendTitleTime(int, int, int) to specify the display time
+     * @deprecated Use {@link #showTitle(Title)}
      */
+    @Deprecated
     public void sendTitleMessage(@NotNull JsonMessage title) {
-        sendTitle(title, TitlePacket.Action.SET_TITLE);
+        this.showTitle(Title.title(title.asComponent(), Component.empty()));
     }
 
     /**
@@ -979,9 +1007,11 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param subtitle the subtitle message
      * @see #sendTitleTime(int, int, int) to specify the display time
+     * @deprecated Use {@link #showTitle(Title)}
      */
+    @Deprecated
     public void sendSubtitleMessage(@NotNull JsonMessage subtitle) {
-        sendTitle(subtitle, TitlePacket.Action.SET_SUBTITLE);
+        this.showTitle(Title.title(Component.empty(), subtitle.asComponent()));
     }
 
     /**
@@ -989,9 +1019,26 @@ public class Player extends LivingEntity implements CommandSender {
      *
      * @param actionBar the action bar message
      * @see #sendTitleTime(int, int, int) to specify the display time
+     * @deprecated Use {@link #sendActionBar(Component)}
      */
+    @Deprecated
     public void sendActionBarMessage(@NotNull JsonMessage actionBar) {
-        sendTitle(actionBar, TitlePacket.Action.SET_ACTION_BAR);
+        this.sendActionBar(actionBar.asComponent());
+    }
+
+    @Override
+    public void showTitle(@NotNull Title title) {
+        Collection<TitlePacket> packet = TitlePacket.of(Title.title(title.title(), title.subtitle(), title.times()));
+
+        for (TitlePacket titlePacket : packet) {
+            playerConnection.sendPacket(titlePacket);
+        }
+    }
+
+    @Override
+    public void sendActionBar(@NotNull Component message) {
+        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.SET_ACTION_BAR, message);
+        playerConnection.sendPacket(titlePacket);
     }
 
     /**
@@ -1000,56 +1047,72 @@ public class Player extends LivingEntity implements CommandSender {
      * @param fadeIn  ticks to spend fading in
      * @param stay    ticks to keep the title displayed
      * @param fadeOut ticks to spend out, not when to start fading out
+     * @deprecated Use {@link #showTitle(Title)}. Note that this will overwrite the
+     * existing title. This is expected behavior and will be the case in 1.17.
      */
+    @Deprecated
     public void sendTitleTime(int fadeIn, int stay, int fadeOut) {
-        TitlePacket titlePacket = new TitlePacket();
-        titlePacket.action = TitlePacket.Action.SET_TIMES_AND_DISPLAY;
-        titlePacket.fadeIn = fadeIn;
-        titlePacket.stay = stay;
-        titlePacket.fadeOut = fadeOut;
+        TitlePacket titlePacket = new TitlePacket(fadeIn, stay, fadeOut);
         playerConnection.sendPacket(titlePacket);
     }
 
     /**
      * Hides the previous title.
-     */
-    public void hideTitle() {
-        TitlePacket titlePacket = new TitlePacket();
-        titlePacket.action = TitlePacket.Action.HIDE;
-        playerConnection.sendPacket(titlePacket);
-    }
-
-    /**
-     * Resets the previous title.
-     */
-    public void resetTitle() {
-        TitlePacket titlePacket = new TitlePacket();
-        titlePacket.action = TitlePacket.Action.RESET;
-        playerConnection.sendPacket(titlePacket);
-    }
-
-    /**
-     * Opens a book ui for the player with the given book metadata.
      *
-     * @param bookMeta The metadata of the book to open
+     * @deprecated Use {@link #clearTitle()}
      */
-    public void openBook(@NotNull WrittenBookMeta bookMeta) {
+    @Deprecated
+    public void hideTitle() {
+        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.HIDE);
+        playerConnection.sendPacket(titlePacket);
+    }
+
+    @Override
+    public void resetTitle() {
+        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.RESET);
+        playerConnection.sendPacket(titlePacket);
+    }
+
+    @Override
+    public void clearTitle() {
+        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.HIDE);
+        playerConnection.sendPacket(titlePacket);
+    }
+
+    @Override
+    public void showBossBar(@NotNull BossBar bar) {
+        MinecraftServer.getBossBarManager().addBossBar(this, bar);
+    }
+
+    @Override
+    public void hideBossBar(@NotNull BossBar bar) {
+        MinecraftServer.getBossBarManager().removeBossBar(this, bar);
+    }
+
+    @Override
+    public void openBook(@NotNull Book book) {
+        ItemStack writtenBook = ItemStack.builder(Material.WRITTEN_BOOK)
+                .meta(WrittenBookMeta.fromAdventure(book, this))
+                .build();
+
         // Set book in offhand
-        final ItemStack writtenBook = new ItemStack(Material.WRITTEN_BOOK, (byte) 1);
-        writtenBook.setItemMeta(bookMeta);
-        final SetSlotPacket setSlotPacket = new SetSlotPacket();
-        setSlotPacket.windowId = 0;
-        setSlotPacket.slot = 45;
-        setSlotPacket.itemStack = writtenBook;
-        this.playerConnection.sendPacket(setSlotPacket);
+        SetSlotPacket setBookPacket = new SetSlotPacket();
+        setBookPacket.windowId = 0;
+        setBookPacket.slot = PlayerInventoryUtils.OFFHAND_SLOT;
+        setBookPacket.itemStack = writtenBook;
+        playerConnection.sendPacket(setBookPacket);
 
         // Open the book
-        final OpenBookPacket openBookPacket = new OpenBookPacket();
+        OpenBookPacket openBookPacket = new OpenBookPacket();
         openBookPacket.hand = Hand.OFF;
-        this.playerConnection.sendPacket(openBookPacket);
+        playerConnection.sendPacket(openBookPacket);
 
-        // Update inventory to remove book (which the actual inventory does not have)
-        this.inventory.update();
+        // Restore the item in offhand
+        SetSlotPacket restoreItemPacket = new SetSlotPacket();
+        restoreItemPacket.windowId = 0;
+        restoreItemPacket.slot = PlayerInventoryUtils.OFFHAND_SLOT;
+        restoreItemPacket.itemStack = getItemInOffHand();
+        playerConnection.sendPacket(restoreItemPacket);
     }
 
     @Override
@@ -1058,15 +1121,6 @@ public class Player extends LivingEntity implements CommandSender {
             return type != DamageType.VOID;
         }
         return super.isImmune(type);
-    }
-
-    @Override
-    protected void onAttributeChanged(@NotNull final AttributeInstance attributeInstance) {
-        if (attributeInstance.getAttribute().isShared() &&
-                playerConnection != null &&
-                playerConnection.getConnectionState() == ConnectionState.PLAY) {
-            playerConnection.sendPacket(getPropertiesPacket());
-        }
     }
 
     @Override
@@ -1109,7 +1163,8 @@ public class Player extends LivingEntity implements CommandSender {
      * @throws IllegalArgumentException if {@code food} is not between 0 and 20
      */
     public void setFood(int food) {
-        Check.argCondition(!MathUtils.isBetween(food, 0, 20), "Food has to be between 0 and 20");
+        Check.argCondition(!MathUtils.isBetween(food, 0, 20),
+                "Food has to be between 0 and 20");
         this.food = food;
         sendUpdateHealthPacket();
     }
@@ -1122,10 +1177,11 @@ public class Player extends LivingEntity implements CommandSender {
      * Sets and refresh client food saturation.
      *
      * @param foodSaturation the food saturation
-     * @throws IllegalArgumentException if {@code foodSaturation} is not between 0 and 5
+     * @throws IllegalArgumentException if {@code foodSaturation} is not between 0 and 20
      */
     public void setFoodSaturation(float foodSaturation) {
-        Check.argCondition(!MathUtils.isBetween(foodSaturation, 0, 5), "Food saturation has to be between 0 and 5");
+        Check.argCondition(!MathUtils.isBetween(foodSaturation, 0, 20),
+                "Food saturation has to be between 0 and 20");
         this.foodSaturation = foodSaturation;
         sendUpdateHealthPacket();
     }
@@ -1136,7 +1192,7 @@ public class Player extends LivingEntity implements CommandSender {
      * @return true if the player is eating, false otherwise
      */
     public boolean isEating() {
-        return isEating;
+        return eatingHand != null;
     }
 
     /**
@@ -1161,9 +1217,21 @@ public class Player extends LivingEntity implements CommandSender {
      * Gets the player display name in the tab-list.
      *
      * @return the player display name, null means that {@link #getUsername()} is displayed
+     * @deprecated Use {@link #getDisplayName()}
      */
     @Nullable
-    public JsonMessage getDisplayName() {
+    @Deprecated
+    public JsonMessage getDisplayNameJson() {
+        return JsonMessage.fromComponent(displayName);
+    }
+
+    /**
+     * Gets the player display name in the tab-list.
+     *
+     * @return the player display name, null means that {@link #getUsername()} is displayed
+     */
+    @Nullable
+    public Component getDisplayName() {
         return displayName;
     }
 
@@ -1173,8 +1241,21 @@ public class Player extends LivingEntity implements CommandSender {
      * Sets to null to show the player username.
      *
      * @param displayName the display name, null to display the username
+     * @deprecated Use {@link #setDisplayName(Component)}
      */
+    @Deprecated
     public void setDisplayName(@Nullable JsonMessage displayName) {
+        this.setDisplayName(displayName == null ? null : displayName.asComponent());
+    }
+
+    /**
+     * Changes the player display name in the tab-list.
+     * <p>
+     * Sets to null to show the player username.
+     *
+     * @param displayName the display name, null to display the username
+     */
+    public void setDisplayName(@Nullable Component displayName) {
         this.displayName = displayName;
 
         PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_DISPLAY_NAME);
@@ -1403,8 +1484,8 @@ public class Player extends LivingEntity implements CommandSender {
         // Update for viewers
         sendPacketToViewersAndSelf(getVelocityPacket());
         sendPacketToViewersAndSelf(getMetadataPacket());
-        playerConnection.sendPacket(getPropertiesPacket());
-        syncEquipments();
+        sendPacketToViewersAndSelf(getPropertiesPacket());
+        sendPacketToViewersAndSelf(getEquipmentsPacket());
 
         {
             // Send new chunks
@@ -1517,10 +1598,12 @@ public class Player extends LivingEntity implements CommandSender {
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
 
-            UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
+            // TODO prevent the client from getting lag spikes when re-loading large chunks
+            // Probably by having a distinction between visible and loaded (cache) chunks
+            /*UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
             unloadChunkPacket.chunkX = chunkX;
             unloadChunkPacket.chunkZ = chunkZ;
-            playerConnection.sendPacket(unloadChunkPacket);
+            playerConnection.sendPacket(unloadChunkPacket);*/
 
             final Chunk chunk = instance.getChunk(chunkX, chunkZ);
             if (chunk != null)
@@ -1554,8 +1637,8 @@ public class Player extends LivingEntity implements CommandSender {
     }
 
     /**
-     * Refreshes the list of entities that the player should be able to see based on {@link MinecraftServer#getEntityViewDistance()}
-     * and {@link Entity#isAutoViewable()}.
+     * Refreshes the list of entities that the player should be able to see based
+     * on {@link MinecraftServer#getEntityViewDistance()} and {@link Entity#isAutoViewable()}.
      *
      * @param newChunk the new chunk of the player (can be the current one)
      */
@@ -1709,7 +1792,8 @@ public class Player extends LivingEntity implements CommandSender {
      * @param dimensionType the new player dimension
      */
     protected void sendDimension(@NotNull DimensionType dimensionType) {
-        Check.argCondition(dimensionType.equals(getDimensionType()), "The dimension needs to be different than the current one!");
+        Check.argCondition(dimensionType.equals(getDimensionType()),
+                "The dimension needs to be different than the current one!");
 
         this.dimensionType = dimensionType;
         RespawnPacket respawnPacket = new RespawnPacket();
@@ -1723,29 +1807,47 @@ public class Player extends LivingEntity implements CommandSender {
      * Kicks the player with a reason.
      *
      * @param text the kick reason
+     * @deprecated Use {@link #kick(Component)}
      */
+    @Deprecated
     public void kick(@NotNull JsonMessage text) {
-        final ConnectionState connectionState = playerConnection.getConnectionState();
-
-        // Packet type depends on the current player connection state
-        final ServerPacket disconnectPacket;
-        if (connectionState == ConnectionState.LOGIN) {
-            disconnectPacket = new LoginDisconnectPacket(text);
-        } else {
-            disconnectPacket = new DisconnectPacket(text);
-        }
-
-        playerConnection.sendPacket(disconnectPacket);
-        playerConnection.refreshOnline(false);
+        this.kick(text.asComponent());
     }
 
     /**
      * Kicks the player with a reason.
      *
      * @param message the kick reason
+     * @deprecated Use {@link #kick(Component)}
      */
+    @Deprecated
     public void kick(@NotNull String message) {
-        kick(ColoredText.of(message));
+        this.kick(Component.text(message));
+    }
+
+    /**
+     * Kicks the player with a reason.
+     *
+     * @param component the reason
+     */
+    public void kick(@NotNull Component component) {
+        final ConnectionState connectionState = playerConnection.getConnectionState();
+
+        // Packet type depends on the current player connection state
+        final ServerPacket disconnectPacket;
+        if (connectionState == ConnectionState.LOGIN) {
+            disconnectPacket = new LoginDisconnectPacket(component);
+        } else {
+            disconnectPacket = new DisconnectPacket(component);
+        }
+
+        if (playerConnection instanceof NettyPlayerConnection) {
+            ((NettyPlayerConnection) playerConnection).writeAndFlush(disconnectPacket);
+            playerConnection.disconnect();
+        } else {
+            playerConnection.sendPacket(disconnectPacket);
+            playerConnection.refreshOnline(false);
+        }
     }
 
     /**
@@ -1774,8 +1876,10 @@ public class Player extends LivingEntity implements CommandSender {
 
     public void setTeam(Team team) {
         super.setTeam(team);
-        if (team != null)
-            PacketUtils.sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), team.createTeamsCreationPacket());
+        if (team != null) {
+            var players = MinecraftServer.getConnectionManager().getOnlinePlayers();
+            PacketUtils.sendGroupedPacket(players, team.createTeamsCreationPacket());
+        }
     }
 
     /**
@@ -1826,7 +1930,7 @@ public class Player extends LivingEntity implements CommandSender {
         callCancellableEvent(InventoryOpenEvent.class, inventoryOpenEvent, () -> {
 
             if (getOpenInventory() != null) {
-                closeInventory();
+                getOpenInventory().removeViewer(this);
             }
 
             Inventory newInventory = inventoryOpenEvent.getInventory();
@@ -1836,10 +1940,9 @@ public class Player extends LivingEntity implements CommandSender {
                 return;
             }
 
-            OpenWindowPacket openWindowPacket = new OpenWindowPacket();
+            OpenWindowPacket openWindowPacket = new OpenWindowPacket(newInventory.getTitle());
             openWindowPacket.windowId = newInventory.getWindowId();
             openWindowPacket.windowType = newInventory.getInventoryType().getWindowType();
-            openWindowPacket.title = newInventory.getTitle();
             playerConnection.sendPacket(openWindowPacket);
             newInventory.addViewer(this);
             this.openInventory = newInventory;
@@ -1860,10 +1963,10 @@ public class Player extends LivingEntity implements CommandSender {
         ItemStack cursorItem;
         if (openInventory == null) {
             cursorItem = getInventory().getCursorItem();
-            getInventory().setCursorItem(ItemStack.getAirItem());
+            getInventory().setCursorItem(ItemStack.AIR);
         } else {
             cursorItem = openInventory.getCursorItem(this);
-            openInventory.setCursorItem(this, ItemStack.getAirItem());
+            openInventory.setCursorItem(this, ItemStack.AIR);
         }
         if (!cursorItem.isAir()) {
             // Add item to inventory if he hasn't been able to drop it
@@ -2216,12 +2319,12 @@ public class Player extends LivingEntity implements CommandSender {
         this.heldSlot = slot;
         syncEquipment(EntityEquipmentPacket.Slot.MAIN_HAND);
 
-        refreshEating(false);
+        refreshEating(null);
     }
 
-    public void refreshEating(boolean isEating, long eatingTime) {
-        this.isEating = isEating;
-        if (isEating) {
+    public void refreshEating(@Nullable Hand eatingHand, long eatingTime) {
+        this.eatingHand = eatingHand;
+        if (eatingHand != null) {
             this.startEatingTime = System.currentTimeMillis();
             this.eatingTime = eatingTime;
         } else {
@@ -2229,8 +2332,8 @@ public class Player extends LivingEntity implements CommandSender {
         }
     }
 
-    public void refreshEating(boolean isEating) {
-        refreshEating(isEating, defaultEatingTime);
+    public void refreshEating(@Nullable Hand eatingHand) {
+        refreshEating(eatingHand, defaultEatingTime);
     }
 
     /**
@@ -2241,23 +2344,16 @@ public class Player extends LivingEntity implements CommandSender {
      * @return the called {@link ItemUpdateStateEvent},
      * null if there is no item to update the state
      */
-    @Nullable
-    public ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood) {
-        final Material mainHandMat = getItemInMainHand().getMaterial();
-        final Material offHandMat = getItemInOffHand().getMaterial();
-        final boolean isOffhand = offHandMat.hasState();
-
-        final ItemStack updatedItem = isOffhand ? getItemInOffHand() :
-                mainHandMat.hasState() ? getItemInMainHand() : null;
-        if (updatedItem == null) // No item with state, cancel
+    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood, @Nullable Hand hand) {
+        if (hand == null)
             return null;
 
+        final ItemStack updatedItem = getItemInHand(hand);
         final boolean isFood = updatedItem.getMaterial().isFood();
 
         if (isFood && !allowFood)
             return null;
 
-        final Hand hand = isOffhand ? Hand.OFF : Hand.MAIN;
         ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, updatedItem);
         callEvent(ItemUpdateStateEvent.class, itemUpdateStateEvent);
 
@@ -2329,10 +2425,10 @@ public class Player extends LivingEntity implements CommandSender {
         final int playerRange = getSettings().viewDistance;
         if (playerRange < 1) {
             // Didn't receive settings packet yet (is the case on login)
-            // In this case we send the smallest amount of chunks possible
+            // In this case we send an arbitrary number of chunks
             // Will be updated in PlayerSettings#refresh.
             // Non-compliant clients might also be stuck with this view
-            return 1;
+            return 7;
         } else {
             final int serverRange = MinecraftServer.getChunkViewDistance();
             return Math.min(playerRange, serverRange);
@@ -2346,6 +2442,11 @@ public class Player extends LivingEntity implements CommandSender {
      */
     public long getLastKeepAlive() {
         return lastKeepAlive;
+    }
+
+    @Override
+    public @NotNull HoverEvent<ShowEntity> asHoverEvent(@NotNull UnaryOperator<ShowEntity> op) {
+        return HoverEvent.showEntity(ShowEntity.of(EntityType.PLAYER, this.uuid, this.displayName));
     }
 
     /**
@@ -2405,9 +2506,7 @@ public class Player extends LivingEntity implements CommandSender {
         connection.sendPacket(getEntityType().getSpawnType().getSpawnPacket(this));
         connection.sendPacket(getVelocityPacket());
         connection.sendPacket(getMetadataPacket());
-
-        // Equipments synchronization
-        syncEquipments(connection);
+        connection.sendPacket(getEquipmentsPacket());
 
         if (hasPassenger()) {
             connection.sendPacket(getPassengersPacket());
@@ -2489,6 +2588,44 @@ public class Player extends LivingEntity implements CommandSender {
         inventory.setBoots(itemStack);
     }
 
+    @Override
+    public Locale getLocale() {
+        return settings.locale == null ? null : Locale.forLanguageTag(settings.locale);
+    }
+
+    /**
+     * Sets the player's locale. This will only set the locale of the player as it
+     * is stored in the server. This will also be reset if the settings are refreshed.
+     *
+     * @param locale the new locale
+     */
+    @Override
+    public void setLocale(@Nullable Locale locale) {
+        settings.locale = locale == null ? null : locale.toLanguageTag();
+    }
+
+    @Override
+    public @NotNull Identity identity() {
+        return this.identity;
+    }
+
+    @Override
+    public void setUuid(@NotNull UUID uuid) {
+        super.setUuid(uuid);
+        // update identity
+        this.identity = Identity.identity(uuid);
+    }
+
+    @Override
+    public boolean isPlayer() {
+        return true;
+    }
+
+    @Override
+    public Player asPlayer() {
+        return this;
+    }
+
     /**
      * Represents the main or off hand of the player.
      */
@@ -2526,8 +2663,6 @@ public class Player extends LivingEntity implements CommandSender {
         private boolean chatColors;
         private byte displayedSkinParts;
         private MainHand mainHand;
-
-        private boolean firstRefresh = true;
 
         /**
          * The player game language.
@@ -2603,8 +2738,6 @@ public class Player extends LivingEntity implements CommandSender {
             this.mainHand = mainHand;
 
             metadata.setIndex((byte) 16, Metadata.Byte(displayedSkinParts));
-
-            this.firstRefresh = false;
 
             // Client changed his view distance in the settings
             if (viewDistanceChanged) {

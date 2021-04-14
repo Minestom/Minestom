@@ -50,13 +50,16 @@ public final class PacketProcessor {
         this.playPacketsHandler = new ClientPlayPacketsHandler();
     }
 
-    public void process(@NotNull ChannelHandlerContext channel, @NotNull InboundPacket packet) {
-        final SocketChannel socketChannel = (SocketChannel) channel.channel();
+    public void process(@NotNull ChannelHandlerContext context, @NotNull InboundPacket packet) {
+        final SocketChannel socketChannel = (SocketChannel) context.channel();
 
         // Create the netty player connection object if not existing
-        PlayerConnection playerConnection = connectionPlayerConnectionMap.computeIfAbsent(
-                channel, c -> new NettyPlayerConnection(socketChannel)
-        );
+        PlayerConnection playerConnection = connectionPlayerConnectionMap.get(context);
+        if (playerConnection == null) {
+            // Should never happen
+            context.close();
+            return;
+        }
 
         // Prevent the client from sending packets when disconnected (kick)
         if (!playerConnection.isOnline() || !socketChannel.isActive()) {
@@ -108,16 +111,21 @@ public final class PacketProcessor {
     /**
      * Retrieves a player connection from its channel.
      *
-     * @param channel the connection channel
+     * @param context the connection context
      * @return the connection of this channel, null if not found
      */
     @Nullable
-    public PlayerConnection getPlayerConnection(ChannelHandlerContext channel) {
-        return connectionPlayerConnectionMap.get(channel);
+    public PlayerConnection getPlayerConnection(ChannelHandlerContext context) {
+        return connectionPlayerConnectionMap.get(context);
     }
 
-    public void removePlayerConnection(@NotNull ChannelHandlerContext channel) {
-        connectionPlayerConnectionMap.remove(channel);
+    public void createPlayerConnection(@NotNull ChannelHandlerContext context) {
+        final PlayerConnection playerConnection = new NettyPlayerConnection((SocketChannel) context.channel());
+        connectionPlayerConnectionMap.put(context, playerConnection);
+    }
+
+    public PlayerConnection removePlayerConnection(@NotNull ChannelHandlerContext context) {
+        return connectionPlayerConnectionMap.remove(context);
     }
 
     /**

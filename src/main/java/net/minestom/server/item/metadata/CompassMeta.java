@@ -1,103 +1,107 @@
 package net.minestom.server.item.metadata;
 
+import net.minestom.server.item.ItemMeta;
+import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.clone.CloneUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.Objects;
+import java.util.function.Supplier;
 
-public class CompassMeta extends ItemMeta {
+public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<CompassMeta.Builder> {
 
-    private boolean lodestoneTracked;
-    private String lodestoneDimension;
+    private final boolean lodestoneTracked;
+    private final String lodestoneDimension;
+    private final Position lodestonePosition;
 
-    private Position lodestonePosition;
+    protected CompassMeta(ItemMetaBuilder metaBuilder,
+                          boolean lodestoneTracked,
+                          @Nullable String lodestoneDimension,
+                          @Nullable Position lodestonePosition) {
+        super(metaBuilder);
+        this.lodestoneTracked = lodestoneTracked;
+        this.lodestoneDimension = lodestoneDimension;
+        this.lodestonePosition = lodestonePosition;
+    }
 
     public boolean isLodestoneTracked() {
         return lodestoneTracked;
     }
 
-    public void setLodestoneTracked(boolean lodestoneTracked) {
-        this.lodestoneTracked = lodestoneTracked;
-    }
-
-    @Nullable
-    public String getLodestoneDimension() {
+    public @Nullable String getLodestoneDimension() {
         return lodestoneDimension;
     }
 
-    public void setLodestoneDimension(@Nullable String lodestoneDimension) {
-        this.lodestoneDimension = lodestoneDimension;
-    }
-
-    @Nullable
-    public Position getLodestonePosition() {
+    public @Nullable Position getLodestonePosition() {
         return lodestonePosition;
     }
 
-    public void setLodestonePosition(@Nullable Position lodestonePosition) {
-        this.lodestonePosition = lodestonePosition;
-    }
+    public static class Builder extends ItemMetaBuilder {
 
-    @Override
-    public boolean hasNbt() {
-        return true;
-    }
+        private boolean lodestoneTracked;
+        private String lodestoneDimension;
+        private Position lodestonePosition;
 
-    @Override
-    public boolean isSimilar(@NotNull ItemMeta itemMeta) {
-        if (!(itemMeta instanceof CompassMeta))
-            return false;
-        CompassMeta compassMeta = (CompassMeta) itemMeta;
-        return (compassMeta.lodestoneTracked == lodestoneTracked) &&
-                (Objects.equals(compassMeta.lodestoneDimension, lodestoneDimension)) &&
-                (Objects.equals(compassMeta.lodestonePosition, lodestonePosition));
-    }
-
-    @Override
-    public void read(@NotNull NBTCompound compound) {
-        if (compound.containsKey("LodestoneTracked")) {
-            this.lodestoneTracked = compound.getByte("LodestoneTracked") == 1;
-        }
-        if (compound.containsKey("LodestoneDimension")) {
-            this.lodestoneDimension = compound.getString("LodestoneDimension");
-        }
-        if (compound.containsKey("LodestonePos")) {
-            final NBTCompound posCompound = compound.getCompound("LodestonePos");
-            final int x = posCompound.getInt("X");
-            final int y = posCompound.getInt("Y");
-            final int z = posCompound.getInt("Z");
-
-            this.lodestonePosition = new Position(x, y, z);
-        }
-    }
-
-    @Override
-    public void write(@NotNull NBTCompound compound) {
-        compound.setByte("LodestoneTracked", (byte) (lodestoneTracked ? 1 : 0));
-        if (lodestoneDimension != null) {
-            compound.setString("LodestoneDimension", lodestoneDimension);
+        public Builder lodestoneTracked(boolean lodestoneTracked) {
+            this.lodestoneTracked = lodestoneTracked;
+            this.nbt.setByte("LodestoneTracked", (byte) (lodestoneTracked ? 1 : 0));
+            return this;
         }
 
-        if (lodestonePosition != null) {
-            NBTCompound posCompound = new NBTCompound();
-            posCompound.setInt("X", (int) lodestonePosition.getX());
-            posCompound.setInt("Y", (int) lodestonePosition.getY());
-            posCompound.setInt("Z", (int) lodestonePosition.getZ());
-            compound.set("LodestonePos", posCompound);
+        public Builder lodestoneDimension(@Nullable String lodestoneDimension) {
+            this.lodestoneDimension = lodestoneDimension;
+
+            if (lodestoneDimension != null) {
+                this.nbt.setString("LodestoneDimension", lodestoneDimension);
+            } else {
+                this.nbt.removeTag("LodestoneDimension");
+            }
+
+            return this;
         }
-    }
 
-    @NotNull
-    @Override
-    public ItemMeta clone() {
-        CompassMeta compassMeta = (CompassMeta) super.clone();
-        compassMeta.lodestoneTracked = lodestoneTracked;
-        compassMeta.lodestoneDimension = lodestoneDimension;
-        compassMeta.lodestonePosition = CloneUtils.optionalClone(lodestonePosition);
+        public Builder lodestonePosition(@Nullable Position lodestonePosition) {
+            this.lodestonePosition = lodestonePosition;
 
-        return compassMeta;
+            if (lodestonePosition != null) {
+                NBTCompound posCompound = new NBTCompound();
+                posCompound.setInt("X", (int) lodestonePosition.getX());
+                posCompound.setInt("Y", (int) lodestonePosition.getY());
+                posCompound.setInt("Z", (int) lodestonePosition.getZ());
+                this.nbt.set("LodestonePos", posCompound);
+            } else {
+                this.nbt.removeTag("LodestonePos");
+            }
+
+            return this;
+        }
+
+        @Override
+        public @NotNull CompassMeta build() {
+            return new CompassMeta(this, lodestoneTracked, lodestoneDimension, lodestonePosition);
+        }
+
+        @Override
+        public void read(@NotNull NBTCompound nbtCompound) {
+            if (nbtCompound.containsKey("LodestoneTracked")) {
+                lodestoneTracked(nbtCompound.getByte("LodestoneTracked") == 1);
+            }
+            if (nbtCompound.containsKey("LodestoneDimension")) {
+                lodestoneDimension(nbtCompound.getString("LodestoneDimension"));
+            }
+            if (nbtCompound.containsKey("LodestonePos")) {
+                final NBTCompound posCompound = nbtCompound.getCompound("LodestonePos");
+                final int x = posCompound.getInt("X");
+                final int y = posCompound.getInt("Y");
+                final int z = posCompound.getInt("Z");
+                lodestonePosition(new Position(x, y, z));
+            }
+        }
+
+        @Override
+        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
+            return Builder::new;
+        }
     }
 }

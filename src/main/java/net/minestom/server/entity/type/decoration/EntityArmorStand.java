@@ -41,13 +41,13 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
         setLeftLegRotation(new Vector(-1f, 0, -1f));
         setRightLegRotation(new Vector(1, 0, 1));
 
-        this.mainHandItem = ItemStack.getAirItem();
-        this.offHandItem = ItemStack.getAirItem();
+        this.mainHandItem = ItemStack.AIR;
+        this.offHandItem = ItemStack.AIR;
 
-        this.helmet = ItemStack.getAirItem();
-        this.chestplate = ItemStack.getAirItem();
-        this.leggings = ItemStack.getAirItem();
-        this.boots = ItemStack.getAirItem();
+        this.helmet = ItemStack.AIR;
+        this.chestplate = ItemStack.AIR;
+        this.leggings = ItemStack.AIR;
+        this.boots = ItemStack.AIR;
 
     }
 
@@ -56,7 +56,7 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
         if (!super.addViewer0(player)) {
             return false;
         }
-        syncEquipments(player.getPlayerConnection());
+        player.getPlayerConnection().sendPacket(getEquipmentsPacket());
         return true;
     }
 

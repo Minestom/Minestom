@@ -1,6 +1,7 @@
 package net.minestom.server.utils;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -9,7 +10,7 @@ import java.util.Objects;
  * Represents a namespaced ID
  * https://minecraft.gamepedia.com/Namespaced_ID
  */
-public class NamespaceID implements CharSequence {
+public class NamespaceID implements CharSequence, Key {
     private static final Int2ObjectOpenHashMap<NamespaceID> cache = new Int2ObjectOpenHashMap<>();
     private static final String legalLetters = "[0123456789abcdefghijklmnopqrstuvwxyz_-]+";
     private static final String legalPathLetters = "[0123456789abcdefghijklmnopqrstuvwxyz./_-]+";
@@ -60,6 +61,10 @@ public class NamespaceID implements CharSequence {
 
     public static NamespaceID from(String id) {
         return from(getDomain(id), getPath(id));
+    }
+
+    public static NamespaceID from(Key key) {
+        return from(key.asString());
     }
 
     private NamespaceID(@NotNull String path) {
@@ -131,4 +136,18 @@ public class NamespaceID implements CharSequence {
         return domain + ":" + path;
     }
 
+    @Override
+    public @NotNull String namespace() {
+        return this.domain;
+    }
+
+    @Override
+    public @NotNull String value() {
+        return this.path;
+    }
+
+    @Override
+    public @NotNull String asString() {
+        return this.full;
+    }
 }

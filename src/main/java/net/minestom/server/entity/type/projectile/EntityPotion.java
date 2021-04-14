@@ -22,7 +22,7 @@ public class EntityPotion extends Entity {
 
     @NotNull
     public ItemStack getPotion() {
-        return metadata.getIndex((byte) 7, ItemStack.getAirItem());
+        return metadata.getIndex((byte) 7, ItemStack.AIR);
     }
 
     public void setPotion(@NotNull ItemStack potion) {

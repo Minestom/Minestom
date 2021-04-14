@@ -105,8 +105,14 @@ public class MinestomExtensionClassLoader extends HierarchyClassLoader {
      * @see MinestomRootClassLoader#loadBytes(String, boolean) for more information
      */
     protected boolean isMainExtensionClass(String name) {
-        if(mainClassName.equals(name))
+
+        if (mainClassName.equals(name))
             return true;
-        return children.stream().anyMatch(c -> c.isMainExtensionClass(name));
+
+        for (MinestomExtensionClassLoader child : children) {
+            if (child.isMainExtensionClass(name)) return true;
+        }
+
+        return false;
     }
 }

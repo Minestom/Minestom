@@ -25,10 +25,9 @@ public class VanillaStackingRule extends StackingRule {
     @Override
     public ItemStack apply(@NotNull ItemStack item, int newAmount) {
         if (newAmount <= 0)
-            return ItemStack.getAirItem();
+            return ItemStack.AIR;
 
-        item.setAmount((byte) newAmount);
-        return item;
+        return item.withAmount(newAmount);
     }
 
     @Override

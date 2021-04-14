@@ -2,6 +2,8 @@ package net.minestom.server.instance.block;
 
 import java.util.Arrays;
 import java.util.List;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.minestom.server.instance.block.states.AcaciaButton;
 import net.minestom.server.instance.block.states.AcaciaDoor;
 import net.minestom.server.instance.block.states.AcaciaFence;
@@ -481,7 +483,7 @@ import org.jetbrains.annotations.Nullable;
  * //==============================
  */
 @SuppressWarnings({"deprecation"})
-public enum Block {
+public enum Block implements Keyed {
     AIR("minecraft:air", (short) 0, 0.0, 0.0, true, false, null, true),
 
     STONE("minecraft:stone", (short) 1, 1.5, 6.0, false, true, null, true),
@@ -2480,24 +2482,26 @@ public enum Block {
     }
 
     @NotNull
-    private String namespaceID;
+    private final String namespaceID;
 
-    private short defaultID;
+    private final short defaultID;
 
-    private double hardness;
+    private final double hardness;
 
-    private double resistance;
+    private final double resistance;
 
-    private boolean isAir;
+    private final boolean isAir;
 
-    private boolean isSolid;
+    private final boolean isSolid;
 
     @Nullable
-    private NamespaceID blockEntity;
+    private final NamespaceID blockEntity;
 
-    private boolean singleState;
+    private final boolean singleState;
 
     private List<BlockAlternative> alternatives = new java.util.ArrayList<>();
+
+    private final Key key;
 
     Block(@NotNull String namespaceID, short defaultID, double hardness, double resistance,
             boolean isAir, boolean isSolid, @Nullable NamespaceID blockEntity,
@@ -2514,6 +2518,7 @@ public enum Block {
             addBlockAlternative(new BlockAlternative(defaultID));
         }
         Registries.blocks.put(NamespaceID.from(namespaceID), this);
+        this.key = Key.key(this.namespaceID);
     }
 
     public short getBlockId() {
@@ -2585,5 +2590,9 @@ public enum Block {
 
     public static Block fromStateId(short blockStateId) {
         return BlockArray.blocks[blockStateId];
+    }
+
+    public Key key() {
+        return this.key;
     }
 }

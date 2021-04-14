@@ -4,21 +4,29 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.kyori.adventure.text.format.*;
+import net.minestom.server.color.Color;
+import net.minestom.server.color.DyeColor;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Represents a color in a text. You can either use one of the pre-made colors
  * or make your own using RGB. {@link ChatColor#fromRGB(byte, byte, byte)}.
  * <p>
  * Immutable class.
+ * @deprecated For chat colors, use {@link TextColor} or {@link NamedTextColor}. For styles, use {@link TextDecoration}.
+ * For colors in other contexts, see {@link Color} or {@link DyeColor}.
  */
-public final class ChatColor {
+@Deprecated
+public final class ChatColor implements StyleBuilderApplicable {
 
     // Special
     public static final ChatColor NO_COLOR = new ChatColor();
@@ -272,6 +280,18 @@ public final class ChatColor {
         return id;
     }
 
+    /**
+     * Gets the Adventure text color from this chat color.
+     * @return the text color
+     */
+    public @NotNull TextColor asTextColor() {
+        return TextColor.color(red, blue, green);
+    }
+
+    public @NotNull Color asColor() {
+        return new Color(red, green, blue);
+    }
+
     @NotNull
     @Override
     public String toString() {
@@ -294,5 +314,27 @@ public final class ChatColor {
         }
 
         return header + code + footer;
+    }
+
+    @Override
+    @Contract(mutates = "param")
+    public void styleApply(Style.@NotNull Builder style) {
+        if (this.isEmpty()) {
+            style.color(NamedTextColor.WHITE);
+        } else if (Objects.equals(this.codeName, "reset")) {
+            style.color(NamedTextColor.WHITE);
+
+            for (TextDecoration value : TextDecoration.NAMES.values()) {
+                style.decoration(value, TextDecoration.State.FALSE);
+            }
+        } else if (this.isSpecial() && this.codeName != null) {
+            TextDecoration decoration = TextDecoration.NAMES.value(this.codeName);
+
+            if (decoration != null) {
+                style.decorate(decoration);
+            }
+        } else {
+            style.color(TextColor.color(this.red, this.green, this.blue));
+        }
     }
 }

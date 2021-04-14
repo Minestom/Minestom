@@ -3,6 +3,7 @@ package net.minestom.server.listener;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
@@ -51,7 +52,8 @@ public class BlockPlacementListener {
         final ItemStack usedItem = player.getItemInHand(hand);
 
         // Interact at block
-        final boolean cancel = usedItem.onUseOnBlock(player, hand, blockPosition, direction);
+        // FIXME: onUseOnBlock
+        final boolean cancel = false;//usedItem.onUseOnBlock(player, hand, blockPosition, direction);
         PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, blockPosition, hand, blockFace);
         playerBlockInteractEvent.setCancelled(cancel);
         playerBlockInteractEvent.setBlockingItemUse(cancel);
@@ -84,7 +86,8 @@ public class BlockPlacementListener {
                 canPlaceBlock = false; //Spectators can't place blocks
             } else if (player.getGameMode() == GameMode.ADVENTURE) {
                 //Check if the block can placed on the block
-                canPlaceBlock = usedItem.canPlaceOn(instance.getBlock(blockPosition).getName());
+                Block placeBlock = instance.getBlock(blockPosition);
+                canPlaceBlock = usedItem.getMeta().getCanPlaceOn().contains(placeBlock);
             }
         }
 
@@ -122,9 +125,11 @@ public class BlockPlacementListener {
                 // Check if the player is trying to place a block in an entity
                 boolean intersect = player.getBoundingBox().intersect(blockPosition);
                 if (!intersect && block.isSolid()) {
+                    // TODO push entities too close to the position
                     for (Entity entity : entities) {
                         // 'player' has already been checked
-                        if (entity == player)
+                        if (entity == player ||
+                                entity.getEntityType() == EntityType.ITEM)
                             continue;
 
                         intersect = entity.getBoundingBox().intersect(blockPosition);
@@ -163,11 +168,8 @@ public class BlockPlacementListener {
                             // Block consuming
                             if (playerBlockPlaceEvent.doesConsumeBlock()) {
                                 // Consume the block in the player's hand
-                                final ItemStack newUsedItem = usedItem.consume(1);
-
-                                if (newUsedItem != null) {
-                                    playerInventory.setItemInHand(hand, newUsedItem);
-                                }
+                                final ItemStack newUsedItem = usedItem.getStackingRule().apply(usedItem, usedItem.getAmount() - 1);
+                                playerInventory.setItemInHand(hand, newUsedItem);
                             }
                         } else {
                             refreshChunk = true;
@@ -183,7 +185,8 @@ public class BlockPlacementListener {
             }
         } else {
             // Player didn't try to place a block but interacted with one
-            PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, blockPosition, direction);
+            final BlockPosition usePosition = blockPosition.clone().subtract(offsetX, offsetY, offsetZ);
+            PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, usePosition, direction);
             player.callEvent(PlayerUseItemOnBlockEvent.class, event);
             refreshChunk = true;
         }
@@ -192,8 +195,6 @@ public class BlockPlacementListener {
         if (refreshChunk) {
             chunk.sendChunkSectionUpdate(ChunkUtils.getSectionAt(blockPosition.getY()), player);
         }
-
-        player.getInventory().refreshSlot(player.getHeldSlot());
     }
 
 }

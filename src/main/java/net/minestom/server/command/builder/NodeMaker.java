@@ -1,10 +1,10 @@
 package net.minestom.server.command.builder;
 
+import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +15,7 @@ public class NodeMaker {
     private final List<DeclareCommandsPacket.Node[]> nodes = new ArrayList<>(2);
     private final Object2IntMap<DeclareCommandsPacket.Node> nodeIdsMap = new Object2IntOpenHashMap<>();
 
-    private Rule rule;
-    private int ruleCount;
+    private final List<Pair<String, Request>> nodeRequests = new ArrayList<>();
 
     public NodeMaker(@NotNull DeclareCommandsPacket.Node[] commandNodes, int id) {
         addNodes(commandNodes);
@@ -41,24 +40,9 @@ public class NodeMaker {
     }
 
     public void addNodes(@NotNull DeclareCommandsPacket.Node[] nodes) {
-        Options options = null;
-        if (rule != null) {
-            options = rule.listen(nodes, ruleCount++);
-        }
-        if (options == null) {
-            options = new Options();
-        }
+        Options options = new Options();
         this.configuredNodes.add(ConfiguredNodes.of(nodes, options));
         this.nodes.add(nodes);
-    }
-
-    public void setRule(@NotNull Rule rule) {
-        this.rule = rule;
-    }
-
-    public void resetRule() {
-        this.rule = null;
-        this.ruleCount = 0;
     }
 
     @NotNull
@@ -73,6 +57,14 @@ public class NodeMaker {
     @NotNull
     public Object2IntMap<DeclareCommandsPacket.Node> getNodeIdsMap() {
         return nodeIdsMap;
+    }
+
+    public void request(String input, Request request) {
+        this.nodeRequests.add(Pair.of(input, request));
+    }
+
+    public List<Pair<String, Request>> getNodeRequests() {
+        return nodeRequests;
     }
 
     public static class ConfiguredNodes {
@@ -93,11 +85,6 @@ public class NodeMaker {
         public Options getOptions() {
             return options;
         }
-    }
-
-    public interface Rule {
-        @Nullable
-        Options listen(DeclareCommandsPacket.Node[] nodes, int count);
     }
 
     public static class Options {
@@ -126,6 +113,11 @@ public class NodeMaker {
             this.previousNodes = previousNodes;
             return this;
         }
+    }
+
+    @FunctionalInterface
+    public interface Request {
+        void retrieve(int id);
     }
 
 }

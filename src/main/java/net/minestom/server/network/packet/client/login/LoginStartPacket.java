@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.client.login;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.ChatColor;
-import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Player;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
@@ -15,6 +15,7 @@ import net.minestom.server.network.packet.server.login.LoginPluginRequestPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -22,9 +23,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class LoginStartPacket implements ClientPreplayPacket {
 
-    private static final ColoredText ALREADY_CONNECTED_JSON = ColoredText.of(ChatColor.RED, "You are already on this server");
+    private static final Component ALREADY_CONNECTED = Component.text("You are already on this server", NamedTextColor.RED);
 
-    public String username;
+    public String username = "";
 
     @Override
     public void process(@NotNull PlayerConnection connection) {
@@ -72,7 +73,7 @@ public class LoginStartPacket implements ClientPreplayPacket {
         if (MojangAuth.isEnabled() && isNettyClient) {
             // Mojang auth
             if (CONNECTION_MANAGER.getPlayer(username) != null) {
-                connection.sendPacket(new LoginDisconnectPacket(ALREADY_CONNECTED_JSON));
+                connection.sendPacket(new LoginDisconnectPacket(ALREADY_CONNECTED));
                 connection.disconnect();
                 return;
             }
@@ -101,4 +102,10 @@ public class LoginStartPacket implements ClientPreplayPacket {
         this.username = reader.readSizedString(16);
     }
 
+    @Override
+    public void write(@NotNull BinaryWriter writer) {
+        if(username.length() > 16)
+            throw new IllegalArgumentException("Username is not allowed to be longer than 16 characters");
+        writer.writeSizedString(username);
+    }
 }

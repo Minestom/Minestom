@@ -1,9 +1,11 @@
 package demo.commands;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
@@ -18,7 +20,7 @@ public class HorseCommand extends Command {
 
     public HorseCommand() {
         super("horse");
-        setCondition(this::condition);
+        setCondition(Conditions::playerOnly);
         setDefaultExecutor(this::defaultExecutor);
         var babyArg = ArgumentType.Boolean("baby");
         var markingArg = ArgumentType.Enum("marking", HorseMeta.Marking.class);
@@ -29,46 +31,39 @@ public class HorseCommand extends Command {
         addSyntax(this::onHorseCommand, babyArg, markingArg, colorArg);
     }
 
-    private boolean condition(CommandSender sender, String commandString) {
-        if (!sender.isPlayer()) {
-            sender.sendMessage("The command is only available for player");
-            return false;
-        }
-        return true;
-    }
-
-    private void defaultExecutor(CommandSender sender, Arguments args) {
-        sender.sendMessage("Correct usage: horse [baby] [marking] [color]");
+    private void defaultExecutor(CommandSender sender, CommandContext context) {
+        sender.sendMessage(Component.text("Correct usage: /horse <baby> <marking> <color>"));
     }
 
     private void onBabyError(CommandSender sender, ArgumentSyntaxException exception) {
-        sender.sendMessage("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by 'true' or 'false'");
+        sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by 'true' or 'false'"));
     }
 
     private void onMarkingError(CommandSender sender, ArgumentSyntaxException exception) {
         String values = Stream.of(HorseMeta.Marking.values())
                 .map(value -> "'" + value.name().toLowerCase(Locale.ROOT) + "'")
                 .collect(Collectors.joining(", "));
-        sender.sendMessage("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by " + values + ".");
+        sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by " + values + "."));
     }
 
     private void onColorError(CommandSender sender, ArgumentSyntaxException exception) {
         String values = Stream.of(HorseMeta.Color.values())
                 .map(value -> "'" + value.name().toLowerCase(Locale.ROOT) + "'")
                 .collect(Collectors.joining(", "));
-        sender.sendMessage("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by " + values + ".");
+        sender.sendMessage(Component.text("SYNTAX ERROR: '" + exception.getInput() + "' should be replaced by " + values + "."));
     }
 
-    private void onHorseCommand(CommandSender sender, Arguments args) {
+    private void onHorseCommand(CommandSender sender, CommandContext context) {
         var player = (Player) sender;
 
-        boolean baby = args.get("baby");
-        HorseMeta.Marking marking = args.get("marking");
-        HorseMeta.Color color = args.get("color");
+        boolean baby = context.get("baby");
+        HorseMeta.Marking marking = context.get("marking");
+        HorseMeta.Color color = context.get("color");
         var horse = new EntityCreature(EntityType.HORSE);
         var meta = (HorseMeta) horse.getEntityMeta();
         meta.setBaby(baby);
         meta.setVariant(new HorseMeta.Variant(marking, color));
+        //noinspection ConstantConditions - It should be impossible to execute a command without being in an instance
         horse.setInstance(player.getInstance(), player.getPosition());
     }
 

@@ -1,11 +1,9 @@
 package net.minestom.server.inventory;
 
-import net.minestom.server.Viewable;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
-import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,8 +20,7 @@ public interface EquipmentHandler {
      *
      * @return the {@link ItemStack} in main hand
      */
-    @NotNull
-    ItemStack getItemInMainHand();
+    @NotNull ItemStack getItemInMainHand();
 
     /**
      * Changes the main hand {@link ItemStack}.
@@ -37,8 +34,7 @@ public interface EquipmentHandler {
      *
      * @return the item in off hand
      */
-    @NotNull
-    ItemStack getItemInOffHand();
+    @NotNull ItemStack getItemInOffHand();
 
     /**
      * Changes the off hand {@link ItemStack}.
@@ -53,8 +49,7 @@ public interface EquipmentHandler {
      * @param hand the Hand to get the {@link ItemStack} from
      * @return the {@link ItemStack} in {@code hand}
      */
-    @NotNull
-    default ItemStack getItemInHand(@NotNull Player.Hand hand) {
+    default @NotNull ItemStack getItemInHand(@NotNull Player.Hand hand) {
         switch (hand) {
             case MAIN:
                 return getItemInMainHand();
@@ -87,8 +82,7 @@ public interface EquipmentHandler {
      *
      * @return the helmet
      */
-    @NotNull
-    ItemStack getHelmet();
+    @NotNull ItemStack getHelmet();
 
     /**
      * Changes the helmet.
@@ -102,8 +96,7 @@ public interface EquipmentHandler {
      *
      * @return the chestplate
      */
-    @NotNull
-    ItemStack getChestplate();
+    @NotNull ItemStack getChestplate();
 
     /**
      * Changes the chestplate.
@@ -117,8 +110,7 @@ public interface EquipmentHandler {
      *
      * @return the leggings
      */
-    @NotNull
-    ItemStack getLeggings();
+    @NotNull ItemStack getLeggings();
 
     /**
      * Changes the leggings.
@@ -132,8 +124,7 @@ public interface EquipmentHandler {
      *
      * @return the boots
      */
-    @NotNull
-    ItemStack getBoots();
+    @NotNull ItemStack getBoots();
 
     /**
      * Changes the boots.
@@ -148,8 +139,7 @@ public interface EquipmentHandler {
      * @param slot the equipment to get the item from
      * @return the equipment {@link ItemStack}
      */
-    @NotNull
-    default ItemStack getEquipment(@NotNull EntityEquipmentPacket.Slot slot) {
+    default @NotNull ItemStack getEquipment(@NotNull EntityEquipmentPacket.Slot slot) {
         switch (slot) {
             case MAIN_HAND:
                 return getItemInMainHand();
@@ -167,23 +157,29 @@ public interface EquipmentHandler {
         throw new IllegalStateException("Something weird happened");
     }
 
-    /**
-     * Sends all the equipments to a {@link PlayerConnection}.
-     *
-     * @param connection the connection to send the equipments to
-     */
-    default void syncEquipments(@NotNull PlayerConnection connection) {
-        connection.sendPacket(getEquipmentsPacket());
-    }
-
-    /**
-     * Sends all the equipments to all viewers.
-     */
-    default void syncEquipments() {
-        Check.stateCondition(!(this instanceof Viewable), "Only accessible for Entity");
-
-        Viewable viewable = (Viewable) this;
-        viewable.sendPacketToViewersAndSelf(getEquipmentsPacket());
+    default void setEquipment(@NotNull EntityEquipmentPacket.Slot slot, @NotNull ItemStack itemStack) {
+        switch (slot) {
+            case MAIN_HAND:
+                setItemInMainHand(itemStack);
+                break;
+            case OFF_HAND:
+                setItemInOffHand(itemStack);
+                break;
+            case HELMET:
+                setHelmet(itemStack);
+                break;
+            case CHESTPLATE:
+                setChestplate(itemStack);
+                break;
+            case LEGGINGS:
+                setLeggings(itemStack);
+                break;
+            case BOOTS:
+                setBoots(itemStack);
+                break;
+            default:
+                throw new IllegalStateException("Something weird happened");
+        }
     }
 
     /**
@@ -212,8 +208,7 @@ public interface EquipmentHandler {
      * @return the packet with the equipments
      * @throws IllegalStateException if 'this' is not an {@link Entity}
      */
-    @NotNull
-    default EntityEquipmentPacket getEquipmentsPacket() {
+    default @NotNull EntityEquipmentPacket getEquipmentsPacket() {
         Check.stateCondition(!(this instanceof Entity), "Only accessible for Entity");
 
         final Entity entity = (Entity) this;
