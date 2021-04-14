@@ -2,7 +2,6 @@ package net.minestom.server;
 
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
-import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.data.DataType;
@@ -25,6 +24,7 @@ import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
 import net.minestom.server.listener.manager.PacketListenerManager;
+import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.NettyServer;
@@ -136,6 +136,7 @@ public final class MinecraftServer {
     private static int compressionThreshold = 256;
     private static boolean packetCaching = true;
     private static boolean groupedPacket = true;
+    private static boolean waitMonitoring = false;
     private static ResponseDataConsumer responseDataConsumer;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
@@ -611,6 +612,14 @@ public final class MinecraftServer {
     public static void setGroupedPacket(boolean groupedPacket) {
         Check.stateCondition(started, "You cannot change the grouped packet value after the server has been started.");
         MinecraftServer.groupedPacket = groupedPacket;
+    }
+
+    public static boolean hasWaitMonitoring() {
+        return waitMonitoring;
+    }
+
+    public static void setWaitMonitoring(boolean waitMonitoring) {
+        MinecraftServer.waitMonitoring = waitMonitoring;
     }
 
     /**
