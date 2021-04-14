@@ -1,6 +1,7 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.UpdateManager;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
@@ -78,14 +79,20 @@ public abstract class ThreadProvider {
     public void prepareUpdate(long time) {
         this.threadChunkMap.forEach((threadId, chunks) -> {
             BatchThread thread = threads.get(threadId);
-            var chunksCopy = new ArrayList<>(chunks);
+
+            Map<Chunk, List<Entity>> chunkListMap = new HashMap<>(chunks.size());
+            for (Chunk chunk : chunks) {
+                var entities = new ArrayList<>(chunk.getInstance().getChunkEntities(chunk));
+                chunkListMap.put(chunk, entities);
+            }
+
             thread.addRunnable(() -> {
-                for (Chunk chunk : chunksCopy) {
+                chunkListMap.forEach((chunk, entities) -> {
                     chunk.tick(time);
-                    chunk.getInstance().getChunkEntities(chunk).forEach(entity -> {
+                    entities.forEach(entity -> {
                         entity.tick(time);
                     });
-                }
+                });
             });
         });
     }
