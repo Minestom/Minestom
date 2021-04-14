@@ -33,7 +33,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-//TODO: Default attributes registration (and limitation ?)
 public class LivingEntity extends Entity implements EquipmentHandler {
 
     // ItemStack pickup

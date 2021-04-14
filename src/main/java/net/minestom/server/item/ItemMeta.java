@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import io.netty.buffer.ByteBuf;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
@@ -33,7 +34,7 @@ public class ItemMeta implements Writeable {
     private final ItemMetaBuilder emptyBuilder;
 
     private String cachedSNBT;
-    private BinaryWriter cachedBuffer;
+    private ByteBuf cachedBuffer;
 
     protected ItemMeta(@NotNull ItemMetaBuilder metaBuilder) {
         this.damage = metaBuilder.damage;
@@ -157,9 +158,9 @@ public class ItemMeta implements Writeable {
         if (cachedBuffer == null) {
             BinaryWriter w = new BinaryWriter();
             w.writeNBT("", nbt);
-            this.cachedBuffer = w;
+            this.cachedBuffer = w.getBuffer();
         }
         writer.write(cachedBuffer);
-        cachedBuffer.getBuffer().resetReaderIndex();
+        this.cachedBuffer.resetReaderIndex();
     }
 }

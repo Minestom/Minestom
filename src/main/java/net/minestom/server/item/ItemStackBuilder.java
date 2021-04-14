@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import com.google.common.annotations.Beta;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.metadata.*;
 import org.jetbrains.annotations.Contract;
@@ -19,6 +20,8 @@ public class ItemStackBuilder {
     private final Material material;
     private int amount;
     protected ItemMetaBuilder metaBuilder;
+
+    private StackingRule stackingRule;
 
     protected ItemStackBuilder(@NotNull Material material, @NotNull ItemMetaBuilder metaBuilder) {
         this.material = material;
@@ -97,12 +100,19 @@ public class ItemStackBuilder {
         return this;
     }
 
+    @Beta
+    @Contract(value = "_ -> this")
+    public @NotNull ItemStackBuilder stackingRule(@Nullable StackingRule stackingRule) {
+        this.stackingRule = stackingRule;
+        return this;
+    }
+
     @Contract(value = "-> new", pure = true)
     public @NotNull ItemStack build() {
         if (amount <= 0)
             return ItemStack.AIR;
 
-        return new ItemStack(material, amount, metaBuilder.build());
+        return new ItemStack(material, amount, metaBuilder.build(), stackingRule);
     }
 
     private static final class DefaultMeta extends ItemMetaBuilder {

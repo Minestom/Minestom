@@ -14,13 +14,15 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerPreEatEvent extends PlayerEvent implements CancellableEvent {
 
     private final ItemStack foodItem;
+    private final Player.Hand hand;
     private long eatingTime;
 
     private boolean cancelled;
 
-    public PlayerPreEatEvent(@NotNull Player player, @NotNull ItemStack foodItem, long eatingTime) {
+    public PlayerPreEatEvent(@NotNull Player player, @NotNull ItemStack foodItem, @NotNull Player.Hand hand, long eatingTime) {
         super(player);
         this.foodItem = foodItem;
+        this.hand = hand;
         this.eatingTime = eatingTime;
     }
 
@@ -29,9 +31,12 @@ public class PlayerPreEatEvent extends PlayerEvent implements CancellableEvent {
      *
      * @return the food item
      */
-    @NotNull
-    public ItemStack getFoodItem() {
+    public @NotNull ItemStack getFoodItem() {
         return foodItem;
+    }
+
+    public @NotNull Player.Hand getHand() {
+        return hand;
     }
 
     /**

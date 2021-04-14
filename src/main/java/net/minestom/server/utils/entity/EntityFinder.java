@@ -363,7 +363,17 @@ public class EntityFinder {
             return new ArrayList<>(instance != null ?
                     instance.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers());
         } else if (targetSelector == TargetSelector.ALL_ENTITIES) {
-            return new ArrayList<>(instance.getEntities());
+            if (instance != null) {
+                return new ArrayList<>(instance.getEntities());
+            } else {
+                // Get entities from every instance
+                var instances = MinecraftServer.getInstanceManager().getInstances();
+                List<Entity> entities = new LinkedList<>();
+                for (Instance inst : instances) {
+                    entities.addAll(inst.getEntities());
+                }
+                return entities;
+            }
         } else if (targetSelector == TargetSelector.SELF) {
             return Collections.singletonList(self);
         }

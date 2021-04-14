@@ -131,7 +131,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private long startEatingTime;
     private long defaultEatingTime = 1000L;
     private long eatingTime;
-    private boolean isEating;
+    private Hand eatingHand;
 
     // Game state (https://wiki.vg/Protocol#Change_Game_State)
     private boolean enableRespawnScreen;
@@ -398,10 +398,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Eating animation
         if (isEating()) {
             if (time - startEatingTime >= eatingTime) {
-                refreshEating(false);
-
                 triggerStatus((byte) 9); // Mark item use as finished
-                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(true);
+                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(true, eatingHand);
 
                 Check.notNull(itemUpdateStateEvent, "#callItemUpdateStateEvent returned null.");
 
@@ -413,9 +411,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 final boolean isFood = foodItem.getMaterial().isFood();
 
                 if (isFood) {
-                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem);
+                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem, eatingHand);
                     callEvent(PlayerEatEvent.class, playerEatEvent);
                 }
+
+                refreshEating(null);
             }
         }
 
@@ -1192,7 +1192,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return true if the player is eating, false otherwise
      */
     public boolean isEating() {
-        return isEating;
+        return eatingHand != null;
     }
 
     /**
@@ -2319,12 +2319,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.heldSlot = slot;
         syncEquipment(EntityEquipmentPacket.Slot.MAIN_HAND);
 
-        refreshEating(false);
+        refreshEating(null);
     }
 
-    public void refreshEating(boolean isEating, long eatingTime) {
-        this.isEating = isEating;
-        if (isEating) {
+    public void refreshEating(@Nullable Hand eatingHand, long eatingTime) {
+        this.eatingHand = eatingHand;
+        if (eatingHand != null) {
             this.startEatingTime = System.currentTimeMillis();
             this.eatingTime = eatingTime;
         } else {
@@ -2332,8 +2332,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
     }
 
-    public void refreshEating(boolean isEating) {
-        refreshEating(isEating, defaultEatingTime);
+    public void refreshEating(@Nullable Hand eatingHand) {
+        refreshEating(eatingHand, defaultEatingTime);
     }
 
     /**
@@ -2344,23 +2344,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return the called {@link ItemUpdateStateEvent},
      * null if there is no item to update the state
      */
-    @Nullable
-    public ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood) {
-        final Material mainHandMat = getItemInMainHand().getMaterial();
-        final Material offHandMat = getItemInOffHand().getMaterial();
-        final boolean isOffhand = offHandMat.hasState();
-
-        final ItemStack updatedItem = isOffhand ? getItemInOffHand() :
-                mainHandMat.hasState() ? getItemInMainHand() : null;
-        if (updatedItem == null) // No item with state, cancel
+    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood, @Nullable Hand hand) {
+        if (hand == null)
             return null;
 
+        final ItemStack updatedItem = getItemInHand(hand);
         final boolean isFood = updatedItem.getMaterial().isFood();
 
         if (isFood && !allowFood)
             return null;
 
-        final Hand hand = isOffhand ? Hand.OFF : Hand.MAIN;
         ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, updatedItem);
         callEvent(ItemUpdateStateEvent.class, itemUpdateStateEvent);
 
