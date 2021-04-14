@@ -1,9 +1,9 @@
 package net.minestom.server.lock;
 
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.thread.BatchThread;
-import net.minestom.server.thread.batch.BatchInfo;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.concurrent.Phaser;
@@ -32,8 +32,7 @@ public interface Acquirable<T> {
         Acquisition.AcquisitionData data = new Acquisition.AcquisitionData();
 
         final Handler handler = getHandler();
-        final BatchInfo batchInfo = handler.getBatchInfo();
-        final BatchThread elementThread = batchInfo != null ? batchInfo.getBatchThread() : null;
+        final BatchThread elementThread = handler.getBatchThread();
 
         final boolean sameThread = Acquisition.acquire(currentThread, elementThread, data);
 
@@ -80,25 +79,29 @@ public interface Acquirable<T> {
 
     class Handler {
 
-        private volatile BatchInfo batchInfo;
+        private volatile BatchThread batchThread;
+        private volatile Chunk batchChunk;
 
-        @Nullable
-        public BatchInfo getBatchInfo() {
-            return batchInfo;
+        public BatchThread getBatchThread() {
+            return batchThread;
         }
 
-        public void refreshBatchInfo(@NotNull BatchInfo batchInfo) {
-            this.batchInfo = batchInfo;
+        public Chunk getBatchChunk() {
+            return batchChunk;
+        }
+
+        @ApiStatus.Internal
+        public void refreshBatchInfo(BatchThread batchThread, Chunk batchChunk) {
+            this.batchThread = batchThread;
+            this.batchChunk = batchChunk;
         }
 
         /**
          * Executed during this element tick to empty the current thread acquisition queue.
          */
         public void acquisitionTick() {
-            final BatchThread batchThread = batchInfo.getBatchThread();
             if (batchThread == null)
                 return;
-
             Acquisition.processQueue(batchThread.getQueue());
         }
     }

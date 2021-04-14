@@ -22,6 +22,9 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.lock.Acquirable;
+import net.minestom.server.lock.AcquirableImpl;
+import net.minestom.server.lock.LockedElement;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.permission.Permission;
@@ -58,7 +61,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, Tickable, EventHandler, DataContainer, PermissionHandler, HoverEventSource<ShowEntity> {
+public class Entity implements Viewable, Tickable, LockedElement, EventHandler, DataContainer, PermissionHandler, HoverEventSource<ShowEntity> {
 
     private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
@@ -122,6 +125,8 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     // Tick related
     private long ticks;
     private final EntityTickEvent tickEvent = new EntityTickEvent(this);
+
+    private final Acquirable<Entity> acquirable = new AcquirableImpl<>(this);
 
     /**
      * Lock used to support #switchEntityType
@@ -482,6 +487,9 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                 callback.accept(this);
             }
         }
+
+        // Acquisition
+        getAcquiredElement().getHandler().acquisitionTick();
 
         final boolean isNettyClient = PlayerUtils.isNettyClient(this);
 
@@ -1456,6 +1464,10 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      * WARNING: this does not trigger {@link EntityDeathEvent}.
      */
     public void remove() {
+        if (isRemoved())
+            return;
+
+        MinecraftServer.getUpdateManager().getThreadProvider().removeEntity(this);
         this.removed = true;
         this.shouldRemove = true;
         Entity.ENTITY_BY_ID.remove(id);
@@ -1557,6 +1569,11 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
     private UpdateOption getSynchronizationCooldown() {
         return Objects.requireNonNullElse(this.customSynchronizationCooldown, SYNCHRONIZATION_COOLDOWN);
+    }
+
+    @Override
+    public @NotNull <T> Acquirable<T> getAcquiredElement() {
+        return (Acquirable<T>) acquirable;
     }
 
     public enum Pose {

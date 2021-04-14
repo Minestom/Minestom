@@ -17,7 +17,6 @@ public interface LockedElement {
      *
      * @return the acquirable element linked to this object
      */
-    @NotNull
-    <T> Acquirable<T> getAcquiredElement();
+    <T> @NotNull Acquirable<T> getAcquiredElement();
 
 }

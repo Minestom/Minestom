@@ -87,10 +87,10 @@ public class BatchThread extends Thread {
             }
         }
 
-        public synchronized void startTick(@NotNull CountDownLatch countDownLatch, Runnable runnable) {
+        public synchronized void startTick(@NotNull CountDownLatch countDownLatch, @NotNull Runnable runnable) {
+            this.countDownLatch = countDownLatch;
+            this.queue.add(runnable);
             synchronized (tickLock) {
-                this.queue.add(runnable);
-                this.countDownLatch = countDownLatch;
                 this.tickLock.notifyAll();
             }
         }

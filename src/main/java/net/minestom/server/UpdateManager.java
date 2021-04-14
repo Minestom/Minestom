@@ -113,17 +113,12 @@ public final class UpdateManager {
      * @param tickStart the time of the tick in milliseconds
      */
     private void serverTick(long tickStart) {
-
         // Tick all instances
         MinecraftServer.getInstanceManager().getInstances().forEach(instance ->
                 instance.tick(tickStart));
 
         // Server tick (instance/chunk/entity)
-        // Synchronize with the update manager instance, like the signal for chunk load/unload
-        final CountDownLatch countDownLatch;
-        synchronized (this) {
-            countDownLatch = threadProvider.update(tickStart);
-        }
+        final CountDownLatch countDownLatch = threadProvider.update(tickStart);
 
         // Wait tick end
         try {
@@ -131,6 +126,9 @@ public final class UpdateManager {
         } catch (InterruptedException e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
+
+        // Clear removed entities & update threads
+        this.threadProvider.refreshThreads();
     }
 
     /**
@@ -153,18 +151,8 @@ public final class UpdateManager {
      *
      * @return the current thread provider
      */
-    public ThreadProvider getThreadProvider() {
+    public @NotNull ThreadProvider getThreadProvider() {
         return threadProvider;
-    }
-
-    /**
-     * Changes the server {@link ThreadProvider}.
-     *
-     * @param threadProvider the new thread provider
-     * @throws NullPointerException if <code>threadProvider</code> is null
-     */
-    public synchronized void setThreadProvider(ThreadProvider threadProvider) {
-        this.threadProvider = threadProvider;
     }
 
     /**
@@ -174,9 +162,7 @@ public final class UpdateManager {
      *
      * @param instance the instance
      */
-    public synchronized void signalInstanceCreate(Instance instance) {
-        if (this.threadProvider == null)
-            return;
+    public void signalInstanceCreate(Instance instance) {
         this.threadProvider.onInstanceCreate(instance);
     }
 
@@ -187,9 +173,7 @@ public final class UpdateManager {
      *
      * @param instance the instance
      */
-    public synchronized void signalInstanceDelete(Instance instance) {
-        if (this.threadProvider == null)
-            return;
+    public void signalInstanceDelete(Instance instance) {
         this.threadProvider.onInstanceDelete(instance);
     }
 
@@ -200,9 +184,7 @@ public final class UpdateManager {
      *
      * @param chunk the loaded chunk
      */
-    public synchronized void signalChunkLoad(@NotNull Chunk chunk) {
-        if (this.threadProvider == null)
-            return;
+    public void signalChunkLoad(@NotNull Chunk chunk) {
         this.threadProvider.onChunkLoad(chunk);
     }
 
@@ -213,9 +195,7 @@ public final class UpdateManager {
      *
      * @param chunk the unloaded chunk
      */
-    public synchronized void signalChunkUnload(@NotNull Chunk chunk) {
-        if (this.threadProvider == null)
-            return;
+    public void signalChunkUnload(@NotNull Chunk chunk) {
         this.threadProvider.onChunkUnload(chunk);
     }
 

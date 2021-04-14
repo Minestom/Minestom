@@ -1,28 +1,27 @@
 package net.minestom.server.thread;
 
-import net.minestom.server.UpdateManager;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.lock.Acquirable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
 /**
  * Used to link chunks into multiple groups.
  * Then executed into a thread pool.
- * <p>
- * You can change the current thread provider by calling {@link UpdateManager#setThreadProvider(ThreadProvider)}.
  */
 public abstract class ThreadProvider {
 
     private final List<BatchThread> threads;
 
-    private final Map<Integer, List<ChunkEntry>> threadChunkMap = new HashMap<>();
+    private final Map<BatchThread, Set<ChunkEntry>> threadChunkMap = new HashMap<>();
     private final Map<Chunk, ChunkEntry> chunkEntryMap = new HashMap<>();
-
-    private final ArrayDeque<Chunk> batchHandlers = new ArrayDeque<>();
+    private final Set<Entity> removedEntities = ConcurrentHashMap.newKeySet();
 
     public ThreadProvider(int threadCount) {
         this.threads = new ArrayList<>(threadCount);
@@ -36,19 +35,19 @@ public abstract class ThreadProvider {
         }
     }
 
-    public void onInstanceCreate(@NotNull Instance instance) {
+    public synchronized void onInstanceCreate(@NotNull Instance instance) {
         instance.getChunks().forEach(this::addChunk);
     }
 
-    public void onInstanceDelete(@NotNull Instance instance) {
+    public synchronized void onInstanceDelete(@NotNull Instance instance) {
         instance.getChunks().forEach(this::removeChunk);
     }
 
-    public void onChunkLoad(Chunk chunk) {
+    public synchronized void onChunkLoad(Chunk chunk) {
         addChunk(chunk);
     }
 
-    public void onChunkUnload(Chunk chunk) {
+    public synchronized void onChunkUnload(Chunk chunk) {
         removeChunk(chunk);
     }
 
@@ -60,8 +59,9 @@ public abstract class ThreadProvider {
     public abstract int findThread(@NotNull Chunk chunk);
 
     protected void addChunk(Chunk chunk) {
-        int thread = findThread(chunk);
-        var chunks = threadChunkMap.computeIfAbsent(thread, ArrayList::new);
+        int threadId = findThread(chunk);
+        BatchThread thread = threads.get(threadId);
+        var chunks = threadChunkMap.computeIfAbsent(thread, batchThread -> ConcurrentHashMap.newKeySet());
 
         ChunkEntry chunkEntry = new ChunkEntry(thread, chunk);
         chunks.add(chunkEntry);
@@ -72,8 +72,8 @@ public abstract class ThreadProvider {
     protected void removeChunk(Chunk chunk) {
         ChunkEntry chunkEntry = chunkEntryMap.get(chunk);
         if (chunkEntry != null) {
-            int threadId = chunkEntry.threadId;
-            var chunks = threadChunkMap.get(threadId);
+            BatchThread thread = chunkEntry.thread;
+            var chunks = threadChunkMap.get(thread);
             if (chunks != null) {
                 chunks.remove(chunkEntry);
             }
@@ -86,34 +86,20 @@ public abstract class ThreadProvider {
      *
      * @param time the tick time in milliseconds
      */
-    public @NotNull CountDownLatch update(long time) {
+    public synchronized @NotNull CountDownLatch update(long time) {
         CountDownLatch countDownLatch = new CountDownLatch(threads.size());
         for (BatchThread thread : threads) {
-            final int id = threads.indexOf(thread);
-            if (id == -1) {
-                countDownLatch.countDown();
-                continue;
-            }
-
-            final var chunkEntries = threadChunkMap.get(id);
+            final var chunkEntries = threadChunkMap.get(thread);
             if (chunkEntries == null) {
                 countDownLatch.countDown();
                 continue;
             }
 
-            // Cache chunk entities
-            Map<Chunk, List<Entity>> chunkListMap = new HashMap<>(chunkEntries.size());
-            for (ChunkEntry chunkEntry : chunkEntries) {
-                var chunk = chunkEntry.chunk;
-                var entities = new ArrayList<>(chunk.getInstance().getChunkEntities(chunk));
-                chunkListMap.put(chunk, entities);
-            }
-
             // Execute tick
             thread.getMainRunnable().startTick(countDownLatch, () -> {
-                chunkListMap.forEach((chunk, entities) -> {
-                    chunk.tick(time);
-                    entities.forEach(entity -> {
+                chunkEntries.forEach(chunkEntry -> {
+                    chunkEntry.chunk.tick(time);
+                    chunkEntry.entities.forEach(entity -> {
                         entity.tick(time);
                     });
                 });
@@ -122,6 +108,56 @@ public abstract class ThreadProvider {
         return countDownLatch;
     }
 
+    public synchronized void refreshThreads() {
+
+        // Clear removed entities
+        for (Entity entity : removedEntities) {
+            Acquirable<Entity> acquirable = entity.getAcquiredElement();
+            Chunk batchChunk = acquirable.getHandler().getBatchChunk();
+
+            // Remove from list
+            {
+                ChunkEntry chunkEntry = chunkEntryMap.get(batchChunk);
+                if (chunkEntry != null) {
+                    chunkEntry.entities.remove(entity);
+                }
+            }
+        }
+        this.removedEntities.clear();
+
+        for (Instance instance : MinecraftServer.getInstanceManager().getInstances()) {
+            var entities = instance.getEntities();
+            for (Entity entity : entities) {
+                Acquirable<Entity> acquirable = entity.getAcquiredElement();
+                Chunk batchChunk = acquirable.getHandler().getBatchChunk();
+                Chunk entityChunk = entity.getChunk();
+                if (!Objects.equals(batchChunk, entityChunk)) {
+                    // Entity is possibly not in the correct thread
+
+                    // Remove from previous list
+                    {
+                        ChunkEntry chunkEntry = chunkEntryMap.get(batchChunk);
+                        if (chunkEntry != null) {
+                            chunkEntry.entities.remove(entity);
+                        }
+                    }
+
+                    // Add to new list
+                    {
+                        ChunkEntry chunkEntry = chunkEntryMap.get(entityChunk);
+                        if (chunkEntry != null) {
+                            chunkEntry.entities.add(entity);
+                            acquirable.getHandler().refreshBatchInfo(chunkEntry.thread, chunkEntry.chunk);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void removeEntity(Entity entity) {
+        this.removedEntities.add(entity);
+    }
 
     public void shutdown() {
         this.threads.forEach(BatchThread::shutdown);
@@ -133,11 +169,12 @@ public abstract class ThreadProvider {
     }
 
     private static class ChunkEntry {
-        private final int threadId;
+        private final BatchThread thread;
         private final Chunk chunk;
+        private final List<Entity> entities = new ArrayList<>();
 
-        private ChunkEntry(int threadId, Chunk chunk) {
-            this.threadId = threadId;
+        private ChunkEntry(BatchThread thread, Chunk chunk) {
+            this.thread = thread;
             this.chunk = chunk;
         }
 
