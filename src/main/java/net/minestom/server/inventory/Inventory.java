@@ -29,7 +29,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class Inventory extends AbstractInventory implements Viewable {
 
     // incremented each time an inventory is created (used in the window packets)
-    private static byte LAST_INVENTORY_ID = 1;
+    private static byte LAST_INVENTORY_ID;
 
     // the id of this inventory
     private final byte id;
@@ -60,12 +60,10 @@ public class Inventory extends AbstractInventory implements Viewable {
     }
 
     private static synchronized byte generateId() {
-        if (LAST_INVENTORY_ID != Byte.MAX_VALUE) {
-            return ++LAST_INVENTORY_ID;
-        } else {
-            LAST_INVENTORY_ID = 1;
-            return LAST_INVENTORY_ID;
+        if (LAST_INVENTORY_ID == Byte.MAX_VALUE) {
+            LAST_INVENTORY_ID = 0;
         }
+        return ++LAST_INVENTORY_ID;
     }
 
     /**
