@@ -488,7 +488,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
      */
     public @NotNull Set<Entity> getChunkEntities(Chunk chunk) {
         if (!ChunkUtils.isLoaded(chunk))
-            return new HashSet<>();
+            return Collections.emptySet();
 
         final long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         final Set<Entity> entities = getEntitiesInChunk(index);
