@@ -19,7 +19,9 @@ public abstract class ThreadProvider {
 
     private final List<BatchThread> threads;
 
-    private final Map<Integer, List<Chunk>> threadChunkMap = new HashMap<>();
+    private final Map<Integer, List<ChunkEntry>> threadChunkMap = new HashMap<>();
+    private final Map<Chunk, ChunkEntry> chunkEntryMap = new HashMap<>();
+
     private final ArrayDeque<Chunk> batchHandlers = new ArrayDeque<>();
 
     public ThreadProvider(int threadCount) {
@@ -60,14 +62,22 @@ public abstract class ThreadProvider {
     protected void addChunk(Chunk chunk) {
         int thread = findThread(chunk);
         var chunks = threadChunkMap.computeIfAbsent(thread, ArrayList::new);
-        chunks.add(chunk);
+
+        ChunkEntry chunkEntry = new ChunkEntry(thread, chunk);
+        chunks.add(chunkEntry);
+
+        chunkEntryMap.put(chunk, chunkEntry);
     }
 
     protected void removeChunk(Chunk chunk) {
-        int thread = findThread(chunk);
-        var chunks = threadChunkMap.get(thread);
-        if (chunks != null) {
-            chunks.remove(chunk);
+        ChunkEntry chunkEntry = chunkEntryMap.get(chunk);
+        if (chunkEntry != null) {
+            int threadId = chunkEntry.threadId;
+            var chunks = threadChunkMap.get(threadId);
+            if (chunks != null) {
+                chunks.remove(chunkEntry);
+            }
+            chunkEntryMap.remove(chunk);
         }
     }
 
@@ -77,11 +87,12 @@ public abstract class ThreadProvider {
      * @param time the tick time in milliseconds
      */
     public void prepareUpdate(long time) {
-        this.threadChunkMap.forEach((threadId, chunks) -> {
+        this.threadChunkMap.forEach((threadId, chunkEntries) -> {
             BatchThread thread = threads.get(threadId);
 
-            Map<Chunk, List<Entity>> chunkListMap = new HashMap<>(chunks.size());
-            for (Chunk chunk : chunks) {
+            Map<Chunk, List<Entity>> chunkListMap = new HashMap<>(chunkEntries.size());
+            for (ChunkEntry chunkEntry : chunkEntries) {
+                var chunk = chunkEntry.chunk;
                 var entities = new ArrayList<>(chunk.getInstance().getChunkEntities(chunk));
                 chunkListMap.put(chunk, entities);
             }
@@ -115,4 +126,28 @@ public abstract class ThreadProvider {
     public List<BatchThread> getThreads() {
         return threads;
     }
+
+    private static class ChunkEntry {
+        private final int threadId;
+        private final Chunk chunk;
+
+        private ChunkEntry(int threadId, Chunk chunk) {
+            this.threadId = threadId;
+            this.chunk = chunk;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            ChunkEntry that = (ChunkEntry) o;
+            return chunk.equals(that.chunk);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(chunk);
+        }
+    }
+
 }
