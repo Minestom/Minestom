@@ -1,7 +1,9 @@
 package net.minestom.server.item;
 
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTList;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -80,7 +82,17 @@ public class ItemTag<T> {
                 (nbtCompound, value) -> nbtCompound.setString(key, value));
     }
 
-    // TODO List/Compound
+    public static @NotNull ItemTag<NBTCompound> Compound(@NotNull String key) {
+        return new ItemTag<>(key,
+                nbtCompound -> nbtCompound.getCompound(key),
+                ((nbtCompound, value) -> nbtCompound.set(key, value)));
+    }
+
+    public static <O extends NBT> @NotNull ItemTag<NBTList<O>> List(@NotNull String key) {
+        return new ItemTag<>(key,
+                nbtCompound -> nbtCompound.getList(key),
+                ((nbtCompound, value) -> nbtCompound.set(key, value)));
+    }
 
     public static @NotNull ItemTag<int[]> IntArray(@NotNull String key) {
         return new ItemTag<>(key,
