@@ -4,6 +4,7 @@ import com.google.common.collect.Queues;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.lock.Acquisition;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.player.NettyPlayerConnection;
@@ -40,7 +41,7 @@ public final class UpdateManager {
     {
         // DEFAULT THREAD PROVIDER
         //threadProvider = new PerGroupChunkProvider();
-        threadProvider = new PerInstanceThreadProvider();
+        threadProvider = new PerInstanceThreadProvider(2);
     }
 
     /**
@@ -85,9 +86,13 @@ public final class UpdateManager {
 
                 // Monitoring
                 if (!tickMonitors.isEmpty()) {
+                    // TODO use value
+                    final double acquisitionTimeMs = Acquisition.getCurrentWaitMonitoring() / 1e6D;
                     final double tickTimeMs = tickTime / 1e6D;
                     final TickMonitor tickMonitor = new TickMonitor(tickTimeMs);
                     this.tickMonitors.forEach(consumer -> consumer.accept(tickMonitor));
+
+                    Acquisition.resetWaitMonitoring();
                 }
 
                 // Flush all waiting packets
@@ -108,21 +113,28 @@ public final class UpdateManager {
      * @param tickStart the time of the tick in milliseconds
      */
     private void serverTick(long tickStart) {
-        List<Future<?>> futures;
+
+        // Tick all instances
+        MinecraftServer.getInstanceManager().getInstances().forEach(instance ->
+                instance.tick(tickStart));
 
         // Server tick (instance/chunk/entity)
         // Synchronize with the update manager instance, like the signal for chunk load/unload
         synchronized (this) {
-            futures = threadProvider.update(tickStart);
+            this.threadProvider.prepareUpdate(tickStart);
         }
 
-        for (final Future<?> future : futures) {
-            try {
-                future.get();
-            } catch (Throwable e) {
-                MinecraftServer.getExceptionManager().handleException(e);
-            }
+        CountDownLatch countDownLatch = threadProvider.notifyThreads();
+
+        // Wait tick end
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            MinecraftServer.getExceptionManager().handleException(e);
         }
+
+        // Reset thread cost count
+        this.threadProvider.cleanup();
     }
 
     /**

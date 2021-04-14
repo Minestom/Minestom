@@ -22,7 +22,7 @@ public class BatchInfo {
 
     /**
      * Specifies in which thread this element will be updated.
-     * Currently defined before every tick for all game elements in {@link BatchSetupHandler#pushTask(Set, long)}.
+     * Currently defined before every tick for all game elements in {@link BatchHandler#pushTask(Set, long)}.
      *
      * @param batchThread the thread where this element will be updated
      */

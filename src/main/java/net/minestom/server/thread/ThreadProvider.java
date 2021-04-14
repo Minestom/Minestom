@@ -4,7 +4,6 @@ import net.minestom.server.UpdateManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.thread.batch.BatchHandler;
-import net.minestom.server.thread.batch.BatchSetupHandler;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -28,7 +27,7 @@ public abstract class ThreadProvider {
 
     private final Set<BatchThread> threads;
 
-    private final List<BatchSetupHandler> batchHandlers = new ArrayList<>();
+    private final List<BatchHandler> batchHandlers = new ArrayList<>();
 
     private UpdateOption batchesRefreshCooldown;
     private long lastBatchRefreshTime;
@@ -86,13 +85,13 @@ public abstract class ThreadProvider {
     public abstract void update(long time);
 
     public void createBatch(@NotNull Consumer<BatchHandler> consumer, long time) {
-        BatchSetupHandler batchSetupHandler = new BatchSetupHandler();
+        BatchHandler batchHandler = new BatchHandler();
 
-        consumer.accept(batchSetupHandler);
+        consumer.accept(batchHandler);
 
-        this.batchHandlers.add(batchSetupHandler);
+        this.batchHandlers.add(batchHandler);
 
-        batchSetupHandler.pushTask(threads, time);
+        batchHandler.pushTask(threads, time);
     }
 
     /**
@@ -112,7 +111,7 @@ public abstract class ThreadProvider {
             update(time);
         } else {
             // Push the tasks
-            for (BatchSetupHandler batchHandler : batchHandlers) {
+            for (BatchHandler batchHandler : batchHandlers) {
                 batchHandler.pushTask(threads, time);
             }
         }

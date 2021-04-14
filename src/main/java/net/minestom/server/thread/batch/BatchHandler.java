@@ -1,100 +1,63 @@
 package net.minestom.server.thread.batch;
 
-import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.instance.SharedInstance;
-import net.minestom.server.utils.callback.validator.EntityValidator;
-import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.lock.Acquirable;
+import net.minestom.server.thread.BatchThread;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Consumer;
+import java.util.ArrayList;
+import java.util.Set;
 
-public interface BatchHandler {
+public class BatchHandler {
 
-    // INSTANCE UPDATE
+    private final BatchInfo batchInfo = new BatchInfo();
 
-    /**
-     * Executes an instance tick.
-     *
-     * @param instance the instance
-     * @param time     the current time in ms
-     */
-    void updateInstance(@NotNull Instance instance, long time);
+    private final ArrayList<Chunk> chunks = new ArrayList<>();
+    private int estimatedCost;
 
-    /**
-     * Executes a chunk tick (blocks update).
-     *
-     * @param instance the chunk's instance
-     * @param chunk    the chunk
-     * @param time     the current time in ms
-     */
-    void updateChunk(@NotNull Instance instance, @NotNull Chunk chunk, long time);
+    public void updateChunk(@NotNull Chunk chunk, long time) {
+        // Set the BatchInfo field
+        //Acquirable.Handler handler = acquirable.getHandler();
+        //handler.refreshBatchInfo(batchInfo);
 
-    /**
-     * Processes a whole tick for a chunk.
-     *
-     * @param instance   the instance of the chunk
-     * @param chunkIndex the index of the chunk {@link ChunkUtils#getChunkIndex(int, int)}
-     * @param time       the time of the update in milliseconds
-     */
-    default void updateChunk(@NotNull Instance instance, long chunkIndex, long time) {
-        final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-        final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-
-        final Chunk chunk = instance.getChunk(chunkX, chunkZ);
-        updateChunk(instance, chunk, time);
+        this.chunks.add(chunk);
+        this.estimatedCost++;
     }
 
-    // ENTITY UPDATE
+    public void pushTask(@NotNull Set<BatchThread> threads, long time) {
+        BatchThread fitThread = null;
+        int minCost = Integer.MAX_VALUE;
 
-    /**
-     * Executes an entity tick (all entities type creatures/objects/players) in an instance's chunk.
-     *
-     * @param instance the chunk's instance
-     * @param chunk    the chunk
-     * @param time     the current time in ms
-     */
-    default void updateEntities(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
-        conditionalEntityUpdate(instance, chunk, time, null);
-    }
-
-    /**
-     * Executes an entity tick in an instance's chunk if condition is verified.
-     *
-     * @param instance  the chunk's instance
-     * @param chunk     the chunk
-     * @param time      the current time in ms
-     * @param condition the condition which confirm if the update happens or not
-     */
-    void conditionalEntityUpdate(@NotNull Instance instance,
-                                 @NotNull Chunk chunk, long time,
-                                 @Nullable EntityValidator condition);
-
-    default boolean shouldTick(@NotNull Entity entity, @Nullable EntityValidator condition) {
-        return condition == null || condition.isValid(entity);
-    }
-
-    /**
-     * If {@code instance} is an {@link InstanceContainer}, run a callback for all of its
-     * {@link SharedInstance}.
-     *
-     * @param instance the instance
-     * @param callback the callback to run for all the {@link SharedInstance}
-     */
-    default void updateSharedInstances(@NotNull Instance instance, @NotNull Consumer<SharedInstance> callback) {
-        if (instance instanceof InstanceContainer) {
-            final InstanceContainer instanceContainer = (InstanceContainer) instance;
-
-            if (!instanceContainer.hasSharedInstances())
-                return;
-
-            for (SharedInstance sharedInstance : instanceContainer.getSharedInstances()) {
-                callback.accept(sharedInstance);
+        // Find the thread with the lowest number of tasks
+        for (BatchThread thread : threads) {
+            final boolean switchThread = fitThread == null || thread.getCost() < minCost;
+            if (switchThread) {
+                fitThread = thread;
+                minCost = thread.getCost();
             }
         }
+
+        Check.notNull(fitThread, "The task thread returned null, something went terribly wrong.");
+
+        // The thread has been decided
+        this.batchInfo.refreshThread(fitThread);
+
+        // Create the runnable and send it to the thread for execution in the next tick
+        final Runnable runnable = createRunnable(time);
+        fitThread.addRunnable(runnable, estimatedCost);
+    }
+
+    @NotNull
+    private Runnable createRunnable(long time) {
+        return () -> {
+            for (Chunk chunk : chunks) {
+                chunk.tick(time);
+                chunk.getInstance().getEntities().forEach(entity -> {
+                    entity.tick(time);
+                });
+            }
+        };
     }
 
 }
