@@ -29,7 +29,7 @@ public final class Acquisition {
         // The goal of the contention service it is manage the situation where two threads are waiting for each other
         ACQUISITION_CONTENTION_SERVICE.scheduleAtFixedRate(() -> {
 
-            final Set<BatchThread> threads = MinecraftServer.getUpdateManager().getThreadProvider().getThreads();
+            final List<BatchThread> threads = MinecraftServer.getUpdateManager().getThreadProvider().getThreads();
 
             for (BatchThread batchThread : threads) {
                 final BatchThread waitingThread = (BatchThread) batchThread.getQueue().getWaitingThread();

@@ -15,22 +15,12 @@ public class BatchThread extends Thread {
 
     private final BatchQueue queue;
 
-    private int cost;
-
     public BatchThread(@NotNull BatchRunnable runnable, int number) {
         super(runnable, MinecraftServer.THREAD_NAME_TICK + "-" + number);
         this.runnable = runnable;
         this.queue = new BatchQueue();
 
         this.runnable.setLinkedThread(this);
-    }
-
-    public int getCost() {
-        return cost;
-    }
-
-    public void setCost(int cost) {
-        this.cost = cost;
     }
 
     @NotNull
@@ -43,9 +33,8 @@ public class BatchThread extends Thread {
         return queue;
     }
 
-    public void addRunnable(@NotNull Runnable runnable, int cost) {
+    public void addRunnable(@NotNull Runnable runnable) {
         this.runnable.queue.add(runnable);
-        this.cost += cost;
     }
 
     public void shutdown() {

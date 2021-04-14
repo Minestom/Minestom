@@ -41,7 +41,7 @@ public final class UpdateManager {
     {
         // DEFAULT THREAD PROVIDER
         //threadProvider = new PerGroupChunkProvider();
-        threadProvider = new PerInstanceThreadProvider(2);
+        threadProvider = new PerInstanceThreadProvider(4);
     }
 
     /**
@@ -132,9 +132,6 @@ public final class UpdateManager {
         } catch (InterruptedException e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
-
-        // Reset thread cost count
-        this.threadProvider.cleanup();
     }
 
     /**
@@ -202,13 +199,12 @@ public final class UpdateManager {
      * <p>
      * WARNING: should be automatically done by the {@link Instance} implementation.
      *
-     * @param instance the instance of the chunk
      * @param chunk    the loaded chunk
      */
-    public synchronized void signalChunkLoad(Instance instance, @NotNull Chunk chunk) {
+    public synchronized void signalChunkLoad(@NotNull Chunk chunk) {
         if (this.threadProvider == null)
             return;
-        this.threadProvider.onChunkLoad(instance, chunk);
+        this.threadProvider.onChunkLoad(chunk);
     }
 
     /**
@@ -216,13 +212,12 @@ public final class UpdateManager {
      * <p>
      * WARNING: should be automatically done by the {@link Instance} implementation.
      *
-     * @param instance the instance of the chunk
      * @param chunk    the unloaded chunk
      */
-    public synchronized void signalChunkUnload(Instance instance, @NotNull Chunk chunk) {
+    public synchronized void signalChunkUnload(@NotNull Chunk chunk) {
         if (this.threadProvider == null)
             return;
-        this.threadProvider.onChunkUnload(instance, chunk);
+        this.threadProvider.onChunkUnload(chunk);
     }
 
     /**

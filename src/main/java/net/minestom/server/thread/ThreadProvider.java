@@ -3,19 +3,10 @@ package net.minestom.server.thread;
 import net.minestom.server.UpdateManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.thread.batch.BatchHandler;
-import net.minestom.server.utils.time.Cooldown;
-import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
-import java.util.function.Consumer;
 
 /**
  * Used to link chunks into multiple groups.
@@ -25,16 +16,13 @@ import java.util.function.Consumer;
  */
 public abstract class ThreadProvider {
 
-    private final Set<BatchThread> threads;
+    private final List<BatchThread> threads;
 
-    private final List<BatchHandler> batchHandlers = new ArrayList<>();
-
-    private UpdateOption batchesRefreshCooldown;
-    private long lastBatchRefreshTime;
+    private final Map<Integer, List<Chunk>> threadChunkMap = new HashMap<>();
+    private final ArrayDeque<Chunk> batchHandlers = new ArrayDeque<>();
 
     public ThreadProvider(int threadCount) {
-        this.threads = new HashSet<>(threadCount);
-        this.batchesRefreshCooldown = new UpdateOption(500, TimeUnit.MILLISECOND);
+        this.threads = new ArrayList<>(threadCount);
 
         for (int i = 0; i < threadCount; i++) {
             final BatchThread.BatchRunnable batchRunnable = new BatchThread.BatchRunnable();
@@ -45,76 +33,61 @@ public abstract class ThreadProvider {
         }
     }
 
-    /**
-     * Called when an {@link Instance} is registered.
-     *
-     * @param instance the newly create {@link Instance}
-     */
-    public abstract void onInstanceCreate(@NotNull Instance instance);
+    public void onInstanceCreate(@NotNull Instance instance) {
+        instance.getChunks().forEach(this::addChunk);
+    }
 
-    /**
-     * Called when an {@link Instance} is unregistered.
-     *
-     * @param instance the deleted {@link Instance}
-     */
-    public abstract void onInstanceDelete(@NotNull Instance instance);
+    public void onInstanceDelete(@NotNull Instance instance) {
+        instance.getChunks().forEach(this::removeChunk);
+    }
 
-    /**
-     * Called when a chunk is loaded.
-     * <p>
-     * Be aware that this is possible for an instance to load chunks before being registered.
-     *
-     * @param instance the instance of the chunk
-     * @param chunk    the chunk
-     */
-    public abstract void onChunkLoad(@NotNull Instance instance, Chunk chunk);
+    public void onChunkLoad(Chunk chunk) {
+        addChunk(chunk);
+    }
 
-    /**
-     * Called when a chunk is unloaded.
-     *
-     * @param instance the instance of the chunk
-     * @param chunk    the chunk
-     */
-    public abstract void onChunkUnload(@NotNull Instance instance, Chunk chunk);
+    public void onChunkUnload(Chunk chunk) {
+        removeChunk(chunk);
+    }
 
     /**
      * Performs a server tick for all chunks based on their linked thread.
      *
-     * @param time the update time in milliseconds
+     * @param chunk the chunk
      */
-    public abstract void update(long time);
+    public abstract int findThread(@NotNull Chunk chunk);
 
-    public void createBatch(@NotNull Consumer<BatchHandler> consumer, long time) {
-        BatchHandler batchHandler = new BatchHandler();
+    protected void addChunk(Chunk chunk) {
+        int thread = findThread(chunk);
+        var chunks = threadChunkMap.computeIfAbsent(thread, ArrayList::new);
+        chunks.add(chunk);
+    }
 
-        consumer.accept(batchHandler);
-
-        this.batchHandlers.add(batchHandler);
-
-        batchHandler.pushTask(threads, time);
+    protected void removeChunk(Chunk chunk) {
+        int thread = findThread(chunk);
+        var chunks = threadChunkMap.get(thread);
+        if (chunks != null) {
+            chunks.remove(chunk);
+        }
     }
 
     /**
      * Prepares the update.
-     * <p>
-     * {@link #update(long)} is called based on its cooldown to limit the overhead.
-     * The cooldown can be modified using {@link #setBatchesRefreshCooldown(UpdateOption)}.
      *
      * @param time the tick time in milliseconds
      */
     public void prepareUpdate(long time) {
-        // Verify if the batches should be updated
-        if (batchesRefreshCooldown == null ||
-                !Cooldown.hasCooldown(time, lastBatchRefreshTime, batchesRefreshCooldown)) {
-            this.lastBatchRefreshTime = time;
-            this.batchHandlers.clear();
-            update(time);
-        } else {
-            // Push the tasks
-            for (BatchHandler batchHandler : batchHandlers) {
-                batchHandler.pushTask(threads, time);
-            }
-        }
+        this.threadChunkMap.forEach((threadId, chunks) -> {
+            BatchThread thread = threads.get(threadId);
+            var chunksCopy = new ArrayList<>(chunks);
+            thread.addRunnable(() -> {
+                for (Chunk chunk : chunksCopy) {
+                    chunk.tick(time);
+                    chunk.getInstance().getChunkEntities(chunk).forEach(entity -> {
+                        entity.tick(time);
+                    });
+                }
+            });
+        });
     }
 
     @NotNull
@@ -127,27 +100,12 @@ public abstract class ThreadProvider {
         return countDownLatch;
     }
 
-    public void cleanup() {
-        for (BatchThread thread : threads) {
-            thread.setCost(0);
-        }
-    }
-
     public void shutdown() {
         this.threads.forEach(BatchThread::shutdown);
     }
 
     @NotNull
-    public Set<BatchThread> getThreads() {
+    public List<BatchThread> getThreads() {
         return threads;
-    }
-
-    @Nullable
-    public UpdateOption getBatchesRefreshCooldown() {
-        return batchesRefreshCooldown;
-    }
-
-    public void setBatchesRefreshCooldown(@Nullable UpdateOption batchesRefreshCooldown) {
-        this.batchesRefreshCooldown = batchesRefreshCooldown;
     }
 }
