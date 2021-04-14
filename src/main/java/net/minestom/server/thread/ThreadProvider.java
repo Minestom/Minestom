@@ -86,10 +86,22 @@ public abstract class ThreadProvider {
      *
      * @param time the tick time in milliseconds
      */
-    public void prepareUpdate(long time) {
-        this.threadChunkMap.forEach((threadId, chunkEntries) -> {
-            BatchThread thread = threads.get(threadId);
+    public @NotNull CountDownLatch update(long time) {
+        CountDownLatch countDownLatch = new CountDownLatch(threads.size());
+        for (BatchThread thread : threads) {
+            final int id = threads.indexOf(thread);
+            if (id == -1) {
+                countDownLatch.countDown();
+                continue;
+            }
 
+            final var chunkEntries = threadChunkMap.get(id);
+            if (chunkEntries == null) {
+                countDownLatch.countDown();
+                continue;
+            }
+
+            // Cache chunk entities
             Map<Chunk, List<Entity>> chunkListMap = new HashMap<>(chunkEntries.size());
             for (ChunkEntry chunkEntry : chunkEntries) {
                 var chunk = chunkEntry.chunk;
@@ -97,7 +109,8 @@ public abstract class ThreadProvider {
                 chunkListMap.put(chunk, entities);
             }
 
-            thread.addRunnable(() -> {
+            // Execute tick
+            thread.getMainRunnable().startTick(countDownLatch, () -> {
                 chunkListMap.forEach((chunk, entities) -> {
                     chunk.tick(time);
                     entities.forEach(entity -> {
@@ -105,18 +118,10 @@ public abstract class ThreadProvider {
                     });
                 });
             });
-        });
-    }
-
-    @NotNull
-    public CountDownLatch notifyThreads() {
-        CountDownLatch countDownLatch = new CountDownLatch(threads.size());
-        for (BatchThread thread : threads) {
-            final BatchThread.BatchRunnable runnable = thread.getMainRunnable();
-            runnable.startTick(countDownLatch);
         }
         return countDownLatch;
     }
+
 
     public void shutdown() {
         this.threads.forEach(BatchThread::shutdown);

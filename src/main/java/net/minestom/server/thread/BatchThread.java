@@ -33,10 +33,6 @@ public class BatchThread extends Thread {
         return queue;
     }
 
-    public void addRunnable(@NotNull Runnable runnable) {
-        this.runnable.queue.add(runnable);
-    }
-
     public void shutdown() {
         this.runnable.stop = true;
     }
@@ -91,8 +87,9 @@ public class BatchThread extends Thread {
             }
         }
 
-        public synchronized void startTick(@NotNull CountDownLatch countDownLatch) {
+        public synchronized void startTick(@NotNull CountDownLatch countDownLatch, Runnable runnable) {
             synchronized (tickLock) {
+                this.queue.add(runnable);
                 this.countDownLatch = countDownLatch;
                 this.tickLock.notifyAll();
             }

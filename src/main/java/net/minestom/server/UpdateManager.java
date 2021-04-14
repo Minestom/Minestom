@@ -120,11 +120,10 @@ public final class UpdateManager {
 
         // Server tick (instance/chunk/entity)
         // Synchronize with the update manager instance, like the signal for chunk load/unload
+        final CountDownLatch countDownLatch;
         synchronized (this) {
-            this.threadProvider.prepareUpdate(tickStart);
+            countDownLatch = threadProvider.update(tickStart);
         }
-
-        CountDownLatch countDownLatch = threadProvider.notifyThreads();
 
         // Wait tick end
         try {
@@ -199,7 +198,7 @@ public final class UpdateManager {
      * <p>
      * WARNING: should be automatically done by the {@link Instance} implementation.
      *
-     * @param chunk    the loaded chunk
+     * @param chunk the loaded chunk
      */
     public synchronized void signalChunkLoad(@NotNull Chunk chunk) {
         if (this.threadProvider == null)
@@ -212,7 +211,7 @@ public final class UpdateManager {
      * <p>
      * WARNING: should be automatically done by the {@link Instance} implementation.
      *
-     * @param chunk    the unloaded chunk
+     * @param chunk the unloaded chunk
      */
     public synchronized void signalChunkUnload(@NotNull Chunk chunk) {
         if (this.threadProvider == null)
