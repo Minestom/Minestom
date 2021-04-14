@@ -84,14 +84,14 @@ public class ItemTag<T> {
 
     public static @NotNull ItemTag<NBTCompound> Compound(@NotNull String key) {
         return new ItemTag<>(key,
-                nbtCompound -> nbtCompound.getCompound(key),
-                ((nbtCompound, value) -> nbtCompound.set(key, value)));
+                nbtCompound -> nbtCompound.getCompound(key).deepClone(),
+                ((nbtCompound, value) -> nbtCompound.set(key, value.deepClone())));
     }
 
     public static <O extends NBT> @NotNull ItemTag<NBTList<O>> List(@NotNull String key) {
         return new ItemTag<>(key,
-                nbtCompound -> nbtCompound.getList(key),
-                ((nbtCompound, value) -> nbtCompound.set(key, value)));
+                nbtCompound -> (NBTList<O>) nbtCompound.getList(key).deepClone(),
+                ((nbtCompound, value) -> nbtCompound.set(key, value.deepClone())));
     }
 
     public static @NotNull ItemTag<int[]> IntArray(@NotNull String key) {
