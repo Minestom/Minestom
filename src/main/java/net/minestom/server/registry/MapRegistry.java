@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MapRegistry<T extends Keyed> implements Registry.Writable<T> {
+public class MapRegistry<T extends Keyed> implements IRegistry.Writable<T> {
     private final Map<Key, T> namespaceToValue = new ConcurrentHashMap<>();
 
     @Override
