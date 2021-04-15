@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.stream.Collectors;
 
 /**
  * Used to link chunks into multiple groups.
@@ -97,6 +98,11 @@ public abstract class ThreadProvider {
 
             // Execute tick
             thread.getMainRunnable().startTick(countDownLatch, () -> {
+                final var entitiesList = chunkEntries.stream().map(chunkEntry -> chunkEntry.entities).collect(Collectors.toList());
+                final var entities = entitiesList.stream()
+                        .flatMap(Collection::stream)
+                        .collect(Collectors.toList());
+                Acquirable.refreshEntities(Collections.unmodifiableList(entities));
                 chunkEntries.forEach(chunkEntry -> {
                     chunkEntry.chunk.tick(time);
                     chunkEntry.entities.forEach(entity -> {

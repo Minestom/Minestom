@@ -1,10 +1,13 @@
 package net.minestom.server.lock;
 
+import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.thread.BatchThread;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Phaser;
 import java.util.function.Consumer;
@@ -19,6 +22,17 @@ import java.util.function.Consumer;
  * @param <T> the acquirable object type
  */
 public interface Acquirable<T> {
+
+    ThreadLocal<Collection<Entity>> CURRENT_ENTITIES = ThreadLocal.withInitial(Collections::emptyList);
+
+    static @NotNull Collection<@NotNull Entity> currentEntities() {
+        return CURRENT_ENTITIES.get();
+    }
+
+    @ApiStatus.Internal
+    static void refreshEntities(@NotNull Collection<@NotNull Entity> entities) {
+        CURRENT_ENTITIES.set(entities);
+    }
 
     /**
      * Blocks the current thread until 'this' can be acquired,

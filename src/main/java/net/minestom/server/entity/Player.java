@@ -561,7 +561,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void remove() {
-        if(isRemoved())
+        if (isRemoved())
             return;
 
         callEvent(PlayerDisconnectEvent.class, new PlayerDisconnectEvent(this));
