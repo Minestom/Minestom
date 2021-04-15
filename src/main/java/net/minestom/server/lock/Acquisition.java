@@ -1,5 +1,6 @@
 package net.minestom.server.lock;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.thread.BatchQueue;
 import net.minestom.server.thread.BatchThread;
@@ -7,17 +8,18 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Phaser;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public final class Acquisition {
 
-    private static final ScheduledExecutorService ACQUISITION_CONTENTION_SERVICE = Executors.newSingleThreadScheduledExecutor();
+    private static final ExecutorService ACQUISITION_CONTENTION_SERVICE = Executors.newSingleThreadExecutor(
+            new ThreadFactoryBuilder().setNameFormat("Deadlock detection").build()
+    );
     private static final ThreadLocal<List<Thread>> ACQUIRED_THREADS = ThreadLocal.withInitial(ArrayList::new);
 
     private static final ThreadLocal<ScheduledAcquisition> SCHEDULED_ACQUISITION = ThreadLocal.withInitial(ScheduledAcquisition::new);
@@ -26,21 +28,21 @@ public final class Acquisition {
 
     static {
         // The goal of the contention service it is manage the situation where two threads are waiting for each other
-        ACQUISITION_CONTENTION_SERVICE.scheduleAtFixedRate(() -> {
+        ACQUISITION_CONTENTION_SERVICE.execute(() -> {
+            while (true) {
+                final List<BatchThread> threads = MinecraftServer.getUpdateManager().getThreadProvider().getThreads();
 
-            final List<BatchThread> threads = MinecraftServer.getUpdateManager().getThreadProvider().getThreads();
-
-            for (BatchThread batchThread : threads) {
-                final BatchThread waitingThread = (BatchThread) batchThread.getQueue().getWaitingThread();
-                if (waitingThread != null) {
-                    if (waitingThread.getState() == Thread.State.WAITING &&
-                            batchThread.getState() == Thread.State.WAITING) {
-                        processQueue(waitingThread.getQueue());
+                for (BatchThread batchThread : threads) {
+                    final BatchThread waitingThread = (BatchThread) batchThread.getQueue().getWaitingThread();
+                    if (waitingThread != null) {
+                        if (waitingThread.getState() == Thread.State.WAITING &&
+                                batchThread.getState() == Thread.State.WAITING) {
+                            processQueue(waitingThread.getQueue());
+                        }
                     }
                 }
             }
-
-        }, 3, 3, TimeUnit.MILLISECONDS);
+        });
     }
 
     public static <E, T extends Acquirable<E>> void acquireCollection(@NotNull Collection<T> collection,
