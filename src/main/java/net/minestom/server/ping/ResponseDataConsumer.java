@@ -7,8 +7,11 @@ import net.minestom.server.network.player.PlayerConnection;
  *
  * <p>Can be specified in {@link net.minestom.server.MinecraftServer#start(String, int,
  * ResponseDataConsumer)}.
+ *
+ *  @deprecated listen to the {@link net.minestom.server.event.server.StatusRequestEvent} instead
  */
 @FunctionalInterface
+@Deprecated
 public interface ResponseDataConsumer {
 
   /**
