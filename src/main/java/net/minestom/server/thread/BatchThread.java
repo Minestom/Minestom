@@ -58,8 +58,12 @@ public class BatchThread extends Thread {
             while (!stop) {
 
                 // The latch is necessary to control the tick rates
-                if (countDownLatch == null)
+                if (countDownLatch == null) {
+                    if(!waitTickLock()){
+                        break;
+                    }
                     continue;
+                }
 
                 synchronized (tickLock) {
                     this.inTick = true;
@@ -81,14 +85,8 @@ public class BatchThread extends Thread {
                     this.inTick = false;
 
                     // Wait for the next notify (game tick)
-                    try {
-                        if (stop) {
-                            break;
-                        }
-
-                        this.tickLock.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    if(!waitTickLock()){
+                        break;
                     }
                 }
             }
@@ -104,6 +102,22 @@ public class BatchThread extends Thread {
 
         public boolean isInTick() {
             return inTick;
+        }
+
+        private boolean waitTickLock() {
+            synchronized (tickLock) {
+                // Wait for the next notify (game tick)
+                try {
+                    if (stop) {
+                        return false;
+                    }
+
+                    this.tickLock.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            return true;
         }
 
         private void setLinkedThread(BatchThread batchThread) {

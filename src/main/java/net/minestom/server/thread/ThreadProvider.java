@@ -91,7 +91,7 @@ public abstract class ThreadProvider {
         CountDownLatch countDownLatch = new CountDownLatch(threads.size());
         for (BatchThread thread : threads) {
             final var chunkEntries = threadChunkMap.get(thread);
-            if (chunkEntries == null) {
+            if (chunkEntries == null || chunkEntries.isEmpty()) {
                 // The thread never had any task
                 countDownLatch.countDown();
                 continue;
