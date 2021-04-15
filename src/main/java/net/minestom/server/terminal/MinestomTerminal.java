@@ -17,11 +17,11 @@ public class MinestomTerminal {
     private static final CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();
     private static final String PROMPT = "> ";
 
+    private static volatile Terminal terminal;
     private static volatile boolean running = false;
 
     @ApiStatus.Internal
     public static void start() {
-        Terminal terminal = null;
         try {
             terminal = TerminalBuilder.terminal();
         } catch (IOException e) {
@@ -47,6 +47,13 @@ public class MinestomTerminal {
     @ApiStatus.Internal
     public static void stop() {
         running = false;
+        if (terminal != null) {
+            try {
+                terminal.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
