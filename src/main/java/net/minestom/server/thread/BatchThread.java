@@ -5,8 +5,8 @@ import net.minestom.server.lock.Acquisition;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayDeque;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 
 public class BatchThread extends Thread {
@@ -45,7 +45,7 @@ public class BatchThread extends Thread {
         private volatile boolean inTick;
         private volatile CountDownLatch countDownLatch;
 
-        private final Queue<Runnable> queue = new ArrayDeque<>();
+        private final Queue<Runnable> queue = new ConcurrentLinkedQueue<>();
 
         private final Object tickLock = new Object();
 
@@ -91,7 +91,7 @@ public class BatchThread extends Thread {
             this.countDownLatch = countDownLatch;
             this.queue.add(runnable);
             synchronized (tickLock) {
-                this.tickLock.notifyAll();
+                this.tickLock.notify();
             }
         }
 
