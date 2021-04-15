@@ -131,6 +131,8 @@ public abstract class ThreadProvider {
         }
         this.removedEntities.clear();
 
+        // Update as many entities as possible
+        // TODO: incremental update instead of full
         for (Instance instance : MinecraftServer.getInstanceManager().getInstances()) {
             var entities = instance.getEntities();
             for (Entity entity : entities) {
