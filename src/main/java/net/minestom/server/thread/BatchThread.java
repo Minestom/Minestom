@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class BatchThread extends Thread {
 
@@ -46,7 +47,7 @@ public class BatchThread extends Thread {
         private BatchThread batchThread;
 
         private volatile boolean inTick;
-        private volatile CountDownLatch countDownLatch;
+        private final AtomicReference<CountDownLatch> countDownLatch = new AtomicReference<>();
 
         private final Queue<Runnable> queue = new ConcurrentLinkedQueue<>();
 
@@ -56,9 +57,10 @@ public class BatchThread extends Thread {
         public void run() {
             Check.notNull(batchThread, "The linked BatchThread cannot be null!");
             while (!stop) {
+                CountDownLatch localCountDownLatch = this.countDownLatch.get();
 
                 // The latch is necessary to control the tick rates
-                if (countDownLatch == null) {
+                if (localCountDownLatch == null) {
                     if(!waitTickLock()){
                         break;
                     }
@@ -79,10 +81,15 @@ public class BatchThread extends Thread {
                         Acquisition.processThreadTick(batchThread.getQueue());
                     }
 
-                    this.countDownLatch.countDown();
-                    this.countDownLatch = null;
+                    localCountDownLatch.countDown();
+                    boolean successful = this.countDownLatch.compareAndSet(localCountDownLatch, null);
 
                     this.inTick = false;
+
+                    // new task should be available
+                    if (!successful) {
+                        continue;
+                    }
 
                     // Wait for the next notify (game tick)
                     if(!waitTickLock()){
@@ -93,7 +100,7 @@ public class BatchThread extends Thread {
         }
 
         public synchronized void startTick(@NotNull CountDownLatch countDownLatch, @NotNull Runnable runnable) {
-            this.countDownLatch = countDownLatch;
+            this.countDownLatch.set(countDownLatch);
             this.queue.add(runnable);
             synchronized (tickLock) {
                 this.tickLock.notifyAll();
