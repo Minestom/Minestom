@@ -2,7 +2,6 @@ package net.minestom.server;
 
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
-import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.data.DataType;
@@ -25,6 +24,7 @@ import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
 import net.minestom.server.listener.manager.PacketListenerManager;
+import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.NettyServer;
@@ -617,8 +617,7 @@ public final class MinecraftServer {
      * Gets the consumer executed to show server-list data.
      *
      * @return the response data consumer
-     *
-     * @deprecated listen to the {@link net.minestom.server.event.server.StatusRequestEvent} instead
+     * @deprecated listen to the {@link net.minestom.server.event.server.ServerListPingEvent} instead
      */
     @Deprecated
     public static ResponseDataConsumer getResponseDataConsumer() {
@@ -746,7 +745,6 @@ public final class MinecraftServer {
      * @param port                 the server port
      * @param responseDataConsumer the response data consumer, can be null
      * @throws IllegalStateException if called before {@link #init()} or if the server is already running
-     *
      * @deprecated use {@link #start(String, int)} and listen to the {@link net.minestom.server.event.server.ServerListPingEvent} event instead of ResponseDataConsumer
      */
     @Deprecated
