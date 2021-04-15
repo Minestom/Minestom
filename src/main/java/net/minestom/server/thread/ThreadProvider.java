@@ -92,6 +92,7 @@ public abstract class ThreadProvider {
         for (BatchThread thread : threads) {
             final var chunkEntries = threadChunkMap.get(thread);
             if (chunkEntries == null) {
+                // The thread never had any task
                 countDownLatch.countDown();
                 continue;
             }
@@ -115,21 +116,22 @@ public abstract class ThreadProvider {
     }
 
     public synchronized void refreshThreads() {
-
         // Clear removed entities
-        for (Entity entity : removedEntities) {
-            Acquirable<Entity> acquirable = entity.getAcquiredElement();
-            Chunk batchChunk = acquirable.getHandler().getBatchChunk();
+        {
+            for (Entity entity : removedEntities) {
+                Acquirable<Entity> acquirable = entity.getAcquiredElement();
+                Chunk batchChunk = acquirable.getHandler().getBatchChunk();
 
-            // Remove from list
-            {
-                ChunkEntry chunkEntry = chunkEntryMap.get(batchChunk);
-                if (chunkEntry != null) {
-                    chunkEntry.entities.remove(entity);
+                // Remove from list
+                {
+                    ChunkEntry chunkEntry = chunkEntryMap.get(batchChunk);
+                    if (chunkEntry != null) {
+                        chunkEntry.entities.remove(entity);
+                    }
                 }
             }
+            this.removedEntities.clear();
         }
-        this.removedEntities.clear();
 
         // Update as many entities as possible
         // TODO: incremental update instead of full
@@ -163,7 +165,7 @@ public abstract class ThreadProvider {
         }
     }
 
-    public void removeEntity(Entity entity) {
+    public void removeEntity(@NotNull Entity entity) {
         this.removedEntities.add(entity);
     }
 
@@ -171,8 +173,7 @@ public abstract class ThreadProvider {
         this.threads.forEach(BatchThread::shutdown);
     }
 
-    @NotNull
-    public List<BatchThread> getThreads() {
+    public @NotNull List<@NotNull BatchThread> getThreads() {
         return threads;
     }
 

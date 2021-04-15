@@ -105,7 +105,7 @@ public interface Acquirable<T> {
         }
 
         @ApiStatus.Internal
-        public void refreshBatchInfo(BatchThread batchThread, Chunk batchChunk) {
+        public void refreshBatchInfo(@NotNull BatchThread batchThread, @NotNull Chunk batchChunk) {
             this.batchThread = batchThread;
             this.batchChunk = batchChunk;
         }

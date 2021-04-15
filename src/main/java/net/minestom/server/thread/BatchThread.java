@@ -34,7 +34,10 @@ public class BatchThread extends Thread {
     }
 
     public void shutdown() {
-        this.runnable.stop = true;
+        synchronized (runnable.tickLock) {
+            this.runnable.stop = true;
+            this.runnable.tickLock.notifyAll();
+        }
     }
 
     public static class BatchRunnable implements Runnable {
@@ -79,6 +82,10 @@ public class BatchThread extends Thread {
 
                     // Wait for the next notify (game tick)
                     try {
+                        if (stop) {
+                            break;
+                        }
+
                         this.tickLock.wait();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -91,7 +98,7 @@ public class BatchThread extends Thread {
             this.countDownLatch = countDownLatch;
             this.queue.add(runnable);
             synchronized (tickLock) {
-                this.tickLock.notify();
+                this.tickLock.notifyAll();
             }
         }
 

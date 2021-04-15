@@ -251,6 +251,7 @@ public final class UpdateManager {
      * Stops the server loop.
      */
     public void stop() {
-        stopRequested = true;
+        this.stopRequested = true;
+        this.threadProvider.shutdown();
     }
 }
