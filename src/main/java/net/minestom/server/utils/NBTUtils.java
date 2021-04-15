@@ -105,7 +105,7 @@ public final class NBTUtils {
 
             enchantList.add(new NBTCompound()
                     .setShort("lvl", level)
-                    .setString("id", "minecraft:" + enchantment.name().toLowerCase())
+                    .setString("id", enchantment.getId().asString())
             );
         }
         nbt.set(listName, enchantList);
@@ -198,7 +198,7 @@ public final class NBTUtils {
                 final int operation = attributeNBT.getAsInt("Operation");
                 final String name = attributeNBT.getString("Name");
 
-                final Attribute attribute = Attribute.fromKey(attributeName);
+                final Attribute attribute = Registries.getAttribute(attributeName);
                 // Wrong attribute name, stop here
                 if (attribute == null)
                     break;

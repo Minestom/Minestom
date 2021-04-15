@@ -3,8 +3,8 @@ package net.minestom.server.instance.block.rule.vanilla;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockAlternative;
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.BlockState;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.BlockPosition;
 import org.apache.commons.lang3.tuple.Pair;
@@ -89,10 +89,10 @@ public class StairsPlacementRule extends BlockPlacementRule {
                 return Pair.of(null, null);
             }
             short stateId = instance.getBlockStateId(blockPosition);
-            BlockAlternative alternative = block.getAlternative(stateId);
+            BlockState state = block.getBlockState(stateId);
             try {
-                Shape shape = Shape.valueOf(alternative.getProperty("shape").toUpperCase());
-                Facing facing = Facing.valueOf(alternative.getProperty("facing").toUpperCase());
+                Shape shape = Shape.valueOf(state.getProperty("shape").toUpperCase());
+                Facing facing = Facing.valueOf(state.getProperty("facing").toUpperCase());
                 return Pair.of(shape, facing);
             } catch (Exception ex) {
                 return Pair.of(null, null);

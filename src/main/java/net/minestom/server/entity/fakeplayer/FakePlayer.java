@@ -114,7 +114,7 @@ public class FakePlayer extends Player implements NavigableEntity {
         super.update(time);
 
         // Path finding
-        this.navigator.tick(getAttributeValue(Attribute.MOVEMENT_SPEED));
+        this.navigator.tick((float) getAttributeValue(Attribute.MOVEMENT_SPEED));
     }
 
     @Override

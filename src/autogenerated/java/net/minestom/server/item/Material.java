@@ -1,6 +1,7 @@
 package net.minestom.server.item;
 
 import java.lang.Override;
+import java.lang.String;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -2967,7 +2968,7 @@ public class Material implements Keyed {
 
   @NotNull
   public String getName() {
-      return this.id.asString();
+    return this.id.asString();
   }
 
   public int getNumericalId() {

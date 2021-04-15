@@ -56,8 +56,7 @@ public class PlayerDiggingListener {
             }
 
             final boolean instantBreak = player.isCreative() ||
-                    player.isInstantBreak() ||
-                    Block.fromStateId(blockStateId).breaksInstantaneously();
+                    player.isInstantBreak(); //|| Block.fromStateId(blockStateId).breaksInstantaneously();
 
             if (instantBreak) {
                 // No need to check custom block

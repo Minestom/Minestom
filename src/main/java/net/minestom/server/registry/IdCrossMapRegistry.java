@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class IdCrossMapRegistry<T extends Keyed> extends MapRegistry<T> implements IdCrossRegistry.Writable<T> {
-    private final List<T> values = Collections.synchronizedList(new ArrayList<>(Short.MAX_VALUE));
+    protected final List<T> values = Collections.synchronizedList(new ArrayList<>(Short.MAX_VALUE));
 
     @Override
     @Nullable
@@ -57,6 +57,16 @@ public class IdCrossMapRegistry<T extends Keyed> extends MapRegistry<T> implemen
 
         public Defaulted(T defaultValue) {
             this.defaultValue = defaultValue;
+        }
+
+        @Override
+        @NotNull
+        public T get(short id) {
+            try {
+                return values.get(id);
+            } catch (IndexOutOfBoundsException e) {
+                return defaultValue;
+            }
         }
 
         @Override

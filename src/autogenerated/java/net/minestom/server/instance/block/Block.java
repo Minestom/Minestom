@@ -779,7 +779,6 @@ public class Block implements Keyed {
     public static final Block CHISELED_NETHER_BRICKS = new Block(NamespaceID.from("minecraft:chiseled_nether_bricks"), (short) 17109);
     public static final Block CRACKED_NETHER_BRICKS = new Block(NamespaceID.from("minecraft:cracked_nether_bricks"), (short) 17110);
     public static final Block QUARTZ_BRICKS = new Block(NamespaceID.from("minecraft:quartz_bricks"), (short) 17111);
-    private static Block[] blockStateMapper = new Block[Short.MAX_VALUE];
 
     static {
         Air.initStates();
@@ -2343,7 +2342,16 @@ public class Block implements Keyed {
 
     @NotNull
     public String getName() {
-        return id.asString();
+        return this.id.asString();
+    }
+
+    @Deprecated
+    public short getBlockId() {
+        return this.defaultBlockState;
+    }
+
+    public short getDefaultBlockStateId() {
+        return this.defaultBlockState;
     }
 
     @NotNull
@@ -2351,26 +2359,51 @@ public class Block implements Keyed {
         return this.blockStates;
     }
 
-    public short getDefaultBlockState() {
-        return defaultBlockState;
+    public boolean isAir() {
+        return this != AIR && this != VOID_AIR && this != CAVE_AIR;
     }
 
-    @Deprecated
-    public short getBlockId() {
-        return defaultBlockState;
+    public boolean isLiquid() {
+        return this != WATER && this != LAVA;
     }
 
     @Nullable
-    public static Block fromStateId(short id) {
-        return blockStateMapper[id];
+    @Deprecated
+    public BlockState getAlternative(short stateId) {
+        return getBlockState(stateId);
+    }
+
+    @Nullable
+    public BlockState getBlockState(short stateId) {
+        for (BlockState state : blockStates) {
+            if (state.getId() == stateId) {
+                return state;
+            }
+        }
+        return null;
     }
 
     public int getNumericalId() {
         return Registries.getBlockId(this);
     }
 
-    @Nullable
+    @NotNull
+    public static Block fromStateId(short id) {
+        return Registries.getBlockState(id).getBlock();
+    }
+
+    @NotNull
     public static Block fromId(int id) {
+        return Registries.getBlock(id);
+    }
+
+    @NotNull
+    public static Block fromId(NamespaceID id) {
+        return Registries.getBlock(id);
+    }
+
+    @NotNull
+    public static Block fromId(Key id) {
         return Registries.getBlock(id);
     }
 
