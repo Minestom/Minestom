@@ -86,10 +86,9 @@ public final class UpdateManager {
 
                 // Monitoring
                 if (!tickMonitors.isEmpty()) {
-                    // TODO use value
                     final double acquisitionTimeMs = Acquisition.getCurrentWaitMonitoring() / 1e6D;
                     final double tickTimeMs = tickTime / 1e6D;
-                    final TickMonitor tickMonitor = new TickMonitor(tickTimeMs);
+                    final TickMonitor tickMonitor = new TickMonitor(tickTimeMs, acquisitionTimeMs);
                     this.tickMonitors.forEach(consumer -> consumer.accept(tickMonitor));
 
                     Acquisition.resetWaitMonitoring();

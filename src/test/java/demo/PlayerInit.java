@@ -1,10 +1,8 @@
 package demo;
 
-import com.google.common.util.concurrent.AtomicDouble;
 import demo.generator.ChunkGeneratorDemo;
 import demo.generator.NoiseTestGenerator;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.chat.ColoredText;
@@ -32,8 +30,8 @@ import net.minestom.server.item.ItemTag;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.CompassMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
+import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -43,8 +41,8 @@ import net.minestom.server.world.DimensionType;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class PlayerInit {
 
@@ -91,14 +89,14 @@ public class PlayerInit {
 
     }
 
-    private static AtomicDouble LAST_TICK_TIME = new AtomicDouble();
+    private static AtomicReference<TickMonitor> LAST_TICK = new AtomicReference<>();
 
     public static void init() {
         ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
         BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
 
         MinecraftServer.getUpdateManager().addTickMonitor(tickMonitor ->
-                LAST_TICK_TIME.set(tickMonitor.getTickTime()));
+                LAST_TICK.set(tickMonitor));
 
         MinecraftServer.getSchedulerManager().buildTask(() -> {
 
@@ -110,9 +108,13 @@ public class PlayerInit {
             long ramUsage = benchmarkManager.getUsedMemory();
             ramUsage /= 1e6; // bytes to MB
 
+            TickMonitor tickMonitor = LAST_TICK.get();
+
             final Component header = Component.text("RAM USAGE: " + ramUsage + " MB")
                     .append(Component.newline())
-                    .append(Component.text("TICK TIME: " + MathUtils.round(LAST_TICK_TIME.get(), 2) + "ms"));
+                    .append(Component.text("TICK TIME: " + MathUtils.round(tickMonitor.getTickTime(), 2) + "ms"))
+                    .append(Component.newline())
+                    .append(Component.text("ACQ TIME: " + MathUtils.round(tickMonitor.getAcquisitionTime(), 2) + "ms"));
             final Component footer = benchmarkManager.getCpuMonitoringMessage();
             Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
 

@@ -136,7 +136,7 @@ public final class MinecraftServer {
     private static int compressionThreshold = 256;
     private static boolean packetCaching = true;
     private static boolean groupedPacket = true;
-    private static boolean waitMonitoring = false;
+    private static boolean waitMonitoring = true;
     private static ResponseDataConsumer responseDataConsumer;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
