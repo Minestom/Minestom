@@ -626,7 +626,9 @@ public final class MinecraftServer {
      * Gets the consumer executed to show server-list data.
      *
      * @return the response data consumer
+     * @deprecated listen to the {@link net.minestom.server.event.server.ServerListPingEvent} instead
      */
+    @Deprecated
     public static ResponseDataConsumer getResponseDataConsumer() {
         checkInitStatus(responseDataConsumer);
         return responseDataConsumer;
@@ -752,15 +754,30 @@ public final class MinecraftServer {
      * @param port                 the server port
      * @param responseDataConsumer the response data consumer, can be null
      * @throws IllegalStateException if called before {@link #init()} or if the server is already running
+     * @deprecated use {@link #start(String, int)} and listen to the {@link net.minestom.server.event.server.ServerListPingEvent} event instead of ResponseDataConsumer
      */
+    @Deprecated
     public void start(@NotNull String address, int port, @Nullable ResponseDataConsumer responseDataConsumer) {
+        MinecraftServer.responseDataConsumer = responseDataConsumer;
+        start(address, port);
+    }
+
+    /**
+     * Starts the server.
+     * <p>
+     * It should be called after {@link #init()} and probably your own initialization code.
+     *
+     * @param address the server address
+     * @param port    the server port
+     * @throws IllegalStateException if called before {@link #init()} or if the server is already running
+     */
+    public void start(@NotNull String address, int port) {
         Check.stateCondition(!initialized, "#start can only be called after #init");
         Check.stateCondition(started, "The server is already started");
 
         MinecraftServer.started = true;
 
         LOGGER.info("Starting Minestom server.");
-        MinecraftServer.responseDataConsumer = responseDataConsumer;
 
         updateManager.start();
 
@@ -786,17 +803,6 @@ public final class MinecraftServer {
         LOGGER.info("Minestom server started successfully.");
 
         MinestomTerminal.start();
-    }
-
-    /**
-     * Starts the server.
-     *
-     * @param address the server address
-     * @param port    the server port
-     * @see #start(String, int, ResponseDataConsumer)
-     */
-    public void start(@NotNull String address, int port) {
-        start(address, port, null);
     }
 
     /**

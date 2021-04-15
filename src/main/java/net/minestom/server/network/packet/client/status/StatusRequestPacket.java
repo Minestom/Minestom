@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.client.status;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.handshake.ResponsePacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -29,10 +30,16 @@ public class StatusRequestPacket implements ClientPreplayPacket {
         if (consumer != null)
             consumer.accept(connection, responseData);
 
-        ResponsePacket responsePacket = new ResponsePacket();
-        responsePacket.jsonResponse = responseData.build().toString();
+        // Call event
+        ServerListPingEvent statusRequestEvent = new ServerListPingEvent(responseData, connection);
+        MinecraftServer.getGlobalEventHandler().callCancellableEvent(ServerListPingEvent.class, statusRequestEvent,
+                () -> {
+                    ResponsePacket responsePacket = new ResponsePacket();
+                    responsePacket.jsonResponse = responseData.build().toString();
 
-        connection.sendPacket(responsePacket);
+                    connection.sendPacket(responsePacket);
+                });
+
     }
 
     @Override
