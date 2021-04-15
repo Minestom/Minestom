@@ -183,22 +183,24 @@ public class NettyPlayerConnection extends PlayerConnection {
             return;
         }
 
+        // Retrieve safe copy
+        final ByteBuf copy;
         synchronized (tickBuffer) {
-            final ByteBuf copy = tickBuffer.copy();
-
-            ChannelFuture channelFuture = channel.write(new FramedPacket(copy));
-            channelFuture.addListener(future -> copy.release());
-
-            // Netty debug
-            if (MinecraftServer.shouldProcessNettyErrors()) {
-                channelFuture.addListener(future -> {
-                    if (!future.isSuccess() && channel.isActive()) {
-                        MinecraftServer.getExceptionManager().handleException(future.cause());
-                    }
-                });
-            }
-
+            copy = tickBuffer.copy();
             tickBuffer.clear();
+        }
+
+        // Write copied buffer to netty
+        ChannelFuture channelFuture = channel.write(new FramedPacket(copy));
+        channelFuture.addListener(future -> copy.release());
+
+        // Netty debug
+        if (MinecraftServer.shouldProcessNettyErrors()) {
+            channelFuture.addListener(future -> {
+                if (!future.isSuccess() && channel.isActive()) {
+                    MinecraftServer.getExceptionManager().handleException(future.cause());
+                }
+            });
         }
     }
 
