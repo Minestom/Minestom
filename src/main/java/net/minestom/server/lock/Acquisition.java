@@ -81,8 +81,8 @@ public final class Acquisition {
         }
     }
 
-    public static <E, T extends Acquirable<E>> void acquireForEach(@NotNull Collection<T> collection,
-                                                                   @NotNull Consumer<E> consumer) {
+    public static <E, T extends Acquirable<E>> void acquireForEach(@NotNull Collection<? super T> collection,
+                                                                   @NotNull Consumer<? super E> consumer) {
         final Thread currentThread = Thread.currentThread();
         Map<BatchThread, List<E>> threadCacheMap = retrieveThreadMap(collection, currentThread, consumer);
 
@@ -221,6 +221,8 @@ public final class Acquisition {
                     periodQueue.wait();
                 }
 
+                acquiredThread.remove(elementThread);
+
                 if (monitoring) {
                     time = System.nanoTime() - time;
                     WAIT_COUNTER_NANO.addAndGet(time);
@@ -241,12 +243,12 @@ public final class Acquisition {
                 .add((Consumer<Object>) consumer);
     }
 
-    private static <E, T extends Acquirable<E>> Map<BatchThread, List<E>> retrieveThreadMap(@NotNull Collection<T> collection,
+    private static <E, T extends Acquirable<E>> Map<BatchThread, List<E>> retrieveThreadMap(@NotNull Collection<? super T> collection,
                                                                                             @NotNull Thread currentThread,
-                                                                                            @NotNull Consumer<E> consumer) {
+                                                                                            @NotNull Consumer<? super E> consumer) {
         Map<BatchThread, List<E>> threadCacheMap = new HashMap<>();
-
-        for (T element : collection) {
+        for (Object obj : collection) {
+            T element = (T) obj;
             final E value = element.unwrap();
 
             final BatchThread elementThread = element.getHandler().getBatchThread();

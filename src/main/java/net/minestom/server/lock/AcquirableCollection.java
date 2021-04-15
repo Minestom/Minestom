@@ -17,7 +17,8 @@ public class AcquirableCollection<E extends LockedElement> extends CollectionVie
         this.acquirableCollection = acquirableCollection;
     }
 
-    public void forEachAcquire(@NotNull Consumer<@NotNull E> action) {
+    @Override
+    public void forEach(Consumer<? super E> action) {
         Acquisition.acquireForEach(acquirableCollection, action);
     }
 }
