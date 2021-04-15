@@ -106,8 +106,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <tbody>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="ResponseDataConsumer.html" title="interface in net.minestom.server.ping">ResponseDataConsumer</a></th>
-<td class="colLast">
-<div class="block">Consumer used to fill a <a href="ResponseData.html" title="class in net.minestom.server.ping"><code>ResponseData</code></a> object before being sent to a connection.</div>
+<td class="colLast">Deprecated.
+<div class="deprecationComment">listen to the <a href="../event/server/ServerListPingEvent.html" title="class in net.minestom.server.event.server"><code>ServerListPingEvent</code></a> instead</div>
 </td>
 </tr>
 </tbody>
@@ -125,6 +125,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colFirst" scope="row"><a href="ResponseData.html" title="class in net.minestom.server.ping">ResponseData</a></th>
 <td class="colLast">
 <div class="block">Represents the data sent to the player when refreshing the server list.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<th class="colFirst" scope="row"><a href="ResponseData.PingPlayer.html" title="class in net.minestom.server.ping">ResponseData.PingPlayer</a></th>
+<td class="colLast">
+<div class="block">Represents a player line in the server list hover.</div>
 </td>
 </tr>
 </tbody>

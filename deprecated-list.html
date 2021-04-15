@@ -122,6 +122,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
  <a href="net/minestom/server/command/builder/SimpleCommand.html" title="class in net.minestom.server.command.builder"><code>SimpleCommand</code></a> instead</div>
 </td>
 </tr>
+<tr class="rowColor">
+<th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/ping/ResponseDataConsumer.html" title="interface in net.minestom.server.ping">net.minestom.server.ping.ResponseDataConsumer</a></th>
+<td class="colLast">
+<div class="deprecationComment">listen to the <a href="net/minestom/server/event/server/ServerListPingEvent.html" title="class in net.minestom.server.event.server"><code>ServerListPingEvent</code></a> instead</div>
+</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -4745,6 +4751,18 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/item/metadata/MapMeta.html#getLegacyMapColor()">net.minestom.server.item.metadata.MapMeta.getLegacyMapColor()</a></th>
 <td class="colLast">
 <div class="deprecationComment">Use <a href="net/minestom/server/item/metadata/MapMeta.html#getMapColor()"><code>MapMeta.getMapColor()</code></a></div>
+</td>
+</tr>
+<tr class="altColor">
+<th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/MinecraftServer.html#getResponseDataConsumer()">net.minestom.server.MinecraftServer.getResponseDataConsumer()</a></th>
+<td class="colLast">
+<div class="deprecationComment">listen to the <a href="net/minestom/server/event/server/ServerListPingEvent.html" title="class in net.minestom.server.event.server"><code>ServerListPingEvent</code></a> instead</div>
+</td>
+</tr>
+<tr class="rowColor">
+<th class="colDeprecatedItemName" scope="row"><a href="net/minestom/server/MinecraftServer.html#start(java.lang.String,int,net.minestom.server.ping.ResponseDataConsumer)">net.minestom.server.MinecraftServer.start&#8203;(String, int, ResponseDataConsumer)</a></th>
+<td class="colLast">
+<div class="deprecationComment">use <a href="net/minestom/server/MinecraftServer.html#start(java.lang.String,int)"><code>MinecraftServer.start(String, int)</code></a> and listen to the <a href="net/minestom/server/event/server/ServerListPingEvent.html" title="class in net.minestom.server.event.server"><code>ServerListPingEvent</code></a> event instead of ResponseDataConsumer</div>
 </td>
 </tr>
 <tr class="altColor">

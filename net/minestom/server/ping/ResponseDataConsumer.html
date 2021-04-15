@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
+var data = {"i0":38};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -127,7 +127,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <hr>
 <pre><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/FunctionalInterface.html?is-external=true" title="class or interface in java.lang" class="externalLink">@FunctionalInterface</a>
+<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public interface <span class="typeNameLabel">ResponseDataConsumer</span></pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">listen to the <a href="../event/server/ServerListPingEvent.html" title="class in net.minestom.server.event.server"><code>ServerListPingEvent</code></a> instead</div>
+</div>
 <div class="block">Consumer used to fill a <a href="ResponseData.html" title="class in net.minestom.server.ping"><code>ResponseData</code></a> object before being sent to a connection.
 
  <p>Can be specified in <a href="../MinecraftServer.html#start(java.lang.String,int,net.minestom.server.ping.ResponseDataConsumer)"><code>MinecraftServer.start(String, int,
@@ -146,7 +150,7 @@ public interface <span class="typeNameLabel">ResponseDataConsumer</span></pre>
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -157,6 +161,7 @@ public interface <span class="typeNameLabel">ResponseDataConsumer</span></pre>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#accept(net.minestom.server.network.player.PlayerConnection,net.minestom.server.ping.ResponseData)">accept</a></span>&#8203;(<a href="../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;playerConnection,
       <a href="ResponseData.html" title="class in net.minestom.server.ping">ResponseData</a>&nbsp;responseData)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">A method to fill the data of the response.</div>
 </td>
 </tr>
@@ -185,6 +190,7 @@ public interface <span class="typeNameLabel">ResponseDataConsumer</span></pre>
 <h4>accept</h4>
 <pre class="methodSignature">void&nbsp;accept&#8203;(<a href="../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;playerConnection,
             <a href="ResponseData.html" title="class in net.minestom.server.ping">ResponseData</a>&nbsp;responseData)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">A method to fill the data of the response.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

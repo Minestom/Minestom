@@ -64,6 +64,7 @@ net.minestom.server.event.instance
 net.minestom.server.event.inventory
 net.minestom.server.event.item
 net.minestom.server.event.player
+net.minestom.server.event.server
 net.minestom.server.exception
 net.minestom.server.extensions
 net.minestom.server.extras
