@@ -869,6 +869,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
             if (isPlayer) {
                 final Player player = (Player) entity;
                 getWorldBorder().init(player);
+                player.getPlayerConnection().sendPacket(createTimePacket());
             }
 
             // Send all visible entities
