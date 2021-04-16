@@ -4,8 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-
-import static net.minestom.server.command.builder.arguments.ArgumentType.ResourceLocation;
+import net.minestom.server.command.builder.arguments.ArgumentType;
 
 public class TestCommand extends Command {
 
@@ -13,9 +12,7 @@ public class TestCommand extends Command {
         super("testcmd");
         setDefaultExecutor(this::usage);
 
-        var test = ResourceLocation("msg");
-
-        addSyntax((sender, context) -> System.out.println("executed"),test);
+        addSyntax((sender, context) -> System.out.println("executed"), ArgumentType.generate("test get"));
     }
 
     private void usage(CommandSender sender, CommandContext context) {
