@@ -2,8 +2,8 @@ package net.minestom.code_generation.potion;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import net.minestom.code_generation.MinestomCodeGenerator;
 import com.squareup.javapoet.*;
+import net.minestom.code_generation.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;

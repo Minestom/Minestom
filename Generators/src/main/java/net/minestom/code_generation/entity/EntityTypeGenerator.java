@@ -200,6 +200,7 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
+        ClassName rawEntityDataClassName = ClassName.get("net.minestom.server.raw_data", "RawEntityTypeData");
 
         JsonArray entities;
         try {
@@ -246,6 +247,13 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
                         ClassName.get("net.minestom.server.entity", "EntitySpawnType"),
                         "spawnType"
                 )
+                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
+                        .addAnnotation(NotNull.class)
+                        .build()
+        );
+        entityClass.addField(
+                FieldSpec.builder(rawEntityDataClassName, "entityTypeData")
+                        .initializer("new $T()", rawEntityDataClassName)
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
                         .addAnnotation(NotNull.class)
                         .build()
@@ -364,6 +372,15 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
                                 ClassName.get("net.minestom.server.registry", "Registries")
                         )
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        // getEntityData method
+        entityClass.addMethod(
+                MethodSpec.methodBuilder("getEntityTypeData")
+                        .returns(rawEntityDataClassName)
+                        .addAnnotation(NotNull.class)
+                        .addStatement("return this.entityTypeData")
+                        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                         .build()
         );
         // values method

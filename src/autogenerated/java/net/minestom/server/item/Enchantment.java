@@ -4,6 +4,7 @@ import java.lang.Override;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
+import net.minestom.server.raw_data.RawEnchantmentData;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
@@ -133,6 +134,9 @@ public class Enchantment implements Keyed {
   @NotNull
   private final NamespaceID id;
 
+  @NotNull
+  private final RawEnchantmentData enchantmentData = new RawEnchantmentData();
+
   protected Enchantment(@NotNull NamespaceID id) {
     this.id = id;
   }
@@ -155,6 +159,11 @@ public class Enchantment implements Keyed {
   @Nullable
   public static Enchantment fromId(int id) {
     return Registries.getEnchantment(id);
+  }
+
+  @NotNull
+  public final RawEnchantmentData getEnchantmentData() {
+    return this.enchantmentData;
   }
 
   @NotNull

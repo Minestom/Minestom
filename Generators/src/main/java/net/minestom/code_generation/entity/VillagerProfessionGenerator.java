@@ -50,6 +50,7 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
+        ClassName rawVillagerProfessionDataClassName = ClassName.get("net.minestom.server.raw_data", "RawVillagerProfessionData");
 
         JsonArray villagerProfessions;
         try {
@@ -68,6 +69,13 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
         villagerProfessionClass.addField(
                 FieldSpec.builder(namespaceIDClassName, "id")
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL).addAnnotation(NotNull.class).build()
+        );
+        villagerProfessionClass.addField(
+                FieldSpec.builder(rawVillagerProfessionDataClassName, "villagerProfessionData")
+                        .initializer("new $T()", rawVillagerProfessionDataClassName)
+                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
+                        .addAnnotation(NotNull.class)
+                        .build()
         );
         villagerProfessionClass.addMethod(
                 MethodSpec.constructorBuilder()
@@ -93,6 +101,15 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
                         .addAnnotation(NotNull.class)
                         .addStatement("return this.id")
                         .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // getVillagerProfessionData method
+        villagerProfessionClass.addMethod(
+                MethodSpec.methodBuilder("getVillagerProfessionData")
+                        .returns(rawVillagerProfessionDataClassName)
+                        .addAnnotation(NotNull.class)
+                        .addStatement("return this.villagerProfessionData")
+                        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                         .build()
         );
         // values method

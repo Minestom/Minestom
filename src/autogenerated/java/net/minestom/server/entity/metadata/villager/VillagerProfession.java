@@ -4,6 +4,7 @@ import java.lang.Override;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
+import net.minestom.server.raw_data.RawVillagerProfessionData;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
@@ -63,6 +64,9 @@ public class VillagerProfession implements Keyed {
   @NotNull
   private final NamespaceID id;
 
+  @NotNull
+  private final RawVillagerProfessionData villagerProfessionData = new RawVillagerProfessionData();
+
   protected VillagerProfession(@NotNull NamespaceID id) {
     this.id = id;
   }
@@ -76,6 +80,11 @@ public class VillagerProfession implements Keyed {
   @NotNull
   public NamespaceID getId() {
     return this.id;
+  }
+
+  @NotNull
+  public final RawVillagerProfessionData getVillagerProfessionData() {
+    return this.villagerProfessionData;
   }
 
   @NotNull

@@ -4,6 +4,7 @@ import com.extollit.gaming.ai.path.model.IBlockDescription;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockState;
 
 import java.util.List;
 
@@ -24,8 +25,8 @@ public class PFBlockDescription implements IBlockDescription {
     public static PFBlockDescription getBlockDescription(short blockStateId) {
         if (!BLOCK_DESCRIPTION_MAP.containsKey(blockStateId)) {
             synchronized (BLOCK_DESCRIPTION_MAP) {
-                final Block block = Block.fromStateId(blockStateId);
-                final PFBlockDescription blockDescription = new PFBlockDescription(block);
+                final BlockState blockState = BlockState.fromId(blockStateId);
+                final PFBlockDescription blockDescription = new PFBlockDescription(blockState);
                 BLOCK_DESCRIPTION_MAP.put(blockStateId, blockDescription);
                 return blockDescription;
             }
@@ -34,10 +35,12 @@ public class PFBlockDescription implements IBlockDescription {
         return BLOCK_DESCRIPTION_MAP.get(blockStateId);
     }
 
+    private final BlockState blockState;
     private final Block block;
 
-    public PFBlockDescription(Block block) {
-        this.block = block;
+    public PFBlockDescription(BlockState blockState) {
+        this.blockState = blockState;
+        this.block = blockState.getBlock();
     }
 
     @Override
@@ -64,7 +67,7 @@ public class PFBlockDescription implements IBlockDescription {
 
     @Override
     public boolean isImpeding() {
-        return block.isSolid();
+        return blockState.isSolid();
     }
 
     @Override

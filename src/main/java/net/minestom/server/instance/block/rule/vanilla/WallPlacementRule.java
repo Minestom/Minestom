@@ -4,6 +4,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.BlockState;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
@@ -60,7 +61,7 @@ public class WallPlacementRule extends BlockPlacementRule {
 
     private boolean isBlock(Instance instance, int x, int y, int z) {
         final short blockStateId = instance.getBlockStateId(x, y, z);
-        return Block.fromStateId(blockStateId).isSolid();
+        return BlockState.fromId(blockStateId).isSolid();
     }
 
 }

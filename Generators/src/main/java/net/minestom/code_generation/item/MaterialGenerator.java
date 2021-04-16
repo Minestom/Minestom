@@ -2,8 +2,8 @@ package net.minestom.code_generation.item;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import net.minestom.code_generation.MinestomCodeGenerator;
 import com.squareup.javapoet.*;
+import net.minestom.code_generation.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -50,6 +50,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
+        ClassName rawMaterialDataClassName = ClassName.get("net.minestom.server.raw_data", "RawMaterialData");
 
         JsonArray items;
         try {
@@ -72,6 +73,13 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
         itemClass.addField(
                 FieldSpec.builder(TypeName.BYTE, "maxDefaultStackSize")
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL).build()
+        );
+        itemClass.addField(
+                FieldSpec.builder(rawMaterialDataClassName, "materialData")
+                        .initializer("new $T()", rawMaterialDataClassName)
+                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
+                        .addAnnotation(NotNull.class)
+                        .build()
         );
         itemClass.addMethod(
                 MethodSpec.constructorBuilder()
@@ -125,7 +133,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
         itemClass.addMethod(
                 MethodSpec.methodBuilder("fromId")
                         .returns(itemClassName)
-                        .addAnnotation(Nullable.class)
+                        .addAnnotation(NotNull.class)
                         .addParameter(TypeName.INT, "id")
                         .addStatement(
                                 "return $T.getMaterial(id)",
@@ -134,6 +142,25 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
+        // getMaterialData method
+        itemClass.addMethod(
+                MethodSpec.methodBuilder("getMaterialData")
+                        .returns(rawMaterialDataClassName)
+                        .addAnnotation(NotNull.class)
+                        .addStatement("return this.materialData")
+                        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                        .build()
+        );
+        // isFood method
+        itemClass.addMethod(
+                MethodSpec.methodBuilder("isFood")
+                        .returns(TypeName.BOOLEAN)
+                        .addStatement("return this.materialData.edible")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+
+
         // values method
         itemClass.addMethod(
                 MethodSpec.methodBuilder("values")

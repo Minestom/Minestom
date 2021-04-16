@@ -114,6 +114,7 @@ import net.minestom.server.entity.metadata.water.fish.CodMeta;
 import net.minestom.server.entity.metadata.water.fish.PufferfishMeta;
 import net.minestom.server.entity.metadata.water.fish.SalmonMeta;
 import net.minestom.server.entity.metadata.water.fish.TropicalFishMeta;
+import net.minestom.server.raw_data.RawEntityTypeData;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
@@ -463,6 +464,9 @@ public class EntityType implements Keyed {
   @NotNull
   private final EntitySpawnType spawnType;
 
+  @NotNull
+  private final RawEntityTypeData entityTypeData = new RawEntityTypeData();
+
   protected EntityType(@NotNull NamespaceID id, double width, double height,
       @NotNull BiFunction<Entity, Metadata, EntityMeta> metaConstructor,
       @NotNull EntitySpawnType spawnType) {
@@ -507,6 +511,11 @@ public class EntityType implements Keyed {
   @Nullable
   public static EntityType fromId(int id) {
     return Registries.getEntityType(id);
+  }
+
+  @NotNull
+  public final RawEntityTypeData getEntityTypeData() {
+    return this.entityTypeData;
   }
 
   @NotNull

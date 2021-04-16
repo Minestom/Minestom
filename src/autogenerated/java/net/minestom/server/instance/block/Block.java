@@ -771,6 +771,7 @@ import net.minestom.server.instance.block.states.YellowWallBanner;
 import net.minestom.server.instance.block.states.YellowWool;
 import net.minestom.server.instance.block.states.ZombieHead;
 import net.minestom.server.instance.block.states.ZombieWallHead;
+import net.minestom.server.raw_data.RawBlockData;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
@@ -3846,6 +3847,9 @@ public class Block implements Keyed {
   @NotNull
   private final List<BlockState> blockStates = new ArrayList<>();
 
+  @NotNull
+  private final RawBlockData blockData = new RawBlockData();
+
   protected Block(@NotNull NamespaceID id, short defaultBlockState) {
     this.id = id;
     this.defaultBlockState = defaultBlockState;
@@ -3885,6 +3889,11 @@ public class Block implements Keyed {
     return this.blockStates;
   }
 
+  @NotNull
+  public final RawBlockData getBlockData() {
+    return this.blockData;
+  }
+
   public boolean isAir() {
     return this != AIR && this != VOID_AIR && this != CAVE_AIR;
   }
@@ -3913,7 +3922,7 @@ public class Block implements Keyed {
     return null;
   }
 
-  @Nullable
+  @NotNull
   public static Block fromStateId(short id) {
     return Registries.getBlockState(id).getBlock();
   }
@@ -3924,11 +3933,6 @@ public class Block implements Keyed {
 
   @NotNull
   public static Block fromId(int id) {
-    return Registries.getBlock(id);
-  }
-
-  @NotNull
-  public static Block fromId(NamespaceID id) {
     return Registries.getBlock(id);
   }
 

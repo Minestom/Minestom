@@ -2,8 +2,8 @@ package net.minestom.code_generation.item;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import net.minestom.code_generation.MinestomCodeGenerator;
 import com.squareup.javapoet.*;
+import net.minestom.code_generation.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -50,6 +50,7 @@ public final class EnchantmentGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
+        ClassName rawEnchantmentDataClassName = ClassName.get("net.minestom.server.raw_data", "RawEnchantmentData");
 
         JsonArray enchantments;
         try {
@@ -68,6 +69,13 @@ public final class EnchantmentGenerator extends MinestomCodeGenerator {
         enchantmentClass.addField(
                 FieldSpec.builder(namespaceIDClassName, "id")
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL).addAnnotation(NotNull.class).build()
+        );
+        enchantmentClass.addField(
+                FieldSpec.builder(rawEnchantmentDataClassName, "enchantmentData")
+                        .initializer("new $T()", rawEnchantmentDataClassName)
+                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
+                        .addAnnotation(NotNull.class)
+                        .build()
         );
         enchantmentClass.addMethod(
                 MethodSpec.constructorBuilder()
@@ -117,6 +125,15 @@ public final class EnchantmentGenerator extends MinestomCodeGenerator {
                                 ClassName.get("net.minestom.server.registry", "Registries")
                         )
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        // getEnchantmentData method
+        enchantmentClass.addMethod(
+                MethodSpec.methodBuilder("getEnchantmentData")
+                        .returns(rawEnchantmentDataClassName)
+                        .addAnnotation(NotNull.class)
+                        .addStatement("return this.enchantmentData")
+                        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                         .build()
         );
         // values method

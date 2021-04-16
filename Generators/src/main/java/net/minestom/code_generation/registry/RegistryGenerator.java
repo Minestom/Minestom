@@ -51,7 +51,6 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
     @Override
     public void generate() {
         // Important classes we use alot
-        ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName keyIDClassName = ClassName.get("net.kyori.adventure.key", "Key");
 
         // Registry class
@@ -67,23 +66,19 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
             ClassName type = registries[i].getFirst();
             String defaultValue = registries[i].getSecond();
             ClassName registryType = registries[i].getThird();
-            CodeBlock init;
+            CodeBlock.Builder init = CodeBlock.builder();
             if (defaultValue != null) {
-                init = CodeBlock.builder()
-                        .addStatement(
-                                "new $T<>($T.$N)",
-                                registryType,
-                                type,
-                                defaultValue
-                        )
-                        .build();
+                init.addStatement(
+                        "new $T<>($T.$N)",
+                        registryType,
+                        type,
+                        defaultValue
+                );
             } else {
-                init = CodeBlock.builder()
-                        .addStatement(
-                                "new $T<>()",
-                                registryType
-                        )
-                        .build();
+                init.addStatement(
+                        "new $T<>()",
+                        registryType
+                );
             }
             FieldSpec registryField = FieldSpec.builder(
                     ParameterizedTypeName.get(
@@ -93,7 +88,7 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
                     decapitalizeString(type.simpleName()) + "Registry" // e.g. blockRegistry, potionEffectRegistry
             )
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                    .initializer(init)
+                    .initializer(init.build())
                     .build();
 
             registryFields[i] = registryField;

@@ -5,6 +5,7 @@ import com.extollit.linalg.immutable.AxisAlignedBBox;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockState;
 
 import java.util.List;
 
@@ -25,8 +26,8 @@ public class PFBlockObject implements IBlockObject {
     public static PFBlockObject getBlockObject(short blockStateId) {
         if (!BLOCK_OBJECT_MAP.containsKey(blockStateId)) {
             synchronized (BLOCK_OBJECT_MAP) {
-                final Block block = Block.fromStateId(blockStateId);
-                final PFBlockObject blockObject = new PFBlockObject(block);
+                final BlockState blockState = BlockState.fromId(blockStateId);
+                final PFBlockObject blockObject = new PFBlockObject(blockState);
                 BLOCK_OBJECT_MAP.put(blockStateId, blockObject);
                 return blockObject;
             }
@@ -35,10 +36,12 @@ public class PFBlockObject implements IBlockObject {
         return BLOCK_OBJECT_MAP.get(blockStateId);
     }
 
+    private final BlockState blockState;
     private final Block block;
 
-    public PFBlockObject(Block block) {
-        this.block = block;
+    public PFBlockObject(BlockState blockState) {
+        this.blockState = blockState;
+        this.block = blockState.getBlock();
     }
 
     @Override
@@ -73,7 +76,7 @@ public class PFBlockObject implements IBlockObject {
 
     @Override
     public boolean isImpeding() {
-        return block.isSolid();
+        return blockState.isSolid();
     }
 
     @Override
@@ -120,7 +123,7 @@ public class PFBlockObject implements IBlockObject {
                 LILY_PAD, ANVIL, CHIPPED_ANVIL, DAMAGED_ANVIL, CAKE, CACTUS, BREWING_STAND, LECTERN, DAYLIGHT_DETECTOR,
                 CAMPFIRE, SOUL_CAMPFIRE, ENCHANTING_TABLE, CHEST, ENDER_CHEST, GRINDSTONE, TRAPPED_CHEST, SOUL_SAND,
                 SOUL_SOIL, LANTERN, COCOA, CONDUIT, GRASS_PATH, FARMLAND, END_ROD, STONECUTTER, BELL
-        ).contains(block)) {
+        ).contains(blockState)) {
             return false;
         }
         return true;
@@ -128,7 +131,7 @@ public class PFBlockObject implements IBlockObject {
 
     @Override
     public boolean isLiquid() {
-        return block.isLiquid();
+        return blockState.isLiquid();
     }
 
     @Override
