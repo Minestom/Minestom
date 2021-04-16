@@ -2,8 +2,8 @@ package net.minestom.code_generation.blocks;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import net.minestom.code_generation.MinestomCodeGenerator;
 import com.squareup.javapoet.*;
+import net.minestom.code_generation.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -108,9 +108,18 @@ public final class BlockEntityGenerator extends MinestomCodeGenerator {
         // addBlock method
         blockEntityClass.addMethod(
                 MethodSpec.methodBuilder("addBlock")
-                        .addParameter(ParameterSpec.builder(namespaceIDClassName, "blockId").addAnnotation(NotNull.class).build())
-                        .addStatement("this.blocks.add($T.getBlock(blockId))", ClassName.get("net.minestom.server.registry", "Registries"))
-                        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                        .addParameter(ParameterSpec.builder(blockClassName, "block").addAnnotation(NotNull.class).build())
+                        .addStatement("this.blocks.add(block)")
+                        .addModifiers(Modifier.PRIVATE)
+                        .build()
+        );
+        // getBlocks method
+        blockEntityClass.addMethod(
+                MethodSpec.methodBuilder("getBlocks")
+                        .returns(ParameterizedTypeName.get(ClassName.get("java.util", "List"), blockClassName))
+                        .addAnnotation(NotNull.class)
+                        .addStatement("return this.blocks")
+                        .addModifiers(Modifier.PUBLIC)
                         .build()
         );
         // values method
@@ -144,12 +153,18 @@ public final class BlockEntityGenerator extends MinestomCodeGenerator {
             JsonArray blocks = blockEntity.get("blocks").getAsJsonArray();
             for (JsonElement b : blocks) {
                 JsonObject block = b.getAsJsonObject();
-                staticBlock.addStatement("$N.addBlock($T.from($S))", blockEntityName, namespaceIDClassName, block.get("id").getAsString());
+                staticBlock.addStatement(
+                        "$N.addBlock($T.getBlock($S))",
+                        blockEntityName,
+                        ClassName.get("net.minestom.server.registry", "Registries"),
+                        block.get("id").getAsString()
+                );
             }
             // Add to static init.
             staticBlock2.addStatement("$T.registerBlockEntity($N)", registryClassName, blockEntityName);
         }
 
+        blockEntityClass.addStaticBlock(staticBlock.build());
         blockEntityClass.addStaticBlock(staticBlock2.build());
 
         // Write files to outputFolder

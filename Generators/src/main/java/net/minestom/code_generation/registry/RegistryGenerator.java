@@ -1,8 +1,8 @@
 package net.minestom.code_generation.registry;
 
-import net.minestom.code_generation.MinestomCodeGenerator;
 import com.squareup.javapoet.*;
 import kotlin.Triple;
+import net.minestom.code_generation.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -126,7 +126,6 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
             FieldSpec registryField = registryFields[i];
             String typeName = type.simpleName();
 
-            ParameterSpec namespaceIDParam = ParameterSpec.builder(namespaceIDClassName, "id").addAnnotation(NotNull.class).build();
             ParameterSpec keyIDParam = ParameterSpec.builder(keyIDClassName, "key").addAnnotation(NotNull.class).build();
             ParameterSpec stringIDParam = ParameterSpec.builder(ClassName.get(String.class), "id").addAnnotation(NotNull.class).build();
 
@@ -216,10 +215,16 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
                                 .build()
                 );
             }
+            String pluralName;
+            if (typeName.endsWith("y")) {
+                pluralName = typeName.substring(0, typeName.length() - 1) + "ies";
+            } else {
+                pluralName = typeName + "s";
+            }
             // Values method
             {
                 registriesClass.addMethod(
-                        MethodSpec.methodBuilder("get" + typeName + "s")
+                        MethodSpec.methodBuilder("get" + pluralName)
                                 .returns(ParameterizedTypeName.get(ClassName.get(List.class), type))
                                 .addAnnotation(Nullable.class)
                                 .addStatement(

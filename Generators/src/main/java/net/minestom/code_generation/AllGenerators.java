@@ -1,6 +1,7 @@
 package net.minestom.code_generation;
 
 import net.minestom.code_generation.attribute.AttributeGenerator;
+import net.minestom.code_generation.blocks.BlockEntityGenerator;
 import net.minestom.code_generation.blocks.BlockGenerator;
 import net.minestom.code_generation.entity.EntityTypeGenerator;
 import net.minestom.code_generation.entity.VillagerProfessionGenerator;
@@ -32,7 +33,6 @@ public class AllGenerators {
         if (args.length >= 2) {
             outputFolder = new File(args[1]);
         }
-
         // FINISHED
         // Generate registries
         new RegistryGenerator(
@@ -49,7 +49,10 @@ public class AllGenerators {
                 outputFolder
         ).generate();
         // Generate block entities
-
+        new BlockEntityGenerator(
+                new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_block_entities.json"),
+                outputFolder
+        ).generate();
         // Generate entities
         new EntityTypeGenerator(
                 new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT + "/json", targetVersion.replaceAll("\\.", "_") + "_entities.json"),

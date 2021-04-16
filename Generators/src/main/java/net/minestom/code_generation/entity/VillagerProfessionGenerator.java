@@ -1,13 +1,9 @@
 package net.minestom.code_generation.entity;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import net.minestom.code_generation.MinestomCodeGenerator;
 import com.squareup.javapoet.*;
+import net.minestom.code_generation.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;

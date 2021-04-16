@@ -2,6 +2,7 @@ package net.minestom.server.world.biomes;
 
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockAlternative;
+import net.minestom.server.instance.block.BlockState;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
@@ -35,9 +36,9 @@ public class BiomeParticles {
         //TODO also can be falling_dust
         private static final String type = "block";
 
-        private final BlockAlternative block;
+        private final BlockState block;
 
-        public BlockParticle(BlockAlternative block) {
+        public BlockParticle(BlockState block) {
             this.block = block;
         }
 

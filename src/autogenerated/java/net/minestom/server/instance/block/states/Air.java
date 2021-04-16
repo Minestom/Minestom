@@ -1,5 +1,6 @@
 package net.minestom.server.instance.block.states;
 
+import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
 import net.minestom.server.utils.NamespaceID;
@@ -12,7 +13,8 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Air {
-    public static BlockState AIR_0 = new BlockState(NamespaceID.from("minecraft:air:0"), (short) 0, Block.AIR);
+  public static final BlockState AIR_0 = new BlockState(NamespaceID.from("minecraft:air:0"), (short) 0, Block.AIR);
+
   public static void initStates() {
     Block.AIR.addBlockState(AIR_0);
   }

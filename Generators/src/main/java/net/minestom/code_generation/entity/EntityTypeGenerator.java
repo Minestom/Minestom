@@ -2,9 +2,9 @@ package net.minestom.code_generation.entity;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
+import com.squareup.javapoet.*;
 import net.minestom.code_generation.MinestomCodeGenerator;
 import net.minestom.code_generation.util.NameUtil;
-import com.squareup.javapoet.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;

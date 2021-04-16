@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group 'net.minestom.server'
+version '1.0'
+
+sourceCompatibility = 1.11
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'org.jetbrains:annotations:20.1.0'
+    implementation 'com.squareup:javapoet:1.13.0'
+    // Logging
+    implementation 'org.apache.logging.log4j:log4j-core:2.14.0'
+    // SLF4J is the base logger for most libraries, therefore we can hook it into log4j2.
+    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.0'
+    // Kotlin stuff
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${project.kotlinVersion}"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:${project.kotlinVersion}"
+}
