@@ -2,7 +2,6 @@ package net.minestom.server.instance.block;
 
 import java.lang.Deprecated;
 import java.lang.Override;
-import java.lang.Short;
 import java.lang.String;
 import java.lang.SuppressWarnings;
 import java.util.ArrayList;
@@ -782,8 +781,6 @@ import org.jetbrains.annotations.Nullable;
  */
 @SuppressWarnings("deprecation")
 public class Block implements Keyed {
-  private static Block[] blockStateMapper = new Block[Short.MAX_VALUE];
-
   public static final Block AIR = new Block(NamespaceID.from("minecraft:air"), (short) 0);
 
   public static final Block STONE = new Block(NamespaceID.from("minecraft:stone"), (short) 1);
@@ -3896,6 +3893,10 @@ public class Block implements Keyed {
     return this != WATER && this != LAVA;
   }
 
+  public boolean hasBlockEntity() {
+    return BlockEntity.BLOCKS.contains(this);
+  }
+
   @Nullable
   @Deprecated
   public BlockState getAlternative(short stateId) {
@@ -3914,7 +3915,7 @@ public class Block implements Keyed {
 
   @Nullable
   public static Block fromStateId(short id) {
-    return blockStateMapper[id];
+    return Registries.getBlockState(id).getBlock();
   }
 
   public int getNumericalId() {
@@ -3936,6 +3937,7 @@ public class Block implements Keyed {
     return Registries.getBlock(id);
   }
 
+  @NotNull
   public static List<Block> values() {
     return Registries.getBlocks();
   }

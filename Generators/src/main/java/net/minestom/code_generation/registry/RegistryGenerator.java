@@ -129,16 +129,17 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
             ParameterSpec keyIDParam = ParameterSpec.builder(keyIDClassName, "key").addAnnotation(NotNull.class).build();
             ParameterSpec stringIDParam = ParameterSpec.builder(ClassName.get(String.class), "id").addAnnotation(NotNull.class).build();
 
+            // code
+            Class<? extends Annotation> annotation;
+            if (defaultValue != null) {
+                annotation = NotNull.class;
+            } else {
+                annotation = Nullable.class;
+            }
 
             // Getting
             {
-                // code
-                Class<? extends Annotation> annotation;
-                if (defaultValue != null) {
-                    annotation = NotNull.class;
-                } else {
-                    annotation = Nullable.class;
-                }
+
                 // javadoc
                 StringBuilder javadoc = new StringBuilder("Returns the corresponding ");
                 javadoc.append(typeName).append(" matching the given id. Returns ");
@@ -205,7 +206,7 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
                 );
                 registriesClass.addMethod(
                         MethodSpec.methodBuilder("get" + typeName)
-                                .returns(type).addAnnotation(Nullable.class)
+                                .returns(type).addAnnotation(annotation)
                                 .addParameter(TypeName.INT, "id")
                                 .addStatement(
                                         "return $N.get((short) id)",
@@ -226,7 +227,7 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
                 registriesClass.addMethod(
                         MethodSpec.methodBuilder("get" + pluralName)
                                 .returns(ParameterizedTypeName.get(ClassName.get(List.class), type))
-                                .addAnnotation(Nullable.class)
+                                .addAnnotation(NotNull.class)
                                 .addStatement(
                                         "return $N.values()",
                                         registryField

@@ -98,6 +98,7 @@ public final class VillagerTypeGenerator extends MinestomCodeGenerator {
         // values method
         villagerTypeClass.addMethod(
                 MethodSpec.methodBuilder("values")
+                        .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), villagerTypeClassName))
                         .addStatement("return $T.getVillagerTypes()", ClassName.get("net.minestom.server.registry", "Registries"))
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)

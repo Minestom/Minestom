@@ -259,6 +259,7 @@ public class Particle implements Keyed {
     return Registries.getParticle(id);
   }
 
+  @NotNull
   public static List<Particle> values() {
     return Registries.getParticles();
   }

@@ -137,6 +137,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
         // values method
         itemClass.addMethod(
                 MethodSpec.methodBuilder("values")
+                        .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), itemClassName))
                         .addStatement("return $T.getMaterials()", ClassName.get("net.minestom.server.registry", "Registries"))
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)

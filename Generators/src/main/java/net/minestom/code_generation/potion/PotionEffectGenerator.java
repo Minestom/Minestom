@@ -150,6 +150,7 @@ public final class PotionEffectGenerator extends MinestomCodeGenerator {
         // values method
         potionEffectClass.addMethod(
                 MethodSpec.methodBuilder("values")
+                        .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), potionEffectClassName))
                         .addStatement("return $T.getPotionEffects()", ClassName.get("net.minestom.server.registry", "Registries"))
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)

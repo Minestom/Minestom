@@ -18,6 +18,7 @@ public class MapRegistry<T extends Keyed> implements IRegistry.Writable<T> {
     }
 
     @Override
+    @NotNull
     public List<T> values() {
         return new ArrayList<>(namespaceToValue.values());
     }

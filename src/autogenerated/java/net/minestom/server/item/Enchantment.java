@@ -157,6 +157,7 @@ public class Enchantment implements Keyed {
     return Registries.getEnchantment(id);
   }
 
+  @NotNull
   public static List<Enchantment> values() {
     return Registries.getEnchantments();
   }

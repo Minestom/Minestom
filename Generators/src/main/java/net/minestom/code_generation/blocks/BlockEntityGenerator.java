@@ -79,6 +79,13 @@ public final class BlockEntityGenerator extends MinestomCodeGenerator {
                         .addAnnotation(NotNull.class)
                         .build()
         );
+        blockEntityClass.addField(
+                FieldSpec.builder(
+                        ParameterizedTypeName.get(ClassName.get("java.util", "List"), blockClassName), "BLOCKS")
+                        .initializer("new $T<>()", ClassName.get("java.util", "ArrayList"))
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                        .build()
+        );
         blockEntityClass.addMethod(
                 MethodSpec.constructorBuilder()
                         .addParameter(ParameterSpec.builder(namespaceIDClassName, "id").addAnnotation(NotNull.class).build())
@@ -125,6 +132,7 @@ public final class BlockEntityGenerator extends MinestomCodeGenerator {
         // values method
         blockEntityClass.addMethod(
                 MethodSpec.methodBuilder("values")
+                        .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), blockEntityClassName))
                         .addStatement("return $T.getBlockEntities()", ClassName.get("net.minestom.server.registry", "Registries"))
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
@@ -132,6 +140,7 @@ public final class BlockEntityGenerator extends MinestomCodeGenerator {
         );
         CodeBlock.Builder staticBlock = CodeBlock.builder();
         CodeBlock.Builder staticBlock2 = CodeBlock.builder();
+        CodeBlock.Builder staticBlock3 = CodeBlock.builder();
         // Use data
         for (JsonElement e : blockEntities) {
             JsonObject blockEntity = e.getAsJsonObject();
@@ -159,6 +168,11 @@ public final class BlockEntityGenerator extends MinestomCodeGenerator {
                         ClassName.get("net.minestom.server.registry", "Registries"),
                         block.get("id").getAsString()
                 );
+                staticBlock3.addStatement(
+                        "BLOCKS.add($T.getBlock($S))",
+                        ClassName.get("net.minestom.server.registry", "Registries"),
+                        block.get("id").getAsString()
+                );
             }
             // Add to static init.
             staticBlock2.addStatement("$T.registerBlockEntity($N)", registryClassName, blockEntityName);
@@ -166,6 +180,7 @@ public final class BlockEntityGenerator extends MinestomCodeGenerator {
 
         blockEntityClass.addStaticBlock(staticBlock.build());
         blockEntityClass.addStaticBlock(staticBlock2.build());
+        blockEntityClass.addStaticBlock(staticBlock3.build());
 
         // Write files to outputFolder
         writeFiles(

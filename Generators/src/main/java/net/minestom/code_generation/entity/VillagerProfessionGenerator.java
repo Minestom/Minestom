@@ -98,6 +98,7 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
         // values method
         villagerProfessionClass.addMethod(
                 MethodSpec.methodBuilder("values")
+                        .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), villagerProfessionClassName))
                         .addStatement("return $T.getVillagerProfessions()", ClassName.get("net.minestom.server.registry", "Registries"))
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)

@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import com.squareup.javapoet.*;
 import net.minestom.code_generation.MinestomCodeGenerator;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,6 +80,7 @@ public final class MapColorsGenerator extends MinestomCodeGenerator {
         // add values() method
         mapColorsClass.addMethod(
                 MethodSpec.methodBuilder("values")
+                        .addAnnotation(NotNull.class)
                         .returns(ArrayTypeName.of(mapColorClassName))
                         .addStatement("return mapColors.toArray(new MapColor[0])")
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)

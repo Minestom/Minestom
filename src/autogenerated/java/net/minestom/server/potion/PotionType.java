@@ -162,6 +162,7 @@ public class PotionType implements Keyed {
     return this.id;
   }
 
+  @NotNull
   public static List<PotionType> values() {
     return Registries.getPotionTypes();
   }

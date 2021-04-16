@@ -509,6 +509,7 @@ public class EntityType implements Keyed {
     return Registries.getEntityType(id);
   }
 
+  @NotNull
   public static List<EntityType> values() {
     return Registries.getEntityTypes();
   }

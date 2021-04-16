@@ -122,6 +122,7 @@ public final class SoundGenerator extends MinestomCodeGenerator {
         // values method
         soundClass.addMethod(
                 MethodSpec.methodBuilder("values")
+                        .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), soundClassName))
                         .addStatement("return $T.getSoundEvents()", ClassName.get("net.minestom.server.registry", "Registries"))
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)

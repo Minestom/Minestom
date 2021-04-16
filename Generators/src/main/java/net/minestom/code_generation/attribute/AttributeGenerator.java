@@ -137,6 +137,7 @@ public final class AttributeGenerator extends MinestomCodeGenerator {
         // values method
         attributeClass.addMethod(
                 MethodSpec.methodBuilder("values")
+                        .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), attributeClassName))
                         .addStatement("return $T.getAttributes()", ClassName.get("net.minestom.server.registry", "Registries"))
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)

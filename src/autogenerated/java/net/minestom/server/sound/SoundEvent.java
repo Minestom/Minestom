@@ -2025,6 +2025,7 @@ public class SoundEvent implements Keyed, Sound.Type {
     return Registries.getSoundEvent(id);
   }
 
+  @NotNull
   public static List<SoundEvent> values() {
     return Registries.getSoundEvents();
   }

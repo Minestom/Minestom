@@ -122,6 +122,7 @@ public final class FluidGenerator extends MinestomCodeGenerator {
         // values method
         fluidClass.addMethod(
                 MethodSpec.methodBuilder("values")
+                        .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), fluidClassName))
                         .addStatement("return $T.getFluids()", ClassName.get("net.minestom.server.registry", "Registries"))
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)

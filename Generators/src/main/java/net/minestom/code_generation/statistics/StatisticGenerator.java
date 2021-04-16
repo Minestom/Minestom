@@ -122,6 +122,7 @@ public final class StatisticGenerator extends MinestomCodeGenerator {
         // values method
         statisticClass.addMethod(
                 MethodSpec.methodBuilder("values")
+                        .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), statisticClassName))
                         .addStatement("return $T.getStatisticTypes()", ClassName.get("net.minestom.server.registry", "Registries"))
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)

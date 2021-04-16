@@ -98,6 +98,7 @@ public final class PotionTypeGenerator extends MinestomCodeGenerator {
         // values method
         potionTypeClass.addMethod(
                 MethodSpec.methodBuilder("values")
+                        .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), potionTypeClassName))
                         .addStatement("return $T.getPotionTypes()", ClassName.get("net.minestom.server.registry", "Registries"))
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)

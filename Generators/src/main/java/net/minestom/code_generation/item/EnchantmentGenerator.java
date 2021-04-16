@@ -122,6 +122,7 @@ public final class EnchantmentGenerator extends MinestomCodeGenerator {
         // values method
         enchantmentClass.addMethod(
                 MethodSpec.methodBuilder("values")
+                        .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), enchantmentClassName))
                         .addStatement("return $T.getEnchantments()", ClassName.get("net.minestom.server.registry", "Registries"))
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)

@@ -2980,6 +2980,7 @@ public class Material implements Keyed {
     return Registries.getMaterial(id);
   }
 
+  @NotNull
   public static List<Material> values() {
     return Registries.getMaterials();
   }

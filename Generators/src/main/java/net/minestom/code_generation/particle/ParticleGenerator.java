@@ -122,6 +122,7 @@ public final class ParticleGenerator extends MinestomCodeGenerator {
         // values method
         particleClass.addMethod(
                 MethodSpec.methodBuilder("values")
+                        .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), particleClassName))
                         .addStatement("return $T.getParticles()", ClassName.get("net.minestom.server.registry", "Registries"))
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)

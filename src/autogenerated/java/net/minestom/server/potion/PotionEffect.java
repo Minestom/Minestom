@@ -153,6 +153,7 @@ public class PotionEffect implements Keyed {
     return Registries.getPotionEffect(id);
   }
 
+  @NotNull
   public static List<PotionEffect> values() {
     return Registries.getPotionEffects();
   }

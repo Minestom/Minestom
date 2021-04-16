@@ -97,12 +97,12 @@ public final class Registries {
     return blockRegistry.getId(block);
   }
 
-  @Nullable
+  @NotNull
   public static Block getBlock(int id) {
     return blockRegistry.get((short) id);
   }
 
-  @Nullable
+  @NotNull
   public static List<Block> getBlocks() {
     return blockRegistry.values();
   }
@@ -134,12 +134,12 @@ public final class Registries {
     return blockStateRegistry.getId(blockstate);
   }
 
-  @Nullable
+  @NotNull
   public static BlockState getBlockState(int id) {
     return blockStateRegistry.get((short) id);
   }
 
-  @Nullable
+  @NotNull
   public static List<BlockState> getBlockStates() {
     return blockStateRegistry.values();
   }
@@ -167,7 +167,7 @@ public final class Registries {
     return blockEntityRegistry.register(blockentity);
   }
 
-  @Nullable
+  @NotNull
   public static List<BlockEntity> getBlockEntities() {
     return blockEntityRegistry.values();
   }
@@ -199,12 +199,12 @@ public final class Registries {
     return fluidRegistry.getId(fluid);
   }
 
-  @Nullable
+  @NotNull
   public static Fluid getFluid(int id) {
     return fluidRegistry.get((short) id);
   }
 
-  @Nullable
+  @NotNull
   public static List<Fluid> getFluids() {
     return fluidRegistry.values();
   }
@@ -236,12 +236,12 @@ public final class Registries {
     return materialRegistry.getId(material);
   }
 
-  @Nullable
+  @NotNull
   public static Material getMaterial(int id) {
     return materialRegistry.get((short) id);
   }
 
-  @Nullable
+  @NotNull
   public static List<Material> getMaterials() {
     return materialRegistry.values();
   }
@@ -278,7 +278,7 @@ public final class Registries {
     return enchantmentRegistry.get((short) id);
   }
 
-  @Nullable
+  @NotNull
   public static List<Enchantment> getEnchantments() {
     return enchantmentRegistry.values();
   }
@@ -306,7 +306,7 @@ public final class Registries {
     return attributeRegistry.register(attribute);
   }
 
-  @Nullable
+  @NotNull
   public static List<Attribute> getAttributes() {
     return attributeRegistry.values();
   }
@@ -343,7 +343,7 @@ public final class Registries {
     return entityTypeRegistry.get((short) id);
   }
 
-  @Nullable
+  @NotNull
   public static List<EntityType> getEntityTypes() {
     return entityTypeRegistry.values();
   }
@@ -371,7 +371,7 @@ public final class Registries {
     return villagerProfessionRegistry.register(villagerprofession);
   }
 
-  @Nullable
+  @NotNull
   public static List<VillagerProfession> getVillagerProfessions() {
     return villagerProfessionRegistry.values();
   }
@@ -399,7 +399,7 @@ public final class Registries {
     return villagerTypeRegistry.register(villagertype);
   }
 
-  @Nullable
+  @NotNull
   public static List<VillagerType> getVillagerTypes() {
     return villagerTypeRegistry.values();
   }
@@ -436,7 +436,7 @@ public final class Registries {
     return particleRegistry.get((short) id);
   }
 
-  @Nullable
+  @NotNull
   public static List<Particle> getParticles() {
     return particleRegistry.values();
   }
@@ -464,7 +464,7 @@ public final class Registries {
     return potionTypeRegistry.register(potiontype);
   }
 
-  @Nullable
+  @NotNull
   public static List<PotionType> getPotionTypes() {
     return potionTypeRegistry.values();
   }
@@ -501,7 +501,7 @@ public final class Registries {
     return potionEffectRegistry.get((short) id);
   }
 
-  @Nullable
+  @NotNull
   public static List<PotionEffect> getPotionEffects() {
     return potionEffectRegistry.values();
   }
@@ -538,7 +538,7 @@ public final class Registries {
     return soundEventRegistry.get((short) id);
   }
 
-  @Nullable
+  @NotNull
   public static List<SoundEvent> getSoundEvents() {
     return soundEventRegistry.values();
   }
@@ -575,7 +575,7 @@ public final class Registries {
     return statisticTypeRegistry.get((short) id);
   }
 
-  @Nullable
+  @NotNull
   public static List<StatisticType> getStatisticTypes() {
     return statisticTypeRegistry.values();
   }
