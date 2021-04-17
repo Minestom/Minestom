@@ -21,18 +21,18 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
     // MainTypeClassName - DefaultValue - RegistryClassName
     @SuppressWarnings({"unchecked", "rawtypes"})
     private static final Triple<ClassName, String, ClassName>[] registries = new Triple[]{
-            new Triple(ClassName.get("net.minestom.server.instance.block", "Block"), "AIR", ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry", "Defaulted")),
-            new Triple(ClassName.get("net.minestom.server.instance.block", "BlockState"), "AIR_0", ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry", "Defaulted")),
+            new Triple(ClassName.get("net.minestom.server.instance.block", "Block"), "minecraft:air", ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry", "Defaulted")),
+            new Triple(ClassName.get("net.minestom.server.instance.block", "BlockState"), "minecraft:air:0", ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry", "Defaulted")),
             new Triple(ClassName.get("net.minestom.server.instance.block", "BlockEntity"), null, ClassName.get("net.minestom.server.registry", "MapRegistry")),
-            new Triple(ClassName.get("net.minestom.server.fluid", "Fluid"), "EMPTY", ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry", "Defaulted")),
-            new Triple(ClassName.get("net.minestom.server.item", "Material"), "AIR", ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry", "Defaulted")),
+            new Triple(ClassName.get("net.minestom.server.fluid", "Fluid"), "minecraft:empty", ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry", "Defaulted")),
+            new Triple(ClassName.get("net.minestom.server.item", "Material"), "minecraft:air", ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry", "Defaulted")),
             new Triple(ClassName.get("net.minestom.server.item", "Enchantment"), null, ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry")),
             new Triple(ClassName.get("net.minestom.server.attribute", "Attribute"), null, ClassName.get("net.minestom.server.registry", "MapRegistry")),
             new Triple(ClassName.get("net.minestom.server.entity", "EntityType"), null, ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry")),
-            new Triple(ClassName.get("net.minestom.server.entity.metadata.villager", "VillagerProfession"), null, ClassName.get("net.minestom.server.registry", "MapRegistry")),
-            new Triple(ClassName.get("net.minestom.server.entity.metadata.villager", "VillagerType"), null, ClassName.get("net.minestom.server.registry", "MapRegistry")),
+            new Triple(ClassName.get("net.minestom.server.entity.metadata.villager", "VillagerProfession"), null, ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry")),
+            new Triple(ClassName.get("net.minestom.server.entity.metadata.villager", "VillagerType"), null, ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry")),
             new Triple(ClassName.get("net.minestom.server.particle", "Particle"), null, ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry")),
-            new Triple(ClassName.get("net.minestom.server.potion", "PotionType"), "EMPTY", ClassName.get("net.minestom.server.registry", "MapRegistry", "Defaulted")),
+            new Triple(ClassName.get("net.minestom.server.potion", "PotionType"), "minecraft:empty", ClassName.get("net.minestom.server.registry", "MapRegistry", "Defaulted")),
             new Triple(ClassName.get("net.minestom.server.potion", "PotionEffect"), null, ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry")),
             new Triple(ClassName.get("net.minestom.server.sound", "SoundEvent"), null, ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry")),
             new Triple(ClassName.get("net.minestom.server.statistic", "StatisticType"), null, ClassName.get("net.minestom.server.registry", "IdCrossMapRegistry"))
@@ -64,12 +64,13 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
             ClassName type = registries[i].getFirst();
             String defaultValue = registries[i].getSecond();
             ClassName registryType = registries[i].getThird();
+            String typeName = type.simpleName();
+
             CodeBlock.Builder init = CodeBlock.builder();
             if (defaultValue != null) {
                 init.addStatement(
-                        "new $T<>(() -> $T.$N)",
+                        "new $T<>(() -> get" + typeName + "($S))",
                         registryType,
-                        type,
                         defaultValue
                 );
             } else {

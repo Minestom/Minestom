@@ -69,7 +69,6 @@ public class DataInitializer {
             blockData.friction = blockJson.get("friction").getAsDouble();
             blockData.speedFactor = blockJson.get("speedFactor").getAsDouble();
             blockData.jumpFactor = blockJson.get("jumpFactor").getAsDouble();
-            blockData.defaultBlockState = blockJson.get("defaultBlockState").getAsShort();
             blockData.item = Registries.getMaterial(blockJson.get("itemId").getAsString());
 
             JsonArray blockStatesJson = blockJson.get("states").getAsJsonArray();
@@ -90,7 +89,6 @@ public class DataInitializer {
                 blockStateData.destroySpeed = blockStateJson.get("destroySpeed").getAsDouble();
                 blockStateData.lightEmission = blockStateJson.get("lightEmission").getAsInt();
                 blockStateData.occluding = blockStateJson.get("doesOcclude").getAsBoolean();
-                // TODO: blockStateData.properties
                 blockStateData.pushReaction = blockStateJson.get("pushReaction").getAsString();
                 blockStateData.blocksMotion = blockStateJson.get("blocksMotion").getAsBoolean();
                 blockStateData.flammable = blockStateJson.get("isFlammable").getAsBoolean();

@@ -112,6 +112,30 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                         .build()
         );
+        // getNumericalId
+        villagerProfessionClass.addMethod(
+                MethodSpec.methodBuilder("getNumericalId")
+                        .returns(TypeName.INT)
+                        .addStatement(
+                                "return $T.getVillagerProfessionId(this)",
+                                ClassName.get("net.minestom.server.registry", "Registries")
+                        )
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // fromId Method
+        villagerProfessionClass.addMethod(
+                MethodSpec.methodBuilder("fromId")
+                        .returns(villagerProfessionClassName)
+                        .addAnnotation(Nullable.class)
+                        .addParameter(TypeName.INT, "id")
+                        .addStatement(
+                                "return $T.getVillagerProfession(id)",
+                                ClassName.get("net.minestom.server.registry", "Registries")
+                        )
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
         // toString method
         villagerProfessionClass.addMethod(
                 MethodSpec.methodBuilder("toString")

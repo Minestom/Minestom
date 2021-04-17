@@ -217,7 +217,7 @@ public final class MinecraftServer {
         } catch (IOException e) {
             LOGGER.error("An error happened during resource gathering. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
         }
-        // VanillaData
+        // DataInitializer
         DataInitializer.runDataInitializer(new File(ResourceGatherer.DATA_FOLDER, "/json"), VERSION_NAME);
 
         initialized = true;
