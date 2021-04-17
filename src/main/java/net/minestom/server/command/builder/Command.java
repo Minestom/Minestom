@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder;
 
+import com.google.common.annotations.Beta;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentDynamicStringArray;
@@ -199,9 +200,22 @@ public class Command {
      *
      * @see #addConditionalSyntax(CommandCondition, CommandExecutor, Argument[])
      */
-    @NotNull
-    public Collection<CommandSyntax> addSyntax(@NotNull CommandExecutor executor, @NotNull Argument<?>... args) {
+    public @NotNull Collection<CommandSyntax> addSyntax(@NotNull CommandExecutor executor, @NotNull Argument<?>... args) {
         return addConditionalSyntax(null, executor, args);
+    }
+
+    /**
+     * Creates a syntax from a formatted string.
+     * <p>
+     * Currently in beta as the format is not final.
+     *
+     * @param executor the syntax executor
+     * @param format   the syntax format
+     * @return the newly created {@link CommandSyntax syntaxes}.
+     */
+    @Beta
+    public @NotNull Collection<CommandSyntax> addSyntax(@NotNull CommandExecutor executor, @NotNull String format) {
+        return addSyntax(executor, ArgumentType.generate(format));
     }
 
     /**
