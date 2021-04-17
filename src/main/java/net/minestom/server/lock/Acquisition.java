@@ -1,6 +1,7 @@
 package net.minestom.server.lock;
 
 import com.google.common.util.concurrent.Monitor;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.thread.BatchThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +14,7 @@ import java.util.function.Consumer;
 
 public final class Acquisition {
 
-    private static final Map<BatchThread, Collection<Acquirable.Request>> REQUEST_MAP = new ConcurrentHashMap<>();
+    private static final Map<BatchThread, Collection<Request>> REQUEST_MAP = new ConcurrentHashMap<>();
     private static final ThreadLocal<ScheduledAcquisition> SCHEDULED_ACQUISITION = ThreadLocal.withInitial(ScheduledAcquisition::new);
 
     private static final Monitor GLOBAL_MONITOR = new Monitor();
@@ -68,53 +69,41 @@ public final class Acquisition {
         if (elementThread == null || elementThread == currentThread) {
             callback.run();
         } else {
-            final BatchThread currentBatch = currentThread instanceof BatchThread ? ((BatchThread) currentThread) : null;
-            final Monitor currentMonitor = currentBatch != null ? currentBatch.monitor : null;
 
-            boolean enter = false;
-            if (currentMonitor != null && currentMonitor.isOccupiedByCurrentThread()) {
-                process((BatchThread) currentThread);
-                currentMonitor.leave();
-                enter = true;
+            // Monitoring
+            final boolean monitoring = MinecraftServer.hasWaitMonitoring();
+            long time = 0;
+            if (monitoring) {
+                time = System.nanoTime();
             }
 
-            Monitor monitor = elementThread.monitor;
+            BatchThread current = (BatchThread) currentThread;
+            Monitor currentMonitor = current.monitor;
+            final boolean currentAcquired = currentMonitor.isOccupiedByCurrentThread();
+            if (currentAcquired)
+                current.monitor.leave();
 
-            if (monitor.isOccupiedByCurrentThread() || GLOBAL_MONITOR.isOccupiedByCurrentThread()) {
-                // We already have access to the thread
-                callback.run();
-            } else if (monitor.tryEnter()) {
-                // Acquire the thread
-                callback.run();
+            GLOBAL_MONITOR.enter();
+
+            final var monitor = elementThread.monitor;
+            final boolean acquired = monitor.isOccupiedByCurrentThread();
+            if (!acquired) {
+                monitor.enter();
+            }
+
+            // Monitoring
+            if (monitoring) {
+                time = System.nanoTime() - time;
+                WAIT_COUNTER_NANO.addAndGet(time);
+            }
+
+            callback.run();
+            if (!acquired) {
                 monitor.leave();
-            } else {
-                // Thread is not available, forward request to be executed later
-
-                while (!GLOBAL_MONITOR.tryEnter())
-                    processMonitored(currentBatch);
-
-                var requests = getRequests(elementThread);
-                Acquirable.Request request = new Acquirable.Request();
-                request.localLatch = new CountDownLatch(1);
-                request.processLatch = new CountDownLatch(1);
-                requests.add(request);
-
-                try {
-                    currentBatch.waitingOn = elementThread;
-                    request.localLatch.await();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                currentBatch.waitingOn = null;
-                callback.run();
-                request.processLatch.countDown();
-
-                GLOBAL_MONITOR.leave();
             }
-
-            if (currentMonitor != null && enter) {
-                currentMonitor.enter();
-            }
+            GLOBAL_MONITOR.leave();
+            if (currentAcquired)
+                current.monitor.enter();
         }
     }
 
@@ -131,13 +120,7 @@ public final class Acquisition {
         });
     }
 
-    public static void processMonitored(@NotNull BatchThread thread) {
-        thread.monitor.enter();
-        process(thread);
-        thread.monitor.leave();
-    }
-
-    private static @NotNull Collection<Acquirable.Request> getRequests(@NotNull BatchThread thread) {
+    private static @NotNull Collection<Request> getRequests(@NotNull BatchThread thread) {
         return REQUEST_MAP.computeIfAbsent(thread, batchThread -> ConcurrentHashMap.newKeySet());
     }
 
@@ -177,6 +160,11 @@ public final class Acquisition {
 
     public static void resetWaitMonitoring() {
         WAIT_COUNTER_NANO.set(0);
+    }
+
+    private static class Request {
+        public CountDownLatch localLatch, processLatch;
+        public Runnable runnable;
     }
 
     private static class ScheduledAcquisition {

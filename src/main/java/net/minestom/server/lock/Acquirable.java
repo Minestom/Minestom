@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
 
 /**
@@ -78,19 +77,6 @@ public interface Acquirable<T> {
             this.batchThread = batchThread;
             this.batchChunk = batchChunk;
         }
-
-        /**
-         * Executed during this element tick to empty the current thread acquisition queue.
-         */
-        public void acquisitionTick() {
-            if (batchThread == null)
-                return;
-            Acquisition.process(batchThread);
-        }
-    }
-
-    class Request {
-        public CountDownLatch localLatch, processLatch;
     }
 
 }

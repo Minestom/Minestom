@@ -44,6 +44,8 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.WrittenBookMeta;
 import net.minestom.server.listener.PlayerDiggingListener;
+import net.minestom.server.lock.Acquirable;
+import net.minestom.server.lock.AcquirableCollection;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
@@ -325,13 +327,22 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             packet.process(this);
         }
 
+        Collection<Acquirable<Player>> players = new ArrayList<>();
         //if (username.equals("TheMode911"))
-            for (Player p1 : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
-                p1.getAcquiredElement().acquire(o -> {
-                    //for (Player p2 : MinecraftServer.getConnectionManager().getOnlinePlayers())
-                      //  p2.getAcquiredElement().acquire(o2 -> { });
-                });
-            }
+        for (Player p1 : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+            //players.add(p1.getAcquiredElement());
+            p1.getAcquiredElement().acquire(o -> {
+                for (Player p2 : MinecraftServer.getConnectionManager().getOnlinePlayers())
+                    p2.getAcquiredElement().acquire(o2 -> {});
+            });
+        }
+
+        /*AcquirableCollection<Player> players1 = new AcquirableCollection<>(players);
+        players1.forEach(player -> {
+            players1.forEach(player2 -> {
+
+            });
+        });*/
 
         super.update(time); // Super update (item pickup/fire management)
 

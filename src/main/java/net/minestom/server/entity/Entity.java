@@ -488,9 +488,6 @@ public class Entity implements Viewable, Tickable, LockedElement, EventHandler, 
             }
         }
 
-        // Acquisition
-        getAcquiredElement().getHandler().acquisitionTick();
-
         final boolean isNettyClient = PlayerUtils.isNettyClient(this);
 
         // Synchronization with updated fields in #getPosition()

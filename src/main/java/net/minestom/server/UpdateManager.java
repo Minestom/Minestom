@@ -121,18 +121,10 @@ public final class UpdateManager {
         final CountDownLatch countDownLatch = threadProvider.update(tickStart);
 
         // Wait tick end
-        while (countDownLatch.getCount() != 0) {
-            this.threadProvider.getThreads().forEach(batchThread -> {
-                BatchThread waitingOn = batchThread.waitingOn;
-                if (waitingOn != null && !waitingOn.getMainRunnable().isInTick()) {
-                    BatchThread waitingOn2 = waitingOn.waitingOn;
-                    if(waitingOn2 != null){
-                        Acquisition.processMonitored(waitingOn2);
-                    }else{
-                        Acquisition.processMonitored(waitingOn);
-                    }
-                }
-            });
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         // Clear removed entities & update threads

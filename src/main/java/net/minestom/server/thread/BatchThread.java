@@ -2,8 +2,6 @@ package net.minestom.server.thread;
 
 import com.google.common.util.concurrent.Monitor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.lock.Acquirable;
-import net.minestom.server.lock.Acquisition;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,8 +15,7 @@ public class BatchThread extends Thread {
 
     private final BatchRunnable runnable;
 
-    public final Monitor monitor = new Monitor();
-    public volatile BatchThread waitingOn;
+    public volatile Monitor monitor = new Monitor();
 
     public BatchThread(@NotNull BatchRunnable runnable, int number) {
         super(runnable, MinecraftServer.THREAD_NAME_TICK + "-" + number);
@@ -67,11 +64,6 @@ public class BatchThread extends Thread {
                 Runnable runnable;
                 while ((runnable = queue.poll()) != null) {
                     runnable.run();
-                }
-
-                // Execute waiting acquisition
-                {
-                    Acquisition.processMonitored(batchThread);
                 }
 
                 localCountDownLatch.countDown();
