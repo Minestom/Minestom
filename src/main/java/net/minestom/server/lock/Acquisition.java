@@ -85,6 +85,9 @@ public final class Acquisition {
 
             GLOBAL_MONITOR.enter();
 
+            if (currentAcquired)
+                current.monitor.enter();
+
             final var monitor = elementThread.monitor;
             final boolean acquired = monitor.isOccupiedByCurrentThread();
             if (!acquired) {
@@ -102,8 +105,6 @@ public final class Acquisition {
                 monitor.leave();
             }
             GLOBAL_MONITOR.leave();
-            if (currentAcquired)
-                current.monitor.enter();
         }
     }
 

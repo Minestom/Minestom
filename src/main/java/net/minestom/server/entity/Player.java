@@ -333,7 +333,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             //players.add(p1.getAcquiredElement());
             p1.getAcquiredElement().acquire(o -> {
                 for (Player p2 : MinecraftServer.getConnectionManager().getOnlinePlayers())
-                    p2.getAcquiredElement().acquire(o2 -> {});
+                    p2.getAcquiredElement().acquire(o2 -> {
+                        //System.out.println(getAcquiredElement().getHandler().getBatchThread().monitor.isOccupiedByCurrentThread());
+                    });
             });
         }
 
