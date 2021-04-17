@@ -38,17 +38,11 @@ public interface Acquirable<T> {
      * and execute {@code consumer} as a callback with the acquired object.
      *
      * @param consumer the consumer of the acquired object
-     * @return true if the acquisition happened without synchronization, false otherwise
      */
-    default boolean acquire(@NotNull Consumer<T> consumer) {
+    default void acquire(@NotNull Consumer<@NotNull T> consumer) {
         final Thread currentThread = Thread.currentThread();
-
-        final Handler handler = getHandler();
-        final BatchThread elementThread = handler.getBatchThread();
-
+        final BatchThread elementThread = getHandler().getBatchThread();
         Acquisition.acquire(currentThread, elementThread, () -> consumer.accept(unwrap()));
-
-        return true;
     }
 
     /**

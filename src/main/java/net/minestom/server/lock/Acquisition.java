@@ -68,7 +68,8 @@ public final class Acquisition {
         if (elementThread == null || elementThread == currentThread) {
             callback.run();
         } else {
-            final Monitor currentMonitor = currentThread instanceof BatchThread ? ((BatchThread) currentThread).monitor : null;
+            final BatchThread currentBatch = currentThread instanceof BatchThread ? ((BatchThread) currentThread) : null;
+            final Monitor currentMonitor = currentBatch != null ? currentBatch.monitor : null;
 
             boolean enter = false;
             if (currentMonitor != null && currentMonitor.isOccupiedByCurrentThread()) {
@@ -79,30 +80,20 @@ public final class Acquisition {
 
             Monitor monitor = elementThread.monitor;
 
-            //System.out.println("acq " + System.currentTimeMillis() + " " + currentThread);
-            if (monitor.isOccupiedByCurrentThread()) {
-                //System.out.println("already");
-                callback.run();
-                process(elementThread);
-            } else if (GLOBAL_MONITOR.isOccupiedByCurrentThread()) {
+            if (monitor.isOccupiedByCurrentThread() || GLOBAL_MONITOR.isOccupiedByCurrentThread()) {
+                // We already have access to the thread
                 callback.run();
             } else if (monitor.tryEnter()) {
-                //System.out.println("enter");
+                // Acquire the thread
                 callback.run();
-
-                process(elementThread);
-
                 monitor.leave();
             } else {
-                // Thread is not available, forward request
-
-                final BatchThread currentBatch = (BatchThread) currentThread;
+                // Thread is not available, forward request to be executed later
 
                 while (!GLOBAL_MONITOR.tryEnter())
                     processMonitored(currentBatch);
-                //System.out.println("yes " + elementThread + " " + elementThread.getMainRunnable().isInTick());
-                var requests = getRequests(elementThread);
 
+                var requests = getRequests(elementThread);
                 Acquirable.Request request = new Acquirable.Request();
                 request.localLatch = new CountDownLatch(1);
                 request.processLatch = new CountDownLatch(1);
@@ -110,13 +101,11 @@ public final class Acquisition {
 
                 try {
                     currentBatch.waitingOn = elementThread;
-                    processMonitored(currentBatch);
                     request.localLatch.await();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 currentBatch.waitingOn = null;
-                //System.out.println("end wait");
                 callback.run();
                 request.processLatch.countDown();
 
@@ -132,6 +121,7 @@ public final class Acquisition {
     public static void process(@NotNull BatchThread thread) {
         var requests = getRequests(thread);
         requests.forEach(request -> {
+            requests.remove(request);
             request.localLatch.countDown();
             try {
                 request.processLatch.await();

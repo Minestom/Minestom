@@ -325,7 +325,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             packet.process(this);
         }
 
-        if (username.equals("TheMode911"))
+        //if (username.equals("TheMode911"))
             for (Player p1 : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
                 p1.getAcquiredElement().acquire(o -> {
                     //for (Player p2 : MinecraftServer.getConnectionManager().getOnlinePlayers())
