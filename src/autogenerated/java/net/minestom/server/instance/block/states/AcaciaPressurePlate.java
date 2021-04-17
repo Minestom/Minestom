@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -16,6 +17,11 @@ public final class AcaciaPressurePlate {
   public static final BlockState ACACIA_PRESSURE_PLATE_0 = new BlockState(NamespaceID.from("minecraft:acacia_pressure_plate:0"), (short) 3881, Block.ACACIA_PRESSURE_PLATE, "powered=true");
 
   public static final BlockState ACACIA_PRESSURE_PLATE_1 = new BlockState(NamespaceID.from("minecraft:acacia_pressure_plate:1"), (short) 3882, Block.ACACIA_PRESSURE_PLATE, "powered=false");
+
+  static {
+    Registries.registerBlockState(ACACIA_PRESSURE_PLATE_0);
+    Registries.registerBlockState(ACACIA_PRESSURE_PLATE_1);
+  }
 
   public static void initStates() {
     Block.ACACIA_PRESSURE_PLATE.addBlockState(ACACIA_PRESSURE_PLATE_0);

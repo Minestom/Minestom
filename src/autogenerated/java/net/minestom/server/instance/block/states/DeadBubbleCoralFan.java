@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -16,6 +17,11 @@ public final class DeadBubbleCoralFan {
   public static final BlockState DEAD_BUBBLE_CORAL_FAN_0 = new BlockState(NamespaceID.from("minecraft:dead_bubble_coral_fan:0"), (short) 9548, Block.DEAD_BUBBLE_CORAL_FAN, "waterlogged=true");
 
   public static final BlockState DEAD_BUBBLE_CORAL_FAN_1 = new BlockState(NamespaceID.from("minecraft:dead_bubble_coral_fan:1"), (short) 9549, Block.DEAD_BUBBLE_CORAL_FAN, "waterlogged=false");
+
+  static {
+    Registries.registerBlockState(DEAD_BUBBLE_CORAL_FAN_0);
+    Registries.registerBlockState(DEAD_BUBBLE_CORAL_FAN_1);
+  }
 
   public static void initStates() {
     Block.DEAD_BUBBLE_CORAL_FAN.addBlockState(DEAD_BUBBLE_CORAL_FAN_0);

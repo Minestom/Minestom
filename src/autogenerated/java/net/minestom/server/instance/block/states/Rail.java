@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -32,6 +33,19 @@ public final class Rail {
   public static final BlockState RAIL_8 = new BlockState(NamespaceID.from("minecraft:rail:8"), (short) 3653, Block.RAIL, "shape=north_west");
 
   public static final BlockState RAIL_9 = new BlockState(NamespaceID.from("minecraft:rail:9"), (short) 3654, Block.RAIL, "shape=north_east");
+
+  static {
+    Registries.registerBlockState(RAIL_0);
+    Registries.registerBlockState(RAIL_1);
+    Registries.registerBlockState(RAIL_2);
+    Registries.registerBlockState(RAIL_3);
+    Registries.registerBlockState(RAIL_4);
+    Registries.registerBlockState(RAIL_5);
+    Registries.registerBlockState(RAIL_6);
+    Registries.registerBlockState(RAIL_7);
+    Registries.registerBlockState(RAIL_8);
+    Registries.registerBlockState(RAIL_9);
+  }
 
   public static void initStates() {
     Block.RAIL.addBlockState(RAIL_0);

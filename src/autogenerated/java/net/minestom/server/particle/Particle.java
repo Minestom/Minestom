@@ -1,6 +1,7 @@
 package net.minestom.server.particle;
 
 import java.lang.Override;
+import java.lang.String;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -257,6 +258,12 @@ public class Particle implements Keyed {
   @Nullable
   public static Particle fromId(int id) {
     return Registries.getParticle(id);
+  }
+
+  @NotNull
+  @Override
+  public String toString() {
+    return "[" + this.id + "]";
   }
 
   @NotNull

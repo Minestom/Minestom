@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -20,6 +21,13 @@ public final class PlayerWallHead {
   public static final BlockState PLAYER_WALL_HEAD_2 = new BlockState(NamespaceID.from("minecraft:player_wall_head:2"), (short) 6572, Block.PLAYER_WALL_HEAD, "facing=west");
 
   public static final BlockState PLAYER_WALL_HEAD_3 = new BlockState(NamespaceID.from("minecraft:player_wall_head:3"), (short) 6573, Block.PLAYER_WALL_HEAD, "facing=east");
+
+  static {
+    Registries.registerBlockState(PLAYER_WALL_HEAD_0);
+    Registries.registerBlockState(PLAYER_WALL_HEAD_1);
+    Registries.registerBlockState(PLAYER_WALL_HEAD_2);
+    Registries.registerBlockState(PLAYER_WALL_HEAD_3);
+  }
 
   public static void initStates() {
     Block.PLAYER_WALL_HEAD.addBlockState(PLAYER_WALL_HEAD_0);

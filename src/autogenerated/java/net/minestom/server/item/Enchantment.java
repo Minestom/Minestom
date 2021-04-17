@@ -1,6 +1,7 @@
 package net.minestom.server.item;
 
 import java.lang.Override;
+import java.lang.String;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -164,6 +165,12 @@ public class Enchantment implements Keyed {
   @NotNull
   public final RawEnchantmentData getEnchantmentData() {
     return this.enchantmentData;
+  }
+
+  @NotNull
+  @Override
+  public String toString() {
+    return "[" + this.id + "]";
   }
 
   @NotNull

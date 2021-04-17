@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -76,6 +77,41 @@ public final class DarkOakFence {
   public static final BlockState DARK_OAK_FENCE_30 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:30"), (short) 8740, Block.DARK_OAK_FENCE, "east=false","north=false","south=false","waterlogged=false","west=true");
 
   public static final BlockState DARK_OAK_FENCE_31 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:31"), (short) 8741, Block.DARK_OAK_FENCE, "east=false","north=false","south=false","waterlogged=false","west=false");
+
+  static {
+    Registries.registerBlockState(DARK_OAK_FENCE_0);
+    Registries.registerBlockState(DARK_OAK_FENCE_1);
+    Registries.registerBlockState(DARK_OAK_FENCE_2);
+    Registries.registerBlockState(DARK_OAK_FENCE_3);
+    Registries.registerBlockState(DARK_OAK_FENCE_4);
+    Registries.registerBlockState(DARK_OAK_FENCE_5);
+    Registries.registerBlockState(DARK_OAK_FENCE_6);
+    Registries.registerBlockState(DARK_OAK_FENCE_7);
+    Registries.registerBlockState(DARK_OAK_FENCE_8);
+    Registries.registerBlockState(DARK_OAK_FENCE_9);
+    Registries.registerBlockState(DARK_OAK_FENCE_10);
+    Registries.registerBlockState(DARK_OAK_FENCE_11);
+    Registries.registerBlockState(DARK_OAK_FENCE_12);
+    Registries.registerBlockState(DARK_OAK_FENCE_13);
+    Registries.registerBlockState(DARK_OAK_FENCE_14);
+    Registries.registerBlockState(DARK_OAK_FENCE_15);
+    Registries.registerBlockState(DARK_OAK_FENCE_16);
+    Registries.registerBlockState(DARK_OAK_FENCE_17);
+    Registries.registerBlockState(DARK_OAK_FENCE_18);
+    Registries.registerBlockState(DARK_OAK_FENCE_19);
+    Registries.registerBlockState(DARK_OAK_FENCE_20);
+    Registries.registerBlockState(DARK_OAK_FENCE_21);
+    Registries.registerBlockState(DARK_OAK_FENCE_22);
+    Registries.registerBlockState(DARK_OAK_FENCE_23);
+    Registries.registerBlockState(DARK_OAK_FENCE_24);
+    Registries.registerBlockState(DARK_OAK_FENCE_25);
+    Registries.registerBlockState(DARK_OAK_FENCE_26);
+    Registries.registerBlockState(DARK_OAK_FENCE_27);
+    Registries.registerBlockState(DARK_OAK_FENCE_28);
+    Registries.registerBlockState(DARK_OAK_FENCE_29);
+    Registries.registerBlockState(DARK_OAK_FENCE_30);
+    Registries.registerBlockState(DARK_OAK_FENCE_31);
+  }
 
   public static void initStates() {
     Block.DARK_OAK_FENCE.addBlockState(DARK_OAK_FENCE_0);

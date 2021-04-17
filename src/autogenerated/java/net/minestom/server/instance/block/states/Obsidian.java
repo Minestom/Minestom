@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class Obsidian {
   public static final BlockState OBSIDIAN_0 = new BlockState(NamespaceID.from("minecraft:obsidian:0"), (short) 1434, Block.OBSIDIAN);
+
+  static {
+    Registries.registerBlockState(OBSIDIAN_0);
+  }
 
   public static void initStates() {
     Block.OBSIDIAN.addBlockState(OBSIDIAN_0);

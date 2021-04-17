@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -60,6 +61,33 @@ public final class PistonHead {
   public static final BlockState PISTON_HEAD_22 = new BlockState(NamespaceID.from("minecraft:piston_head:22"), (short) 1382, Block.PISTON_HEAD, "facing=down","short=false","type=normal");
 
   public static final BlockState PISTON_HEAD_23 = new BlockState(NamespaceID.from("minecraft:piston_head:23"), (short) 1383, Block.PISTON_HEAD, "facing=down","short=false","type=sticky");
+
+  static {
+    Registries.registerBlockState(PISTON_HEAD_0);
+    Registries.registerBlockState(PISTON_HEAD_1);
+    Registries.registerBlockState(PISTON_HEAD_2);
+    Registries.registerBlockState(PISTON_HEAD_3);
+    Registries.registerBlockState(PISTON_HEAD_4);
+    Registries.registerBlockState(PISTON_HEAD_5);
+    Registries.registerBlockState(PISTON_HEAD_6);
+    Registries.registerBlockState(PISTON_HEAD_7);
+    Registries.registerBlockState(PISTON_HEAD_8);
+    Registries.registerBlockState(PISTON_HEAD_9);
+    Registries.registerBlockState(PISTON_HEAD_10);
+    Registries.registerBlockState(PISTON_HEAD_11);
+    Registries.registerBlockState(PISTON_HEAD_12);
+    Registries.registerBlockState(PISTON_HEAD_13);
+    Registries.registerBlockState(PISTON_HEAD_14);
+    Registries.registerBlockState(PISTON_HEAD_15);
+    Registries.registerBlockState(PISTON_HEAD_16);
+    Registries.registerBlockState(PISTON_HEAD_17);
+    Registries.registerBlockState(PISTON_HEAD_18);
+    Registries.registerBlockState(PISTON_HEAD_19);
+    Registries.registerBlockState(PISTON_HEAD_20);
+    Registries.registerBlockState(PISTON_HEAD_21);
+    Registries.registerBlockState(PISTON_HEAD_22);
+    Registries.registerBlockState(PISTON_HEAD_23);
+  }
 
   public static void initStates() {
     Block.PISTON_HEAD.addBlockState(PISTON_HEAD_0);

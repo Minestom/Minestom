@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -24,6 +25,15 @@ public final class LimeShulkerBox {
   public static final BlockState LIME_SHULKER_BOX_4 = new BlockState(NamespaceID.from("minecraft:lime_shulker_box:4"), (short) 9316, Block.LIME_SHULKER_BOX, "facing=up");
 
   public static final BlockState LIME_SHULKER_BOX_5 = new BlockState(NamespaceID.from("minecraft:lime_shulker_box:5"), (short) 9317, Block.LIME_SHULKER_BOX, "facing=down");
+
+  static {
+    Registries.registerBlockState(LIME_SHULKER_BOX_0);
+    Registries.registerBlockState(LIME_SHULKER_BOX_1);
+    Registries.registerBlockState(LIME_SHULKER_BOX_2);
+    Registries.registerBlockState(LIME_SHULKER_BOX_3);
+    Registries.registerBlockState(LIME_SHULKER_BOX_4);
+    Registries.registerBlockState(LIME_SHULKER_BOX_5);
+  }
 
   public static void initStates() {
     Block.LIME_SHULKER_BOX.addBlockState(LIME_SHULKER_BOX_0);

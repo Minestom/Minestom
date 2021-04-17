@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -16,6 +17,11 @@ public final class WarpedPressurePlate {
   public static final BlockState WARPED_PRESSURE_PLATE_0 = new BlockState(NamespaceID.from("minecraft:warped_pressure_plate:0"), (short) 15069, Block.WARPED_PRESSURE_PLATE, "powered=true");
 
   public static final BlockState WARPED_PRESSURE_PLATE_1 = new BlockState(NamespaceID.from("minecraft:warped_pressure_plate:1"), (short) 15070, Block.WARPED_PRESSURE_PLATE, "powered=false");
+
+  static {
+    Registries.registerBlockState(WARPED_PRESSURE_PLATE_0);
+    Registries.registerBlockState(WARPED_PRESSURE_PLATE_1);
+  }
 
   public static void initStates() {
     Block.WARPED_PRESSURE_PLATE.addBlockState(WARPED_PRESSURE_PLATE_0);

@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -36,6 +37,21 @@ public final class Bamboo {
   public static final BlockState BAMBOO_10 = new BlockState(NamespaceID.from("minecraft:bamboo:10"), (short) 9666, Block.BAMBOO, "age=1","leaves=large","stage=0");
 
   public static final BlockState BAMBOO_11 = new BlockState(NamespaceID.from("minecraft:bamboo:11"), (short) 9667, Block.BAMBOO, "age=1","leaves=large","stage=1");
+
+  static {
+    Registries.registerBlockState(BAMBOO_0);
+    Registries.registerBlockState(BAMBOO_1);
+    Registries.registerBlockState(BAMBOO_2);
+    Registries.registerBlockState(BAMBOO_3);
+    Registries.registerBlockState(BAMBOO_4);
+    Registries.registerBlockState(BAMBOO_5);
+    Registries.registerBlockState(BAMBOO_6);
+    Registries.registerBlockState(BAMBOO_7);
+    Registries.registerBlockState(BAMBOO_8);
+    Registries.registerBlockState(BAMBOO_9);
+    Registries.registerBlockState(BAMBOO_10);
+    Registries.registerBlockState(BAMBOO_11);
+  }
 
   public static void initStates() {
     Block.BAMBOO.addBlockState(BAMBOO_0);

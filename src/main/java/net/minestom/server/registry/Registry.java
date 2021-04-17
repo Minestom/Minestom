@@ -8,23 +8,22 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-//todo not a fan of the I, but the generator needs to create the Registry class
-public interface IRegistry<T extends Keyed> {
+public interface Registry<T extends Keyed> {
 
     // Access
 
     @NotNull
-    static <T extends Keyed> T get(@NotNull IRegistry<T> registry, @NotNull String id) {
-        return registry.get(Key.key(id));
+    static <T extends Keyed> T get(@NotNull Registry<T> registry, @NotNull String id) {
+        return registry.get(NamespaceID.from(id));
     }
 
     @NotNull
-    static <T extends Keyed> T get(@NotNull IRegistry<T> registry, @NotNull NamespaceID id) {
+    static <T extends Keyed> T get(@NotNull Registry<T> registry, @NotNull NamespaceID id) {
         return registry.get(id);
     }
 
     @NotNull
-    static <T extends Keyed> T get(@NotNull IRegistry<T> registry, @NotNull Key key) {
+    static <T extends Keyed> T get(@NotNull Registry<T> registry, @NotNull Key key) {
         return registry.get(key);
     }
 
@@ -43,7 +42,7 @@ public interface IRegistry<T extends Keyed> {
 
     List<T> values();
 
-    interface Writable<T extends Keyed> extends IRegistry<T> {
+    interface Writable<T extends Keyed> extends Registry<T> {
         boolean register(@NotNull T value);
     }
 }

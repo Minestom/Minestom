@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -140,6 +141,73 @@ public final class MushroomStem {
   public static final BlockState MUSHROOM_STEM_62 = new BlockState(NamespaceID.from("minecraft:mushroom_stem:62"), (short) 4695, Block.MUSHROOM_STEM, "down=false","east=false","north=false","south=false","up=false","west=true");
 
   public static final BlockState MUSHROOM_STEM_63 = new BlockState(NamespaceID.from("minecraft:mushroom_stem:63"), (short) 4696, Block.MUSHROOM_STEM, "down=false","east=false","north=false","south=false","up=false","west=false");
+
+  static {
+    Registries.registerBlockState(MUSHROOM_STEM_0);
+    Registries.registerBlockState(MUSHROOM_STEM_1);
+    Registries.registerBlockState(MUSHROOM_STEM_2);
+    Registries.registerBlockState(MUSHROOM_STEM_3);
+    Registries.registerBlockState(MUSHROOM_STEM_4);
+    Registries.registerBlockState(MUSHROOM_STEM_5);
+    Registries.registerBlockState(MUSHROOM_STEM_6);
+    Registries.registerBlockState(MUSHROOM_STEM_7);
+    Registries.registerBlockState(MUSHROOM_STEM_8);
+    Registries.registerBlockState(MUSHROOM_STEM_9);
+    Registries.registerBlockState(MUSHROOM_STEM_10);
+    Registries.registerBlockState(MUSHROOM_STEM_11);
+    Registries.registerBlockState(MUSHROOM_STEM_12);
+    Registries.registerBlockState(MUSHROOM_STEM_13);
+    Registries.registerBlockState(MUSHROOM_STEM_14);
+    Registries.registerBlockState(MUSHROOM_STEM_15);
+    Registries.registerBlockState(MUSHROOM_STEM_16);
+    Registries.registerBlockState(MUSHROOM_STEM_17);
+    Registries.registerBlockState(MUSHROOM_STEM_18);
+    Registries.registerBlockState(MUSHROOM_STEM_19);
+    Registries.registerBlockState(MUSHROOM_STEM_20);
+    Registries.registerBlockState(MUSHROOM_STEM_21);
+    Registries.registerBlockState(MUSHROOM_STEM_22);
+    Registries.registerBlockState(MUSHROOM_STEM_23);
+    Registries.registerBlockState(MUSHROOM_STEM_24);
+    Registries.registerBlockState(MUSHROOM_STEM_25);
+    Registries.registerBlockState(MUSHROOM_STEM_26);
+    Registries.registerBlockState(MUSHROOM_STEM_27);
+    Registries.registerBlockState(MUSHROOM_STEM_28);
+    Registries.registerBlockState(MUSHROOM_STEM_29);
+    Registries.registerBlockState(MUSHROOM_STEM_30);
+    Registries.registerBlockState(MUSHROOM_STEM_31);
+    Registries.registerBlockState(MUSHROOM_STEM_32);
+    Registries.registerBlockState(MUSHROOM_STEM_33);
+    Registries.registerBlockState(MUSHROOM_STEM_34);
+    Registries.registerBlockState(MUSHROOM_STEM_35);
+    Registries.registerBlockState(MUSHROOM_STEM_36);
+    Registries.registerBlockState(MUSHROOM_STEM_37);
+    Registries.registerBlockState(MUSHROOM_STEM_38);
+    Registries.registerBlockState(MUSHROOM_STEM_39);
+    Registries.registerBlockState(MUSHROOM_STEM_40);
+    Registries.registerBlockState(MUSHROOM_STEM_41);
+    Registries.registerBlockState(MUSHROOM_STEM_42);
+    Registries.registerBlockState(MUSHROOM_STEM_43);
+    Registries.registerBlockState(MUSHROOM_STEM_44);
+    Registries.registerBlockState(MUSHROOM_STEM_45);
+    Registries.registerBlockState(MUSHROOM_STEM_46);
+    Registries.registerBlockState(MUSHROOM_STEM_47);
+    Registries.registerBlockState(MUSHROOM_STEM_48);
+    Registries.registerBlockState(MUSHROOM_STEM_49);
+    Registries.registerBlockState(MUSHROOM_STEM_50);
+    Registries.registerBlockState(MUSHROOM_STEM_51);
+    Registries.registerBlockState(MUSHROOM_STEM_52);
+    Registries.registerBlockState(MUSHROOM_STEM_53);
+    Registries.registerBlockState(MUSHROOM_STEM_54);
+    Registries.registerBlockState(MUSHROOM_STEM_55);
+    Registries.registerBlockState(MUSHROOM_STEM_56);
+    Registries.registerBlockState(MUSHROOM_STEM_57);
+    Registries.registerBlockState(MUSHROOM_STEM_58);
+    Registries.registerBlockState(MUSHROOM_STEM_59);
+    Registries.registerBlockState(MUSHROOM_STEM_60);
+    Registries.registerBlockState(MUSHROOM_STEM_61);
+    Registries.registerBlockState(MUSHROOM_STEM_62);
+    Registries.registerBlockState(MUSHROOM_STEM_63);
+  }
 
   public static void initStates() {
     Block.MUSHROOM_STEM.addBlockState(MUSHROOM_STEM_0);

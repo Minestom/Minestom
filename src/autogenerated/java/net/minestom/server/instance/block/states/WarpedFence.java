@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -76,6 +77,41 @@ public final class WarpedFence {
   public static final BlockState WARPED_FENCE_30 = new BlockState(NamespaceID.from("minecraft:warped_fence:30"), (short) 15133, Block.WARPED_FENCE, "east=false","north=false","south=false","waterlogged=false","west=true");
 
   public static final BlockState WARPED_FENCE_31 = new BlockState(NamespaceID.from("minecraft:warped_fence:31"), (short) 15134, Block.WARPED_FENCE, "east=false","north=false","south=false","waterlogged=false","west=false");
+
+  static {
+    Registries.registerBlockState(WARPED_FENCE_0);
+    Registries.registerBlockState(WARPED_FENCE_1);
+    Registries.registerBlockState(WARPED_FENCE_2);
+    Registries.registerBlockState(WARPED_FENCE_3);
+    Registries.registerBlockState(WARPED_FENCE_4);
+    Registries.registerBlockState(WARPED_FENCE_5);
+    Registries.registerBlockState(WARPED_FENCE_6);
+    Registries.registerBlockState(WARPED_FENCE_7);
+    Registries.registerBlockState(WARPED_FENCE_8);
+    Registries.registerBlockState(WARPED_FENCE_9);
+    Registries.registerBlockState(WARPED_FENCE_10);
+    Registries.registerBlockState(WARPED_FENCE_11);
+    Registries.registerBlockState(WARPED_FENCE_12);
+    Registries.registerBlockState(WARPED_FENCE_13);
+    Registries.registerBlockState(WARPED_FENCE_14);
+    Registries.registerBlockState(WARPED_FENCE_15);
+    Registries.registerBlockState(WARPED_FENCE_16);
+    Registries.registerBlockState(WARPED_FENCE_17);
+    Registries.registerBlockState(WARPED_FENCE_18);
+    Registries.registerBlockState(WARPED_FENCE_19);
+    Registries.registerBlockState(WARPED_FENCE_20);
+    Registries.registerBlockState(WARPED_FENCE_21);
+    Registries.registerBlockState(WARPED_FENCE_22);
+    Registries.registerBlockState(WARPED_FENCE_23);
+    Registries.registerBlockState(WARPED_FENCE_24);
+    Registries.registerBlockState(WARPED_FENCE_25);
+    Registries.registerBlockState(WARPED_FENCE_26);
+    Registries.registerBlockState(WARPED_FENCE_27);
+    Registries.registerBlockState(WARPED_FENCE_28);
+    Registries.registerBlockState(WARPED_FENCE_29);
+    Registries.registerBlockState(WARPED_FENCE_30);
+    Registries.registerBlockState(WARPED_FENCE_31);
+  }
 
   public static void initStates() {
     Block.WARPED_FENCE.addBlockState(WARPED_FENCE_0);

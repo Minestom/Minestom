@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -76,6 +77,41 @@ public final class OakFenceGate {
   public static final BlockState OAK_FENCE_GATE_30 = new BlockState(NamespaceID.from("minecraft:oak_fence_gate:30"), (short) 4854, Block.OAK_FENCE_GATE, "facing=east","in_wall=false","open=false","powered=true");
 
   public static final BlockState OAK_FENCE_GATE_31 = new BlockState(NamespaceID.from("minecraft:oak_fence_gate:31"), (short) 4855, Block.OAK_FENCE_GATE, "facing=east","in_wall=false","open=false","powered=false");
+
+  static {
+    Registries.registerBlockState(OAK_FENCE_GATE_0);
+    Registries.registerBlockState(OAK_FENCE_GATE_1);
+    Registries.registerBlockState(OAK_FENCE_GATE_2);
+    Registries.registerBlockState(OAK_FENCE_GATE_3);
+    Registries.registerBlockState(OAK_FENCE_GATE_4);
+    Registries.registerBlockState(OAK_FENCE_GATE_5);
+    Registries.registerBlockState(OAK_FENCE_GATE_6);
+    Registries.registerBlockState(OAK_FENCE_GATE_7);
+    Registries.registerBlockState(OAK_FENCE_GATE_8);
+    Registries.registerBlockState(OAK_FENCE_GATE_9);
+    Registries.registerBlockState(OAK_FENCE_GATE_10);
+    Registries.registerBlockState(OAK_FENCE_GATE_11);
+    Registries.registerBlockState(OAK_FENCE_GATE_12);
+    Registries.registerBlockState(OAK_FENCE_GATE_13);
+    Registries.registerBlockState(OAK_FENCE_GATE_14);
+    Registries.registerBlockState(OAK_FENCE_GATE_15);
+    Registries.registerBlockState(OAK_FENCE_GATE_16);
+    Registries.registerBlockState(OAK_FENCE_GATE_17);
+    Registries.registerBlockState(OAK_FENCE_GATE_18);
+    Registries.registerBlockState(OAK_FENCE_GATE_19);
+    Registries.registerBlockState(OAK_FENCE_GATE_20);
+    Registries.registerBlockState(OAK_FENCE_GATE_21);
+    Registries.registerBlockState(OAK_FENCE_GATE_22);
+    Registries.registerBlockState(OAK_FENCE_GATE_23);
+    Registries.registerBlockState(OAK_FENCE_GATE_24);
+    Registries.registerBlockState(OAK_FENCE_GATE_25);
+    Registries.registerBlockState(OAK_FENCE_GATE_26);
+    Registries.registerBlockState(OAK_FENCE_GATE_27);
+    Registries.registerBlockState(OAK_FENCE_GATE_28);
+    Registries.registerBlockState(OAK_FENCE_GATE_29);
+    Registries.registerBlockState(OAK_FENCE_GATE_30);
+    Registries.registerBlockState(OAK_FENCE_GATE_31);
+  }
 
   public static void initStates() {
     Block.OAK_FENCE_GATE.addBlockState(OAK_FENCE_GATE_0);

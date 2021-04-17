@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -36,6 +37,21 @@ public final class Dispenser {
   public static final BlockState DISPENSER_10 = new BlockState(NamespaceID.from("minecraft:dispenser:10"), (short) 244, Block.DISPENSER, "facing=down","triggered=true");
 
   public static final BlockState DISPENSER_11 = new BlockState(NamespaceID.from("minecraft:dispenser:11"), (short) 245, Block.DISPENSER, "facing=down","triggered=false");
+
+  static {
+    Registries.registerBlockState(DISPENSER_0);
+    Registries.registerBlockState(DISPENSER_1);
+    Registries.registerBlockState(DISPENSER_2);
+    Registries.registerBlockState(DISPENSER_3);
+    Registries.registerBlockState(DISPENSER_4);
+    Registries.registerBlockState(DISPENSER_5);
+    Registries.registerBlockState(DISPENSER_6);
+    Registries.registerBlockState(DISPENSER_7);
+    Registries.registerBlockState(DISPENSER_8);
+    Registries.registerBlockState(DISPENSER_9);
+    Registries.registerBlockState(DISPENSER_10);
+    Registries.registerBlockState(DISPENSER_11);
+  }
 
   public static void initStates() {
     Block.DISPENSER.addBlockState(DISPENSER_0);

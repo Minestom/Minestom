@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class HornCoralBlock {
   public static final BlockState HORN_CORAL_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:horn_coral_block:0"), (short) 9523, Block.HORN_CORAL_BLOCK);
+
+  static {
+    Registries.registerBlockState(HORN_CORAL_BLOCK_0);
+  }
 
   public static void initStates() {
     Block.HORN_CORAL_BLOCK.addBlockState(HORN_CORAL_BLOCK_0);

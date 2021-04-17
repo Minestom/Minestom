@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -36,6 +37,21 @@ public final class RepeatingCommandBlock {
   public static final BlockState REPEATING_COMMAND_BLOCK_10 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:10"), (short) 9239, Block.REPEATING_COMMAND_BLOCK, "conditional=false","facing=up");
 
   public static final BlockState REPEATING_COMMAND_BLOCK_11 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:11"), (short) 9240, Block.REPEATING_COMMAND_BLOCK, "conditional=false","facing=down");
+
+  static {
+    Registries.registerBlockState(REPEATING_COMMAND_BLOCK_0);
+    Registries.registerBlockState(REPEATING_COMMAND_BLOCK_1);
+    Registries.registerBlockState(REPEATING_COMMAND_BLOCK_2);
+    Registries.registerBlockState(REPEATING_COMMAND_BLOCK_3);
+    Registries.registerBlockState(REPEATING_COMMAND_BLOCK_4);
+    Registries.registerBlockState(REPEATING_COMMAND_BLOCK_5);
+    Registries.registerBlockState(REPEATING_COMMAND_BLOCK_6);
+    Registries.registerBlockState(REPEATING_COMMAND_BLOCK_7);
+    Registries.registerBlockState(REPEATING_COMMAND_BLOCK_8);
+    Registries.registerBlockState(REPEATING_COMMAND_BLOCK_9);
+    Registries.registerBlockState(REPEATING_COMMAND_BLOCK_10);
+    Registries.registerBlockState(REPEATING_COMMAND_BLOCK_11);
+  }
 
   public static void initStates() {
     Block.REPEATING_COMMAND_BLOCK.addBlockState(REPEATING_COMMAND_BLOCK_0);

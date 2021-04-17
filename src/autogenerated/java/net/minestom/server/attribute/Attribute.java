@@ -2,6 +2,7 @@ package net.minestom.server.attribute;
 
 import java.lang.Deprecated;
 import java.lang.Override;
+import java.lang.String;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -95,5 +96,11 @@ public class Attribute implements Keyed {
   @NotNull
   public static List<Attribute> values() {
     return Registries.getAttributes();
+  }
+
+  @NotNull
+  @Override
+  public String toString() {
+    return "[" + this.id + "]";
   }
 }

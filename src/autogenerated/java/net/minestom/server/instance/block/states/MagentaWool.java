@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class MagentaWool {
   public static final BlockState MAGENTA_WOOL_0 = new BlockState(NamespaceID.from("minecraft:magenta_wool:0"), (short) 1386, Block.MAGENTA_WOOL);
+
+  static {
+    Registries.registerBlockState(MAGENTA_WOOL_0);
+  }
 
   public static void initStates() {
     Block.MAGENTA_WOOL.addBlockState(MAGENTA_WOOL_0);

@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -140,6 +141,73 @@ public final class Repeater {
   public static final BlockState REPEATER_62 = new BlockState(NamespaceID.from("minecraft:repeater:62"), (short) 4093, Block.REPEATER, "delay=4","facing=east","locked=false","powered=true");
 
   public static final BlockState REPEATER_63 = new BlockState(NamespaceID.from("minecraft:repeater:63"), (short) 4094, Block.REPEATER, "delay=4","facing=east","locked=false","powered=false");
+
+  static {
+    Registries.registerBlockState(REPEATER_0);
+    Registries.registerBlockState(REPEATER_1);
+    Registries.registerBlockState(REPEATER_2);
+    Registries.registerBlockState(REPEATER_3);
+    Registries.registerBlockState(REPEATER_4);
+    Registries.registerBlockState(REPEATER_5);
+    Registries.registerBlockState(REPEATER_6);
+    Registries.registerBlockState(REPEATER_7);
+    Registries.registerBlockState(REPEATER_8);
+    Registries.registerBlockState(REPEATER_9);
+    Registries.registerBlockState(REPEATER_10);
+    Registries.registerBlockState(REPEATER_11);
+    Registries.registerBlockState(REPEATER_12);
+    Registries.registerBlockState(REPEATER_13);
+    Registries.registerBlockState(REPEATER_14);
+    Registries.registerBlockState(REPEATER_15);
+    Registries.registerBlockState(REPEATER_16);
+    Registries.registerBlockState(REPEATER_17);
+    Registries.registerBlockState(REPEATER_18);
+    Registries.registerBlockState(REPEATER_19);
+    Registries.registerBlockState(REPEATER_20);
+    Registries.registerBlockState(REPEATER_21);
+    Registries.registerBlockState(REPEATER_22);
+    Registries.registerBlockState(REPEATER_23);
+    Registries.registerBlockState(REPEATER_24);
+    Registries.registerBlockState(REPEATER_25);
+    Registries.registerBlockState(REPEATER_26);
+    Registries.registerBlockState(REPEATER_27);
+    Registries.registerBlockState(REPEATER_28);
+    Registries.registerBlockState(REPEATER_29);
+    Registries.registerBlockState(REPEATER_30);
+    Registries.registerBlockState(REPEATER_31);
+    Registries.registerBlockState(REPEATER_32);
+    Registries.registerBlockState(REPEATER_33);
+    Registries.registerBlockState(REPEATER_34);
+    Registries.registerBlockState(REPEATER_35);
+    Registries.registerBlockState(REPEATER_36);
+    Registries.registerBlockState(REPEATER_37);
+    Registries.registerBlockState(REPEATER_38);
+    Registries.registerBlockState(REPEATER_39);
+    Registries.registerBlockState(REPEATER_40);
+    Registries.registerBlockState(REPEATER_41);
+    Registries.registerBlockState(REPEATER_42);
+    Registries.registerBlockState(REPEATER_43);
+    Registries.registerBlockState(REPEATER_44);
+    Registries.registerBlockState(REPEATER_45);
+    Registries.registerBlockState(REPEATER_46);
+    Registries.registerBlockState(REPEATER_47);
+    Registries.registerBlockState(REPEATER_48);
+    Registries.registerBlockState(REPEATER_49);
+    Registries.registerBlockState(REPEATER_50);
+    Registries.registerBlockState(REPEATER_51);
+    Registries.registerBlockState(REPEATER_52);
+    Registries.registerBlockState(REPEATER_53);
+    Registries.registerBlockState(REPEATER_54);
+    Registries.registerBlockState(REPEATER_55);
+    Registries.registerBlockState(REPEATER_56);
+    Registries.registerBlockState(REPEATER_57);
+    Registries.registerBlockState(REPEATER_58);
+    Registries.registerBlockState(REPEATER_59);
+    Registries.registerBlockState(REPEATER_60);
+    Registries.registerBlockState(REPEATER_61);
+    Registries.registerBlockState(REPEATER_62);
+    Registries.registerBlockState(REPEATER_63);
+  }
 
   public static void initStates() {
     Block.REPEATER.addBlockState(REPEATER_0);

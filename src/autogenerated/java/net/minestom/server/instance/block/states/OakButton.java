@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -60,6 +61,33 @@ public final class OakButton {
   public static final BlockState OAK_BUTTON_22 = new BlockState(NamespaceID.from("minecraft:oak_button:22"), (short) 6372, Block.OAK_BUTTON, "face=CEILING","facing=east","powered=true");
 
   public static final BlockState OAK_BUTTON_23 = new BlockState(NamespaceID.from("minecraft:oak_button:23"), (short) 6373, Block.OAK_BUTTON, "face=CEILING","facing=east","powered=false");
+
+  static {
+    Registries.registerBlockState(OAK_BUTTON_0);
+    Registries.registerBlockState(OAK_BUTTON_1);
+    Registries.registerBlockState(OAK_BUTTON_2);
+    Registries.registerBlockState(OAK_BUTTON_3);
+    Registries.registerBlockState(OAK_BUTTON_4);
+    Registries.registerBlockState(OAK_BUTTON_5);
+    Registries.registerBlockState(OAK_BUTTON_6);
+    Registries.registerBlockState(OAK_BUTTON_7);
+    Registries.registerBlockState(OAK_BUTTON_8);
+    Registries.registerBlockState(OAK_BUTTON_9);
+    Registries.registerBlockState(OAK_BUTTON_10);
+    Registries.registerBlockState(OAK_BUTTON_11);
+    Registries.registerBlockState(OAK_BUTTON_12);
+    Registries.registerBlockState(OAK_BUTTON_13);
+    Registries.registerBlockState(OAK_BUTTON_14);
+    Registries.registerBlockState(OAK_BUTTON_15);
+    Registries.registerBlockState(OAK_BUTTON_16);
+    Registries.registerBlockState(OAK_BUTTON_17);
+    Registries.registerBlockState(OAK_BUTTON_18);
+    Registries.registerBlockState(OAK_BUTTON_19);
+    Registries.registerBlockState(OAK_BUTTON_20);
+    Registries.registerBlockState(OAK_BUTTON_21);
+    Registries.registerBlockState(OAK_BUTTON_22);
+    Registries.registerBlockState(OAK_BUTTON_23);
+  }
 
   public static void initStates() {
     Block.OAK_BUTTON.addBlockState(OAK_BUTTON_0);

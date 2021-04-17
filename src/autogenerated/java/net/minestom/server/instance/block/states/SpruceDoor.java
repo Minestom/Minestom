@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -140,6 +141,73 @@ public final class SpruceDoor {
   public static final BlockState SPRUCE_DOOR_62 = new BlockState(NamespaceID.from("minecraft:spruce_door:62"), (short) 8804, Block.SPRUCE_DOOR, "facing=east","half=lower","hinge=right","open=false","powered=true");
 
   public static final BlockState SPRUCE_DOOR_63 = new BlockState(NamespaceID.from("minecraft:spruce_door:63"), (short) 8805, Block.SPRUCE_DOOR, "facing=east","half=lower","hinge=right","open=false","powered=false");
+
+  static {
+    Registries.registerBlockState(SPRUCE_DOOR_0);
+    Registries.registerBlockState(SPRUCE_DOOR_1);
+    Registries.registerBlockState(SPRUCE_DOOR_2);
+    Registries.registerBlockState(SPRUCE_DOOR_3);
+    Registries.registerBlockState(SPRUCE_DOOR_4);
+    Registries.registerBlockState(SPRUCE_DOOR_5);
+    Registries.registerBlockState(SPRUCE_DOOR_6);
+    Registries.registerBlockState(SPRUCE_DOOR_7);
+    Registries.registerBlockState(SPRUCE_DOOR_8);
+    Registries.registerBlockState(SPRUCE_DOOR_9);
+    Registries.registerBlockState(SPRUCE_DOOR_10);
+    Registries.registerBlockState(SPRUCE_DOOR_11);
+    Registries.registerBlockState(SPRUCE_DOOR_12);
+    Registries.registerBlockState(SPRUCE_DOOR_13);
+    Registries.registerBlockState(SPRUCE_DOOR_14);
+    Registries.registerBlockState(SPRUCE_DOOR_15);
+    Registries.registerBlockState(SPRUCE_DOOR_16);
+    Registries.registerBlockState(SPRUCE_DOOR_17);
+    Registries.registerBlockState(SPRUCE_DOOR_18);
+    Registries.registerBlockState(SPRUCE_DOOR_19);
+    Registries.registerBlockState(SPRUCE_DOOR_20);
+    Registries.registerBlockState(SPRUCE_DOOR_21);
+    Registries.registerBlockState(SPRUCE_DOOR_22);
+    Registries.registerBlockState(SPRUCE_DOOR_23);
+    Registries.registerBlockState(SPRUCE_DOOR_24);
+    Registries.registerBlockState(SPRUCE_DOOR_25);
+    Registries.registerBlockState(SPRUCE_DOOR_26);
+    Registries.registerBlockState(SPRUCE_DOOR_27);
+    Registries.registerBlockState(SPRUCE_DOOR_28);
+    Registries.registerBlockState(SPRUCE_DOOR_29);
+    Registries.registerBlockState(SPRUCE_DOOR_30);
+    Registries.registerBlockState(SPRUCE_DOOR_31);
+    Registries.registerBlockState(SPRUCE_DOOR_32);
+    Registries.registerBlockState(SPRUCE_DOOR_33);
+    Registries.registerBlockState(SPRUCE_DOOR_34);
+    Registries.registerBlockState(SPRUCE_DOOR_35);
+    Registries.registerBlockState(SPRUCE_DOOR_36);
+    Registries.registerBlockState(SPRUCE_DOOR_37);
+    Registries.registerBlockState(SPRUCE_DOOR_38);
+    Registries.registerBlockState(SPRUCE_DOOR_39);
+    Registries.registerBlockState(SPRUCE_DOOR_40);
+    Registries.registerBlockState(SPRUCE_DOOR_41);
+    Registries.registerBlockState(SPRUCE_DOOR_42);
+    Registries.registerBlockState(SPRUCE_DOOR_43);
+    Registries.registerBlockState(SPRUCE_DOOR_44);
+    Registries.registerBlockState(SPRUCE_DOOR_45);
+    Registries.registerBlockState(SPRUCE_DOOR_46);
+    Registries.registerBlockState(SPRUCE_DOOR_47);
+    Registries.registerBlockState(SPRUCE_DOOR_48);
+    Registries.registerBlockState(SPRUCE_DOOR_49);
+    Registries.registerBlockState(SPRUCE_DOOR_50);
+    Registries.registerBlockState(SPRUCE_DOOR_51);
+    Registries.registerBlockState(SPRUCE_DOOR_52);
+    Registries.registerBlockState(SPRUCE_DOOR_53);
+    Registries.registerBlockState(SPRUCE_DOOR_54);
+    Registries.registerBlockState(SPRUCE_DOOR_55);
+    Registries.registerBlockState(SPRUCE_DOOR_56);
+    Registries.registerBlockState(SPRUCE_DOOR_57);
+    Registries.registerBlockState(SPRUCE_DOOR_58);
+    Registries.registerBlockState(SPRUCE_DOOR_59);
+    Registries.registerBlockState(SPRUCE_DOOR_60);
+    Registries.registerBlockState(SPRUCE_DOOR_61);
+    Registries.registerBlockState(SPRUCE_DOOR_62);
+    Registries.registerBlockState(SPRUCE_DOOR_63);
+  }
 
   public static void initStates() {
     Block.SPRUCE_DOOR.addBlockState(SPRUCE_DOOR_0);

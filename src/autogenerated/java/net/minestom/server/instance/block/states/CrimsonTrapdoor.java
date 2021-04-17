@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -140,6 +141,73 @@ public final class CrimsonTrapdoor {
   public static final BlockState CRIMSON_TRAPDOOR_62 = new BlockState(NamespaceID.from("minecraft:crimson_trapdoor:62"), (short) 15197, Block.CRIMSON_TRAPDOOR, "facing=east","half=bottom","open=false","powered=false","waterlogged=true");
 
   public static final BlockState CRIMSON_TRAPDOOR_63 = new BlockState(NamespaceID.from("minecraft:crimson_trapdoor:63"), (short) 15198, Block.CRIMSON_TRAPDOOR, "facing=east","half=bottom","open=false","powered=false","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_0);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_1);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_2);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_3);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_4);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_5);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_6);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_7);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_8);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_9);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_10);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_11);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_12);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_13);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_14);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_15);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_16);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_17);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_18);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_19);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_20);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_21);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_22);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_23);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_24);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_25);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_26);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_27);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_28);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_29);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_30);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_31);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_32);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_33);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_34);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_35);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_36);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_37);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_38);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_39);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_40);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_41);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_42);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_43);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_44);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_45);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_46);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_47);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_48);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_49);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_50);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_51);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_52);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_53);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_54);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_55);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_56);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_57);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_58);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_59);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_60);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_61);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_62);
+    Registries.registerBlockState(CRIMSON_TRAPDOOR_63);
+  }
 
   public static void initStates() {
     Block.CRIMSON_TRAPDOOR.addBlockState(CRIMSON_TRAPDOOR_0);

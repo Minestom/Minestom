@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -76,6 +77,41 @@ public final class SpruceFence {
   public static final BlockState SPRUCE_FENCE_30 = new BlockState(NamespaceID.from("minecraft:spruce_fence:30"), (short) 8612, Block.SPRUCE_FENCE, "east=false","north=false","south=false","waterlogged=false","west=true");
 
   public static final BlockState SPRUCE_FENCE_31 = new BlockState(NamespaceID.from("minecraft:spruce_fence:31"), (short) 8613, Block.SPRUCE_FENCE, "east=false","north=false","south=false","waterlogged=false","west=false");
+
+  static {
+    Registries.registerBlockState(SPRUCE_FENCE_0);
+    Registries.registerBlockState(SPRUCE_FENCE_1);
+    Registries.registerBlockState(SPRUCE_FENCE_2);
+    Registries.registerBlockState(SPRUCE_FENCE_3);
+    Registries.registerBlockState(SPRUCE_FENCE_4);
+    Registries.registerBlockState(SPRUCE_FENCE_5);
+    Registries.registerBlockState(SPRUCE_FENCE_6);
+    Registries.registerBlockState(SPRUCE_FENCE_7);
+    Registries.registerBlockState(SPRUCE_FENCE_8);
+    Registries.registerBlockState(SPRUCE_FENCE_9);
+    Registries.registerBlockState(SPRUCE_FENCE_10);
+    Registries.registerBlockState(SPRUCE_FENCE_11);
+    Registries.registerBlockState(SPRUCE_FENCE_12);
+    Registries.registerBlockState(SPRUCE_FENCE_13);
+    Registries.registerBlockState(SPRUCE_FENCE_14);
+    Registries.registerBlockState(SPRUCE_FENCE_15);
+    Registries.registerBlockState(SPRUCE_FENCE_16);
+    Registries.registerBlockState(SPRUCE_FENCE_17);
+    Registries.registerBlockState(SPRUCE_FENCE_18);
+    Registries.registerBlockState(SPRUCE_FENCE_19);
+    Registries.registerBlockState(SPRUCE_FENCE_20);
+    Registries.registerBlockState(SPRUCE_FENCE_21);
+    Registries.registerBlockState(SPRUCE_FENCE_22);
+    Registries.registerBlockState(SPRUCE_FENCE_23);
+    Registries.registerBlockState(SPRUCE_FENCE_24);
+    Registries.registerBlockState(SPRUCE_FENCE_25);
+    Registries.registerBlockState(SPRUCE_FENCE_26);
+    Registries.registerBlockState(SPRUCE_FENCE_27);
+    Registries.registerBlockState(SPRUCE_FENCE_28);
+    Registries.registerBlockState(SPRUCE_FENCE_29);
+    Registries.registerBlockState(SPRUCE_FENCE_30);
+    Registries.registerBlockState(SPRUCE_FENCE_31);
+  }
 
   public static void initStates() {
     Block.SPRUCE_FENCE.addBlockState(SPRUCE_FENCE_0);

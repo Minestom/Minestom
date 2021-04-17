@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -18,6 +19,12 @@ public final class WarpedStem {
   public static final BlockState WARPED_STEM_1 = new BlockState(NamespaceID.from("minecraft:warped_stem:1"), (short) 14967, Block.WARPED_STEM, "axis=y");
 
   public static final BlockState WARPED_STEM_2 = new BlockState(NamespaceID.from("minecraft:warped_stem:2"), (short) 14968, Block.WARPED_STEM, "axis=z");
+
+  static {
+    Registries.registerBlockState(WARPED_STEM_0);
+    Registries.registerBlockState(WARPED_STEM_1);
+    Registries.registerBlockState(WARPED_STEM_2);
+  }
 
   public static void initStates() {
     Block.WARPED_STEM.addBlockState(WARPED_STEM_0);

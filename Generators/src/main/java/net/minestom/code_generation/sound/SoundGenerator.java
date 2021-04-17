@@ -119,6 +119,17 @@ public final class SoundGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
+        // toString method
+        soundClass.addMethod(
+                MethodSpec.methodBuilder("toString")
+                        .addAnnotation(NotNull.class)
+                        .addAnnotation(Override.class)
+                        .returns(String.class)
+                        // this resolves to [Namespace]
+                        .addStatement("return \"[\" + this.id + \"]\"")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
         // values method
         soundClass.addMethod(
                 MethodSpec.methodBuilder("values")

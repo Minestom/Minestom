@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -44,6 +45,25 @@ public final class Water {
   public static final BlockState WATER_14 = new BlockState(NamespaceID.from("minecraft:water:14"), (short) 48, Block.WATER, "level=14");
 
   public static final BlockState WATER_15 = new BlockState(NamespaceID.from("minecraft:water:15"), (short) 49, Block.WATER, "level=15");
+
+  static {
+    Registries.registerBlockState(WATER_0);
+    Registries.registerBlockState(WATER_1);
+    Registries.registerBlockState(WATER_2);
+    Registries.registerBlockState(WATER_3);
+    Registries.registerBlockState(WATER_4);
+    Registries.registerBlockState(WATER_5);
+    Registries.registerBlockState(WATER_6);
+    Registries.registerBlockState(WATER_7);
+    Registries.registerBlockState(WATER_8);
+    Registries.registerBlockState(WATER_9);
+    Registries.registerBlockState(WATER_10);
+    Registries.registerBlockState(WATER_11);
+    Registries.registerBlockState(WATER_12);
+    Registries.registerBlockState(WATER_13);
+    Registries.registerBlockState(WATER_14);
+    Registries.registerBlockState(WATER_15);
+  }
 
   public static void initStates() {
     Block.WATER.addBlockState(WATER_0);

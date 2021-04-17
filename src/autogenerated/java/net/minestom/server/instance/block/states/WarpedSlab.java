@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -24,6 +25,15 @@ public final class WarpedSlab {
   public static final BlockState WARPED_SLAB_4 = new BlockState(NamespaceID.from("minecraft:warped_slab:4"), (short) 15065, Block.WARPED_SLAB, "type=double","waterlogged=true");
 
   public static final BlockState WARPED_SLAB_5 = new BlockState(NamespaceID.from("minecraft:warped_slab:5"), (short) 15066, Block.WARPED_SLAB, "type=double","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(WARPED_SLAB_0);
+    Registries.registerBlockState(WARPED_SLAB_1);
+    Registries.registerBlockState(WARPED_SLAB_2);
+    Registries.registerBlockState(WARPED_SLAB_3);
+    Registries.registerBlockState(WARPED_SLAB_4);
+    Registries.registerBlockState(WARPED_SLAB_5);
+  }
 
   public static void initStates() {
     Block.WARPED_SLAB.addBlockState(WARPED_SLAB_0);

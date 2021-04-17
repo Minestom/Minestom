@@ -3036,6 +3036,12 @@ public class Material implements Keyed {
   }
 
   @NotNull
+  @Override
+  public String toString() {
+    return "[" + this.id + "]";
+  }
+
+  @NotNull
   public static List<Material> values() {
     return Registries.getMaterials();
   }

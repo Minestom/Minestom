@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class NetherGoldOre {
   public static final BlockState NETHER_GOLD_ORE_0 = new BlockState(NamespaceID.from("minecraft:nether_gold_ore:0"), (short) 72, Block.NETHER_GOLD_ORE);
+
+  static {
+    Registries.registerBlockState(NETHER_GOLD_ORE_0);
+  }
 
   public static void initStates() {
     Block.NETHER_GOLD_ORE.addBlockState(NETHER_GOLD_ORE_0);

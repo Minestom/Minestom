@@ -1,6 +1,7 @@
 package net.minestom.server.fluid;
 
 import java.lang.Override;
+import java.lang.String;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -65,6 +66,12 @@ public class Fluid implements Keyed {
   @NotNull
   public final RawFluidData getFluidData() {
     return this.fluidData;
+  }
+
+  @NotNull
+  @Override
+  public String toString() {
+    return "[" + this.id + "]";
   }
 
   @NotNull

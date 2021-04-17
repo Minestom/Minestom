@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class WeepingVinesPlant {
   public static final BlockState WEEPING_VINES_PLANT_0 = new BlockState(NamespaceID.from("minecraft:weeping_vines_plant:0"), (short) 15024, Block.WEEPING_VINES_PLANT);
+
+  static {
+    Registries.registerBlockState(WEEPING_VINES_PLANT_0);
+  }
 
   public static void initStates() {
     Block.WEEPING_VINES_PLANT.addBlockState(WEEPING_VINES_PLANT_0);

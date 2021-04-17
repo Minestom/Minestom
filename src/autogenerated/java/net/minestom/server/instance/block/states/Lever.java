@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -60,6 +61,33 @@ public final class Lever {
   public static final BlockState LEVER_22 = new BlockState(NamespaceID.from("minecraft:lever:22"), (short) 3805, Block.LEVER, "face=CEILING","facing=east","powered=true");
 
   public static final BlockState LEVER_23 = new BlockState(NamespaceID.from("minecraft:lever:23"), (short) 3806, Block.LEVER, "face=CEILING","facing=east","powered=false");
+
+  static {
+    Registries.registerBlockState(LEVER_0);
+    Registries.registerBlockState(LEVER_1);
+    Registries.registerBlockState(LEVER_2);
+    Registries.registerBlockState(LEVER_3);
+    Registries.registerBlockState(LEVER_4);
+    Registries.registerBlockState(LEVER_5);
+    Registries.registerBlockState(LEVER_6);
+    Registries.registerBlockState(LEVER_7);
+    Registries.registerBlockState(LEVER_8);
+    Registries.registerBlockState(LEVER_9);
+    Registries.registerBlockState(LEVER_10);
+    Registries.registerBlockState(LEVER_11);
+    Registries.registerBlockState(LEVER_12);
+    Registries.registerBlockState(LEVER_13);
+    Registries.registerBlockState(LEVER_14);
+    Registries.registerBlockState(LEVER_15);
+    Registries.registerBlockState(LEVER_16);
+    Registries.registerBlockState(LEVER_17);
+    Registries.registerBlockState(LEVER_18);
+    Registries.registerBlockState(LEVER_19);
+    Registries.registerBlockState(LEVER_20);
+    Registries.registerBlockState(LEVER_21);
+    Registries.registerBlockState(LEVER_22);
+    Registries.registerBlockState(LEVER_23);
+  }
 
   public static void initStates() {
     Block.LEVER.addBlockState(LEVER_0);

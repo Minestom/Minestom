@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -60,6 +61,33 @@ public final class PolishedBlackstoneButton {
   public static final BlockState POLISHED_BLACKSTONE_BUTTON_22 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:22"), (short) 16783, Block.POLISHED_BLACKSTONE_BUTTON, "face=CEILING","facing=east","powered=true");
 
   public static final BlockState POLISHED_BLACKSTONE_BUTTON_23 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:23"), (short) 16784, Block.POLISHED_BLACKSTONE_BUTTON, "face=CEILING","facing=east","powered=false");
+
+  static {
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_0);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_1);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_2);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_3);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_4);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_5);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_6);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_7);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_8);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_9);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_10);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_11);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_12);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_13);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_14);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_15);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_16);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_17);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_18);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_19);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_20);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_21);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_22);
+    Registries.registerBlockState(POLISHED_BLACKSTONE_BUTTON_23);
+  }
 
   public static void initStates() {
     Block.POLISHED_BLACKSTONE_BUTTON.addBlockState(POLISHED_BLACKSTONE_BUTTON_0);

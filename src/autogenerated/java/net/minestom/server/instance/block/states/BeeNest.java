@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -60,6 +61,33 @@ public final class BeeNest {
   public static final BlockState BEE_NEST_22 = new BlockState(NamespaceID.from("minecraft:bee_nest:22"), (short) 15806, Block.BEE_NEST, "facing=east","honey_level=4");
 
   public static final BlockState BEE_NEST_23 = new BlockState(NamespaceID.from("minecraft:bee_nest:23"), (short) 15807, Block.BEE_NEST, "facing=east","honey_level=5");
+
+  static {
+    Registries.registerBlockState(BEE_NEST_0);
+    Registries.registerBlockState(BEE_NEST_1);
+    Registries.registerBlockState(BEE_NEST_2);
+    Registries.registerBlockState(BEE_NEST_3);
+    Registries.registerBlockState(BEE_NEST_4);
+    Registries.registerBlockState(BEE_NEST_5);
+    Registries.registerBlockState(BEE_NEST_6);
+    Registries.registerBlockState(BEE_NEST_7);
+    Registries.registerBlockState(BEE_NEST_8);
+    Registries.registerBlockState(BEE_NEST_9);
+    Registries.registerBlockState(BEE_NEST_10);
+    Registries.registerBlockState(BEE_NEST_11);
+    Registries.registerBlockState(BEE_NEST_12);
+    Registries.registerBlockState(BEE_NEST_13);
+    Registries.registerBlockState(BEE_NEST_14);
+    Registries.registerBlockState(BEE_NEST_15);
+    Registries.registerBlockState(BEE_NEST_16);
+    Registries.registerBlockState(BEE_NEST_17);
+    Registries.registerBlockState(BEE_NEST_18);
+    Registries.registerBlockState(BEE_NEST_19);
+    Registries.registerBlockState(BEE_NEST_20);
+    Registries.registerBlockState(BEE_NEST_21);
+    Registries.registerBlockState(BEE_NEST_22);
+    Registries.registerBlockState(BEE_NEST_23);
+  }
 
   public static void initStates() {
     Block.BEE_NEST.addBlockState(BEE_NEST_0);

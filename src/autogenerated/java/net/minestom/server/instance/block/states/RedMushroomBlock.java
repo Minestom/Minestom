@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -140,6 +141,73 @@ public final class RedMushroomBlock {
   public static final BlockState RED_MUSHROOM_BLOCK_62 = new BlockState(NamespaceID.from("minecraft:red_mushroom_block:62"), (short) 4631, Block.RED_MUSHROOM_BLOCK, "down=false","east=false","north=false","south=false","up=false","west=true");
 
   public static final BlockState RED_MUSHROOM_BLOCK_63 = new BlockState(NamespaceID.from("minecraft:red_mushroom_block:63"), (short) 4632, Block.RED_MUSHROOM_BLOCK, "down=false","east=false","north=false","south=false","up=false","west=false");
+
+  static {
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_0);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_1);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_2);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_3);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_4);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_5);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_6);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_7);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_8);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_9);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_10);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_11);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_12);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_13);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_14);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_15);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_16);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_17);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_18);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_19);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_20);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_21);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_22);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_23);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_24);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_25);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_26);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_27);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_28);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_29);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_30);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_31);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_32);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_33);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_34);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_35);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_36);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_37);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_38);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_39);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_40);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_41);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_42);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_43);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_44);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_45);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_46);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_47);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_48);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_49);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_50);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_51);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_52);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_53);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_54);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_55);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_56);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_57);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_58);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_59);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_60);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_61);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_62);
+    Registries.registerBlockState(RED_MUSHROOM_BLOCK_63);
+  }
 
   public static void initStates() {
     Block.RED_MUSHROOM_BLOCK.addBlockState(RED_MUSHROOM_BLOCK_0);

@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -76,6 +77,41 @@ public final class AcaciaSign {
   public static final BlockState ACACIA_SIGN_30 = new BlockState(NamespaceID.from("minecraft:acacia_sign:30"), (short) 3507, Block.ACACIA_SIGN, "rotation=15","waterlogged=true");
 
   public static final BlockState ACACIA_SIGN_31 = new BlockState(NamespaceID.from("minecraft:acacia_sign:31"), (short) 3508, Block.ACACIA_SIGN, "rotation=15","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(ACACIA_SIGN_0);
+    Registries.registerBlockState(ACACIA_SIGN_1);
+    Registries.registerBlockState(ACACIA_SIGN_2);
+    Registries.registerBlockState(ACACIA_SIGN_3);
+    Registries.registerBlockState(ACACIA_SIGN_4);
+    Registries.registerBlockState(ACACIA_SIGN_5);
+    Registries.registerBlockState(ACACIA_SIGN_6);
+    Registries.registerBlockState(ACACIA_SIGN_7);
+    Registries.registerBlockState(ACACIA_SIGN_8);
+    Registries.registerBlockState(ACACIA_SIGN_9);
+    Registries.registerBlockState(ACACIA_SIGN_10);
+    Registries.registerBlockState(ACACIA_SIGN_11);
+    Registries.registerBlockState(ACACIA_SIGN_12);
+    Registries.registerBlockState(ACACIA_SIGN_13);
+    Registries.registerBlockState(ACACIA_SIGN_14);
+    Registries.registerBlockState(ACACIA_SIGN_15);
+    Registries.registerBlockState(ACACIA_SIGN_16);
+    Registries.registerBlockState(ACACIA_SIGN_17);
+    Registries.registerBlockState(ACACIA_SIGN_18);
+    Registries.registerBlockState(ACACIA_SIGN_19);
+    Registries.registerBlockState(ACACIA_SIGN_20);
+    Registries.registerBlockState(ACACIA_SIGN_21);
+    Registries.registerBlockState(ACACIA_SIGN_22);
+    Registries.registerBlockState(ACACIA_SIGN_23);
+    Registries.registerBlockState(ACACIA_SIGN_24);
+    Registries.registerBlockState(ACACIA_SIGN_25);
+    Registries.registerBlockState(ACACIA_SIGN_26);
+    Registries.registerBlockState(ACACIA_SIGN_27);
+    Registries.registerBlockState(ACACIA_SIGN_28);
+    Registries.registerBlockState(ACACIA_SIGN_29);
+    Registries.registerBlockState(ACACIA_SIGN_30);
+    Registries.registerBlockState(ACACIA_SIGN_31);
+  }
 
   public static void initStates() {
     Block.ACACIA_SIGN.addBlockState(ACACIA_SIGN_0);

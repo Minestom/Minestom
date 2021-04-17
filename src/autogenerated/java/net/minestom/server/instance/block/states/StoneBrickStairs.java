@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -172,6 +173,89 @@ public final class StoneBrickStairs {
   public static final BlockState STONE_BRICK_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:stone_brick_stairs:78"), (short) 5014, Block.STONE_BRICK_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
 
   public static final BlockState STONE_BRICK_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:stone_brick_stairs:79"), (short) 5015, Block.STONE_BRICK_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(STONE_BRICK_STAIRS_0);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_1);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_2);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_3);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_4);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_5);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_6);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_7);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_8);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_9);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_10);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_11);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_12);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_13);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_14);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_15);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_16);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_17);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_18);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_19);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_20);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_21);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_22);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_23);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_24);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_25);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_26);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_27);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_28);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_29);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_30);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_31);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_32);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_33);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_34);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_35);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_36);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_37);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_38);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_39);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_40);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_41);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_42);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_43);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_44);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_45);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_46);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_47);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_48);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_49);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_50);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_51);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_52);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_53);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_54);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_55);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_56);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_57);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_58);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_59);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_60);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_61);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_62);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_63);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_64);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_65);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_66);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_67);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_68);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_69);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_70);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_71);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_72);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_73);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_74);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_75);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_76);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_77);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_78);
+    Registries.registerBlockState(STONE_BRICK_STAIRS_79);
+  }
 
   public static void initStates() {
     Block.STONE_BRICK_STAIRS.addBlockState(STONE_BRICK_STAIRS_0);

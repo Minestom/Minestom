@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -24,6 +25,15 @@ public final class PrismarineSlab {
   public static final BlockState PRISMARINE_SLAB_4 = new BlockState(NamespaceID.from("minecraft:prismarine_slab:4"), (short) 7852, Block.PRISMARINE_SLAB, "type=double","waterlogged=true");
 
   public static final BlockState PRISMARINE_SLAB_5 = new BlockState(NamespaceID.from("minecraft:prismarine_slab:5"), (short) 7853, Block.PRISMARINE_SLAB, "type=double","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(PRISMARINE_SLAB_0);
+    Registries.registerBlockState(PRISMARINE_SLAB_1);
+    Registries.registerBlockState(PRISMARINE_SLAB_2);
+    Registries.registerBlockState(PRISMARINE_SLAB_3);
+    Registries.registerBlockState(PRISMARINE_SLAB_4);
+    Registries.registerBlockState(PRISMARINE_SLAB_5);
+  }
 
   public static void initStates() {
     Block.PRISMARINE_SLAB.addBlockState(PRISMARINE_SLAB_0);

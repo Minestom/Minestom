@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -44,6 +45,25 @@ public final class LightGrayBed {
   public static final BlockState LIGHT_GRAY_BED_14 = new BlockState(NamespaceID.from("minecraft:light_gray_bed:14"), (short) 1191, Block.LIGHT_GRAY_BED, "facing=east","occupied=false","part=head");
 
   public static final BlockState LIGHT_GRAY_BED_15 = new BlockState(NamespaceID.from("minecraft:light_gray_bed:15"), (short) 1192, Block.LIGHT_GRAY_BED, "facing=east","occupied=false","part=foot");
+
+  static {
+    Registries.registerBlockState(LIGHT_GRAY_BED_0);
+    Registries.registerBlockState(LIGHT_GRAY_BED_1);
+    Registries.registerBlockState(LIGHT_GRAY_BED_2);
+    Registries.registerBlockState(LIGHT_GRAY_BED_3);
+    Registries.registerBlockState(LIGHT_GRAY_BED_4);
+    Registries.registerBlockState(LIGHT_GRAY_BED_5);
+    Registries.registerBlockState(LIGHT_GRAY_BED_6);
+    Registries.registerBlockState(LIGHT_GRAY_BED_7);
+    Registries.registerBlockState(LIGHT_GRAY_BED_8);
+    Registries.registerBlockState(LIGHT_GRAY_BED_9);
+    Registries.registerBlockState(LIGHT_GRAY_BED_10);
+    Registries.registerBlockState(LIGHT_GRAY_BED_11);
+    Registries.registerBlockState(LIGHT_GRAY_BED_12);
+    Registries.registerBlockState(LIGHT_GRAY_BED_13);
+    Registries.registerBlockState(LIGHT_GRAY_BED_14);
+    Registries.registerBlockState(LIGHT_GRAY_BED_15);
+  }
 
   public static void initStates() {
     Block.LIGHT_GRAY_BED.addBlockState(LIGHT_GRAY_BED_0);

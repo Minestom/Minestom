@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class WarpedNylium {
   public static final BlockState WARPED_NYLIUM_0 = new BlockState(NamespaceID.from("minecraft:warped_nylium:0"), (short) 14978, Block.WARPED_NYLIUM);
+
+  static {
+    Registries.registerBlockState(WARPED_NYLIUM_0);
+  }
 
   public static void initStates() {
     Block.WARPED_NYLIUM.addBlockState(WARPED_NYLIUM_0);

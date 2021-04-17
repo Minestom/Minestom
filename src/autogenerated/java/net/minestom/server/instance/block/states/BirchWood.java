@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -18,6 +19,12 @@ public final class BirchWood {
   public static final BlockState BIRCH_WOOD_1 = new BlockState(NamespaceID.from("minecraft:birch_wood:1"), (short) 116, Block.BIRCH_WOOD, "axis=y");
 
   public static final BlockState BIRCH_WOOD_2 = new BlockState(NamespaceID.from("minecraft:birch_wood:2"), (short) 117, Block.BIRCH_WOOD, "axis=z");
+
+  static {
+    Registries.registerBlockState(BIRCH_WOOD_0);
+    Registries.registerBlockState(BIRCH_WOOD_1);
+    Registries.registerBlockState(BIRCH_WOOD_2);
+  }
 
   public static void initStates() {
     Block.BIRCH_WOOD.addBlockState(BIRCH_WOOD_0);

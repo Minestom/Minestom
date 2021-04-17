@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -64,6 +65,35 @@ public final class Kelp {
   public static final BlockState KELP_24 = new BlockState(NamespaceID.from("minecraft:kelp:24"), (short) 9498, Block.KELP, "age=24");
 
   public static final BlockState KELP_25 = new BlockState(NamespaceID.from("minecraft:kelp:25"), (short) 9499, Block.KELP, "age=25");
+
+  static {
+    Registries.registerBlockState(KELP_0);
+    Registries.registerBlockState(KELP_1);
+    Registries.registerBlockState(KELP_2);
+    Registries.registerBlockState(KELP_3);
+    Registries.registerBlockState(KELP_4);
+    Registries.registerBlockState(KELP_5);
+    Registries.registerBlockState(KELP_6);
+    Registries.registerBlockState(KELP_7);
+    Registries.registerBlockState(KELP_8);
+    Registries.registerBlockState(KELP_9);
+    Registries.registerBlockState(KELP_10);
+    Registries.registerBlockState(KELP_11);
+    Registries.registerBlockState(KELP_12);
+    Registries.registerBlockState(KELP_13);
+    Registries.registerBlockState(KELP_14);
+    Registries.registerBlockState(KELP_15);
+    Registries.registerBlockState(KELP_16);
+    Registries.registerBlockState(KELP_17);
+    Registries.registerBlockState(KELP_18);
+    Registries.registerBlockState(KELP_19);
+    Registries.registerBlockState(KELP_20);
+    Registries.registerBlockState(KELP_21);
+    Registries.registerBlockState(KELP_22);
+    Registries.registerBlockState(KELP_23);
+    Registries.registerBlockState(KELP_24);
+    Registries.registerBlockState(KELP_25);
+  }
 
   public static void initStates() {
     Block.KELP.addBlockState(KELP_0);

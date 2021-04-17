@@ -20,10 +20,7 @@ import net.minestom.server.gamedata.loottables.LootTableManager;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockEntity;
-import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.instance.block.*;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
@@ -39,6 +36,7 @@ import net.minestom.server.particle.Particle;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
+import net.minestom.server.raw_data.DataInitializer;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.ResourceGatherer;
@@ -61,6 +59,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -166,20 +165,25 @@ public final class MinecraftServer {
         } catch (ClassNotFoundException e) {
             LOGGER.error("An error happened while loading the registry. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
         }
-        Block.values();
-        Fluid.values();
-        BlockEntity.values();
-        EntityType.values();
-        VillagerProfession.values();
-        VillagerType.values();
-        Material.values();
-        Enchantment.values();
-        PotionType.values();
-        PotionEffect.values();
-        SoundEvent.values();
-        Particle.values();
-        Attribute.values();
-        StatisticType.values();
+        try {
+            Class.forName(Block.class.getName(), true, MinecraftServer.class.getClassLoader());
+            Class.forName(BlockState.class.getName(), true, MinecraftServer.class.getClassLoader());
+            Class.forName(Fluid.class.getName(), true, MinecraftServer.class.getClassLoader());
+            Class.forName(BlockEntity.class.getName(), true, MinecraftServer.class.getClassLoader());
+            Class.forName(EntityType.class.getName(), true, MinecraftServer.class.getClassLoader());
+            Class.forName(VillagerProfession.class.getName(), true, MinecraftServer.class.getClassLoader());
+            Class.forName(VillagerType.class.getName(), true, MinecraftServer.class.getClassLoader());
+            Class.forName(Material.class.getName(), true, MinecraftServer.class.getClassLoader());
+            Class.forName(Enchantment.class.getName(), true, MinecraftServer.class.getClassLoader());
+            Class.forName(PotionType.class.getName(), true, MinecraftServer.class.getClassLoader());
+            Class.forName(PotionEffect.class.getName(), true, MinecraftServer.class.getClassLoader());
+            Class.forName(SoundEvent.class.getName(), true, MinecraftServer.class.getClassLoader());
+            Class.forName(Particle.class.getName(), true, MinecraftServer.class.getClassLoader());
+            Class.forName(Attribute.class.getName(), true, MinecraftServer.class.getClassLoader());
+            Class.forName(StatisticType.class.getName(), true, MinecraftServer.class.getClassLoader());
+        } catch (ClassNotFoundException e) {
+            LOGGER.error("An error occured while loading the keyed registry types. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
+        }
 
         connectionManager = new ConnectionManager();
         // Networking
@@ -213,6 +217,8 @@ public final class MinecraftServer {
         } catch (IOException e) {
             LOGGER.error("An error happened during resource gathering. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
         }
+        // VanillaData
+        DataInitializer.runDataInitializer(new File(ResourceGatherer.DATA_FOLDER, "/json"), VERSION_NAME);
 
         initialized = true;
 

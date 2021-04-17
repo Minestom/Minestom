@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -60,6 +61,33 @@ public final class BirchButton {
   public static final BlockState BIRCH_BUTTON_22 = new BlockState(NamespaceID.from("minecraft:birch_button:22"), (short) 6420, Block.BIRCH_BUTTON, "face=CEILING","facing=east","powered=true");
 
   public static final BlockState BIRCH_BUTTON_23 = new BlockState(NamespaceID.from("minecraft:birch_button:23"), (short) 6421, Block.BIRCH_BUTTON, "face=CEILING","facing=east","powered=false");
+
+  static {
+    Registries.registerBlockState(BIRCH_BUTTON_0);
+    Registries.registerBlockState(BIRCH_BUTTON_1);
+    Registries.registerBlockState(BIRCH_BUTTON_2);
+    Registries.registerBlockState(BIRCH_BUTTON_3);
+    Registries.registerBlockState(BIRCH_BUTTON_4);
+    Registries.registerBlockState(BIRCH_BUTTON_5);
+    Registries.registerBlockState(BIRCH_BUTTON_6);
+    Registries.registerBlockState(BIRCH_BUTTON_7);
+    Registries.registerBlockState(BIRCH_BUTTON_8);
+    Registries.registerBlockState(BIRCH_BUTTON_9);
+    Registries.registerBlockState(BIRCH_BUTTON_10);
+    Registries.registerBlockState(BIRCH_BUTTON_11);
+    Registries.registerBlockState(BIRCH_BUTTON_12);
+    Registries.registerBlockState(BIRCH_BUTTON_13);
+    Registries.registerBlockState(BIRCH_BUTTON_14);
+    Registries.registerBlockState(BIRCH_BUTTON_15);
+    Registries.registerBlockState(BIRCH_BUTTON_16);
+    Registries.registerBlockState(BIRCH_BUTTON_17);
+    Registries.registerBlockState(BIRCH_BUTTON_18);
+    Registries.registerBlockState(BIRCH_BUTTON_19);
+    Registries.registerBlockState(BIRCH_BUTTON_20);
+    Registries.registerBlockState(BIRCH_BUTTON_21);
+    Registries.registerBlockState(BIRCH_BUTTON_22);
+    Registries.registerBlockState(BIRCH_BUTTON_23);
+  }
 
   public static void initStates() {
     Block.BIRCH_BUTTON.addBlockState(BIRCH_BUTTON_0);

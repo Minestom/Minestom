@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -28,6 +29,17 @@ public final class BubbleCoralWallFan {
   public static final BlockState BUBBLE_CORAL_WALL_FAN_6 = new BlockState(NamespaceID.from("minecraft:bubble_coral_wall_fan:6"), (short) 9626, Block.BUBBLE_CORAL_WALL_FAN, "facing=east","waterlogged=true");
 
   public static final BlockState BUBBLE_CORAL_WALL_FAN_7 = new BlockState(NamespaceID.from("minecraft:bubble_coral_wall_fan:7"), (short) 9627, Block.BUBBLE_CORAL_WALL_FAN, "facing=east","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(BUBBLE_CORAL_WALL_FAN_0);
+    Registries.registerBlockState(BUBBLE_CORAL_WALL_FAN_1);
+    Registries.registerBlockState(BUBBLE_CORAL_WALL_FAN_2);
+    Registries.registerBlockState(BUBBLE_CORAL_WALL_FAN_3);
+    Registries.registerBlockState(BUBBLE_CORAL_WALL_FAN_4);
+    Registries.registerBlockState(BUBBLE_CORAL_WALL_FAN_5);
+    Registries.registerBlockState(BUBBLE_CORAL_WALL_FAN_6);
+    Registries.registerBlockState(BUBBLE_CORAL_WALL_FAN_7);
+  }
 
   public static void initStates() {
     Block.BUBBLE_CORAL_WALL_FAN.addBlockState(BUBBLE_CORAL_WALL_FAN_0);

@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -30,6 +31,18 @@ public final class Composter {
   public static final BlockState COMPOSTER_7 = new BlockState(NamespaceID.from("minecraft:composter:7"), (short) 15766, Block.COMPOSTER, "level=7");
 
   public static final BlockState COMPOSTER_8 = new BlockState(NamespaceID.from("minecraft:composter:8"), (short) 15767, Block.COMPOSTER, "level=8");
+
+  static {
+    Registries.registerBlockState(COMPOSTER_0);
+    Registries.registerBlockState(COMPOSTER_1);
+    Registries.registerBlockState(COMPOSTER_2);
+    Registries.registerBlockState(COMPOSTER_3);
+    Registries.registerBlockState(COMPOSTER_4);
+    Registries.registerBlockState(COMPOSTER_5);
+    Registries.registerBlockState(COMPOSTER_6);
+    Registries.registerBlockState(COMPOSTER_7);
+    Registries.registerBlockState(COMPOSTER_8);
+  }
 
   public static void initStates() {
     Block.COMPOSTER.addBlockState(COMPOSTER_0);

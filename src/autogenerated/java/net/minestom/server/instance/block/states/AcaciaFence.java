@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -76,6 +77,41 @@ public final class AcaciaFence {
   public static final BlockState ACACIA_FENCE_30 = new BlockState(NamespaceID.from("minecraft:acacia_fence:30"), (short) 8708, Block.ACACIA_FENCE, "east=false","north=false","south=false","waterlogged=false","west=true");
 
   public static final BlockState ACACIA_FENCE_31 = new BlockState(NamespaceID.from("minecraft:acacia_fence:31"), (short) 8709, Block.ACACIA_FENCE, "east=false","north=false","south=false","waterlogged=false","west=false");
+
+  static {
+    Registries.registerBlockState(ACACIA_FENCE_0);
+    Registries.registerBlockState(ACACIA_FENCE_1);
+    Registries.registerBlockState(ACACIA_FENCE_2);
+    Registries.registerBlockState(ACACIA_FENCE_3);
+    Registries.registerBlockState(ACACIA_FENCE_4);
+    Registries.registerBlockState(ACACIA_FENCE_5);
+    Registries.registerBlockState(ACACIA_FENCE_6);
+    Registries.registerBlockState(ACACIA_FENCE_7);
+    Registries.registerBlockState(ACACIA_FENCE_8);
+    Registries.registerBlockState(ACACIA_FENCE_9);
+    Registries.registerBlockState(ACACIA_FENCE_10);
+    Registries.registerBlockState(ACACIA_FENCE_11);
+    Registries.registerBlockState(ACACIA_FENCE_12);
+    Registries.registerBlockState(ACACIA_FENCE_13);
+    Registries.registerBlockState(ACACIA_FENCE_14);
+    Registries.registerBlockState(ACACIA_FENCE_15);
+    Registries.registerBlockState(ACACIA_FENCE_16);
+    Registries.registerBlockState(ACACIA_FENCE_17);
+    Registries.registerBlockState(ACACIA_FENCE_18);
+    Registries.registerBlockState(ACACIA_FENCE_19);
+    Registries.registerBlockState(ACACIA_FENCE_20);
+    Registries.registerBlockState(ACACIA_FENCE_21);
+    Registries.registerBlockState(ACACIA_FENCE_22);
+    Registries.registerBlockState(ACACIA_FENCE_23);
+    Registries.registerBlockState(ACACIA_FENCE_24);
+    Registries.registerBlockState(ACACIA_FENCE_25);
+    Registries.registerBlockState(ACACIA_FENCE_26);
+    Registries.registerBlockState(ACACIA_FENCE_27);
+    Registries.registerBlockState(ACACIA_FENCE_28);
+    Registries.registerBlockState(ACACIA_FENCE_29);
+    Registries.registerBlockState(ACACIA_FENCE_30);
+    Registries.registerBlockState(ACACIA_FENCE_31);
+  }
 
   public static void initStates() {
     Block.ACACIA_FENCE.addBlockState(ACACIA_FENCE_0);

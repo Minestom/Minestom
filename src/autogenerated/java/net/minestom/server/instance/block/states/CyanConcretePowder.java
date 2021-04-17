@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class CyanConcretePowder {
   public static final BlockState CYAN_CONCRETE_POWDER_0 = new BlockState(NamespaceID.from("minecraft:cyan_concrete_powder:0"), (short) 9467, Block.CYAN_CONCRETE_POWDER);
+
+  static {
+    Registries.registerBlockState(CYAN_CONCRETE_POWDER_0);
+  }
 
   public static void initStates() {
     Block.CYAN_CONCRETE_POWDER.addBlockState(CYAN_CONCRETE_POWDER_0);

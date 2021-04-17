@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class PinkCarpet {
   public static final BlockState PINK_CARPET_0 = new BlockState(NamespaceID.from("minecraft:pink_carpet:0"), (short) 7876, Block.PINK_CARPET);
+
+  static {
+    Registries.registerBlockState(PINK_CARPET_0);
+  }
 
   public static void initStates() {
     Block.PINK_CARPET.addBlockState(PINK_CARPET_0);

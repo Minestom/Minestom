@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -140,6 +141,73 @@ public final class AcaciaTrapdoor {
   public static final BlockState ACACIA_TRAPDOOR_62 = new BlockState(NamespaceID.from("minecraft:acacia_trapdoor:62"), (short) 4429, Block.ACACIA_TRAPDOOR, "facing=east","half=bottom","open=false","powered=false","waterlogged=true");
 
   public static final BlockState ACACIA_TRAPDOOR_63 = new BlockState(NamespaceID.from("minecraft:acacia_trapdoor:63"), (short) 4430, Block.ACACIA_TRAPDOOR, "facing=east","half=bottom","open=false","powered=false","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(ACACIA_TRAPDOOR_0);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_1);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_2);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_3);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_4);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_5);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_6);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_7);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_8);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_9);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_10);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_11);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_12);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_13);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_14);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_15);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_16);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_17);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_18);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_19);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_20);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_21);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_22);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_23);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_24);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_25);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_26);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_27);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_28);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_29);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_30);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_31);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_32);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_33);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_34);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_35);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_36);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_37);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_38);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_39);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_40);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_41);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_42);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_43);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_44);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_45);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_46);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_47);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_48);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_49);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_50);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_51);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_52);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_53);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_54);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_55);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_56);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_57);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_58);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_59);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_60);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_61);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_62);
+    Registries.registerBlockState(ACACIA_TRAPDOOR_63);
+  }
 
   public static void initStates() {
     Block.ACACIA_TRAPDOOR.addBlockState(ACACIA_TRAPDOOR_0);

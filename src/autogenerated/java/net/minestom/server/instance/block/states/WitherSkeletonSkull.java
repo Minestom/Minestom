@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -44,6 +45,25 @@ public final class WitherSkeletonSkull {
   public static final BlockState WITHER_SKELETON_SKULL_14 = new BlockState(NamespaceID.from("minecraft:wither_skeleton_skull:14"), (short) 6528, Block.WITHER_SKELETON_SKULL, "rotation=14");
 
   public static final BlockState WITHER_SKELETON_SKULL_15 = new BlockState(NamespaceID.from("minecraft:wither_skeleton_skull:15"), (short) 6529, Block.WITHER_SKELETON_SKULL, "rotation=15");
+
+  static {
+    Registries.registerBlockState(WITHER_SKELETON_SKULL_0);
+    Registries.registerBlockState(WITHER_SKELETON_SKULL_1);
+    Registries.registerBlockState(WITHER_SKELETON_SKULL_2);
+    Registries.registerBlockState(WITHER_SKELETON_SKULL_3);
+    Registries.registerBlockState(WITHER_SKELETON_SKULL_4);
+    Registries.registerBlockState(WITHER_SKELETON_SKULL_5);
+    Registries.registerBlockState(WITHER_SKELETON_SKULL_6);
+    Registries.registerBlockState(WITHER_SKELETON_SKULL_7);
+    Registries.registerBlockState(WITHER_SKELETON_SKULL_8);
+    Registries.registerBlockState(WITHER_SKELETON_SKULL_9);
+    Registries.registerBlockState(WITHER_SKELETON_SKULL_10);
+    Registries.registerBlockState(WITHER_SKELETON_SKULL_11);
+    Registries.registerBlockState(WITHER_SKELETON_SKULL_12);
+    Registries.registerBlockState(WITHER_SKELETON_SKULL_13);
+    Registries.registerBlockState(WITHER_SKELETON_SKULL_14);
+    Registries.registerBlockState(WITHER_SKELETON_SKULL_15);
+  }
 
   public static void initStates() {
     Block.WITHER_SKELETON_SKULL.addBlockState(WITHER_SKELETON_SKULL_0);

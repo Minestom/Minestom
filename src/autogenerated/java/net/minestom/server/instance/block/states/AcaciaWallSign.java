@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -28,6 +29,17 @@ public final class AcaciaWallSign {
   public static final BlockState ACACIA_WALL_SIGN_6 = new BlockState(NamespaceID.from("minecraft:acacia_wall_sign:6"), (short) 3765, Block.ACACIA_WALL_SIGN, "facing=east","waterlogged=true");
 
   public static final BlockState ACACIA_WALL_SIGN_7 = new BlockState(NamespaceID.from("minecraft:acacia_wall_sign:7"), (short) 3766, Block.ACACIA_WALL_SIGN, "facing=east","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(ACACIA_WALL_SIGN_0);
+    Registries.registerBlockState(ACACIA_WALL_SIGN_1);
+    Registries.registerBlockState(ACACIA_WALL_SIGN_2);
+    Registries.registerBlockState(ACACIA_WALL_SIGN_3);
+    Registries.registerBlockState(ACACIA_WALL_SIGN_4);
+    Registries.registerBlockState(ACACIA_WALL_SIGN_5);
+    Registries.registerBlockState(ACACIA_WALL_SIGN_6);
+    Registries.registerBlockState(ACACIA_WALL_SIGN_7);
+  }
 
   public static void initStates() {
     Block.ACACIA_WALL_SIGN.addBlockState(ACACIA_WALL_SIGN_0);

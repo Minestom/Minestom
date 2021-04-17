@@ -307,6 +307,17 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
+        // toString method
+        blockClass.addMethod(
+                MethodSpec.methodBuilder("toString")
+                        .addAnnotation(NotNull.class)
+                        .addAnnotation(Override.class)
+                        .returns(String.class)
+                        // this resolves to [Namespace]
+                        .addStatement("return \"[\" + this.id + \"]\"")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
         // values method
         blockClass.addMethod(
                 MethodSpec.methodBuilder("values")
@@ -517,6 +528,17 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
+        // toString method
+        blockStateClass.addMethod(
+                MethodSpec.methodBuilder("toString")
+                        .addAnnotation(NotNull.class)
+                        .addAnnotation(Override.class)
+                        .returns(String.class)
+                        // this resolves to [Namespace]
+                        .addStatement("return \"[\" + this.id + \",\"+ this.namespaceId + \"]\"")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
         // For static initStates
         CodeBlock.Builder staticBlock = CodeBlock.builder();
         CodeBlock.Builder staticBlock2 = CodeBlock.builder();
@@ -566,6 +588,8 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                 // initStates method
                 MethodSpec.Builder initStatesMethod = MethodSpec.methodBuilder("initStates")
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
+
+                CodeBlock.Builder internalStaticBlock = CodeBlock.builder();
 
 
                 for (int j = i*maxSize; j < Math.min((i+1)*maxSize, states.size()); j++) { // from 0 until maxSize or the rest of the array.
@@ -626,9 +650,12 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                             blockName,
                             stateName
                     );
+                    // Add field to internal static method
+                    internalStaticBlock.addStatement("$T.registerBlockState($N)", ClassName.get("net.minestom.server.registry", "Registries"), stateName);
                 }
                 // Add initStates Method
                 blockStateSpecificClass.addMethod(initStatesMethod.build());
+                blockStateSpecificClass.addStaticBlock(internalStaticBlock.build());
 
                 // Add initStates method refence to static block
                 staticBlock.addStatement("$T.initStates()", blockStateSpecificClassName);

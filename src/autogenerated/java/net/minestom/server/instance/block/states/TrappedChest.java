@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -60,6 +61,33 @@ public final class TrappedChest {
   public static final BlockState TRAPPED_CHEST_22 = new BlockState(NamespaceID.from("minecraft:trapped_chest:22"), (short) 6648, Block.TRAPPED_CHEST, "facing=east","type=RIGHT","waterlogged=true");
 
   public static final BlockState TRAPPED_CHEST_23 = new BlockState(NamespaceID.from("minecraft:trapped_chest:23"), (short) 6649, Block.TRAPPED_CHEST, "facing=east","type=RIGHT","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(TRAPPED_CHEST_0);
+    Registries.registerBlockState(TRAPPED_CHEST_1);
+    Registries.registerBlockState(TRAPPED_CHEST_2);
+    Registries.registerBlockState(TRAPPED_CHEST_3);
+    Registries.registerBlockState(TRAPPED_CHEST_4);
+    Registries.registerBlockState(TRAPPED_CHEST_5);
+    Registries.registerBlockState(TRAPPED_CHEST_6);
+    Registries.registerBlockState(TRAPPED_CHEST_7);
+    Registries.registerBlockState(TRAPPED_CHEST_8);
+    Registries.registerBlockState(TRAPPED_CHEST_9);
+    Registries.registerBlockState(TRAPPED_CHEST_10);
+    Registries.registerBlockState(TRAPPED_CHEST_11);
+    Registries.registerBlockState(TRAPPED_CHEST_12);
+    Registries.registerBlockState(TRAPPED_CHEST_13);
+    Registries.registerBlockState(TRAPPED_CHEST_14);
+    Registries.registerBlockState(TRAPPED_CHEST_15);
+    Registries.registerBlockState(TRAPPED_CHEST_16);
+    Registries.registerBlockState(TRAPPED_CHEST_17);
+    Registries.registerBlockState(TRAPPED_CHEST_18);
+    Registries.registerBlockState(TRAPPED_CHEST_19);
+    Registries.registerBlockState(TRAPPED_CHEST_20);
+    Registries.registerBlockState(TRAPPED_CHEST_21);
+    Registries.registerBlockState(TRAPPED_CHEST_22);
+    Registries.registerBlockState(TRAPPED_CHEST_23);
+  }
 
   public static void initStates() {
     Block.TRAPPED_CHEST.addBlockState(TRAPPED_CHEST_0);

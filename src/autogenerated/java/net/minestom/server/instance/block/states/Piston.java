@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -36,6 +37,21 @@ public final class Piston {
   public static final BlockState PISTON_10 = new BlockState(NamespaceID.from("minecraft:piston:10"), (short) 1358, Block.PISTON, "extended=false","facing=up");
 
   public static final BlockState PISTON_11 = new BlockState(NamespaceID.from("minecraft:piston:11"), (short) 1359, Block.PISTON, "extended=false","facing=down");
+
+  static {
+    Registries.registerBlockState(PISTON_0);
+    Registries.registerBlockState(PISTON_1);
+    Registries.registerBlockState(PISTON_2);
+    Registries.registerBlockState(PISTON_3);
+    Registries.registerBlockState(PISTON_4);
+    Registries.registerBlockState(PISTON_5);
+    Registries.registerBlockState(PISTON_6);
+    Registries.registerBlockState(PISTON_7);
+    Registries.registerBlockState(PISTON_8);
+    Registries.registerBlockState(PISTON_9);
+    Registries.registerBlockState(PISTON_10);
+    Registries.registerBlockState(PISTON_11);
+  }
 
   public static void initStates() {
     Block.PISTON.addBlockState(PISTON_0);

@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -18,6 +19,12 @@ public final class HayBlock {
   public static final BlockState HAY_BLOCK_1 = new BlockState(NamespaceID.from("minecraft:hay_block:1"), (short) 7868, Block.HAY_BLOCK, "axis=y");
 
   public static final BlockState HAY_BLOCK_2 = new BlockState(NamespaceID.from("minecraft:hay_block:2"), (short) 7869, Block.HAY_BLOCK, "axis=z");
+
+  static {
+    Registries.registerBlockState(HAY_BLOCK_0);
+    Registries.registerBlockState(HAY_BLOCK_1);
+    Registries.registerBlockState(HAY_BLOCK_2);
+  }
 
   public static void initStates() {
     Block.HAY_BLOCK.addBlockState(HAY_BLOCK_0);

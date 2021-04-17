@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class PottedAzureBluet {
   public static final BlockState POTTED_AZURE_BLUET_0 = new BlockState(NamespaceID.from("minecraft:potted_azure_bluet:0"), (short) 6321, Block.POTTED_AZURE_BLUET);
+
+  static {
+    Registries.registerBlockState(POTTED_AZURE_BLUET_0);
+  }
 
   public static void initStates() {
     Block.POTTED_AZURE_BLUET.addBlockState(POTTED_AZURE_BLUET_0);

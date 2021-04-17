@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -36,6 +37,21 @@ public final class Dropper {
   public static final BlockState DROPPER_10 = new BlockState(NamespaceID.from("minecraft:dropper:10"), (short) 6849, Block.DROPPER, "facing=down","triggered=true");
 
   public static final BlockState DROPPER_11 = new BlockState(NamespaceID.from("minecraft:dropper:11"), (short) 6850, Block.DROPPER, "facing=down","triggered=false");
+
+  static {
+    Registries.registerBlockState(DROPPER_0);
+    Registries.registerBlockState(DROPPER_1);
+    Registries.registerBlockState(DROPPER_2);
+    Registries.registerBlockState(DROPPER_3);
+    Registries.registerBlockState(DROPPER_4);
+    Registries.registerBlockState(DROPPER_5);
+    Registries.registerBlockState(DROPPER_6);
+    Registries.registerBlockState(DROPPER_7);
+    Registries.registerBlockState(DROPPER_8);
+    Registries.registerBlockState(DROPPER_9);
+    Registries.registerBlockState(DROPPER_10);
+    Registries.registerBlockState(DROPPER_11);
+  }
 
   public static void initStates() {
     Block.DROPPER.addBlockState(DROPPER_0);

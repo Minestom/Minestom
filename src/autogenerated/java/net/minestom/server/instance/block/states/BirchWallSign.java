@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -28,6 +29,17 @@ public final class BirchWallSign {
   public static final BlockState BIRCH_WALL_SIGN_6 = new BlockState(NamespaceID.from("minecraft:birch_wall_sign:6"), (short) 3757, Block.BIRCH_WALL_SIGN, "facing=east","waterlogged=true");
 
   public static final BlockState BIRCH_WALL_SIGN_7 = new BlockState(NamespaceID.from("minecraft:birch_wall_sign:7"), (short) 3758, Block.BIRCH_WALL_SIGN, "facing=east","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(BIRCH_WALL_SIGN_0);
+    Registries.registerBlockState(BIRCH_WALL_SIGN_1);
+    Registries.registerBlockState(BIRCH_WALL_SIGN_2);
+    Registries.registerBlockState(BIRCH_WALL_SIGN_3);
+    Registries.registerBlockState(BIRCH_WALL_SIGN_4);
+    Registries.registerBlockState(BIRCH_WALL_SIGN_5);
+    Registries.registerBlockState(BIRCH_WALL_SIGN_6);
+    Registries.registerBlockState(BIRCH_WALL_SIGN_7);
+  }
 
   public static void initStates() {
     Block.BIRCH_WALL_SIGN.addBlockState(BIRCH_WALL_SIGN_0);

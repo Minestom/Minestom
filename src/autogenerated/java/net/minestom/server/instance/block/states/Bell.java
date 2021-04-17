@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -76,6 +77,41 @@ public final class Bell {
   public static final BlockState BELL_30 = new BlockState(NamespaceID.from("minecraft:bell:30"), (short) 14888, Block.BELL, "attachment=DOUBLE_WALL","facing=east","powered=true");
 
   public static final BlockState BELL_31 = new BlockState(NamespaceID.from("minecraft:bell:31"), (short) 14889, Block.BELL, "attachment=DOUBLE_WALL","facing=east","powered=false");
+
+  static {
+    Registries.registerBlockState(BELL_0);
+    Registries.registerBlockState(BELL_1);
+    Registries.registerBlockState(BELL_2);
+    Registries.registerBlockState(BELL_3);
+    Registries.registerBlockState(BELL_4);
+    Registries.registerBlockState(BELL_5);
+    Registries.registerBlockState(BELL_6);
+    Registries.registerBlockState(BELL_7);
+    Registries.registerBlockState(BELL_8);
+    Registries.registerBlockState(BELL_9);
+    Registries.registerBlockState(BELL_10);
+    Registries.registerBlockState(BELL_11);
+    Registries.registerBlockState(BELL_12);
+    Registries.registerBlockState(BELL_13);
+    Registries.registerBlockState(BELL_14);
+    Registries.registerBlockState(BELL_15);
+    Registries.registerBlockState(BELL_16);
+    Registries.registerBlockState(BELL_17);
+    Registries.registerBlockState(BELL_18);
+    Registries.registerBlockState(BELL_19);
+    Registries.registerBlockState(BELL_20);
+    Registries.registerBlockState(BELL_21);
+    Registries.registerBlockState(BELL_22);
+    Registries.registerBlockState(BELL_23);
+    Registries.registerBlockState(BELL_24);
+    Registries.registerBlockState(BELL_25);
+    Registries.registerBlockState(BELL_26);
+    Registries.registerBlockState(BELL_27);
+    Registries.registerBlockState(BELL_28);
+    Registries.registerBlockState(BELL_29);
+    Registries.registerBlockState(BELL_30);
+    Registries.registerBlockState(BELL_31);
+  }
 
   public static void initStates() {
     Block.BELL.addBlockState(BELL_0);

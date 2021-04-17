@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -172,6 +173,89 @@ public final class QuartzStairs {
   public static final BlockState QUARTZ_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:quartz_stairs:78"), (short) 6825, Block.QUARTZ_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
 
   public static final BlockState QUARTZ_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:quartz_stairs:79"), (short) 6826, Block.QUARTZ_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(QUARTZ_STAIRS_0);
+    Registries.registerBlockState(QUARTZ_STAIRS_1);
+    Registries.registerBlockState(QUARTZ_STAIRS_2);
+    Registries.registerBlockState(QUARTZ_STAIRS_3);
+    Registries.registerBlockState(QUARTZ_STAIRS_4);
+    Registries.registerBlockState(QUARTZ_STAIRS_5);
+    Registries.registerBlockState(QUARTZ_STAIRS_6);
+    Registries.registerBlockState(QUARTZ_STAIRS_7);
+    Registries.registerBlockState(QUARTZ_STAIRS_8);
+    Registries.registerBlockState(QUARTZ_STAIRS_9);
+    Registries.registerBlockState(QUARTZ_STAIRS_10);
+    Registries.registerBlockState(QUARTZ_STAIRS_11);
+    Registries.registerBlockState(QUARTZ_STAIRS_12);
+    Registries.registerBlockState(QUARTZ_STAIRS_13);
+    Registries.registerBlockState(QUARTZ_STAIRS_14);
+    Registries.registerBlockState(QUARTZ_STAIRS_15);
+    Registries.registerBlockState(QUARTZ_STAIRS_16);
+    Registries.registerBlockState(QUARTZ_STAIRS_17);
+    Registries.registerBlockState(QUARTZ_STAIRS_18);
+    Registries.registerBlockState(QUARTZ_STAIRS_19);
+    Registries.registerBlockState(QUARTZ_STAIRS_20);
+    Registries.registerBlockState(QUARTZ_STAIRS_21);
+    Registries.registerBlockState(QUARTZ_STAIRS_22);
+    Registries.registerBlockState(QUARTZ_STAIRS_23);
+    Registries.registerBlockState(QUARTZ_STAIRS_24);
+    Registries.registerBlockState(QUARTZ_STAIRS_25);
+    Registries.registerBlockState(QUARTZ_STAIRS_26);
+    Registries.registerBlockState(QUARTZ_STAIRS_27);
+    Registries.registerBlockState(QUARTZ_STAIRS_28);
+    Registries.registerBlockState(QUARTZ_STAIRS_29);
+    Registries.registerBlockState(QUARTZ_STAIRS_30);
+    Registries.registerBlockState(QUARTZ_STAIRS_31);
+    Registries.registerBlockState(QUARTZ_STAIRS_32);
+    Registries.registerBlockState(QUARTZ_STAIRS_33);
+    Registries.registerBlockState(QUARTZ_STAIRS_34);
+    Registries.registerBlockState(QUARTZ_STAIRS_35);
+    Registries.registerBlockState(QUARTZ_STAIRS_36);
+    Registries.registerBlockState(QUARTZ_STAIRS_37);
+    Registries.registerBlockState(QUARTZ_STAIRS_38);
+    Registries.registerBlockState(QUARTZ_STAIRS_39);
+    Registries.registerBlockState(QUARTZ_STAIRS_40);
+    Registries.registerBlockState(QUARTZ_STAIRS_41);
+    Registries.registerBlockState(QUARTZ_STAIRS_42);
+    Registries.registerBlockState(QUARTZ_STAIRS_43);
+    Registries.registerBlockState(QUARTZ_STAIRS_44);
+    Registries.registerBlockState(QUARTZ_STAIRS_45);
+    Registries.registerBlockState(QUARTZ_STAIRS_46);
+    Registries.registerBlockState(QUARTZ_STAIRS_47);
+    Registries.registerBlockState(QUARTZ_STAIRS_48);
+    Registries.registerBlockState(QUARTZ_STAIRS_49);
+    Registries.registerBlockState(QUARTZ_STAIRS_50);
+    Registries.registerBlockState(QUARTZ_STAIRS_51);
+    Registries.registerBlockState(QUARTZ_STAIRS_52);
+    Registries.registerBlockState(QUARTZ_STAIRS_53);
+    Registries.registerBlockState(QUARTZ_STAIRS_54);
+    Registries.registerBlockState(QUARTZ_STAIRS_55);
+    Registries.registerBlockState(QUARTZ_STAIRS_56);
+    Registries.registerBlockState(QUARTZ_STAIRS_57);
+    Registries.registerBlockState(QUARTZ_STAIRS_58);
+    Registries.registerBlockState(QUARTZ_STAIRS_59);
+    Registries.registerBlockState(QUARTZ_STAIRS_60);
+    Registries.registerBlockState(QUARTZ_STAIRS_61);
+    Registries.registerBlockState(QUARTZ_STAIRS_62);
+    Registries.registerBlockState(QUARTZ_STAIRS_63);
+    Registries.registerBlockState(QUARTZ_STAIRS_64);
+    Registries.registerBlockState(QUARTZ_STAIRS_65);
+    Registries.registerBlockState(QUARTZ_STAIRS_66);
+    Registries.registerBlockState(QUARTZ_STAIRS_67);
+    Registries.registerBlockState(QUARTZ_STAIRS_68);
+    Registries.registerBlockState(QUARTZ_STAIRS_69);
+    Registries.registerBlockState(QUARTZ_STAIRS_70);
+    Registries.registerBlockState(QUARTZ_STAIRS_71);
+    Registries.registerBlockState(QUARTZ_STAIRS_72);
+    Registries.registerBlockState(QUARTZ_STAIRS_73);
+    Registries.registerBlockState(QUARTZ_STAIRS_74);
+    Registries.registerBlockState(QUARTZ_STAIRS_75);
+    Registries.registerBlockState(QUARTZ_STAIRS_76);
+    Registries.registerBlockState(QUARTZ_STAIRS_77);
+    Registries.registerBlockState(QUARTZ_STAIRS_78);
+    Registries.registerBlockState(QUARTZ_STAIRS_79);
+  }
 
   public static void initStates() {
     Block.QUARTZ_STAIRS.addBlockState(QUARTZ_STAIRS_0);

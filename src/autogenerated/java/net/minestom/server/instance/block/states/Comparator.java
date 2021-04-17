@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -44,6 +45,25 @@ public final class Comparator {
   public static final BlockState COMPARATOR_14 = new BlockState(NamespaceID.from("minecraft:comparator:14"), (short) 6696, Block.COMPARATOR, "facing=east","mode=subtract","powered=true");
 
   public static final BlockState COMPARATOR_15 = new BlockState(NamespaceID.from("minecraft:comparator:15"), (short) 6697, Block.COMPARATOR, "facing=east","mode=subtract","powered=false");
+
+  static {
+    Registries.registerBlockState(COMPARATOR_0);
+    Registries.registerBlockState(COMPARATOR_1);
+    Registries.registerBlockState(COMPARATOR_2);
+    Registries.registerBlockState(COMPARATOR_3);
+    Registries.registerBlockState(COMPARATOR_4);
+    Registries.registerBlockState(COMPARATOR_5);
+    Registries.registerBlockState(COMPARATOR_6);
+    Registries.registerBlockState(COMPARATOR_7);
+    Registries.registerBlockState(COMPARATOR_8);
+    Registries.registerBlockState(COMPARATOR_9);
+    Registries.registerBlockState(COMPARATOR_10);
+    Registries.registerBlockState(COMPARATOR_11);
+    Registries.registerBlockState(COMPARATOR_12);
+    Registries.registerBlockState(COMPARATOR_13);
+    Registries.registerBlockState(COMPARATOR_14);
+    Registries.registerBlockState(COMPARATOR_15);
+  }
 
   public static void initStates() {
     Block.COMPARATOR.addBlockState(COMPARATOR_0);

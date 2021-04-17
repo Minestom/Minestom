@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -76,6 +77,41 @@ public final class CrimsonSign {
   public static final BlockState CRIMSON_SIGN_30 = new BlockState(NamespaceID.from("minecraft:crimson_sign:30"), (short) 15693, Block.CRIMSON_SIGN, "rotation=15","waterlogged=true");
 
   public static final BlockState CRIMSON_SIGN_31 = new BlockState(NamespaceID.from("minecraft:crimson_sign:31"), (short) 15694, Block.CRIMSON_SIGN, "rotation=15","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(CRIMSON_SIGN_0);
+    Registries.registerBlockState(CRIMSON_SIGN_1);
+    Registries.registerBlockState(CRIMSON_SIGN_2);
+    Registries.registerBlockState(CRIMSON_SIGN_3);
+    Registries.registerBlockState(CRIMSON_SIGN_4);
+    Registries.registerBlockState(CRIMSON_SIGN_5);
+    Registries.registerBlockState(CRIMSON_SIGN_6);
+    Registries.registerBlockState(CRIMSON_SIGN_7);
+    Registries.registerBlockState(CRIMSON_SIGN_8);
+    Registries.registerBlockState(CRIMSON_SIGN_9);
+    Registries.registerBlockState(CRIMSON_SIGN_10);
+    Registries.registerBlockState(CRIMSON_SIGN_11);
+    Registries.registerBlockState(CRIMSON_SIGN_12);
+    Registries.registerBlockState(CRIMSON_SIGN_13);
+    Registries.registerBlockState(CRIMSON_SIGN_14);
+    Registries.registerBlockState(CRIMSON_SIGN_15);
+    Registries.registerBlockState(CRIMSON_SIGN_16);
+    Registries.registerBlockState(CRIMSON_SIGN_17);
+    Registries.registerBlockState(CRIMSON_SIGN_18);
+    Registries.registerBlockState(CRIMSON_SIGN_19);
+    Registries.registerBlockState(CRIMSON_SIGN_20);
+    Registries.registerBlockState(CRIMSON_SIGN_21);
+    Registries.registerBlockState(CRIMSON_SIGN_22);
+    Registries.registerBlockState(CRIMSON_SIGN_23);
+    Registries.registerBlockState(CRIMSON_SIGN_24);
+    Registries.registerBlockState(CRIMSON_SIGN_25);
+    Registries.registerBlockState(CRIMSON_SIGN_26);
+    Registries.registerBlockState(CRIMSON_SIGN_27);
+    Registries.registerBlockState(CRIMSON_SIGN_28);
+    Registries.registerBlockState(CRIMSON_SIGN_29);
+    Registries.registerBlockState(CRIMSON_SIGN_30);
+    Registries.registerBlockState(CRIMSON_SIGN_31);
+  }
 
   public static void initStates() {
     Block.CRIMSON_SIGN.addBlockState(CRIMSON_SIGN_0);

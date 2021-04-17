@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -20,6 +21,13 @@ public final class Cauldron {
   public static final BlockState CAULDRON_2 = new BlockState(NamespaceID.from("minecraft:cauldron:2"), (short) 5147, Block.CAULDRON, "level=2");
 
   public static final BlockState CAULDRON_3 = new BlockState(NamespaceID.from("minecraft:cauldron:3"), (short) 5148, Block.CAULDRON, "level=3");
+
+  static {
+    Registries.registerBlockState(CAULDRON_0);
+    Registries.registerBlockState(CAULDRON_1);
+    Registries.registerBlockState(CAULDRON_2);
+    Registries.registerBlockState(CAULDRON_3);
+  }
 
   public static void initStates() {
     Block.CAULDRON.addBlockState(CAULDRON_0);

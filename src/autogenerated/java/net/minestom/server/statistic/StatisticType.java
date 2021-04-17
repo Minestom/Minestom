@@ -1,6 +1,7 @@
 package net.minestom.server.statistic;
 
 import java.lang.Override;
+import java.lang.String;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -263,6 +264,12 @@ public class StatisticType implements Keyed {
   @Nullable
   public static StatisticType fromId(int id) {
     return Registries.getStatisticType(id);
+  }
+
+  @NotNull
+  @Override
+  public String toString() {
+    return "[" + this.id + "]";
   }
 
   @NotNull

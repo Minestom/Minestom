@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -64,6 +65,35 @@ public final class TwistingVines {
   public static final BlockState TWISTING_VINES_24 = new BlockState(NamespaceID.from("minecraft:twisting_vines:24"), (short) 15049, Block.TWISTING_VINES, "age=24");
 
   public static final BlockState TWISTING_VINES_25 = new BlockState(NamespaceID.from("minecraft:twisting_vines:25"), (short) 15050, Block.TWISTING_VINES, "age=25");
+
+  static {
+    Registries.registerBlockState(TWISTING_VINES_0);
+    Registries.registerBlockState(TWISTING_VINES_1);
+    Registries.registerBlockState(TWISTING_VINES_2);
+    Registries.registerBlockState(TWISTING_VINES_3);
+    Registries.registerBlockState(TWISTING_VINES_4);
+    Registries.registerBlockState(TWISTING_VINES_5);
+    Registries.registerBlockState(TWISTING_VINES_6);
+    Registries.registerBlockState(TWISTING_VINES_7);
+    Registries.registerBlockState(TWISTING_VINES_8);
+    Registries.registerBlockState(TWISTING_VINES_9);
+    Registries.registerBlockState(TWISTING_VINES_10);
+    Registries.registerBlockState(TWISTING_VINES_11);
+    Registries.registerBlockState(TWISTING_VINES_12);
+    Registries.registerBlockState(TWISTING_VINES_13);
+    Registries.registerBlockState(TWISTING_VINES_14);
+    Registries.registerBlockState(TWISTING_VINES_15);
+    Registries.registerBlockState(TWISTING_VINES_16);
+    Registries.registerBlockState(TWISTING_VINES_17);
+    Registries.registerBlockState(TWISTING_VINES_18);
+    Registries.registerBlockState(TWISTING_VINES_19);
+    Registries.registerBlockState(TWISTING_VINES_20);
+    Registries.registerBlockState(TWISTING_VINES_21);
+    Registries.registerBlockState(TWISTING_VINES_22);
+    Registries.registerBlockState(TWISTING_VINES_23);
+    Registries.registerBlockState(TWISTING_VINES_24);
+    Registries.registerBlockState(TWISTING_VINES_25);
+  }
 
   public static void initStates() {
     Block.TWISTING_VINES.addBlockState(TWISTING_VINES_0);

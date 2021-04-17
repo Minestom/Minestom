@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -76,6 +77,41 @@ public final class CrimsonFence {
   public static final BlockState CRIMSON_FENCE_30 = new BlockState(NamespaceID.from("minecraft:crimson_fence:30"), (short) 15101, Block.CRIMSON_FENCE, "east=false","north=false","south=false","waterlogged=false","west=true");
 
   public static final BlockState CRIMSON_FENCE_31 = new BlockState(NamespaceID.from("minecraft:crimson_fence:31"), (short) 15102, Block.CRIMSON_FENCE, "east=false","north=false","south=false","waterlogged=false","west=false");
+
+  static {
+    Registries.registerBlockState(CRIMSON_FENCE_0);
+    Registries.registerBlockState(CRIMSON_FENCE_1);
+    Registries.registerBlockState(CRIMSON_FENCE_2);
+    Registries.registerBlockState(CRIMSON_FENCE_3);
+    Registries.registerBlockState(CRIMSON_FENCE_4);
+    Registries.registerBlockState(CRIMSON_FENCE_5);
+    Registries.registerBlockState(CRIMSON_FENCE_6);
+    Registries.registerBlockState(CRIMSON_FENCE_7);
+    Registries.registerBlockState(CRIMSON_FENCE_8);
+    Registries.registerBlockState(CRIMSON_FENCE_9);
+    Registries.registerBlockState(CRIMSON_FENCE_10);
+    Registries.registerBlockState(CRIMSON_FENCE_11);
+    Registries.registerBlockState(CRIMSON_FENCE_12);
+    Registries.registerBlockState(CRIMSON_FENCE_13);
+    Registries.registerBlockState(CRIMSON_FENCE_14);
+    Registries.registerBlockState(CRIMSON_FENCE_15);
+    Registries.registerBlockState(CRIMSON_FENCE_16);
+    Registries.registerBlockState(CRIMSON_FENCE_17);
+    Registries.registerBlockState(CRIMSON_FENCE_18);
+    Registries.registerBlockState(CRIMSON_FENCE_19);
+    Registries.registerBlockState(CRIMSON_FENCE_20);
+    Registries.registerBlockState(CRIMSON_FENCE_21);
+    Registries.registerBlockState(CRIMSON_FENCE_22);
+    Registries.registerBlockState(CRIMSON_FENCE_23);
+    Registries.registerBlockState(CRIMSON_FENCE_24);
+    Registries.registerBlockState(CRIMSON_FENCE_25);
+    Registries.registerBlockState(CRIMSON_FENCE_26);
+    Registries.registerBlockState(CRIMSON_FENCE_27);
+    Registries.registerBlockState(CRIMSON_FENCE_28);
+    Registries.registerBlockState(CRIMSON_FENCE_29);
+    Registries.registerBlockState(CRIMSON_FENCE_30);
+    Registries.registerBlockState(CRIMSON_FENCE_31);
+  }
 
   public static void initStates() {
     Block.CRIMSON_FENCE.addBlockState(CRIMSON_FENCE_0);

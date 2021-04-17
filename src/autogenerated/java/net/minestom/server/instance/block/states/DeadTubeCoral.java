@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -16,6 +17,11 @@ public final class DeadTubeCoral {
   public static final BlockState DEAD_TUBE_CORAL_0 = new BlockState(NamespaceID.from("minecraft:dead_tube_coral:0"), (short) 9524, Block.DEAD_TUBE_CORAL, "waterlogged=true");
 
   public static final BlockState DEAD_TUBE_CORAL_1 = new BlockState(NamespaceID.from("minecraft:dead_tube_coral:1"), (short) 9525, Block.DEAD_TUBE_CORAL, "waterlogged=false");
+
+  static {
+    Registries.registerBlockState(DEAD_TUBE_CORAL_0);
+    Registries.registerBlockState(DEAD_TUBE_CORAL_1);
+  }
 
   public static void initStates() {
     Block.DEAD_TUBE_CORAL.addBlockState(DEAD_TUBE_CORAL_0);

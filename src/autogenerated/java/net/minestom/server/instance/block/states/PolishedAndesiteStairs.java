@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -172,6 +173,89 @@ public final class PolishedAndesiteStairs {
   public static final BlockState POLISHED_ANDESITE_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:polished_andesite_stairs:78"), (short) 10711, Block.POLISHED_ANDESITE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
 
   public static final BlockState POLISHED_ANDESITE_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:polished_andesite_stairs:79"), (short) 10712, Block.POLISHED_ANDESITE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_0);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_1);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_2);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_3);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_4);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_5);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_6);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_7);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_8);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_9);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_10);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_11);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_12);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_13);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_14);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_15);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_16);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_17);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_18);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_19);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_20);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_21);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_22);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_23);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_24);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_25);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_26);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_27);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_28);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_29);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_30);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_31);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_32);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_33);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_34);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_35);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_36);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_37);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_38);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_39);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_40);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_41);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_42);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_43);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_44);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_45);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_46);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_47);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_48);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_49);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_50);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_51);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_52);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_53);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_54);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_55);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_56);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_57);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_58);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_59);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_60);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_61);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_62);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_63);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_64);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_65);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_66);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_67);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_68);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_69);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_70);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_71);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_72);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_73);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_74);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_75);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_76);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_77);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_78);
+    Registries.registerBlockState(POLISHED_ANDESITE_STAIRS_79);
+  }
 
   public static void initStates() {
     Block.POLISHED_ANDESITE_STAIRS.addBlockState(POLISHED_ANDESITE_STAIRS_0);

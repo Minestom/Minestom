@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -24,6 +25,15 @@ public final class EndRod {
   public static final BlockState END_ROD_4 = new BlockState(NamespaceID.from("minecraft:end_rod:4"), (short) 9066, Block.END_ROD, "facing=up");
 
   public static final BlockState END_ROD_5 = new BlockState(NamespaceID.from("minecraft:end_rod:5"), (short) 9067, Block.END_ROD, "facing=down");
+
+  static {
+    Registries.registerBlockState(END_ROD_0);
+    Registries.registerBlockState(END_ROD_1);
+    Registries.registerBlockState(END_ROD_2);
+    Registries.registerBlockState(END_ROD_3);
+    Registries.registerBlockState(END_ROD_4);
+    Registries.registerBlockState(END_ROD_5);
+  }
 
   public static void initStates() {
     Block.END_ROD.addBlockState(END_ROD_0);

@@ -1,6 +1,7 @@
 package net.minestom.server.entity.metadata.villager;
 
 import java.lang.Override;
+import java.lang.String;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -52,6 +53,12 @@ public class VillagerType implements Keyed {
   @NotNull
   public NamespaceID getId() {
     return this.id;
+  }
+
+  @NotNull
+  @Override
+  public String toString() {
+    return "[" + this.id + "]";
   }
 
   @NotNull

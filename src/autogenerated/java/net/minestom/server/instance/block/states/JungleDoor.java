@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -140,6 +141,73 @@ public final class JungleDoor {
   public static final BlockState JUNGLE_DOOR_62 = new BlockState(NamespaceID.from("minecraft:jungle_door:62"), (short) 8932, Block.JUNGLE_DOOR, "facing=east","half=lower","hinge=right","open=false","powered=true");
 
   public static final BlockState JUNGLE_DOOR_63 = new BlockState(NamespaceID.from("minecraft:jungle_door:63"), (short) 8933, Block.JUNGLE_DOOR, "facing=east","half=lower","hinge=right","open=false","powered=false");
+
+  static {
+    Registries.registerBlockState(JUNGLE_DOOR_0);
+    Registries.registerBlockState(JUNGLE_DOOR_1);
+    Registries.registerBlockState(JUNGLE_DOOR_2);
+    Registries.registerBlockState(JUNGLE_DOOR_3);
+    Registries.registerBlockState(JUNGLE_DOOR_4);
+    Registries.registerBlockState(JUNGLE_DOOR_5);
+    Registries.registerBlockState(JUNGLE_DOOR_6);
+    Registries.registerBlockState(JUNGLE_DOOR_7);
+    Registries.registerBlockState(JUNGLE_DOOR_8);
+    Registries.registerBlockState(JUNGLE_DOOR_9);
+    Registries.registerBlockState(JUNGLE_DOOR_10);
+    Registries.registerBlockState(JUNGLE_DOOR_11);
+    Registries.registerBlockState(JUNGLE_DOOR_12);
+    Registries.registerBlockState(JUNGLE_DOOR_13);
+    Registries.registerBlockState(JUNGLE_DOOR_14);
+    Registries.registerBlockState(JUNGLE_DOOR_15);
+    Registries.registerBlockState(JUNGLE_DOOR_16);
+    Registries.registerBlockState(JUNGLE_DOOR_17);
+    Registries.registerBlockState(JUNGLE_DOOR_18);
+    Registries.registerBlockState(JUNGLE_DOOR_19);
+    Registries.registerBlockState(JUNGLE_DOOR_20);
+    Registries.registerBlockState(JUNGLE_DOOR_21);
+    Registries.registerBlockState(JUNGLE_DOOR_22);
+    Registries.registerBlockState(JUNGLE_DOOR_23);
+    Registries.registerBlockState(JUNGLE_DOOR_24);
+    Registries.registerBlockState(JUNGLE_DOOR_25);
+    Registries.registerBlockState(JUNGLE_DOOR_26);
+    Registries.registerBlockState(JUNGLE_DOOR_27);
+    Registries.registerBlockState(JUNGLE_DOOR_28);
+    Registries.registerBlockState(JUNGLE_DOOR_29);
+    Registries.registerBlockState(JUNGLE_DOOR_30);
+    Registries.registerBlockState(JUNGLE_DOOR_31);
+    Registries.registerBlockState(JUNGLE_DOOR_32);
+    Registries.registerBlockState(JUNGLE_DOOR_33);
+    Registries.registerBlockState(JUNGLE_DOOR_34);
+    Registries.registerBlockState(JUNGLE_DOOR_35);
+    Registries.registerBlockState(JUNGLE_DOOR_36);
+    Registries.registerBlockState(JUNGLE_DOOR_37);
+    Registries.registerBlockState(JUNGLE_DOOR_38);
+    Registries.registerBlockState(JUNGLE_DOOR_39);
+    Registries.registerBlockState(JUNGLE_DOOR_40);
+    Registries.registerBlockState(JUNGLE_DOOR_41);
+    Registries.registerBlockState(JUNGLE_DOOR_42);
+    Registries.registerBlockState(JUNGLE_DOOR_43);
+    Registries.registerBlockState(JUNGLE_DOOR_44);
+    Registries.registerBlockState(JUNGLE_DOOR_45);
+    Registries.registerBlockState(JUNGLE_DOOR_46);
+    Registries.registerBlockState(JUNGLE_DOOR_47);
+    Registries.registerBlockState(JUNGLE_DOOR_48);
+    Registries.registerBlockState(JUNGLE_DOOR_49);
+    Registries.registerBlockState(JUNGLE_DOOR_50);
+    Registries.registerBlockState(JUNGLE_DOOR_51);
+    Registries.registerBlockState(JUNGLE_DOOR_52);
+    Registries.registerBlockState(JUNGLE_DOOR_53);
+    Registries.registerBlockState(JUNGLE_DOOR_54);
+    Registries.registerBlockState(JUNGLE_DOOR_55);
+    Registries.registerBlockState(JUNGLE_DOOR_56);
+    Registries.registerBlockState(JUNGLE_DOOR_57);
+    Registries.registerBlockState(JUNGLE_DOOR_58);
+    Registries.registerBlockState(JUNGLE_DOOR_59);
+    Registries.registerBlockState(JUNGLE_DOOR_60);
+    Registries.registerBlockState(JUNGLE_DOOR_61);
+    Registries.registerBlockState(JUNGLE_DOOR_62);
+    Registries.registerBlockState(JUNGLE_DOOR_63);
+  }
 
   public static void initStates() {
     Block.JUNGLE_DOOR.addBlockState(JUNGLE_DOOR_0);

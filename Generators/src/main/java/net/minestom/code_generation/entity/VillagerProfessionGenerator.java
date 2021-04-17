@@ -112,6 +112,17 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                         .build()
         );
+        // toString method
+        villagerProfessionClass.addMethod(
+                MethodSpec.methodBuilder("toString")
+                        .addAnnotation(NotNull.class)
+                        .addAnnotation(Override.class)
+                        .returns(String.class)
+                        // this resolves to [Namespace]
+                        .addStatement("return \"[\" + this.id + \"]\"")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
         // values method
         villagerProfessionClass.addMethod(
                 MethodSpec.methodBuilder("values")

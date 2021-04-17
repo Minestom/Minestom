@@ -50,8 +50,6 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
 
     @Override
     public void generate() {
-        // Important classes we use alot
-        ClassName keyIDClassName = ClassName.get("net.kyori.adventure.key", "Key");
 
         // Registry class
         ClassName registeriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
@@ -121,7 +119,7 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
             FieldSpec registryField = registryFields[i];
             String typeName = type.simpleName();
 
-            ParameterSpec keyIDParam = ParameterSpec.builder(keyIDClassName, "key").addAnnotation(NotNull.class).build();
+            ParameterSpec keyIDParam = ParameterSpec.builder(ClassName.get("net.kyori.adventure.key", "Key"), "key").addAnnotation(NotNull.class).build();
             ParameterSpec stringIDParam = ParameterSpec.builder(ClassName.get(String.class), "id").addAnnotation(NotNull.class).build();
 
             // code
@@ -150,7 +148,7 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
                         .returns(type)
                         .addAnnotation(annotation)
                         .addParameter(stringIDParam)
-                        .addStatement("return $N.get($T.key($N))", registryField, ClassName.get("net.kyori.adventure.key", "Key"), stringIDParam)
+                        .addStatement("return $N.get($T.from($N))", registryField, ClassName.get("net.minestom.server.utils","NamespaceID"), stringIDParam)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .addJavadoc(javadoc.toString())
                         .build();

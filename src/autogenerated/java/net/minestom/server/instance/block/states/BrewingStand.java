@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -28,6 +29,17 @@ public final class BrewingStand {
   public static final BlockState BREWING_STAND_6 = new BlockState(NamespaceID.from("minecraft:brewing_stand:6"), (short) 5143, Block.BREWING_STAND, "has_bottle_0=false","has_bottle_1=false","has_bottle_2=true");
 
   public static final BlockState BREWING_STAND_7 = new BlockState(NamespaceID.from("minecraft:brewing_stand:7"), (short) 5144, Block.BREWING_STAND, "has_bottle_0=false","has_bottle_1=false","has_bottle_2=false");
+
+  static {
+    Registries.registerBlockState(BREWING_STAND_0);
+    Registries.registerBlockState(BREWING_STAND_1);
+    Registries.registerBlockState(BREWING_STAND_2);
+    Registries.registerBlockState(BREWING_STAND_3);
+    Registries.registerBlockState(BREWING_STAND_4);
+    Registries.registerBlockState(BREWING_STAND_5);
+    Registries.registerBlockState(BREWING_STAND_6);
+    Registries.registerBlockState(BREWING_STAND_7);
+  }
 
   public static void initStates() {
     Block.BREWING_STAND.addBlockState(BREWING_STAND_0);

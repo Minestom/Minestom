@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -18,6 +19,12 @@ public final class StrippedCrimsonHyphae {
   public static final BlockState STRIPPED_CRIMSON_HYPHAE_1 = new BlockState(NamespaceID.from("minecraft:stripped_crimson_hyphae:1"), (short) 14993, Block.STRIPPED_CRIMSON_HYPHAE, "axis=y");
 
   public static final BlockState STRIPPED_CRIMSON_HYPHAE_2 = new BlockState(NamespaceID.from("minecraft:stripped_crimson_hyphae:2"), (short) 14994, Block.STRIPPED_CRIMSON_HYPHAE, "axis=z");
+
+  static {
+    Registries.registerBlockState(STRIPPED_CRIMSON_HYPHAE_0);
+    Registries.registerBlockState(STRIPPED_CRIMSON_HYPHAE_1);
+    Registries.registerBlockState(STRIPPED_CRIMSON_HYPHAE_2);
+  }
 
   public static void initStates() {
     Block.STRIPPED_CRIMSON_HYPHAE.addBlockState(STRIPPED_CRIMSON_HYPHAE_0);

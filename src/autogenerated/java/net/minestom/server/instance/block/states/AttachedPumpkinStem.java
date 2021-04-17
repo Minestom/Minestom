@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -20,6 +21,13 @@ public final class AttachedPumpkinStem {
   public static final BlockState ATTACHED_PUMPKIN_STEM_2 = new BlockState(NamespaceID.from("minecraft:attached_pumpkin_stem:2"), (short) 4770, Block.ATTACHED_PUMPKIN_STEM, "facing=west");
 
   public static final BlockState ATTACHED_PUMPKIN_STEM_3 = new BlockState(NamespaceID.from("minecraft:attached_pumpkin_stem:3"), (short) 4771, Block.ATTACHED_PUMPKIN_STEM, "facing=east");
+
+  static {
+    Registries.registerBlockState(ATTACHED_PUMPKIN_STEM_0);
+    Registries.registerBlockState(ATTACHED_PUMPKIN_STEM_1);
+    Registries.registerBlockState(ATTACHED_PUMPKIN_STEM_2);
+    Registries.registerBlockState(ATTACHED_PUMPKIN_STEM_3);
+  }
 
   public static void initStates() {
     Block.ATTACHED_PUMPKIN_STEM.addBlockState(ATTACHED_PUMPKIN_STEM_0);

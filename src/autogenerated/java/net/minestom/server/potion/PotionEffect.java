@@ -1,6 +1,7 @@
 package net.minestom.server.potion;
 
 import java.lang.Override;
+import java.lang.String;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -151,6 +152,12 @@ public class PotionEffect implements Keyed {
   @Nullable
   public static PotionEffect fromId(int id) {
     return Registries.getPotionEffect(id);
+  }
+
+  @NotNull
+  @Override
+  public String toString() {
+    return "[" + this.id + "]";
   }
 
   @NotNull

@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -44,6 +45,25 @@ public final class SugarCane {
   public static final BlockState SUGAR_CANE_14 = new BlockState(NamespaceID.from("minecraft:sugar_cane:14"), (short) 3962, Block.SUGAR_CANE, "age=14");
 
   public static final BlockState SUGAR_CANE_15 = new BlockState(NamespaceID.from("minecraft:sugar_cane:15"), (short) 3963, Block.SUGAR_CANE, "age=15");
+
+  static {
+    Registries.registerBlockState(SUGAR_CANE_0);
+    Registries.registerBlockState(SUGAR_CANE_1);
+    Registries.registerBlockState(SUGAR_CANE_2);
+    Registries.registerBlockState(SUGAR_CANE_3);
+    Registries.registerBlockState(SUGAR_CANE_4);
+    Registries.registerBlockState(SUGAR_CANE_5);
+    Registries.registerBlockState(SUGAR_CANE_6);
+    Registries.registerBlockState(SUGAR_CANE_7);
+    Registries.registerBlockState(SUGAR_CANE_8);
+    Registries.registerBlockState(SUGAR_CANE_9);
+    Registries.registerBlockState(SUGAR_CANE_10);
+    Registries.registerBlockState(SUGAR_CANE_11);
+    Registries.registerBlockState(SUGAR_CANE_12);
+    Registries.registerBlockState(SUGAR_CANE_13);
+    Registries.registerBlockState(SUGAR_CANE_14);
+    Registries.registerBlockState(SUGAR_CANE_15);
+  }
 
   public static void initStates() {
     Block.SUGAR_CANE.addBlockState(SUGAR_CANE_0);

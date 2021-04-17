@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -44,6 +45,25 @@ public final class GrayBanner {
   public static final BlockState GRAY_BANNER_14 = new BlockState(NamespaceID.from("minecraft:gray_banner:14"), (short) 8027, Block.GRAY_BANNER, "rotation=14");
 
   public static final BlockState GRAY_BANNER_15 = new BlockState(NamespaceID.from("minecraft:gray_banner:15"), (short) 8028, Block.GRAY_BANNER, "rotation=15");
+
+  static {
+    Registries.registerBlockState(GRAY_BANNER_0);
+    Registries.registerBlockState(GRAY_BANNER_1);
+    Registries.registerBlockState(GRAY_BANNER_2);
+    Registries.registerBlockState(GRAY_BANNER_3);
+    Registries.registerBlockState(GRAY_BANNER_4);
+    Registries.registerBlockState(GRAY_BANNER_5);
+    Registries.registerBlockState(GRAY_BANNER_6);
+    Registries.registerBlockState(GRAY_BANNER_7);
+    Registries.registerBlockState(GRAY_BANNER_8);
+    Registries.registerBlockState(GRAY_BANNER_9);
+    Registries.registerBlockState(GRAY_BANNER_10);
+    Registries.registerBlockState(GRAY_BANNER_11);
+    Registries.registerBlockState(GRAY_BANNER_12);
+    Registries.registerBlockState(GRAY_BANNER_13);
+    Registries.registerBlockState(GRAY_BANNER_14);
+    Registries.registerBlockState(GRAY_BANNER_15);
+  }
 
   public static void initStates() {
     Block.GRAY_BANNER.addBlockState(GRAY_BANNER_0);

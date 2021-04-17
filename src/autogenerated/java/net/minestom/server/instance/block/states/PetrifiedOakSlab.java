@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -24,6 +25,15 @@ public final class PetrifiedOakSlab {
   public static final BlockState PETRIFIED_OAK_SLAB_4 = new BlockState(NamespaceID.from("minecraft:petrified_oak_slab:4"), (short) 8368, Block.PETRIFIED_OAK_SLAB, "type=double","waterlogged=true");
 
   public static final BlockState PETRIFIED_OAK_SLAB_5 = new BlockState(NamespaceID.from("minecraft:petrified_oak_slab:5"), (short) 8369, Block.PETRIFIED_OAK_SLAB, "type=double","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(PETRIFIED_OAK_SLAB_0);
+    Registries.registerBlockState(PETRIFIED_OAK_SLAB_1);
+    Registries.registerBlockState(PETRIFIED_OAK_SLAB_2);
+    Registries.registerBlockState(PETRIFIED_OAK_SLAB_3);
+    Registries.registerBlockState(PETRIFIED_OAK_SLAB_4);
+    Registries.registerBlockState(PETRIFIED_OAK_SLAB_5);
+  }
 
   public static void initStates() {
     Block.PETRIFIED_OAK_SLAB.addBlockState(PETRIFIED_OAK_SLAB_0);

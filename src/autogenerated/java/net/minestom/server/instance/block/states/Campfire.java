@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -76,6 +77,41 @@ public final class Campfire {
   public static final BlockState CAMPFIRE_30 = new BlockState(NamespaceID.from("minecraft:campfire:30"), (short) 14928, Block.CAMPFIRE, "facing=east","lit=false","signal_fire=false","waterlogged=true");
 
   public static final BlockState CAMPFIRE_31 = new BlockState(NamespaceID.from("minecraft:campfire:31"), (short) 14929, Block.CAMPFIRE, "facing=east","lit=false","signal_fire=false","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(CAMPFIRE_0);
+    Registries.registerBlockState(CAMPFIRE_1);
+    Registries.registerBlockState(CAMPFIRE_2);
+    Registries.registerBlockState(CAMPFIRE_3);
+    Registries.registerBlockState(CAMPFIRE_4);
+    Registries.registerBlockState(CAMPFIRE_5);
+    Registries.registerBlockState(CAMPFIRE_6);
+    Registries.registerBlockState(CAMPFIRE_7);
+    Registries.registerBlockState(CAMPFIRE_8);
+    Registries.registerBlockState(CAMPFIRE_9);
+    Registries.registerBlockState(CAMPFIRE_10);
+    Registries.registerBlockState(CAMPFIRE_11);
+    Registries.registerBlockState(CAMPFIRE_12);
+    Registries.registerBlockState(CAMPFIRE_13);
+    Registries.registerBlockState(CAMPFIRE_14);
+    Registries.registerBlockState(CAMPFIRE_15);
+    Registries.registerBlockState(CAMPFIRE_16);
+    Registries.registerBlockState(CAMPFIRE_17);
+    Registries.registerBlockState(CAMPFIRE_18);
+    Registries.registerBlockState(CAMPFIRE_19);
+    Registries.registerBlockState(CAMPFIRE_20);
+    Registries.registerBlockState(CAMPFIRE_21);
+    Registries.registerBlockState(CAMPFIRE_22);
+    Registries.registerBlockState(CAMPFIRE_23);
+    Registries.registerBlockState(CAMPFIRE_24);
+    Registries.registerBlockState(CAMPFIRE_25);
+    Registries.registerBlockState(CAMPFIRE_26);
+    Registries.registerBlockState(CAMPFIRE_27);
+    Registries.registerBlockState(CAMPFIRE_28);
+    Registries.registerBlockState(CAMPFIRE_29);
+    Registries.registerBlockState(CAMPFIRE_30);
+    Registries.registerBlockState(CAMPFIRE_31);
+  }
 
   public static void initStates() {
     Block.CAMPFIRE.addBlockState(CAMPFIRE_0);

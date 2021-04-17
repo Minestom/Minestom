@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class Sponge {
   public static final BlockState SPONGE_0 = new BlockState(NamespaceID.from("minecraft:sponge:0"), (short) 229, Block.SPONGE);
+
+  static {
+    Registries.registerBlockState(SPONGE_0);
+  }
 
   public static void initStates() {
     Block.SPONGE.addBlockState(SPONGE_0);

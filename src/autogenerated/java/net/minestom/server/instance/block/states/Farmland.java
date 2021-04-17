@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -28,6 +29,17 @@ public final class Farmland {
   public static final BlockState FARMLAND_6 = new BlockState(NamespaceID.from("minecraft:farmland:6"), (short) 3371, Block.FARMLAND, "moisture=6");
 
   public static final BlockState FARMLAND_7 = new BlockState(NamespaceID.from("minecraft:farmland:7"), (short) 3372, Block.FARMLAND, "moisture=7");
+
+  static {
+    Registries.registerBlockState(FARMLAND_0);
+    Registries.registerBlockState(FARMLAND_1);
+    Registries.registerBlockState(FARMLAND_2);
+    Registries.registerBlockState(FARMLAND_3);
+    Registries.registerBlockState(FARMLAND_4);
+    Registries.registerBlockState(FARMLAND_5);
+    Registries.registerBlockState(FARMLAND_6);
+    Registries.registerBlockState(FARMLAND_7);
+  }
 
   public static void initStates() {
     Block.FARMLAND.addBlockState(FARMLAND_0);

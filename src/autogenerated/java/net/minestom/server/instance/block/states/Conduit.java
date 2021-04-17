@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -16,6 +17,11 @@ public final class Conduit {
   public static final BlockState CONDUIT_0 = new BlockState(NamespaceID.from("minecraft:conduit:0"), (short) 9653, Block.CONDUIT, "waterlogged=true");
 
   public static final BlockState CONDUIT_1 = new BlockState(NamespaceID.from("minecraft:conduit:1"), (short) 9654, Block.CONDUIT, "waterlogged=false");
+
+  static {
+    Registries.registerBlockState(CONDUIT_0);
+    Registries.registerBlockState(CONDUIT_1);
+  }
 
   public static void initStates() {
     Block.CONDUIT.addBlockState(CONDUIT_0);

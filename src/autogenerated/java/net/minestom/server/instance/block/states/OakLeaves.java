@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -40,6 +41,23 @@ public final class OakLeaves {
   public static final BlockState OAK_LEAVES_12 = new BlockState(NamespaceID.from("minecraft:oak_leaves:12"), (short) 157, Block.OAK_LEAVES, "distance=7","persistent=true");
 
   public static final BlockState OAK_LEAVES_13 = new BlockState(NamespaceID.from("minecraft:oak_leaves:13"), (short) 158, Block.OAK_LEAVES, "distance=7","persistent=false");
+
+  static {
+    Registries.registerBlockState(OAK_LEAVES_0);
+    Registries.registerBlockState(OAK_LEAVES_1);
+    Registries.registerBlockState(OAK_LEAVES_2);
+    Registries.registerBlockState(OAK_LEAVES_3);
+    Registries.registerBlockState(OAK_LEAVES_4);
+    Registries.registerBlockState(OAK_LEAVES_5);
+    Registries.registerBlockState(OAK_LEAVES_6);
+    Registries.registerBlockState(OAK_LEAVES_7);
+    Registries.registerBlockState(OAK_LEAVES_8);
+    Registries.registerBlockState(OAK_LEAVES_9);
+    Registries.registerBlockState(OAK_LEAVES_10);
+    Registries.registerBlockState(OAK_LEAVES_11);
+    Registries.registerBlockState(OAK_LEAVES_12);
+    Registries.registerBlockState(OAK_LEAVES_13);
+  }
 
   public static void initStates() {
     Block.OAK_LEAVES.addBlockState(OAK_LEAVES_0);

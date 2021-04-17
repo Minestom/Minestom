@@ -251,6 +251,17 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
+        // toString method
+        itemClass.addMethod(
+                MethodSpec.methodBuilder("toString")
+                        .addAnnotation(NotNull.class)
+                        .addAnnotation(Override.class)
+                        .returns(String.class)
+                        // this resolves to [Namespace]
+                        .addStatement("return \"[\" + this.id + \"]\"")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
         // values method
         itemClass.addMethod(
                 MethodSpec.methodBuilder("values")

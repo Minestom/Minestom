@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -64,6 +65,35 @@ public final class WeepingVines {
   public static final BlockState WEEPING_VINES_24 = new BlockState(NamespaceID.from("minecraft:weeping_vines:24"), (short) 15022, Block.WEEPING_VINES, "age=24");
 
   public static final BlockState WEEPING_VINES_25 = new BlockState(NamespaceID.from("minecraft:weeping_vines:25"), (short) 15023, Block.WEEPING_VINES, "age=25");
+
+  static {
+    Registries.registerBlockState(WEEPING_VINES_0);
+    Registries.registerBlockState(WEEPING_VINES_1);
+    Registries.registerBlockState(WEEPING_VINES_2);
+    Registries.registerBlockState(WEEPING_VINES_3);
+    Registries.registerBlockState(WEEPING_VINES_4);
+    Registries.registerBlockState(WEEPING_VINES_5);
+    Registries.registerBlockState(WEEPING_VINES_6);
+    Registries.registerBlockState(WEEPING_VINES_7);
+    Registries.registerBlockState(WEEPING_VINES_8);
+    Registries.registerBlockState(WEEPING_VINES_9);
+    Registries.registerBlockState(WEEPING_VINES_10);
+    Registries.registerBlockState(WEEPING_VINES_11);
+    Registries.registerBlockState(WEEPING_VINES_12);
+    Registries.registerBlockState(WEEPING_VINES_13);
+    Registries.registerBlockState(WEEPING_VINES_14);
+    Registries.registerBlockState(WEEPING_VINES_15);
+    Registries.registerBlockState(WEEPING_VINES_16);
+    Registries.registerBlockState(WEEPING_VINES_17);
+    Registries.registerBlockState(WEEPING_VINES_18);
+    Registries.registerBlockState(WEEPING_VINES_19);
+    Registries.registerBlockState(WEEPING_VINES_20);
+    Registries.registerBlockState(WEEPING_VINES_21);
+    Registries.registerBlockState(WEEPING_VINES_22);
+    Registries.registerBlockState(WEEPING_VINES_23);
+    Registries.registerBlockState(WEEPING_VINES_24);
+    Registries.registerBlockState(WEEPING_VINES_25);
+  }
 
   public static void initStates() {
     Block.WEEPING_VINES.addBlockState(WEEPING_VINES_0);

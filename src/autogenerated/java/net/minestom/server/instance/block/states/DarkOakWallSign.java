@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -28,6 +29,17 @@ public final class DarkOakWallSign {
   public static final BlockState DARK_OAK_WALL_SIGN_6 = new BlockState(NamespaceID.from("minecraft:dark_oak_wall_sign:6"), (short) 3781, Block.DARK_OAK_WALL_SIGN, "facing=east","waterlogged=true");
 
   public static final BlockState DARK_OAK_WALL_SIGN_7 = new BlockState(NamespaceID.from("minecraft:dark_oak_wall_sign:7"), (short) 3782, Block.DARK_OAK_WALL_SIGN, "facing=east","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(DARK_OAK_WALL_SIGN_0);
+    Registries.registerBlockState(DARK_OAK_WALL_SIGN_1);
+    Registries.registerBlockState(DARK_OAK_WALL_SIGN_2);
+    Registries.registerBlockState(DARK_OAK_WALL_SIGN_3);
+    Registries.registerBlockState(DARK_OAK_WALL_SIGN_4);
+    Registries.registerBlockState(DARK_OAK_WALL_SIGN_5);
+    Registries.registerBlockState(DARK_OAK_WALL_SIGN_6);
+    Registries.registerBlockState(DARK_OAK_WALL_SIGN_7);
+  }
 
   public static void initStates() {
     Block.DARK_OAK_WALL_SIGN.addBlockState(DARK_OAK_WALL_SIGN_0);

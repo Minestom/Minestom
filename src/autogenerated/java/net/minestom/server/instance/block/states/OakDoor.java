@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -140,6 +141,73 @@ public final class OakDoor {
   public static final BlockState OAK_DOOR_62 = new BlockState(NamespaceID.from("minecraft:oak_door:62"), (short) 3635, Block.OAK_DOOR, "facing=east","half=lower","hinge=right","open=false","powered=true");
 
   public static final BlockState OAK_DOOR_63 = new BlockState(NamespaceID.from("minecraft:oak_door:63"), (short) 3636, Block.OAK_DOOR, "facing=east","half=lower","hinge=right","open=false","powered=false");
+
+  static {
+    Registries.registerBlockState(OAK_DOOR_0);
+    Registries.registerBlockState(OAK_DOOR_1);
+    Registries.registerBlockState(OAK_DOOR_2);
+    Registries.registerBlockState(OAK_DOOR_3);
+    Registries.registerBlockState(OAK_DOOR_4);
+    Registries.registerBlockState(OAK_DOOR_5);
+    Registries.registerBlockState(OAK_DOOR_6);
+    Registries.registerBlockState(OAK_DOOR_7);
+    Registries.registerBlockState(OAK_DOOR_8);
+    Registries.registerBlockState(OAK_DOOR_9);
+    Registries.registerBlockState(OAK_DOOR_10);
+    Registries.registerBlockState(OAK_DOOR_11);
+    Registries.registerBlockState(OAK_DOOR_12);
+    Registries.registerBlockState(OAK_DOOR_13);
+    Registries.registerBlockState(OAK_DOOR_14);
+    Registries.registerBlockState(OAK_DOOR_15);
+    Registries.registerBlockState(OAK_DOOR_16);
+    Registries.registerBlockState(OAK_DOOR_17);
+    Registries.registerBlockState(OAK_DOOR_18);
+    Registries.registerBlockState(OAK_DOOR_19);
+    Registries.registerBlockState(OAK_DOOR_20);
+    Registries.registerBlockState(OAK_DOOR_21);
+    Registries.registerBlockState(OAK_DOOR_22);
+    Registries.registerBlockState(OAK_DOOR_23);
+    Registries.registerBlockState(OAK_DOOR_24);
+    Registries.registerBlockState(OAK_DOOR_25);
+    Registries.registerBlockState(OAK_DOOR_26);
+    Registries.registerBlockState(OAK_DOOR_27);
+    Registries.registerBlockState(OAK_DOOR_28);
+    Registries.registerBlockState(OAK_DOOR_29);
+    Registries.registerBlockState(OAK_DOOR_30);
+    Registries.registerBlockState(OAK_DOOR_31);
+    Registries.registerBlockState(OAK_DOOR_32);
+    Registries.registerBlockState(OAK_DOOR_33);
+    Registries.registerBlockState(OAK_DOOR_34);
+    Registries.registerBlockState(OAK_DOOR_35);
+    Registries.registerBlockState(OAK_DOOR_36);
+    Registries.registerBlockState(OAK_DOOR_37);
+    Registries.registerBlockState(OAK_DOOR_38);
+    Registries.registerBlockState(OAK_DOOR_39);
+    Registries.registerBlockState(OAK_DOOR_40);
+    Registries.registerBlockState(OAK_DOOR_41);
+    Registries.registerBlockState(OAK_DOOR_42);
+    Registries.registerBlockState(OAK_DOOR_43);
+    Registries.registerBlockState(OAK_DOOR_44);
+    Registries.registerBlockState(OAK_DOOR_45);
+    Registries.registerBlockState(OAK_DOOR_46);
+    Registries.registerBlockState(OAK_DOOR_47);
+    Registries.registerBlockState(OAK_DOOR_48);
+    Registries.registerBlockState(OAK_DOOR_49);
+    Registries.registerBlockState(OAK_DOOR_50);
+    Registries.registerBlockState(OAK_DOOR_51);
+    Registries.registerBlockState(OAK_DOOR_52);
+    Registries.registerBlockState(OAK_DOOR_53);
+    Registries.registerBlockState(OAK_DOOR_54);
+    Registries.registerBlockState(OAK_DOOR_55);
+    Registries.registerBlockState(OAK_DOOR_56);
+    Registries.registerBlockState(OAK_DOOR_57);
+    Registries.registerBlockState(OAK_DOOR_58);
+    Registries.registerBlockState(OAK_DOOR_59);
+    Registries.registerBlockState(OAK_DOOR_60);
+    Registries.registerBlockState(OAK_DOOR_61);
+    Registries.registerBlockState(OAK_DOOR_62);
+    Registries.registerBlockState(OAK_DOOR_63);
+  }
 
   public static void initStates() {
     Block.OAK_DOOR.addBlockState(OAK_DOOR_0);

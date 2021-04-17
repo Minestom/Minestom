@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -76,6 +77,41 @@ public final class OakSign {
   public static final BlockState OAK_SIGN_30 = new BlockState(NamespaceID.from("minecraft:oak_sign:30"), (short) 3411, Block.OAK_SIGN, "rotation=15","waterlogged=true");
 
   public static final BlockState OAK_SIGN_31 = new BlockState(NamespaceID.from("minecraft:oak_sign:31"), (short) 3412, Block.OAK_SIGN, "rotation=15","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(OAK_SIGN_0);
+    Registries.registerBlockState(OAK_SIGN_1);
+    Registries.registerBlockState(OAK_SIGN_2);
+    Registries.registerBlockState(OAK_SIGN_3);
+    Registries.registerBlockState(OAK_SIGN_4);
+    Registries.registerBlockState(OAK_SIGN_5);
+    Registries.registerBlockState(OAK_SIGN_6);
+    Registries.registerBlockState(OAK_SIGN_7);
+    Registries.registerBlockState(OAK_SIGN_8);
+    Registries.registerBlockState(OAK_SIGN_9);
+    Registries.registerBlockState(OAK_SIGN_10);
+    Registries.registerBlockState(OAK_SIGN_11);
+    Registries.registerBlockState(OAK_SIGN_12);
+    Registries.registerBlockState(OAK_SIGN_13);
+    Registries.registerBlockState(OAK_SIGN_14);
+    Registries.registerBlockState(OAK_SIGN_15);
+    Registries.registerBlockState(OAK_SIGN_16);
+    Registries.registerBlockState(OAK_SIGN_17);
+    Registries.registerBlockState(OAK_SIGN_18);
+    Registries.registerBlockState(OAK_SIGN_19);
+    Registries.registerBlockState(OAK_SIGN_20);
+    Registries.registerBlockState(OAK_SIGN_21);
+    Registries.registerBlockState(OAK_SIGN_22);
+    Registries.registerBlockState(OAK_SIGN_23);
+    Registries.registerBlockState(OAK_SIGN_24);
+    Registries.registerBlockState(OAK_SIGN_25);
+    Registries.registerBlockState(OAK_SIGN_26);
+    Registries.registerBlockState(OAK_SIGN_27);
+    Registries.registerBlockState(OAK_SIGN_28);
+    Registries.registerBlockState(OAK_SIGN_29);
+    Registries.registerBlockState(OAK_SIGN_30);
+    Registries.registerBlockState(OAK_SIGN_31);
+  }
 
   public static void initStates() {
     Block.OAK_SIGN.addBlockState(OAK_SIGN_0);

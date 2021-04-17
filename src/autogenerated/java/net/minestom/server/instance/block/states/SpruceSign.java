@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -76,6 +77,41 @@ public final class SpruceSign {
   public static final BlockState SPRUCE_SIGN_30 = new BlockState(NamespaceID.from("minecraft:spruce_sign:30"), (short) 3443, Block.SPRUCE_SIGN, "rotation=15","waterlogged=true");
 
   public static final BlockState SPRUCE_SIGN_31 = new BlockState(NamespaceID.from("minecraft:spruce_sign:31"), (short) 3444, Block.SPRUCE_SIGN, "rotation=15","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(SPRUCE_SIGN_0);
+    Registries.registerBlockState(SPRUCE_SIGN_1);
+    Registries.registerBlockState(SPRUCE_SIGN_2);
+    Registries.registerBlockState(SPRUCE_SIGN_3);
+    Registries.registerBlockState(SPRUCE_SIGN_4);
+    Registries.registerBlockState(SPRUCE_SIGN_5);
+    Registries.registerBlockState(SPRUCE_SIGN_6);
+    Registries.registerBlockState(SPRUCE_SIGN_7);
+    Registries.registerBlockState(SPRUCE_SIGN_8);
+    Registries.registerBlockState(SPRUCE_SIGN_9);
+    Registries.registerBlockState(SPRUCE_SIGN_10);
+    Registries.registerBlockState(SPRUCE_SIGN_11);
+    Registries.registerBlockState(SPRUCE_SIGN_12);
+    Registries.registerBlockState(SPRUCE_SIGN_13);
+    Registries.registerBlockState(SPRUCE_SIGN_14);
+    Registries.registerBlockState(SPRUCE_SIGN_15);
+    Registries.registerBlockState(SPRUCE_SIGN_16);
+    Registries.registerBlockState(SPRUCE_SIGN_17);
+    Registries.registerBlockState(SPRUCE_SIGN_18);
+    Registries.registerBlockState(SPRUCE_SIGN_19);
+    Registries.registerBlockState(SPRUCE_SIGN_20);
+    Registries.registerBlockState(SPRUCE_SIGN_21);
+    Registries.registerBlockState(SPRUCE_SIGN_22);
+    Registries.registerBlockState(SPRUCE_SIGN_23);
+    Registries.registerBlockState(SPRUCE_SIGN_24);
+    Registries.registerBlockState(SPRUCE_SIGN_25);
+    Registries.registerBlockState(SPRUCE_SIGN_26);
+    Registries.registerBlockState(SPRUCE_SIGN_27);
+    Registries.registerBlockState(SPRUCE_SIGN_28);
+    Registries.registerBlockState(SPRUCE_SIGN_29);
+    Registries.registerBlockState(SPRUCE_SIGN_30);
+    Registries.registerBlockState(SPRUCE_SIGN_31);
+  }
 
   public static void initStates() {
     Block.SPRUCE_SIGN.addBlockState(SPRUCE_SIGN_0);

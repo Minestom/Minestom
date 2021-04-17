@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class Poppy {
   public static final BlockState POPPY_0 = new BlockState(NamespaceID.from("minecraft:poppy:0"), (short) 1413, Block.POPPY);
+
+  static {
+    Registries.registerBlockState(POPPY_0);
+  }
 
   public static void initStates() {
     Block.POPPY.addBlockState(POPPY_0);

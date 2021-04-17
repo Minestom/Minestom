@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class Spawner {
   public static final BlockState SPAWNER_0 = new BlockState(NamespaceID.from("minecraft:spawner:0"), (short) 1953, Block.SPAWNER);
+
+  static {
+    Registries.registerBlockState(SPAWNER_0);
+  }
 
   public static void initStates() {
     Block.SPAWNER.addBlockState(SPAWNER_0);

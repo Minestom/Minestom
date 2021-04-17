@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class LightGrayWool {
   public static final BlockState LIGHT_GRAY_WOOL_0 = new BlockState(NamespaceID.from("minecraft:light_gray_wool:0"), (short) 1392, Block.LIGHT_GRAY_WOOL);
+
+  static {
+    Registries.registerBlockState(LIGHT_GRAY_WOOL_0);
+  }
 
   public static void initStates() {
     Block.LIGHT_GRAY_WOOL.addBlockState(LIGHT_GRAY_WOOL_0);

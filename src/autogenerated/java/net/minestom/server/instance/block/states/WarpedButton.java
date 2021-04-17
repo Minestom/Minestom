@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -60,6 +61,33 @@ public final class WarpedButton {
   public static final BlockState WARPED_BUTTON_22 = new BlockState(NamespaceID.from("minecraft:warped_button:22"), (short) 15533, Block.WARPED_BUTTON, "face=CEILING","facing=east","powered=true");
 
   public static final BlockState WARPED_BUTTON_23 = new BlockState(NamespaceID.from("minecraft:warped_button:23"), (short) 15534, Block.WARPED_BUTTON, "face=CEILING","facing=east","powered=false");
+
+  static {
+    Registries.registerBlockState(WARPED_BUTTON_0);
+    Registries.registerBlockState(WARPED_BUTTON_1);
+    Registries.registerBlockState(WARPED_BUTTON_2);
+    Registries.registerBlockState(WARPED_BUTTON_3);
+    Registries.registerBlockState(WARPED_BUTTON_4);
+    Registries.registerBlockState(WARPED_BUTTON_5);
+    Registries.registerBlockState(WARPED_BUTTON_6);
+    Registries.registerBlockState(WARPED_BUTTON_7);
+    Registries.registerBlockState(WARPED_BUTTON_8);
+    Registries.registerBlockState(WARPED_BUTTON_9);
+    Registries.registerBlockState(WARPED_BUTTON_10);
+    Registries.registerBlockState(WARPED_BUTTON_11);
+    Registries.registerBlockState(WARPED_BUTTON_12);
+    Registries.registerBlockState(WARPED_BUTTON_13);
+    Registries.registerBlockState(WARPED_BUTTON_14);
+    Registries.registerBlockState(WARPED_BUTTON_15);
+    Registries.registerBlockState(WARPED_BUTTON_16);
+    Registries.registerBlockState(WARPED_BUTTON_17);
+    Registries.registerBlockState(WARPED_BUTTON_18);
+    Registries.registerBlockState(WARPED_BUTTON_19);
+    Registries.registerBlockState(WARPED_BUTTON_20);
+    Registries.registerBlockState(WARPED_BUTTON_21);
+    Registries.registerBlockState(WARPED_BUTTON_22);
+    Registries.registerBlockState(WARPED_BUTTON_23);
+  }
 
   public static void initStates() {
     Block.WARPED_BUTTON.addBlockState(WARPED_BUTTON_0);

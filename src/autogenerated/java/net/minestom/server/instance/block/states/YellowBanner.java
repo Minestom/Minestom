@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -44,6 +45,25 @@ public final class YellowBanner {
   public static final BlockState YELLOW_BANNER_14 = new BlockState(NamespaceID.from("minecraft:yellow_banner:14"), (short) 7979, Block.YELLOW_BANNER, "rotation=14");
 
   public static final BlockState YELLOW_BANNER_15 = new BlockState(NamespaceID.from("minecraft:yellow_banner:15"), (short) 7980, Block.YELLOW_BANNER, "rotation=15");
+
+  static {
+    Registries.registerBlockState(YELLOW_BANNER_0);
+    Registries.registerBlockState(YELLOW_BANNER_1);
+    Registries.registerBlockState(YELLOW_BANNER_2);
+    Registries.registerBlockState(YELLOW_BANNER_3);
+    Registries.registerBlockState(YELLOW_BANNER_4);
+    Registries.registerBlockState(YELLOW_BANNER_5);
+    Registries.registerBlockState(YELLOW_BANNER_6);
+    Registries.registerBlockState(YELLOW_BANNER_7);
+    Registries.registerBlockState(YELLOW_BANNER_8);
+    Registries.registerBlockState(YELLOW_BANNER_9);
+    Registries.registerBlockState(YELLOW_BANNER_10);
+    Registries.registerBlockState(YELLOW_BANNER_11);
+    Registries.registerBlockState(YELLOW_BANNER_12);
+    Registries.registerBlockState(YELLOW_BANNER_13);
+    Registries.registerBlockState(YELLOW_BANNER_14);
+    Registries.registerBlockState(YELLOW_BANNER_15);
+  }
 
   public static void initStates() {
     Block.YELLOW_BANNER.addBlockState(YELLOW_BANNER_0);

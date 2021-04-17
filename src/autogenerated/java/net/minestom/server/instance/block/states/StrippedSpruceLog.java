@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -18,6 +19,12 @@ public final class StrippedSpruceLog {
   public static final BlockState STRIPPED_SPRUCE_LOG_1 = new BlockState(NamespaceID.from("minecraft:stripped_spruce_log:1"), (short) 92, Block.STRIPPED_SPRUCE_LOG, "axis=y");
 
   public static final BlockState STRIPPED_SPRUCE_LOG_2 = new BlockState(NamespaceID.from("minecraft:stripped_spruce_log:2"), (short) 93, Block.STRIPPED_SPRUCE_LOG, "axis=z");
+
+  static {
+    Registries.registerBlockState(STRIPPED_SPRUCE_LOG_0);
+    Registries.registerBlockState(STRIPPED_SPRUCE_LOG_1);
+    Registries.registerBlockState(STRIPPED_SPRUCE_LOG_2);
+  }
 
   public static void initStates() {
     Block.STRIPPED_SPRUCE_LOG.addBlockState(STRIPPED_SPRUCE_LOG_0);

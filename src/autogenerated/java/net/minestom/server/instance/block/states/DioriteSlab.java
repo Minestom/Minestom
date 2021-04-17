@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -24,6 +25,15 @@ public final class DioriteSlab {
   public static final BlockState DIORITE_SLAB_4 = new BlockState(NamespaceID.from("minecraft:diorite_slab:4"), (short) 10869, Block.DIORITE_SLAB, "type=double","waterlogged=true");
 
   public static final BlockState DIORITE_SLAB_5 = new BlockState(NamespaceID.from("minecraft:diorite_slab:5"), (short) 10870, Block.DIORITE_SLAB, "type=double","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(DIORITE_SLAB_0);
+    Registries.registerBlockState(DIORITE_SLAB_1);
+    Registries.registerBlockState(DIORITE_SLAB_2);
+    Registries.registerBlockState(DIORITE_SLAB_3);
+    Registries.registerBlockState(DIORITE_SLAB_4);
+    Registries.registerBlockState(DIORITE_SLAB_5);
+  }
 
   public static void initStates() {
     Block.DIORITE_SLAB.addBlockState(DIORITE_SLAB_0);

@@ -1,6 +1,7 @@
 package net.minestom.server.entity.metadata.villager;
 
 import java.lang.Override;
+import java.lang.String;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -85,6 +86,12 @@ public class VillagerProfession implements Keyed {
   @NotNull
   public final RawVillagerProfessionData getVillagerProfessionData() {
     return this.villagerProfessionData;
+  }
+
+  @NotNull
+  @Override
+  public String toString() {
+    return "[" + this.id + "]";
   }
 
   @NotNull

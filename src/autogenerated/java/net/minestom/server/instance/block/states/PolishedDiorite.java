@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class PolishedDiorite {
   public static final BlockState POLISHED_DIORITE_0 = new BlockState(NamespaceID.from("minecraft:polished_diorite:0"), (short) 5, Block.POLISHED_DIORITE);
+
+  static {
+    Registries.registerBlockState(POLISHED_DIORITE_0);
+  }
 
   public static void initStates() {
     Block.POLISHED_DIORITE.addBlockState(POLISHED_DIORITE_0);

@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -76,6 +77,41 @@ public final class PinkStainedGlassPane {
   public static final BlockState PINK_STAINED_GLASS_PANE_30 = new BlockState(NamespaceID.from("minecraft:pink_stained_glass_pane:30"), (short) 7089, Block.PINK_STAINED_GLASS_PANE, "east=false","north=false","south=false","waterlogged=false","west=true");
 
   public static final BlockState PINK_STAINED_GLASS_PANE_31 = new BlockState(NamespaceID.from("minecraft:pink_stained_glass_pane:31"), (short) 7090, Block.PINK_STAINED_GLASS_PANE, "east=false","north=false","south=false","waterlogged=false","west=false");
+
+  static {
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_0);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_1);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_2);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_3);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_4);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_5);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_6);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_7);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_8);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_9);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_10);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_11);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_12);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_13);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_14);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_15);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_16);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_17);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_18);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_19);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_20);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_21);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_22);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_23);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_24);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_25);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_26);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_27);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_28);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_29);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_30);
+    Registries.registerBlockState(PINK_STAINED_GLASS_PANE_31);
+  }
 
   public static void initStates() {
     Block.PINK_STAINED_GLASS_PANE.addBlockState(PINK_STAINED_GLASS_PANE_0);

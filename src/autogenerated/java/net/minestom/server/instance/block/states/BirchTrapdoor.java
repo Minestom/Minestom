@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -140,6 +141,73 @@ public final class BirchTrapdoor {
   public static final BlockState BIRCH_TRAPDOOR_62 = new BlockState(NamespaceID.from("minecraft:birch_trapdoor:62"), (short) 4301, Block.BIRCH_TRAPDOOR, "facing=east","half=bottom","open=false","powered=false","waterlogged=true");
 
   public static final BlockState BIRCH_TRAPDOOR_63 = new BlockState(NamespaceID.from("minecraft:birch_trapdoor:63"), (short) 4302, Block.BIRCH_TRAPDOOR, "facing=east","half=bottom","open=false","powered=false","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(BIRCH_TRAPDOOR_0);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_1);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_2);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_3);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_4);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_5);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_6);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_7);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_8);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_9);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_10);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_11);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_12);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_13);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_14);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_15);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_16);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_17);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_18);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_19);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_20);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_21);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_22);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_23);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_24);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_25);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_26);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_27);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_28);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_29);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_30);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_31);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_32);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_33);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_34);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_35);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_36);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_37);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_38);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_39);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_40);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_41);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_42);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_43);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_44);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_45);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_46);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_47);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_48);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_49);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_50);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_51);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_52);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_53);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_54);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_55);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_56);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_57);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_58);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_59);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_60);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_61);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_62);
+    Registries.registerBlockState(BIRCH_TRAPDOOR_63);
+  }
 
   public static void initStates() {
     Block.BIRCH_TRAPDOOR.addBlockState(BIRCH_TRAPDOOR_0);

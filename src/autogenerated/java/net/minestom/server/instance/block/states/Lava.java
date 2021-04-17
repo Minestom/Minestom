@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -44,6 +45,25 @@ public final class Lava {
   public static final BlockState LAVA_14 = new BlockState(NamespaceID.from("minecraft:lava:14"), (short) 64, Block.LAVA, "level=14");
 
   public static final BlockState LAVA_15 = new BlockState(NamespaceID.from("minecraft:lava:15"), (short) 65, Block.LAVA, "level=15");
+
+  static {
+    Registries.registerBlockState(LAVA_0);
+    Registries.registerBlockState(LAVA_1);
+    Registries.registerBlockState(LAVA_2);
+    Registries.registerBlockState(LAVA_3);
+    Registries.registerBlockState(LAVA_4);
+    Registries.registerBlockState(LAVA_5);
+    Registries.registerBlockState(LAVA_6);
+    Registries.registerBlockState(LAVA_7);
+    Registries.registerBlockState(LAVA_8);
+    Registries.registerBlockState(LAVA_9);
+    Registries.registerBlockState(LAVA_10);
+    Registries.registerBlockState(LAVA_11);
+    Registries.registerBlockState(LAVA_12);
+    Registries.registerBlockState(LAVA_13);
+    Registries.registerBlockState(LAVA_14);
+    Registries.registerBlockState(LAVA_15);
+  }
 
   public static void initStates() {
     Block.LAVA.addBlockState(LAVA_0);

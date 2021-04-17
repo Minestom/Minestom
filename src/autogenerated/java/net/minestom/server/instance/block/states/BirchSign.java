@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -76,6 +77,41 @@ public final class BirchSign {
   public static final BlockState BIRCH_SIGN_30 = new BlockState(NamespaceID.from("minecraft:birch_sign:30"), (short) 3475, Block.BIRCH_SIGN, "rotation=15","waterlogged=true");
 
   public static final BlockState BIRCH_SIGN_31 = new BlockState(NamespaceID.from("minecraft:birch_sign:31"), (short) 3476, Block.BIRCH_SIGN, "rotation=15","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(BIRCH_SIGN_0);
+    Registries.registerBlockState(BIRCH_SIGN_1);
+    Registries.registerBlockState(BIRCH_SIGN_2);
+    Registries.registerBlockState(BIRCH_SIGN_3);
+    Registries.registerBlockState(BIRCH_SIGN_4);
+    Registries.registerBlockState(BIRCH_SIGN_5);
+    Registries.registerBlockState(BIRCH_SIGN_6);
+    Registries.registerBlockState(BIRCH_SIGN_7);
+    Registries.registerBlockState(BIRCH_SIGN_8);
+    Registries.registerBlockState(BIRCH_SIGN_9);
+    Registries.registerBlockState(BIRCH_SIGN_10);
+    Registries.registerBlockState(BIRCH_SIGN_11);
+    Registries.registerBlockState(BIRCH_SIGN_12);
+    Registries.registerBlockState(BIRCH_SIGN_13);
+    Registries.registerBlockState(BIRCH_SIGN_14);
+    Registries.registerBlockState(BIRCH_SIGN_15);
+    Registries.registerBlockState(BIRCH_SIGN_16);
+    Registries.registerBlockState(BIRCH_SIGN_17);
+    Registries.registerBlockState(BIRCH_SIGN_18);
+    Registries.registerBlockState(BIRCH_SIGN_19);
+    Registries.registerBlockState(BIRCH_SIGN_20);
+    Registries.registerBlockState(BIRCH_SIGN_21);
+    Registries.registerBlockState(BIRCH_SIGN_22);
+    Registries.registerBlockState(BIRCH_SIGN_23);
+    Registries.registerBlockState(BIRCH_SIGN_24);
+    Registries.registerBlockState(BIRCH_SIGN_25);
+    Registries.registerBlockState(BIRCH_SIGN_26);
+    Registries.registerBlockState(BIRCH_SIGN_27);
+    Registries.registerBlockState(BIRCH_SIGN_28);
+    Registries.registerBlockState(BIRCH_SIGN_29);
+    Registries.registerBlockState(BIRCH_SIGN_30);
+    Registries.registerBlockState(BIRCH_SIGN_31);
+  }
 
   public static void initStates() {
     Block.BIRCH_SIGN.addBlockState(BIRCH_SIGN_0);

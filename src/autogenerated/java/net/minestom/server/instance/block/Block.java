@@ -3958,6 +3958,12 @@ public class Block implements Keyed {
   }
 
   @NotNull
+  @Override
+  public String toString() {
+    return "[" + this.id + "]";
+  }
+
+  @NotNull
   public static List<Block> values() {
     return Registries.getBlocks();
   }

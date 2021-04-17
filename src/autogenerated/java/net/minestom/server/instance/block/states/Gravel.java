@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class Gravel {
   public static final BlockState GRAVEL_0 = new BlockState(NamespaceID.from("minecraft:gravel:0"), (short) 68, Block.GRAVEL);
+
+  static {
+    Registries.registerBlockState(GRAVEL_0);
+  }
 
   public static void initStates() {
     Block.GRAVEL.addBlockState(GRAVEL_0);

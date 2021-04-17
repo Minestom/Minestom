@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -44,6 +45,25 @@ public final class Lectern {
   public static final BlockState LECTERN_14 = new BlockState(NamespaceID.from("minecraft:lectern:14"), (short) 14851, Block.LECTERN, "facing=east","has_book=false","powered=true");
 
   public static final BlockState LECTERN_15 = new BlockState(NamespaceID.from("minecraft:lectern:15"), (short) 14852, Block.LECTERN, "facing=east","has_book=false","powered=false");
+
+  static {
+    Registries.registerBlockState(LECTERN_0);
+    Registries.registerBlockState(LECTERN_1);
+    Registries.registerBlockState(LECTERN_2);
+    Registries.registerBlockState(LECTERN_3);
+    Registries.registerBlockState(LECTERN_4);
+    Registries.registerBlockState(LECTERN_5);
+    Registries.registerBlockState(LECTERN_6);
+    Registries.registerBlockState(LECTERN_7);
+    Registries.registerBlockState(LECTERN_8);
+    Registries.registerBlockState(LECTERN_9);
+    Registries.registerBlockState(LECTERN_10);
+    Registries.registerBlockState(LECTERN_11);
+    Registries.registerBlockState(LECTERN_12);
+    Registries.registerBlockState(LECTERN_13);
+    Registries.registerBlockState(LECTERN_14);
+    Registries.registerBlockState(LECTERN_15);
+  }
 
   public static void initStates() {
     Block.LECTERN.addBlockState(LECTERN_0);

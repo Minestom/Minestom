@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -20,6 +21,13 @@ public final class Stonecutter {
   public static final BlockState STONECUTTER_2 = new BlockState(NamespaceID.from("minecraft:stonecutter:2"), (short) 14856, Block.STONECUTTER, "facing=west");
 
   public static final BlockState STONECUTTER_3 = new BlockState(NamespaceID.from("minecraft:stonecutter:3"), (short) 14857, Block.STONECUTTER, "facing=east");
+
+  static {
+    Registries.registerBlockState(STONECUTTER_0);
+    Registries.registerBlockState(STONECUTTER_1);
+    Registries.registerBlockState(STONECUTTER_2);
+    Registries.registerBlockState(STONECUTTER_3);
+  }
 
   public static void initStates() {
     Block.STONECUTTER.addBlockState(STONECUTTER_0);

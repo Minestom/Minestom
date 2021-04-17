@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -24,6 +25,15 @@ public final class ChorusFlower {
   public static final BlockState CHORUS_FLOWER_4 = new BlockState(NamespaceID.from("minecraft:chorus_flower:4"), (short) 9136, Block.CHORUS_FLOWER, "age=4");
 
   public static final BlockState CHORUS_FLOWER_5 = new BlockState(NamespaceID.from("minecraft:chorus_flower:5"), (short) 9137, Block.CHORUS_FLOWER, "age=5");
+
+  static {
+    Registries.registerBlockState(CHORUS_FLOWER_0);
+    Registries.registerBlockState(CHORUS_FLOWER_1);
+    Registries.registerBlockState(CHORUS_FLOWER_2);
+    Registries.registerBlockState(CHORUS_FLOWER_3);
+    Registries.registerBlockState(CHORUS_FLOWER_4);
+    Registries.registerBlockState(CHORUS_FLOWER_5);
+  }
 
   public static void initStates() {
     Block.CHORUS_FLOWER.addBlockState(CHORUS_FLOWER_0);

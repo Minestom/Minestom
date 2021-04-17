@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -36,6 +37,21 @@ public final class Cocoa {
   public static final BlockState COCOA_10 = new BlockState(NamespaceID.from("minecraft:cocoa:10"), (short) 5172, Block.COCOA, "age=2","facing=west");
 
   public static final BlockState COCOA_11 = new BlockState(NamespaceID.from("minecraft:cocoa:11"), (short) 5173, Block.COCOA, "age=2","facing=east");
+
+  static {
+    Registries.registerBlockState(COCOA_0);
+    Registries.registerBlockState(COCOA_1);
+    Registries.registerBlockState(COCOA_2);
+    Registries.registerBlockState(COCOA_3);
+    Registries.registerBlockState(COCOA_4);
+    Registries.registerBlockState(COCOA_5);
+    Registries.registerBlockState(COCOA_6);
+    Registries.registerBlockState(COCOA_7);
+    Registries.registerBlockState(COCOA_8);
+    Registries.registerBlockState(COCOA_9);
+    Registries.registerBlockState(COCOA_10);
+    Registries.registerBlockState(COCOA_11);
+  }
 
   public static void initStates() {
     Block.COCOA.addBlockState(COCOA_0);

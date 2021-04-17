@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -20,6 +21,13 @@ public final class OrangeGlazedTerracotta {
   public static final BlockState ORANGE_GLAZED_TERRACOTTA_2 = new BlockState(NamespaceID.from("minecraft:orange_glazed_terracotta:2"), (short) 9384, Block.ORANGE_GLAZED_TERRACOTTA, "facing=west");
 
   public static final BlockState ORANGE_GLAZED_TERRACOTTA_3 = new BlockState(NamespaceID.from("minecraft:orange_glazed_terracotta:3"), (short) 9385, Block.ORANGE_GLAZED_TERRACOTTA, "facing=east");
+
+  static {
+    Registries.registerBlockState(ORANGE_GLAZED_TERRACOTTA_0);
+    Registries.registerBlockState(ORANGE_GLAZED_TERRACOTTA_1);
+    Registries.registerBlockState(ORANGE_GLAZED_TERRACOTTA_2);
+    Registries.registerBlockState(ORANGE_GLAZED_TERRACOTTA_3);
+  }
 
   public static void initStates() {
     Block.ORANGE_GLAZED_TERRACOTTA.addBlockState(ORANGE_GLAZED_TERRACOTTA_0);

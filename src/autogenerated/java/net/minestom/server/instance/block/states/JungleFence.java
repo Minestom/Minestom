@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -76,6 +77,41 @@ public final class JungleFence {
   public static final BlockState JUNGLE_FENCE_30 = new BlockState(NamespaceID.from("minecraft:jungle_fence:30"), (short) 8676, Block.JUNGLE_FENCE, "east=false","north=false","south=false","waterlogged=false","west=true");
 
   public static final BlockState JUNGLE_FENCE_31 = new BlockState(NamespaceID.from("minecraft:jungle_fence:31"), (short) 8677, Block.JUNGLE_FENCE, "east=false","north=false","south=false","waterlogged=false","west=false");
+
+  static {
+    Registries.registerBlockState(JUNGLE_FENCE_0);
+    Registries.registerBlockState(JUNGLE_FENCE_1);
+    Registries.registerBlockState(JUNGLE_FENCE_2);
+    Registries.registerBlockState(JUNGLE_FENCE_3);
+    Registries.registerBlockState(JUNGLE_FENCE_4);
+    Registries.registerBlockState(JUNGLE_FENCE_5);
+    Registries.registerBlockState(JUNGLE_FENCE_6);
+    Registries.registerBlockState(JUNGLE_FENCE_7);
+    Registries.registerBlockState(JUNGLE_FENCE_8);
+    Registries.registerBlockState(JUNGLE_FENCE_9);
+    Registries.registerBlockState(JUNGLE_FENCE_10);
+    Registries.registerBlockState(JUNGLE_FENCE_11);
+    Registries.registerBlockState(JUNGLE_FENCE_12);
+    Registries.registerBlockState(JUNGLE_FENCE_13);
+    Registries.registerBlockState(JUNGLE_FENCE_14);
+    Registries.registerBlockState(JUNGLE_FENCE_15);
+    Registries.registerBlockState(JUNGLE_FENCE_16);
+    Registries.registerBlockState(JUNGLE_FENCE_17);
+    Registries.registerBlockState(JUNGLE_FENCE_18);
+    Registries.registerBlockState(JUNGLE_FENCE_19);
+    Registries.registerBlockState(JUNGLE_FENCE_20);
+    Registries.registerBlockState(JUNGLE_FENCE_21);
+    Registries.registerBlockState(JUNGLE_FENCE_22);
+    Registries.registerBlockState(JUNGLE_FENCE_23);
+    Registries.registerBlockState(JUNGLE_FENCE_24);
+    Registries.registerBlockState(JUNGLE_FENCE_25);
+    Registries.registerBlockState(JUNGLE_FENCE_26);
+    Registries.registerBlockState(JUNGLE_FENCE_27);
+    Registries.registerBlockState(JUNGLE_FENCE_28);
+    Registries.registerBlockState(JUNGLE_FENCE_29);
+    Registries.registerBlockState(JUNGLE_FENCE_30);
+    Registries.registerBlockState(JUNGLE_FENCE_31);
+  }
 
   public static void initStates() {
     Block.JUNGLE_FENCE.addBlockState(JUNGLE_FENCE_0);

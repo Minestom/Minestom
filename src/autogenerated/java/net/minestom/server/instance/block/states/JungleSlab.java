@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -24,6 +25,15 @@ public final class JungleSlab {
   public static final BlockState JUNGLE_SLAB_4 = new BlockState(NamespaceID.from("minecraft:jungle_slab:4"), (short) 8326, Block.JUNGLE_SLAB, "type=double","waterlogged=true");
 
   public static final BlockState JUNGLE_SLAB_5 = new BlockState(NamespaceID.from("minecraft:jungle_slab:5"), (short) 8327, Block.JUNGLE_SLAB, "type=double","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(JUNGLE_SLAB_0);
+    Registries.registerBlockState(JUNGLE_SLAB_1);
+    Registries.registerBlockState(JUNGLE_SLAB_2);
+    Registries.registerBlockState(JUNGLE_SLAB_3);
+    Registries.registerBlockState(JUNGLE_SLAB_4);
+    Registries.registerBlockState(JUNGLE_SLAB_5);
+  }
 
   public static void initStates() {
     Block.JUNGLE_SLAB.addBlockState(JUNGLE_SLAB_0);

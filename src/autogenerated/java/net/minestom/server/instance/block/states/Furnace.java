@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -28,6 +29,17 @@ public final class Furnace {
   public static final BlockState FURNACE_6 = new BlockState(NamespaceID.from("minecraft:furnace:6"), (short) 3379, Block.FURNACE, "facing=east","lit=true");
 
   public static final BlockState FURNACE_7 = new BlockState(NamespaceID.from("minecraft:furnace:7"), (short) 3380, Block.FURNACE, "facing=east","lit=false");
+
+  static {
+    Registries.registerBlockState(FURNACE_0);
+    Registries.registerBlockState(FURNACE_1);
+    Registries.registerBlockState(FURNACE_2);
+    Registries.registerBlockState(FURNACE_3);
+    Registries.registerBlockState(FURNACE_4);
+    Registries.registerBlockState(FURNACE_5);
+    Registries.registerBlockState(FURNACE_6);
+    Registries.registerBlockState(FURNACE_7);
+  }
 
   public static void initStates() {
     Block.FURNACE.addBlockState(FURNACE_0);

@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -172,6 +173,89 @@ public final class OakStairs {
   public static final BlockState OAK_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:oak_stairs:78"), (short) 2032, Block.OAK_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
 
   public static final BlockState OAK_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:oak_stairs:79"), (short) 2033, Block.OAK_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(OAK_STAIRS_0);
+    Registries.registerBlockState(OAK_STAIRS_1);
+    Registries.registerBlockState(OAK_STAIRS_2);
+    Registries.registerBlockState(OAK_STAIRS_3);
+    Registries.registerBlockState(OAK_STAIRS_4);
+    Registries.registerBlockState(OAK_STAIRS_5);
+    Registries.registerBlockState(OAK_STAIRS_6);
+    Registries.registerBlockState(OAK_STAIRS_7);
+    Registries.registerBlockState(OAK_STAIRS_8);
+    Registries.registerBlockState(OAK_STAIRS_9);
+    Registries.registerBlockState(OAK_STAIRS_10);
+    Registries.registerBlockState(OAK_STAIRS_11);
+    Registries.registerBlockState(OAK_STAIRS_12);
+    Registries.registerBlockState(OAK_STAIRS_13);
+    Registries.registerBlockState(OAK_STAIRS_14);
+    Registries.registerBlockState(OAK_STAIRS_15);
+    Registries.registerBlockState(OAK_STAIRS_16);
+    Registries.registerBlockState(OAK_STAIRS_17);
+    Registries.registerBlockState(OAK_STAIRS_18);
+    Registries.registerBlockState(OAK_STAIRS_19);
+    Registries.registerBlockState(OAK_STAIRS_20);
+    Registries.registerBlockState(OAK_STAIRS_21);
+    Registries.registerBlockState(OAK_STAIRS_22);
+    Registries.registerBlockState(OAK_STAIRS_23);
+    Registries.registerBlockState(OAK_STAIRS_24);
+    Registries.registerBlockState(OAK_STAIRS_25);
+    Registries.registerBlockState(OAK_STAIRS_26);
+    Registries.registerBlockState(OAK_STAIRS_27);
+    Registries.registerBlockState(OAK_STAIRS_28);
+    Registries.registerBlockState(OAK_STAIRS_29);
+    Registries.registerBlockState(OAK_STAIRS_30);
+    Registries.registerBlockState(OAK_STAIRS_31);
+    Registries.registerBlockState(OAK_STAIRS_32);
+    Registries.registerBlockState(OAK_STAIRS_33);
+    Registries.registerBlockState(OAK_STAIRS_34);
+    Registries.registerBlockState(OAK_STAIRS_35);
+    Registries.registerBlockState(OAK_STAIRS_36);
+    Registries.registerBlockState(OAK_STAIRS_37);
+    Registries.registerBlockState(OAK_STAIRS_38);
+    Registries.registerBlockState(OAK_STAIRS_39);
+    Registries.registerBlockState(OAK_STAIRS_40);
+    Registries.registerBlockState(OAK_STAIRS_41);
+    Registries.registerBlockState(OAK_STAIRS_42);
+    Registries.registerBlockState(OAK_STAIRS_43);
+    Registries.registerBlockState(OAK_STAIRS_44);
+    Registries.registerBlockState(OAK_STAIRS_45);
+    Registries.registerBlockState(OAK_STAIRS_46);
+    Registries.registerBlockState(OAK_STAIRS_47);
+    Registries.registerBlockState(OAK_STAIRS_48);
+    Registries.registerBlockState(OAK_STAIRS_49);
+    Registries.registerBlockState(OAK_STAIRS_50);
+    Registries.registerBlockState(OAK_STAIRS_51);
+    Registries.registerBlockState(OAK_STAIRS_52);
+    Registries.registerBlockState(OAK_STAIRS_53);
+    Registries.registerBlockState(OAK_STAIRS_54);
+    Registries.registerBlockState(OAK_STAIRS_55);
+    Registries.registerBlockState(OAK_STAIRS_56);
+    Registries.registerBlockState(OAK_STAIRS_57);
+    Registries.registerBlockState(OAK_STAIRS_58);
+    Registries.registerBlockState(OAK_STAIRS_59);
+    Registries.registerBlockState(OAK_STAIRS_60);
+    Registries.registerBlockState(OAK_STAIRS_61);
+    Registries.registerBlockState(OAK_STAIRS_62);
+    Registries.registerBlockState(OAK_STAIRS_63);
+    Registries.registerBlockState(OAK_STAIRS_64);
+    Registries.registerBlockState(OAK_STAIRS_65);
+    Registries.registerBlockState(OAK_STAIRS_66);
+    Registries.registerBlockState(OAK_STAIRS_67);
+    Registries.registerBlockState(OAK_STAIRS_68);
+    Registries.registerBlockState(OAK_STAIRS_69);
+    Registries.registerBlockState(OAK_STAIRS_70);
+    Registries.registerBlockState(OAK_STAIRS_71);
+    Registries.registerBlockState(OAK_STAIRS_72);
+    Registries.registerBlockState(OAK_STAIRS_73);
+    Registries.registerBlockState(OAK_STAIRS_74);
+    Registries.registerBlockState(OAK_STAIRS_75);
+    Registries.registerBlockState(OAK_STAIRS_76);
+    Registries.registerBlockState(OAK_STAIRS_77);
+    Registries.registerBlockState(OAK_STAIRS_78);
+    Registries.registerBlockState(OAK_STAIRS_79);
+  }
 
   public static void initStates() {
     Block.OAK_STAIRS.addBlockState(OAK_STAIRS_0);

@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -16,6 +17,11 @@ public final class DeadHornCoral {
   public static final BlockState DEAD_HORN_CORAL_0 = new BlockState(NamespaceID.from("minecraft:dead_horn_coral:0"), (short) 9532, Block.DEAD_HORN_CORAL, "waterlogged=true");
 
   public static final BlockState DEAD_HORN_CORAL_1 = new BlockState(NamespaceID.from("minecraft:dead_horn_coral:1"), (short) 9533, Block.DEAD_HORN_CORAL, "waterlogged=false");
+
+  static {
+    Registries.registerBlockState(DEAD_HORN_CORAL_0);
+    Registries.registerBlockState(DEAD_HORN_CORAL_1);
+  }
 
   public static void initStates() {
     Block.DEAD_HORN_CORAL.addBlockState(DEAD_HORN_CORAL_0);

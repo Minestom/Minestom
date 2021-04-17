@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class Ice {
   public static final BlockState ICE_0 = new BlockState(NamespaceID.from("minecraft:ice:0"), (short) 3929, Block.ICE);
+
+  static {
+    Registries.registerBlockState(ICE_0);
+  }
 
   public static void initStates() {
     Block.ICE.addBlockState(ICE_0);

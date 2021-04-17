@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -20,6 +21,13 @@ public final class ChippedAnvil {
   public static final BlockState CHIPPED_ANVIL_2 = new BlockState(NamespaceID.from("minecraft:chipped_anvil:2"), (short) 6620, Block.CHIPPED_ANVIL, "facing=west");
 
   public static final BlockState CHIPPED_ANVIL_3 = new BlockState(NamespaceID.from("minecraft:chipped_anvil:3"), (short) 6621, Block.CHIPPED_ANVIL, "facing=east");
+
+  static {
+    Registries.registerBlockState(CHIPPED_ANVIL_0);
+    Registries.registerBlockState(CHIPPED_ANVIL_1);
+    Registries.registerBlockState(CHIPPED_ANVIL_2);
+    Registries.registerBlockState(CHIPPED_ANVIL_3);
+  }
 
   public static void initStates() {
     Block.CHIPPED_ANVIL.addBlockState(CHIPPED_ANVIL_0);

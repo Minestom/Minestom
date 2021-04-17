@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -28,6 +29,17 @@ public final class HornCoralWallFan {
   public static final BlockState HORN_CORAL_WALL_FAN_6 = new BlockState(NamespaceID.from("minecraft:horn_coral_wall_fan:6"), (short) 9642, Block.HORN_CORAL_WALL_FAN, "facing=east","waterlogged=true");
 
   public static final BlockState HORN_CORAL_WALL_FAN_7 = new BlockState(NamespaceID.from("minecraft:horn_coral_wall_fan:7"), (short) 9643, Block.HORN_CORAL_WALL_FAN, "facing=east","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(HORN_CORAL_WALL_FAN_0);
+    Registries.registerBlockState(HORN_CORAL_WALL_FAN_1);
+    Registries.registerBlockState(HORN_CORAL_WALL_FAN_2);
+    Registries.registerBlockState(HORN_CORAL_WALL_FAN_3);
+    Registries.registerBlockState(HORN_CORAL_WALL_FAN_4);
+    Registries.registerBlockState(HORN_CORAL_WALL_FAN_5);
+    Registries.registerBlockState(HORN_CORAL_WALL_FAN_6);
+    Registries.registerBlockState(HORN_CORAL_WALL_FAN_7);
+  }
 
   public static void initStates() {
     Block.HORN_CORAL_WALL_FAN.addBlockState(HORN_CORAL_WALL_FAN_0);

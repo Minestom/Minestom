@@ -1,6 +1,7 @@
 package net.minestom.server.entity;
 
 import java.lang.Override;
+import java.lang.String;
 import java.util.List;
 import java.util.function.BiFunction;
 import net.kyori.adventure.key.Key;
@@ -516,6 +517,12 @@ public class EntityType implements Keyed {
   @NotNull
   public final RawEntityTypeData getEntityTypeData() {
     return this.entityTypeData;
+  }
+
+  @NotNull
+  @Override
+  public String toString() {
+    return "[" + this.id + "]";
   }
 
   @NotNull

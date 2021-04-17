@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -18,6 +19,12 @@ public final class JungleLog {
   public static final BlockState JUNGLE_LOG_1 = new BlockState(NamespaceID.from("minecraft:jungle_log:1"), (short) 83, Block.JUNGLE_LOG, "axis=y");
 
   public static final BlockState JUNGLE_LOG_2 = new BlockState(NamespaceID.from("minecraft:jungle_log:2"), (short) 84, Block.JUNGLE_LOG, "axis=z");
+
+  static {
+    Registries.registerBlockState(JUNGLE_LOG_0);
+    Registries.registerBlockState(JUNGLE_LOG_1);
+    Registries.registerBlockState(JUNGLE_LOG_2);
+  }
 
   public static void initStates() {
     Block.JUNGLE_LOG.addBlockState(JUNGLE_LOG_0);

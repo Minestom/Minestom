@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -76,6 +77,41 @@ public final class BirchFence {
   public static final BlockState BIRCH_FENCE_30 = new BlockState(NamespaceID.from("minecraft:birch_fence:30"), (short) 8644, Block.BIRCH_FENCE, "east=false","north=false","south=false","waterlogged=false","west=true");
 
   public static final BlockState BIRCH_FENCE_31 = new BlockState(NamespaceID.from("minecraft:birch_fence:31"), (short) 8645, Block.BIRCH_FENCE, "east=false","north=false","south=false","waterlogged=false","west=false");
+
+  static {
+    Registries.registerBlockState(BIRCH_FENCE_0);
+    Registries.registerBlockState(BIRCH_FENCE_1);
+    Registries.registerBlockState(BIRCH_FENCE_2);
+    Registries.registerBlockState(BIRCH_FENCE_3);
+    Registries.registerBlockState(BIRCH_FENCE_4);
+    Registries.registerBlockState(BIRCH_FENCE_5);
+    Registries.registerBlockState(BIRCH_FENCE_6);
+    Registries.registerBlockState(BIRCH_FENCE_7);
+    Registries.registerBlockState(BIRCH_FENCE_8);
+    Registries.registerBlockState(BIRCH_FENCE_9);
+    Registries.registerBlockState(BIRCH_FENCE_10);
+    Registries.registerBlockState(BIRCH_FENCE_11);
+    Registries.registerBlockState(BIRCH_FENCE_12);
+    Registries.registerBlockState(BIRCH_FENCE_13);
+    Registries.registerBlockState(BIRCH_FENCE_14);
+    Registries.registerBlockState(BIRCH_FENCE_15);
+    Registries.registerBlockState(BIRCH_FENCE_16);
+    Registries.registerBlockState(BIRCH_FENCE_17);
+    Registries.registerBlockState(BIRCH_FENCE_18);
+    Registries.registerBlockState(BIRCH_FENCE_19);
+    Registries.registerBlockState(BIRCH_FENCE_20);
+    Registries.registerBlockState(BIRCH_FENCE_21);
+    Registries.registerBlockState(BIRCH_FENCE_22);
+    Registries.registerBlockState(BIRCH_FENCE_23);
+    Registries.registerBlockState(BIRCH_FENCE_24);
+    Registries.registerBlockState(BIRCH_FENCE_25);
+    Registries.registerBlockState(BIRCH_FENCE_26);
+    Registries.registerBlockState(BIRCH_FENCE_27);
+    Registries.registerBlockState(BIRCH_FENCE_28);
+    Registries.registerBlockState(BIRCH_FENCE_29);
+    Registries.registerBlockState(BIRCH_FENCE_30);
+    Registries.registerBlockState(BIRCH_FENCE_31);
+  }
 
   public static void initStates() {
     Block.BIRCH_FENCE.addBlockState(BIRCH_FENCE_0);

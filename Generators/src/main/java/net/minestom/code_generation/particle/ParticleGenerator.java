@@ -119,6 +119,17 @@ public final class ParticleGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
+        // toString method
+        particleClass.addMethod(
+                MethodSpec.methodBuilder("toString")
+                        .addAnnotation(NotNull.class)
+                        .addAnnotation(Override.class)
+                        .returns(String.class)
+                        // this resolves to [Namespace]
+                        .addStatement("return \"[\" + this.id + \"]\"")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
         // values method
         particleClass.addMethod(
                 MethodSpec.methodBuilder("values")

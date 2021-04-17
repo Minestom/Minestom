@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -140,6 +141,73 @@ public final class OakTrapdoor {
   public static final BlockState OAK_TRAPDOOR_62 = new BlockState(NamespaceID.from("minecraft:oak_trapdoor:62"), (short) 4173, Block.OAK_TRAPDOOR, "facing=east","half=bottom","open=false","powered=false","waterlogged=true");
 
   public static final BlockState OAK_TRAPDOOR_63 = new BlockState(NamespaceID.from("minecraft:oak_trapdoor:63"), (short) 4174, Block.OAK_TRAPDOOR, "facing=east","half=bottom","open=false","powered=false","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(OAK_TRAPDOOR_0);
+    Registries.registerBlockState(OAK_TRAPDOOR_1);
+    Registries.registerBlockState(OAK_TRAPDOOR_2);
+    Registries.registerBlockState(OAK_TRAPDOOR_3);
+    Registries.registerBlockState(OAK_TRAPDOOR_4);
+    Registries.registerBlockState(OAK_TRAPDOOR_5);
+    Registries.registerBlockState(OAK_TRAPDOOR_6);
+    Registries.registerBlockState(OAK_TRAPDOOR_7);
+    Registries.registerBlockState(OAK_TRAPDOOR_8);
+    Registries.registerBlockState(OAK_TRAPDOOR_9);
+    Registries.registerBlockState(OAK_TRAPDOOR_10);
+    Registries.registerBlockState(OAK_TRAPDOOR_11);
+    Registries.registerBlockState(OAK_TRAPDOOR_12);
+    Registries.registerBlockState(OAK_TRAPDOOR_13);
+    Registries.registerBlockState(OAK_TRAPDOOR_14);
+    Registries.registerBlockState(OAK_TRAPDOOR_15);
+    Registries.registerBlockState(OAK_TRAPDOOR_16);
+    Registries.registerBlockState(OAK_TRAPDOOR_17);
+    Registries.registerBlockState(OAK_TRAPDOOR_18);
+    Registries.registerBlockState(OAK_TRAPDOOR_19);
+    Registries.registerBlockState(OAK_TRAPDOOR_20);
+    Registries.registerBlockState(OAK_TRAPDOOR_21);
+    Registries.registerBlockState(OAK_TRAPDOOR_22);
+    Registries.registerBlockState(OAK_TRAPDOOR_23);
+    Registries.registerBlockState(OAK_TRAPDOOR_24);
+    Registries.registerBlockState(OAK_TRAPDOOR_25);
+    Registries.registerBlockState(OAK_TRAPDOOR_26);
+    Registries.registerBlockState(OAK_TRAPDOOR_27);
+    Registries.registerBlockState(OAK_TRAPDOOR_28);
+    Registries.registerBlockState(OAK_TRAPDOOR_29);
+    Registries.registerBlockState(OAK_TRAPDOOR_30);
+    Registries.registerBlockState(OAK_TRAPDOOR_31);
+    Registries.registerBlockState(OAK_TRAPDOOR_32);
+    Registries.registerBlockState(OAK_TRAPDOOR_33);
+    Registries.registerBlockState(OAK_TRAPDOOR_34);
+    Registries.registerBlockState(OAK_TRAPDOOR_35);
+    Registries.registerBlockState(OAK_TRAPDOOR_36);
+    Registries.registerBlockState(OAK_TRAPDOOR_37);
+    Registries.registerBlockState(OAK_TRAPDOOR_38);
+    Registries.registerBlockState(OAK_TRAPDOOR_39);
+    Registries.registerBlockState(OAK_TRAPDOOR_40);
+    Registries.registerBlockState(OAK_TRAPDOOR_41);
+    Registries.registerBlockState(OAK_TRAPDOOR_42);
+    Registries.registerBlockState(OAK_TRAPDOOR_43);
+    Registries.registerBlockState(OAK_TRAPDOOR_44);
+    Registries.registerBlockState(OAK_TRAPDOOR_45);
+    Registries.registerBlockState(OAK_TRAPDOOR_46);
+    Registries.registerBlockState(OAK_TRAPDOOR_47);
+    Registries.registerBlockState(OAK_TRAPDOOR_48);
+    Registries.registerBlockState(OAK_TRAPDOOR_49);
+    Registries.registerBlockState(OAK_TRAPDOOR_50);
+    Registries.registerBlockState(OAK_TRAPDOOR_51);
+    Registries.registerBlockState(OAK_TRAPDOOR_52);
+    Registries.registerBlockState(OAK_TRAPDOOR_53);
+    Registries.registerBlockState(OAK_TRAPDOOR_54);
+    Registries.registerBlockState(OAK_TRAPDOOR_55);
+    Registries.registerBlockState(OAK_TRAPDOOR_56);
+    Registries.registerBlockState(OAK_TRAPDOOR_57);
+    Registries.registerBlockState(OAK_TRAPDOOR_58);
+    Registries.registerBlockState(OAK_TRAPDOOR_59);
+    Registries.registerBlockState(OAK_TRAPDOOR_60);
+    Registries.registerBlockState(OAK_TRAPDOOR_61);
+    Registries.registerBlockState(OAK_TRAPDOOR_62);
+    Registries.registerBlockState(OAK_TRAPDOOR_63);
+  }
 
   public static void initStates() {
     Block.OAK_TRAPDOOR.addBlockState(OAK_TRAPDOOR_0);

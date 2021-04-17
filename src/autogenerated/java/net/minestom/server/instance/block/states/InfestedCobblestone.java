@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class InfestedCobblestone {
   public static final BlockState INFESTED_COBBLESTONE_0 = new BlockState(NamespaceID.from("minecraft:infested_cobblestone:0"), (short) 4500, Block.INFESTED_COBBLESTONE);
+
+  static {
+    Registries.registerBlockState(INFESTED_COBBLESTONE_0);
+  }
 
   public static void initStates() {
     Block.INFESTED_COBBLESTONE.addBlockState(INFESTED_COBBLESTONE_0);

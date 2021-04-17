@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -140,6 +141,73 @@ public final class ChorusPlant {
   public static final BlockState CHORUS_PLANT_62 = new BlockState(NamespaceID.from("minecraft:chorus_plant:62"), (short) 9130, Block.CHORUS_PLANT, "down=false","east=false","north=false","south=false","up=false","west=true");
 
   public static final BlockState CHORUS_PLANT_63 = new BlockState(NamespaceID.from("minecraft:chorus_plant:63"), (short) 9131, Block.CHORUS_PLANT, "down=false","east=false","north=false","south=false","up=false","west=false");
+
+  static {
+    Registries.registerBlockState(CHORUS_PLANT_0);
+    Registries.registerBlockState(CHORUS_PLANT_1);
+    Registries.registerBlockState(CHORUS_PLANT_2);
+    Registries.registerBlockState(CHORUS_PLANT_3);
+    Registries.registerBlockState(CHORUS_PLANT_4);
+    Registries.registerBlockState(CHORUS_PLANT_5);
+    Registries.registerBlockState(CHORUS_PLANT_6);
+    Registries.registerBlockState(CHORUS_PLANT_7);
+    Registries.registerBlockState(CHORUS_PLANT_8);
+    Registries.registerBlockState(CHORUS_PLANT_9);
+    Registries.registerBlockState(CHORUS_PLANT_10);
+    Registries.registerBlockState(CHORUS_PLANT_11);
+    Registries.registerBlockState(CHORUS_PLANT_12);
+    Registries.registerBlockState(CHORUS_PLANT_13);
+    Registries.registerBlockState(CHORUS_PLANT_14);
+    Registries.registerBlockState(CHORUS_PLANT_15);
+    Registries.registerBlockState(CHORUS_PLANT_16);
+    Registries.registerBlockState(CHORUS_PLANT_17);
+    Registries.registerBlockState(CHORUS_PLANT_18);
+    Registries.registerBlockState(CHORUS_PLANT_19);
+    Registries.registerBlockState(CHORUS_PLANT_20);
+    Registries.registerBlockState(CHORUS_PLANT_21);
+    Registries.registerBlockState(CHORUS_PLANT_22);
+    Registries.registerBlockState(CHORUS_PLANT_23);
+    Registries.registerBlockState(CHORUS_PLANT_24);
+    Registries.registerBlockState(CHORUS_PLANT_25);
+    Registries.registerBlockState(CHORUS_PLANT_26);
+    Registries.registerBlockState(CHORUS_PLANT_27);
+    Registries.registerBlockState(CHORUS_PLANT_28);
+    Registries.registerBlockState(CHORUS_PLANT_29);
+    Registries.registerBlockState(CHORUS_PLANT_30);
+    Registries.registerBlockState(CHORUS_PLANT_31);
+    Registries.registerBlockState(CHORUS_PLANT_32);
+    Registries.registerBlockState(CHORUS_PLANT_33);
+    Registries.registerBlockState(CHORUS_PLANT_34);
+    Registries.registerBlockState(CHORUS_PLANT_35);
+    Registries.registerBlockState(CHORUS_PLANT_36);
+    Registries.registerBlockState(CHORUS_PLANT_37);
+    Registries.registerBlockState(CHORUS_PLANT_38);
+    Registries.registerBlockState(CHORUS_PLANT_39);
+    Registries.registerBlockState(CHORUS_PLANT_40);
+    Registries.registerBlockState(CHORUS_PLANT_41);
+    Registries.registerBlockState(CHORUS_PLANT_42);
+    Registries.registerBlockState(CHORUS_PLANT_43);
+    Registries.registerBlockState(CHORUS_PLANT_44);
+    Registries.registerBlockState(CHORUS_PLANT_45);
+    Registries.registerBlockState(CHORUS_PLANT_46);
+    Registries.registerBlockState(CHORUS_PLANT_47);
+    Registries.registerBlockState(CHORUS_PLANT_48);
+    Registries.registerBlockState(CHORUS_PLANT_49);
+    Registries.registerBlockState(CHORUS_PLANT_50);
+    Registries.registerBlockState(CHORUS_PLANT_51);
+    Registries.registerBlockState(CHORUS_PLANT_52);
+    Registries.registerBlockState(CHORUS_PLANT_53);
+    Registries.registerBlockState(CHORUS_PLANT_54);
+    Registries.registerBlockState(CHORUS_PLANT_55);
+    Registries.registerBlockState(CHORUS_PLANT_56);
+    Registries.registerBlockState(CHORUS_PLANT_57);
+    Registries.registerBlockState(CHORUS_PLANT_58);
+    Registries.registerBlockState(CHORUS_PLANT_59);
+    Registries.registerBlockState(CHORUS_PLANT_60);
+    Registries.registerBlockState(CHORUS_PLANT_61);
+    Registries.registerBlockState(CHORUS_PLANT_62);
+    Registries.registerBlockState(CHORUS_PLANT_63);
+  }
 
   public static void initStates() {
     Block.CHORUS_PLANT.addBlockState(CHORUS_PLANT_0);

@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class EmeraldBlock {
   public static final BlockState EMERALD_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:emerald_block:0"), (short) 5407, Block.EMERALD_BLOCK);
+
+  static {
+    Registries.registerBlockState(EMERALD_BLOCK_0);
+  }
 
   public static void initStates() {
     Block.EMERALD_BLOCK.addBlockState(EMERALD_BLOCK_0);

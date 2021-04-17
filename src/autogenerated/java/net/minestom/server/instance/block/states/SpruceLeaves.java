@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -40,6 +41,23 @@ public final class SpruceLeaves {
   public static final BlockState SPRUCE_LEAVES_12 = new BlockState(NamespaceID.from("minecraft:spruce_leaves:12"), (short) 171, Block.SPRUCE_LEAVES, "distance=7","persistent=true");
 
   public static final BlockState SPRUCE_LEAVES_13 = new BlockState(NamespaceID.from("minecraft:spruce_leaves:13"), (short) 172, Block.SPRUCE_LEAVES, "distance=7","persistent=false");
+
+  static {
+    Registries.registerBlockState(SPRUCE_LEAVES_0);
+    Registries.registerBlockState(SPRUCE_LEAVES_1);
+    Registries.registerBlockState(SPRUCE_LEAVES_2);
+    Registries.registerBlockState(SPRUCE_LEAVES_3);
+    Registries.registerBlockState(SPRUCE_LEAVES_4);
+    Registries.registerBlockState(SPRUCE_LEAVES_5);
+    Registries.registerBlockState(SPRUCE_LEAVES_6);
+    Registries.registerBlockState(SPRUCE_LEAVES_7);
+    Registries.registerBlockState(SPRUCE_LEAVES_8);
+    Registries.registerBlockState(SPRUCE_LEAVES_9);
+    Registries.registerBlockState(SPRUCE_LEAVES_10);
+    Registries.registerBlockState(SPRUCE_LEAVES_11);
+    Registries.registerBlockState(SPRUCE_LEAVES_12);
+    Registries.registerBlockState(SPRUCE_LEAVES_13);
+  }
 
   public static void initStates() {
     Block.SPRUCE_LEAVES.addBlockState(SPRUCE_LEAVES_0);

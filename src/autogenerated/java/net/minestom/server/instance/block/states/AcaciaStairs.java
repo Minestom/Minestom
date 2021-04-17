@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -172,6 +173,89 @@ public final class AcaciaStairs {
   public static final BlockState ACACIA_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:acacia_stairs:78"), (short) 7457, Block.ACACIA_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
 
   public static final BlockState ACACIA_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:acacia_stairs:79"), (short) 7458, Block.ACACIA_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(ACACIA_STAIRS_0);
+    Registries.registerBlockState(ACACIA_STAIRS_1);
+    Registries.registerBlockState(ACACIA_STAIRS_2);
+    Registries.registerBlockState(ACACIA_STAIRS_3);
+    Registries.registerBlockState(ACACIA_STAIRS_4);
+    Registries.registerBlockState(ACACIA_STAIRS_5);
+    Registries.registerBlockState(ACACIA_STAIRS_6);
+    Registries.registerBlockState(ACACIA_STAIRS_7);
+    Registries.registerBlockState(ACACIA_STAIRS_8);
+    Registries.registerBlockState(ACACIA_STAIRS_9);
+    Registries.registerBlockState(ACACIA_STAIRS_10);
+    Registries.registerBlockState(ACACIA_STAIRS_11);
+    Registries.registerBlockState(ACACIA_STAIRS_12);
+    Registries.registerBlockState(ACACIA_STAIRS_13);
+    Registries.registerBlockState(ACACIA_STAIRS_14);
+    Registries.registerBlockState(ACACIA_STAIRS_15);
+    Registries.registerBlockState(ACACIA_STAIRS_16);
+    Registries.registerBlockState(ACACIA_STAIRS_17);
+    Registries.registerBlockState(ACACIA_STAIRS_18);
+    Registries.registerBlockState(ACACIA_STAIRS_19);
+    Registries.registerBlockState(ACACIA_STAIRS_20);
+    Registries.registerBlockState(ACACIA_STAIRS_21);
+    Registries.registerBlockState(ACACIA_STAIRS_22);
+    Registries.registerBlockState(ACACIA_STAIRS_23);
+    Registries.registerBlockState(ACACIA_STAIRS_24);
+    Registries.registerBlockState(ACACIA_STAIRS_25);
+    Registries.registerBlockState(ACACIA_STAIRS_26);
+    Registries.registerBlockState(ACACIA_STAIRS_27);
+    Registries.registerBlockState(ACACIA_STAIRS_28);
+    Registries.registerBlockState(ACACIA_STAIRS_29);
+    Registries.registerBlockState(ACACIA_STAIRS_30);
+    Registries.registerBlockState(ACACIA_STAIRS_31);
+    Registries.registerBlockState(ACACIA_STAIRS_32);
+    Registries.registerBlockState(ACACIA_STAIRS_33);
+    Registries.registerBlockState(ACACIA_STAIRS_34);
+    Registries.registerBlockState(ACACIA_STAIRS_35);
+    Registries.registerBlockState(ACACIA_STAIRS_36);
+    Registries.registerBlockState(ACACIA_STAIRS_37);
+    Registries.registerBlockState(ACACIA_STAIRS_38);
+    Registries.registerBlockState(ACACIA_STAIRS_39);
+    Registries.registerBlockState(ACACIA_STAIRS_40);
+    Registries.registerBlockState(ACACIA_STAIRS_41);
+    Registries.registerBlockState(ACACIA_STAIRS_42);
+    Registries.registerBlockState(ACACIA_STAIRS_43);
+    Registries.registerBlockState(ACACIA_STAIRS_44);
+    Registries.registerBlockState(ACACIA_STAIRS_45);
+    Registries.registerBlockState(ACACIA_STAIRS_46);
+    Registries.registerBlockState(ACACIA_STAIRS_47);
+    Registries.registerBlockState(ACACIA_STAIRS_48);
+    Registries.registerBlockState(ACACIA_STAIRS_49);
+    Registries.registerBlockState(ACACIA_STAIRS_50);
+    Registries.registerBlockState(ACACIA_STAIRS_51);
+    Registries.registerBlockState(ACACIA_STAIRS_52);
+    Registries.registerBlockState(ACACIA_STAIRS_53);
+    Registries.registerBlockState(ACACIA_STAIRS_54);
+    Registries.registerBlockState(ACACIA_STAIRS_55);
+    Registries.registerBlockState(ACACIA_STAIRS_56);
+    Registries.registerBlockState(ACACIA_STAIRS_57);
+    Registries.registerBlockState(ACACIA_STAIRS_58);
+    Registries.registerBlockState(ACACIA_STAIRS_59);
+    Registries.registerBlockState(ACACIA_STAIRS_60);
+    Registries.registerBlockState(ACACIA_STAIRS_61);
+    Registries.registerBlockState(ACACIA_STAIRS_62);
+    Registries.registerBlockState(ACACIA_STAIRS_63);
+    Registries.registerBlockState(ACACIA_STAIRS_64);
+    Registries.registerBlockState(ACACIA_STAIRS_65);
+    Registries.registerBlockState(ACACIA_STAIRS_66);
+    Registries.registerBlockState(ACACIA_STAIRS_67);
+    Registries.registerBlockState(ACACIA_STAIRS_68);
+    Registries.registerBlockState(ACACIA_STAIRS_69);
+    Registries.registerBlockState(ACACIA_STAIRS_70);
+    Registries.registerBlockState(ACACIA_STAIRS_71);
+    Registries.registerBlockState(ACACIA_STAIRS_72);
+    Registries.registerBlockState(ACACIA_STAIRS_73);
+    Registries.registerBlockState(ACACIA_STAIRS_74);
+    Registries.registerBlockState(ACACIA_STAIRS_75);
+    Registries.registerBlockState(ACACIA_STAIRS_76);
+    Registries.registerBlockState(ACACIA_STAIRS_77);
+    Registries.registerBlockState(ACACIA_STAIRS_78);
+    Registries.registerBlockState(ACACIA_STAIRS_79);
+  }
 
   public static void initStates() {
     Block.ACACIA_STAIRS.addBlockState(ACACIA_STAIRS_0);

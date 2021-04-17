@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -76,6 +77,41 @@ public final class Vine {
   public static final BlockState VINE_30 = new BlockState(NamespaceID.from("minecraft:vine:30"), (short) 4822, Block.VINE, "east=false","north=false","south=false","up=false","west=true");
 
   public static final BlockState VINE_31 = new BlockState(NamespaceID.from("minecraft:vine:31"), (short) 4823, Block.VINE, "east=false","north=false","south=false","up=false","west=false");
+
+  static {
+    Registries.registerBlockState(VINE_0);
+    Registries.registerBlockState(VINE_1);
+    Registries.registerBlockState(VINE_2);
+    Registries.registerBlockState(VINE_3);
+    Registries.registerBlockState(VINE_4);
+    Registries.registerBlockState(VINE_5);
+    Registries.registerBlockState(VINE_6);
+    Registries.registerBlockState(VINE_7);
+    Registries.registerBlockState(VINE_8);
+    Registries.registerBlockState(VINE_9);
+    Registries.registerBlockState(VINE_10);
+    Registries.registerBlockState(VINE_11);
+    Registries.registerBlockState(VINE_12);
+    Registries.registerBlockState(VINE_13);
+    Registries.registerBlockState(VINE_14);
+    Registries.registerBlockState(VINE_15);
+    Registries.registerBlockState(VINE_16);
+    Registries.registerBlockState(VINE_17);
+    Registries.registerBlockState(VINE_18);
+    Registries.registerBlockState(VINE_19);
+    Registries.registerBlockState(VINE_20);
+    Registries.registerBlockState(VINE_21);
+    Registries.registerBlockState(VINE_22);
+    Registries.registerBlockState(VINE_23);
+    Registries.registerBlockState(VINE_24);
+    Registries.registerBlockState(VINE_25);
+    Registries.registerBlockState(VINE_26);
+    Registries.registerBlockState(VINE_27);
+    Registries.registerBlockState(VINE_28);
+    Registries.registerBlockState(VINE_29);
+    Registries.registerBlockState(VINE_30);
+    Registries.registerBlockState(VINE_31);
+  }
 
   public static void initStates() {
     Block.VINE.addBlockState(VINE_0);

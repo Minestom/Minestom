@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -172,6 +173,89 @@ public final class SpruceStairs {
   public static final BlockState SPRUCE_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:spruce_stairs:78"), (short) 5486, Block.SPRUCE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
 
   public static final BlockState SPRUCE_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:spruce_stairs:79"), (short) 5487, Block.SPRUCE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(SPRUCE_STAIRS_0);
+    Registries.registerBlockState(SPRUCE_STAIRS_1);
+    Registries.registerBlockState(SPRUCE_STAIRS_2);
+    Registries.registerBlockState(SPRUCE_STAIRS_3);
+    Registries.registerBlockState(SPRUCE_STAIRS_4);
+    Registries.registerBlockState(SPRUCE_STAIRS_5);
+    Registries.registerBlockState(SPRUCE_STAIRS_6);
+    Registries.registerBlockState(SPRUCE_STAIRS_7);
+    Registries.registerBlockState(SPRUCE_STAIRS_8);
+    Registries.registerBlockState(SPRUCE_STAIRS_9);
+    Registries.registerBlockState(SPRUCE_STAIRS_10);
+    Registries.registerBlockState(SPRUCE_STAIRS_11);
+    Registries.registerBlockState(SPRUCE_STAIRS_12);
+    Registries.registerBlockState(SPRUCE_STAIRS_13);
+    Registries.registerBlockState(SPRUCE_STAIRS_14);
+    Registries.registerBlockState(SPRUCE_STAIRS_15);
+    Registries.registerBlockState(SPRUCE_STAIRS_16);
+    Registries.registerBlockState(SPRUCE_STAIRS_17);
+    Registries.registerBlockState(SPRUCE_STAIRS_18);
+    Registries.registerBlockState(SPRUCE_STAIRS_19);
+    Registries.registerBlockState(SPRUCE_STAIRS_20);
+    Registries.registerBlockState(SPRUCE_STAIRS_21);
+    Registries.registerBlockState(SPRUCE_STAIRS_22);
+    Registries.registerBlockState(SPRUCE_STAIRS_23);
+    Registries.registerBlockState(SPRUCE_STAIRS_24);
+    Registries.registerBlockState(SPRUCE_STAIRS_25);
+    Registries.registerBlockState(SPRUCE_STAIRS_26);
+    Registries.registerBlockState(SPRUCE_STAIRS_27);
+    Registries.registerBlockState(SPRUCE_STAIRS_28);
+    Registries.registerBlockState(SPRUCE_STAIRS_29);
+    Registries.registerBlockState(SPRUCE_STAIRS_30);
+    Registries.registerBlockState(SPRUCE_STAIRS_31);
+    Registries.registerBlockState(SPRUCE_STAIRS_32);
+    Registries.registerBlockState(SPRUCE_STAIRS_33);
+    Registries.registerBlockState(SPRUCE_STAIRS_34);
+    Registries.registerBlockState(SPRUCE_STAIRS_35);
+    Registries.registerBlockState(SPRUCE_STAIRS_36);
+    Registries.registerBlockState(SPRUCE_STAIRS_37);
+    Registries.registerBlockState(SPRUCE_STAIRS_38);
+    Registries.registerBlockState(SPRUCE_STAIRS_39);
+    Registries.registerBlockState(SPRUCE_STAIRS_40);
+    Registries.registerBlockState(SPRUCE_STAIRS_41);
+    Registries.registerBlockState(SPRUCE_STAIRS_42);
+    Registries.registerBlockState(SPRUCE_STAIRS_43);
+    Registries.registerBlockState(SPRUCE_STAIRS_44);
+    Registries.registerBlockState(SPRUCE_STAIRS_45);
+    Registries.registerBlockState(SPRUCE_STAIRS_46);
+    Registries.registerBlockState(SPRUCE_STAIRS_47);
+    Registries.registerBlockState(SPRUCE_STAIRS_48);
+    Registries.registerBlockState(SPRUCE_STAIRS_49);
+    Registries.registerBlockState(SPRUCE_STAIRS_50);
+    Registries.registerBlockState(SPRUCE_STAIRS_51);
+    Registries.registerBlockState(SPRUCE_STAIRS_52);
+    Registries.registerBlockState(SPRUCE_STAIRS_53);
+    Registries.registerBlockState(SPRUCE_STAIRS_54);
+    Registries.registerBlockState(SPRUCE_STAIRS_55);
+    Registries.registerBlockState(SPRUCE_STAIRS_56);
+    Registries.registerBlockState(SPRUCE_STAIRS_57);
+    Registries.registerBlockState(SPRUCE_STAIRS_58);
+    Registries.registerBlockState(SPRUCE_STAIRS_59);
+    Registries.registerBlockState(SPRUCE_STAIRS_60);
+    Registries.registerBlockState(SPRUCE_STAIRS_61);
+    Registries.registerBlockState(SPRUCE_STAIRS_62);
+    Registries.registerBlockState(SPRUCE_STAIRS_63);
+    Registries.registerBlockState(SPRUCE_STAIRS_64);
+    Registries.registerBlockState(SPRUCE_STAIRS_65);
+    Registries.registerBlockState(SPRUCE_STAIRS_66);
+    Registries.registerBlockState(SPRUCE_STAIRS_67);
+    Registries.registerBlockState(SPRUCE_STAIRS_68);
+    Registries.registerBlockState(SPRUCE_STAIRS_69);
+    Registries.registerBlockState(SPRUCE_STAIRS_70);
+    Registries.registerBlockState(SPRUCE_STAIRS_71);
+    Registries.registerBlockState(SPRUCE_STAIRS_72);
+    Registries.registerBlockState(SPRUCE_STAIRS_73);
+    Registries.registerBlockState(SPRUCE_STAIRS_74);
+    Registries.registerBlockState(SPRUCE_STAIRS_75);
+    Registries.registerBlockState(SPRUCE_STAIRS_76);
+    Registries.registerBlockState(SPRUCE_STAIRS_77);
+    Registries.registerBlockState(SPRUCE_STAIRS_78);
+    Registries.registerBlockState(SPRUCE_STAIRS_79);
+  }
 
   public static void initStates() {
     Block.SPRUCE_STAIRS.addBlockState(SPRUCE_STAIRS_0);

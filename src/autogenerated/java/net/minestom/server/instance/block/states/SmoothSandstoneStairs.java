@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -172,6 +173,89 @@ public final class SmoothSandstoneStairs {
   public static final BlockState SMOOTH_SANDSTONE_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:smooth_sandstone_stairs:78"), (short) 10311, Block.SMOOTH_SANDSTONE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
 
   public static final BlockState SMOOTH_SANDSTONE_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:smooth_sandstone_stairs:79"), (short) 10312, Block.SMOOTH_SANDSTONE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_0);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_1);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_2);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_3);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_4);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_5);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_6);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_7);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_8);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_9);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_10);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_11);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_12);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_13);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_14);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_15);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_16);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_17);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_18);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_19);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_20);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_21);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_22);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_23);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_24);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_25);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_26);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_27);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_28);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_29);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_30);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_31);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_32);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_33);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_34);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_35);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_36);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_37);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_38);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_39);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_40);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_41);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_42);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_43);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_44);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_45);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_46);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_47);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_48);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_49);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_50);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_51);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_52);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_53);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_54);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_55);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_56);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_57);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_58);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_59);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_60);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_61);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_62);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_63);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_64);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_65);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_66);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_67);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_68);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_69);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_70);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_71);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_72);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_73);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_74);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_75);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_76);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_77);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_78);
+    Registries.registerBlockState(SMOOTH_SANDSTONE_STAIRS_79);
+  }
 
   public static void initStates() {
     Block.SMOOTH_SANDSTONE_STAIRS.addBlockState(SMOOTH_SANDSTONE_STAIRS_0);

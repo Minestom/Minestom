@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -26,6 +27,16 @@ public final class Cake {
   public static final BlockState CAKE_5 = new BlockState(NamespaceID.from("minecraft:cake:5"), (short) 4029, Block.CAKE, "bites=5");
 
   public static final BlockState CAKE_6 = new BlockState(NamespaceID.from("minecraft:cake:6"), (short) 4030, Block.CAKE, "bites=6");
+
+  static {
+    Registries.registerBlockState(CAKE_0);
+    Registries.registerBlockState(CAKE_1);
+    Registries.registerBlockState(CAKE_2);
+    Registries.registerBlockState(CAKE_3);
+    Registries.registerBlockState(CAKE_4);
+    Registries.registerBlockState(CAKE_5);
+    Registries.registerBlockState(CAKE_6);
+  }
 
   public static void initStates() {
     Block.CAKE.addBlockState(CAKE_0);

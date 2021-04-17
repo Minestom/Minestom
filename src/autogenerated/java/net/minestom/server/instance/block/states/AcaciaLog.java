@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -18,6 +19,12 @@ public final class AcaciaLog {
   public static final BlockState ACACIA_LOG_1 = new BlockState(NamespaceID.from("minecraft:acacia_log:1"), (short) 86, Block.ACACIA_LOG, "axis=y");
 
   public static final BlockState ACACIA_LOG_2 = new BlockState(NamespaceID.from("minecraft:acacia_log:2"), (short) 87, Block.ACACIA_LOG, "axis=z");
+
+  static {
+    Registries.registerBlockState(ACACIA_LOG_0);
+    Registries.registerBlockState(ACACIA_LOG_1);
+    Registries.registerBlockState(ACACIA_LOG_2);
+  }
 
   public static void initStates() {
     Block.ACACIA_LOG.addBlockState(ACACIA_LOG_0);

@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -20,6 +21,13 @@ public final class Loom {
   public static final BlockState LOOM_2 = new BlockState(NamespaceID.from("minecraft:loom:2"), (short) 14793, Block.LOOM, "facing=west");
 
   public static final BlockState LOOM_3 = new BlockState(NamespaceID.from("minecraft:loom:3"), (short) 14794, Block.LOOM, "facing=east");
+
+  static {
+    Registries.registerBlockState(LOOM_0);
+    Registries.registerBlockState(LOOM_1);
+    Registries.registerBlockState(LOOM_2);
+    Registries.registerBlockState(LOOM_3);
+  }
 
   public static void initStates() {
     Block.LOOM.addBlockState(LOOM_0);

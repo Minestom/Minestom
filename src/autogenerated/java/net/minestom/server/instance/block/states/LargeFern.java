@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -16,6 +17,11 @@ public final class LargeFern {
   public static final BlockState LARGE_FERN_0 = new BlockState(NamespaceID.from("minecraft:large_fern:0"), (short) 7899, Block.LARGE_FERN, "half=upper");
 
   public static final BlockState LARGE_FERN_1 = new BlockState(NamespaceID.from("minecraft:large_fern:1"), (short) 7900, Block.LARGE_FERN, "half=lower");
+
+  static {
+    Registries.registerBlockState(LARGE_FERN_0);
+    Registries.registerBlockState(LARGE_FERN_1);
+  }
 
   public static void initStates() {
     Block.LARGE_FERN.addBlockState(LARGE_FERN_0);

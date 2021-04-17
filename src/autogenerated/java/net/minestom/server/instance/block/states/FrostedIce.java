@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -20,6 +21,13 @@ public final class FrostedIce {
   public static final BlockState FROSTED_ICE_2 = new BlockState(NamespaceID.from("minecraft:frosted_ice:2"), (short) 9255, Block.FROSTED_ICE, "age=2");
 
   public static final BlockState FROSTED_ICE_3 = new BlockState(NamespaceID.from("minecraft:frosted_ice:3"), (short) 9256, Block.FROSTED_ICE, "age=3");
+
+  static {
+    Registries.registerBlockState(FROSTED_ICE_0);
+    Registries.registerBlockState(FROSTED_ICE_1);
+    Registries.registerBlockState(FROSTED_ICE_2);
+    Registries.registerBlockState(FROSTED_ICE_3);
+  }
 
   public static void initStates() {
     Block.FROSTED_ICE.addBlockState(FROSTED_ICE_0);

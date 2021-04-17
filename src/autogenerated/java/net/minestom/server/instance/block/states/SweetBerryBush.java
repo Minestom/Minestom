@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -20,6 +21,13 @@ public final class SweetBerryBush {
   public static final BlockState SWEET_BERRY_BUSH_2 = new BlockState(NamespaceID.from("minecraft:sweet_berry_bush:2"), (short) 14964, Block.SWEET_BERRY_BUSH, "age=2");
 
   public static final BlockState SWEET_BERRY_BUSH_3 = new BlockState(NamespaceID.from("minecraft:sweet_berry_bush:3"), (short) 14965, Block.SWEET_BERRY_BUSH, "age=3");
+
+  static {
+    Registries.registerBlockState(SWEET_BERRY_BUSH_0);
+    Registries.registerBlockState(SWEET_BERRY_BUSH_1);
+    Registries.registerBlockState(SWEET_BERRY_BUSH_2);
+    Registries.registerBlockState(SWEET_BERRY_BUSH_3);
+  }
 
   public static void initStates() {
     Block.SWEET_BERRY_BUSH.addBlockState(SWEET_BERRY_BUSH_0);

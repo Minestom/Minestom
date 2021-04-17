@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -140,6 +141,73 @@ public final class IronTrapdoor {
   public static final BlockState IRON_TRAPDOOR_62 = new BlockState(NamespaceID.from("minecraft:iron_trapdoor:62"), (short) 7603, Block.IRON_TRAPDOOR, "facing=east","half=bottom","open=false","powered=false","waterlogged=true");
 
   public static final BlockState IRON_TRAPDOOR_63 = new BlockState(NamespaceID.from("minecraft:iron_trapdoor:63"), (short) 7604, Block.IRON_TRAPDOOR, "facing=east","half=bottom","open=false","powered=false","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(IRON_TRAPDOOR_0);
+    Registries.registerBlockState(IRON_TRAPDOOR_1);
+    Registries.registerBlockState(IRON_TRAPDOOR_2);
+    Registries.registerBlockState(IRON_TRAPDOOR_3);
+    Registries.registerBlockState(IRON_TRAPDOOR_4);
+    Registries.registerBlockState(IRON_TRAPDOOR_5);
+    Registries.registerBlockState(IRON_TRAPDOOR_6);
+    Registries.registerBlockState(IRON_TRAPDOOR_7);
+    Registries.registerBlockState(IRON_TRAPDOOR_8);
+    Registries.registerBlockState(IRON_TRAPDOOR_9);
+    Registries.registerBlockState(IRON_TRAPDOOR_10);
+    Registries.registerBlockState(IRON_TRAPDOOR_11);
+    Registries.registerBlockState(IRON_TRAPDOOR_12);
+    Registries.registerBlockState(IRON_TRAPDOOR_13);
+    Registries.registerBlockState(IRON_TRAPDOOR_14);
+    Registries.registerBlockState(IRON_TRAPDOOR_15);
+    Registries.registerBlockState(IRON_TRAPDOOR_16);
+    Registries.registerBlockState(IRON_TRAPDOOR_17);
+    Registries.registerBlockState(IRON_TRAPDOOR_18);
+    Registries.registerBlockState(IRON_TRAPDOOR_19);
+    Registries.registerBlockState(IRON_TRAPDOOR_20);
+    Registries.registerBlockState(IRON_TRAPDOOR_21);
+    Registries.registerBlockState(IRON_TRAPDOOR_22);
+    Registries.registerBlockState(IRON_TRAPDOOR_23);
+    Registries.registerBlockState(IRON_TRAPDOOR_24);
+    Registries.registerBlockState(IRON_TRAPDOOR_25);
+    Registries.registerBlockState(IRON_TRAPDOOR_26);
+    Registries.registerBlockState(IRON_TRAPDOOR_27);
+    Registries.registerBlockState(IRON_TRAPDOOR_28);
+    Registries.registerBlockState(IRON_TRAPDOOR_29);
+    Registries.registerBlockState(IRON_TRAPDOOR_30);
+    Registries.registerBlockState(IRON_TRAPDOOR_31);
+    Registries.registerBlockState(IRON_TRAPDOOR_32);
+    Registries.registerBlockState(IRON_TRAPDOOR_33);
+    Registries.registerBlockState(IRON_TRAPDOOR_34);
+    Registries.registerBlockState(IRON_TRAPDOOR_35);
+    Registries.registerBlockState(IRON_TRAPDOOR_36);
+    Registries.registerBlockState(IRON_TRAPDOOR_37);
+    Registries.registerBlockState(IRON_TRAPDOOR_38);
+    Registries.registerBlockState(IRON_TRAPDOOR_39);
+    Registries.registerBlockState(IRON_TRAPDOOR_40);
+    Registries.registerBlockState(IRON_TRAPDOOR_41);
+    Registries.registerBlockState(IRON_TRAPDOOR_42);
+    Registries.registerBlockState(IRON_TRAPDOOR_43);
+    Registries.registerBlockState(IRON_TRAPDOOR_44);
+    Registries.registerBlockState(IRON_TRAPDOOR_45);
+    Registries.registerBlockState(IRON_TRAPDOOR_46);
+    Registries.registerBlockState(IRON_TRAPDOOR_47);
+    Registries.registerBlockState(IRON_TRAPDOOR_48);
+    Registries.registerBlockState(IRON_TRAPDOOR_49);
+    Registries.registerBlockState(IRON_TRAPDOOR_50);
+    Registries.registerBlockState(IRON_TRAPDOOR_51);
+    Registries.registerBlockState(IRON_TRAPDOOR_52);
+    Registries.registerBlockState(IRON_TRAPDOOR_53);
+    Registries.registerBlockState(IRON_TRAPDOOR_54);
+    Registries.registerBlockState(IRON_TRAPDOOR_55);
+    Registries.registerBlockState(IRON_TRAPDOOR_56);
+    Registries.registerBlockState(IRON_TRAPDOOR_57);
+    Registries.registerBlockState(IRON_TRAPDOOR_58);
+    Registries.registerBlockState(IRON_TRAPDOOR_59);
+    Registries.registerBlockState(IRON_TRAPDOOR_60);
+    Registries.registerBlockState(IRON_TRAPDOOR_61);
+    Registries.registerBlockState(IRON_TRAPDOOR_62);
+    Registries.registerBlockState(IRON_TRAPDOOR_63);
+  }
 
   public static void initStates() {
     Block.IRON_TRAPDOOR.addBlockState(IRON_TRAPDOOR_0);

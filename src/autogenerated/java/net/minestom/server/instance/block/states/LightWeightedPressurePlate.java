@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -44,6 +45,25 @@ public final class LightWeightedPressurePlate {
   public static final BlockState LIGHT_WEIGHTED_PRESSURE_PLATE_14 = new BlockState(NamespaceID.from("minecraft:light_weighted_pressure_plate:14"), (short) 6664, Block.LIGHT_WEIGHTED_PRESSURE_PLATE, "power=14");
 
   public static final BlockState LIGHT_WEIGHTED_PRESSURE_PLATE_15 = new BlockState(NamespaceID.from("minecraft:light_weighted_pressure_plate:15"), (short) 6665, Block.LIGHT_WEIGHTED_PRESSURE_PLATE, "power=15");
+
+  static {
+    Registries.registerBlockState(LIGHT_WEIGHTED_PRESSURE_PLATE_0);
+    Registries.registerBlockState(LIGHT_WEIGHTED_PRESSURE_PLATE_1);
+    Registries.registerBlockState(LIGHT_WEIGHTED_PRESSURE_PLATE_2);
+    Registries.registerBlockState(LIGHT_WEIGHTED_PRESSURE_PLATE_3);
+    Registries.registerBlockState(LIGHT_WEIGHTED_PRESSURE_PLATE_4);
+    Registries.registerBlockState(LIGHT_WEIGHTED_PRESSURE_PLATE_5);
+    Registries.registerBlockState(LIGHT_WEIGHTED_PRESSURE_PLATE_6);
+    Registries.registerBlockState(LIGHT_WEIGHTED_PRESSURE_PLATE_7);
+    Registries.registerBlockState(LIGHT_WEIGHTED_PRESSURE_PLATE_8);
+    Registries.registerBlockState(LIGHT_WEIGHTED_PRESSURE_PLATE_9);
+    Registries.registerBlockState(LIGHT_WEIGHTED_PRESSURE_PLATE_10);
+    Registries.registerBlockState(LIGHT_WEIGHTED_PRESSURE_PLATE_11);
+    Registries.registerBlockState(LIGHT_WEIGHTED_PRESSURE_PLATE_12);
+    Registries.registerBlockState(LIGHT_WEIGHTED_PRESSURE_PLATE_13);
+    Registries.registerBlockState(LIGHT_WEIGHTED_PRESSURE_PLATE_14);
+    Registries.registerBlockState(LIGHT_WEIGHTED_PRESSURE_PLATE_15);
+  }
 
   public static void initStates() {
     Block.LIGHT_WEIGHTED_PRESSURE_PLATE.addBlockState(LIGHT_WEIGHTED_PRESSURE_PLATE_0);

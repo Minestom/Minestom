@@ -1,6 +1,7 @@
 package net.minestom.server.instance.block;
 
 import java.lang.Override;
+import java.lang.String;
 import java.util.ArrayList;
 import java.util.List;
 import net.kyori.adventure.key.Key;
@@ -399,6 +400,12 @@ public class BlockEntity implements Keyed {
   @NotNull
   public List<Block> getBlocks() {
     return this.blocks;
+  }
+
+  @NotNull
+  @Override
+  public String toString() {
+    return "[" + this.id + "]";
   }
 
   @NotNull

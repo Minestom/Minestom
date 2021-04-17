@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -76,6 +77,41 @@ public final class IronBars {
   public static final BlockState IRON_BARS_30 = new BlockState(NamespaceID.from("minecraft:iron_bars:30"), (short) 4727, Block.IRON_BARS, "east=false","north=false","south=false","waterlogged=false","west=true");
 
   public static final BlockState IRON_BARS_31 = new BlockState(NamespaceID.from("minecraft:iron_bars:31"), (short) 4728, Block.IRON_BARS, "east=false","north=false","south=false","waterlogged=false","west=false");
+
+  static {
+    Registries.registerBlockState(IRON_BARS_0);
+    Registries.registerBlockState(IRON_BARS_1);
+    Registries.registerBlockState(IRON_BARS_2);
+    Registries.registerBlockState(IRON_BARS_3);
+    Registries.registerBlockState(IRON_BARS_4);
+    Registries.registerBlockState(IRON_BARS_5);
+    Registries.registerBlockState(IRON_BARS_6);
+    Registries.registerBlockState(IRON_BARS_7);
+    Registries.registerBlockState(IRON_BARS_8);
+    Registries.registerBlockState(IRON_BARS_9);
+    Registries.registerBlockState(IRON_BARS_10);
+    Registries.registerBlockState(IRON_BARS_11);
+    Registries.registerBlockState(IRON_BARS_12);
+    Registries.registerBlockState(IRON_BARS_13);
+    Registries.registerBlockState(IRON_BARS_14);
+    Registries.registerBlockState(IRON_BARS_15);
+    Registries.registerBlockState(IRON_BARS_16);
+    Registries.registerBlockState(IRON_BARS_17);
+    Registries.registerBlockState(IRON_BARS_18);
+    Registries.registerBlockState(IRON_BARS_19);
+    Registries.registerBlockState(IRON_BARS_20);
+    Registries.registerBlockState(IRON_BARS_21);
+    Registries.registerBlockState(IRON_BARS_22);
+    Registries.registerBlockState(IRON_BARS_23);
+    Registries.registerBlockState(IRON_BARS_24);
+    Registries.registerBlockState(IRON_BARS_25);
+    Registries.registerBlockState(IRON_BARS_26);
+    Registries.registerBlockState(IRON_BARS_27);
+    Registries.registerBlockState(IRON_BARS_28);
+    Registries.registerBlockState(IRON_BARS_29);
+    Registries.registerBlockState(IRON_BARS_30);
+    Registries.registerBlockState(IRON_BARS_31);
+  }
 
   public static void initStates() {
     Block.IRON_BARS.addBlockState(IRON_BARS_0);

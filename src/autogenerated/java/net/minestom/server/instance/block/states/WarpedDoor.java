@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -140,6 +141,73 @@ public final class WarpedDoor {
   public static final BlockState WARPED_DOOR_62 = new BlockState(NamespaceID.from("minecraft:warped_door:62"), (short) 15661, Block.WARPED_DOOR, "facing=east","half=lower","hinge=right","open=false","powered=true");
 
   public static final BlockState WARPED_DOOR_63 = new BlockState(NamespaceID.from("minecraft:warped_door:63"), (short) 15662, Block.WARPED_DOOR, "facing=east","half=lower","hinge=right","open=false","powered=false");
+
+  static {
+    Registries.registerBlockState(WARPED_DOOR_0);
+    Registries.registerBlockState(WARPED_DOOR_1);
+    Registries.registerBlockState(WARPED_DOOR_2);
+    Registries.registerBlockState(WARPED_DOOR_3);
+    Registries.registerBlockState(WARPED_DOOR_4);
+    Registries.registerBlockState(WARPED_DOOR_5);
+    Registries.registerBlockState(WARPED_DOOR_6);
+    Registries.registerBlockState(WARPED_DOOR_7);
+    Registries.registerBlockState(WARPED_DOOR_8);
+    Registries.registerBlockState(WARPED_DOOR_9);
+    Registries.registerBlockState(WARPED_DOOR_10);
+    Registries.registerBlockState(WARPED_DOOR_11);
+    Registries.registerBlockState(WARPED_DOOR_12);
+    Registries.registerBlockState(WARPED_DOOR_13);
+    Registries.registerBlockState(WARPED_DOOR_14);
+    Registries.registerBlockState(WARPED_DOOR_15);
+    Registries.registerBlockState(WARPED_DOOR_16);
+    Registries.registerBlockState(WARPED_DOOR_17);
+    Registries.registerBlockState(WARPED_DOOR_18);
+    Registries.registerBlockState(WARPED_DOOR_19);
+    Registries.registerBlockState(WARPED_DOOR_20);
+    Registries.registerBlockState(WARPED_DOOR_21);
+    Registries.registerBlockState(WARPED_DOOR_22);
+    Registries.registerBlockState(WARPED_DOOR_23);
+    Registries.registerBlockState(WARPED_DOOR_24);
+    Registries.registerBlockState(WARPED_DOOR_25);
+    Registries.registerBlockState(WARPED_DOOR_26);
+    Registries.registerBlockState(WARPED_DOOR_27);
+    Registries.registerBlockState(WARPED_DOOR_28);
+    Registries.registerBlockState(WARPED_DOOR_29);
+    Registries.registerBlockState(WARPED_DOOR_30);
+    Registries.registerBlockState(WARPED_DOOR_31);
+    Registries.registerBlockState(WARPED_DOOR_32);
+    Registries.registerBlockState(WARPED_DOOR_33);
+    Registries.registerBlockState(WARPED_DOOR_34);
+    Registries.registerBlockState(WARPED_DOOR_35);
+    Registries.registerBlockState(WARPED_DOOR_36);
+    Registries.registerBlockState(WARPED_DOOR_37);
+    Registries.registerBlockState(WARPED_DOOR_38);
+    Registries.registerBlockState(WARPED_DOOR_39);
+    Registries.registerBlockState(WARPED_DOOR_40);
+    Registries.registerBlockState(WARPED_DOOR_41);
+    Registries.registerBlockState(WARPED_DOOR_42);
+    Registries.registerBlockState(WARPED_DOOR_43);
+    Registries.registerBlockState(WARPED_DOOR_44);
+    Registries.registerBlockState(WARPED_DOOR_45);
+    Registries.registerBlockState(WARPED_DOOR_46);
+    Registries.registerBlockState(WARPED_DOOR_47);
+    Registries.registerBlockState(WARPED_DOOR_48);
+    Registries.registerBlockState(WARPED_DOOR_49);
+    Registries.registerBlockState(WARPED_DOOR_50);
+    Registries.registerBlockState(WARPED_DOOR_51);
+    Registries.registerBlockState(WARPED_DOOR_52);
+    Registries.registerBlockState(WARPED_DOOR_53);
+    Registries.registerBlockState(WARPED_DOOR_54);
+    Registries.registerBlockState(WARPED_DOOR_55);
+    Registries.registerBlockState(WARPED_DOOR_56);
+    Registries.registerBlockState(WARPED_DOOR_57);
+    Registries.registerBlockState(WARPED_DOOR_58);
+    Registries.registerBlockState(WARPED_DOOR_59);
+    Registries.registerBlockState(WARPED_DOOR_60);
+    Registries.registerBlockState(WARPED_DOOR_61);
+    Registries.registerBlockState(WARPED_DOOR_62);
+    Registries.registerBlockState(WARPED_DOOR_63);
+  }
 
   public static void initStates() {
     Block.WARPED_DOOR.addBlockState(WARPED_DOOR_0);

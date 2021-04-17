@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -16,6 +17,11 @@ public final class SprucePressurePlate {
   public static final BlockState SPRUCE_PRESSURE_PLATE_0 = new BlockState(NamespaceID.from("minecraft:spruce_pressure_plate:0"), (short) 3875, Block.SPRUCE_PRESSURE_PLATE, "powered=true");
 
   public static final BlockState SPRUCE_PRESSURE_PLATE_1 = new BlockState(NamespaceID.from("minecraft:spruce_pressure_plate:1"), (short) 3876, Block.SPRUCE_PRESSURE_PLATE, "powered=false");
+
+  static {
+    Registries.registerBlockState(SPRUCE_PRESSURE_PLATE_0);
+    Registries.registerBlockState(SPRUCE_PRESSURE_PLATE_1);
+  }
 
   public static void initStates() {
     Block.SPRUCE_PRESSURE_PLATE.addBlockState(SPRUCE_PRESSURE_PLATE_0);

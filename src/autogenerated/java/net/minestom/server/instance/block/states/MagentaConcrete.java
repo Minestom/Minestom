@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class MagentaConcrete {
   public static final BlockState MAGENTA_CONCRETE_0 = new BlockState(NamespaceID.from("minecraft:magenta_concrete:0"), (short) 9444, Block.MAGENTA_CONCRETE);
+
+  static {
+    Registries.registerBlockState(MAGENTA_CONCRETE_0);
+  }
 
   public static void initStates() {
     Block.MAGENTA_CONCRETE.addBlockState(MAGENTA_CONCRETE_0);

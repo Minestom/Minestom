@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class Glowstone {
   public static final BlockState GLOWSTONE_0 = new BlockState(NamespaceID.from("minecraft:glowstone:0"), (short) 4013, Block.GLOWSTONE);
+
+  static {
+    Registries.registerBlockState(GLOWSTONE_0);
+  }
 
   public static void initStates() {
     Block.GLOWSTONE.addBlockState(GLOWSTONE_0);

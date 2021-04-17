@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -28,6 +29,17 @@ public final class Snow {
   public static final BlockState SNOW_6 = new BlockState(NamespaceID.from("minecraft:snow:6"), (short) 3927, Block.SNOW, "layers=7");
 
   public static final BlockState SNOW_7 = new BlockState(NamespaceID.from("minecraft:snow:7"), (short) 3928, Block.SNOW, "layers=8");
+
+  static {
+    Registries.registerBlockState(SNOW_0);
+    Registries.registerBlockState(SNOW_1);
+    Registries.registerBlockState(SNOW_2);
+    Registries.registerBlockState(SNOW_3);
+    Registries.registerBlockState(SNOW_4);
+    Registries.registerBlockState(SNOW_5);
+    Registries.registerBlockState(SNOW_6);
+    Registries.registerBlockState(SNOW_7);
+  }
 
   public static void initStates() {
     Block.SNOW.addBlockState(SNOW_0);

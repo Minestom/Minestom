@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -44,6 +45,25 @@ public final class LimeBed {
   public static final BlockState LIME_BED_14 = new BlockState(NamespaceID.from("minecraft:lime_bed:14"), (short) 1143, Block.LIME_BED, "facing=east","occupied=false","part=head");
 
   public static final BlockState LIME_BED_15 = new BlockState(NamespaceID.from("minecraft:lime_bed:15"), (short) 1144, Block.LIME_BED, "facing=east","occupied=false","part=foot");
+
+  static {
+    Registries.registerBlockState(LIME_BED_0);
+    Registries.registerBlockState(LIME_BED_1);
+    Registries.registerBlockState(LIME_BED_2);
+    Registries.registerBlockState(LIME_BED_3);
+    Registries.registerBlockState(LIME_BED_4);
+    Registries.registerBlockState(LIME_BED_5);
+    Registries.registerBlockState(LIME_BED_6);
+    Registries.registerBlockState(LIME_BED_7);
+    Registries.registerBlockState(LIME_BED_8);
+    Registries.registerBlockState(LIME_BED_9);
+    Registries.registerBlockState(LIME_BED_10);
+    Registries.registerBlockState(LIME_BED_11);
+    Registries.registerBlockState(LIME_BED_12);
+    Registries.registerBlockState(LIME_BED_13);
+    Registries.registerBlockState(LIME_BED_14);
+    Registries.registerBlockState(LIME_BED_15);
+  }
 
   public static void initStates() {
     Block.LIME_BED.addBlockState(LIME_BED_0);

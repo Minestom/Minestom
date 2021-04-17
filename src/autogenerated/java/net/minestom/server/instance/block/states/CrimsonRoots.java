@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class CrimsonRoots {
   public static final BlockState CRIMSON_ROOTS_0 = new BlockState(NamespaceID.from("minecraft:crimson_roots:0"), (short) 15052, Block.CRIMSON_ROOTS);
+
+  static {
+    Registries.registerBlockState(CRIMSON_ROOTS_0);
+  }
 
   public static void initStates() {
     Block.CRIMSON_ROOTS.addBlockState(CRIMSON_ROOTS_0);

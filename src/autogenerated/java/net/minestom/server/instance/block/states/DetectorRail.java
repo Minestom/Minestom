@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -36,6 +37,21 @@ public final class DetectorRail {
   public static final BlockState DETECTOR_RAIL_10 = new BlockState(NamespaceID.from("minecraft:detector_rail:10"), (short) 1327, Block.DETECTOR_RAIL, "powered=false","shape=ascending_north");
 
   public static final BlockState DETECTOR_RAIL_11 = new BlockState(NamespaceID.from("minecraft:detector_rail:11"), (short) 1328, Block.DETECTOR_RAIL, "powered=false","shape=ascending_south");
+
+  static {
+    Registries.registerBlockState(DETECTOR_RAIL_0);
+    Registries.registerBlockState(DETECTOR_RAIL_1);
+    Registries.registerBlockState(DETECTOR_RAIL_2);
+    Registries.registerBlockState(DETECTOR_RAIL_3);
+    Registries.registerBlockState(DETECTOR_RAIL_4);
+    Registries.registerBlockState(DETECTOR_RAIL_5);
+    Registries.registerBlockState(DETECTOR_RAIL_6);
+    Registries.registerBlockState(DETECTOR_RAIL_7);
+    Registries.registerBlockState(DETECTOR_RAIL_8);
+    Registries.registerBlockState(DETECTOR_RAIL_9);
+    Registries.registerBlockState(DETECTOR_RAIL_10);
+    Registries.registerBlockState(DETECTOR_RAIL_11);
+  }
 
   public static void initStates() {
     Block.DETECTOR_RAIL.addBlockState(DETECTOR_RAIL_0);

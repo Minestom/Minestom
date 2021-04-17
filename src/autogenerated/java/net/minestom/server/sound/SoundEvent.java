@@ -1,6 +1,7 @@
 package net.minestom.server.sound;
 
 import java.lang.Override;
+import java.lang.String;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -2023,6 +2024,12 @@ public class SoundEvent implements Keyed, Sound.Type {
   @Nullable
   public static SoundEvent fromId(int id) {
     return Registries.getSoundEvent(id);
+  }
+
+  @NotNull
+  @Override
+  public String toString() {
+    return "[" + this.id + "]";
   }
 
   @NotNull

@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -44,6 +45,25 @@ public final class PinkBanner {
   public static final BlockState PINK_BANNER_14 = new BlockState(NamespaceID.from("minecraft:pink_banner:14"), (short) 8011, Block.PINK_BANNER, "rotation=14");
 
   public static final BlockState PINK_BANNER_15 = new BlockState(NamespaceID.from("minecraft:pink_banner:15"), (short) 8012, Block.PINK_BANNER, "rotation=15");
+
+  static {
+    Registries.registerBlockState(PINK_BANNER_0);
+    Registries.registerBlockState(PINK_BANNER_1);
+    Registries.registerBlockState(PINK_BANNER_2);
+    Registries.registerBlockState(PINK_BANNER_3);
+    Registries.registerBlockState(PINK_BANNER_4);
+    Registries.registerBlockState(PINK_BANNER_5);
+    Registries.registerBlockState(PINK_BANNER_6);
+    Registries.registerBlockState(PINK_BANNER_7);
+    Registries.registerBlockState(PINK_BANNER_8);
+    Registries.registerBlockState(PINK_BANNER_9);
+    Registries.registerBlockState(PINK_BANNER_10);
+    Registries.registerBlockState(PINK_BANNER_11);
+    Registries.registerBlockState(PINK_BANNER_12);
+    Registries.registerBlockState(PINK_BANNER_13);
+    Registries.registerBlockState(PINK_BANNER_14);
+    Registries.registerBlockState(PINK_BANNER_15);
+  }
 
   public static void initStates() {
     Block.PINK_BANNER.addBlockState(PINK_BANNER_0);

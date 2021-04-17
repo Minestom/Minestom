@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -24,6 +25,15 @@ public final class SmoothStoneSlab {
   public static final BlockState SMOOTH_STONE_SLAB_4 = new BlockState(NamespaceID.from("minecraft:smooth_stone_slab:4"), (short) 8350, Block.SMOOTH_STONE_SLAB, "type=double","waterlogged=true");
 
   public static final BlockState SMOOTH_STONE_SLAB_5 = new BlockState(NamespaceID.from("minecraft:smooth_stone_slab:5"), (short) 8351, Block.SMOOTH_STONE_SLAB, "type=double","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(SMOOTH_STONE_SLAB_0);
+    Registries.registerBlockState(SMOOTH_STONE_SLAB_1);
+    Registries.registerBlockState(SMOOTH_STONE_SLAB_2);
+    Registries.registerBlockState(SMOOTH_STONE_SLAB_3);
+    Registries.registerBlockState(SMOOTH_STONE_SLAB_4);
+    Registries.registerBlockState(SMOOTH_STONE_SLAB_5);
+  }
 
   public static void initStates() {
     Block.SMOOTH_STONE_SLAB.addBlockState(SMOOTH_STONE_SLAB_0);

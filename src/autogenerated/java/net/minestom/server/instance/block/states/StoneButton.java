@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -60,6 +61,33 @@ public final class StoneButton {
   public static final BlockState STONE_BUTTON_22 = new BlockState(NamespaceID.from("minecraft:stone_button:22"), (short) 3919, Block.STONE_BUTTON, "face=CEILING","facing=east","powered=true");
 
   public static final BlockState STONE_BUTTON_23 = new BlockState(NamespaceID.from("minecraft:stone_button:23"), (short) 3920, Block.STONE_BUTTON, "face=CEILING","facing=east","powered=false");
+
+  static {
+    Registries.registerBlockState(STONE_BUTTON_0);
+    Registries.registerBlockState(STONE_BUTTON_1);
+    Registries.registerBlockState(STONE_BUTTON_2);
+    Registries.registerBlockState(STONE_BUTTON_3);
+    Registries.registerBlockState(STONE_BUTTON_4);
+    Registries.registerBlockState(STONE_BUTTON_5);
+    Registries.registerBlockState(STONE_BUTTON_6);
+    Registries.registerBlockState(STONE_BUTTON_7);
+    Registries.registerBlockState(STONE_BUTTON_8);
+    Registries.registerBlockState(STONE_BUTTON_9);
+    Registries.registerBlockState(STONE_BUTTON_10);
+    Registries.registerBlockState(STONE_BUTTON_11);
+    Registries.registerBlockState(STONE_BUTTON_12);
+    Registries.registerBlockState(STONE_BUTTON_13);
+    Registries.registerBlockState(STONE_BUTTON_14);
+    Registries.registerBlockState(STONE_BUTTON_15);
+    Registries.registerBlockState(STONE_BUTTON_16);
+    Registries.registerBlockState(STONE_BUTTON_17);
+    Registries.registerBlockState(STONE_BUTTON_18);
+    Registries.registerBlockState(STONE_BUTTON_19);
+    Registries.registerBlockState(STONE_BUTTON_20);
+    Registries.registerBlockState(STONE_BUTTON_21);
+    Registries.registerBlockState(STONE_BUTTON_22);
+    Registries.registerBlockState(STONE_BUTTON_23);
+  }
 
   public static void initStates() {
     Block.STONE_BUTTON.addBlockState(STONE_BUTTON_0);

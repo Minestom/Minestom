@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -24,6 +25,15 @@ public final class CrimsonSlab {
   public static final BlockState CRIMSON_SLAB_4 = new BlockState(NamespaceID.from("minecraft:crimson_slab:4"), (short) 15059, Block.CRIMSON_SLAB, "type=double","waterlogged=true");
 
   public static final BlockState CRIMSON_SLAB_5 = new BlockState(NamespaceID.from("minecraft:crimson_slab:5"), (short) 15060, Block.CRIMSON_SLAB, "type=double","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(CRIMSON_SLAB_0);
+    Registries.registerBlockState(CRIMSON_SLAB_1);
+    Registries.registerBlockState(CRIMSON_SLAB_2);
+    Registries.registerBlockState(CRIMSON_SLAB_3);
+    Registries.registerBlockState(CRIMSON_SLAB_4);
+    Registries.registerBlockState(CRIMSON_SLAB_5);
+  }
 
   public static void initStates() {
     Block.CRIMSON_SLAB.addBlockState(CRIMSON_SLAB_0);

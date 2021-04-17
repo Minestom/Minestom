@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -44,6 +45,25 @@ public final class Target {
   public static final BlockState TARGET_14 = new BlockState(NamespaceID.from("minecraft:target:14"), (short) 15782, Block.TARGET, "power=14");
 
   public static final BlockState TARGET_15 = new BlockState(NamespaceID.from("minecraft:target:15"), (short) 15783, Block.TARGET, "power=15");
+
+  static {
+    Registries.registerBlockState(TARGET_0);
+    Registries.registerBlockState(TARGET_1);
+    Registries.registerBlockState(TARGET_2);
+    Registries.registerBlockState(TARGET_3);
+    Registries.registerBlockState(TARGET_4);
+    Registries.registerBlockState(TARGET_5);
+    Registries.registerBlockState(TARGET_6);
+    Registries.registerBlockState(TARGET_7);
+    Registries.registerBlockState(TARGET_8);
+    Registries.registerBlockState(TARGET_9);
+    Registries.registerBlockState(TARGET_10);
+    Registries.registerBlockState(TARGET_11);
+    Registries.registerBlockState(TARGET_12);
+    Registries.registerBlockState(TARGET_13);
+    Registries.registerBlockState(TARGET_14);
+    Registries.registerBlockState(TARGET_15);
+  }
 
   public static void initStates() {
     Block.TARGET.addBlockState(TARGET_0);

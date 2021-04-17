@@ -143,6 +143,17 @@ public final class AttributeGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
+        // toString method
+        attributeClass.addMethod(
+                MethodSpec.methodBuilder("toString")
+                .addAnnotation(NotNull.class)
+                .addAnnotation(Override.class)
+                .returns(String.class)
+                        // this resolves to [Namespace]
+                .addStatement("return \"[\" + this.id + \"]\"")
+                .addModifiers(Modifier.PUBLIC)
+                .build()
+        );
         // Creating ClampedAttribute
         ClassName clampedAttributeClassName = ClassName.get("net.minestom.server.attribute", "ClampedAttribute");
 

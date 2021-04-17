@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class PurpleTerracotta {
   public static final BlockState PURPLE_TERRACOTTA_0 = new BlockState(NamespaceID.from("minecraft:purple_terracotta:0"), (short) 6861, Block.PURPLE_TERRACOTTA);
+
+  static {
+    Registries.registerBlockState(PURPLE_TERRACOTTA_0);
+  }
 
   public static void initStates() {
     Block.PURPLE_TERRACOTTA.addBlockState(PURPLE_TERRACOTTA_0);

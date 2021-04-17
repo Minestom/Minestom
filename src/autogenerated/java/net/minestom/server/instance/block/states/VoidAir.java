@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class VoidAir {
   public static final BlockState VOID_AIR_0 = new BlockState(NamespaceID.from("minecraft:void_air:0"), (short) 9669, Block.VOID_AIR);
+
+  static {
+    Registries.registerBlockState(VOID_AIR_0);
+  }
 
   public static void initStates() {
     Block.VOID_AIR.addBlockState(VOID_AIR_0);

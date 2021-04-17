@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -36,6 +37,21 @@ public final class Grindstone {
   public static final BlockState GRINDSTONE_10 = new BlockState(NamespaceID.from("minecraft:grindstone:10"), (short) 14835, Block.GRINDSTONE, "face=CEILING","facing=west");
 
   public static final BlockState GRINDSTONE_11 = new BlockState(NamespaceID.from("minecraft:grindstone:11"), (short) 14836, Block.GRINDSTONE, "face=CEILING","facing=east");
+
+  static {
+    Registries.registerBlockState(GRINDSTONE_0);
+    Registries.registerBlockState(GRINDSTONE_1);
+    Registries.registerBlockState(GRINDSTONE_2);
+    Registries.registerBlockState(GRINDSTONE_3);
+    Registries.registerBlockState(GRINDSTONE_4);
+    Registries.registerBlockState(GRINDSTONE_5);
+    Registries.registerBlockState(GRINDSTONE_6);
+    Registries.registerBlockState(GRINDSTONE_7);
+    Registries.registerBlockState(GRINDSTONE_8);
+    Registries.registerBlockState(GRINDSTONE_9);
+    Registries.registerBlockState(GRINDSTONE_10);
+    Registries.registerBlockState(GRINDSTONE_11);
+  }
 
   public static void initStates() {
     Block.GRINDSTONE.addBlockState(GRINDSTONE_0);

@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -28,6 +29,17 @@ public final class OakWallSign {
   public static final BlockState OAK_WALL_SIGN_6 = new BlockState(NamespaceID.from("minecraft:oak_wall_sign:6"), (short) 3741, Block.OAK_WALL_SIGN, "facing=east","waterlogged=true");
 
   public static final BlockState OAK_WALL_SIGN_7 = new BlockState(NamespaceID.from("minecraft:oak_wall_sign:7"), (short) 3742, Block.OAK_WALL_SIGN, "facing=east","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(OAK_WALL_SIGN_0);
+    Registries.registerBlockState(OAK_WALL_SIGN_1);
+    Registries.registerBlockState(OAK_WALL_SIGN_2);
+    Registries.registerBlockState(OAK_WALL_SIGN_3);
+    Registries.registerBlockState(OAK_WALL_SIGN_4);
+    Registries.registerBlockState(OAK_WALL_SIGN_5);
+    Registries.registerBlockState(OAK_WALL_SIGN_6);
+    Registries.registerBlockState(OAK_WALL_SIGN_7);
+  }
 
   public static void initStates() {
     Block.OAK_WALL_SIGN.addBlockState(OAK_WALL_SIGN_0);

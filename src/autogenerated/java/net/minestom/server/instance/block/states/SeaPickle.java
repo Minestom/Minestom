@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -28,6 +29,17 @@ public final class SeaPickle {
   public static final BlockState SEA_PICKLE_6 = new BlockState(NamespaceID.from("minecraft:sea_pickle:6"), (short) 9650, Block.SEA_PICKLE, "pickles=4","waterlogged=true");
 
   public static final BlockState SEA_PICKLE_7 = new BlockState(NamespaceID.from("minecraft:sea_pickle:7"), (short) 9651, Block.SEA_PICKLE, "pickles=4","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(SEA_PICKLE_0);
+    Registries.registerBlockState(SEA_PICKLE_1);
+    Registries.registerBlockState(SEA_PICKLE_2);
+    Registries.registerBlockState(SEA_PICKLE_3);
+    Registries.registerBlockState(SEA_PICKLE_4);
+    Registries.registerBlockState(SEA_PICKLE_5);
+    Registries.registerBlockState(SEA_PICKLE_6);
+    Registries.registerBlockState(SEA_PICKLE_7);
+  }
 
   public static void initStates() {
     Block.SEA_PICKLE.addBlockState(SEA_PICKLE_0);

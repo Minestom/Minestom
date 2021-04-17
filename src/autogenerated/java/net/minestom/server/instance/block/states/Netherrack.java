@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class Netherrack {
   public static final BlockState NETHERRACK_0 = new BlockState(NamespaceID.from("minecraft:netherrack:0"), (short) 3999, Block.NETHERRACK);
+
+  static {
+    Registries.registerBlockState(NETHERRACK_0);
+  }
 
   public static void initStates() {
     Block.NETHERRACK.addBlockState(NETHERRACK_0);

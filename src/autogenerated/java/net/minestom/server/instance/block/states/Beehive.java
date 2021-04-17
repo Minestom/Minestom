@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -60,6 +61,33 @@ public final class Beehive {
   public static final BlockState BEEHIVE_22 = new BlockState(NamespaceID.from("minecraft:beehive:22"), (short) 15830, Block.BEEHIVE, "facing=east","honey_level=4");
 
   public static final BlockState BEEHIVE_23 = new BlockState(NamespaceID.from("minecraft:beehive:23"), (short) 15831, Block.BEEHIVE, "facing=east","honey_level=5");
+
+  static {
+    Registries.registerBlockState(BEEHIVE_0);
+    Registries.registerBlockState(BEEHIVE_1);
+    Registries.registerBlockState(BEEHIVE_2);
+    Registries.registerBlockState(BEEHIVE_3);
+    Registries.registerBlockState(BEEHIVE_4);
+    Registries.registerBlockState(BEEHIVE_5);
+    Registries.registerBlockState(BEEHIVE_6);
+    Registries.registerBlockState(BEEHIVE_7);
+    Registries.registerBlockState(BEEHIVE_8);
+    Registries.registerBlockState(BEEHIVE_9);
+    Registries.registerBlockState(BEEHIVE_10);
+    Registries.registerBlockState(BEEHIVE_11);
+    Registries.registerBlockState(BEEHIVE_12);
+    Registries.registerBlockState(BEEHIVE_13);
+    Registries.registerBlockState(BEEHIVE_14);
+    Registries.registerBlockState(BEEHIVE_15);
+    Registries.registerBlockState(BEEHIVE_16);
+    Registries.registerBlockState(BEEHIVE_17);
+    Registries.registerBlockState(BEEHIVE_18);
+    Registries.registerBlockState(BEEHIVE_19);
+    Registries.registerBlockState(BEEHIVE_20);
+    Registries.registerBlockState(BEEHIVE_21);
+    Registries.registerBlockState(BEEHIVE_22);
+    Registries.registerBlockState(BEEHIVE_23);
+  }
 
   public static void initStates() {
     Block.BEEHIVE.addBlockState(BEEHIVE_0);

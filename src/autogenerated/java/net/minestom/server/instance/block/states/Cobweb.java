@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class Cobweb {
   public static final BlockState COBWEB_0 = new BlockState(NamespaceID.from("minecraft:cobweb:0"), (short) 1341, Block.COBWEB);
+
+  static {
+    Registries.registerBlockState(COBWEB_0);
+  }
 
   public static void initStates() {
     Block.COBWEB.addBlockState(COBWEB_0);

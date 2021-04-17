@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -44,6 +45,25 @@ public final class RedBanner {
   public static final BlockState RED_BANNER_14 = new BlockState(NamespaceID.from("minecraft:red_banner:14"), (short) 8139, Block.RED_BANNER, "rotation=14");
 
   public static final BlockState RED_BANNER_15 = new BlockState(NamespaceID.from("minecraft:red_banner:15"), (short) 8140, Block.RED_BANNER, "rotation=15");
+
+  static {
+    Registries.registerBlockState(RED_BANNER_0);
+    Registries.registerBlockState(RED_BANNER_1);
+    Registries.registerBlockState(RED_BANNER_2);
+    Registries.registerBlockState(RED_BANNER_3);
+    Registries.registerBlockState(RED_BANNER_4);
+    Registries.registerBlockState(RED_BANNER_5);
+    Registries.registerBlockState(RED_BANNER_6);
+    Registries.registerBlockState(RED_BANNER_7);
+    Registries.registerBlockState(RED_BANNER_8);
+    Registries.registerBlockState(RED_BANNER_9);
+    Registries.registerBlockState(RED_BANNER_10);
+    Registries.registerBlockState(RED_BANNER_11);
+    Registries.registerBlockState(RED_BANNER_12);
+    Registries.registerBlockState(RED_BANNER_13);
+    Registries.registerBlockState(RED_BANNER_14);
+    Registries.registerBlockState(RED_BANNER_15);
+  }
 
   public static void initStates() {
     Block.RED_BANNER.addBlockState(RED_BANNER_0);

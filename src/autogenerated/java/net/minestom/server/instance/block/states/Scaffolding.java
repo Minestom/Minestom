@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -76,6 +77,41 @@ public final class Scaffolding {
   public static final BlockState SCAFFOLDING_30 = new BlockState(NamespaceID.from("minecraft:scaffolding:30"), (short) 14789, Block.SCAFFOLDING, "bottom=false","distance=7","waterlogged=true");
 
   public static final BlockState SCAFFOLDING_31 = new BlockState(NamespaceID.from("minecraft:scaffolding:31"), (short) 14790, Block.SCAFFOLDING, "bottom=false","distance=7","waterlogged=false");
+
+  static {
+    Registries.registerBlockState(SCAFFOLDING_0);
+    Registries.registerBlockState(SCAFFOLDING_1);
+    Registries.registerBlockState(SCAFFOLDING_2);
+    Registries.registerBlockState(SCAFFOLDING_3);
+    Registries.registerBlockState(SCAFFOLDING_4);
+    Registries.registerBlockState(SCAFFOLDING_5);
+    Registries.registerBlockState(SCAFFOLDING_6);
+    Registries.registerBlockState(SCAFFOLDING_7);
+    Registries.registerBlockState(SCAFFOLDING_8);
+    Registries.registerBlockState(SCAFFOLDING_9);
+    Registries.registerBlockState(SCAFFOLDING_10);
+    Registries.registerBlockState(SCAFFOLDING_11);
+    Registries.registerBlockState(SCAFFOLDING_12);
+    Registries.registerBlockState(SCAFFOLDING_13);
+    Registries.registerBlockState(SCAFFOLDING_14);
+    Registries.registerBlockState(SCAFFOLDING_15);
+    Registries.registerBlockState(SCAFFOLDING_16);
+    Registries.registerBlockState(SCAFFOLDING_17);
+    Registries.registerBlockState(SCAFFOLDING_18);
+    Registries.registerBlockState(SCAFFOLDING_19);
+    Registries.registerBlockState(SCAFFOLDING_20);
+    Registries.registerBlockState(SCAFFOLDING_21);
+    Registries.registerBlockState(SCAFFOLDING_22);
+    Registries.registerBlockState(SCAFFOLDING_23);
+    Registries.registerBlockState(SCAFFOLDING_24);
+    Registries.registerBlockState(SCAFFOLDING_25);
+    Registries.registerBlockState(SCAFFOLDING_26);
+    Registries.registerBlockState(SCAFFOLDING_27);
+    Registries.registerBlockState(SCAFFOLDING_28);
+    Registries.registerBlockState(SCAFFOLDING_29);
+    Registries.registerBlockState(SCAFFOLDING_30);
+    Registries.registerBlockState(SCAFFOLDING_31);
+  }
 
   public static void initStates() {
     Block.SCAFFOLDING.addBlockState(SCAFFOLDING_0);

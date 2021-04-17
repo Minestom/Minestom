@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class CutSandstone {
   public static final BlockState CUT_SANDSTONE_0 = new BlockState(NamespaceID.from("minecraft:cut_sandstone:0"), (short) 248, Block.CUT_SANDSTONE);
+
+  static {
+    Registries.registerBlockState(CUT_SANDSTONE_0);
+  }
 
   public static void initStates() {
     Block.CUT_SANDSTONE.addBlockState(CUT_SANDSTONE_0);

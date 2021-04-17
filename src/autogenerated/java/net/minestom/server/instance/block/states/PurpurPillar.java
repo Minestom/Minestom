@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -18,6 +19,12 @@ public final class PurpurPillar {
   public static final BlockState PURPUR_PILLAR_1 = new BlockState(NamespaceID.from("minecraft:purpur_pillar:1"), (short) 9140, Block.PURPUR_PILLAR, "axis=y");
 
   public static final BlockState PURPUR_PILLAR_2 = new BlockState(NamespaceID.from("minecraft:purpur_pillar:2"), (short) 9141, Block.PURPUR_PILLAR, "axis=z");
+
+  static {
+    Registries.registerBlockState(PURPUR_PILLAR_0);
+    Registries.registerBlockState(PURPUR_PILLAR_1);
+    Registries.registerBlockState(PURPUR_PILLAR_2);
+  }
 
   public static void initStates() {
     Block.PURPUR_PILLAR.addBlockState(PURPUR_PILLAR_0);

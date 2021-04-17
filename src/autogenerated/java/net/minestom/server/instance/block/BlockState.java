@@ -115,4 +115,10 @@ public class BlockState implements Keyed {
   public static List<BlockState> values() {
     return Registries.getBlockStates();
   }
+
+  @NotNull
+  @Override
+  public String toString() {
+    return "[" + this.id + ","+ this.namespaceId + "]";
+  }
 }

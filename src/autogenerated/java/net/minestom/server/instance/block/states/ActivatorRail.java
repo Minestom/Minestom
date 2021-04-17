@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -36,6 +37,21 @@ public final class ActivatorRail {
   public static final BlockState ACTIVATOR_RAIL_10 = new BlockState(NamespaceID.from("minecraft:activator_rail:10"), (short) 6837, Block.ACTIVATOR_RAIL, "powered=false","shape=ascending_north");
 
   public static final BlockState ACTIVATOR_RAIL_11 = new BlockState(NamespaceID.from("minecraft:activator_rail:11"), (short) 6838, Block.ACTIVATOR_RAIL, "powered=false","shape=ascending_south");
+
+  static {
+    Registries.registerBlockState(ACTIVATOR_RAIL_0);
+    Registries.registerBlockState(ACTIVATOR_RAIL_1);
+    Registries.registerBlockState(ACTIVATOR_RAIL_2);
+    Registries.registerBlockState(ACTIVATOR_RAIL_3);
+    Registries.registerBlockState(ACTIVATOR_RAIL_4);
+    Registries.registerBlockState(ACTIVATOR_RAIL_5);
+    Registries.registerBlockState(ACTIVATOR_RAIL_6);
+    Registries.registerBlockState(ACTIVATOR_RAIL_7);
+    Registries.registerBlockState(ACTIVATOR_RAIL_8);
+    Registries.registerBlockState(ACTIVATOR_RAIL_9);
+    Registries.registerBlockState(ACTIVATOR_RAIL_10);
+    Registries.registerBlockState(ACTIVATOR_RAIL_11);
+  }
 
   public static void initStates() {
     Block.ACTIVATOR_RAIL.addBlockState(ACTIVATOR_RAIL_0);

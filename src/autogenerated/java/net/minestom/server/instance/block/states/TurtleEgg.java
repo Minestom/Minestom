@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -36,6 +37,21 @@ public final class TurtleEgg {
   public static final BlockState TURTLE_EGG_10 = new BlockState(NamespaceID.from("minecraft:turtle_egg:10"), (short) 9512, Block.TURTLE_EGG, "eggs=4","hatch=1");
 
   public static final BlockState TURTLE_EGG_11 = new BlockState(NamespaceID.from("minecraft:turtle_egg:11"), (short) 9513, Block.TURTLE_EGG, "eggs=4","hatch=2");
+
+  static {
+    Registries.registerBlockState(TURTLE_EGG_0);
+    Registries.registerBlockState(TURTLE_EGG_1);
+    Registries.registerBlockState(TURTLE_EGG_2);
+    Registries.registerBlockState(TURTLE_EGG_3);
+    Registries.registerBlockState(TURTLE_EGG_4);
+    Registries.registerBlockState(TURTLE_EGG_5);
+    Registries.registerBlockState(TURTLE_EGG_6);
+    Registries.registerBlockState(TURTLE_EGG_7);
+    Registries.registerBlockState(TURTLE_EGG_8);
+    Registries.registerBlockState(TURTLE_EGG_9);
+    Registries.registerBlockState(TURTLE_EGG_10);
+    Registries.registerBlockState(TURTLE_EGG_11);
+  }
 
   public static void initStates() {
     Block.TURTLE_EGG.addBlockState(TURTLE_EGG_0);

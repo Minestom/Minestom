@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -16,6 +17,11 @@ public final class NetherPortal {
   public static final BlockState NETHER_PORTAL_0 = new BlockState(NamespaceID.from("minecraft:nether_portal:0"), (short) 4014, Block.NETHER_PORTAL, "axis=x");
 
   public static final BlockState NETHER_PORTAL_1 = new BlockState(NamespaceID.from("minecraft:nether_portal:1"), (short) 4015, Block.NETHER_PORTAL, "axis=z");
+
+  static {
+    Registries.registerBlockState(NETHER_PORTAL_0);
+    Registries.registerBlockState(NETHER_PORTAL_1);
+  }
 
   public static void initStates() {
     Block.NETHER_PORTAL.addBlockState(NETHER_PORTAL_0);

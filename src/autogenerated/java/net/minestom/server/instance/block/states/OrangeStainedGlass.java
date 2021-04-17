@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class OrangeStainedGlass {
   public static final BlockState ORANGE_STAINED_GLASS_0 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass:0"), (short) 4096, Block.ORANGE_STAINED_GLASS);
+
+  static {
+    Registries.registerBlockState(ORANGE_STAINED_GLASS_0);
+  }
 
   public static void initStates() {
     Block.ORANGE_STAINED_GLASS.addBlockState(ORANGE_STAINED_GLASS_0);

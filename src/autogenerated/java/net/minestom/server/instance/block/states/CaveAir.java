@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +15,10 @@ import net.minestom.server.utils.NamespaceID;
 )
 public final class CaveAir {
   public static final BlockState CAVE_AIR_0 = new BlockState(NamespaceID.from("minecraft:cave_air:0"), (short) 9670, Block.CAVE_AIR);
+
+  static {
+    Registries.registerBlockState(CAVE_AIR_0);
+  }
 
   public static void initStates() {
     Block.CAVE_AIR.addBlockState(CAVE_AIR_0);

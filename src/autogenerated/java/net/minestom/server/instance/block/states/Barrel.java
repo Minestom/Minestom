@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -36,6 +37,21 @@ public final class Barrel {
   public static final BlockState BARREL_10 = new BlockState(NamespaceID.from("minecraft:barrel:10"), (short) 14805, Block.BARREL, "facing=down","open=true");
 
   public static final BlockState BARREL_11 = new BlockState(NamespaceID.from("minecraft:barrel:11"), (short) 14806, Block.BARREL, "facing=down","open=false");
+
+  static {
+    Registries.registerBlockState(BARREL_0);
+    Registries.registerBlockState(BARREL_1);
+    Registries.registerBlockState(BARREL_2);
+    Registries.registerBlockState(BARREL_3);
+    Registries.registerBlockState(BARREL_4);
+    Registries.registerBlockState(BARREL_5);
+    Registries.registerBlockState(BARREL_6);
+    Registries.registerBlockState(BARREL_7);
+    Registries.registerBlockState(BARREL_8);
+    Registries.registerBlockState(BARREL_9);
+    Registries.registerBlockState(BARREL_10);
+    Registries.registerBlockState(BARREL_11);
+  }
 
   public static void initStates() {
     Block.BARREL.addBlockState(BARREL_0);
