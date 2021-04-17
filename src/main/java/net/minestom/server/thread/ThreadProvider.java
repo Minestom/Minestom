@@ -107,7 +107,9 @@ public abstract class ThreadProvider {
                 chunkEntries.forEach(chunkEntry -> {
                     chunkEntry.chunk.tick(time);
                     chunkEntry.entities.forEach(entity -> {
+                        thread.monitor.enter();
                         entity.tick(time);
+                        thread.monitor.leave();
                     });
                 });
             });

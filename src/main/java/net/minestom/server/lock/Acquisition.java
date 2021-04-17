@@ -1,87 +1,24 @@
 package net.minestom.server.lock;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.thread.BatchQueue;
+import com.google.common.util.concurrent.Monitor;
 import net.minestom.server.thread.BatchThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Phaser;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public final class Acquisition {
 
-    private static final ExecutorService ACQUISITION_CONTENTION_SERVICE = Executors.newSingleThreadExecutor(
-            new ThreadFactoryBuilder().setNameFormat("Deadlock detection").build()
-    );
-    private static final ThreadLocal<List<Thread>> ACQUIRED_THREADS = ThreadLocal.withInitial(ArrayList::new);
-
+    private static final Map<BatchThread, Collection<Acquirable.Request>> REQUEST_MAP = new ConcurrentHashMap<>();
     private static final ThreadLocal<ScheduledAcquisition> SCHEDULED_ACQUISITION = ThreadLocal.withInitial(ScheduledAcquisition::new);
 
+    private static final Monitor GLOBAL_MONITOR = new Monitor();
+
     private static final AtomicLong WAIT_COUNTER_NANO = new AtomicLong();
-
-    static {
-        // The goal of the contention service it is manage the situation where two threads are waiting for each other
-        ACQUISITION_CONTENTION_SERVICE.execute(() -> {
-            while (true) {
-                final List<BatchThread> threads = MinecraftServer.getUpdateManager().getThreadProvider().getThreads();
-
-                for (BatchThread batchThread : threads) {
-                    final BatchThread waitingThread = (BatchThread) batchThread.getQueue().getWaitingThread();
-                    if (waitingThread != null) {
-                        if (waitingThread.getState() == Thread.State.WAITING &&
-                                batchThread.getState() == Thread.State.WAITING) {
-                            processQueue(waitingThread.getQueue());
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    public static <E, T extends Acquirable<E>> void acquireCollection(@NotNull Collection<T> collection,
-                                                                      @NotNull Supplier<Collection<E>> collectionSupplier,
-                                                                      @NotNull Consumer<Collection<E>> consumer) {
-        final Thread currentThread = Thread.currentThread();
-        Collection<E> result = collectionSupplier.get();
-
-        Map<BatchThread, List<E>> threadCacheMap = retrieveThreadMap(collection, currentThread, result::add);
-
-        // Acquire all the threads
-        {
-            List<Phaser> phasers = new ArrayList<>();
-
-            for (Map.Entry<BatchThread, List<E>> entry : threadCacheMap.entrySet()) {
-                final BatchThread batchThread = entry.getKey();
-                final List<E> elements = entry.getValue();
-
-                AcquisitionData data = new AcquisitionData();
-
-                acquire(currentThread, batchThread, data);
-
-                // Retrieve all elements
-                result.addAll(elements);
-
-                final Phaser phaser = data.getPhaser();
-                if (phaser != null) {
-                    phasers.add(phaser);
-                }
-            }
-
-            // Give result and deregister phasers
-            consumer.accept(result);
-            for (Phaser phaser : phasers) {
-                phaser.arriveAndDeregister();
-            }
-
-        }
-    }
 
     public static <E, T extends Acquirable<E>> void acquireForEach(@NotNull Collection<? super T> collection,
                                                                    @NotNull Consumer<? super E> consumer) {
@@ -94,58 +31,16 @@ public final class Acquisition {
                 final BatchThread batchThread = entry.getKey();
                 final List<E> elements = entry.getValue();
 
-                AcquisitionData data = new AcquisitionData();
-
-                acquire(currentThread, batchThread, data);
-
-                // Execute the consumer for all waiting elements
-                for (E element : elements) {
-                    synchronized (element) {
+                acquire(currentThread, batchThread, () -> {
+                    for (E element : elements) {
                         consumer.accept(element);
                     }
-                }
-
-                final Phaser phaser = data.getPhaser();
-                if (phaser != null) {
-                    phaser.arriveAndDeregister();
-                }
+                });
             }
         }
     }
 
-    /**
-     * Notifies all the locks and wait for them to return using a {@link Phaser}.
-     * <p>
-     * Currently called during instance/chunk/entity ticks
-     * and in {@link BatchThread.BatchRunnable#run()} after every thread-tick.
-     *
-     * @param queue the queue to empty containing the locks to notify
-     * @see #acquire(Thread, BatchThread, AcquisitionData)
-     */
-    public static void processQueue(@NotNull BatchQueue queue) {
-        Queue<AcquisitionData> acquisitionQueue = queue.getQueue();
-
-        if (acquisitionQueue.isEmpty())
-            return;
-
-        Phaser phaser = new Phaser(1);
-        synchronized (queue) {
-            AcquisitionData lock;
-            while ((lock = acquisitionQueue.poll()) != null) {
-                lock.phaser = phaser;
-                phaser.register();
-            }
-
-            queue.setWaitingThread(null);
-            queue.notifyAll();
-        }
-
-        phaser.arriveAndAwaitAdvance();
-    }
-
-    public static void processThreadTick(@NotNull BatchQueue queue) {
-        processQueue(queue);
-
+    public static void processThreadTick() {
         ScheduledAcquisition scheduledAcquisition = SCHEDULED_ACQUISITION.get();
 
         final List<Acquirable<Object>> acquirableElements = scheduledAcquisition.acquirableElements;
@@ -167,74 +62,93 @@ public final class Acquisition {
     }
 
     /**
-     * Checks if the {@link Acquirable} update tick is in the same thread as {@link Thread#currentThread()}.
-     * If yes return immediately, otherwise a lock will be created and added to {@link BatchQueue#getQueue()}
-     * to be executed later during {@link #processQueue(BatchQueue)}.
-     *
-     * @param data the object containing data about the acquisition
-     * @return true if the acquisition didn't require any synchronization
-     * @see #processQueue(BatchQueue)
+     * Ensure that {@code callback} is safely executed inside the batch thread.
      */
-    protected static boolean acquire(@NotNull Thread currentThread, @Nullable BatchThread elementThread, @NotNull AcquisitionData data) {
-        if (elementThread == null) {
-            // Element didn't get assigned a thread yet (meaning that the element is not part of any thread)
-            // Returns false in order to force synchronization (useful if this element is acquired multiple time)
-            return false;
-        }
+    protected static void acquire(@NotNull Thread currentThread, @Nullable BatchThread elementThread, Runnable callback) {
+        if (elementThread == null || elementThread == currentThread) {
+            callback.run();
+        } else {
+            final Monitor currentMonitor = currentThread instanceof BatchThread ? ((BatchThread) currentThread).monitor : null;
 
-        if (currentThread == elementThread) {
-            // Element can be acquired without any wait/block because threads are the same
-            return true;
-        }
-
-        if (!elementThread.getMainRunnable().isInTick()) {
-            // Element tick has ended and can therefore be directly accessed (with synchronization)
-            return false;
-        }
-
-        final List<Thread> acquiredThread = ACQUIRED_THREADS.get();
-        if (acquiredThread.contains(elementThread)) {
-            // This thread is already acquiring the element thread
-            return true;
-        }
-
-        // Element needs to be synchronized, forward a request
-        {
-            // Prevent most of contentions, the rest in handled in the acquisition scheduled service
-            if (currentThread instanceof BatchThread) {
-                BatchThread batchThread = (BatchThread) currentThread;
-                Acquisition.processQueue(batchThread.getQueue());
+            boolean enter = false;
+            if (currentMonitor != null && currentMonitor.isOccupiedByCurrentThread()) {
+                process((BatchThread) currentThread);
+                currentMonitor.leave();
+                enter = true;
             }
 
+            Monitor monitor = elementThread.monitor;
+
+            //System.out.println("acq " + System.currentTimeMillis() + " " + currentThread);
+            if (monitor.isOccupiedByCurrentThread()) {
+                //System.out.println("already");
+                callback.run();
+                process(elementThread);
+            } else if (GLOBAL_MONITOR.isOccupiedByCurrentThread()) {
+                callback.run();
+            } else if (monitor.tryEnter()) {
+                //System.out.println("enter");
+                callback.run();
+
+                process(elementThread);
+
+                monitor.leave();
+            } else {
+                // Thread is not available, forward request
+
+                final BatchThread currentBatch = (BatchThread) currentThread;
+
+                while (!GLOBAL_MONITOR.tryEnter())
+                    processMonitored(currentBatch);
+                //System.out.println("yes " + elementThread + " " + elementThread.getMainRunnable().isInTick());
+                var requests = getRequests(elementThread);
+
+                Acquirable.Request request = new Acquirable.Request();
+                request.localLatch = new CountDownLatch(1);
+                request.processLatch = new CountDownLatch(1);
+                requests.add(request);
+
+                try {
+                    currentBatch.waitingOn = elementThread;
+                    processMonitored(currentBatch);
+                    request.localLatch.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                currentBatch.waitingOn = null;
+                //System.out.println("end wait");
+                callback.run();
+                request.processLatch.countDown();
+
+                GLOBAL_MONITOR.leave();
+            }
+
+            if (currentMonitor != null && enter) {
+                currentMonitor.enter();
+            }
+        }
+    }
+
+    public static void process(@NotNull BatchThread thread) {
+        var requests = getRequests(thread);
+        requests.forEach(request -> {
+            request.localLatch.countDown();
             try {
-                final boolean monitoring = MinecraftServer.hasWaitMonitoring();
-                long time = 0;
-                if (monitoring) {
-                    time = System.nanoTime();
-                }
-
-                final BatchQueue periodQueue = elementThread.getQueue();
-                synchronized (periodQueue) {
-                    acquiredThread.add(elementThread);
-                    data.acquiredThreads = acquiredThread; // Shared to remove the element when the acquisition is done
-
-                    periodQueue.setWaitingThread(elementThread);
-                    periodQueue.getQueue().add(data);
-                    periodQueue.wait();
-                }
-
-                acquiredThread.remove(elementThread);
-
-                if (monitoring) {
-                    time = System.nanoTime() - time;
-                    WAIT_COUNTER_NANO.addAndGet(time);
-                }
+                request.processLatch.await();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        });
+    }
 
-            return false;
-        }
+    public static void processMonitored(@NotNull BatchThread thread) {
+        thread.monitor.enter();
+        process(thread);
+        thread.monitor.leave();
+    }
+
+    private static @NotNull Collection<Acquirable.Request> getRequests(@NotNull BatchThread thread) {
+        return REQUEST_MAP.computeIfAbsent(thread, batchThread -> ConcurrentHashMap.newKeySet());
     }
 
     protected synchronized static <T> void scheduledAcquireRequest(@NotNull Acquirable<T> acquirable, Consumer<T> consumer) {
@@ -273,22 +187,6 @@ public final class Acquisition {
 
     public static void resetWaitMonitoring() {
         WAIT_COUNTER_NANO.set(0);
-    }
-
-    public static final class AcquisitionData {
-
-        private volatile Phaser phaser;
-        private volatile List<Thread> acquiredThreads;
-
-        @Nullable
-        public Phaser getPhaser() {
-            return phaser;
-        }
-
-        @Nullable
-        public List<Thread> getAcquiredThreads() {
-            return acquiredThreads;
-        }
     }
 
     private static class ScheduledAcquisition {

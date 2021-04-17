@@ -8,8 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.Phaser;
+import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
 
 /**
@@ -39,39 +38,17 @@ public interface Acquirable<T> {
      * and execute {@code consumer} as a callback with the acquired object.
      *
      * @param consumer the consumer of the acquired object
-     * @return true if the acquisition happened without synchonization, false otherwise
+     * @return true if the acquisition happened without synchronization, false otherwise
      */
     default boolean acquire(@NotNull Consumer<T> consumer) {
         final Thread currentThread = Thread.currentThread();
-        Acquisition.AcquisitionData data = new Acquisition.AcquisitionData();
 
         final Handler handler = getHandler();
         final BatchThread elementThread = handler.getBatchThread();
 
-        final boolean sameThread = Acquisition.acquire(currentThread, elementThread, data);
+        Acquisition.acquire(currentThread, elementThread, () -> consumer.accept(unwrap()));
 
-        final T unwrap = unwrap();
-        if (sameThread) {
-            consumer.accept(unwrap);
-        } else {
-            synchronized (unwrap) {
-                consumer.accept(unwrap);
-            }
-
-            // Remove the previously acquired thread from the local list
-            List<Thread> acquiredThreads = data.getAcquiredThreads();
-            if (acquiredThreads != null) {
-                acquiredThreads.remove(elementThread);
-            }
-
-            // Notify the end of the task if required
-            Phaser phaser = data.getPhaser();
-            if (phaser != null) {
-                phaser.arriveAndDeregister();
-            }
-        }
-
-        return sameThread;
+        return true;
     }
 
     /**
@@ -85,11 +62,9 @@ public interface Acquirable<T> {
         Acquisition.scheduledAcquireRequest(this, consumer);
     }
 
-    @NotNull
-    T unwrap();
+    @NotNull T unwrap();
 
-    @NotNull
-    Handler getHandler();
+    @NotNull Handler getHandler();
 
     class Handler {
 
@@ -116,8 +91,12 @@ public interface Acquirable<T> {
         public void acquisitionTick() {
             if (batchThread == null)
                 return;
-            Acquisition.processQueue(batchThread.getQueue());
+            Acquisition.process(batchThread);
         }
+    }
+
+    class Request {
+        public CountDownLatch localLatch, processLatch;
     }
 
 }

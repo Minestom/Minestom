@@ -4,10 +4,12 @@ import com.google.common.collect.Queues;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.lock.Acquirable;
 import net.minestom.server.lock.Acquisition;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.player.NettyPlayerConnection;
+import net.minestom.server.thread.BatchThread;
 import net.minestom.server.thread.PerInstanceThreadProvider;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -22,8 +24,7 @@ import java.util.function.LongConsumer;
 /**
  * Manager responsible for the server ticks.
  * <p>
- * The {@link ThreadProvider} manages the multi-thread aspect for {@link Instance} ticks,
- * it can be modified with {@link #setThreadProvider(ThreadProvider)}.
+ * The {@link ThreadProvider} manages the multi-thread aspect of chunk ticks.
  */
 public final class UpdateManager {
 
@@ -120,10 +121,18 @@ public final class UpdateManager {
         final CountDownLatch countDownLatch = threadProvider.update(tickStart);
 
         // Wait tick end
-        try {
-            countDownLatch.await();
-        } catch (InterruptedException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
+        while (countDownLatch.getCount() != 0) {
+            this.threadProvider.getThreads().forEach(batchThread -> {
+                BatchThread waitingOn = batchThread.waitingOn;
+                if (waitingOn != null && !waitingOn.getMainRunnable().isInTick()) {
+                    BatchThread waitingOn2 = waitingOn.waitingOn;
+                    if(waitingOn2 != null){
+                        Acquisition.processMonitored(waitingOn2);
+                    }else{
+                        Acquisition.processMonitored(waitingOn);
+                    }
+                }
+            });
         }
 
         // Clear removed entities & update threads

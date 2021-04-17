@@ -1,6 +1,8 @@
 package net.minestom.server.thread;
 
+import com.google.common.util.concurrent.Monitor;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.lock.Acquirable;
 import net.minestom.server.lock.Acquisition;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -9,17 +11,18 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.LockSupport;
 
 public class BatchThread extends Thread {
 
     private final BatchRunnable runnable;
 
-    private final BatchQueue queue;
+    public final Monitor monitor = new Monitor();
+    public volatile BatchThread waitingOn;
 
     public BatchThread(@NotNull BatchRunnable runnable, int number) {
         super(runnable, MinecraftServer.THREAD_NAME_TICK + "-" + number);
         this.runnable = runnable;
-        this.queue = new BatchQueue();
 
         this.runnable.setLinkedThread(this);
     }
@@ -29,16 +32,9 @@ public class BatchThread extends Thread {
         return runnable;
     }
 
-    @NotNull
-    public BatchQueue getQueue() {
-        return queue;
-    }
-
     public void shutdown() {
-        synchronized (runnable.tickLock) {
-            this.runnable.stop = true;
-            this.runnable.tickLock.notifyAll();
-        }
+        this.runnable.stop = true;
+        LockSupport.unpark(this);
     }
 
     public static class BatchRunnable implements Runnable {
@@ -51,80 +47,49 @@ public class BatchThread extends Thread {
 
         private final Queue<Runnable> queue = new ConcurrentLinkedQueue<>();
 
-        private final Object tickLock = new Object();
-
         @Override
         public void run() {
             Check.notNull(batchThread, "The linked BatchThread cannot be null!");
             while (!stop) {
+                LockSupport.park(batchThread);
+                if (stop)
+                    break;
                 CountDownLatch localCountDownLatch = this.countDownLatch.get();
 
                 // The latch is necessary to control the tick rates
                 if (localCountDownLatch == null) {
-                    if(!waitTickLock()){
-                        break;
-                    }
                     continue;
                 }
 
-                synchronized (tickLock) {
-                    this.inTick = true;
+                this.inTick = true;
 
-                    // Execute all pending runnable
-                    Runnable runnable;
-                    while ((runnable = queue.poll()) != null) {
-                        runnable.run();
-                    }
-
-                    // Execute waiting acquisition
-                    {
-                        Acquisition.processThreadTick(batchThread.getQueue());
-                    }
-
-                    localCountDownLatch.countDown();
-                    boolean successful = this.countDownLatch.compareAndSet(localCountDownLatch, null);
-
-                    this.inTick = false;
-
-                    // new task should be available
-                    if (!successful) {
-                        continue;
-                    }
-
-                    // Wait for the next notify (game tick)
-                    if(!waitTickLock()){
-                        break;
-                    }
+                // Execute all pending runnable
+                Runnable runnable;
+                while ((runnable = queue.poll()) != null) {
+                    runnable.run();
                 }
+
+                // Execute waiting acquisition
+                {
+                    Acquisition.processMonitored(batchThread);
+                }
+
+                localCountDownLatch.countDown();
+                this.countDownLatch.compareAndSet(localCountDownLatch, null);
+
+                // Wait for the next notify (game tick)
+                this.inTick = false;
             }
         }
 
         public synchronized void startTick(@NotNull CountDownLatch countDownLatch, @NotNull Runnable runnable) {
             this.countDownLatch.set(countDownLatch);
             this.queue.add(runnable);
-            synchronized (tickLock) {
-                this.tickLock.notifyAll();
-            }
+            LockSupport.unpark(batchThread);
         }
 
         public boolean isInTick() {
             return inTick;
-        }
-
-        private boolean waitTickLock() {
-            synchronized (tickLock) {
-                // Wait for the next notify (game tick)
-                try {
-                    if (stop) {
-                        return false;
-                    }
-
-                    this.tickLock.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            return true;
         }
 
         private void setLinkedThread(BatchThread batchThread) {
