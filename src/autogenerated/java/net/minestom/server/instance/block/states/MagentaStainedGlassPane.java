@@ -13,69 +13,69 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class MagentaStainedGlassPane {
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_0 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:0"), (short) 6931, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_0 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:0"), (short) 6931, Block.MAGENTA_STAINED_GLASS_PANE, "east=true","north=true","south=true","waterlogged=true","west=true");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_1 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:1"), (short) 6932, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_1 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:1"), (short) 6932, Block.MAGENTA_STAINED_GLASS_PANE, "east=true","north=true","south=true","waterlogged=true","west=false");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_2 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:2"), (short) 6933, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_2 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:2"), (short) 6933, Block.MAGENTA_STAINED_GLASS_PANE, "east=true","north=true","south=true","waterlogged=false","west=true");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_3 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:3"), (short) 6934, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_3 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:3"), (short) 6934, Block.MAGENTA_STAINED_GLASS_PANE, "east=true","north=true","south=true","waterlogged=false","west=false");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_4 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:4"), (short) 6935, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_4 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:4"), (short) 6935, Block.MAGENTA_STAINED_GLASS_PANE, "east=true","north=true","south=false","waterlogged=true","west=true");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_5 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:5"), (short) 6936, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_5 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:5"), (short) 6936, Block.MAGENTA_STAINED_GLASS_PANE, "east=true","north=true","south=false","waterlogged=true","west=false");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_6 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:6"), (short) 6937, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_6 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:6"), (short) 6937, Block.MAGENTA_STAINED_GLASS_PANE, "east=true","north=true","south=false","waterlogged=false","west=true");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_7 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:7"), (short) 6938, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_7 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:7"), (short) 6938, Block.MAGENTA_STAINED_GLASS_PANE, "east=true","north=true","south=false","waterlogged=false","west=false");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_8 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:8"), (short) 6939, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_8 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:8"), (short) 6939, Block.MAGENTA_STAINED_GLASS_PANE, "east=true","north=false","south=true","waterlogged=true","west=true");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_9 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:9"), (short) 6940, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_9 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:9"), (short) 6940, Block.MAGENTA_STAINED_GLASS_PANE, "east=true","north=false","south=true","waterlogged=true","west=false");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_10 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:10"), (short) 6941, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_10 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:10"), (short) 6941, Block.MAGENTA_STAINED_GLASS_PANE, "east=true","north=false","south=true","waterlogged=false","west=true");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_11 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:11"), (short) 6942, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_11 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:11"), (short) 6942, Block.MAGENTA_STAINED_GLASS_PANE, "east=true","north=false","south=true","waterlogged=false","west=false");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_12 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:12"), (short) 6943, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_12 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:12"), (short) 6943, Block.MAGENTA_STAINED_GLASS_PANE, "east=true","north=false","south=false","waterlogged=true","west=true");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_13 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:13"), (short) 6944, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_13 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:13"), (short) 6944, Block.MAGENTA_STAINED_GLASS_PANE, "east=true","north=false","south=false","waterlogged=true","west=false");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_14 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:14"), (short) 6945, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_14 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:14"), (short) 6945, Block.MAGENTA_STAINED_GLASS_PANE, "east=true","north=false","south=false","waterlogged=false","west=true");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_15 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:15"), (short) 6946, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_15 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:15"), (short) 6946, Block.MAGENTA_STAINED_GLASS_PANE, "east=true","north=false","south=false","waterlogged=false","west=false");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_16 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:16"), (short) 6947, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_16 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:16"), (short) 6947, Block.MAGENTA_STAINED_GLASS_PANE, "east=false","north=true","south=true","waterlogged=true","west=true");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_17 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:17"), (short) 6948, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_17 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:17"), (short) 6948, Block.MAGENTA_STAINED_GLASS_PANE, "east=false","north=true","south=true","waterlogged=true","west=false");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_18 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:18"), (short) 6949, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_18 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:18"), (short) 6949, Block.MAGENTA_STAINED_GLASS_PANE, "east=false","north=true","south=true","waterlogged=false","west=true");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_19 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:19"), (short) 6950, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_19 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:19"), (short) 6950, Block.MAGENTA_STAINED_GLASS_PANE, "east=false","north=true","south=true","waterlogged=false","west=false");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_20 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:20"), (short) 6951, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_20 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:20"), (short) 6951, Block.MAGENTA_STAINED_GLASS_PANE, "east=false","north=true","south=false","waterlogged=true","west=true");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_21 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:21"), (short) 6952, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_21 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:21"), (short) 6952, Block.MAGENTA_STAINED_GLASS_PANE, "east=false","north=true","south=false","waterlogged=true","west=false");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_22 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:22"), (short) 6953, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_22 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:22"), (short) 6953, Block.MAGENTA_STAINED_GLASS_PANE, "east=false","north=true","south=false","waterlogged=false","west=true");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_23 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:23"), (short) 6954, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_23 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:23"), (short) 6954, Block.MAGENTA_STAINED_GLASS_PANE, "east=false","north=true","south=false","waterlogged=false","west=false");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_24 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:24"), (short) 6955, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_24 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:24"), (short) 6955, Block.MAGENTA_STAINED_GLASS_PANE, "east=false","north=false","south=true","waterlogged=true","west=true");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_25 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:25"), (short) 6956, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_25 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:25"), (short) 6956, Block.MAGENTA_STAINED_GLASS_PANE, "east=false","north=false","south=true","waterlogged=true","west=false");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_26 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:26"), (short) 6957, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_26 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:26"), (short) 6957, Block.MAGENTA_STAINED_GLASS_PANE, "east=false","north=false","south=true","waterlogged=false","west=true");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_27 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:27"), (short) 6958, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_27 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:27"), (short) 6958, Block.MAGENTA_STAINED_GLASS_PANE, "east=false","north=false","south=true","waterlogged=false","west=false");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_28 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:28"), (short) 6959, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_28 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:28"), (short) 6959, Block.MAGENTA_STAINED_GLASS_PANE, "east=false","north=false","south=false","waterlogged=true","west=true");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_29 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:29"), (short) 6960, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_29 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:29"), (short) 6960, Block.MAGENTA_STAINED_GLASS_PANE, "east=false","north=false","south=false","waterlogged=true","west=false");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_30 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:30"), (short) 6961, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_30 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:30"), (short) 6961, Block.MAGENTA_STAINED_GLASS_PANE, "east=false","north=false","south=false","waterlogged=false","west=true");
 
-  public static final BlockState MAGENTA_STAINED_GLASS_PANE_31 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:31"), (short) 6962, Block.MAGENTA_STAINED_GLASS_PANE);
+  public static final BlockState MAGENTA_STAINED_GLASS_PANE_31 = new BlockState(NamespaceID.from("minecraft:magenta_stained_glass_pane:31"), (short) 6962, Block.MAGENTA_STAINED_GLASS_PANE, "east=false","north=false","south=false","waterlogged=false","west=false");
 
   public static void initStates() {
     Block.MAGENTA_STAINED_GLASS_PANE.addBlockState(MAGENTA_STAINED_GLASS_PANE_0);

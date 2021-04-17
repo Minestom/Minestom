@@ -13,11 +13,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class StrippedAcaciaWood {
-  public static final BlockState STRIPPED_ACACIA_WOOD_0 = new BlockState(NamespaceID.from("minecraft:stripped_acacia_wood:0"), (short) 139, Block.STRIPPED_ACACIA_WOOD);
+  public static final BlockState STRIPPED_ACACIA_WOOD_0 = new BlockState(NamespaceID.from("minecraft:stripped_acacia_wood:0"), (short) 139, Block.STRIPPED_ACACIA_WOOD, "axis=x");
 
-  public static final BlockState STRIPPED_ACACIA_WOOD_1 = new BlockState(NamespaceID.from("minecraft:stripped_acacia_wood:1"), (short) 140, Block.STRIPPED_ACACIA_WOOD);
+  public static final BlockState STRIPPED_ACACIA_WOOD_1 = new BlockState(NamespaceID.from("minecraft:stripped_acacia_wood:1"), (short) 140, Block.STRIPPED_ACACIA_WOOD, "axis=y");
 
-  public static final BlockState STRIPPED_ACACIA_WOOD_2 = new BlockState(NamespaceID.from("minecraft:stripped_acacia_wood:2"), (short) 141, Block.STRIPPED_ACACIA_WOOD);
+  public static final BlockState STRIPPED_ACACIA_WOOD_2 = new BlockState(NamespaceID.from("minecraft:stripped_acacia_wood:2"), (short) 141, Block.STRIPPED_ACACIA_WOOD, "axis=z");
 
   public static void initStates() {
     Block.STRIPPED_ACACIA_WOOD.addBlockState(STRIPPED_ACACIA_WOOD_0);

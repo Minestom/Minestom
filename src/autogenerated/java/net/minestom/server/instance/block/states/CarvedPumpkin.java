@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CarvedPumpkin {
-  public static final BlockState CARVED_PUMPKIN_0 = new BlockState(NamespaceID.from("minecraft:carved_pumpkin:0"), (short) 4016, Block.CARVED_PUMPKIN);
+  public static final BlockState CARVED_PUMPKIN_0 = new BlockState(NamespaceID.from("minecraft:carved_pumpkin:0"), (short) 4016, Block.CARVED_PUMPKIN, "facing=north");
 
-  public static final BlockState CARVED_PUMPKIN_1 = new BlockState(NamespaceID.from("minecraft:carved_pumpkin:1"), (short) 4017, Block.CARVED_PUMPKIN);
+  public static final BlockState CARVED_PUMPKIN_1 = new BlockState(NamespaceID.from("minecraft:carved_pumpkin:1"), (short) 4017, Block.CARVED_PUMPKIN, "facing=south");
 
-  public static final BlockState CARVED_PUMPKIN_2 = new BlockState(NamespaceID.from("minecraft:carved_pumpkin:2"), (short) 4018, Block.CARVED_PUMPKIN);
+  public static final BlockState CARVED_PUMPKIN_2 = new BlockState(NamespaceID.from("minecraft:carved_pumpkin:2"), (short) 4018, Block.CARVED_PUMPKIN, "facing=west");
 
-  public static final BlockState CARVED_PUMPKIN_3 = new BlockState(NamespaceID.from("minecraft:carved_pumpkin:3"), (short) 4019, Block.CARVED_PUMPKIN);
+  public static final BlockState CARVED_PUMPKIN_3 = new BlockState(NamespaceID.from("minecraft:carved_pumpkin:3"), (short) 4019, Block.CARVED_PUMPKIN, "facing=east");
 
   public static void initStates() {
     Block.CARVED_PUMPKIN.addBlockState(CARVED_PUMPKIN_0);

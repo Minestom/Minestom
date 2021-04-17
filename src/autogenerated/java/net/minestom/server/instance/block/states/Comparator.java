@@ -13,37 +13,37 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Comparator {
-  public static final BlockState COMPARATOR_0 = new BlockState(NamespaceID.from("minecraft:comparator:0"), (short) 6682, Block.COMPARATOR);
+  public static final BlockState COMPARATOR_0 = new BlockState(NamespaceID.from("minecraft:comparator:0"), (short) 6682, Block.COMPARATOR, "facing=north","mode=compare","powered=true");
 
-  public static final BlockState COMPARATOR_1 = new BlockState(NamespaceID.from("minecraft:comparator:1"), (short) 6683, Block.COMPARATOR);
+  public static final BlockState COMPARATOR_1 = new BlockState(NamespaceID.from("minecraft:comparator:1"), (short) 6683, Block.COMPARATOR, "facing=north","mode=compare","powered=false");
 
-  public static final BlockState COMPARATOR_2 = new BlockState(NamespaceID.from("minecraft:comparator:2"), (short) 6684, Block.COMPARATOR);
+  public static final BlockState COMPARATOR_2 = new BlockState(NamespaceID.from("minecraft:comparator:2"), (short) 6684, Block.COMPARATOR, "facing=north","mode=subtract","powered=true");
 
-  public static final BlockState COMPARATOR_3 = new BlockState(NamespaceID.from("minecraft:comparator:3"), (short) 6685, Block.COMPARATOR);
+  public static final BlockState COMPARATOR_3 = new BlockState(NamespaceID.from("minecraft:comparator:3"), (short) 6685, Block.COMPARATOR, "facing=north","mode=subtract","powered=false");
 
-  public static final BlockState COMPARATOR_4 = new BlockState(NamespaceID.from("minecraft:comparator:4"), (short) 6686, Block.COMPARATOR);
+  public static final BlockState COMPARATOR_4 = new BlockState(NamespaceID.from("minecraft:comparator:4"), (short) 6686, Block.COMPARATOR, "facing=south","mode=compare","powered=true");
 
-  public static final BlockState COMPARATOR_5 = new BlockState(NamespaceID.from("minecraft:comparator:5"), (short) 6687, Block.COMPARATOR);
+  public static final BlockState COMPARATOR_5 = new BlockState(NamespaceID.from("minecraft:comparator:5"), (short) 6687, Block.COMPARATOR, "facing=south","mode=compare","powered=false");
 
-  public static final BlockState COMPARATOR_6 = new BlockState(NamespaceID.from("minecraft:comparator:6"), (short) 6688, Block.COMPARATOR);
+  public static final BlockState COMPARATOR_6 = new BlockState(NamespaceID.from("minecraft:comparator:6"), (short) 6688, Block.COMPARATOR, "facing=south","mode=subtract","powered=true");
 
-  public static final BlockState COMPARATOR_7 = new BlockState(NamespaceID.from("minecraft:comparator:7"), (short) 6689, Block.COMPARATOR);
+  public static final BlockState COMPARATOR_7 = new BlockState(NamespaceID.from("minecraft:comparator:7"), (short) 6689, Block.COMPARATOR, "facing=south","mode=subtract","powered=false");
 
-  public static final BlockState COMPARATOR_8 = new BlockState(NamespaceID.from("minecraft:comparator:8"), (short) 6690, Block.COMPARATOR);
+  public static final BlockState COMPARATOR_8 = new BlockState(NamespaceID.from("minecraft:comparator:8"), (short) 6690, Block.COMPARATOR, "facing=west","mode=compare","powered=true");
 
-  public static final BlockState COMPARATOR_9 = new BlockState(NamespaceID.from("minecraft:comparator:9"), (short) 6691, Block.COMPARATOR);
+  public static final BlockState COMPARATOR_9 = new BlockState(NamespaceID.from("minecraft:comparator:9"), (short) 6691, Block.COMPARATOR, "facing=west","mode=compare","powered=false");
 
-  public static final BlockState COMPARATOR_10 = new BlockState(NamespaceID.from("minecraft:comparator:10"), (short) 6692, Block.COMPARATOR);
+  public static final BlockState COMPARATOR_10 = new BlockState(NamespaceID.from("minecraft:comparator:10"), (short) 6692, Block.COMPARATOR, "facing=west","mode=subtract","powered=true");
 
-  public static final BlockState COMPARATOR_11 = new BlockState(NamespaceID.from("minecraft:comparator:11"), (short) 6693, Block.COMPARATOR);
+  public static final BlockState COMPARATOR_11 = new BlockState(NamespaceID.from("minecraft:comparator:11"), (short) 6693, Block.COMPARATOR, "facing=west","mode=subtract","powered=false");
 
-  public static final BlockState COMPARATOR_12 = new BlockState(NamespaceID.from("minecraft:comparator:12"), (short) 6694, Block.COMPARATOR);
+  public static final BlockState COMPARATOR_12 = new BlockState(NamespaceID.from("minecraft:comparator:12"), (short) 6694, Block.COMPARATOR, "facing=east","mode=compare","powered=true");
 
-  public static final BlockState COMPARATOR_13 = new BlockState(NamespaceID.from("minecraft:comparator:13"), (short) 6695, Block.COMPARATOR);
+  public static final BlockState COMPARATOR_13 = new BlockState(NamespaceID.from("minecraft:comparator:13"), (short) 6695, Block.COMPARATOR, "facing=east","mode=compare","powered=false");
 
-  public static final BlockState COMPARATOR_14 = new BlockState(NamespaceID.from("minecraft:comparator:14"), (short) 6696, Block.COMPARATOR);
+  public static final BlockState COMPARATOR_14 = new BlockState(NamespaceID.from("minecraft:comparator:14"), (short) 6696, Block.COMPARATOR, "facing=east","mode=subtract","powered=true");
 
-  public static final BlockState COMPARATOR_15 = new BlockState(NamespaceID.from("minecraft:comparator:15"), (short) 6697, Block.COMPARATOR);
+  public static final BlockState COMPARATOR_15 = new BlockState(NamespaceID.from("minecraft:comparator:15"), (short) 6697, Block.COMPARATOR, "facing=east","mode=subtract","powered=false");
 
   public static void initStates() {
     Block.COMPARATOR.addBlockState(COMPARATOR_0);

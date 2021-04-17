@@ -13,33 +13,33 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class OakLeaves {
-  public static final BlockState OAK_LEAVES_0 = new BlockState(NamespaceID.from("minecraft:oak_leaves:0"), (short) 145, Block.OAK_LEAVES);
+  public static final BlockState OAK_LEAVES_0 = new BlockState(NamespaceID.from("minecraft:oak_leaves:0"), (short) 145, Block.OAK_LEAVES, "distance=1","persistent=true");
 
-  public static final BlockState OAK_LEAVES_1 = new BlockState(NamespaceID.from("minecraft:oak_leaves:1"), (short) 146, Block.OAK_LEAVES);
+  public static final BlockState OAK_LEAVES_1 = new BlockState(NamespaceID.from("minecraft:oak_leaves:1"), (short) 146, Block.OAK_LEAVES, "distance=1","persistent=false");
 
-  public static final BlockState OAK_LEAVES_2 = new BlockState(NamespaceID.from("minecraft:oak_leaves:2"), (short) 147, Block.OAK_LEAVES);
+  public static final BlockState OAK_LEAVES_2 = new BlockState(NamespaceID.from("minecraft:oak_leaves:2"), (short) 147, Block.OAK_LEAVES, "distance=2","persistent=true");
 
-  public static final BlockState OAK_LEAVES_3 = new BlockState(NamespaceID.from("minecraft:oak_leaves:3"), (short) 148, Block.OAK_LEAVES);
+  public static final BlockState OAK_LEAVES_3 = new BlockState(NamespaceID.from("minecraft:oak_leaves:3"), (short) 148, Block.OAK_LEAVES, "distance=2","persistent=false");
 
-  public static final BlockState OAK_LEAVES_4 = new BlockState(NamespaceID.from("minecraft:oak_leaves:4"), (short) 149, Block.OAK_LEAVES);
+  public static final BlockState OAK_LEAVES_4 = new BlockState(NamespaceID.from("minecraft:oak_leaves:4"), (short) 149, Block.OAK_LEAVES, "distance=3","persistent=true");
 
-  public static final BlockState OAK_LEAVES_5 = new BlockState(NamespaceID.from("minecraft:oak_leaves:5"), (short) 150, Block.OAK_LEAVES);
+  public static final BlockState OAK_LEAVES_5 = new BlockState(NamespaceID.from("minecraft:oak_leaves:5"), (short) 150, Block.OAK_LEAVES, "distance=3","persistent=false");
 
-  public static final BlockState OAK_LEAVES_6 = new BlockState(NamespaceID.from("minecraft:oak_leaves:6"), (short) 151, Block.OAK_LEAVES);
+  public static final BlockState OAK_LEAVES_6 = new BlockState(NamespaceID.from("minecraft:oak_leaves:6"), (short) 151, Block.OAK_LEAVES, "distance=4","persistent=true");
 
-  public static final BlockState OAK_LEAVES_7 = new BlockState(NamespaceID.from("minecraft:oak_leaves:7"), (short) 152, Block.OAK_LEAVES);
+  public static final BlockState OAK_LEAVES_7 = new BlockState(NamespaceID.from("minecraft:oak_leaves:7"), (short) 152, Block.OAK_LEAVES, "distance=4","persistent=false");
 
-  public static final BlockState OAK_LEAVES_8 = new BlockState(NamespaceID.from("minecraft:oak_leaves:8"), (short) 153, Block.OAK_LEAVES);
+  public static final BlockState OAK_LEAVES_8 = new BlockState(NamespaceID.from("minecraft:oak_leaves:8"), (short) 153, Block.OAK_LEAVES, "distance=5","persistent=true");
 
-  public static final BlockState OAK_LEAVES_9 = new BlockState(NamespaceID.from("minecraft:oak_leaves:9"), (short) 154, Block.OAK_LEAVES);
+  public static final BlockState OAK_LEAVES_9 = new BlockState(NamespaceID.from("minecraft:oak_leaves:9"), (short) 154, Block.OAK_LEAVES, "distance=5","persistent=false");
 
-  public static final BlockState OAK_LEAVES_10 = new BlockState(NamespaceID.from("minecraft:oak_leaves:10"), (short) 155, Block.OAK_LEAVES);
+  public static final BlockState OAK_LEAVES_10 = new BlockState(NamespaceID.from("minecraft:oak_leaves:10"), (short) 155, Block.OAK_LEAVES, "distance=6","persistent=true");
 
-  public static final BlockState OAK_LEAVES_11 = new BlockState(NamespaceID.from("minecraft:oak_leaves:11"), (short) 156, Block.OAK_LEAVES);
+  public static final BlockState OAK_LEAVES_11 = new BlockState(NamespaceID.from("minecraft:oak_leaves:11"), (short) 156, Block.OAK_LEAVES, "distance=6","persistent=false");
 
-  public static final BlockState OAK_LEAVES_12 = new BlockState(NamespaceID.from("minecraft:oak_leaves:12"), (short) 157, Block.OAK_LEAVES);
+  public static final BlockState OAK_LEAVES_12 = new BlockState(NamespaceID.from("minecraft:oak_leaves:12"), (short) 157, Block.OAK_LEAVES, "distance=7","persistent=true");
 
-  public static final BlockState OAK_LEAVES_13 = new BlockState(NamespaceID.from("minecraft:oak_leaves:13"), (short) 158, Block.OAK_LEAVES);
+  public static final BlockState OAK_LEAVES_13 = new BlockState(NamespaceID.from("minecraft:oak_leaves:13"), (short) 158, Block.OAK_LEAVES, "distance=7","persistent=false");
 
   public static void initStates() {
     Block.OAK_LEAVES.addBlockState(OAK_LEAVES_0);

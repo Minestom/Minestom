@@ -13,29 +13,29 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Dropper {
-  public static final BlockState DROPPER_0 = new BlockState(NamespaceID.from("minecraft:dropper:0"), (short) 6839, Block.DROPPER);
+  public static final BlockState DROPPER_0 = new BlockState(NamespaceID.from("minecraft:dropper:0"), (short) 6839, Block.DROPPER, "facing=north","triggered=true");
 
-  public static final BlockState DROPPER_1 = new BlockState(NamespaceID.from("minecraft:dropper:1"), (short) 6840, Block.DROPPER);
+  public static final BlockState DROPPER_1 = new BlockState(NamespaceID.from("minecraft:dropper:1"), (short) 6840, Block.DROPPER, "facing=north","triggered=false");
 
-  public static final BlockState DROPPER_2 = new BlockState(NamespaceID.from("minecraft:dropper:2"), (short) 6841, Block.DROPPER);
+  public static final BlockState DROPPER_2 = new BlockState(NamespaceID.from("minecraft:dropper:2"), (short) 6841, Block.DROPPER, "facing=east","triggered=true");
 
-  public static final BlockState DROPPER_3 = new BlockState(NamespaceID.from("minecraft:dropper:3"), (short) 6842, Block.DROPPER);
+  public static final BlockState DROPPER_3 = new BlockState(NamespaceID.from("minecraft:dropper:3"), (short) 6842, Block.DROPPER, "facing=east","triggered=false");
 
-  public static final BlockState DROPPER_4 = new BlockState(NamespaceID.from("minecraft:dropper:4"), (short) 6843, Block.DROPPER);
+  public static final BlockState DROPPER_4 = new BlockState(NamespaceID.from("minecraft:dropper:4"), (short) 6843, Block.DROPPER, "facing=south","triggered=true");
 
-  public static final BlockState DROPPER_5 = new BlockState(NamespaceID.from("minecraft:dropper:5"), (short) 6844, Block.DROPPER);
+  public static final BlockState DROPPER_5 = new BlockState(NamespaceID.from("minecraft:dropper:5"), (short) 6844, Block.DROPPER, "facing=south","triggered=false");
 
-  public static final BlockState DROPPER_6 = new BlockState(NamespaceID.from("minecraft:dropper:6"), (short) 6845, Block.DROPPER);
+  public static final BlockState DROPPER_6 = new BlockState(NamespaceID.from("minecraft:dropper:6"), (short) 6845, Block.DROPPER, "facing=west","triggered=true");
 
-  public static final BlockState DROPPER_7 = new BlockState(NamespaceID.from("minecraft:dropper:7"), (short) 6846, Block.DROPPER);
+  public static final BlockState DROPPER_7 = new BlockState(NamespaceID.from("minecraft:dropper:7"), (short) 6846, Block.DROPPER, "facing=west","triggered=false");
 
-  public static final BlockState DROPPER_8 = new BlockState(NamespaceID.from("minecraft:dropper:8"), (short) 6847, Block.DROPPER);
+  public static final BlockState DROPPER_8 = new BlockState(NamespaceID.from("minecraft:dropper:8"), (short) 6847, Block.DROPPER, "facing=up","triggered=true");
 
-  public static final BlockState DROPPER_9 = new BlockState(NamespaceID.from("minecraft:dropper:9"), (short) 6848, Block.DROPPER);
+  public static final BlockState DROPPER_9 = new BlockState(NamespaceID.from("minecraft:dropper:9"), (short) 6848, Block.DROPPER, "facing=up","triggered=false");
 
-  public static final BlockState DROPPER_10 = new BlockState(NamespaceID.from("minecraft:dropper:10"), (short) 6849, Block.DROPPER);
+  public static final BlockState DROPPER_10 = new BlockState(NamespaceID.from("minecraft:dropper:10"), (short) 6849, Block.DROPPER, "facing=down","triggered=true");
 
-  public static final BlockState DROPPER_11 = new BlockState(NamespaceID.from("minecraft:dropper:11"), (short) 6850, Block.DROPPER);
+  public static final BlockState DROPPER_11 = new BlockState(NamespaceID.from("minecraft:dropper:11"), (short) 6850, Block.DROPPER, "facing=down","triggered=false");
 
   public static void initStates() {
     Block.DROPPER.addBlockState(DROPPER_0);

@@ -13,69 +13,69 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class OakSign {
-  public static final BlockState OAK_SIGN_0 = new BlockState(NamespaceID.from("minecraft:oak_sign:0"), (short) 3381, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_0 = new BlockState(NamespaceID.from("minecraft:oak_sign:0"), (short) 3381, Block.OAK_SIGN, "rotation=0","waterlogged=true");
 
-  public static final BlockState OAK_SIGN_1 = new BlockState(NamespaceID.from("minecraft:oak_sign:1"), (short) 3382, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_1 = new BlockState(NamespaceID.from("minecraft:oak_sign:1"), (short) 3382, Block.OAK_SIGN, "rotation=0","waterlogged=false");
 
-  public static final BlockState OAK_SIGN_2 = new BlockState(NamespaceID.from("minecraft:oak_sign:2"), (short) 3383, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_2 = new BlockState(NamespaceID.from("minecraft:oak_sign:2"), (short) 3383, Block.OAK_SIGN, "rotation=1","waterlogged=true");
 
-  public static final BlockState OAK_SIGN_3 = new BlockState(NamespaceID.from("minecraft:oak_sign:3"), (short) 3384, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_3 = new BlockState(NamespaceID.from("minecraft:oak_sign:3"), (short) 3384, Block.OAK_SIGN, "rotation=1","waterlogged=false");
 
-  public static final BlockState OAK_SIGN_4 = new BlockState(NamespaceID.from("minecraft:oak_sign:4"), (short) 3385, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_4 = new BlockState(NamespaceID.from("minecraft:oak_sign:4"), (short) 3385, Block.OAK_SIGN, "rotation=2","waterlogged=true");
 
-  public static final BlockState OAK_SIGN_5 = new BlockState(NamespaceID.from("minecraft:oak_sign:5"), (short) 3386, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_5 = new BlockState(NamespaceID.from("minecraft:oak_sign:5"), (short) 3386, Block.OAK_SIGN, "rotation=2","waterlogged=false");
 
-  public static final BlockState OAK_SIGN_6 = new BlockState(NamespaceID.from("minecraft:oak_sign:6"), (short) 3387, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_6 = new BlockState(NamespaceID.from("minecraft:oak_sign:6"), (short) 3387, Block.OAK_SIGN, "rotation=3","waterlogged=true");
 
-  public static final BlockState OAK_SIGN_7 = new BlockState(NamespaceID.from("minecraft:oak_sign:7"), (short) 3388, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_7 = new BlockState(NamespaceID.from("minecraft:oak_sign:7"), (short) 3388, Block.OAK_SIGN, "rotation=3","waterlogged=false");
 
-  public static final BlockState OAK_SIGN_8 = new BlockState(NamespaceID.from("minecraft:oak_sign:8"), (short) 3389, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_8 = new BlockState(NamespaceID.from("minecraft:oak_sign:8"), (short) 3389, Block.OAK_SIGN, "rotation=4","waterlogged=true");
 
-  public static final BlockState OAK_SIGN_9 = new BlockState(NamespaceID.from("minecraft:oak_sign:9"), (short) 3390, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_9 = new BlockState(NamespaceID.from("minecraft:oak_sign:9"), (short) 3390, Block.OAK_SIGN, "rotation=4","waterlogged=false");
 
-  public static final BlockState OAK_SIGN_10 = new BlockState(NamespaceID.from("minecraft:oak_sign:10"), (short) 3391, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_10 = new BlockState(NamespaceID.from("minecraft:oak_sign:10"), (short) 3391, Block.OAK_SIGN, "rotation=5","waterlogged=true");
 
-  public static final BlockState OAK_SIGN_11 = new BlockState(NamespaceID.from("minecraft:oak_sign:11"), (short) 3392, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_11 = new BlockState(NamespaceID.from("minecraft:oak_sign:11"), (short) 3392, Block.OAK_SIGN, "rotation=5","waterlogged=false");
 
-  public static final BlockState OAK_SIGN_12 = new BlockState(NamespaceID.from("minecraft:oak_sign:12"), (short) 3393, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_12 = new BlockState(NamespaceID.from("minecraft:oak_sign:12"), (short) 3393, Block.OAK_SIGN, "rotation=6","waterlogged=true");
 
-  public static final BlockState OAK_SIGN_13 = new BlockState(NamespaceID.from("minecraft:oak_sign:13"), (short) 3394, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_13 = new BlockState(NamespaceID.from("minecraft:oak_sign:13"), (short) 3394, Block.OAK_SIGN, "rotation=6","waterlogged=false");
 
-  public static final BlockState OAK_SIGN_14 = new BlockState(NamespaceID.from("minecraft:oak_sign:14"), (short) 3395, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_14 = new BlockState(NamespaceID.from("minecraft:oak_sign:14"), (short) 3395, Block.OAK_SIGN, "rotation=7","waterlogged=true");
 
-  public static final BlockState OAK_SIGN_15 = new BlockState(NamespaceID.from("minecraft:oak_sign:15"), (short) 3396, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_15 = new BlockState(NamespaceID.from("minecraft:oak_sign:15"), (short) 3396, Block.OAK_SIGN, "rotation=7","waterlogged=false");
 
-  public static final BlockState OAK_SIGN_16 = new BlockState(NamespaceID.from("minecraft:oak_sign:16"), (short) 3397, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_16 = new BlockState(NamespaceID.from("minecraft:oak_sign:16"), (short) 3397, Block.OAK_SIGN, "rotation=8","waterlogged=true");
 
-  public static final BlockState OAK_SIGN_17 = new BlockState(NamespaceID.from("minecraft:oak_sign:17"), (short) 3398, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_17 = new BlockState(NamespaceID.from("minecraft:oak_sign:17"), (short) 3398, Block.OAK_SIGN, "rotation=8","waterlogged=false");
 
-  public static final BlockState OAK_SIGN_18 = new BlockState(NamespaceID.from("minecraft:oak_sign:18"), (short) 3399, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_18 = new BlockState(NamespaceID.from("minecraft:oak_sign:18"), (short) 3399, Block.OAK_SIGN, "rotation=9","waterlogged=true");
 
-  public static final BlockState OAK_SIGN_19 = new BlockState(NamespaceID.from("minecraft:oak_sign:19"), (short) 3400, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_19 = new BlockState(NamespaceID.from("minecraft:oak_sign:19"), (short) 3400, Block.OAK_SIGN, "rotation=9","waterlogged=false");
 
-  public static final BlockState OAK_SIGN_20 = new BlockState(NamespaceID.from("minecraft:oak_sign:20"), (short) 3401, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_20 = new BlockState(NamespaceID.from("minecraft:oak_sign:20"), (short) 3401, Block.OAK_SIGN, "rotation=10","waterlogged=true");
 
-  public static final BlockState OAK_SIGN_21 = new BlockState(NamespaceID.from("minecraft:oak_sign:21"), (short) 3402, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_21 = new BlockState(NamespaceID.from("minecraft:oak_sign:21"), (short) 3402, Block.OAK_SIGN, "rotation=10","waterlogged=false");
 
-  public static final BlockState OAK_SIGN_22 = new BlockState(NamespaceID.from("minecraft:oak_sign:22"), (short) 3403, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_22 = new BlockState(NamespaceID.from("minecraft:oak_sign:22"), (short) 3403, Block.OAK_SIGN, "rotation=11","waterlogged=true");
 
-  public static final BlockState OAK_SIGN_23 = new BlockState(NamespaceID.from("minecraft:oak_sign:23"), (short) 3404, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_23 = new BlockState(NamespaceID.from("minecraft:oak_sign:23"), (short) 3404, Block.OAK_SIGN, "rotation=11","waterlogged=false");
 
-  public static final BlockState OAK_SIGN_24 = new BlockState(NamespaceID.from("minecraft:oak_sign:24"), (short) 3405, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_24 = new BlockState(NamespaceID.from("minecraft:oak_sign:24"), (short) 3405, Block.OAK_SIGN, "rotation=12","waterlogged=true");
 
-  public static final BlockState OAK_SIGN_25 = new BlockState(NamespaceID.from("minecraft:oak_sign:25"), (short) 3406, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_25 = new BlockState(NamespaceID.from("minecraft:oak_sign:25"), (short) 3406, Block.OAK_SIGN, "rotation=12","waterlogged=false");
 
-  public static final BlockState OAK_SIGN_26 = new BlockState(NamespaceID.from("minecraft:oak_sign:26"), (short) 3407, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_26 = new BlockState(NamespaceID.from("minecraft:oak_sign:26"), (short) 3407, Block.OAK_SIGN, "rotation=13","waterlogged=true");
 
-  public static final BlockState OAK_SIGN_27 = new BlockState(NamespaceID.from("minecraft:oak_sign:27"), (short) 3408, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_27 = new BlockState(NamespaceID.from("minecraft:oak_sign:27"), (short) 3408, Block.OAK_SIGN, "rotation=13","waterlogged=false");
 
-  public static final BlockState OAK_SIGN_28 = new BlockState(NamespaceID.from("minecraft:oak_sign:28"), (short) 3409, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_28 = new BlockState(NamespaceID.from("minecraft:oak_sign:28"), (short) 3409, Block.OAK_SIGN, "rotation=14","waterlogged=true");
 
-  public static final BlockState OAK_SIGN_29 = new BlockState(NamespaceID.from("minecraft:oak_sign:29"), (short) 3410, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_29 = new BlockState(NamespaceID.from("minecraft:oak_sign:29"), (short) 3410, Block.OAK_SIGN, "rotation=14","waterlogged=false");
 
-  public static final BlockState OAK_SIGN_30 = new BlockState(NamespaceID.from("minecraft:oak_sign:30"), (short) 3411, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_30 = new BlockState(NamespaceID.from("minecraft:oak_sign:30"), (short) 3411, Block.OAK_SIGN, "rotation=15","waterlogged=true");
 
-  public static final BlockState OAK_SIGN_31 = new BlockState(NamespaceID.from("minecraft:oak_sign:31"), (short) 3412, Block.OAK_SIGN);
+  public static final BlockState OAK_SIGN_31 = new BlockState(NamespaceID.from("minecraft:oak_sign:31"), (short) 3412, Block.OAK_SIGN, "rotation=15","waterlogged=false");
 
   public static void initStates() {
     Block.OAK_SIGN.addBlockState(OAK_SIGN_0);

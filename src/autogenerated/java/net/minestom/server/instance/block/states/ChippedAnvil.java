@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class ChippedAnvil {
-  public static final BlockState CHIPPED_ANVIL_0 = new BlockState(NamespaceID.from("minecraft:chipped_anvil:0"), (short) 6618, Block.CHIPPED_ANVIL);
+  public static final BlockState CHIPPED_ANVIL_0 = new BlockState(NamespaceID.from("minecraft:chipped_anvil:0"), (short) 6618, Block.CHIPPED_ANVIL, "facing=north");
 
-  public static final BlockState CHIPPED_ANVIL_1 = new BlockState(NamespaceID.from("minecraft:chipped_anvil:1"), (short) 6619, Block.CHIPPED_ANVIL);
+  public static final BlockState CHIPPED_ANVIL_1 = new BlockState(NamespaceID.from("minecraft:chipped_anvil:1"), (short) 6619, Block.CHIPPED_ANVIL, "facing=south");
 
-  public static final BlockState CHIPPED_ANVIL_2 = new BlockState(NamespaceID.from("minecraft:chipped_anvil:2"), (short) 6620, Block.CHIPPED_ANVIL);
+  public static final BlockState CHIPPED_ANVIL_2 = new BlockState(NamespaceID.from("minecraft:chipped_anvil:2"), (short) 6620, Block.CHIPPED_ANVIL, "facing=west");
 
-  public static final BlockState CHIPPED_ANVIL_3 = new BlockState(NamespaceID.from("minecraft:chipped_anvil:3"), (short) 6621, Block.CHIPPED_ANVIL);
+  public static final BlockState CHIPPED_ANVIL_3 = new BlockState(NamespaceID.from("minecraft:chipped_anvil:3"), (short) 6621, Block.CHIPPED_ANVIL, "facing=east");
 
   public static void initStates() {
     Block.CHIPPED_ANVIL.addBlockState(CHIPPED_ANVIL_0);

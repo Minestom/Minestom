@@ -13,69 +13,69 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WarpedFence {
-  public static final BlockState WARPED_FENCE_0 = new BlockState(NamespaceID.from("minecraft:warped_fence:0"), (short) 15103, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_0 = new BlockState(NamespaceID.from("minecraft:warped_fence:0"), (short) 15103, Block.WARPED_FENCE, "east=true","north=true","south=true","waterlogged=true","west=true");
 
-  public static final BlockState WARPED_FENCE_1 = new BlockState(NamespaceID.from("minecraft:warped_fence:1"), (short) 15104, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_1 = new BlockState(NamespaceID.from("minecraft:warped_fence:1"), (short) 15104, Block.WARPED_FENCE, "east=true","north=true","south=true","waterlogged=true","west=false");
 
-  public static final BlockState WARPED_FENCE_2 = new BlockState(NamespaceID.from("minecraft:warped_fence:2"), (short) 15105, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_2 = new BlockState(NamespaceID.from("minecraft:warped_fence:2"), (short) 15105, Block.WARPED_FENCE, "east=true","north=true","south=true","waterlogged=false","west=true");
 
-  public static final BlockState WARPED_FENCE_3 = new BlockState(NamespaceID.from("minecraft:warped_fence:3"), (short) 15106, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_3 = new BlockState(NamespaceID.from("minecraft:warped_fence:3"), (short) 15106, Block.WARPED_FENCE, "east=true","north=true","south=true","waterlogged=false","west=false");
 
-  public static final BlockState WARPED_FENCE_4 = new BlockState(NamespaceID.from("minecraft:warped_fence:4"), (short) 15107, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_4 = new BlockState(NamespaceID.from("minecraft:warped_fence:4"), (short) 15107, Block.WARPED_FENCE, "east=true","north=true","south=false","waterlogged=true","west=true");
 
-  public static final BlockState WARPED_FENCE_5 = new BlockState(NamespaceID.from("minecraft:warped_fence:5"), (short) 15108, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_5 = new BlockState(NamespaceID.from("minecraft:warped_fence:5"), (short) 15108, Block.WARPED_FENCE, "east=true","north=true","south=false","waterlogged=true","west=false");
 
-  public static final BlockState WARPED_FENCE_6 = new BlockState(NamespaceID.from("minecraft:warped_fence:6"), (short) 15109, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_6 = new BlockState(NamespaceID.from("minecraft:warped_fence:6"), (short) 15109, Block.WARPED_FENCE, "east=true","north=true","south=false","waterlogged=false","west=true");
 
-  public static final BlockState WARPED_FENCE_7 = new BlockState(NamespaceID.from("minecraft:warped_fence:7"), (short) 15110, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_7 = new BlockState(NamespaceID.from("minecraft:warped_fence:7"), (short) 15110, Block.WARPED_FENCE, "east=true","north=true","south=false","waterlogged=false","west=false");
 
-  public static final BlockState WARPED_FENCE_8 = new BlockState(NamespaceID.from("minecraft:warped_fence:8"), (short) 15111, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_8 = new BlockState(NamespaceID.from("minecraft:warped_fence:8"), (short) 15111, Block.WARPED_FENCE, "east=true","north=false","south=true","waterlogged=true","west=true");
 
-  public static final BlockState WARPED_FENCE_9 = new BlockState(NamespaceID.from("minecraft:warped_fence:9"), (short) 15112, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_9 = new BlockState(NamespaceID.from("minecraft:warped_fence:9"), (short) 15112, Block.WARPED_FENCE, "east=true","north=false","south=true","waterlogged=true","west=false");
 
-  public static final BlockState WARPED_FENCE_10 = new BlockState(NamespaceID.from("minecraft:warped_fence:10"), (short) 15113, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_10 = new BlockState(NamespaceID.from("minecraft:warped_fence:10"), (short) 15113, Block.WARPED_FENCE, "east=true","north=false","south=true","waterlogged=false","west=true");
 
-  public static final BlockState WARPED_FENCE_11 = new BlockState(NamespaceID.from("minecraft:warped_fence:11"), (short) 15114, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_11 = new BlockState(NamespaceID.from("minecraft:warped_fence:11"), (short) 15114, Block.WARPED_FENCE, "east=true","north=false","south=true","waterlogged=false","west=false");
 
-  public static final BlockState WARPED_FENCE_12 = new BlockState(NamespaceID.from("minecraft:warped_fence:12"), (short) 15115, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_12 = new BlockState(NamespaceID.from("minecraft:warped_fence:12"), (short) 15115, Block.WARPED_FENCE, "east=true","north=false","south=false","waterlogged=true","west=true");
 
-  public static final BlockState WARPED_FENCE_13 = new BlockState(NamespaceID.from("minecraft:warped_fence:13"), (short) 15116, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_13 = new BlockState(NamespaceID.from("minecraft:warped_fence:13"), (short) 15116, Block.WARPED_FENCE, "east=true","north=false","south=false","waterlogged=true","west=false");
 
-  public static final BlockState WARPED_FENCE_14 = new BlockState(NamespaceID.from("minecraft:warped_fence:14"), (short) 15117, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_14 = new BlockState(NamespaceID.from("minecraft:warped_fence:14"), (short) 15117, Block.WARPED_FENCE, "east=true","north=false","south=false","waterlogged=false","west=true");
 
-  public static final BlockState WARPED_FENCE_15 = new BlockState(NamespaceID.from("minecraft:warped_fence:15"), (short) 15118, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_15 = new BlockState(NamespaceID.from("minecraft:warped_fence:15"), (short) 15118, Block.WARPED_FENCE, "east=true","north=false","south=false","waterlogged=false","west=false");
 
-  public static final BlockState WARPED_FENCE_16 = new BlockState(NamespaceID.from("minecraft:warped_fence:16"), (short) 15119, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_16 = new BlockState(NamespaceID.from("minecraft:warped_fence:16"), (short) 15119, Block.WARPED_FENCE, "east=false","north=true","south=true","waterlogged=true","west=true");
 
-  public static final BlockState WARPED_FENCE_17 = new BlockState(NamespaceID.from("minecraft:warped_fence:17"), (short) 15120, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_17 = new BlockState(NamespaceID.from("minecraft:warped_fence:17"), (short) 15120, Block.WARPED_FENCE, "east=false","north=true","south=true","waterlogged=true","west=false");
 
-  public static final BlockState WARPED_FENCE_18 = new BlockState(NamespaceID.from("minecraft:warped_fence:18"), (short) 15121, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_18 = new BlockState(NamespaceID.from("minecraft:warped_fence:18"), (short) 15121, Block.WARPED_FENCE, "east=false","north=true","south=true","waterlogged=false","west=true");
 
-  public static final BlockState WARPED_FENCE_19 = new BlockState(NamespaceID.from("minecraft:warped_fence:19"), (short) 15122, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_19 = new BlockState(NamespaceID.from("minecraft:warped_fence:19"), (short) 15122, Block.WARPED_FENCE, "east=false","north=true","south=true","waterlogged=false","west=false");
 
-  public static final BlockState WARPED_FENCE_20 = new BlockState(NamespaceID.from("minecraft:warped_fence:20"), (short) 15123, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_20 = new BlockState(NamespaceID.from("minecraft:warped_fence:20"), (short) 15123, Block.WARPED_FENCE, "east=false","north=true","south=false","waterlogged=true","west=true");
 
-  public static final BlockState WARPED_FENCE_21 = new BlockState(NamespaceID.from("minecraft:warped_fence:21"), (short) 15124, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_21 = new BlockState(NamespaceID.from("minecraft:warped_fence:21"), (short) 15124, Block.WARPED_FENCE, "east=false","north=true","south=false","waterlogged=true","west=false");
 
-  public static final BlockState WARPED_FENCE_22 = new BlockState(NamespaceID.from("minecraft:warped_fence:22"), (short) 15125, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_22 = new BlockState(NamespaceID.from("minecraft:warped_fence:22"), (short) 15125, Block.WARPED_FENCE, "east=false","north=true","south=false","waterlogged=false","west=true");
 
-  public static final BlockState WARPED_FENCE_23 = new BlockState(NamespaceID.from("minecraft:warped_fence:23"), (short) 15126, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_23 = new BlockState(NamespaceID.from("minecraft:warped_fence:23"), (short) 15126, Block.WARPED_FENCE, "east=false","north=true","south=false","waterlogged=false","west=false");
 
-  public static final BlockState WARPED_FENCE_24 = new BlockState(NamespaceID.from("minecraft:warped_fence:24"), (short) 15127, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_24 = new BlockState(NamespaceID.from("minecraft:warped_fence:24"), (short) 15127, Block.WARPED_FENCE, "east=false","north=false","south=true","waterlogged=true","west=true");
 
-  public static final BlockState WARPED_FENCE_25 = new BlockState(NamespaceID.from("minecraft:warped_fence:25"), (short) 15128, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_25 = new BlockState(NamespaceID.from("minecraft:warped_fence:25"), (short) 15128, Block.WARPED_FENCE, "east=false","north=false","south=true","waterlogged=true","west=false");
 
-  public static final BlockState WARPED_FENCE_26 = new BlockState(NamespaceID.from("minecraft:warped_fence:26"), (short) 15129, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_26 = new BlockState(NamespaceID.from("minecraft:warped_fence:26"), (short) 15129, Block.WARPED_FENCE, "east=false","north=false","south=true","waterlogged=false","west=true");
 
-  public static final BlockState WARPED_FENCE_27 = new BlockState(NamespaceID.from("minecraft:warped_fence:27"), (short) 15130, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_27 = new BlockState(NamespaceID.from("minecraft:warped_fence:27"), (short) 15130, Block.WARPED_FENCE, "east=false","north=false","south=true","waterlogged=false","west=false");
 
-  public static final BlockState WARPED_FENCE_28 = new BlockState(NamespaceID.from("minecraft:warped_fence:28"), (short) 15131, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_28 = new BlockState(NamespaceID.from("minecraft:warped_fence:28"), (short) 15131, Block.WARPED_FENCE, "east=false","north=false","south=false","waterlogged=true","west=true");
 
-  public static final BlockState WARPED_FENCE_29 = new BlockState(NamespaceID.from("minecraft:warped_fence:29"), (short) 15132, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_29 = new BlockState(NamespaceID.from("minecraft:warped_fence:29"), (short) 15132, Block.WARPED_FENCE, "east=false","north=false","south=false","waterlogged=true","west=false");
 
-  public static final BlockState WARPED_FENCE_30 = new BlockState(NamespaceID.from("minecraft:warped_fence:30"), (short) 15133, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_30 = new BlockState(NamespaceID.from("minecraft:warped_fence:30"), (short) 15133, Block.WARPED_FENCE, "east=false","north=false","south=false","waterlogged=false","west=true");
 
-  public static final BlockState WARPED_FENCE_31 = new BlockState(NamespaceID.from("minecraft:warped_fence:31"), (short) 15134, Block.WARPED_FENCE);
+  public static final BlockState WARPED_FENCE_31 = new BlockState(NamespaceID.from("minecraft:warped_fence:31"), (short) 15134, Block.WARPED_FENCE, "east=false","north=false","south=false","waterlogged=false","west=false");
 
   public static void initStates() {
     Block.WARPED_FENCE.addBlockState(WARPED_FENCE_0);

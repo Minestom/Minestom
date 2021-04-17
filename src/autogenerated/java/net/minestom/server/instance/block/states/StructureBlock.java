@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class StructureBlock {
-  public static final BlockState STRUCTURE_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:structure_block:0"), (short) 15743, Block.STRUCTURE_BLOCK);
+  public static final BlockState STRUCTURE_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:structure_block:0"), (short) 15743, Block.STRUCTURE_BLOCK, "mode=SAVE");
 
-  public static final BlockState STRUCTURE_BLOCK_1 = new BlockState(NamespaceID.from("minecraft:structure_block:1"), (short) 15744, Block.STRUCTURE_BLOCK);
+  public static final BlockState STRUCTURE_BLOCK_1 = new BlockState(NamespaceID.from("minecraft:structure_block:1"), (short) 15744, Block.STRUCTURE_BLOCK, "mode=LOAD");
 
-  public static final BlockState STRUCTURE_BLOCK_2 = new BlockState(NamespaceID.from("minecraft:structure_block:2"), (short) 15745, Block.STRUCTURE_BLOCK);
+  public static final BlockState STRUCTURE_BLOCK_2 = new BlockState(NamespaceID.from("minecraft:structure_block:2"), (short) 15745, Block.STRUCTURE_BLOCK, "mode=CORNER");
 
-  public static final BlockState STRUCTURE_BLOCK_3 = new BlockState(NamespaceID.from("minecraft:structure_block:3"), (short) 15746, Block.STRUCTURE_BLOCK);
+  public static final BlockState STRUCTURE_BLOCK_3 = new BlockState(NamespaceID.from("minecraft:structure_block:3"), (short) 15746, Block.STRUCTURE_BLOCK, "mode=DATA");
 
   public static void initStates() {
     Block.STRUCTURE_BLOCK.addBlockState(STRUCTURE_BLOCK_0);

@@ -13,17 +13,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WarpedSlab {
-  public static final BlockState WARPED_SLAB_0 = new BlockState(NamespaceID.from("minecraft:warped_slab:0"), (short) 15061, Block.WARPED_SLAB);
+  public static final BlockState WARPED_SLAB_0 = new BlockState(NamespaceID.from("minecraft:warped_slab:0"), (short) 15061, Block.WARPED_SLAB, "type=top","waterlogged=true");
 
-  public static final BlockState WARPED_SLAB_1 = new BlockState(NamespaceID.from("minecraft:warped_slab:1"), (short) 15062, Block.WARPED_SLAB);
+  public static final BlockState WARPED_SLAB_1 = new BlockState(NamespaceID.from("minecraft:warped_slab:1"), (short) 15062, Block.WARPED_SLAB, "type=top","waterlogged=false");
 
-  public static final BlockState WARPED_SLAB_2 = new BlockState(NamespaceID.from("minecraft:warped_slab:2"), (short) 15063, Block.WARPED_SLAB);
+  public static final BlockState WARPED_SLAB_2 = new BlockState(NamespaceID.from("minecraft:warped_slab:2"), (short) 15063, Block.WARPED_SLAB, "type=bottom","waterlogged=true");
 
-  public static final BlockState WARPED_SLAB_3 = new BlockState(NamespaceID.from("minecraft:warped_slab:3"), (short) 15064, Block.WARPED_SLAB);
+  public static final BlockState WARPED_SLAB_3 = new BlockState(NamespaceID.from("minecraft:warped_slab:3"), (short) 15064, Block.WARPED_SLAB, "type=bottom","waterlogged=false");
 
-  public static final BlockState WARPED_SLAB_4 = new BlockState(NamespaceID.from("minecraft:warped_slab:4"), (short) 15065, Block.WARPED_SLAB);
+  public static final BlockState WARPED_SLAB_4 = new BlockState(NamespaceID.from("minecraft:warped_slab:4"), (short) 15065, Block.WARPED_SLAB, "type=double","waterlogged=true");
 
-  public static final BlockState WARPED_SLAB_5 = new BlockState(NamespaceID.from("minecraft:warped_slab:5"), (short) 15066, Block.WARPED_SLAB);
+  public static final BlockState WARPED_SLAB_5 = new BlockState(NamespaceID.from("minecraft:warped_slab:5"), (short) 15066, Block.WARPED_SLAB, "type=double","waterlogged=false");
 
   public static void initStates() {
     Block.WARPED_SLAB.addBlockState(WARPED_SLAB_0);

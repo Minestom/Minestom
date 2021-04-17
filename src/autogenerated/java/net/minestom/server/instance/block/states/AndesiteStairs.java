@@ -13,165 +13,165 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class AndesiteStairs {
-  public static final BlockState ANDESITE_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:0"), (short) 10473, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:0"), (short) 10473, Block.ANDESITE_STAIRS, "facing=north","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:1"), (short) 10474, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:1"), (short) 10474, Block.ANDESITE_STAIRS, "facing=north","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:2"), (short) 10475, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:2"), (short) 10475, Block.ANDESITE_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:3"), (short) 10476, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:3"), (short) 10476, Block.ANDESITE_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:4"), (short) 10477, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:4"), (short) 10477, Block.ANDESITE_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:5"), (short) 10478, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:5"), (short) 10478, Block.ANDESITE_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:6"), (short) 10479, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:6"), (short) 10479, Block.ANDESITE_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:7"), (short) 10480, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:7"), (short) 10480, Block.ANDESITE_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:8"), (short) 10481, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:8"), (short) 10481, Block.ANDESITE_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:9"), (short) 10482, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:9"), (short) 10482, Block.ANDESITE_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:10"), (short) 10483, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:10"), (short) 10483, Block.ANDESITE_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:11"), (short) 10484, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:11"), (short) 10484, Block.ANDESITE_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:12"), (short) 10485, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:12"), (short) 10485, Block.ANDESITE_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:13"), (short) 10486, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:13"), (short) 10486, Block.ANDESITE_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:14"), (short) 10487, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:14"), (short) 10487, Block.ANDESITE_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:15"), (short) 10488, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:15"), (short) 10488, Block.ANDESITE_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:16"), (short) 10489, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:16"), (short) 10489, Block.ANDESITE_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:17"), (short) 10490, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:17"), (short) 10490, Block.ANDESITE_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:18"), (short) 10491, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:18"), (short) 10491, Block.ANDESITE_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:19"), (short) 10492, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:19"), (short) 10492, Block.ANDESITE_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:20"), (short) 10493, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:20"), (short) 10493, Block.ANDESITE_STAIRS, "facing=south","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:21"), (short) 10494, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:21"), (short) 10494, Block.ANDESITE_STAIRS, "facing=south","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:22"), (short) 10495, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:22"), (short) 10495, Block.ANDESITE_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:23"), (short) 10496, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:23"), (short) 10496, Block.ANDESITE_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:24"), (short) 10497, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:24"), (short) 10497, Block.ANDESITE_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:25"), (short) 10498, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:25"), (short) 10498, Block.ANDESITE_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:26"), (short) 10499, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:26"), (short) 10499, Block.ANDESITE_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:27"), (short) 10500, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:27"), (short) 10500, Block.ANDESITE_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:28"), (short) 10501, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:28"), (short) 10501, Block.ANDESITE_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:29"), (short) 10502, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:29"), (short) 10502, Block.ANDESITE_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:30"), (short) 10503, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:30"), (short) 10503, Block.ANDESITE_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:31"), (short) 10504, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:31"), (short) 10504, Block.ANDESITE_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:32"), (short) 10505, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:32"), (short) 10505, Block.ANDESITE_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:33"), (short) 10506, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:33"), (short) 10506, Block.ANDESITE_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:34"), (short) 10507, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:34"), (short) 10507, Block.ANDESITE_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:35"), (short) 10508, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:35"), (short) 10508, Block.ANDESITE_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:36"), (short) 10509, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:36"), (short) 10509, Block.ANDESITE_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:37"), (short) 10510, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:37"), (short) 10510, Block.ANDESITE_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:38"), (short) 10511, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:38"), (short) 10511, Block.ANDESITE_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:39"), (short) 10512, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:39"), (short) 10512, Block.ANDESITE_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:40"), (short) 10513, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:40"), (short) 10513, Block.ANDESITE_STAIRS, "facing=west","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:41"), (short) 10514, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:41"), (short) 10514, Block.ANDESITE_STAIRS, "facing=west","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:42"), (short) 10515, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:42"), (short) 10515, Block.ANDESITE_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:43"), (short) 10516, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:43"), (short) 10516, Block.ANDESITE_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:44"), (short) 10517, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:44"), (short) 10517, Block.ANDESITE_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:45"), (short) 10518, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:45"), (short) 10518, Block.ANDESITE_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:46"), (short) 10519, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:46"), (short) 10519, Block.ANDESITE_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:47"), (short) 10520, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:47"), (short) 10520, Block.ANDESITE_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:48"), (short) 10521, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:48"), (short) 10521, Block.ANDESITE_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:49"), (short) 10522, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:49"), (short) 10522, Block.ANDESITE_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:50"), (short) 10523, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:50"), (short) 10523, Block.ANDESITE_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:51"), (short) 10524, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:51"), (short) 10524, Block.ANDESITE_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:52"), (short) 10525, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:52"), (short) 10525, Block.ANDESITE_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:53"), (short) 10526, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:53"), (short) 10526, Block.ANDESITE_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:54"), (short) 10527, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:54"), (short) 10527, Block.ANDESITE_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:55"), (short) 10528, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:55"), (short) 10528, Block.ANDESITE_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:56"), (short) 10529, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:56"), (short) 10529, Block.ANDESITE_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:57"), (short) 10530, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:57"), (short) 10530, Block.ANDESITE_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:58"), (short) 10531, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:58"), (short) 10531, Block.ANDESITE_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:59"), (short) 10532, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:59"), (short) 10532, Block.ANDESITE_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:60"), (short) 10533, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:60"), (short) 10533, Block.ANDESITE_STAIRS, "facing=east","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:61"), (short) 10534, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:61"), (short) 10534, Block.ANDESITE_STAIRS, "facing=east","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:62"), (short) 10535, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:62"), (short) 10535, Block.ANDESITE_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:63"), (short) 10536, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:63"), (short) 10536, Block.ANDESITE_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:64"), (short) 10537, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:64"), (short) 10537, Block.ANDESITE_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:65"), (short) 10538, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:65"), (short) 10538, Block.ANDESITE_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:66"), (short) 10539, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:66"), (short) 10539, Block.ANDESITE_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:67"), (short) 10540, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:67"), (short) 10540, Block.ANDESITE_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:68"), (short) 10541, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:68"), (short) 10541, Block.ANDESITE_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:69"), (short) 10542, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:69"), (short) 10542, Block.ANDESITE_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:70"), (short) 10543, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:70"), (short) 10543, Block.ANDESITE_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:71"), (short) 10544, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:71"), (short) 10544, Block.ANDESITE_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:72"), (short) 10545, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:72"), (short) 10545, Block.ANDESITE_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:73"), (short) 10546, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:73"), (short) 10546, Block.ANDESITE_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:74"), (short) 10547, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:74"), (short) 10547, Block.ANDESITE_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:75"), (short) 10548, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:75"), (short) 10548, Block.ANDESITE_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:76"), (short) 10549, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:76"), (short) 10549, Block.ANDESITE_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:77"), (short) 10550, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:77"), (short) 10550, Block.ANDESITE_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState ANDESITE_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:78"), (short) 10551, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:78"), (short) 10551, Block.ANDESITE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState ANDESITE_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:79"), (short) 10552, Block.ANDESITE_STAIRS);
+  public static final BlockState ANDESITE_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:andesite_stairs:79"), (short) 10552, Block.ANDESITE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
 
   public static void initStates() {
     Block.ANDESITE_STAIRS.addBlockState(ANDESITE_STAIRS_0);

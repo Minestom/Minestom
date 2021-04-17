@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Stonecutter {
-  public static final BlockState STONECUTTER_0 = new BlockState(NamespaceID.from("minecraft:stonecutter:0"), (short) 14854, Block.STONECUTTER);
+  public static final BlockState STONECUTTER_0 = new BlockState(NamespaceID.from("minecraft:stonecutter:0"), (short) 14854, Block.STONECUTTER, "facing=north");
 
-  public static final BlockState STONECUTTER_1 = new BlockState(NamespaceID.from("minecraft:stonecutter:1"), (short) 14855, Block.STONECUTTER);
+  public static final BlockState STONECUTTER_1 = new BlockState(NamespaceID.from("minecraft:stonecutter:1"), (short) 14855, Block.STONECUTTER, "facing=south");
 
-  public static final BlockState STONECUTTER_2 = new BlockState(NamespaceID.from("minecraft:stonecutter:2"), (short) 14856, Block.STONECUTTER);
+  public static final BlockState STONECUTTER_2 = new BlockState(NamespaceID.from("minecraft:stonecutter:2"), (short) 14856, Block.STONECUTTER, "facing=west");
 
-  public static final BlockState STONECUTTER_3 = new BlockState(NamespaceID.from("minecraft:stonecutter:3"), (short) 14857, Block.STONECUTTER);
+  public static final BlockState STONECUTTER_3 = new BlockState(NamespaceID.from("minecraft:stonecutter:3"), (short) 14857, Block.STONECUTTER, "facing=east");
 
   public static void initStates() {
     Block.STONECUTTER.addBlockState(STONECUTTER_0);

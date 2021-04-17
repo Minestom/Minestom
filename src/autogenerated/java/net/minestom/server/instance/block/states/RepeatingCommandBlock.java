@@ -13,29 +13,29 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class RepeatingCommandBlock {
-  public static final BlockState REPEATING_COMMAND_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:0"), (short) 9229, Block.REPEATING_COMMAND_BLOCK);
+  public static final BlockState REPEATING_COMMAND_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:0"), (short) 9229, Block.REPEATING_COMMAND_BLOCK, "conditional=true","facing=north");
 
-  public static final BlockState REPEATING_COMMAND_BLOCK_1 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:1"), (short) 9230, Block.REPEATING_COMMAND_BLOCK);
+  public static final BlockState REPEATING_COMMAND_BLOCK_1 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:1"), (short) 9230, Block.REPEATING_COMMAND_BLOCK, "conditional=true","facing=east");
 
-  public static final BlockState REPEATING_COMMAND_BLOCK_2 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:2"), (short) 9231, Block.REPEATING_COMMAND_BLOCK);
+  public static final BlockState REPEATING_COMMAND_BLOCK_2 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:2"), (short) 9231, Block.REPEATING_COMMAND_BLOCK, "conditional=true","facing=south");
 
-  public static final BlockState REPEATING_COMMAND_BLOCK_3 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:3"), (short) 9232, Block.REPEATING_COMMAND_BLOCK);
+  public static final BlockState REPEATING_COMMAND_BLOCK_3 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:3"), (short) 9232, Block.REPEATING_COMMAND_BLOCK, "conditional=true","facing=west");
 
-  public static final BlockState REPEATING_COMMAND_BLOCK_4 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:4"), (short) 9233, Block.REPEATING_COMMAND_BLOCK);
+  public static final BlockState REPEATING_COMMAND_BLOCK_4 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:4"), (short) 9233, Block.REPEATING_COMMAND_BLOCK, "conditional=true","facing=up");
 
-  public static final BlockState REPEATING_COMMAND_BLOCK_5 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:5"), (short) 9234, Block.REPEATING_COMMAND_BLOCK);
+  public static final BlockState REPEATING_COMMAND_BLOCK_5 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:5"), (short) 9234, Block.REPEATING_COMMAND_BLOCK, "conditional=true","facing=down");
 
-  public static final BlockState REPEATING_COMMAND_BLOCK_6 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:6"), (short) 9235, Block.REPEATING_COMMAND_BLOCK);
+  public static final BlockState REPEATING_COMMAND_BLOCK_6 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:6"), (short) 9235, Block.REPEATING_COMMAND_BLOCK, "conditional=false","facing=north");
 
-  public static final BlockState REPEATING_COMMAND_BLOCK_7 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:7"), (short) 9236, Block.REPEATING_COMMAND_BLOCK);
+  public static final BlockState REPEATING_COMMAND_BLOCK_7 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:7"), (short) 9236, Block.REPEATING_COMMAND_BLOCK, "conditional=false","facing=east");
 
-  public static final BlockState REPEATING_COMMAND_BLOCK_8 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:8"), (short) 9237, Block.REPEATING_COMMAND_BLOCK);
+  public static final BlockState REPEATING_COMMAND_BLOCK_8 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:8"), (short) 9237, Block.REPEATING_COMMAND_BLOCK, "conditional=false","facing=south");
 
-  public static final BlockState REPEATING_COMMAND_BLOCK_9 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:9"), (short) 9238, Block.REPEATING_COMMAND_BLOCK);
+  public static final BlockState REPEATING_COMMAND_BLOCK_9 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:9"), (short) 9238, Block.REPEATING_COMMAND_BLOCK, "conditional=false","facing=west");
 
-  public static final BlockState REPEATING_COMMAND_BLOCK_10 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:10"), (short) 9239, Block.REPEATING_COMMAND_BLOCK);
+  public static final BlockState REPEATING_COMMAND_BLOCK_10 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:10"), (short) 9239, Block.REPEATING_COMMAND_BLOCK, "conditional=false","facing=up");
 
-  public static final BlockState REPEATING_COMMAND_BLOCK_11 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:11"), (short) 9240, Block.REPEATING_COMMAND_BLOCK);
+  public static final BlockState REPEATING_COMMAND_BLOCK_11 = new BlockState(NamespaceID.from("minecraft:repeating_command_block:11"), (short) 9240, Block.REPEATING_COMMAND_BLOCK, "conditional=false","facing=down");
 
   public static void initStates() {
     Block.REPEATING_COMMAND_BLOCK.addBlockState(REPEATING_COMMAND_BLOCK_0);

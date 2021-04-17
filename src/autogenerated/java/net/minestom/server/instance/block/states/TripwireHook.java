@@ -13,37 +13,37 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class TripwireHook {
-  public static final BlockState TRIPWIRE_HOOK_0 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:0"), (short) 5263, Block.TRIPWIRE_HOOK);
+  public static final BlockState TRIPWIRE_HOOK_0 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:0"), (short) 5263, Block.TRIPWIRE_HOOK, "attached=true","facing=north","powered=true");
 
-  public static final BlockState TRIPWIRE_HOOK_1 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:1"), (short) 5264, Block.TRIPWIRE_HOOK);
+  public static final BlockState TRIPWIRE_HOOK_1 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:1"), (short) 5264, Block.TRIPWIRE_HOOK, "attached=true","facing=north","powered=false");
 
-  public static final BlockState TRIPWIRE_HOOK_2 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:2"), (short) 5265, Block.TRIPWIRE_HOOK);
+  public static final BlockState TRIPWIRE_HOOK_2 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:2"), (short) 5265, Block.TRIPWIRE_HOOK, "attached=true","facing=south","powered=true");
 
-  public static final BlockState TRIPWIRE_HOOK_3 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:3"), (short) 5266, Block.TRIPWIRE_HOOK);
+  public static final BlockState TRIPWIRE_HOOK_3 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:3"), (short) 5266, Block.TRIPWIRE_HOOK, "attached=true","facing=south","powered=false");
 
-  public static final BlockState TRIPWIRE_HOOK_4 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:4"), (short) 5267, Block.TRIPWIRE_HOOK);
+  public static final BlockState TRIPWIRE_HOOK_4 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:4"), (short) 5267, Block.TRIPWIRE_HOOK, "attached=true","facing=west","powered=true");
 
-  public static final BlockState TRIPWIRE_HOOK_5 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:5"), (short) 5268, Block.TRIPWIRE_HOOK);
+  public static final BlockState TRIPWIRE_HOOK_5 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:5"), (short) 5268, Block.TRIPWIRE_HOOK, "attached=true","facing=west","powered=false");
 
-  public static final BlockState TRIPWIRE_HOOK_6 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:6"), (short) 5269, Block.TRIPWIRE_HOOK);
+  public static final BlockState TRIPWIRE_HOOK_6 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:6"), (short) 5269, Block.TRIPWIRE_HOOK, "attached=true","facing=east","powered=true");
 
-  public static final BlockState TRIPWIRE_HOOK_7 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:7"), (short) 5270, Block.TRIPWIRE_HOOK);
+  public static final BlockState TRIPWIRE_HOOK_7 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:7"), (short) 5270, Block.TRIPWIRE_HOOK, "attached=true","facing=east","powered=false");
 
-  public static final BlockState TRIPWIRE_HOOK_8 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:8"), (short) 5271, Block.TRIPWIRE_HOOK);
+  public static final BlockState TRIPWIRE_HOOK_8 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:8"), (short) 5271, Block.TRIPWIRE_HOOK, "attached=false","facing=north","powered=true");
 
-  public static final BlockState TRIPWIRE_HOOK_9 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:9"), (short) 5272, Block.TRIPWIRE_HOOK);
+  public static final BlockState TRIPWIRE_HOOK_9 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:9"), (short) 5272, Block.TRIPWIRE_HOOK, "attached=false","facing=north","powered=false");
 
-  public static final BlockState TRIPWIRE_HOOK_10 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:10"), (short) 5273, Block.TRIPWIRE_HOOK);
+  public static final BlockState TRIPWIRE_HOOK_10 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:10"), (short) 5273, Block.TRIPWIRE_HOOK, "attached=false","facing=south","powered=true");
 
-  public static final BlockState TRIPWIRE_HOOK_11 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:11"), (short) 5274, Block.TRIPWIRE_HOOK);
+  public static final BlockState TRIPWIRE_HOOK_11 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:11"), (short) 5274, Block.TRIPWIRE_HOOK, "attached=false","facing=south","powered=false");
 
-  public static final BlockState TRIPWIRE_HOOK_12 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:12"), (short) 5275, Block.TRIPWIRE_HOOK);
+  public static final BlockState TRIPWIRE_HOOK_12 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:12"), (short) 5275, Block.TRIPWIRE_HOOK, "attached=false","facing=west","powered=true");
 
-  public static final BlockState TRIPWIRE_HOOK_13 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:13"), (short) 5276, Block.TRIPWIRE_HOOK);
+  public static final BlockState TRIPWIRE_HOOK_13 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:13"), (short) 5276, Block.TRIPWIRE_HOOK, "attached=false","facing=west","powered=false");
 
-  public static final BlockState TRIPWIRE_HOOK_14 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:14"), (short) 5277, Block.TRIPWIRE_HOOK);
+  public static final BlockState TRIPWIRE_HOOK_14 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:14"), (short) 5277, Block.TRIPWIRE_HOOK, "attached=false","facing=east","powered=true");
 
-  public static final BlockState TRIPWIRE_HOOK_15 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:15"), (short) 5278, Block.TRIPWIRE_HOOK);
+  public static final BlockState TRIPWIRE_HOOK_15 = new BlockState(NamespaceID.from("minecraft:tripwire_hook:15"), (short) 5278, Block.TRIPWIRE_HOOK, "attached=false","facing=east","powered=false");
 
   public static void initStates() {
     Block.TRIPWIRE_HOOK.addBlockState(TRIPWIRE_HOOK_0);

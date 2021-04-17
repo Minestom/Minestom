@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class LimeGlazedTerracotta {
-  public static final BlockState LIME_GLAZED_TERRACOTTA_0 = new BlockState(NamespaceID.from("minecraft:lime_glazed_terracotta:0"), (short) 9398, Block.LIME_GLAZED_TERRACOTTA);
+  public static final BlockState LIME_GLAZED_TERRACOTTA_0 = new BlockState(NamespaceID.from("minecraft:lime_glazed_terracotta:0"), (short) 9398, Block.LIME_GLAZED_TERRACOTTA, "facing=north");
 
-  public static final BlockState LIME_GLAZED_TERRACOTTA_1 = new BlockState(NamespaceID.from("minecraft:lime_glazed_terracotta:1"), (short) 9399, Block.LIME_GLAZED_TERRACOTTA);
+  public static final BlockState LIME_GLAZED_TERRACOTTA_1 = new BlockState(NamespaceID.from("minecraft:lime_glazed_terracotta:1"), (short) 9399, Block.LIME_GLAZED_TERRACOTTA, "facing=south");
 
-  public static final BlockState LIME_GLAZED_TERRACOTTA_2 = new BlockState(NamespaceID.from("minecraft:lime_glazed_terracotta:2"), (short) 9400, Block.LIME_GLAZED_TERRACOTTA);
+  public static final BlockState LIME_GLAZED_TERRACOTTA_2 = new BlockState(NamespaceID.from("minecraft:lime_glazed_terracotta:2"), (short) 9400, Block.LIME_GLAZED_TERRACOTTA, "facing=west");
 
-  public static final BlockState LIME_GLAZED_TERRACOTTA_3 = new BlockState(NamespaceID.from("minecraft:lime_glazed_terracotta:3"), (short) 9401, Block.LIME_GLAZED_TERRACOTTA);
+  public static final BlockState LIME_GLAZED_TERRACOTTA_3 = new BlockState(NamespaceID.from("minecraft:lime_glazed_terracotta:3"), (short) 9401, Block.LIME_GLAZED_TERRACOTTA, "facing=east");
 
   public static void initStates() {
     Block.LIME_GLAZED_TERRACOTTA.addBlockState(LIME_GLAZED_TERRACOTTA_0);

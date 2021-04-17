@@ -13,37 +13,37 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class OrangeBed {
-  public static final BlockState ORANGE_BED_0 = new BlockState(NamespaceID.from("minecraft:orange_bed:0"), (short) 1065, Block.ORANGE_BED);
+  public static final BlockState ORANGE_BED_0 = new BlockState(NamespaceID.from("minecraft:orange_bed:0"), (short) 1065, Block.ORANGE_BED, "facing=north","occupied=true","part=head");
 
-  public static final BlockState ORANGE_BED_1 = new BlockState(NamespaceID.from("minecraft:orange_bed:1"), (short) 1066, Block.ORANGE_BED);
+  public static final BlockState ORANGE_BED_1 = new BlockState(NamespaceID.from("minecraft:orange_bed:1"), (short) 1066, Block.ORANGE_BED, "facing=north","occupied=true","part=foot");
 
-  public static final BlockState ORANGE_BED_2 = new BlockState(NamespaceID.from("minecraft:orange_bed:2"), (short) 1067, Block.ORANGE_BED);
+  public static final BlockState ORANGE_BED_2 = new BlockState(NamespaceID.from("minecraft:orange_bed:2"), (short) 1067, Block.ORANGE_BED, "facing=north","occupied=false","part=head");
 
-  public static final BlockState ORANGE_BED_3 = new BlockState(NamespaceID.from("minecraft:orange_bed:3"), (short) 1068, Block.ORANGE_BED);
+  public static final BlockState ORANGE_BED_3 = new BlockState(NamespaceID.from("minecraft:orange_bed:3"), (short) 1068, Block.ORANGE_BED, "facing=north","occupied=false","part=foot");
 
-  public static final BlockState ORANGE_BED_4 = new BlockState(NamespaceID.from("minecraft:orange_bed:4"), (short) 1069, Block.ORANGE_BED);
+  public static final BlockState ORANGE_BED_4 = new BlockState(NamespaceID.from("minecraft:orange_bed:4"), (short) 1069, Block.ORANGE_BED, "facing=south","occupied=true","part=head");
 
-  public static final BlockState ORANGE_BED_5 = new BlockState(NamespaceID.from("minecraft:orange_bed:5"), (short) 1070, Block.ORANGE_BED);
+  public static final BlockState ORANGE_BED_5 = new BlockState(NamespaceID.from("minecraft:orange_bed:5"), (short) 1070, Block.ORANGE_BED, "facing=south","occupied=true","part=foot");
 
-  public static final BlockState ORANGE_BED_6 = new BlockState(NamespaceID.from("minecraft:orange_bed:6"), (short) 1071, Block.ORANGE_BED);
+  public static final BlockState ORANGE_BED_6 = new BlockState(NamespaceID.from("minecraft:orange_bed:6"), (short) 1071, Block.ORANGE_BED, "facing=south","occupied=false","part=head");
 
-  public static final BlockState ORANGE_BED_7 = new BlockState(NamespaceID.from("minecraft:orange_bed:7"), (short) 1072, Block.ORANGE_BED);
+  public static final BlockState ORANGE_BED_7 = new BlockState(NamespaceID.from("minecraft:orange_bed:7"), (short) 1072, Block.ORANGE_BED, "facing=south","occupied=false","part=foot");
 
-  public static final BlockState ORANGE_BED_8 = new BlockState(NamespaceID.from("minecraft:orange_bed:8"), (short) 1073, Block.ORANGE_BED);
+  public static final BlockState ORANGE_BED_8 = new BlockState(NamespaceID.from("minecraft:orange_bed:8"), (short) 1073, Block.ORANGE_BED, "facing=west","occupied=true","part=head");
 
-  public static final BlockState ORANGE_BED_9 = new BlockState(NamespaceID.from("minecraft:orange_bed:9"), (short) 1074, Block.ORANGE_BED);
+  public static final BlockState ORANGE_BED_9 = new BlockState(NamespaceID.from("minecraft:orange_bed:9"), (short) 1074, Block.ORANGE_BED, "facing=west","occupied=true","part=foot");
 
-  public static final BlockState ORANGE_BED_10 = new BlockState(NamespaceID.from("minecraft:orange_bed:10"), (short) 1075, Block.ORANGE_BED);
+  public static final BlockState ORANGE_BED_10 = new BlockState(NamespaceID.from("minecraft:orange_bed:10"), (short) 1075, Block.ORANGE_BED, "facing=west","occupied=false","part=head");
 
-  public static final BlockState ORANGE_BED_11 = new BlockState(NamespaceID.from("minecraft:orange_bed:11"), (short) 1076, Block.ORANGE_BED);
+  public static final BlockState ORANGE_BED_11 = new BlockState(NamespaceID.from("minecraft:orange_bed:11"), (short) 1076, Block.ORANGE_BED, "facing=west","occupied=false","part=foot");
 
-  public static final BlockState ORANGE_BED_12 = new BlockState(NamespaceID.from("minecraft:orange_bed:12"), (short) 1077, Block.ORANGE_BED);
+  public static final BlockState ORANGE_BED_12 = new BlockState(NamespaceID.from("minecraft:orange_bed:12"), (short) 1077, Block.ORANGE_BED, "facing=east","occupied=true","part=head");
 
-  public static final BlockState ORANGE_BED_13 = new BlockState(NamespaceID.from("minecraft:orange_bed:13"), (short) 1078, Block.ORANGE_BED);
+  public static final BlockState ORANGE_BED_13 = new BlockState(NamespaceID.from("minecraft:orange_bed:13"), (short) 1078, Block.ORANGE_BED, "facing=east","occupied=true","part=foot");
 
-  public static final BlockState ORANGE_BED_14 = new BlockState(NamespaceID.from("minecraft:orange_bed:14"), (short) 1079, Block.ORANGE_BED);
+  public static final BlockState ORANGE_BED_14 = new BlockState(NamespaceID.from("minecraft:orange_bed:14"), (short) 1079, Block.ORANGE_BED, "facing=east","occupied=false","part=head");
 
-  public static final BlockState ORANGE_BED_15 = new BlockState(NamespaceID.from("minecraft:orange_bed:15"), (short) 1080, Block.ORANGE_BED);
+  public static final BlockState ORANGE_BED_15 = new BlockState(NamespaceID.from("minecraft:orange_bed:15"), (short) 1080, Block.ORANGE_BED, "facing=east","occupied=false","part=foot");
 
   public static void initStates() {
     Block.ORANGE_BED.addBlockState(ORANGE_BED_0);

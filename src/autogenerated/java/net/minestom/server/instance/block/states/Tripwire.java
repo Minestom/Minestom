@@ -13,261 +13,261 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Tripwire {
-  public static final BlockState TRIPWIRE_0 = new BlockState(NamespaceID.from("minecraft:tripwire:0"), (short) 5279, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_0 = new BlockState(NamespaceID.from("minecraft:tripwire:0"), (short) 5279, Block.TRIPWIRE, "attached=true","disarmed=true","east=true","north=true","powered=true","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_1 = new BlockState(NamespaceID.from("minecraft:tripwire:1"), (short) 5280, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_1 = new BlockState(NamespaceID.from("minecraft:tripwire:1"), (short) 5280, Block.TRIPWIRE, "attached=true","disarmed=true","east=true","north=true","powered=true","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_2 = new BlockState(NamespaceID.from("minecraft:tripwire:2"), (short) 5281, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_2 = new BlockState(NamespaceID.from("minecraft:tripwire:2"), (short) 5281, Block.TRIPWIRE, "attached=true","disarmed=true","east=true","north=true","powered=true","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_3 = new BlockState(NamespaceID.from("minecraft:tripwire:3"), (short) 5282, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_3 = new BlockState(NamespaceID.from("minecraft:tripwire:3"), (short) 5282, Block.TRIPWIRE, "attached=true","disarmed=true","east=true","north=true","powered=true","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_4 = new BlockState(NamespaceID.from("minecraft:tripwire:4"), (short) 5283, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_4 = new BlockState(NamespaceID.from("minecraft:tripwire:4"), (short) 5283, Block.TRIPWIRE, "attached=true","disarmed=true","east=true","north=true","powered=false","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_5 = new BlockState(NamespaceID.from("minecraft:tripwire:5"), (short) 5284, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_5 = new BlockState(NamespaceID.from("minecraft:tripwire:5"), (short) 5284, Block.TRIPWIRE, "attached=true","disarmed=true","east=true","north=true","powered=false","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_6 = new BlockState(NamespaceID.from("minecraft:tripwire:6"), (short) 5285, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_6 = new BlockState(NamespaceID.from("minecraft:tripwire:6"), (short) 5285, Block.TRIPWIRE, "attached=true","disarmed=true","east=true","north=true","powered=false","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_7 = new BlockState(NamespaceID.from("minecraft:tripwire:7"), (short) 5286, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_7 = new BlockState(NamespaceID.from("minecraft:tripwire:7"), (short) 5286, Block.TRIPWIRE, "attached=true","disarmed=true","east=true","north=true","powered=false","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_8 = new BlockState(NamespaceID.from("minecraft:tripwire:8"), (short) 5287, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_8 = new BlockState(NamespaceID.from("minecraft:tripwire:8"), (short) 5287, Block.TRIPWIRE, "attached=true","disarmed=true","east=true","north=false","powered=true","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_9 = new BlockState(NamespaceID.from("minecraft:tripwire:9"), (short) 5288, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_9 = new BlockState(NamespaceID.from("minecraft:tripwire:9"), (short) 5288, Block.TRIPWIRE, "attached=true","disarmed=true","east=true","north=false","powered=true","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_10 = new BlockState(NamespaceID.from("minecraft:tripwire:10"), (short) 5289, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_10 = new BlockState(NamespaceID.from("minecraft:tripwire:10"), (short) 5289, Block.TRIPWIRE, "attached=true","disarmed=true","east=true","north=false","powered=true","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_11 = new BlockState(NamespaceID.from("minecraft:tripwire:11"), (short) 5290, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_11 = new BlockState(NamespaceID.from("minecraft:tripwire:11"), (short) 5290, Block.TRIPWIRE, "attached=true","disarmed=true","east=true","north=false","powered=true","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_12 = new BlockState(NamespaceID.from("minecraft:tripwire:12"), (short) 5291, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_12 = new BlockState(NamespaceID.from("minecraft:tripwire:12"), (short) 5291, Block.TRIPWIRE, "attached=true","disarmed=true","east=true","north=false","powered=false","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_13 = new BlockState(NamespaceID.from("minecraft:tripwire:13"), (short) 5292, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_13 = new BlockState(NamespaceID.from("minecraft:tripwire:13"), (short) 5292, Block.TRIPWIRE, "attached=true","disarmed=true","east=true","north=false","powered=false","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_14 = new BlockState(NamespaceID.from("minecraft:tripwire:14"), (short) 5293, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_14 = new BlockState(NamespaceID.from("minecraft:tripwire:14"), (short) 5293, Block.TRIPWIRE, "attached=true","disarmed=true","east=true","north=false","powered=false","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_15 = new BlockState(NamespaceID.from("minecraft:tripwire:15"), (short) 5294, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_15 = new BlockState(NamespaceID.from("minecraft:tripwire:15"), (short) 5294, Block.TRIPWIRE, "attached=true","disarmed=true","east=true","north=false","powered=false","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_16 = new BlockState(NamespaceID.from("minecraft:tripwire:16"), (short) 5295, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_16 = new BlockState(NamespaceID.from("minecraft:tripwire:16"), (short) 5295, Block.TRIPWIRE, "attached=true","disarmed=true","east=false","north=true","powered=true","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_17 = new BlockState(NamespaceID.from("minecraft:tripwire:17"), (short) 5296, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_17 = new BlockState(NamespaceID.from("minecraft:tripwire:17"), (short) 5296, Block.TRIPWIRE, "attached=true","disarmed=true","east=false","north=true","powered=true","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_18 = new BlockState(NamespaceID.from("minecraft:tripwire:18"), (short) 5297, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_18 = new BlockState(NamespaceID.from("minecraft:tripwire:18"), (short) 5297, Block.TRIPWIRE, "attached=true","disarmed=true","east=false","north=true","powered=true","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_19 = new BlockState(NamespaceID.from("minecraft:tripwire:19"), (short) 5298, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_19 = new BlockState(NamespaceID.from("minecraft:tripwire:19"), (short) 5298, Block.TRIPWIRE, "attached=true","disarmed=true","east=false","north=true","powered=true","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_20 = new BlockState(NamespaceID.from("minecraft:tripwire:20"), (short) 5299, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_20 = new BlockState(NamespaceID.from("minecraft:tripwire:20"), (short) 5299, Block.TRIPWIRE, "attached=true","disarmed=true","east=false","north=true","powered=false","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_21 = new BlockState(NamespaceID.from("minecraft:tripwire:21"), (short) 5300, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_21 = new BlockState(NamespaceID.from("minecraft:tripwire:21"), (short) 5300, Block.TRIPWIRE, "attached=true","disarmed=true","east=false","north=true","powered=false","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_22 = new BlockState(NamespaceID.from("minecraft:tripwire:22"), (short) 5301, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_22 = new BlockState(NamespaceID.from("minecraft:tripwire:22"), (short) 5301, Block.TRIPWIRE, "attached=true","disarmed=true","east=false","north=true","powered=false","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_23 = new BlockState(NamespaceID.from("minecraft:tripwire:23"), (short) 5302, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_23 = new BlockState(NamespaceID.from("minecraft:tripwire:23"), (short) 5302, Block.TRIPWIRE, "attached=true","disarmed=true","east=false","north=true","powered=false","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_24 = new BlockState(NamespaceID.from("minecraft:tripwire:24"), (short) 5303, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_24 = new BlockState(NamespaceID.from("minecraft:tripwire:24"), (short) 5303, Block.TRIPWIRE, "attached=true","disarmed=true","east=false","north=false","powered=true","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_25 = new BlockState(NamespaceID.from("minecraft:tripwire:25"), (short) 5304, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_25 = new BlockState(NamespaceID.from("minecraft:tripwire:25"), (short) 5304, Block.TRIPWIRE, "attached=true","disarmed=true","east=false","north=false","powered=true","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_26 = new BlockState(NamespaceID.from("minecraft:tripwire:26"), (short) 5305, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_26 = new BlockState(NamespaceID.from("minecraft:tripwire:26"), (short) 5305, Block.TRIPWIRE, "attached=true","disarmed=true","east=false","north=false","powered=true","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_27 = new BlockState(NamespaceID.from("minecraft:tripwire:27"), (short) 5306, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_27 = new BlockState(NamespaceID.from("minecraft:tripwire:27"), (short) 5306, Block.TRIPWIRE, "attached=true","disarmed=true","east=false","north=false","powered=true","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_28 = new BlockState(NamespaceID.from("minecraft:tripwire:28"), (short) 5307, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_28 = new BlockState(NamespaceID.from("minecraft:tripwire:28"), (short) 5307, Block.TRIPWIRE, "attached=true","disarmed=true","east=false","north=false","powered=false","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_29 = new BlockState(NamespaceID.from("minecraft:tripwire:29"), (short) 5308, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_29 = new BlockState(NamespaceID.from("minecraft:tripwire:29"), (short) 5308, Block.TRIPWIRE, "attached=true","disarmed=true","east=false","north=false","powered=false","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_30 = new BlockState(NamespaceID.from("minecraft:tripwire:30"), (short) 5309, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_30 = new BlockState(NamespaceID.from("minecraft:tripwire:30"), (short) 5309, Block.TRIPWIRE, "attached=true","disarmed=true","east=false","north=false","powered=false","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_31 = new BlockState(NamespaceID.from("minecraft:tripwire:31"), (short) 5310, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_31 = new BlockState(NamespaceID.from("minecraft:tripwire:31"), (short) 5310, Block.TRIPWIRE, "attached=true","disarmed=true","east=false","north=false","powered=false","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_32 = new BlockState(NamespaceID.from("minecraft:tripwire:32"), (short) 5311, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_32 = new BlockState(NamespaceID.from("minecraft:tripwire:32"), (short) 5311, Block.TRIPWIRE, "attached=true","disarmed=false","east=true","north=true","powered=true","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_33 = new BlockState(NamespaceID.from("minecraft:tripwire:33"), (short) 5312, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_33 = new BlockState(NamespaceID.from("minecraft:tripwire:33"), (short) 5312, Block.TRIPWIRE, "attached=true","disarmed=false","east=true","north=true","powered=true","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_34 = new BlockState(NamespaceID.from("minecraft:tripwire:34"), (short) 5313, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_34 = new BlockState(NamespaceID.from("minecraft:tripwire:34"), (short) 5313, Block.TRIPWIRE, "attached=true","disarmed=false","east=true","north=true","powered=true","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_35 = new BlockState(NamespaceID.from("minecraft:tripwire:35"), (short) 5314, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_35 = new BlockState(NamespaceID.from("minecraft:tripwire:35"), (short) 5314, Block.TRIPWIRE, "attached=true","disarmed=false","east=true","north=true","powered=true","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_36 = new BlockState(NamespaceID.from("minecraft:tripwire:36"), (short) 5315, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_36 = new BlockState(NamespaceID.from("minecraft:tripwire:36"), (short) 5315, Block.TRIPWIRE, "attached=true","disarmed=false","east=true","north=true","powered=false","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_37 = new BlockState(NamespaceID.from("minecraft:tripwire:37"), (short) 5316, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_37 = new BlockState(NamespaceID.from("minecraft:tripwire:37"), (short) 5316, Block.TRIPWIRE, "attached=true","disarmed=false","east=true","north=true","powered=false","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_38 = new BlockState(NamespaceID.from("minecraft:tripwire:38"), (short) 5317, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_38 = new BlockState(NamespaceID.from("minecraft:tripwire:38"), (short) 5317, Block.TRIPWIRE, "attached=true","disarmed=false","east=true","north=true","powered=false","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_39 = new BlockState(NamespaceID.from("minecraft:tripwire:39"), (short) 5318, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_39 = new BlockState(NamespaceID.from("minecraft:tripwire:39"), (short) 5318, Block.TRIPWIRE, "attached=true","disarmed=false","east=true","north=true","powered=false","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_40 = new BlockState(NamespaceID.from("minecraft:tripwire:40"), (short) 5319, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_40 = new BlockState(NamespaceID.from("minecraft:tripwire:40"), (short) 5319, Block.TRIPWIRE, "attached=true","disarmed=false","east=true","north=false","powered=true","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_41 = new BlockState(NamespaceID.from("minecraft:tripwire:41"), (short) 5320, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_41 = new BlockState(NamespaceID.from("minecraft:tripwire:41"), (short) 5320, Block.TRIPWIRE, "attached=true","disarmed=false","east=true","north=false","powered=true","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_42 = new BlockState(NamespaceID.from("minecraft:tripwire:42"), (short) 5321, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_42 = new BlockState(NamespaceID.from("minecraft:tripwire:42"), (short) 5321, Block.TRIPWIRE, "attached=true","disarmed=false","east=true","north=false","powered=true","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_43 = new BlockState(NamespaceID.from("minecraft:tripwire:43"), (short) 5322, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_43 = new BlockState(NamespaceID.from("minecraft:tripwire:43"), (short) 5322, Block.TRIPWIRE, "attached=true","disarmed=false","east=true","north=false","powered=true","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_44 = new BlockState(NamespaceID.from("minecraft:tripwire:44"), (short) 5323, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_44 = new BlockState(NamespaceID.from("minecraft:tripwire:44"), (short) 5323, Block.TRIPWIRE, "attached=true","disarmed=false","east=true","north=false","powered=false","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_45 = new BlockState(NamespaceID.from("minecraft:tripwire:45"), (short) 5324, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_45 = new BlockState(NamespaceID.from("minecraft:tripwire:45"), (short) 5324, Block.TRIPWIRE, "attached=true","disarmed=false","east=true","north=false","powered=false","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_46 = new BlockState(NamespaceID.from("minecraft:tripwire:46"), (short) 5325, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_46 = new BlockState(NamespaceID.from("minecraft:tripwire:46"), (short) 5325, Block.TRIPWIRE, "attached=true","disarmed=false","east=true","north=false","powered=false","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_47 = new BlockState(NamespaceID.from("minecraft:tripwire:47"), (short) 5326, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_47 = new BlockState(NamespaceID.from("minecraft:tripwire:47"), (short) 5326, Block.TRIPWIRE, "attached=true","disarmed=false","east=true","north=false","powered=false","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_48 = new BlockState(NamespaceID.from("minecraft:tripwire:48"), (short) 5327, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_48 = new BlockState(NamespaceID.from("minecraft:tripwire:48"), (short) 5327, Block.TRIPWIRE, "attached=true","disarmed=false","east=false","north=true","powered=true","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_49 = new BlockState(NamespaceID.from("minecraft:tripwire:49"), (short) 5328, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_49 = new BlockState(NamespaceID.from("minecraft:tripwire:49"), (short) 5328, Block.TRIPWIRE, "attached=true","disarmed=false","east=false","north=true","powered=true","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_50 = new BlockState(NamespaceID.from("minecraft:tripwire:50"), (short) 5329, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_50 = new BlockState(NamespaceID.from("minecraft:tripwire:50"), (short) 5329, Block.TRIPWIRE, "attached=true","disarmed=false","east=false","north=true","powered=true","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_51 = new BlockState(NamespaceID.from("minecraft:tripwire:51"), (short) 5330, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_51 = new BlockState(NamespaceID.from("minecraft:tripwire:51"), (short) 5330, Block.TRIPWIRE, "attached=true","disarmed=false","east=false","north=true","powered=true","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_52 = new BlockState(NamespaceID.from("minecraft:tripwire:52"), (short) 5331, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_52 = new BlockState(NamespaceID.from("minecraft:tripwire:52"), (short) 5331, Block.TRIPWIRE, "attached=true","disarmed=false","east=false","north=true","powered=false","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_53 = new BlockState(NamespaceID.from("minecraft:tripwire:53"), (short) 5332, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_53 = new BlockState(NamespaceID.from("minecraft:tripwire:53"), (short) 5332, Block.TRIPWIRE, "attached=true","disarmed=false","east=false","north=true","powered=false","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_54 = new BlockState(NamespaceID.from("minecraft:tripwire:54"), (short) 5333, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_54 = new BlockState(NamespaceID.from("minecraft:tripwire:54"), (short) 5333, Block.TRIPWIRE, "attached=true","disarmed=false","east=false","north=true","powered=false","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_55 = new BlockState(NamespaceID.from("minecraft:tripwire:55"), (short) 5334, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_55 = new BlockState(NamespaceID.from("minecraft:tripwire:55"), (short) 5334, Block.TRIPWIRE, "attached=true","disarmed=false","east=false","north=true","powered=false","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_56 = new BlockState(NamespaceID.from("minecraft:tripwire:56"), (short) 5335, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_56 = new BlockState(NamespaceID.from("minecraft:tripwire:56"), (short) 5335, Block.TRIPWIRE, "attached=true","disarmed=false","east=false","north=false","powered=true","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_57 = new BlockState(NamespaceID.from("minecraft:tripwire:57"), (short) 5336, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_57 = new BlockState(NamespaceID.from("minecraft:tripwire:57"), (short) 5336, Block.TRIPWIRE, "attached=true","disarmed=false","east=false","north=false","powered=true","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_58 = new BlockState(NamespaceID.from("minecraft:tripwire:58"), (short) 5337, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_58 = new BlockState(NamespaceID.from("minecraft:tripwire:58"), (short) 5337, Block.TRIPWIRE, "attached=true","disarmed=false","east=false","north=false","powered=true","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_59 = new BlockState(NamespaceID.from("minecraft:tripwire:59"), (short) 5338, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_59 = new BlockState(NamespaceID.from("minecraft:tripwire:59"), (short) 5338, Block.TRIPWIRE, "attached=true","disarmed=false","east=false","north=false","powered=true","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_60 = new BlockState(NamespaceID.from("minecraft:tripwire:60"), (short) 5339, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_60 = new BlockState(NamespaceID.from("minecraft:tripwire:60"), (short) 5339, Block.TRIPWIRE, "attached=true","disarmed=false","east=false","north=false","powered=false","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_61 = new BlockState(NamespaceID.from("minecraft:tripwire:61"), (short) 5340, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_61 = new BlockState(NamespaceID.from("minecraft:tripwire:61"), (short) 5340, Block.TRIPWIRE, "attached=true","disarmed=false","east=false","north=false","powered=false","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_62 = new BlockState(NamespaceID.from("minecraft:tripwire:62"), (short) 5341, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_62 = new BlockState(NamespaceID.from("minecraft:tripwire:62"), (short) 5341, Block.TRIPWIRE, "attached=true","disarmed=false","east=false","north=false","powered=false","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_63 = new BlockState(NamespaceID.from("minecraft:tripwire:63"), (short) 5342, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_63 = new BlockState(NamespaceID.from("minecraft:tripwire:63"), (short) 5342, Block.TRIPWIRE, "attached=true","disarmed=false","east=false","north=false","powered=false","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_64 = new BlockState(NamespaceID.from("minecraft:tripwire:64"), (short) 5343, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_64 = new BlockState(NamespaceID.from("minecraft:tripwire:64"), (short) 5343, Block.TRIPWIRE, "attached=false","disarmed=true","east=true","north=true","powered=true","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_65 = new BlockState(NamespaceID.from("minecraft:tripwire:65"), (short) 5344, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_65 = new BlockState(NamespaceID.from("minecraft:tripwire:65"), (short) 5344, Block.TRIPWIRE, "attached=false","disarmed=true","east=true","north=true","powered=true","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_66 = new BlockState(NamespaceID.from("minecraft:tripwire:66"), (short) 5345, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_66 = new BlockState(NamespaceID.from("minecraft:tripwire:66"), (short) 5345, Block.TRIPWIRE, "attached=false","disarmed=true","east=true","north=true","powered=true","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_67 = new BlockState(NamespaceID.from("minecraft:tripwire:67"), (short) 5346, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_67 = new BlockState(NamespaceID.from("minecraft:tripwire:67"), (short) 5346, Block.TRIPWIRE, "attached=false","disarmed=true","east=true","north=true","powered=true","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_68 = new BlockState(NamespaceID.from("minecraft:tripwire:68"), (short) 5347, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_68 = new BlockState(NamespaceID.from("minecraft:tripwire:68"), (short) 5347, Block.TRIPWIRE, "attached=false","disarmed=true","east=true","north=true","powered=false","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_69 = new BlockState(NamespaceID.from("minecraft:tripwire:69"), (short) 5348, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_69 = new BlockState(NamespaceID.from("minecraft:tripwire:69"), (short) 5348, Block.TRIPWIRE, "attached=false","disarmed=true","east=true","north=true","powered=false","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_70 = new BlockState(NamespaceID.from("minecraft:tripwire:70"), (short) 5349, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_70 = new BlockState(NamespaceID.from("minecraft:tripwire:70"), (short) 5349, Block.TRIPWIRE, "attached=false","disarmed=true","east=true","north=true","powered=false","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_71 = new BlockState(NamespaceID.from("minecraft:tripwire:71"), (short) 5350, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_71 = new BlockState(NamespaceID.from("minecraft:tripwire:71"), (short) 5350, Block.TRIPWIRE, "attached=false","disarmed=true","east=true","north=true","powered=false","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_72 = new BlockState(NamespaceID.from("minecraft:tripwire:72"), (short) 5351, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_72 = new BlockState(NamespaceID.from("minecraft:tripwire:72"), (short) 5351, Block.TRIPWIRE, "attached=false","disarmed=true","east=true","north=false","powered=true","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_73 = new BlockState(NamespaceID.from("minecraft:tripwire:73"), (short) 5352, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_73 = new BlockState(NamespaceID.from("minecraft:tripwire:73"), (short) 5352, Block.TRIPWIRE, "attached=false","disarmed=true","east=true","north=false","powered=true","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_74 = new BlockState(NamespaceID.from("minecraft:tripwire:74"), (short) 5353, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_74 = new BlockState(NamespaceID.from("minecraft:tripwire:74"), (short) 5353, Block.TRIPWIRE, "attached=false","disarmed=true","east=true","north=false","powered=true","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_75 = new BlockState(NamespaceID.from("minecraft:tripwire:75"), (short) 5354, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_75 = new BlockState(NamespaceID.from("minecraft:tripwire:75"), (short) 5354, Block.TRIPWIRE, "attached=false","disarmed=true","east=true","north=false","powered=true","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_76 = new BlockState(NamespaceID.from("minecraft:tripwire:76"), (short) 5355, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_76 = new BlockState(NamespaceID.from("minecraft:tripwire:76"), (short) 5355, Block.TRIPWIRE, "attached=false","disarmed=true","east=true","north=false","powered=false","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_77 = new BlockState(NamespaceID.from("minecraft:tripwire:77"), (short) 5356, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_77 = new BlockState(NamespaceID.from("minecraft:tripwire:77"), (short) 5356, Block.TRIPWIRE, "attached=false","disarmed=true","east=true","north=false","powered=false","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_78 = new BlockState(NamespaceID.from("minecraft:tripwire:78"), (short) 5357, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_78 = new BlockState(NamespaceID.from("minecraft:tripwire:78"), (short) 5357, Block.TRIPWIRE, "attached=false","disarmed=true","east=true","north=false","powered=false","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_79 = new BlockState(NamespaceID.from("minecraft:tripwire:79"), (short) 5358, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_79 = new BlockState(NamespaceID.from("minecraft:tripwire:79"), (short) 5358, Block.TRIPWIRE, "attached=false","disarmed=true","east=true","north=false","powered=false","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_80 = new BlockState(NamespaceID.from("minecraft:tripwire:80"), (short) 5359, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_80 = new BlockState(NamespaceID.from("minecraft:tripwire:80"), (short) 5359, Block.TRIPWIRE, "attached=false","disarmed=true","east=false","north=true","powered=true","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_81 = new BlockState(NamespaceID.from("minecraft:tripwire:81"), (short) 5360, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_81 = new BlockState(NamespaceID.from("minecraft:tripwire:81"), (short) 5360, Block.TRIPWIRE, "attached=false","disarmed=true","east=false","north=true","powered=true","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_82 = new BlockState(NamespaceID.from("minecraft:tripwire:82"), (short) 5361, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_82 = new BlockState(NamespaceID.from("minecraft:tripwire:82"), (short) 5361, Block.TRIPWIRE, "attached=false","disarmed=true","east=false","north=true","powered=true","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_83 = new BlockState(NamespaceID.from("minecraft:tripwire:83"), (short) 5362, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_83 = new BlockState(NamespaceID.from("minecraft:tripwire:83"), (short) 5362, Block.TRIPWIRE, "attached=false","disarmed=true","east=false","north=true","powered=true","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_84 = new BlockState(NamespaceID.from("minecraft:tripwire:84"), (short) 5363, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_84 = new BlockState(NamespaceID.from("minecraft:tripwire:84"), (short) 5363, Block.TRIPWIRE, "attached=false","disarmed=true","east=false","north=true","powered=false","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_85 = new BlockState(NamespaceID.from("minecraft:tripwire:85"), (short) 5364, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_85 = new BlockState(NamespaceID.from("minecraft:tripwire:85"), (short) 5364, Block.TRIPWIRE, "attached=false","disarmed=true","east=false","north=true","powered=false","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_86 = new BlockState(NamespaceID.from("minecraft:tripwire:86"), (short) 5365, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_86 = new BlockState(NamespaceID.from("minecraft:tripwire:86"), (short) 5365, Block.TRIPWIRE, "attached=false","disarmed=true","east=false","north=true","powered=false","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_87 = new BlockState(NamespaceID.from("minecraft:tripwire:87"), (short) 5366, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_87 = new BlockState(NamespaceID.from("minecraft:tripwire:87"), (short) 5366, Block.TRIPWIRE, "attached=false","disarmed=true","east=false","north=true","powered=false","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_88 = new BlockState(NamespaceID.from("minecraft:tripwire:88"), (short) 5367, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_88 = new BlockState(NamespaceID.from("minecraft:tripwire:88"), (short) 5367, Block.TRIPWIRE, "attached=false","disarmed=true","east=false","north=false","powered=true","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_89 = new BlockState(NamespaceID.from("minecraft:tripwire:89"), (short) 5368, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_89 = new BlockState(NamespaceID.from("minecraft:tripwire:89"), (short) 5368, Block.TRIPWIRE, "attached=false","disarmed=true","east=false","north=false","powered=true","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_90 = new BlockState(NamespaceID.from("minecraft:tripwire:90"), (short) 5369, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_90 = new BlockState(NamespaceID.from("minecraft:tripwire:90"), (short) 5369, Block.TRIPWIRE, "attached=false","disarmed=true","east=false","north=false","powered=true","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_91 = new BlockState(NamespaceID.from("minecraft:tripwire:91"), (short) 5370, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_91 = new BlockState(NamespaceID.from("minecraft:tripwire:91"), (short) 5370, Block.TRIPWIRE, "attached=false","disarmed=true","east=false","north=false","powered=true","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_92 = new BlockState(NamespaceID.from("minecraft:tripwire:92"), (short) 5371, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_92 = new BlockState(NamespaceID.from("minecraft:tripwire:92"), (short) 5371, Block.TRIPWIRE, "attached=false","disarmed=true","east=false","north=false","powered=false","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_93 = new BlockState(NamespaceID.from("minecraft:tripwire:93"), (short) 5372, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_93 = new BlockState(NamespaceID.from("minecraft:tripwire:93"), (short) 5372, Block.TRIPWIRE, "attached=false","disarmed=true","east=false","north=false","powered=false","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_94 = new BlockState(NamespaceID.from("minecraft:tripwire:94"), (short) 5373, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_94 = new BlockState(NamespaceID.from("minecraft:tripwire:94"), (short) 5373, Block.TRIPWIRE, "attached=false","disarmed=true","east=false","north=false","powered=false","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_95 = new BlockState(NamespaceID.from("minecraft:tripwire:95"), (short) 5374, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_95 = new BlockState(NamespaceID.from("minecraft:tripwire:95"), (short) 5374, Block.TRIPWIRE, "attached=false","disarmed=true","east=false","north=false","powered=false","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_96 = new BlockState(NamespaceID.from("minecraft:tripwire:96"), (short) 5375, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_96 = new BlockState(NamespaceID.from("minecraft:tripwire:96"), (short) 5375, Block.TRIPWIRE, "attached=false","disarmed=false","east=true","north=true","powered=true","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_97 = new BlockState(NamespaceID.from("minecraft:tripwire:97"), (short) 5376, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_97 = new BlockState(NamespaceID.from("minecraft:tripwire:97"), (short) 5376, Block.TRIPWIRE, "attached=false","disarmed=false","east=true","north=true","powered=true","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_98 = new BlockState(NamespaceID.from("minecraft:tripwire:98"), (short) 5377, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_98 = new BlockState(NamespaceID.from("minecraft:tripwire:98"), (short) 5377, Block.TRIPWIRE, "attached=false","disarmed=false","east=true","north=true","powered=true","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_99 = new BlockState(NamespaceID.from("minecraft:tripwire:99"), (short) 5378, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_99 = new BlockState(NamespaceID.from("minecraft:tripwire:99"), (short) 5378, Block.TRIPWIRE, "attached=false","disarmed=false","east=true","north=true","powered=true","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_100 = new BlockState(NamespaceID.from("minecraft:tripwire:100"), (short) 5379, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_100 = new BlockState(NamespaceID.from("minecraft:tripwire:100"), (short) 5379, Block.TRIPWIRE, "attached=false","disarmed=false","east=true","north=true","powered=false","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_101 = new BlockState(NamespaceID.from("minecraft:tripwire:101"), (short) 5380, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_101 = new BlockState(NamespaceID.from("minecraft:tripwire:101"), (short) 5380, Block.TRIPWIRE, "attached=false","disarmed=false","east=true","north=true","powered=false","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_102 = new BlockState(NamespaceID.from("minecraft:tripwire:102"), (short) 5381, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_102 = new BlockState(NamespaceID.from("minecraft:tripwire:102"), (short) 5381, Block.TRIPWIRE, "attached=false","disarmed=false","east=true","north=true","powered=false","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_103 = new BlockState(NamespaceID.from("minecraft:tripwire:103"), (short) 5382, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_103 = new BlockState(NamespaceID.from("minecraft:tripwire:103"), (short) 5382, Block.TRIPWIRE, "attached=false","disarmed=false","east=true","north=true","powered=false","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_104 = new BlockState(NamespaceID.from("minecraft:tripwire:104"), (short) 5383, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_104 = new BlockState(NamespaceID.from("minecraft:tripwire:104"), (short) 5383, Block.TRIPWIRE, "attached=false","disarmed=false","east=true","north=false","powered=true","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_105 = new BlockState(NamespaceID.from("minecraft:tripwire:105"), (short) 5384, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_105 = new BlockState(NamespaceID.from("minecraft:tripwire:105"), (short) 5384, Block.TRIPWIRE, "attached=false","disarmed=false","east=true","north=false","powered=true","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_106 = new BlockState(NamespaceID.from("minecraft:tripwire:106"), (short) 5385, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_106 = new BlockState(NamespaceID.from("minecraft:tripwire:106"), (short) 5385, Block.TRIPWIRE, "attached=false","disarmed=false","east=true","north=false","powered=true","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_107 = new BlockState(NamespaceID.from("minecraft:tripwire:107"), (short) 5386, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_107 = new BlockState(NamespaceID.from("minecraft:tripwire:107"), (short) 5386, Block.TRIPWIRE, "attached=false","disarmed=false","east=true","north=false","powered=true","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_108 = new BlockState(NamespaceID.from("minecraft:tripwire:108"), (short) 5387, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_108 = new BlockState(NamespaceID.from("minecraft:tripwire:108"), (short) 5387, Block.TRIPWIRE, "attached=false","disarmed=false","east=true","north=false","powered=false","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_109 = new BlockState(NamespaceID.from("minecraft:tripwire:109"), (short) 5388, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_109 = new BlockState(NamespaceID.from("minecraft:tripwire:109"), (short) 5388, Block.TRIPWIRE, "attached=false","disarmed=false","east=true","north=false","powered=false","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_110 = new BlockState(NamespaceID.from("minecraft:tripwire:110"), (short) 5389, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_110 = new BlockState(NamespaceID.from("minecraft:tripwire:110"), (short) 5389, Block.TRIPWIRE, "attached=false","disarmed=false","east=true","north=false","powered=false","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_111 = new BlockState(NamespaceID.from("minecraft:tripwire:111"), (short) 5390, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_111 = new BlockState(NamespaceID.from("minecraft:tripwire:111"), (short) 5390, Block.TRIPWIRE, "attached=false","disarmed=false","east=true","north=false","powered=false","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_112 = new BlockState(NamespaceID.from("minecraft:tripwire:112"), (short) 5391, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_112 = new BlockState(NamespaceID.from("minecraft:tripwire:112"), (short) 5391, Block.TRIPWIRE, "attached=false","disarmed=false","east=false","north=true","powered=true","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_113 = new BlockState(NamespaceID.from("minecraft:tripwire:113"), (short) 5392, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_113 = new BlockState(NamespaceID.from("minecraft:tripwire:113"), (short) 5392, Block.TRIPWIRE, "attached=false","disarmed=false","east=false","north=true","powered=true","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_114 = new BlockState(NamespaceID.from("minecraft:tripwire:114"), (short) 5393, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_114 = new BlockState(NamespaceID.from("minecraft:tripwire:114"), (short) 5393, Block.TRIPWIRE, "attached=false","disarmed=false","east=false","north=true","powered=true","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_115 = new BlockState(NamespaceID.from("minecraft:tripwire:115"), (short) 5394, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_115 = new BlockState(NamespaceID.from("minecraft:tripwire:115"), (short) 5394, Block.TRIPWIRE, "attached=false","disarmed=false","east=false","north=true","powered=true","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_116 = new BlockState(NamespaceID.from("minecraft:tripwire:116"), (short) 5395, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_116 = new BlockState(NamespaceID.from("minecraft:tripwire:116"), (short) 5395, Block.TRIPWIRE, "attached=false","disarmed=false","east=false","north=true","powered=false","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_117 = new BlockState(NamespaceID.from("minecraft:tripwire:117"), (short) 5396, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_117 = new BlockState(NamespaceID.from("minecraft:tripwire:117"), (short) 5396, Block.TRIPWIRE, "attached=false","disarmed=false","east=false","north=true","powered=false","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_118 = new BlockState(NamespaceID.from("minecraft:tripwire:118"), (short) 5397, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_118 = new BlockState(NamespaceID.from("minecraft:tripwire:118"), (short) 5397, Block.TRIPWIRE, "attached=false","disarmed=false","east=false","north=true","powered=false","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_119 = new BlockState(NamespaceID.from("minecraft:tripwire:119"), (short) 5398, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_119 = new BlockState(NamespaceID.from("minecraft:tripwire:119"), (short) 5398, Block.TRIPWIRE, "attached=false","disarmed=false","east=false","north=true","powered=false","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_120 = new BlockState(NamespaceID.from("minecraft:tripwire:120"), (short) 5399, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_120 = new BlockState(NamespaceID.from("minecraft:tripwire:120"), (short) 5399, Block.TRIPWIRE, "attached=false","disarmed=false","east=false","north=false","powered=true","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_121 = new BlockState(NamespaceID.from("minecraft:tripwire:121"), (short) 5400, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_121 = new BlockState(NamespaceID.from("minecraft:tripwire:121"), (short) 5400, Block.TRIPWIRE, "attached=false","disarmed=false","east=false","north=false","powered=true","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_122 = new BlockState(NamespaceID.from("minecraft:tripwire:122"), (short) 5401, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_122 = new BlockState(NamespaceID.from("minecraft:tripwire:122"), (short) 5401, Block.TRIPWIRE, "attached=false","disarmed=false","east=false","north=false","powered=true","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_123 = new BlockState(NamespaceID.from("minecraft:tripwire:123"), (short) 5402, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_123 = new BlockState(NamespaceID.from("minecraft:tripwire:123"), (short) 5402, Block.TRIPWIRE, "attached=false","disarmed=false","east=false","north=false","powered=true","south=false","west=false");
 
-  public static final BlockState TRIPWIRE_124 = new BlockState(NamespaceID.from("minecraft:tripwire:124"), (short) 5403, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_124 = new BlockState(NamespaceID.from("minecraft:tripwire:124"), (short) 5403, Block.TRIPWIRE, "attached=false","disarmed=false","east=false","north=false","powered=false","south=true","west=true");
 
-  public static final BlockState TRIPWIRE_125 = new BlockState(NamespaceID.from("minecraft:tripwire:125"), (short) 5404, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_125 = new BlockState(NamespaceID.from("minecraft:tripwire:125"), (short) 5404, Block.TRIPWIRE, "attached=false","disarmed=false","east=false","north=false","powered=false","south=true","west=false");
 
-  public static final BlockState TRIPWIRE_126 = new BlockState(NamespaceID.from("minecraft:tripwire:126"), (short) 5405, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_126 = new BlockState(NamespaceID.from("minecraft:tripwire:126"), (short) 5405, Block.TRIPWIRE, "attached=false","disarmed=false","east=false","north=false","powered=false","south=false","west=true");
 
-  public static final BlockState TRIPWIRE_127 = new BlockState(NamespaceID.from("minecraft:tripwire:127"), (short) 5406, Block.TRIPWIRE);
+  public static final BlockState TRIPWIRE_127 = new BlockState(NamespaceID.from("minecraft:tripwire:127"), (short) 5406, Block.TRIPWIRE, "attached=false","disarmed=false","east=false","north=false","powered=false","south=false","west=false");
 
   public static void initStates() {
     Block.TRIPWIRE.addBlockState(TRIPWIRE_0);

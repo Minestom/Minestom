@@ -13,37 +13,37 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WhiteBanner {
-  public static final BlockState WHITE_BANNER_0 = new BlockState(NamespaceID.from("minecraft:white_banner:0"), (short) 7901, Block.WHITE_BANNER);
+  public static final BlockState WHITE_BANNER_0 = new BlockState(NamespaceID.from("minecraft:white_banner:0"), (short) 7901, Block.WHITE_BANNER, "rotation=0");
 
-  public static final BlockState WHITE_BANNER_1 = new BlockState(NamespaceID.from("minecraft:white_banner:1"), (short) 7902, Block.WHITE_BANNER);
+  public static final BlockState WHITE_BANNER_1 = new BlockState(NamespaceID.from("minecraft:white_banner:1"), (short) 7902, Block.WHITE_BANNER, "rotation=1");
 
-  public static final BlockState WHITE_BANNER_2 = new BlockState(NamespaceID.from("minecraft:white_banner:2"), (short) 7903, Block.WHITE_BANNER);
+  public static final BlockState WHITE_BANNER_2 = new BlockState(NamespaceID.from("minecraft:white_banner:2"), (short) 7903, Block.WHITE_BANNER, "rotation=2");
 
-  public static final BlockState WHITE_BANNER_3 = new BlockState(NamespaceID.from("minecraft:white_banner:3"), (short) 7904, Block.WHITE_BANNER);
+  public static final BlockState WHITE_BANNER_3 = new BlockState(NamespaceID.from("minecraft:white_banner:3"), (short) 7904, Block.WHITE_BANNER, "rotation=3");
 
-  public static final BlockState WHITE_BANNER_4 = new BlockState(NamespaceID.from("minecraft:white_banner:4"), (short) 7905, Block.WHITE_BANNER);
+  public static final BlockState WHITE_BANNER_4 = new BlockState(NamespaceID.from("minecraft:white_banner:4"), (short) 7905, Block.WHITE_BANNER, "rotation=4");
 
-  public static final BlockState WHITE_BANNER_5 = new BlockState(NamespaceID.from("minecraft:white_banner:5"), (short) 7906, Block.WHITE_BANNER);
+  public static final BlockState WHITE_BANNER_5 = new BlockState(NamespaceID.from("minecraft:white_banner:5"), (short) 7906, Block.WHITE_BANNER, "rotation=5");
 
-  public static final BlockState WHITE_BANNER_6 = new BlockState(NamespaceID.from("minecraft:white_banner:6"), (short) 7907, Block.WHITE_BANNER);
+  public static final BlockState WHITE_BANNER_6 = new BlockState(NamespaceID.from("minecraft:white_banner:6"), (short) 7907, Block.WHITE_BANNER, "rotation=6");
 
-  public static final BlockState WHITE_BANNER_7 = new BlockState(NamespaceID.from("minecraft:white_banner:7"), (short) 7908, Block.WHITE_BANNER);
+  public static final BlockState WHITE_BANNER_7 = new BlockState(NamespaceID.from("minecraft:white_banner:7"), (short) 7908, Block.WHITE_BANNER, "rotation=7");
 
-  public static final BlockState WHITE_BANNER_8 = new BlockState(NamespaceID.from("minecraft:white_banner:8"), (short) 7909, Block.WHITE_BANNER);
+  public static final BlockState WHITE_BANNER_8 = new BlockState(NamespaceID.from("minecraft:white_banner:8"), (short) 7909, Block.WHITE_BANNER, "rotation=8");
 
-  public static final BlockState WHITE_BANNER_9 = new BlockState(NamespaceID.from("minecraft:white_banner:9"), (short) 7910, Block.WHITE_BANNER);
+  public static final BlockState WHITE_BANNER_9 = new BlockState(NamespaceID.from("minecraft:white_banner:9"), (short) 7910, Block.WHITE_BANNER, "rotation=9");
 
-  public static final BlockState WHITE_BANNER_10 = new BlockState(NamespaceID.from("minecraft:white_banner:10"), (short) 7911, Block.WHITE_BANNER);
+  public static final BlockState WHITE_BANNER_10 = new BlockState(NamespaceID.from("minecraft:white_banner:10"), (short) 7911, Block.WHITE_BANNER, "rotation=10");
 
-  public static final BlockState WHITE_BANNER_11 = new BlockState(NamespaceID.from("minecraft:white_banner:11"), (short) 7912, Block.WHITE_BANNER);
+  public static final BlockState WHITE_BANNER_11 = new BlockState(NamespaceID.from("minecraft:white_banner:11"), (short) 7912, Block.WHITE_BANNER, "rotation=11");
 
-  public static final BlockState WHITE_BANNER_12 = new BlockState(NamespaceID.from("minecraft:white_banner:12"), (short) 7913, Block.WHITE_BANNER);
+  public static final BlockState WHITE_BANNER_12 = new BlockState(NamespaceID.from("minecraft:white_banner:12"), (short) 7913, Block.WHITE_BANNER, "rotation=12");
 
-  public static final BlockState WHITE_BANNER_13 = new BlockState(NamespaceID.from("minecraft:white_banner:13"), (short) 7914, Block.WHITE_BANNER);
+  public static final BlockState WHITE_BANNER_13 = new BlockState(NamespaceID.from("minecraft:white_banner:13"), (short) 7914, Block.WHITE_BANNER, "rotation=13");
 
-  public static final BlockState WHITE_BANNER_14 = new BlockState(NamespaceID.from("minecraft:white_banner:14"), (short) 7915, Block.WHITE_BANNER);
+  public static final BlockState WHITE_BANNER_14 = new BlockState(NamespaceID.from("minecraft:white_banner:14"), (short) 7915, Block.WHITE_BANNER, "rotation=14");
 
-  public static final BlockState WHITE_BANNER_15 = new BlockState(NamespaceID.from("minecraft:white_banner:15"), (short) 7916, Block.WHITE_BANNER);
+  public static final BlockState WHITE_BANNER_15 = new BlockState(NamespaceID.from("minecraft:white_banner:15"), (short) 7916, Block.WHITE_BANNER, "rotation=15");
 
   public static void initStates() {
     Block.WHITE_BANNER.addBlockState(WHITE_BANNER_0);

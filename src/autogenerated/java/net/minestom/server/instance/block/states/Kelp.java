@@ -13,57 +13,57 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Kelp {
-  public static final BlockState KELP_0 = new BlockState(NamespaceID.from("minecraft:kelp:0"), (short) 9474, Block.KELP);
+  public static final BlockState KELP_0 = new BlockState(NamespaceID.from("minecraft:kelp:0"), (short) 9474, Block.KELP, "age=0");
 
-  public static final BlockState KELP_1 = new BlockState(NamespaceID.from("minecraft:kelp:1"), (short) 9475, Block.KELP);
+  public static final BlockState KELP_1 = new BlockState(NamespaceID.from("minecraft:kelp:1"), (short) 9475, Block.KELP, "age=1");
 
-  public static final BlockState KELP_2 = new BlockState(NamespaceID.from("minecraft:kelp:2"), (short) 9476, Block.KELP);
+  public static final BlockState KELP_2 = new BlockState(NamespaceID.from("minecraft:kelp:2"), (short) 9476, Block.KELP, "age=2");
 
-  public static final BlockState KELP_3 = new BlockState(NamespaceID.from("minecraft:kelp:3"), (short) 9477, Block.KELP);
+  public static final BlockState KELP_3 = new BlockState(NamespaceID.from("minecraft:kelp:3"), (short) 9477, Block.KELP, "age=3");
 
-  public static final BlockState KELP_4 = new BlockState(NamespaceID.from("minecraft:kelp:4"), (short) 9478, Block.KELP);
+  public static final BlockState KELP_4 = new BlockState(NamespaceID.from("minecraft:kelp:4"), (short) 9478, Block.KELP, "age=4");
 
-  public static final BlockState KELP_5 = new BlockState(NamespaceID.from("minecraft:kelp:5"), (short) 9479, Block.KELP);
+  public static final BlockState KELP_5 = new BlockState(NamespaceID.from("minecraft:kelp:5"), (short) 9479, Block.KELP, "age=5");
 
-  public static final BlockState KELP_6 = new BlockState(NamespaceID.from("minecraft:kelp:6"), (short) 9480, Block.KELP);
+  public static final BlockState KELP_6 = new BlockState(NamespaceID.from("minecraft:kelp:6"), (short) 9480, Block.KELP, "age=6");
 
-  public static final BlockState KELP_7 = new BlockState(NamespaceID.from("minecraft:kelp:7"), (short) 9481, Block.KELP);
+  public static final BlockState KELP_7 = new BlockState(NamespaceID.from("minecraft:kelp:7"), (short) 9481, Block.KELP, "age=7");
 
-  public static final BlockState KELP_8 = new BlockState(NamespaceID.from("minecraft:kelp:8"), (short) 9482, Block.KELP);
+  public static final BlockState KELP_8 = new BlockState(NamespaceID.from("minecraft:kelp:8"), (short) 9482, Block.KELP, "age=8");
 
-  public static final BlockState KELP_9 = new BlockState(NamespaceID.from("minecraft:kelp:9"), (short) 9483, Block.KELP);
+  public static final BlockState KELP_9 = new BlockState(NamespaceID.from("minecraft:kelp:9"), (short) 9483, Block.KELP, "age=9");
 
-  public static final BlockState KELP_10 = new BlockState(NamespaceID.from("minecraft:kelp:10"), (short) 9484, Block.KELP);
+  public static final BlockState KELP_10 = new BlockState(NamespaceID.from("minecraft:kelp:10"), (short) 9484, Block.KELP, "age=10");
 
-  public static final BlockState KELP_11 = new BlockState(NamespaceID.from("minecraft:kelp:11"), (short) 9485, Block.KELP);
+  public static final BlockState KELP_11 = new BlockState(NamespaceID.from("minecraft:kelp:11"), (short) 9485, Block.KELP, "age=11");
 
-  public static final BlockState KELP_12 = new BlockState(NamespaceID.from("minecraft:kelp:12"), (short) 9486, Block.KELP);
+  public static final BlockState KELP_12 = new BlockState(NamespaceID.from("minecraft:kelp:12"), (short) 9486, Block.KELP, "age=12");
 
-  public static final BlockState KELP_13 = new BlockState(NamespaceID.from("minecraft:kelp:13"), (short) 9487, Block.KELP);
+  public static final BlockState KELP_13 = new BlockState(NamespaceID.from("minecraft:kelp:13"), (short) 9487, Block.KELP, "age=13");
 
-  public static final BlockState KELP_14 = new BlockState(NamespaceID.from("minecraft:kelp:14"), (short) 9488, Block.KELP);
+  public static final BlockState KELP_14 = new BlockState(NamespaceID.from("minecraft:kelp:14"), (short) 9488, Block.KELP, "age=14");
 
-  public static final BlockState KELP_15 = new BlockState(NamespaceID.from("minecraft:kelp:15"), (short) 9489, Block.KELP);
+  public static final BlockState KELP_15 = new BlockState(NamespaceID.from("minecraft:kelp:15"), (short) 9489, Block.KELP, "age=15");
 
-  public static final BlockState KELP_16 = new BlockState(NamespaceID.from("minecraft:kelp:16"), (short) 9490, Block.KELP);
+  public static final BlockState KELP_16 = new BlockState(NamespaceID.from("minecraft:kelp:16"), (short) 9490, Block.KELP, "age=16");
 
-  public static final BlockState KELP_17 = new BlockState(NamespaceID.from("minecraft:kelp:17"), (short) 9491, Block.KELP);
+  public static final BlockState KELP_17 = new BlockState(NamespaceID.from("minecraft:kelp:17"), (short) 9491, Block.KELP, "age=17");
 
-  public static final BlockState KELP_18 = new BlockState(NamespaceID.from("minecraft:kelp:18"), (short) 9492, Block.KELP);
+  public static final BlockState KELP_18 = new BlockState(NamespaceID.from("minecraft:kelp:18"), (short) 9492, Block.KELP, "age=18");
 
-  public static final BlockState KELP_19 = new BlockState(NamespaceID.from("minecraft:kelp:19"), (short) 9493, Block.KELP);
+  public static final BlockState KELP_19 = new BlockState(NamespaceID.from("minecraft:kelp:19"), (short) 9493, Block.KELP, "age=19");
 
-  public static final BlockState KELP_20 = new BlockState(NamespaceID.from("minecraft:kelp:20"), (short) 9494, Block.KELP);
+  public static final BlockState KELP_20 = new BlockState(NamespaceID.from("minecraft:kelp:20"), (short) 9494, Block.KELP, "age=20");
 
-  public static final BlockState KELP_21 = new BlockState(NamespaceID.from("minecraft:kelp:21"), (short) 9495, Block.KELP);
+  public static final BlockState KELP_21 = new BlockState(NamespaceID.from("minecraft:kelp:21"), (short) 9495, Block.KELP, "age=21");
 
-  public static final BlockState KELP_22 = new BlockState(NamespaceID.from("minecraft:kelp:22"), (short) 9496, Block.KELP);
+  public static final BlockState KELP_22 = new BlockState(NamespaceID.from("minecraft:kelp:22"), (short) 9496, Block.KELP, "age=22");
 
-  public static final BlockState KELP_23 = new BlockState(NamespaceID.from("minecraft:kelp:23"), (short) 9497, Block.KELP);
+  public static final BlockState KELP_23 = new BlockState(NamespaceID.from("minecraft:kelp:23"), (short) 9497, Block.KELP, "age=23");
 
-  public static final BlockState KELP_24 = new BlockState(NamespaceID.from("minecraft:kelp:24"), (short) 9498, Block.KELP);
+  public static final BlockState KELP_24 = new BlockState(NamespaceID.from("minecraft:kelp:24"), (short) 9498, Block.KELP, "age=24");
 
-  public static final BlockState KELP_25 = new BlockState(NamespaceID.from("minecraft:kelp:25"), (short) 9499, Block.KELP);
+  public static final BlockState KELP_25 = new BlockState(NamespaceID.from("minecraft:kelp:25"), (short) 9499, Block.KELP, "age=25");
 
   public static void initStates() {
     Block.KELP.addBlockState(KELP_0);

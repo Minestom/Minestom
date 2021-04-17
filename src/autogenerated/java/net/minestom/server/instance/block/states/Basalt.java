@@ -13,11 +13,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Basalt {
-  public static final BlockState BASALT_0 = new BlockState(NamespaceID.from("minecraft:basalt:0"), (short) 4002, Block.BASALT);
+  public static final BlockState BASALT_0 = new BlockState(NamespaceID.from("minecraft:basalt:0"), (short) 4002, Block.BASALT, "axis=x");
 
-  public static final BlockState BASALT_1 = new BlockState(NamespaceID.from("minecraft:basalt:1"), (short) 4003, Block.BASALT);
+  public static final BlockState BASALT_1 = new BlockState(NamespaceID.from("minecraft:basalt:1"), (short) 4003, Block.BASALT, "axis=y");
 
-  public static final BlockState BASALT_2 = new BlockState(NamespaceID.from("minecraft:basalt:2"), (short) 4004, Block.BASALT);
+  public static final BlockState BASALT_2 = new BlockState(NamespaceID.from("minecraft:basalt:2"), (short) 4004, Block.BASALT, "axis=z");
 
   public static void initStates() {
     Block.BASALT.addBlockState(BASALT_0);

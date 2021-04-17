@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class LightBlueGlazedTerracotta {
-  public static final BlockState LIGHT_BLUE_GLAZED_TERRACOTTA_0 = new BlockState(NamespaceID.from("minecraft:light_blue_glazed_terracotta:0"), (short) 9390, Block.LIGHT_BLUE_GLAZED_TERRACOTTA);
+  public static final BlockState LIGHT_BLUE_GLAZED_TERRACOTTA_0 = new BlockState(NamespaceID.from("minecraft:light_blue_glazed_terracotta:0"), (short) 9390, Block.LIGHT_BLUE_GLAZED_TERRACOTTA, "facing=north");
 
-  public static final BlockState LIGHT_BLUE_GLAZED_TERRACOTTA_1 = new BlockState(NamespaceID.from("minecraft:light_blue_glazed_terracotta:1"), (short) 9391, Block.LIGHT_BLUE_GLAZED_TERRACOTTA);
+  public static final BlockState LIGHT_BLUE_GLAZED_TERRACOTTA_1 = new BlockState(NamespaceID.from("minecraft:light_blue_glazed_terracotta:1"), (short) 9391, Block.LIGHT_BLUE_GLAZED_TERRACOTTA, "facing=south");
 
-  public static final BlockState LIGHT_BLUE_GLAZED_TERRACOTTA_2 = new BlockState(NamespaceID.from("minecraft:light_blue_glazed_terracotta:2"), (short) 9392, Block.LIGHT_BLUE_GLAZED_TERRACOTTA);
+  public static final BlockState LIGHT_BLUE_GLAZED_TERRACOTTA_2 = new BlockState(NamespaceID.from("minecraft:light_blue_glazed_terracotta:2"), (short) 9392, Block.LIGHT_BLUE_GLAZED_TERRACOTTA, "facing=west");
 
-  public static final BlockState LIGHT_BLUE_GLAZED_TERRACOTTA_3 = new BlockState(NamespaceID.from("minecraft:light_blue_glazed_terracotta:3"), (short) 9393, Block.LIGHT_BLUE_GLAZED_TERRACOTTA);
+  public static final BlockState LIGHT_BLUE_GLAZED_TERRACOTTA_3 = new BlockState(NamespaceID.from("minecraft:light_blue_glazed_terracotta:3"), (short) 9393, Block.LIGHT_BLUE_GLAZED_TERRACOTTA, "facing=east");
 
   public static void initStates() {
     Block.LIGHT_BLUE_GLAZED_TERRACOTTA.addBlockState(LIGHT_BLUE_GLAZED_TERRACOTTA_0);

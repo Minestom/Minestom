@@ -13,37 +13,37 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Cactus {
-  public static final BlockState CACTUS_0 = new BlockState(NamespaceID.from("minecraft:cactus:0"), (short) 3931, Block.CACTUS);
+  public static final BlockState CACTUS_0 = new BlockState(NamespaceID.from("minecraft:cactus:0"), (short) 3931, Block.CACTUS, "age=0");
 
-  public static final BlockState CACTUS_1 = new BlockState(NamespaceID.from("minecraft:cactus:1"), (short) 3932, Block.CACTUS);
+  public static final BlockState CACTUS_1 = new BlockState(NamespaceID.from("minecraft:cactus:1"), (short) 3932, Block.CACTUS, "age=1");
 
-  public static final BlockState CACTUS_2 = new BlockState(NamespaceID.from("minecraft:cactus:2"), (short) 3933, Block.CACTUS);
+  public static final BlockState CACTUS_2 = new BlockState(NamespaceID.from("minecraft:cactus:2"), (short) 3933, Block.CACTUS, "age=2");
 
-  public static final BlockState CACTUS_3 = new BlockState(NamespaceID.from("minecraft:cactus:3"), (short) 3934, Block.CACTUS);
+  public static final BlockState CACTUS_3 = new BlockState(NamespaceID.from("minecraft:cactus:3"), (short) 3934, Block.CACTUS, "age=3");
 
-  public static final BlockState CACTUS_4 = new BlockState(NamespaceID.from("minecraft:cactus:4"), (short) 3935, Block.CACTUS);
+  public static final BlockState CACTUS_4 = new BlockState(NamespaceID.from("minecraft:cactus:4"), (short) 3935, Block.CACTUS, "age=4");
 
-  public static final BlockState CACTUS_5 = new BlockState(NamespaceID.from("minecraft:cactus:5"), (short) 3936, Block.CACTUS);
+  public static final BlockState CACTUS_5 = new BlockState(NamespaceID.from("minecraft:cactus:5"), (short) 3936, Block.CACTUS, "age=5");
 
-  public static final BlockState CACTUS_6 = new BlockState(NamespaceID.from("minecraft:cactus:6"), (short) 3937, Block.CACTUS);
+  public static final BlockState CACTUS_6 = new BlockState(NamespaceID.from("minecraft:cactus:6"), (short) 3937, Block.CACTUS, "age=6");
 
-  public static final BlockState CACTUS_7 = new BlockState(NamespaceID.from("minecraft:cactus:7"), (short) 3938, Block.CACTUS);
+  public static final BlockState CACTUS_7 = new BlockState(NamespaceID.from("minecraft:cactus:7"), (short) 3938, Block.CACTUS, "age=7");
 
-  public static final BlockState CACTUS_8 = new BlockState(NamespaceID.from("minecraft:cactus:8"), (short) 3939, Block.CACTUS);
+  public static final BlockState CACTUS_8 = new BlockState(NamespaceID.from("minecraft:cactus:8"), (short) 3939, Block.CACTUS, "age=8");
 
-  public static final BlockState CACTUS_9 = new BlockState(NamespaceID.from("minecraft:cactus:9"), (short) 3940, Block.CACTUS);
+  public static final BlockState CACTUS_9 = new BlockState(NamespaceID.from("minecraft:cactus:9"), (short) 3940, Block.CACTUS, "age=9");
 
-  public static final BlockState CACTUS_10 = new BlockState(NamespaceID.from("minecraft:cactus:10"), (short) 3941, Block.CACTUS);
+  public static final BlockState CACTUS_10 = new BlockState(NamespaceID.from("minecraft:cactus:10"), (short) 3941, Block.CACTUS, "age=10");
 
-  public static final BlockState CACTUS_11 = new BlockState(NamespaceID.from("minecraft:cactus:11"), (short) 3942, Block.CACTUS);
+  public static final BlockState CACTUS_11 = new BlockState(NamespaceID.from("minecraft:cactus:11"), (short) 3942, Block.CACTUS, "age=11");
 
-  public static final BlockState CACTUS_12 = new BlockState(NamespaceID.from("minecraft:cactus:12"), (short) 3943, Block.CACTUS);
+  public static final BlockState CACTUS_12 = new BlockState(NamespaceID.from("minecraft:cactus:12"), (short) 3943, Block.CACTUS, "age=12");
 
-  public static final BlockState CACTUS_13 = new BlockState(NamespaceID.from("minecraft:cactus:13"), (short) 3944, Block.CACTUS);
+  public static final BlockState CACTUS_13 = new BlockState(NamespaceID.from("minecraft:cactus:13"), (short) 3944, Block.CACTUS, "age=13");
 
-  public static final BlockState CACTUS_14 = new BlockState(NamespaceID.from("minecraft:cactus:14"), (short) 3945, Block.CACTUS);
+  public static final BlockState CACTUS_14 = new BlockState(NamespaceID.from("minecraft:cactus:14"), (short) 3945, Block.CACTUS, "age=14");
 
-  public static final BlockState CACTUS_15 = new BlockState(NamespaceID.from("minecraft:cactus:15"), (short) 3946, Block.CACTUS);
+  public static final BlockState CACTUS_15 = new BlockState(NamespaceID.from("minecraft:cactus:15"), (short) 3946, Block.CACTUS, "age=15");
 
   public static void initStates() {
     Block.CACTUS.addBlockState(CACTUS_0);

@@ -13,9 +13,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SprucePressurePlate {
-  public static final BlockState SPRUCE_PRESSURE_PLATE_0 = new BlockState(NamespaceID.from("minecraft:spruce_pressure_plate:0"), (short) 3875, Block.SPRUCE_PRESSURE_PLATE);
+  public static final BlockState SPRUCE_PRESSURE_PLATE_0 = new BlockState(NamespaceID.from("minecraft:spruce_pressure_plate:0"), (short) 3875, Block.SPRUCE_PRESSURE_PLATE, "powered=true");
 
-  public static final BlockState SPRUCE_PRESSURE_PLATE_1 = new BlockState(NamespaceID.from("minecraft:spruce_pressure_plate:1"), (short) 3876, Block.SPRUCE_PRESSURE_PLATE);
+  public static final BlockState SPRUCE_PRESSURE_PLATE_1 = new BlockState(NamespaceID.from("minecraft:spruce_pressure_plate:1"), (short) 3876, Block.SPRUCE_PRESSURE_PLATE, "powered=false");
 
   public static void initStates() {
     Block.SPRUCE_PRESSURE_PLATE.addBlockState(SPRUCE_PRESSURE_PLATE_0);

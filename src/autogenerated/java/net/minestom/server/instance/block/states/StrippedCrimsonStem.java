@@ -13,11 +13,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class StrippedCrimsonStem {
-  public static final BlockState STRIPPED_CRIMSON_STEM_0 = new BlockState(NamespaceID.from("minecraft:stripped_crimson_stem:0"), (short) 14986, Block.STRIPPED_CRIMSON_STEM);
+  public static final BlockState STRIPPED_CRIMSON_STEM_0 = new BlockState(NamespaceID.from("minecraft:stripped_crimson_stem:0"), (short) 14986, Block.STRIPPED_CRIMSON_STEM, "axis=x");
 
-  public static final BlockState STRIPPED_CRIMSON_STEM_1 = new BlockState(NamespaceID.from("minecraft:stripped_crimson_stem:1"), (short) 14987, Block.STRIPPED_CRIMSON_STEM);
+  public static final BlockState STRIPPED_CRIMSON_STEM_1 = new BlockState(NamespaceID.from("minecraft:stripped_crimson_stem:1"), (short) 14987, Block.STRIPPED_CRIMSON_STEM, "axis=y");
 
-  public static final BlockState STRIPPED_CRIMSON_STEM_2 = new BlockState(NamespaceID.from("minecraft:stripped_crimson_stem:2"), (short) 14988, Block.STRIPPED_CRIMSON_STEM);
+  public static final BlockState STRIPPED_CRIMSON_STEM_2 = new BlockState(NamespaceID.from("minecraft:stripped_crimson_stem:2"), (short) 14988, Block.STRIPPED_CRIMSON_STEM, "axis=z");
 
   public static void initStates() {
     Block.STRIPPED_CRIMSON_STEM.addBlockState(STRIPPED_CRIMSON_STEM_0);

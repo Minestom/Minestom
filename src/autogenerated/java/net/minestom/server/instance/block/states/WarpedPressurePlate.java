@@ -13,9 +13,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WarpedPressurePlate {
-  public static final BlockState WARPED_PRESSURE_PLATE_0 = new BlockState(NamespaceID.from("minecraft:warped_pressure_plate:0"), (short) 15069, Block.WARPED_PRESSURE_PLATE);
+  public static final BlockState WARPED_PRESSURE_PLATE_0 = new BlockState(NamespaceID.from("minecraft:warped_pressure_plate:0"), (short) 15069, Block.WARPED_PRESSURE_PLATE, "powered=true");
 
-  public static final BlockState WARPED_PRESSURE_PLATE_1 = new BlockState(NamespaceID.from("minecraft:warped_pressure_plate:1"), (short) 15070, Block.WARPED_PRESSURE_PLATE);
+  public static final BlockState WARPED_PRESSURE_PLATE_1 = new BlockState(NamespaceID.from("minecraft:warped_pressure_plate:1"), (short) 15070, Block.WARPED_PRESSURE_PLATE, "powered=false");
 
   public static void initStates() {
     Block.WARPED_PRESSURE_PLATE.addBlockState(WARPED_PRESSURE_PLATE_0);

@@ -13,9 +13,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Tnt {
-  public static final BlockState TNT_0 = new BlockState(NamespaceID.from("minecraft:tnt:0"), (short) 1430, Block.TNT);
+  public static final BlockState TNT_0 = new BlockState(NamespaceID.from("minecraft:tnt:0"), (short) 1430, Block.TNT, "unstable=true");
 
-  public static final BlockState TNT_1 = new BlockState(NamespaceID.from("minecraft:tnt:1"), (short) 1431, Block.TNT);
+  public static final BlockState TNT_1 = new BlockState(NamespaceID.from("minecraft:tnt:1"), (short) 1431, Block.TNT, "unstable=false");
 
   public static void initStates() {
     Block.TNT.addBlockState(TNT_0);

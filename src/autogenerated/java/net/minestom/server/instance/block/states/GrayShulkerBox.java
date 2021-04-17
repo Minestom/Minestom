@@ -13,17 +13,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class GrayShulkerBox {
-  public static final BlockState GRAY_SHULKER_BOX_0 = new BlockState(NamespaceID.from("minecraft:gray_shulker_box:0"), (short) 9324, Block.GRAY_SHULKER_BOX);
+  public static final BlockState GRAY_SHULKER_BOX_0 = new BlockState(NamespaceID.from("minecraft:gray_shulker_box:0"), (short) 9324, Block.GRAY_SHULKER_BOX, "facing=north");
 
-  public static final BlockState GRAY_SHULKER_BOX_1 = new BlockState(NamespaceID.from("minecraft:gray_shulker_box:1"), (short) 9325, Block.GRAY_SHULKER_BOX);
+  public static final BlockState GRAY_SHULKER_BOX_1 = new BlockState(NamespaceID.from("minecraft:gray_shulker_box:1"), (short) 9325, Block.GRAY_SHULKER_BOX, "facing=east");
 
-  public static final BlockState GRAY_SHULKER_BOX_2 = new BlockState(NamespaceID.from("minecraft:gray_shulker_box:2"), (short) 9326, Block.GRAY_SHULKER_BOX);
+  public static final BlockState GRAY_SHULKER_BOX_2 = new BlockState(NamespaceID.from("minecraft:gray_shulker_box:2"), (short) 9326, Block.GRAY_SHULKER_BOX, "facing=south");
 
-  public static final BlockState GRAY_SHULKER_BOX_3 = new BlockState(NamespaceID.from("minecraft:gray_shulker_box:3"), (short) 9327, Block.GRAY_SHULKER_BOX);
+  public static final BlockState GRAY_SHULKER_BOX_3 = new BlockState(NamespaceID.from("minecraft:gray_shulker_box:3"), (short) 9327, Block.GRAY_SHULKER_BOX, "facing=west");
 
-  public static final BlockState GRAY_SHULKER_BOX_4 = new BlockState(NamespaceID.from("minecraft:gray_shulker_box:4"), (short) 9328, Block.GRAY_SHULKER_BOX);
+  public static final BlockState GRAY_SHULKER_BOX_4 = new BlockState(NamespaceID.from("minecraft:gray_shulker_box:4"), (short) 9328, Block.GRAY_SHULKER_BOX, "facing=up");
 
-  public static final BlockState GRAY_SHULKER_BOX_5 = new BlockState(NamespaceID.from("minecraft:gray_shulker_box:5"), (short) 9329, Block.GRAY_SHULKER_BOX);
+  public static final BlockState GRAY_SHULKER_BOX_5 = new BlockState(NamespaceID.from("minecraft:gray_shulker_box:5"), (short) 9329, Block.GRAY_SHULKER_BOX, "facing=down");
 
   public static void initStates() {
     Block.GRAY_SHULKER_BOX.addBlockState(GRAY_SHULKER_BOX_0);

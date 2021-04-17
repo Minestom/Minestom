@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class YellowGlazedTerracotta {
-  public static final BlockState YELLOW_GLAZED_TERRACOTTA_0 = new BlockState(NamespaceID.from("minecraft:yellow_glazed_terracotta:0"), (short) 9394, Block.YELLOW_GLAZED_TERRACOTTA);
+  public static final BlockState YELLOW_GLAZED_TERRACOTTA_0 = new BlockState(NamespaceID.from("minecraft:yellow_glazed_terracotta:0"), (short) 9394, Block.YELLOW_GLAZED_TERRACOTTA, "facing=north");
 
-  public static final BlockState YELLOW_GLAZED_TERRACOTTA_1 = new BlockState(NamespaceID.from("minecraft:yellow_glazed_terracotta:1"), (short) 9395, Block.YELLOW_GLAZED_TERRACOTTA);
+  public static final BlockState YELLOW_GLAZED_TERRACOTTA_1 = new BlockState(NamespaceID.from("minecraft:yellow_glazed_terracotta:1"), (short) 9395, Block.YELLOW_GLAZED_TERRACOTTA, "facing=south");
 
-  public static final BlockState YELLOW_GLAZED_TERRACOTTA_2 = new BlockState(NamespaceID.from("minecraft:yellow_glazed_terracotta:2"), (short) 9396, Block.YELLOW_GLAZED_TERRACOTTA);
+  public static final BlockState YELLOW_GLAZED_TERRACOTTA_2 = new BlockState(NamespaceID.from("minecraft:yellow_glazed_terracotta:2"), (short) 9396, Block.YELLOW_GLAZED_TERRACOTTA, "facing=west");
 
-  public static final BlockState YELLOW_GLAZED_TERRACOTTA_3 = new BlockState(NamespaceID.from("minecraft:yellow_glazed_terracotta:3"), (short) 9397, Block.YELLOW_GLAZED_TERRACOTTA);
+  public static final BlockState YELLOW_GLAZED_TERRACOTTA_3 = new BlockState(NamespaceID.from("minecraft:yellow_glazed_terracotta:3"), (short) 9397, Block.YELLOW_GLAZED_TERRACOTTA, "facing=east");
 
   public static void initStates() {
     Block.YELLOW_GLAZED_TERRACOTTA.addBlockState(YELLOW_GLAZED_TERRACOTTA_0);

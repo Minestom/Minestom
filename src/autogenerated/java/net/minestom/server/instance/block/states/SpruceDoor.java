@@ -13,133 +13,133 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SpruceDoor {
-  public static final BlockState SPRUCE_DOOR_0 = new BlockState(NamespaceID.from("minecraft:spruce_door:0"), (short) 8742, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_0 = new BlockState(NamespaceID.from("minecraft:spruce_door:0"), (short) 8742, Block.SPRUCE_DOOR, "facing=north","half=upper","hinge=left","open=true","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_1 = new BlockState(NamespaceID.from("minecraft:spruce_door:1"), (short) 8743, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_1 = new BlockState(NamespaceID.from("minecraft:spruce_door:1"), (short) 8743, Block.SPRUCE_DOOR, "facing=north","half=upper","hinge=left","open=true","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_2 = new BlockState(NamespaceID.from("minecraft:spruce_door:2"), (short) 8744, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_2 = new BlockState(NamespaceID.from("minecraft:spruce_door:2"), (short) 8744, Block.SPRUCE_DOOR, "facing=north","half=upper","hinge=left","open=false","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_3 = new BlockState(NamespaceID.from("minecraft:spruce_door:3"), (short) 8745, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_3 = new BlockState(NamespaceID.from("minecraft:spruce_door:3"), (short) 8745, Block.SPRUCE_DOOR, "facing=north","half=upper","hinge=left","open=false","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_4 = new BlockState(NamespaceID.from("minecraft:spruce_door:4"), (short) 8746, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_4 = new BlockState(NamespaceID.from("minecraft:spruce_door:4"), (short) 8746, Block.SPRUCE_DOOR, "facing=north","half=upper","hinge=right","open=true","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_5 = new BlockState(NamespaceID.from("minecraft:spruce_door:5"), (short) 8747, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_5 = new BlockState(NamespaceID.from("minecraft:spruce_door:5"), (short) 8747, Block.SPRUCE_DOOR, "facing=north","half=upper","hinge=right","open=true","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_6 = new BlockState(NamespaceID.from("minecraft:spruce_door:6"), (short) 8748, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_6 = new BlockState(NamespaceID.from("minecraft:spruce_door:6"), (short) 8748, Block.SPRUCE_DOOR, "facing=north","half=upper","hinge=right","open=false","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_7 = new BlockState(NamespaceID.from("minecraft:spruce_door:7"), (short) 8749, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_7 = new BlockState(NamespaceID.from("minecraft:spruce_door:7"), (short) 8749, Block.SPRUCE_DOOR, "facing=north","half=upper","hinge=right","open=false","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_8 = new BlockState(NamespaceID.from("minecraft:spruce_door:8"), (short) 8750, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_8 = new BlockState(NamespaceID.from("minecraft:spruce_door:8"), (short) 8750, Block.SPRUCE_DOOR, "facing=north","half=lower","hinge=left","open=true","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_9 = new BlockState(NamespaceID.from("minecraft:spruce_door:9"), (short) 8751, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_9 = new BlockState(NamespaceID.from("minecraft:spruce_door:9"), (short) 8751, Block.SPRUCE_DOOR, "facing=north","half=lower","hinge=left","open=true","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_10 = new BlockState(NamespaceID.from("minecraft:spruce_door:10"), (short) 8752, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_10 = new BlockState(NamespaceID.from("minecraft:spruce_door:10"), (short) 8752, Block.SPRUCE_DOOR, "facing=north","half=lower","hinge=left","open=false","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_11 = new BlockState(NamespaceID.from("minecraft:spruce_door:11"), (short) 8753, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_11 = new BlockState(NamespaceID.from("minecraft:spruce_door:11"), (short) 8753, Block.SPRUCE_DOOR, "facing=north","half=lower","hinge=left","open=false","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_12 = new BlockState(NamespaceID.from("minecraft:spruce_door:12"), (short) 8754, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_12 = new BlockState(NamespaceID.from("minecraft:spruce_door:12"), (short) 8754, Block.SPRUCE_DOOR, "facing=north","half=lower","hinge=right","open=true","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_13 = new BlockState(NamespaceID.from("minecraft:spruce_door:13"), (short) 8755, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_13 = new BlockState(NamespaceID.from("minecraft:spruce_door:13"), (short) 8755, Block.SPRUCE_DOOR, "facing=north","half=lower","hinge=right","open=true","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_14 = new BlockState(NamespaceID.from("minecraft:spruce_door:14"), (short) 8756, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_14 = new BlockState(NamespaceID.from("minecraft:spruce_door:14"), (short) 8756, Block.SPRUCE_DOOR, "facing=north","half=lower","hinge=right","open=false","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_15 = new BlockState(NamespaceID.from("minecraft:spruce_door:15"), (short) 8757, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_15 = new BlockState(NamespaceID.from("minecraft:spruce_door:15"), (short) 8757, Block.SPRUCE_DOOR, "facing=north","half=lower","hinge=right","open=false","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_16 = new BlockState(NamespaceID.from("minecraft:spruce_door:16"), (short) 8758, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_16 = new BlockState(NamespaceID.from("minecraft:spruce_door:16"), (short) 8758, Block.SPRUCE_DOOR, "facing=south","half=upper","hinge=left","open=true","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_17 = new BlockState(NamespaceID.from("minecraft:spruce_door:17"), (short) 8759, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_17 = new BlockState(NamespaceID.from("minecraft:spruce_door:17"), (short) 8759, Block.SPRUCE_DOOR, "facing=south","half=upper","hinge=left","open=true","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_18 = new BlockState(NamespaceID.from("minecraft:spruce_door:18"), (short) 8760, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_18 = new BlockState(NamespaceID.from("minecraft:spruce_door:18"), (short) 8760, Block.SPRUCE_DOOR, "facing=south","half=upper","hinge=left","open=false","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_19 = new BlockState(NamespaceID.from("minecraft:spruce_door:19"), (short) 8761, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_19 = new BlockState(NamespaceID.from("minecraft:spruce_door:19"), (short) 8761, Block.SPRUCE_DOOR, "facing=south","half=upper","hinge=left","open=false","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_20 = new BlockState(NamespaceID.from("minecraft:spruce_door:20"), (short) 8762, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_20 = new BlockState(NamespaceID.from("minecraft:spruce_door:20"), (short) 8762, Block.SPRUCE_DOOR, "facing=south","half=upper","hinge=right","open=true","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_21 = new BlockState(NamespaceID.from("minecraft:spruce_door:21"), (short) 8763, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_21 = new BlockState(NamespaceID.from("minecraft:spruce_door:21"), (short) 8763, Block.SPRUCE_DOOR, "facing=south","half=upper","hinge=right","open=true","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_22 = new BlockState(NamespaceID.from("minecraft:spruce_door:22"), (short) 8764, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_22 = new BlockState(NamespaceID.from("minecraft:spruce_door:22"), (short) 8764, Block.SPRUCE_DOOR, "facing=south","half=upper","hinge=right","open=false","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_23 = new BlockState(NamespaceID.from("minecraft:spruce_door:23"), (short) 8765, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_23 = new BlockState(NamespaceID.from("minecraft:spruce_door:23"), (short) 8765, Block.SPRUCE_DOOR, "facing=south","half=upper","hinge=right","open=false","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_24 = new BlockState(NamespaceID.from("minecraft:spruce_door:24"), (short) 8766, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_24 = new BlockState(NamespaceID.from("minecraft:spruce_door:24"), (short) 8766, Block.SPRUCE_DOOR, "facing=south","half=lower","hinge=left","open=true","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_25 = new BlockState(NamespaceID.from("minecraft:spruce_door:25"), (short) 8767, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_25 = new BlockState(NamespaceID.from("minecraft:spruce_door:25"), (short) 8767, Block.SPRUCE_DOOR, "facing=south","half=lower","hinge=left","open=true","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_26 = new BlockState(NamespaceID.from("minecraft:spruce_door:26"), (short) 8768, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_26 = new BlockState(NamespaceID.from("minecraft:spruce_door:26"), (short) 8768, Block.SPRUCE_DOOR, "facing=south","half=lower","hinge=left","open=false","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_27 = new BlockState(NamespaceID.from("minecraft:spruce_door:27"), (short) 8769, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_27 = new BlockState(NamespaceID.from("minecraft:spruce_door:27"), (short) 8769, Block.SPRUCE_DOOR, "facing=south","half=lower","hinge=left","open=false","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_28 = new BlockState(NamespaceID.from("minecraft:spruce_door:28"), (short) 8770, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_28 = new BlockState(NamespaceID.from("minecraft:spruce_door:28"), (short) 8770, Block.SPRUCE_DOOR, "facing=south","half=lower","hinge=right","open=true","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_29 = new BlockState(NamespaceID.from("minecraft:spruce_door:29"), (short) 8771, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_29 = new BlockState(NamespaceID.from("minecraft:spruce_door:29"), (short) 8771, Block.SPRUCE_DOOR, "facing=south","half=lower","hinge=right","open=true","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_30 = new BlockState(NamespaceID.from("minecraft:spruce_door:30"), (short) 8772, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_30 = new BlockState(NamespaceID.from("minecraft:spruce_door:30"), (short) 8772, Block.SPRUCE_DOOR, "facing=south","half=lower","hinge=right","open=false","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_31 = new BlockState(NamespaceID.from("minecraft:spruce_door:31"), (short) 8773, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_31 = new BlockState(NamespaceID.from("minecraft:spruce_door:31"), (short) 8773, Block.SPRUCE_DOOR, "facing=south","half=lower","hinge=right","open=false","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_32 = new BlockState(NamespaceID.from("minecraft:spruce_door:32"), (short) 8774, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_32 = new BlockState(NamespaceID.from("minecraft:spruce_door:32"), (short) 8774, Block.SPRUCE_DOOR, "facing=west","half=upper","hinge=left","open=true","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_33 = new BlockState(NamespaceID.from("minecraft:spruce_door:33"), (short) 8775, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_33 = new BlockState(NamespaceID.from("minecraft:spruce_door:33"), (short) 8775, Block.SPRUCE_DOOR, "facing=west","half=upper","hinge=left","open=true","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_34 = new BlockState(NamespaceID.from("minecraft:spruce_door:34"), (short) 8776, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_34 = new BlockState(NamespaceID.from("minecraft:spruce_door:34"), (short) 8776, Block.SPRUCE_DOOR, "facing=west","half=upper","hinge=left","open=false","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_35 = new BlockState(NamespaceID.from("minecraft:spruce_door:35"), (short) 8777, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_35 = new BlockState(NamespaceID.from("minecraft:spruce_door:35"), (short) 8777, Block.SPRUCE_DOOR, "facing=west","half=upper","hinge=left","open=false","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_36 = new BlockState(NamespaceID.from("minecraft:spruce_door:36"), (short) 8778, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_36 = new BlockState(NamespaceID.from("minecraft:spruce_door:36"), (short) 8778, Block.SPRUCE_DOOR, "facing=west","half=upper","hinge=right","open=true","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_37 = new BlockState(NamespaceID.from("minecraft:spruce_door:37"), (short) 8779, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_37 = new BlockState(NamespaceID.from("minecraft:spruce_door:37"), (short) 8779, Block.SPRUCE_DOOR, "facing=west","half=upper","hinge=right","open=true","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_38 = new BlockState(NamespaceID.from("minecraft:spruce_door:38"), (short) 8780, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_38 = new BlockState(NamespaceID.from("minecraft:spruce_door:38"), (short) 8780, Block.SPRUCE_DOOR, "facing=west","half=upper","hinge=right","open=false","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_39 = new BlockState(NamespaceID.from("minecraft:spruce_door:39"), (short) 8781, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_39 = new BlockState(NamespaceID.from("minecraft:spruce_door:39"), (short) 8781, Block.SPRUCE_DOOR, "facing=west","half=upper","hinge=right","open=false","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_40 = new BlockState(NamespaceID.from("minecraft:spruce_door:40"), (short) 8782, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_40 = new BlockState(NamespaceID.from("minecraft:spruce_door:40"), (short) 8782, Block.SPRUCE_DOOR, "facing=west","half=lower","hinge=left","open=true","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_41 = new BlockState(NamespaceID.from("minecraft:spruce_door:41"), (short) 8783, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_41 = new BlockState(NamespaceID.from("minecraft:spruce_door:41"), (short) 8783, Block.SPRUCE_DOOR, "facing=west","half=lower","hinge=left","open=true","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_42 = new BlockState(NamespaceID.from("minecraft:spruce_door:42"), (short) 8784, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_42 = new BlockState(NamespaceID.from("minecraft:spruce_door:42"), (short) 8784, Block.SPRUCE_DOOR, "facing=west","half=lower","hinge=left","open=false","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_43 = new BlockState(NamespaceID.from("minecraft:spruce_door:43"), (short) 8785, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_43 = new BlockState(NamespaceID.from("minecraft:spruce_door:43"), (short) 8785, Block.SPRUCE_DOOR, "facing=west","half=lower","hinge=left","open=false","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_44 = new BlockState(NamespaceID.from("minecraft:spruce_door:44"), (short) 8786, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_44 = new BlockState(NamespaceID.from("minecraft:spruce_door:44"), (short) 8786, Block.SPRUCE_DOOR, "facing=west","half=lower","hinge=right","open=true","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_45 = new BlockState(NamespaceID.from("minecraft:spruce_door:45"), (short) 8787, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_45 = new BlockState(NamespaceID.from("minecraft:spruce_door:45"), (short) 8787, Block.SPRUCE_DOOR, "facing=west","half=lower","hinge=right","open=true","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_46 = new BlockState(NamespaceID.from("minecraft:spruce_door:46"), (short) 8788, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_46 = new BlockState(NamespaceID.from("minecraft:spruce_door:46"), (short) 8788, Block.SPRUCE_DOOR, "facing=west","half=lower","hinge=right","open=false","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_47 = new BlockState(NamespaceID.from("minecraft:spruce_door:47"), (short) 8789, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_47 = new BlockState(NamespaceID.from("minecraft:spruce_door:47"), (short) 8789, Block.SPRUCE_DOOR, "facing=west","half=lower","hinge=right","open=false","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_48 = new BlockState(NamespaceID.from("minecraft:spruce_door:48"), (short) 8790, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_48 = new BlockState(NamespaceID.from("minecraft:spruce_door:48"), (short) 8790, Block.SPRUCE_DOOR, "facing=east","half=upper","hinge=left","open=true","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_49 = new BlockState(NamespaceID.from("minecraft:spruce_door:49"), (short) 8791, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_49 = new BlockState(NamespaceID.from("minecraft:spruce_door:49"), (short) 8791, Block.SPRUCE_DOOR, "facing=east","half=upper","hinge=left","open=true","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_50 = new BlockState(NamespaceID.from("minecraft:spruce_door:50"), (short) 8792, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_50 = new BlockState(NamespaceID.from("minecraft:spruce_door:50"), (short) 8792, Block.SPRUCE_DOOR, "facing=east","half=upper","hinge=left","open=false","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_51 = new BlockState(NamespaceID.from("minecraft:spruce_door:51"), (short) 8793, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_51 = new BlockState(NamespaceID.from("minecraft:spruce_door:51"), (short) 8793, Block.SPRUCE_DOOR, "facing=east","half=upper","hinge=left","open=false","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_52 = new BlockState(NamespaceID.from("minecraft:spruce_door:52"), (short) 8794, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_52 = new BlockState(NamespaceID.from("minecraft:spruce_door:52"), (short) 8794, Block.SPRUCE_DOOR, "facing=east","half=upper","hinge=right","open=true","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_53 = new BlockState(NamespaceID.from("minecraft:spruce_door:53"), (short) 8795, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_53 = new BlockState(NamespaceID.from("minecraft:spruce_door:53"), (short) 8795, Block.SPRUCE_DOOR, "facing=east","half=upper","hinge=right","open=true","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_54 = new BlockState(NamespaceID.from("minecraft:spruce_door:54"), (short) 8796, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_54 = new BlockState(NamespaceID.from("minecraft:spruce_door:54"), (short) 8796, Block.SPRUCE_DOOR, "facing=east","half=upper","hinge=right","open=false","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_55 = new BlockState(NamespaceID.from("minecraft:spruce_door:55"), (short) 8797, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_55 = new BlockState(NamespaceID.from("minecraft:spruce_door:55"), (short) 8797, Block.SPRUCE_DOOR, "facing=east","half=upper","hinge=right","open=false","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_56 = new BlockState(NamespaceID.from("minecraft:spruce_door:56"), (short) 8798, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_56 = new BlockState(NamespaceID.from("minecraft:spruce_door:56"), (short) 8798, Block.SPRUCE_DOOR, "facing=east","half=lower","hinge=left","open=true","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_57 = new BlockState(NamespaceID.from("minecraft:spruce_door:57"), (short) 8799, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_57 = new BlockState(NamespaceID.from("minecraft:spruce_door:57"), (short) 8799, Block.SPRUCE_DOOR, "facing=east","half=lower","hinge=left","open=true","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_58 = new BlockState(NamespaceID.from("minecraft:spruce_door:58"), (short) 8800, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_58 = new BlockState(NamespaceID.from("minecraft:spruce_door:58"), (short) 8800, Block.SPRUCE_DOOR, "facing=east","half=lower","hinge=left","open=false","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_59 = new BlockState(NamespaceID.from("minecraft:spruce_door:59"), (short) 8801, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_59 = new BlockState(NamespaceID.from("minecraft:spruce_door:59"), (short) 8801, Block.SPRUCE_DOOR, "facing=east","half=lower","hinge=left","open=false","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_60 = new BlockState(NamespaceID.from("minecraft:spruce_door:60"), (short) 8802, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_60 = new BlockState(NamespaceID.from("minecraft:spruce_door:60"), (short) 8802, Block.SPRUCE_DOOR, "facing=east","half=lower","hinge=right","open=true","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_61 = new BlockState(NamespaceID.from("minecraft:spruce_door:61"), (short) 8803, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_61 = new BlockState(NamespaceID.from("minecraft:spruce_door:61"), (short) 8803, Block.SPRUCE_DOOR, "facing=east","half=lower","hinge=right","open=true","powered=false");
 
-  public static final BlockState SPRUCE_DOOR_62 = new BlockState(NamespaceID.from("minecraft:spruce_door:62"), (short) 8804, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_62 = new BlockState(NamespaceID.from("minecraft:spruce_door:62"), (short) 8804, Block.SPRUCE_DOOR, "facing=east","half=lower","hinge=right","open=false","powered=true");
 
-  public static final BlockState SPRUCE_DOOR_63 = new BlockState(NamespaceID.from("minecraft:spruce_door:63"), (short) 8805, Block.SPRUCE_DOOR);
+  public static final BlockState SPRUCE_DOOR_63 = new BlockState(NamespaceID.from("minecraft:spruce_door:63"), (short) 8805, Block.SPRUCE_DOOR, "facing=east","half=lower","hinge=right","open=false","powered=false");
 
   public static void initStates() {
     Block.SPRUCE_DOOR.addBlockState(SPRUCE_DOOR_0);

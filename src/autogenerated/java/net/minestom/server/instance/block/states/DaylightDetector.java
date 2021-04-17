@@ -13,69 +13,69 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DaylightDetector {
-  public static final BlockState DAYLIGHT_DETECTOR_0 = new BlockState(NamespaceID.from("minecraft:daylight_detector:0"), (short) 6698, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_0 = new BlockState(NamespaceID.from("minecraft:daylight_detector:0"), (short) 6698, Block.DAYLIGHT_DETECTOR, "inverted=true","power=0");
 
-  public static final BlockState DAYLIGHT_DETECTOR_1 = new BlockState(NamespaceID.from("minecraft:daylight_detector:1"), (short) 6699, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_1 = new BlockState(NamespaceID.from("minecraft:daylight_detector:1"), (short) 6699, Block.DAYLIGHT_DETECTOR, "inverted=true","power=1");
 
-  public static final BlockState DAYLIGHT_DETECTOR_2 = new BlockState(NamespaceID.from("minecraft:daylight_detector:2"), (short) 6700, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_2 = new BlockState(NamespaceID.from("minecraft:daylight_detector:2"), (short) 6700, Block.DAYLIGHT_DETECTOR, "inverted=true","power=2");
 
-  public static final BlockState DAYLIGHT_DETECTOR_3 = new BlockState(NamespaceID.from("minecraft:daylight_detector:3"), (short) 6701, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_3 = new BlockState(NamespaceID.from("minecraft:daylight_detector:3"), (short) 6701, Block.DAYLIGHT_DETECTOR, "inverted=true","power=3");
 
-  public static final BlockState DAYLIGHT_DETECTOR_4 = new BlockState(NamespaceID.from("minecraft:daylight_detector:4"), (short) 6702, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_4 = new BlockState(NamespaceID.from("minecraft:daylight_detector:4"), (short) 6702, Block.DAYLIGHT_DETECTOR, "inverted=true","power=4");
 
-  public static final BlockState DAYLIGHT_DETECTOR_5 = new BlockState(NamespaceID.from("minecraft:daylight_detector:5"), (short) 6703, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_5 = new BlockState(NamespaceID.from("minecraft:daylight_detector:5"), (short) 6703, Block.DAYLIGHT_DETECTOR, "inverted=true","power=5");
 
-  public static final BlockState DAYLIGHT_DETECTOR_6 = new BlockState(NamespaceID.from("minecraft:daylight_detector:6"), (short) 6704, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_6 = new BlockState(NamespaceID.from("minecraft:daylight_detector:6"), (short) 6704, Block.DAYLIGHT_DETECTOR, "inverted=true","power=6");
 
-  public static final BlockState DAYLIGHT_DETECTOR_7 = new BlockState(NamespaceID.from("minecraft:daylight_detector:7"), (short) 6705, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_7 = new BlockState(NamespaceID.from("minecraft:daylight_detector:7"), (short) 6705, Block.DAYLIGHT_DETECTOR, "inverted=true","power=7");
 
-  public static final BlockState DAYLIGHT_DETECTOR_8 = new BlockState(NamespaceID.from("minecraft:daylight_detector:8"), (short) 6706, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_8 = new BlockState(NamespaceID.from("minecraft:daylight_detector:8"), (short) 6706, Block.DAYLIGHT_DETECTOR, "inverted=true","power=8");
 
-  public static final BlockState DAYLIGHT_DETECTOR_9 = new BlockState(NamespaceID.from("minecraft:daylight_detector:9"), (short) 6707, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_9 = new BlockState(NamespaceID.from("minecraft:daylight_detector:9"), (short) 6707, Block.DAYLIGHT_DETECTOR, "inverted=true","power=9");
 
-  public static final BlockState DAYLIGHT_DETECTOR_10 = new BlockState(NamespaceID.from("minecraft:daylight_detector:10"), (short) 6708, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_10 = new BlockState(NamespaceID.from("minecraft:daylight_detector:10"), (short) 6708, Block.DAYLIGHT_DETECTOR, "inverted=true","power=10");
 
-  public static final BlockState DAYLIGHT_DETECTOR_11 = new BlockState(NamespaceID.from("minecraft:daylight_detector:11"), (short) 6709, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_11 = new BlockState(NamespaceID.from("minecraft:daylight_detector:11"), (short) 6709, Block.DAYLIGHT_DETECTOR, "inverted=true","power=11");
 
-  public static final BlockState DAYLIGHT_DETECTOR_12 = new BlockState(NamespaceID.from("minecraft:daylight_detector:12"), (short) 6710, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_12 = new BlockState(NamespaceID.from("minecraft:daylight_detector:12"), (short) 6710, Block.DAYLIGHT_DETECTOR, "inverted=true","power=12");
 
-  public static final BlockState DAYLIGHT_DETECTOR_13 = new BlockState(NamespaceID.from("minecraft:daylight_detector:13"), (short) 6711, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_13 = new BlockState(NamespaceID.from("minecraft:daylight_detector:13"), (short) 6711, Block.DAYLIGHT_DETECTOR, "inverted=true","power=13");
 
-  public static final BlockState DAYLIGHT_DETECTOR_14 = new BlockState(NamespaceID.from("minecraft:daylight_detector:14"), (short) 6712, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_14 = new BlockState(NamespaceID.from("minecraft:daylight_detector:14"), (short) 6712, Block.DAYLIGHT_DETECTOR, "inverted=true","power=14");
 
-  public static final BlockState DAYLIGHT_DETECTOR_15 = new BlockState(NamespaceID.from("minecraft:daylight_detector:15"), (short) 6713, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_15 = new BlockState(NamespaceID.from("minecraft:daylight_detector:15"), (short) 6713, Block.DAYLIGHT_DETECTOR, "inverted=true","power=15");
 
-  public static final BlockState DAYLIGHT_DETECTOR_16 = new BlockState(NamespaceID.from("minecraft:daylight_detector:16"), (short) 6714, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_16 = new BlockState(NamespaceID.from("minecraft:daylight_detector:16"), (short) 6714, Block.DAYLIGHT_DETECTOR, "inverted=false","power=0");
 
-  public static final BlockState DAYLIGHT_DETECTOR_17 = new BlockState(NamespaceID.from("minecraft:daylight_detector:17"), (short) 6715, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_17 = new BlockState(NamespaceID.from("minecraft:daylight_detector:17"), (short) 6715, Block.DAYLIGHT_DETECTOR, "inverted=false","power=1");
 
-  public static final BlockState DAYLIGHT_DETECTOR_18 = new BlockState(NamespaceID.from("minecraft:daylight_detector:18"), (short) 6716, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_18 = new BlockState(NamespaceID.from("minecraft:daylight_detector:18"), (short) 6716, Block.DAYLIGHT_DETECTOR, "inverted=false","power=2");
 
-  public static final BlockState DAYLIGHT_DETECTOR_19 = new BlockState(NamespaceID.from("minecraft:daylight_detector:19"), (short) 6717, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_19 = new BlockState(NamespaceID.from("minecraft:daylight_detector:19"), (short) 6717, Block.DAYLIGHT_DETECTOR, "inverted=false","power=3");
 
-  public static final BlockState DAYLIGHT_DETECTOR_20 = new BlockState(NamespaceID.from("minecraft:daylight_detector:20"), (short) 6718, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_20 = new BlockState(NamespaceID.from("minecraft:daylight_detector:20"), (short) 6718, Block.DAYLIGHT_DETECTOR, "inverted=false","power=4");
 
-  public static final BlockState DAYLIGHT_DETECTOR_21 = new BlockState(NamespaceID.from("minecraft:daylight_detector:21"), (short) 6719, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_21 = new BlockState(NamespaceID.from("minecraft:daylight_detector:21"), (short) 6719, Block.DAYLIGHT_DETECTOR, "inverted=false","power=5");
 
-  public static final BlockState DAYLIGHT_DETECTOR_22 = new BlockState(NamespaceID.from("minecraft:daylight_detector:22"), (short) 6720, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_22 = new BlockState(NamespaceID.from("minecraft:daylight_detector:22"), (short) 6720, Block.DAYLIGHT_DETECTOR, "inverted=false","power=6");
 
-  public static final BlockState DAYLIGHT_DETECTOR_23 = new BlockState(NamespaceID.from("minecraft:daylight_detector:23"), (short) 6721, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_23 = new BlockState(NamespaceID.from("minecraft:daylight_detector:23"), (short) 6721, Block.DAYLIGHT_DETECTOR, "inverted=false","power=7");
 
-  public static final BlockState DAYLIGHT_DETECTOR_24 = new BlockState(NamespaceID.from("minecraft:daylight_detector:24"), (short) 6722, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_24 = new BlockState(NamespaceID.from("minecraft:daylight_detector:24"), (short) 6722, Block.DAYLIGHT_DETECTOR, "inverted=false","power=8");
 
-  public static final BlockState DAYLIGHT_DETECTOR_25 = new BlockState(NamespaceID.from("minecraft:daylight_detector:25"), (short) 6723, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_25 = new BlockState(NamespaceID.from("minecraft:daylight_detector:25"), (short) 6723, Block.DAYLIGHT_DETECTOR, "inverted=false","power=9");
 
-  public static final BlockState DAYLIGHT_DETECTOR_26 = new BlockState(NamespaceID.from("minecraft:daylight_detector:26"), (short) 6724, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_26 = new BlockState(NamespaceID.from("minecraft:daylight_detector:26"), (short) 6724, Block.DAYLIGHT_DETECTOR, "inverted=false","power=10");
 
-  public static final BlockState DAYLIGHT_DETECTOR_27 = new BlockState(NamespaceID.from("minecraft:daylight_detector:27"), (short) 6725, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_27 = new BlockState(NamespaceID.from("minecraft:daylight_detector:27"), (short) 6725, Block.DAYLIGHT_DETECTOR, "inverted=false","power=11");
 
-  public static final BlockState DAYLIGHT_DETECTOR_28 = new BlockState(NamespaceID.from("minecraft:daylight_detector:28"), (short) 6726, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_28 = new BlockState(NamespaceID.from("minecraft:daylight_detector:28"), (short) 6726, Block.DAYLIGHT_DETECTOR, "inverted=false","power=12");
 
-  public static final BlockState DAYLIGHT_DETECTOR_29 = new BlockState(NamespaceID.from("minecraft:daylight_detector:29"), (short) 6727, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_29 = new BlockState(NamespaceID.from("minecraft:daylight_detector:29"), (short) 6727, Block.DAYLIGHT_DETECTOR, "inverted=false","power=13");
 
-  public static final BlockState DAYLIGHT_DETECTOR_30 = new BlockState(NamespaceID.from("minecraft:daylight_detector:30"), (short) 6728, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_30 = new BlockState(NamespaceID.from("minecraft:daylight_detector:30"), (short) 6728, Block.DAYLIGHT_DETECTOR, "inverted=false","power=14");
 
-  public static final BlockState DAYLIGHT_DETECTOR_31 = new BlockState(NamespaceID.from("minecraft:daylight_detector:31"), (short) 6729, Block.DAYLIGHT_DETECTOR);
+  public static final BlockState DAYLIGHT_DETECTOR_31 = new BlockState(NamespaceID.from("minecraft:daylight_detector:31"), (short) 6729, Block.DAYLIGHT_DETECTOR, "inverted=false","power=15");
 
   public static void initStates() {
     Block.DAYLIGHT_DETECTOR.addBlockState(DAYLIGHT_DETECTOR_0);

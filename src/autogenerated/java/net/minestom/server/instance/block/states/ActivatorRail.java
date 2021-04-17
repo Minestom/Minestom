@@ -13,29 +13,29 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class ActivatorRail {
-  public static final BlockState ACTIVATOR_RAIL_0 = new BlockState(NamespaceID.from("minecraft:activator_rail:0"), (short) 6827, Block.ACTIVATOR_RAIL);
+  public static final BlockState ACTIVATOR_RAIL_0 = new BlockState(NamespaceID.from("minecraft:activator_rail:0"), (short) 6827, Block.ACTIVATOR_RAIL, "powered=true","shape=north_south");
 
-  public static final BlockState ACTIVATOR_RAIL_1 = new BlockState(NamespaceID.from("minecraft:activator_rail:1"), (short) 6828, Block.ACTIVATOR_RAIL);
+  public static final BlockState ACTIVATOR_RAIL_1 = new BlockState(NamespaceID.from("minecraft:activator_rail:1"), (short) 6828, Block.ACTIVATOR_RAIL, "powered=true","shape=east_west");
 
-  public static final BlockState ACTIVATOR_RAIL_2 = new BlockState(NamespaceID.from("minecraft:activator_rail:2"), (short) 6829, Block.ACTIVATOR_RAIL);
+  public static final BlockState ACTIVATOR_RAIL_2 = new BlockState(NamespaceID.from("minecraft:activator_rail:2"), (short) 6829, Block.ACTIVATOR_RAIL, "powered=true","shape=ascending_east");
 
-  public static final BlockState ACTIVATOR_RAIL_3 = new BlockState(NamespaceID.from("minecraft:activator_rail:3"), (short) 6830, Block.ACTIVATOR_RAIL);
+  public static final BlockState ACTIVATOR_RAIL_3 = new BlockState(NamespaceID.from("minecraft:activator_rail:3"), (short) 6830, Block.ACTIVATOR_RAIL, "powered=true","shape=ascending_west");
 
-  public static final BlockState ACTIVATOR_RAIL_4 = new BlockState(NamespaceID.from("minecraft:activator_rail:4"), (short) 6831, Block.ACTIVATOR_RAIL);
+  public static final BlockState ACTIVATOR_RAIL_4 = new BlockState(NamespaceID.from("minecraft:activator_rail:4"), (short) 6831, Block.ACTIVATOR_RAIL, "powered=true","shape=ascending_north");
 
-  public static final BlockState ACTIVATOR_RAIL_5 = new BlockState(NamespaceID.from("minecraft:activator_rail:5"), (short) 6832, Block.ACTIVATOR_RAIL);
+  public static final BlockState ACTIVATOR_RAIL_5 = new BlockState(NamespaceID.from("minecraft:activator_rail:5"), (short) 6832, Block.ACTIVATOR_RAIL, "powered=true","shape=ascending_south");
 
-  public static final BlockState ACTIVATOR_RAIL_6 = new BlockState(NamespaceID.from("minecraft:activator_rail:6"), (short) 6833, Block.ACTIVATOR_RAIL);
+  public static final BlockState ACTIVATOR_RAIL_6 = new BlockState(NamespaceID.from("minecraft:activator_rail:6"), (short) 6833, Block.ACTIVATOR_RAIL, "powered=false","shape=north_south");
 
-  public static final BlockState ACTIVATOR_RAIL_7 = new BlockState(NamespaceID.from("minecraft:activator_rail:7"), (short) 6834, Block.ACTIVATOR_RAIL);
+  public static final BlockState ACTIVATOR_RAIL_7 = new BlockState(NamespaceID.from("minecraft:activator_rail:7"), (short) 6834, Block.ACTIVATOR_RAIL, "powered=false","shape=east_west");
 
-  public static final BlockState ACTIVATOR_RAIL_8 = new BlockState(NamespaceID.from("minecraft:activator_rail:8"), (short) 6835, Block.ACTIVATOR_RAIL);
+  public static final BlockState ACTIVATOR_RAIL_8 = new BlockState(NamespaceID.from("minecraft:activator_rail:8"), (short) 6835, Block.ACTIVATOR_RAIL, "powered=false","shape=ascending_east");
 
-  public static final BlockState ACTIVATOR_RAIL_9 = new BlockState(NamespaceID.from("minecraft:activator_rail:9"), (short) 6836, Block.ACTIVATOR_RAIL);
+  public static final BlockState ACTIVATOR_RAIL_9 = new BlockState(NamespaceID.from("minecraft:activator_rail:9"), (short) 6836, Block.ACTIVATOR_RAIL, "powered=false","shape=ascending_west");
 
-  public static final BlockState ACTIVATOR_RAIL_10 = new BlockState(NamespaceID.from("minecraft:activator_rail:10"), (short) 6837, Block.ACTIVATOR_RAIL);
+  public static final BlockState ACTIVATOR_RAIL_10 = new BlockState(NamespaceID.from("minecraft:activator_rail:10"), (short) 6837, Block.ACTIVATOR_RAIL, "powered=false","shape=ascending_north");
 
-  public static final BlockState ACTIVATOR_RAIL_11 = new BlockState(NamespaceID.from("minecraft:activator_rail:11"), (short) 6838, Block.ACTIVATOR_RAIL);
+  public static final BlockState ACTIVATOR_RAIL_11 = new BlockState(NamespaceID.from("minecraft:activator_rail:11"), (short) 6838, Block.ACTIVATOR_RAIL, "powered=false","shape=ascending_south");
 
   public static void initStates() {
     Block.ACTIVATOR_RAIL.addBlockState(ACTIVATOR_RAIL_0);

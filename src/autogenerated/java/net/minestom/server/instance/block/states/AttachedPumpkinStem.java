@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class AttachedPumpkinStem {
-  public static final BlockState ATTACHED_PUMPKIN_STEM_0 = new BlockState(NamespaceID.from("minecraft:attached_pumpkin_stem:0"), (short) 4768, Block.ATTACHED_PUMPKIN_STEM);
+  public static final BlockState ATTACHED_PUMPKIN_STEM_0 = new BlockState(NamespaceID.from("minecraft:attached_pumpkin_stem:0"), (short) 4768, Block.ATTACHED_PUMPKIN_STEM, "facing=north");
 
-  public static final BlockState ATTACHED_PUMPKIN_STEM_1 = new BlockState(NamespaceID.from("minecraft:attached_pumpkin_stem:1"), (short) 4769, Block.ATTACHED_PUMPKIN_STEM);
+  public static final BlockState ATTACHED_PUMPKIN_STEM_1 = new BlockState(NamespaceID.from("minecraft:attached_pumpkin_stem:1"), (short) 4769, Block.ATTACHED_PUMPKIN_STEM, "facing=south");
 
-  public static final BlockState ATTACHED_PUMPKIN_STEM_2 = new BlockState(NamespaceID.from("minecraft:attached_pumpkin_stem:2"), (short) 4770, Block.ATTACHED_PUMPKIN_STEM);
+  public static final BlockState ATTACHED_PUMPKIN_STEM_2 = new BlockState(NamespaceID.from("minecraft:attached_pumpkin_stem:2"), (short) 4770, Block.ATTACHED_PUMPKIN_STEM, "facing=west");
 
-  public static final BlockState ATTACHED_PUMPKIN_STEM_3 = new BlockState(NamespaceID.from("minecraft:attached_pumpkin_stem:3"), (short) 4771, Block.ATTACHED_PUMPKIN_STEM);
+  public static final BlockState ATTACHED_PUMPKIN_STEM_3 = new BlockState(NamespaceID.from("minecraft:attached_pumpkin_stem:3"), (short) 4771, Block.ATTACHED_PUMPKIN_STEM, "facing=east");
 
   public static void initStates() {
     Block.ATTACHED_PUMPKIN_STEM.addBlockState(ATTACHED_PUMPKIN_STEM_0);

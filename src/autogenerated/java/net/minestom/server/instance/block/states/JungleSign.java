@@ -13,69 +13,69 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class JungleSign {
-  public static final BlockState JUNGLE_SIGN_0 = new BlockState(NamespaceID.from("minecraft:jungle_sign:0"), (short) 3509, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_0 = new BlockState(NamespaceID.from("minecraft:jungle_sign:0"), (short) 3509, Block.JUNGLE_SIGN, "rotation=0","waterlogged=true");
 
-  public static final BlockState JUNGLE_SIGN_1 = new BlockState(NamespaceID.from("minecraft:jungle_sign:1"), (short) 3510, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_1 = new BlockState(NamespaceID.from("minecraft:jungle_sign:1"), (short) 3510, Block.JUNGLE_SIGN, "rotation=0","waterlogged=false");
 
-  public static final BlockState JUNGLE_SIGN_2 = new BlockState(NamespaceID.from("minecraft:jungle_sign:2"), (short) 3511, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_2 = new BlockState(NamespaceID.from("minecraft:jungle_sign:2"), (short) 3511, Block.JUNGLE_SIGN, "rotation=1","waterlogged=true");
 
-  public static final BlockState JUNGLE_SIGN_3 = new BlockState(NamespaceID.from("minecraft:jungle_sign:3"), (short) 3512, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_3 = new BlockState(NamespaceID.from("minecraft:jungle_sign:3"), (short) 3512, Block.JUNGLE_SIGN, "rotation=1","waterlogged=false");
 
-  public static final BlockState JUNGLE_SIGN_4 = new BlockState(NamespaceID.from("minecraft:jungle_sign:4"), (short) 3513, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_4 = new BlockState(NamespaceID.from("minecraft:jungle_sign:4"), (short) 3513, Block.JUNGLE_SIGN, "rotation=2","waterlogged=true");
 
-  public static final BlockState JUNGLE_SIGN_5 = new BlockState(NamespaceID.from("minecraft:jungle_sign:5"), (short) 3514, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_5 = new BlockState(NamespaceID.from("minecraft:jungle_sign:5"), (short) 3514, Block.JUNGLE_SIGN, "rotation=2","waterlogged=false");
 
-  public static final BlockState JUNGLE_SIGN_6 = new BlockState(NamespaceID.from("minecraft:jungle_sign:6"), (short) 3515, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_6 = new BlockState(NamespaceID.from("minecraft:jungle_sign:6"), (short) 3515, Block.JUNGLE_SIGN, "rotation=3","waterlogged=true");
 
-  public static final BlockState JUNGLE_SIGN_7 = new BlockState(NamespaceID.from("minecraft:jungle_sign:7"), (short) 3516, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_7 = new BlockState(NamespaceID.from("minecraft:jungle_sign:7"), (short) 3516, Block.JUNGLE_SIGN, "rotation=3","waterlogged=false");
 
-  public static final BlockState JUNGLE_SIGN_8 = new BlockState(NamespaceID.from("minecraft:jungle_sign:8"), (short) 3517, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_8 = new BlockState(NamespaceID.from("minecraft:jungle_sign:8"), (short) 3517, Block.JUNGLE_SIGN, "rotation=4","waterlogged=true");
 
-  public static final BlockState JUNGLE_SIGN_9 = new BlockState(NamespaceID.from("minecraft:jungle_sign:9"), (short) 3518, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_9 = new BlockState(NamespaceID.from("minecraft:jungle_sign:9"), (short) 3518, Block.JUNGLE_SIGN, "rotation=4","waterlogged=false");
 
-  public static final BlockState JUNGLE_SIGN_10 = new BlockState(NamespaceID.from("minecraft:jungle_sign:10"), (short) 3519, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_10 = new BlockState(NamespaceID.from("minecraft:jungle_sign:10"), (short) 3519, Block.JUNGLE_SIGN, "rotation=5","waterlogged=true");
 
-  public static final BlockState JUNGLE_SIGN_11 = new BlockState(NamespaceID.from("minecraft:jungle_sign:11"), (short) 3520, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_11 = new BlockState(NamespaceID.from("minecraft:jungle_sign:11"), (short) 3520, Block.JUNGLE_SIGN, "rotation=5","waterlogged=false");
 
-  public static final BlockState JUNGLE_SIGN_12 = new BlockState(NamespaceID.from("minecraft:jungle_sign:12"), (short) 3521, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_12 = new BlockState(NamespaceID.from("minecraft:jungle_sign:12"), (short) 3521, Block.JUNGLE_SIGN, "rotation=6","waterlogged=true");
 
-  public static final BlockState JUNGLE_SIGN_13 = new BlockState(NamespaceID.from("minecraft:jungle_sign:13"), (short) 3522, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_13 = new BlockState(NamespaceID.from("minecraft:jungle_sign:13"), (short) 3522, Block.JUNGLE_SIGN, "rotation=6","waterlogged=false");
 
-  public static final BlockState JUNGLE_SIGN_14 = new BlockState(NamespaceID.from("minecraft:jungle_sign:14"), (short) 3523, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_14 = new BlockState(NamespaceID.from("minecraft:jungle_sign:14"), (short) 3523, Block.JUNGLE_SIGN, "rotation=7","waterlogged=true");
 
-  public static final BlockState JUNGLE_SIGN_15 = new BlockState(NamespaceID.from("minecraft:jungle_sign:15"), (short) 3524, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_15 = new BlockState(NamespaceID.from("minecraft:jungle_sign:15"), (short) 3524, Block.JUNGLE_SIGN, "rotation=7","waterlogged=false");
 
-  public static final BlockState JUNGLE_SIGN_16 = new BlockState(NamespaceID.from("minecraft:jungle_sign:16"), (short) 3525, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_16 = new BlockState(NamespaceID.from("minecraft:jungle_sign:16"), (short) 3525, Block.JUNGLE_SIGN, "rotation=8","waterlogged=true");
 
-  public static final BlockState JUNGLE_SIGN_17 = new BlockState(NamespaceID.from("minecraft:jungle_sign:17"), (short) 3526, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_17 = new BlockState(NamespaceID.from("minecraft:jungle_sign:17"), (short) 3526, Block.JUNGLE_SIGN, "rotation=8","waterlogged=false");
 
-  public static final BlockState JUNGLE_SIGN_18 = new BlockState(NamespaceID.from("minecraft:jungle_sign:18"), (short) 3527, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_18 = new BlockState(NamespaceID.from("minecraft:jungle_sign:18"), (short) 3527, Block.JUNGLE_SIGN, "rotation=9","waterlogged=true");
 
-  public static final BlockState JUNGLE_SIGN_19 = new BlockState(NamespaceID.from("minecraft:jungle_sign:19"), (short) 3528, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_19 = new BlockState(NamespaceID.from("minecraft:jungle_sign:19"), (short) 3528, Block.JUNGLE_SIGN, "rotation=9","waterlogged=false");
 
-  public static final BlockState JUNGLE_SIGN_20 = new BlockState(NamespaceID.from("minecraft:jungle_sign:20"), (short) 3529, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_20 = new BlockState(NamespaceID.from("minecraft:jungle_sign:20"), (short) 3529, Block.JUNGLE_SIGN, "rotation=10","waterlogged=true");
 
-  public static final BlockState JUNGLE_SIGN_21 = new BlockState(NamespaceID.from("minecraft:jungle_sign:21"), (short) 3530, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_21 = new BlockState(NamespaceID.from("minecraft:jungle_sign:21"), (short) 3530, Block.JUNGLE_SIGN, "rotation=10","waterlogged=false");
 
-  public static final BlockState JUNGLE_SIGN_22 = new BlockState(NamespaceID.from("minecraft:jungle_sign:22"), (short) 3531, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_22 = new BlockState(NamespaceID.from("minecraft:jungle_sign:22"), (short) 3531, Block.JUNGLE_SIGN, "rotation=11","waterlogged=true");
 
-  public static final BlockState JUNGLE_SIGN_23 = new BlockState(NamespaceID.from("minecraft:jungle_sign:23"), (short) 3532, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_23 = new BlockState(NamespaceID.from("minecraft:jungle_sign:23"), (short) 3532, Block.JUNGLE_SIGN, "rotation=11","waterlogged=false");
 
-  public static final BlockState JUNGLE_SIGN_24 = new BlockState(NamespaceID.from("minecraft:jungle_sign:24"), (short) 3533, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_24 = new BlockState(NamespaceID.from("minecraft:jungle_sign:24"), (short) 3533, Block.JUNGLE_SIGN, "rotation=12","waterlogged=true");
 
-  public static final BlockState JUNGLE_SIGN_25 = new BlockState(NamespaceID.from("minecraft:jungle_sign:25"), (short) 3534, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_25 = new BlockState(NamespaceID.from("minecraft:jungle_sign:25"), (short) 3534, Block.JUNGLE_SIGN, "rotation=12","waterlogged=false");
 
-  public static final BlockState JUNGLE_SIGN_26 = new BlockState(NamespaceID.from("minecraft:jungle_sign:26"), (short) 3535, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_26 = new BlockState(NamespaceID.from("minecraft:jungle_sign:26"), (short) 3535, Block.JUNGLE_SIGN, "rotation=13","waterlogged=true");
 
-  public static final BlockState JUNGLE_SIGN_27 = new BlockState(NamespaceID.from("minecraft:jungle_sign:27"), (short) 3536, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_27 = new BlockState(NamespaceID.from("minecraft:jungle_sign:27"), (short) 3536, Block.JUNGLE_SIGN, "rotation=13","waterlogged=false");
 
-  public static final BlockState JUNGLE_SIGN_28 = new BlockState(NamespaceID.from("minecraft:jungle_sign:28"), (short) 3537, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_28 = new BlockState(NamespaceID.from("minecraft:jungle_sign:28"), (short) 3537, Block.JUNGLE_SIGN, "rotation=14","waterlogged=true");
 
-  public static final BlockState JUNGLE_SIGN_29 = new BlockState(NamespaceID.from("minecraft:jungle_sign:29"), (short) 3538, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_29 = new BlockState(NamespaceID.from("minecraft:jungle_sign:29"), (short) 3538, Block.JUNGLE_SIGN, "rotation=14","waterlogged=false");
 
-  public static final BlockState JUNGLE_SIGN_30 = new BlockState(NamespaceID.from("minecraft:jungle_sign:30"), (short) 3539, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_30 = new BlockState(NamespaceID.from("minecraft:jungle_sign:30"), (short) 3539, Block.JUNGLE_SIGN, "rotation=15","waterlogged=true");
 
-  public static final BlockState JUNGLE_SIGN_31 = new BlockState(NamespaceID.from("minecraft:jungle_sign:31"), (short) 3540, Block.JUNGLE_SIGN);
+  public static final BlockState JUNGLE_SIGN_31 = new BlockState(NamespaceID.from("minecraft:jungle_sign:31"), (short) 3540, Block.JUNGLE_SIGN, "rotation=15","waterlogged=false");
 
   public static void initStates() {
     Block.JUNGLE_SIGN.addBlockState(JUNGLE_SIGN_0);

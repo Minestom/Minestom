@@ -13,9 +13,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class NetherPortal {
-  public static final BlockState NETHER_PORTAL_0 = new BlockState(NamespaceID.from("minecraft:nether_portal:0"), (short) 4014, Block.NETHER_PORTAL);
+  public static final BlockState NETHER_PORTAL_0 = new BlockState(NamespaceID.from("minecraft:nether_portal:0"), (short) 4014, Block.NETHER_PORTAL, "axis=x");
 
-  public static final BlockState NETHER_PORTAL_1 = new BlockState(NamespaceID.from("minecraft:nether_portal:1"), (short) 4015, Block.NETHER_PORTAL);
+  public static final BlockState NETHER_PORTAL_1 = new BlockState(NamespaceID.from("minecraft:nether_portal:1"), (short) 4015, Block.NETHER_PORTAL, "axis=z");
 
   public static void initStates() {
     Block.NETHER_PORTAL.addBlockState(NETHER_PORTAL_0);

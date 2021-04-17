@@ -13,33 +13,33 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BirchLeaves {
-  public static final BlockState BIRCH_LEAVES_0 = new BlockState(NamespaceID.from("minecraft:birch_leaves:0"), (short) 173, Block.BIRCH_LEAVES);
+  public static final BlockState BIRCH_LEAVES_0 = new BlockState(NamespaceID.from("minecraft:birch_leaves:0"), (short) 173, Block.BIRCH_LEAVES, "distance=1","persistent=true");
 
-  public static final BlockState BIRCH_LEAVES_1 = new BlockState(NamespaceID.from("minecraft:birch_leaves:1"), (short) 174, Block.BIRCH_LEAVES);
+  public static final BlockState BIRCH_LEAVES_1 = new BlockState(NamespaceID.from("minecraft:birch_leaves:1"), (short) 174, Block.BIRCH_LEAVES, "distance=1","persistent=false");
 
-  public static final BlockState BIRCH_LEAVES_2 = new BlockState(NamespaceID.from("minecraft:birch_leaves:2"), (short) 175, Block.BIRCH_LEAVES);
+  public static final BlockState BIRCH_LEAVES_2 = new BlockState(NamespaceID.from("minecraft:birch_leaves:2"), (short) 175, Block.BIRCH_LEAVES, "distance=2","persistent=true");
 
-  public static final BlockState BIRCH_LEAVES_3 = new BlockState(NamespaceID.from("minecraft:birch_leaves:3"), (short) 176, Block.BIRCH_LEAVES);
+  public static final BlockState BIRCH_LEAVES_3 = new BlockState(NamespaceID.from("minecraft:birch_leaves:3"), (short) 176, Block.BIRCH_LEAVES, "distance=2","persistent=false");
 
-  public static final BlockState BIRCH_LEAVES_4 = new BlockState(NamespaceID.from("minecraft:birch_leaves:4"), (short) 177, Block.BIRCH_LEAVES);
+  public static final BlockState BIRCH_LEAVES_4 = new BlockState(NamespaceID.from("minecraft:birch_leaves:4"), (short) 177, Block.BIRCH_LEAVES, "distance=3","persistent=true");
 
-  public static final BlockState BIRCH_LEAVES_5 = new BlockState(NamespaceID.from("minecraft:birch_leaves:5"), (short) 178, Block.BIRCH_LEAVES);
+  public static final BlockState BIRCH_LEAVES_5 = new BlockState(NamespaceID.from("minecraft:birch_leaves:5"), (short) 178, Block.BIRCH_LEAVES, "distance=3","persistent=false");
 
-  public static final BlockState BIRCH_LEAVES_6 = new BlockState(NamespaceID.from("minecraft:birch_leaves:6"), (short) 179, Block.BIRCH_LEAVES);
+  public static final BlockState BIRCH_LEAVES_6 = new BlockState(NamespaceID.from("minecraft:birch_leaves:6"), (short) 179, Block.BIRCH_LEAVES, "distance=4","persistent=true");
 
-  public static final BlockState BIRCH_LEAVES_7 = new BlockState(NamespaceID.from("minecraft:birch_leaves:7"), (short) 180, Block.BIRCH_LEAVES);
+  public static final BlockState BIRCH_LEAVES_7 = new BlockState(NamespaceID.from("minecraft:birch_leaves:7"), (short) 180, Block.BIRCH_LEAVES, "distance=4","persistent=false");
 
-  public static final BlockState BIRCH_LEAVES_8 = new BlockState(NamespaceID.from("minecraft:birch_leaves:8"), (short) 181, Block.BIRCH_LEAVES);
+  public static final BlockState BIRCH_LEAVES_8 = new BlockState(NamespaceID.from("minecraft:birch_leaves:8"), (short) 181, Block.BIRCH_LEAVES, "distance=5","persistent=true");
 
-  public static final BlockState BIRCH_LEAVES_9 = new BlockState(NamespaceID.from("minecraft:birch_leaves:9"), (short) 182, Block.BIRCH_LEAVES);
+  public static final BlockState BIRCH_LEAVES_9 = new BlockState(NamespaceID.from("minecraft:birch_leaves:9"), (short) 182, Block.BIRCH_LEAVES, "distance=5","persistent=false");
 
-  public static final BlockState BIRCH_LEAVES_10 = new BlockState(NamespaceID.from("minecraft:birch_leaves:10"), (short) 183, Block.BIRCH_LEAVES);
+  public static final BlockState BIRCH_LEAVES_10 = new BlockState(NamespaceID.from("minecraft:birch_leaves:10"), (short) 183, Block.BIRCH_LEAVES, "distance=6","persistent=true");
 
-  public static final BlockState BIRCH_LEAVES_11 = new BlockState(NamespaceID.from("minecraft:birch_leaves:11"), (short) 184, Block.BIRCH_LEAVES);
+  public static final BlockState BIRCH_LEAVES_11 = new BlockState(NamespaceID.from("minecraft:birch_leaves:11"), (short) 184, Block.BIRCH_LEAVES, "distance=6","persistent=false");
 
-  public static final BlockState BIRCH_LEAVES_12 = new BlockState(NamespaceID.from("minecraft:birch_leaves:12"), (short) 185, Block.BIRCH_LEAVES);
+  public static final BlockState BIRCH_LEAVES_12 = new BlockState(NamespaceID.from("minecraft:birch_leaves:12"), (short) 185, Block.BIRCH_LEAVES, "distance=7","persistent=true");
 
-  public static final BlockState BIRCH_LEAVES_13 = new BlockState(NamespaceID.from("minecraft:birch_leaves:13"), (short) 186, Block.BIRCH_LEAVES);
+  public static final BlockState BIRCH_LEAVES_13 = new BlockState(NamespaceID.from("minecraft:birch_leaves:13"), (short) 186, Block.BIRCH_LEAVES, "distance=7","persistent=false");
 
   public static void initStates() {
     Block.BIRCH_LEAVES.addBlockState(BIRCH_LEAVES_0);

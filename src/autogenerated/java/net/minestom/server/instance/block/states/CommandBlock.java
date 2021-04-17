@@ -13,29 +13,29 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CommandBlock {
-  public static final BlockState COMMAND_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:command_block:0"), (short) 5648, Block.COMMAND_BLOCK);
+  public static final BlockState COMMAND_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:command_block:0"), (short) 5648, Block.COMMAND_BLOCK, "conditional=true","facing=north");
 
-  public static final BlockState COMMAND_BLOCK_1 = new BlockState(NamespaceID.from("minecraft:command_block:1"), (short) 5649, Block.COMMAND_BLOCK);
+  public static final BlockState COMMAND_BLOCK_1 = new BlockState(NamespaceID.from("minecraft:command_block:1"), (short) 5649, Block.COMMAND_BLOCK, "conditional=true","facing=east");
 
-  public static final BlockState COMMAND_BLOCK_2 = new BlockState(NamespaceID.from("minecraft:command_block:2"), (short) 5650, Block.COMMAND_BLOCK);
+  public static final BlockState COMMAND_BLOCK_2 = new BlockState(NamespaceID.from("minecraft:command_block:2"), (short) 5650, Block.COMMAND_BLOCK, "conditional=true","facing=south");
 
-  public static final BlockState COMMAND_BLOCK_3 = new BlockState(NamespaceID.from("minecraft:command_block:3"), (short) 5651, Block.COMMAND_BLOCK);
+  public static final BlockState COMMAND_BLOCK_3 = new BlockState(NamespaceID.from("minecraft:command_block:3"), (short) 5651, Block.COMMAND_BLOCK, "conditional=true","facing=west");
 
-  public static final BlockState COMMAND_BLOCK_4 = new BlockState(NamespaceID.from("minecraft:command_block:4"), (short) 5652, Block.COMMAND_BLOCK);
+  public static final BlockState COMMAND_BLOCK_4 = new BlockState(NamespaceID.from("minecraft:command_block:4"), (short) 5652, Block.COMMAND_BLOCK, "conditional=true","facing=up");
 
-  public static final BlockState COMMAND_BLOCK_5 = new BlockState(NamespaceID.from("minecraft:command_block:5"), (short) 5653, Block.COMMAND_BLOCK);
+  public static final BlockState COMMAND_BLOCK_5 = new BlockState(NamespaceID.from("minecraft:command_block:5"), (short) 5653, Block.COMMAND_BLOCK, "conditional=true","facing=down");
 
-  public static final BlockState COMMAND_BLOCK_6 = new BlockState(NamespaceID.from("minecraft:command_block:6"), (short) 5654, Block.COMMAND_BLOCK);
+  public static final BlockState COMMAND_BLOCK_6 = new BlockState(NamespaceID.from("minecraft:command_block:6"), (short) 5654, Block.COMMAND_BLOCK, "conditional=false","facing=north");
 
-  public static final BlockState COMMAND_BLOCK_7 = new BlockState(NamespaceID.from("minecraft:command_block:7"), (short) 5655, Block.COMMAND_BLOCK);
+  public static final BlockState COMMAND_BLOCK_7 = new BlockState(NamespaceID.from("minecraft:command_block:7"), (short) 5655, Block.COMMAND_BLOCK, "conditional=false","facing=east");
 
-  public static final BlockState COMMAND_BLOCK_8 = new BlockState(NamespaceID.from("minecraft:command_block:8"), (short) 5656, Block.COMMAND_BLOCK);
+  public static final BlockState COMMAND_BLOCK_8 = new BlockState(NamespaceID.from("minecraft:command_block:8"), (short) 5656, Block.COMMAND_BLOCK, "conditional=false","facing=south");
 
-  public static final BlockState COMMAND_BLOCK_9 = new BlockState(NamespaceID.from("minecraft:command_block:9"), (short) 5657, Block.COMMAND_BLOCK);
+  public static final BlockState COMMAND_BLOCK_9 = new BlockState(NamespaceID.from("minecraft:command_block:9"), (short) 5657, Block.COMMAND_BLOCK, "conditional=false","facing=west");
 
-  public static final BlockState COMMAND_BLOCK_10 = new BlockState(NamespaceID.from("minecraft:command_block:10"), (short) 5658, Block.COMMAND_BLOCK);
+  public static final BlockState COMMAND_BLOCK_10 = new BlockState(NamespaceID.from("minecraft:command_block:10"), (short) 5658, Block.COMMAND_BLOCK, "conditional=false","facing=up");
 
-  public static final BlockState COMMAND_BLOCK_11 = new BlockState(NamespaceID.from("minecraft:command_block:11"), (short) 5659, Block.COMMAND_BLOCK);
+  public static final BlockState COMMAND_BLOCK_11 = new BlockState(NamespaceID.from("minecraft:command_block:11"), (short) 5659, Block.COMMAND_BLOCK, "conditional=false","facing=down");
 
   public static void initStates() {
     Block.COMMAND_BLOCK.addBlockState(COMMAND_BLOCK_0);

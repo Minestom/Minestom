@@ -13,37 +13,37 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DragonHead {
-  public static final BlockState DRAGON_HEAD_0 = new BlockState(NamespaceID.from("minecraft:dragon_head:0"), (short) 6594, Block.DRAGON_HEAD);
+  public static final BlockState DRAGON_HEAD_0 = new BlockState(NamespaceID.from("minecraft:dragon_head:0"), (short) 6594, Block.DRAGON_HEAD, "rotation=0");
 
-  public static final BlockState DRAGON_HEAD_1 = new BlockState(NamespaceID.from("minecraft:dragon_head:1"), (short) 6595, Block.DRAGON_HEAD);
+  public static final BlockState DRAGON_HEAD_1 = new BlockState(NamespaceID.from("minecraft:dragon_head:1"), (short) 6595, Block.DRAGON_HEAD, "rotation=1");
 
-  public static final BlockState DRAGON_HEAD_2 = new BlockState(NamespaceID.from("minecraft:dragon_head:2"), (short) 6596, Block.DRAGON_HEAD);
+  public static final BlockState DRAGON_HEAD_2 = new BlockState(NamespaceID.from("minecraft:dragon_head:2"), (short) 6596, Block.DRAGON_HEAD, "rotation=2");
 
-  public static final BlockState DRAGON_HEAD_3 = new BlockState(NamespaceID.from("minecraft:dragon_head:3"), (short) 6597, Block.DRAGON_HEAD);
+  public static final BlockState DRAGON_HEAD_3 = new BlockState(NamespaceID.from("minecraft:dragon_head:3"), (short) 6597, Block.DRAGON_HEAD, "rotation=3");
 
-  public static final BlockState DRAGON_HEAD_4 = new BlockState(NamespaceID.from("minecraft:dragon_head:4"), (short) 6598, Block.DRAGON_HEAD);
+  public static final BlockState DRAGON_HEAD_4 = new BlockState(NamespaceID.from("minecraft:dragon_head:4"), (short) 6598, Block.DRAGON_HEAD, "rotation=4");
 
-  public static final BlockState DRAGON_HEAD_5 = new BlockState(NamespaceID.from("minecraft:dragon_head:5"), (short) 6599, Block.DRAGON_HEAD);
+  public static final BlockState DRAGON_HEAD_5 = new BlockState(NamespaceID.from("minecraft:dragon_head:5"), (short) 6599, Block.DRAGON_HEAD, "rotation=5");
 
-  public static final BlockState DRAGON_HEAD_6 = new BlockState(NamespaceID.from("minecraft:dragon_head:6"), (short) 6600, Block.DRAGON_HEAD);
+  public static final BlockState DRAGON_HEAD_6 = new BlockState(NamespaceID.from("minecraft:dragon_head:6"), (short) 6600, Block.DRAGON_HEAD, "rotation=6");
 
-  public static final BlockState DRAGON_HEAD_7 = new BlockState(NamespaceID.from("minecraft:dragon_head:7"), (short) 6601, Block.DRAGON_HEAD);
+  public static final BlockState DRAGON_HEAD_7 = new BlockState(NamespaceID.from("minecraft:dragon_head:7"), (short) 6601, Block.DRAGON_HEAD, "rotation=7");
 
-  public static final BlockState DRAGON_HEAD_8 = new BlockState(NamespaceID.from("minecraft:dragon_head:8"), (short) 6602, Block.DRAGON_HEAD);
+  public static final BlockState DRAGON_HEAD_8 = new BlockState(NamespaceID.from("minecraft:dragon_head:8"), (short) 6602, Block.DRAGON_HEAD, "rotation=8");
 
-  public static final BlockState DRAGON_HEAD_9 = new BlockState(NamespaceID.from("minecraft:dragon_head:9"), (short) 6603, Block.DRAGON_HEAD);
+  public static final BlockState DRAGON_HEAD_9 = new BlockState(NamespaceID.from("minecraft:dragon_head:9"), (short) 6603, Block.DRAGON_HEAD, "rotation=9");
 
-  public static final BlockState DRAGON_HEAD_10 = new BlockState(NamespaceID.from("minecraft:dragon_head:10"), (short) 6604, Block.DRAGON_HEAD);
+  public static final BlockState DRAGON_HEAD_10 = new BlockState(NamespaceID.from("minecraft:dragon_head:10"), (short) 6604, Block.DRAGON_HEAD, "rotation=10");
 
-  public static final BlockState DRAGON_HEAD_11 = new BlockState(NamespaceID.from("minecraft:dragon_head:11"), (short) 6605, Block.DRAGON_HEAD);
+  public static final BlockState DRAGON_HEAD_11 = new BlockState(NamespaceID.from("minecraft:dragon_head:11"), (short) 6605, Block.DRAGON_HEAD, "rotation=11");
 
-  public static final BlockState DRAGON_HEAD_12 = new BlockState(NamespaceID.from("minecraft:dragon_head:12"), (short) 6606, Block.DRAGON_HEAD);
+  public static final BlockState DRAGON_HEAD_12 = new BlockState(NamespaceID.from("minecraft:dragon_head:12"), (short) 6606, Block.DRAGON_HEAD, "rotation=12");
 
-  public static final BlockState DRAGON_HEAD_13 = new BlockState(NamespaceID.from("minecraft:dragon_head:13"), (short) 6607, Block.DRAGON_HEAD);
+  public static final BlockState DRAGON_HEAD_13 = new BlockState(NamespaceID.from("minecraft:dragon_head:13"), (short) 6607, Block.DRAGON_HEAD, "rotation=13");
 
-  public static final BlockState DRAGON_HEAD_14 = new BlockState(NamespaceID.from("minecraft:dragon_head:14"), (short) 6608, Block.DRAGON_HEAD);
+  public static final BlockState DRAGON_HEAD_14 = new BlockState(NamespaceID.from("minecraft:dragon_head:14"), (short) 6608, Block.DRAGON_HEAD, "rotation=14");
 
-  public static final BlockState DRAGON_HEAD_15 = new BlockState(NamespaceID.from("minecraft:dragon_head:15"), (short) 6609, Block.DRAGON_HEAD);
+  public static final BlockState DRAGON_HEAD_15 = new BlockState(NamespaceID.from("minecraft:dragon_head:15"), (short) 6609, Block.DRAGON_HEAD, "rotation=15");
 
   public static void initStates() {
     Block.DRAGON_HEAD.addBlockState(DRAGON_HEAD_0);

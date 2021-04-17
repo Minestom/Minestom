@@ -13,133 +13,133 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CrimsonDoor {
-  public static final BlockState CRIMSON_DOOR_0 = new BlockState(NamespaceID.from("minecraft:crimson_door:0"), (short) 15535, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_0 = new BlockState(NamespaceID.from("minecraft:crimson_door:0"), (short) 15535, Block.CRIMSON_DOOR, "facing=north","half=upper","hinge=left","open=true","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_1 = new BlockState(NamespaceID.from("minecraft:crimson_door:1"), (short) 15536, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_1 = new BlockState(NamespaceID.from("minecraft:crimson_door:1"), (short) 15536, Block.CRIMSON_DOOR, "facing=north","half=upper","hinge=left","open=true","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_2 = new BlockState(NamespaceID.from("minecraft:crimson_door:2"), (short) 15537, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_2 = new BlockState(NamespaceID.from("minecraft:crimson_door:2"), (short) 15537, Block.CRIMSON_DOOR, "facing=north","half=upper","hinge=left","open=false","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_3 = new BlockState(NamespaceID.from("minecraft:crimson_door:3"), (short) 15538, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_3 = new BlockState(NamespaceID.from("minecraft:crimson_door:3"), (short) 15538, Block.CRIMSON_DOOR, "facing=north","half=upper","hinge=left","open=false","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_4 = new BlockState(NamespaceID.from("minecraft:crimson_door:4"), (short) 15539, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_4 = new BlockState(NamespaceID.from("minecraft:crimson_door:4"), (short) 15539, Block.CRIMSON_DOOR, "facing=north","half=upper","hinge=right","open=true","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_5 = new BlockState(NamespaceID.from("minecraft:crimson_door:5"), (short) 15540, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_5 = new BlockState(NamespaceID.from("minecraft:crimson_door:5"), (short) 15540, Block.CRIMSON_DOOR, "facing=north","half=upper","hinge=right","open=true","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_6 = new BlockState(NamespaceID.from("minecraft:crimson_door:6"), (short) 15541, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_6 = new BlockState(NamespaceID.from("minecraft:crimson_door:6"), (short) 15541, Block.CRIMSON_DOOR, "facing=north","half=upper","hinge=right","open=false","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_7 = new BlockState(NamespaceID.from("minecraft:crimson_door:7"), (short) 15542, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_7 = new BlockState(NamespaceID.from("minecraft:crimson_door:7"), (short) 15542, Block.CRIMSON_DOOR, "facing=north","half=upper","hinge=right","open=false","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_8 = new BlockState(NamespaceID.from("minecraft:crimson_door:8"), (short) 15543, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_8 = new BlockState(NamespaceID.from("minecraft:crimson_door:8"), (short) 15543, Block.CRIMSON_DOOR, "facing=north","half=lower","hinge=left","open=true","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_9 = new BlockState(NamespaceID.from("minecraft:crimson_door:9"), (short) 15544, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_9 = new BlockState(NamespaceID.from("minecraft:crimson_door:9"), (short) 15544, Block.CRIMSON_DOOR, "facing=north","half=lower","hinge=left","open=true","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_10 = new BlockState(NamespaceID.from("minecraft:crimson_door:10"), (short) 15545, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_10 = new BlockState(NamespaceID.from("minecraft:crimson_door:10"), (short) 15545, Block.CRIMSON_DOOR, "facing=north","half=lower","hinge=left","open=false","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_11 = new BlockState(NamespaceID.from("minecraft:crimson_door:11"), (short) 15546, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_11 = new BlockState(NamespaceID.from("minecraft:crimson_door:11"), (short) 15546, Block.CRIMSON_DOOR, "facing=north","half=lower","hinge=left","open=false","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_12 = new BlockState(NamespaceID.from("minecraft:crimson_door:12"), (short) 15547, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_12 = new BlockState(NamespaceID.from("minecraft:crimson_door:12"), (short) 15547, Block.CRIMSON_DOOR, "facing=north","half=lower","hinge=right","open=true","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_13 = new BlockState(NamespaceID.from("minecraft:crimson_door:13"), (short) 15548, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_13 = new BlockState(NamespaceID.from("minecraft:crimson_door:13"), (short) 15548, Block.CRIMSON_DOOR, "facing=north","half=lower","hinge=right","open=true","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_14 = new BlockState(NamespaceID.from("minecraft:crimson_door:14"), (short) 15549, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_14 = new BlockState(NamespaceID.from("minecraft:crimson_door:14"), (short) 15549, Block.CRIMSON_DOOR, "facing=north","half=lower","hinge=right","open=false","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_15 = new BlockState(NamespaceID.from("minecraft:crimson_door:15"), (short) 15550, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_15 = new BlockState(NamespaceID.from("minecraft:crimson_door:15"), (short) 15550, Block.CRIMSON_DOOR, "facing=north","half=lower","hinge=right","open=false","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_16 = new BlockState(NamespaceID.from("minecraft:crimson_door:16"), (short) 15551, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_16 = new BlockState(NamespaceID.from("minecraft:crimson_door:16"), (short) 15551, Block.CRIMSON_DOOR, "facing=south","half=upper","hinge=left","open=true","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_17 = new BlockState(NamespaceID.from("minecraft:crimson_door:17"), (short) 15552, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_17 = new BlockState(NamespaceID.from("minecraft:crimson_door:17"), (short) 15552, Block.CRIMSON_DOOR, "facing=south","half=upper","hinge=left","open=true","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_18 = new BlockState(NamespaceID.from("minecraft:crimson_door:18"), (short) 15553, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_18 = new BlockState(NamespaceID.from("minecraft:crimson_door:18"), (short) 15553, Block.CRIMSON_DOOR, "facing=south","half=upper","hinge=left","open=false","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_19 = new BlockState(NamespaceID.from("minecraft:crimson_door:19"), (short) 15554, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_19 = new BlockState(NamespaceID.from("minecraft:crimson_door:19"), (short) 15554, Block.CRIMSON_DOOR, "facing=south","half=upper","hinge=left","open=false","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_20 = new BlockState(NamespaceID.from("minecraft:crimson_door:20"), (short) 15555, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_20 = new BlockState(NamespaceID.from("minecraft:crimson_door:20"), (short) 15555, Block.CRIMSON_DOOR, "facing=south","half=upper","hinge=right","open=true","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_21 = new BlockState(NamespaceID.from("minecraft:crimson_door:21"), (short) 15556, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_21 = new BlockState(NamespaceID.from("minecraft:crimson_door:21"), (short) 15556, Block.CRIMSON_DOOR, "facing=south","half=upper","hinge=right","open=true","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_22 = new BlockState(NamespaceID.from("minecraft:crimson_door:22"), (short) 15557, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_22 = new BlockState(NamespaceID.from("minecraft:crimson_door:22"), (short) 15557, Block.CRIMSON_DOOR, "facing=south","half=upper","hinge=right","open=false","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_23 = new BlockState(NamespaceID.from("minecraft:crimson_door:23"), (short) 15558, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_23 = new BlockState(NamespaceID.from("minecraft:crimson_door:23"), (short) 15558, Block.CRIMSON_DOOR, "facing=south","half=upper","hinge=right","open=false","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_24 = new BlockState(NamespaceID.from("minecraft:crimson_door:24"), (short) 15559, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_24 = new BlockState(NamespaceID.from("minecraft:crimson_door:24"), (short) 15559, Block.CRIMSON_DOOR, "facing=south","half=lower","hinge=left","open=true","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_25 = new BlockState(NamespaceID.from("minecraft:crimson_door:25"), (short) 15560, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_25 = new BlockState(NamespaceID.from("minecraft:crimson_door:25"), (short) 15560, Block.CRIMSON_DOOR, "facing=south","half=lower","hinge=left","open=true","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_26 = new BlockState(NamespaceID.from("minecraft:crimson_door:26"), (short) 15561, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_26 = new BlockState(NamespaceID.from("minecraft:crimson_door:26"), (short) 15561, Block.CRIMSON_DOOR, "facing=south","half=lower","hinge=left","open=false","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_27 = new BlockState(NamespaceID.from("minecraft:crimson_door:27"), (short) 15562, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_27 = new BlockState(NamespaceID.from("minecraft:crimson_door:27"), (short) 15562, Block.CRIMSON_DOOR, "facing=south","half=lower","hinge=left","open=false","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_28 = new BlockState(NamespaceID.from("minecraft:crimson_door:28"), (short) 15563, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_28 = new BlockState(NamespaceID.from("minecraft:crimson_door:28"), (short) 15563, Block.CRIMSON_DOOR, "facing=south","half=lower","hinge=right","open=true","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_29 = new BlockState(NamespaceID.from("minecraft:crimson_door:29"), (short) 15564, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_29 = new BlockState(NamespaceID.from("minecraft:crimson_door:29"), (short) 15564, Block.CRIMSON_DOOR, "facing=south","half=lower","hinge=right","open=true","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_30 = new BlockState(NamespaceID.from("minecraft:crimson_door:30"), (short) 15565, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_30 = new BlockState(NamespaceID.from("minecraft:crimson_door:30"), (short) 15565, Block.CRIMSON_DOOR, "facing=south","half=lower","hinge=right","open=false","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_31 = new BlockState(NamespaceID.from("minecraft:crimson_door:31"), (short) 15566, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_31 = new BlockState(NamespaceID.from("minecraft:crimson_door:31"), (short) 15566, Block.CRIMSON_DOOR, "facing=south","half=lower","hinge=right","open=false","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_32 = new BlockState(NamespaceID.from("minecraft:crimson_door:32"), (short) 15567, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_32 = new BlockState(NamespaceID.from("minecraft:crimson_door:32"), (short) 15567, Block.CRIMSON_DOOR, "facing=west","half=upper","hinge=left","open=true","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_33 = new BlockState(NamespaceID.from("minecraft:crimson_door:33"), (short) 15568, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_33 = new BlockState(NamespaceID.from("minecraft:crimson_door:33"), (short) 15568, Block.CRIMSON_DOOR, "facing=west","half=upper","hinge=left","open=true","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_34 = new BlockState(NamespaceID.from("minecraft:crimson_door:34"), (short) 15569, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_34 = new BlockState(NamespaceID.from("minecraft:crimson_door:34"), (short) 15569, Block.CRIMSON_DOOR, "facing=west","half=upper","hinge=left","open=false","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_35 = new BlockState(NamespaceID.from("minecraft:crimson_door:35"), (short) 15570, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_35 = new BlockState(NamespaceID.from("minecraft:crimson_door:35"), (short) 15570, Block.CRIMSON_DOOR, "facing=west","half=upper","hinge=left","open=false","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_36 = new BlockState(NamespaceID.from("minecraft:crimson_door:36"), (short) 15571, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_36 = new BlockState(NamespaceID.from("minecraft:crimson_door:36"), (short) 15571, Block.CRIMSON_DOOR, "facing=west","half=upper","hinge=right","open=true","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_37 = new BlockState(NamespaceID.from("minecraft:crimson_door:37"), (short) 15572, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_37 = new BlockState(NamespaceID.from("minecraft:crimson_door:37"), (short) 15572, Block.CRIMSON_DOOR, "facing=west","half=upper","hinge=right","open=true","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_38 = new BlockState(NamespaceID.from("minecraft:crimson_door:38"), (short) 15573, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_38 = new BlockState(NamespaceID.from("minecraft:crimson_door:38"), (short) 15573, Block.CRIMSON_DOOR, "facing=west","half=upper","hinge=right","open=false","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_39 = new BlockState(NamespaceID.from("minecraft:crimson_door:39"), (short) 15574, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_39 = new BlockState(NamespaceID.from("minecraft:crimson_door:39"), (short) 15574, Block.CRIMSON_DOOR, "facing=west","half=upper","hinge=right","open=false","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_40 = new BlockState(NamespaceID.from("minecraft:crimson_door:40"), (short) 15575, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_40 = new BlockState(NamespaceID.from("minecraft:crimson_door:40"), (short) 15575, Block.CRIMSON_DOOR, "facing=west","half=lower","hinge=left","open=true","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_41 = new BlockState(NamespaceID.from("minecraft:crimson_door:41"), (short) 15576, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_41 = new BlockState(NamespaceID.from("minecraft:crimson_door:41"), (short) 15576, Block.CRIMSON_DOOR, "facing=west","half=lower","hinge=left","open=true","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_42 = new BlockState(NamespaceID.from("minecraft:crimson_door:42"), (short) 15577, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_42 = new BlockState(NamespaceID.from("minecraft:crimson_door:42"), (short) 15577, Block.CRIMSON_DOOR, "facing=west","half=lower","hinge=left","open=false","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_43 = new BlockState(NamespaceID.from("minecraft:crimson_door:43"), (short) 15578, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_43 = new BlockState(NamespaceID.from("minecraft:crimson_door:43"), (short) 15578, Block.CRIMSON_DOOR, "facing=west","half=lower","hinge=left","open=false","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_44 = new BlockState(NamespaceID.from("minecraft:crimson_door:44"), (short) 15579, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_44 = new BlockState(NamespaceID.from("minecraft:crimson_door:44"), (short) 15579, Block.CRIMSON_DOOR, "facing=west","half=lower","hinge=right","open=true","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_45 = new BlockState(NamespaceID.from("minecraft:crimson_door:45"), (short) 15580, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_45 = new BlockState(NamespaceID.from("minecraft:crimson_door:45"), (short) 15580, Block.CRIMSON_DOOR, "facing=west","half=lower","hinge=right","open=true","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_46 = new BlockState(NamespaceID.from("minecraft:crimson_door:46"), (short) 15581, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_46 = new BlockState(NamespaceID.from("minecraft:crimson_door:46"), (short) 15581, Block.CRIMSON_DOOR, "facing=west","half=lower","hinge=right","open=false","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_47 = new BlockState(NamespaceID.from("minecraft:crimson_door:47"), (short) 15582, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_47 = new BlockState(NamespaceID.from("minecraft:crimson_door:47"), (short) 15582, Block.CRIMSON_DOOR, "facing=west","half=lower","hinge=right","open=false","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_48 = new BlockState(NamespaceID.from("minecraft:crimson_door:48"), (short) 15583, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_48 = new BlockState(NamespaceID.from("minecraft:crimson_door:48"), (short) 15583, Block.CRIMSON_DOOR, "facing=east","half=upper","hinge=left","open=true","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_49 = new BlockState(NamespaceID.from("minecraft:crimson_door:49"), (short) 15584, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_49 = new BlockState(NamespaceID.from("minecraft:crimson_door:49"), (short) 15584, Block.CRIMSON_DOOR, "facing=east","half=upper","hinge=left","open=true","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_50 = new BlockState(NamespaceID.from("minecraft:crimson_door:50"), (short) 15585, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_50 = new BlockState(NamespaceID.from("minecraft:crimson_door:50"), (short) 15585, Block.CRIMSON_DOOR, "facing=east","half=upper","hinge=left","open=false","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_51 = new BlockState(NamespaceID.from("minecraft:crimson_door:51"), (short) 15586, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_51 = new BlockState(NamespaceID.from("minecraft:crimson_door:51"), (short) 15586, Block.CRIMSON_DOOR, "facing=east","half=upper","hinge=left","open=false","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_52 = new BlockState(NamespaceID.from("minecraft:crimson_door:52"), (short) 15587, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_52 = new BlockState(NamespaceID.from("minecraft:crimson_door:52"), (short) 15587, Block.CRIMSON_DOOR, "facing=east","half=upper","hinge=right","open=true","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_53 = new BlockState(NamespaceID.from("minecraft:crimson_door:53"), (short) 15588, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_53 = new BlockState(NamespaceID.from("minecraft:crimson_door:53"), (short) 15588, Block.CRIMSON_DOOR, "facing=east","half=upper","hinge=right","open=true","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_54 = new BlockState(NamespaceID.from("minecraft:crimson_door:54"), (short) 15589, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_54 = new BlockState(NamespaceID.from("minecraft:crimson_door:54"), (short) 15589, Block.CRIMSON_DOOR, "facing=east","half=upper","hinge=right","open=false","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_55 = new BlockState(NamespaceID.from("minecraft:crimson_door:55"), (short) 15590, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_55 = new BlockState(NamespaceID.from("minecraft:crimson_door:55"), (short) 15590, Block.CRIMSON_DOOR, "facing=east","half=upper","hinge=right","open=false","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_56 = new BlockState(NamespaceID.from("minecraft:crimson_door:56"), (short) 15591, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_56 = new BlockState(NamespaceID.from("minecraft:crimson_door:56"), (short) 15591, Block.CRIMSON_DOOR, "facing=east","half=lower","hinge=left","open=true","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_57 = new BlockState(NamespaceID.from("minecraft:crimson_door:57"), (short) 15592, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_57 = new BlockState(NamespaceID.from("minecraft:crimson_door:57"), (short) 15592, Block.CRIMSON_DOOR, "facing=east","half=lower","hinge=left","open=true","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_58 = new BlockState(NamespaceID.from("minecraft:crimson_door:58"), (short) 15593, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_58 = new BlockState(NamespaceID.from("minecraft:crimson_door:58"), (short) 15593, Block.CRIMSON_DOOR, "facing=east","half=lower","hinge=left","open=false","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_59 = new BlockState(NamespaceID.from("minecraft:crimson_door:59"), (short) 15594, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_59 = new BlockState(NamespaceID.from("minecraft:crimson_door:59"), (short) 15594, Block.CRIMSON_DOOR, "facing=east","half=lower","hinge=left","open=false","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_60 = new BlockState(NamespaceID.from("minecraft:crimson_door:60"), (short) 15595, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_60 = new BlockState(NamespaceID.from("minecraft:crimson_door:60"), (short) 15595, Block.CRIMSON_DOOR, "facing=east","half=lower","hinge=right","open=true","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_61 = new BlockState(NamespaceID.from("minecraft:crimson_door:61"), (short) 15596, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_61 = new BlockState(NamespaceID.from("minecraft:crimson_door:61"), (short) 15596, Block.CRIMSON_DOOR, "facing=east","half=lower","hinge=right","open=true","powered=false");
 
-  public static final BlockState CRIMSON_DOOR_62 = new BlockState(NamespaceID.from("minecraft:crimson_door:62"), (short) 15597, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_62 = new BlockState(NamespaceID.from("minecraft:crimson_door:62"), (short) 15597, Block.CRIMSON_DOOR, "facing=east","half=lower","hinge=right","open=false","powered=true");
 
-  public static final BlockState CRIMSON_DOOR_63 = new BlockState(NamespaceID.from("minecraft:crimson_door:63"), (short) 15598, Block.CRIMSON_DOOR);
+  public static final BlockState CRIMSON_DOOR_63 = new BlockState(NamespaceID.from("minecraft:crimson_door:63"), (short) 15598, Block.CRIMSON_DOOR, "facing=east","half=lower","hinge=right","open=false","powered=false");
 
   public static void initStates() {
     Block.CRIMSON_DOOR.addBlockState(CRIMSON_DOOR_0);

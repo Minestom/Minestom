@@ -13,165 +13,165 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SmoothRedSandstoneStairs {
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:0"), (short) 9753, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:0"), (short) 9753, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:1"), (short) 9754, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:1"), (short) 9754, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:2"), (short) 9755, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:2"), (short) 9755, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:3"), (short) 9756, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:3"), (short) 9756, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:4"), (short) 9757, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:4"), (short) 9757, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:5"), (short) 9758, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:5"), (short) 9758, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:6"), (short) 9759, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:6"), (short) 9759, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:7"), (short) 9760, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:7"), (short) 9760, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:8"), (short) 9761, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:8"), (short) 9761, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:9"), (short) 9762, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:9"), (short) 9762, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:10"), (short) 9763, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:10"), (short) 9763, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:11"), (short) 9764, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:11"), (short) 9764, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:12"), (short) 9765, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:12"), (short) 9765, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:13"), (short) 9766, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:13"), (short) 9766, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:14"), (short) 9767, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:14"), (short) 9767, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:15"), (short) 9768, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:15"), (short) 9768, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:16"), (short) 9769, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:16"), (short) 9769, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:17"), (short) 9770, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:17"), (short) 9770, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:18"), (short) 9771, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:18"), (short) 9771, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:19"), (short) 9772, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:19"), (short) 9772, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:20"), (short) 9773, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:20"), (short) 9773, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:21"), (short) 9774, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:21"), (short) 9774, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:22"), (short) 9775, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:22"), (short) 9775, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:23"), (short) 9776, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:23"), (short) 9776, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:24"), (short) 9777, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:24"), (short) 9777, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:25"), (short) 9778, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:25"), (short) 9778, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:26"), (short) 9779, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:26"), (short) 9779, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:27"), (short) 9780, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:27"), (short) 9780, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:28"), (short) 9781, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:28"), (short) 9781, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:29"), (short) 9782, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:29"), (short) 9782, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:30"), (short) 9783, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:30"), (short) 9783, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:31"), (short) 9784, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:31"), (short) 9784, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:32"), (short) 9785, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:32"), (short) 9785, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:33"), (short) 9786, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:33"), (short) 9786, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:34"), (short) 9787, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:34"), (short) 9787, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:35"), (short) 9788, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:35"), (short) 9788, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:36"), (short) 9789, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:36"), (short) 9789, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:37"), (short) 9790, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:37"), (short) 9790, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:38"), (short) 9791, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:38"), (short) 9791, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:39"), (short) 9792, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:39"), (short) 9792, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:40"), (short) 9793, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:40"), (short) 9793, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:41"), (short) 9794, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:41"), (short) 9794, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:42"), (short) 9795, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:42"), (short) 9795, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:43"), (short) 9796, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:43"), (short) 9796, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:44"), (short) 9797, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:44"), (short) 9797, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:45"), (short) 9798, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:45"), (short) 9798, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:46"), (short) 9799, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:46"), (short) 9799, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:47"), (short) 9800, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:47"), (short) 9800, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:48"), (short) 9801, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:48"), (short) 9801, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:49"), (short) 9802, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:49"), (short) 9802, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:50"), (short) 9803, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:50"), (short) 9803, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:51"), (short) 9804, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:51"), (short) 9804, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:52"), (short) 9805, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:52"), (short) 9805, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:53"), (short) 9806, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:53"), (short) 9806, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:54"), (short) 9807, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:54"), (short) 9807, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:55"), (short) 9808, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:55"), (short) 9808, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:56"), (short) 9809, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:56"), (short) 9809, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:57"), (short) 9810, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:57"), (short) 9810, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:58"), (short) 9811, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:58"), (short) 9811, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:59"), (short) 9812, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:59"), (short) 9812, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:60"), (short) 9813, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:60"), (short) 9813, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:61"), (short) 9814, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:61"), (short) 9814, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:62"), (short) 9815, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:62"), (short) 9815, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:63"), (short) 9816, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:63"), (short) 9816, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:64"), (short) 9817, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:64"), (short) 9817, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:65"), (short) 9818, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:65"), (short) 9818, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:66"), (short) 9819, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:66"), (short) 9819, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:67"), (short) 9820, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:67"), (short) 9820, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:68"), (short) 9821, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:68"), (short) 9821, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:69"), (short) 9822, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:69"), (short) 9822, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:70"), (short) 9823, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:70"), (short) 9823, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:71"), (short) 9824, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:71"), (short) 9824, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:72"), (short) 9825, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:72"), (short) 9825, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:73"), (short) 9826, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:73"), (short) 9826, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:74"), (short) 9827, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:74"), (short) 9827, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:75"), (short) 9828, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:75"), (short) 9828, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:76"), (short) 9829, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:76"), (short) 9829, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:77"), (short) 9830, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:77"), (short) 9830, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:78"), (short) 9831, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:78"), (short) 9831, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:79"), (short) 9832, Block.SMOOTH_RED_SANDSTONE_STAIRS);
+  public static final BlockState SMOOTH_RED_SANDSTONE_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_stairs:79"), (short) 9832, Block.SMOOTH_RED_SANDSTONE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
 
   public static void initStates() {
     Block.SMOOTH_RED_SANDSTONE_STAIRS.addBlockState(SMOOTH_RED_SANDSTONE_STAIRS_0);

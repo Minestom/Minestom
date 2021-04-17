@@ -13,165 +13,165 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PrismarineStairs {
-  public static final BlockState PRISMARINE_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:0"), (short) 7608, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:0"), (short) 7608, Block.PRISMARINE_STAIRS, "facing=north","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:1"), (short) 7609, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:1"), (short) 7609, Block.PRISMARINE_STAIRS, "facing=north","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:2"), (short) 7610, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:2"), (short) 7610, Block.PRISMARINE_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:3"), (short) 7611, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:3"), (short) 7611, Block.PRISMARINE_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:4"), (short) 7612, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:4"), (short) 7612, Block.PRISMARINE_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:5"), (short) 7613, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:5"), (short) 7613, Block.PRISMARINE_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:6"), (short) 7614, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:6"), (short) 7614, Block.PRISMARINE_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:7"), (short) 7615, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:7"), (short) 7615, Block.PRISMARINE_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:8"), (short) 7616, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:8"), (short) 7616, Block.PRISMARINE_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:9"), (short) 7617, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:9"), (short) 7617, Block.PRISMARINE_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:10"), (short) 7618, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:10"), (short) 7618, Block.PRISMARINE_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:11"), (short) 7619, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:11"), (short) 7619, Block.PRISMARINE_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:12"), (short) 7620, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:12"), (short) 7620, Block.PRISMARINE_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:13"), (short) 7621, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:13"), (short) 7621, Block.PRISMARINE_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:14"), (short) 7622, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:14"), (short) 7622, Block.PRISMARINE_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:15"), (short) 7623, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:15"), (short) 7623, Block.PRISMARINE_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:16"), (short) 7624, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:16"), (short) 7624, Block.PRISMARINE_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:17"), (short) 7625, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:17"), (short) 7625, Block.PRISMARINE_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:18"), (short) 7626, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:18"), (short) 7626, Block.PRISMARINE_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:19"), (short) 7627, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:19"), (short) 7627, Block.PRISMARINE_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:20"), (short) 7628, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:20"), (short) 7628, Block.PRISMARINE_STAIRS, "facing=south","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:21"), (short) 7629, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:21"), (short) 7629, Block.PRISMARINE_STAIRS, "facing=south","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:22"), (short) 7630, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:22"), (short) 7630, Block.PRISMARINE_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:23"), (short) 7631, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:23"), (short) 7631, Block.PRISMARINE_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:24"), (short) 7632, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:24"), (short) 7632, Block.PRISMARINE_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:25"), (short) 7633, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:25"), (short) 7633, Block.PRISMARINE_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:26"), (short) 7634, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:26"), (short) 7634, Block.PRISMARINE_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:27"), (short) 7635, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:27"), (short) 7635, Block.PRISMARINE_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:28"), (short) 7636, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:28"), (short) 7636, Block.PRISMARINE_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:29"), (short) 7637, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:29"), (short) 7637, Block.PRISMARINE_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:30"), (short) 7638, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:30"), (short) 7638, Block.PRISMARINE_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:31"), (short) 7639, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:31"), (short) 7639, Block.PRISMARINE_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:32"), (short) 7640, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:32"), (short) 7640, Block.PRISMARINE_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:33"), (short) 7641, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:33"), (short) 7641, Block.PRISMARINE_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:34"), (short) 7642, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:34"), (short) 7642, Block.PRISMARINE_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:35"), (short) 7643, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:35"), (short) 7643, Block.PRISMARINE_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:36"), (short) 7644, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:36"), (short) 7644, Block.PRISMARINE_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:37"), (short) 7645, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:37"), (short) 7645, Block.PRISMARINE_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:38"), (short) 7646, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:38"), (short) 7646, Block.PRISMARINE_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:39"), (short) 7647, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:39"), (short) 7647, Block.PRISMARINE_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:40"), (short) 7648, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:40"), (short) 7648, Block.PRISMARINE_STAIRS, "facing=west","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:41"), (short) 7649, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:41"), (short) 7649, Block.PRISMARINE_STAIRS, "facing=west","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:42"), (short) 7650, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:42"), (short) 7650, Block.PRISMARINE_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:43"), (short) 7651, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:43"), (short) 7651, Block.PRISMARINE_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:44"), (short) 7652, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:44"), (short) 7652, Block.PRISMARINE_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:45"), (short) 7653, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:45"), (short) 7653, Block.PRISMARINE_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:46"), (short) 7654, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:46"), (short) 7654, Block.PRISMARINE_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:47"), (short) 7655, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:47"), (short) 7655, Block.PRISMARINE_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:48"), (short) 7656, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:48"), (short) 7656, Block.PRISMARINE_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:49"), (short) 7657, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:49"), (short) 7657, Block.PRISMARINE_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:50"), (short) 7658, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:50"), (short) 7658, Block.PRISMARINE_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:51"), (short) 7659, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:51"), (short) 7659, Block.PRISMARINE_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:52"), (short) 7660, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:52"), (short) 7660, Block.PRISMARINE_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:53"), (short) 7661, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:53"), (short) 7661, Block.PRISMARINE_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:54"), (short) 7662, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:54"), (short) 7662, Block.PRISMARINE_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:55"), (short) 7663, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:55"), (short) 7663, Block.PRISMARINE_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:56"), (short) 7664, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:56"), (short) 7664, Block.PRISMARINE_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:57"), (short) 7665, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:57"), (short) 7665, Block.PRISMARINE_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:58"), (short) 7666, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:58"), (short) 7666, Block.PRISMARINE_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:59"), (short) 7667, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:59"), (short) 7667, Block.PRISMARINE_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:60"), (short) 7668, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:60"), (short) 7668, Block.PRISMARINE_STAIRS, "facing=east","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:61"), (short) 7669, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:61"), (short) 7669, Block.PRISMARINE_STAIRS, "facing=east","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:62"), (short) 7670, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:62"), (short) 7670, Block.PRISMARINE_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:63"), (short) 7671, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:63"), (short) 7671, Block.PRISMARINE_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:64"), (short) 7672, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:64"), (short) 7672, Block.PRISMARINE_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:65"), (short) 7673, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:65"), (short) 7673, Block.PRISMARINE_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:66"), (short) 7674, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:66"), (short) 7674, Block.PRISMARINE_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:67"), (short) 7675, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:67"), (short) 7675, Block.PRISMARINE_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:68"), (short) 7676, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:68"), (short) 7676, Block.PRISMARINE_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:69"), (short) 7677, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:69"), (short) 7677, Block.PRISMARINE_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:70"), (short) 7678, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:70"), (short) 7678, Block.PRISMARINE_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:71"), (short) 7679, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:71"), (short) 7679, Block.PRISMARINE_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:72"), (short) 7680, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:72"), (short) 7680, Block.PRISMARINE_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:73"), (short) 7681, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:73"), (short) 7681, Block.PRISMARINE_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:74"), (short) 7682, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:74"), (short) 7682, Block.PRISMARINE_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:75"), (short) 7683, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:75"), (short) 7683, Block.PRISMARINE_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:76"), (short) 7684, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:76"), (short) 7684, Block.PRISMARINE_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:77"), (short) 7685, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:77"), (short) 7685, Block.PRISMARINE_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState PRISMARINE_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:78"), (short) 7686, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:78"), (short) 7686, Block.PRISMARINE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState PRISMARINE_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:79"), (short) 7687, Block.PRISMARINE_STAIRS);
+  public static final BlockState PRISMARINE_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:prismarine_stairs:79"), (short) 7687, Block.PRISMARINE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
 
   public static void initStates() {
     Block.PRISMARINE_STAIRS.addBlockState(PRISMARINE_STAIRS_0);

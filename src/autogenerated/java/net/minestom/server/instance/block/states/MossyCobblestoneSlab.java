@@ -13,17 +13,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class MossyCobblestoneSlab {
-  public static final BlockState MOSSY_COBBLESTONE_SLAB_0 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_slab:0"), (short) 10817, Block.MOSSY_COBBLESTONE_SLAB);
+  public static final BlockState MOSSY_COBBLESTONE_SLAB_0 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_slab:0"), (short) 10817, Block.MOSSY_COBBLESTONE_SLAB, "type=top","waterlogged=true");
 
-  public static final BlockState MOSSY_COBBLESTONE_SLAB_1 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_slab:1"), (short) 10818, Block.MOSSY_COBBLESTONE_SLAB);
+  public static final BlockState MOSSY_COBBLESTONE_SLAB_1 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_slab:1"), (short) 10818, Block.MOSSY_COBBLESTONE_SLAB, "type=top","waterlogged=false");
 
-  public static final BlockState MOSSY_COBBLESTONE_SLAB_2 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_slab:2"), (short) 10819, Block.MOSSY_COBBLESTONE_SLAB);
+  public static final BlockState MOSSY_COBBLESTONE_SLAB_2 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_slab:2"), (short) 10819, Block.MOSSY_COBBLESTONE_SLAB, "type=bottom","waterlogged=true");
 
-  public static final BlockState MOSSY_COBBLESTONE_SLAB_3 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_slab:3"), (short) 10820, Block.MOSSY_COBBLESTONE_SLAB);
+  public static final BlockState MOSSY_COBBLESTONE_SLAB_3 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_slab:3"), (short) 10820, Block.MOSSY_COBBLESTONE_SLAB, "type=bottom","waterlogged=false");
 
-  public static final BlockState MOSSY_COBBLESTONE_SLAB_4 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_slab:4"), (short) 10821, Block.MOSSY_COBBLESTONE_SLAB);
+  public static final BlockState MOSSY_COBBLESTONE_SLAB_4 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_slab:4"), (short) 10821, Block.MOSSY_COBBLESTONE_SLAB, "type=double","waterlogged=true");
 
-  public static final BlockState MOSSY_COBBLESTONE_SLAB_5 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_slab:5"), (short) 10822, Block.MOSSY_COBBLESTONE_SLAB);
+  public static final BlockState MOSSY_COBBLESTONE_SLAB_5 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_slab:5"), (short) 10822, Block.MOSSY_COBBLESTONE_SLAB, "type=double","waterlogged=false");
 
   public static void initStates() {
     Block.MOSSY_COBBLESTONE_SLAB.addBlockState(MOSSY_COBBLESTONE_SLAB_0);

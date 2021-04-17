@@ -13,69 +13,69 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SpruceSign {
-  public static final BlockState SPRUCE_SIGN_0 = new BlockState(NamespaceID.from("minecraft:spruce_sign:0"), (short) 3413, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_0 = new BlockState(NamespaceID.from("minecraft:spruce_sign:0"), (short) 3413, Block.SPRUCE_SIGN, "rotation=0","waterlogged=true");
 
-  public static final BlockState SPRUCE_SIGN_1 = new BlockState(NamespaceID.from("minecraft:spruce_sign:1"), (short) 3414, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_1 = new BlockState(NamespaceID.from("minecraft:spruce_sign:1"), (short) 3414, Block.SPRUCE_SIGN, "rotation=0","waterlogged=false");
 
-  public static final BlockState SPRUCE_SIGN_2 = new BlockState(NamespaceID.from("minecraft:spruce_sign:2"), (short) 3415, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_2 = new BlockState(NamespaceID.from("minecraft:spruce_sign:2"), (short) 3415, Block.SPRUCE_SIGN, "rotation=1","waterlogged=true");
 
-  public static final BlockState SPRUCE_SIGN_3 = new BlockState(NamespaceID.from("minecraft:spruce_sign:3"), (short) 3416, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_3 = new BlockState(NamespaceID.from("minecraft:spruce_sign:3"), (short) 3416, Block.SPRUCE_SIGN, "rotation=1","waterlogged=false");
 
-  public static final BlockState SPRUCE_SIGN_4 = new BlockState(NamespaceID.from("minecraft:spruce_sign:4"), (short) 3417, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_4 = new BlockState(NamespaceID.from("minecraft:spruce_sign:4"), (short) 3417, Block.SPRUCE_SIGN, "rotation=2","waterlogged=true");
 
-  public static final BlockState SPRUCE_SIGN_5 = new BlockState(NamespaceID.from("minecraft:spruce_sign:5"), (short) 3418, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_5 = new BlockState(NamespaceID.from("minecraft:spruce_sign:5"), (short) 3418, Block.SPRUCE_SIGN, "rotation=2","waterlogged=false");
 
-  public static final BlockState SPRUCE_SIGN_6 = new BlockState(NamespaceID.from("minecraft:spruce_sign:6"), (short) 3419, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_6 = new BlockState(NamespaceID.from("minecraft:spruce_sign:6"), (short) 3419, Block.SPRUCE_SIGN, "rotation=3","waterlogged=true");
 
-  public static final BlockState SPRUCE_SIGN_7 = new BlockState(NamespaceID.from("minecraft:spruce_sign:7"), (short) 3420, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_7 = new BlockState(NamespaceID.from("minecraft:spruce_sign:7"), (short) 3420, Block.SPRUCE_SIGN, "rotation=3","waterlogged=false");
 
-  public static final BlockState SPRUCE_SIGN_8 = new BlockState(NamespaceID.from("minecraft:spruce_sign:8"), (short) 3421, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_8 = new BlockState(NamespaceID.from("minecraft:spruce_sign:8"), (short) 3421, Block.SPRUCE_SIGN, "rotation=4","waterlogged=true");
 
-  public static final BlockState SPRUCE_SIGN_9 = new BlockState(NamespaceID.from("minecraft:spruce_sign:9"), (short) 3422, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_9 = new BlockState(NamespaceID.from("minecraft:spruce_sign:9"), (short) 3422, Block.SPRUCE_SIGN, "rotation=4","waterlogged=false");
 
-  public static final BlockState SPRUCE_SIGN_10 = new BlockState(NamespaceID.from("minecraft:spruce_sign:10"), (short) 3423, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_10 = new BlockState(NamespaceID.from("minecraft:spruce_sign:10"), (short) 3423, Block.SPRUCE_SIGN, "rotation=5","waterlogged=true");
 
-  public static final BlockState SPRUCE_SIGN_11 = new BlockState(NamespaceID.from("minecraft:spruce_sign:11"), (short) 3424, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_11 = new BlockState(NamespaceID.from("minecraft:spruce_sign:11"), (short) 3424, Block.SPRUCE_SIGN, "rotation=5","waterlogged=false");
 
-  public static final BlockState SPRUCE_SIGN_12 = new BlockState(NamespaceID.from("minecraft:spruce_sign:12"), (short) 3425, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_12 = new BlockState(NamespaceID.from("minecraft:spruce_sign:12"), (short) 3425, Block.SPRUCE_SIGN, "rotation=6","waterlogged=true");
 
-  public static final BlockState SPRUCE_SIGN_13 = new BlockState(NamespaceID.from("minecraft:spruce_sign:13"), (short) 3426, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_13 = new BlockState(NamespaceID.from("minecraft:spruce_sign:13"), (short) 3426, Block.SPRUCE_SIGN, "rotation=6","waterlogged=false");
 
-  public static final BlockState SPRUCE_SIGN_14 = new BlockState(NamespaceID.from("minecraft:spruce_sign:14"), (short) 3427, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_14 = new BlockState(NamespaceID.from("minecraft:spruce_sign:14"), (short) 3427, Block.SPRUCE_SIGN, "rotation=7","waterlogged=true");
 
-  public static final BlockState SPRUCE_SIGN_15 = new BlockState(NamespaceID.from("minecraft:spruce_sign:15"), (short) 3428, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_15 = new BlockState(NamespaceID.from("minecraft:spruce_sign:15"), (short) 3428, Block.SPRUCE_SIGN, "rotation=7","waterlogged=false");
 
-  public static final BlockState SPRUCE_SIGN_16 = new BlockState(NamespaceID.from("minecraft:spruce_sign:16"), (short) 3429, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_16 = new BlockState(NamespaceID.from("minecraft:spruce_sign:16"), (short) 3429, Block.SPRUCE_SIGN, "rotation=8","waterlogged=true");
 
-  public static final BlockState SPRUCE_SIGN_17 = new BlockState(NamespaceID.from("minecraft:spruce_sign:17"), (short) 3430, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_17 = new BlockState(NamespaceID.from("minecraft:spruce_sign:17"), (short) 3430, Block.SPRUCE_SIGN, "rotation=8","waterlogged=false");
 
-  public static final BlockState SPRUCE_SIGN_18 = new BlockState(NamespaceID.from("minecraft:spruce_sign:18"), (short) 3431, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_18 = new BlockState(NamespaceID.from("minecraft:spruce_sign:18"), (short) 3431, Block.SPRUCE_SIGN, "rotation=9","waterlogged=true");
 
-  public static final BlockState SPRUCE_SIGN_19 = new BlockState(NamespaceID.from("minecraft:spruce_sign:19"), (short) 3432, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_19 = new BlockState(NamespaceID.from("minecraft:spruce_sign:19"), (short) 3432, Block.SPRUCE_SIGN, "rotation=9","waterlogged=false");
 
-  public static final BlockState SPRUCE_SIGN_20 = new BlockState(NamespaceID.from("minecraft:spruce_sign:20"), (short) 3433, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_20 = new BlockState(NamespaceID.from("minecraft:spruce_sign:20"), (short) 3433, Block.SPRUCE_SIGN, "rotation=10","waterlogged=true");
 
-  public static final BlockState SPRUCE_SIGN_21 = new BlockState(NamespaceID.from("minecraft:spruce_sign:21"), (short) 3434, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_21 = new BlockState(NamespaceID.from("minecraft:spruce_sign:21"), (short) 3434, Block.SPRUCE_SIGN, "rotation=10","waterlogged=false");
 
-  public static final BlockState SPRUCE_SIGN_22 = new BlockState(NamespaceID.from("minecraft:spruce_sign:22"), (short) 3435, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_22 = new BlockState(NamespaceID.from("minecraft:spruce_sign:22"), (short) 3435, Block.SPRUCE_SIGN, "rotation=11","waterlogged=true");
 
-  public static final BlockState SPRUCE_SIGN_23 = new BlockState(NamespaceID.from("minecraft:spruce_sign:23"), (short) 3436, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_23 = new BlockState(NamespaceID.from("minecraft:spruce_sign:23"), (short) 3436, Block.SPRUCE_SIGN, "rotation=11","waterlogged=false");
 
-  public static final BlockState SPRUCE_SIGN_24 = new BlockState(NamespaceID.from("minecraft:spruce_sign:24"), (short) 3437, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_24 = new BlockState(NamespaceID.from("minecraft:spruce_sign:24"), (short) 3437, Block.SPRUCE_SIGN, "rotation=12","waterlogged=true");
 
-  public static final BlockState SPRUCE_SIGN_25 = new BlockState(NamespaceID.from("minecraft:spruce_sign:25"), (short) 3438, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_25 = new BlockState(NamespaceID.from("minecraft:spruce_sign:25"), (short) 3438, Block.SPRUCE_SIGN, "rotation=12","waterlogged=false");
 
-  public static final BlockState SPRUCE_SIGN_26 = new BlockState(NamespaceID.from("minecraft:spruce_sign:26"), (short) 3439, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_26 = new BlockState(NamespaceID.from("minecraft:spruce_sign:26"), (short) 3439, Block.SPRUCE_SIGN, "rotation=13","waterlogged=true");
 
-  public static final BlockState SPRUCE_SIGN_27 = new BlockState(NamespaceID.from("minecraft:spruce_sign:27"), (short) 3440, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_27 = new BlockState(NamespaceID.from("minecraft:spruce_sign:27"), (short) 3440, Block.SPRUCE_SIGN, "rotation=13","waterlogged=false");
 
-  public static final BlockState SPRUCE_SIGN_28 = new BlockState(NamespaceID.from("minecraft:spruce_sign:28"), (short) 3441, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_28 = new BlockState(NamespaceID.from("minecraft:spruce_sign:28"), (short) 3441, Block.SPRUCE_SIGN, "rotation=14","waterlogged=true");
 
-  public static final BlockState SPRUCE_SIGN_29 = new BlockState(NamespaceID.from("minecraft:spruce_sign:29"), (short) 3442, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_29 = new BlockState(NamespaceID.from("minecraft:spruce_sign:29"), (short) 3442, Block.SPRUCE_SIGN, "rotation=14","waterlogged=false");
 
-  public static final BlockState SPRUCE_SIGN_30 = new BlockState(NamespaceID.from("minecraft:spruce_sign:30"), (short) 3443, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_30 = new BlockState(NamespaceID.from("minecraft:spruce_sign:30"), (short) 3443, Block.SPRUCE_SIGN, "rotation=15","waterlogged=true");
 
-  public static final BlockState SPRUCE_SIGN_31 = new BlockState(NamespaceID.from("minecraft:spruce_sign:31"), (short) 3444, Block.SPRUCE_SIGN);
+  public static final BlockState SPRUCE_SIGN_31 = new BlockState(NamespaceID.from("minecraft:spruce_sign:31"), (short) 3444, Block.SPRUCE_SIGN, "rotation=15","waterlogged=false");
 
   public static void initStates() {
     Block.SPRUCE_SIGN.addBlockState(SPRUCE_SIGN_0);

@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PinkWallBanner {
-  public static final BlockState PINK_WALL_BANNER_0 = new BlockState(NamespaceID.from("minecraft:pink_wall_banner:0"), (short) 8181, Block.PINK_WALL_BANNER);
+  public static final BlockState PINK_WALL_BANNER_0 = new BlockState(NamespaceID.from("minecraft:pink_wall_banner:0"), (short) 8181, Block.PINK_WALL_BANNER, "facing=north");
 
-  public static final BlockState PINK_WALL_BANNER_1 = new BlockState(NamespaceID.from("minecraft:pink_wall_banner:1"), (short) 8182, Block.PINK_WALL_BANNER);
+  public static final BlockState PINK_WALL_BANNER_1 = new BlockState(NamespaceID.from("minecraft:pink_wall_banner:1"), (short) 8182, Block.PINK_WALL_BANNER, "facing=south");
 
-  public static final BlockState PINK_WALL_BANNER_2 = new BlockState(NamespaceID.from("minecraft:pink_wall_banner:2"), (short) 8183, Block.PINK_WALL_BANNER);
+  public static final BlockState PINK_WALL_BANNER_2 = new BlockState(NamespaceID.from("minecraft:pink_wall_banner:2"), (short) 8183, Block.PINK_WALL_BANNER, "facing=west");
 
-  public static final BlockState PINK_WALL_BANNER_3 = new BlockState(NamespaceID.from("minecraft:pink_wall_banner:3"), (short) 8184, Block.PINK_WALL_BANNER);
+  public static final BlockState PINK_WALL_BANNER_3 = new BlockState(NamespaceID.from("minecraft:pink_wall_banner:3"), (short) 8184, Block.PINK_WALL_BANNER, "facing=east");
 
   public static void initStates() {
     Block.PINK_WALL_BANNER.addBlockState(PINK_WALL_BANNER_0);

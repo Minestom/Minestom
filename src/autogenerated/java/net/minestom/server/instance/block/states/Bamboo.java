@@ -13,29 +13,29 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Bamboo {
-  public static final BlockState BAMBOO_0 = new BlockState(NamespaceID.from("minecraft:bamboo:0"), (short) 9656, Block.BAMBOO);
+  public static final BlockState BAMBOO_0 = new BlockState(NamespaceID.from("minecraft:bamboo:0"), (short) 9656, Block.BAMBOO, "age=0","leaves=none","stage=0");
 
-  public static final BlockState BAMBOO_1 = new BlockState(NamespaceID.from("minecraft:bamboo:1"), (short) 9657, Block.BAMBOO);
+  public static final BlockState BAMBOO_1 = new BlockState(NamespaceID.from("minecraft:bamboo:1"), (short) 9657, Block.BAMBOO, "age=0","leaves=none","stage=1");
 
-  public static final BlockState BAMBOO_2 = new BlockState(NamespaceID.from("minecraft:bamboo:2"), (short) 9658, Block.BAMBOO);
+  public static final BlockState BAMBOO_2 = new BlockState(NamespaceID.from("minecraft:bamboo:2"), (short) 9658, Block.BAMBOO, "age=0","leaves=small","stage=0");
 
-  public static final BlockState BAMBOO_3 = new BlockState(NamespaceID.from("minecraft:bamboo:3"), (short) 9659, Block.BAMBOO);
+  public static final BlockState BAMBOO_3 = new BlockState(NamespaceID.from("minecraft:bamboo:3"), (short) 9659, Block.BAMBOO, "age=0","leaves=small","stage=1");
 
-  public static final BlockState BAMBOO_4 = new BlockState(NamespaceID.from("minecraft:bamboo:4"), (short) 9660, Block.BAMBOO);
+  public static final BlockState BAMBOO_4 = new BlockState(NamespaceID.from("minecraft:bamboo:4"), (short) 9660, Block.BAMBOO, "age=0","leaves=large","stage=0");
 
-  public static final BlockState BAMBOO_5 = new BlockState(NamespaceID.from("minecraft:bamboo:5"), (short) 9661, Block.BAMBOO);
+  public static final BlockState BAMBOO_5 = new BlockState(NamespaceID.from("minecraft:bamboo:5"), (short) 9661, Block.BAMBOO, "age=0","leaves=large","stage=1");
 
-  public static final BlockState BAMBOO_6 = new BlockState(NamespaceID.from("minecraft:bamboo:6"), (short) 9662, Block.BAMBOO);
+  public static final BlockState BAMBOO_6 = new BlockState(NamespaceID.from("minecraft:bamboo:6"), (short) 9662, Block.BAMBOO, "age=1","leaves=none","stage=0");
 
-  public static final BlockState BAMBOO_7 = new BlockState(NamespaceID.from("minecraft:bamboo:7"), (short) 9663, Block.BAMBOO);
+  public static final BlockState BAMBOO_7 = new BlockState(NamespaceID.from("minecraft:bamboo:7"), (short) 9663, Block.BAMBOO, "age=1","leaves=none","stage=1");
 
-  public static final BlockState BAMBOO_8 = new BlockState(NamespaceID.from("minecraft:bamboo:8"), (short) 9664, Block.BAMBOO);
+  public static final BlockState BAMBOO_8 = new BlockState(NamespaceID.from("minecraft:bamboo:8"), (short) 9664, Block.BAMBOO, "age=1","leaves=small","stage=0");
 
-  public static final BlockState BAMBOO_9 = new BlockState(NamespaceID.from("minecraft:bamboo:9"), (short) 9665, Block.BAMBOO);
+  public static final BlockState BAMBOO_9 = new BlockState(NamespaceID.from("minecraft:bamboo:9"), (short) 9665, Block.BAMBOO, "age=1","leaves=small","stage=1");
 
-  public static final BlockState BAMBOO_10 = new BlockState(NamespaceID.from("minecraft:bamboo:10"), (short) 9666, Block.BAMBOO);
+  public static final BlockState BAMBOO_10 = new BlockState(NamespaceID.from("minecraft:bamboo:10"), (short) 9666, Block.BAMBOO, "age=1","leaves=large","stage=0");
 
-  public static final BlockState BAMBOO_11 = new BlockState(NamespaceID.from("minecraft:bamboo:11"), (short) 9667, Block.BAMBOO);
+  public static final BlockState BAMBOO_11 = new BlockState(NamespaceID.from("minecraft:bamboo:11"), (short) 9667, Block.BAMBOO, "age=1","leaves=large","stage=1");
 
   public static void initStates() {
     Block.BAMBOO.addBlockState(BAMBOO_0);

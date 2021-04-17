@@ -13,69 +13,69 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class AcaciaFence {
-  public static final BlockState ACACIA_FENCE_0 = new BlockState(NamespaceID.from("minecraft:acacia_fence:0"), (short) 8678, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_0 = new BlockState(NamespaceID.from("minecraft:acacia_fence:0"), (short) 8678, Block.ACACIA_FENCE, "east=true","north=true","south=true","waterlogged=true","west=true");
 
-  public static final BlockState ACACIA_FENCE_1 = new BlockState(NamespaceID.from("minecraft:acacia_fence:1"), (short) 8679, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_1 = new BlockState(NamespaceID.from("minecraft:acacia_fence:1"), (short) 8679, Block.ACACIA_FENCE, "east=true","north=true","south=true","waterlogged=true","west=false");
 
-  public static final BlockState ACACIA_FENCE_2 = new BlockState(NamespaceID.from("minecraft:acacia_fence:2"), (short) 8680, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_2 = new BlockState(NamespaceID.from("minecraft:acacia_fence:2"), (short) 8680, Block.ACACIA_FENCE, "east=true","north=true","south=true","waterlogged=false","west=true");
 
-  public static final BlockState ACACIA_FENCE_3 = new BlockState(NamespaceID.from("minecraft:acacia_fence:3"), (short) 8681, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_3 = new BlockState(NamespaceID.from("minecraft:acacia_fence:3"), (short) 8681, Block.ACACIA_FENCE, "east=true","north=true","south=true","waterlogged=false","west=false");
 
-  public static final BlockState ACACIA_FENCE_4 = new BlockState(NamespaceID.from("minecraft:acacia_fence:4"), (short) 8682, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_4 = new BlockState(NamespaceID.from("minecraft:acacia_fence:4"), (short) 8682, Block.ACACIA_FENCE, "east=true","north=true","south=false","waterlogged=true","west=true");
 
-  public static final BlockState ACACIA_FENCE_5 = new BlockState(NamespaceID.from("minecraft:acacia_fence:5"), (short) 8683, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_5 = new BlockState(NamespaceID.from("minecraft:acacia_fence:5"), (short) 8683, Block.ACACIA_FENCE, "east=true","north=true","south=false","waterlogged=true","west=false");
 
-  public static final BlockState ACACIA_FENCE_6 = new BlockState(NamespaceID.from("minecraft:acacia_fence:6"), (short) 8684, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_6 = new BlockState(NamespaceID.from("minecraft:acacia_fence:6"), (short) 8684, Block.ACACIA_FENCE, "east=true","north=true","south=false","waterlogged=false","west=true");
 
-  public static final BlockState ACACIA_FENCE_7 = new BlockState(NamespaceID.from("minecraft:acacia_fence:7"), (short) 8685, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_7 = new BlockState(NamespaceID.from("minecraft:acacia_fence:7"), (short) 8685, Block.ACACIA_FENCE, "east=true","north=true","south=false","waterlogged=false","west=false");
 
-  public static final BlockState ACACIA_FENCE_8 = new BlockState(NamespaceID.from("minecraft:acacia_fence:8"), (short) 8686, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_8 = new BlockState(NamespaceID.from("minecraft:acacia_fence:8"), (short) 8686, Block.ACACIA_FENCE, "east=true","north=false","south=true","waterlogged=true","west=true");
 
-  public static final BlockState ACACIA_FENCE_9 = new BlockState(NamespaceID.from("minecraft:acacia_fence:9"), (short) 8687, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_9 = new BlockState(NamespaceID.from("minecraft:acacia_fence:9"), (short) 8687, Block.ACACIA_FENCE, "east=true","north=false","south=true","waterlogged=true","west=false");
 
-  public static final BlockState ACACIA_FENCE_10 = new BlockState(NamespaceID.from("minecraft:acacia_fence:10"), (short) 8688, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_10 = new BlockState(NamespaceID.from("minecraft:acacia_fence:10"), (short) 8688, Block.ACACIA_FENCE, "east=true","north=false","south=true","waterlogged=false","west=true");
 
-  public static final BlockState ACACIA_FENCE_11 = new BlockState(NamespaceID.from("minecraft:acacia_fence:11"), (short) 8689, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_11 = new BlockState(NamespaceID.from("minecraft:acacia_fence:11"), (short) 8689, Block.ACACIA_FENCE, "east=true","north=false","south=true","waterlogged=false","west=false");
 
-  public static final BlockState ACACIA_FENCE_12 = new BlockState(NamespaceID.from("minecraft:acacia_fence:12"), (short) 8690, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_12 = new BlockState(NamespaceID.from("minecraft:acacia_fence:12"), (short) 8690, Block.ACACIA_FENCE, "east=true","north=false","south=false","waterlogged=true","west=true");
 
-  public static final BlockState ACACIA_FENCE_13 = new BlockState(NamespaceID.from("minecraft:acacia_fence:13"), (short) 8691, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_13 = new BlockState(NamespaceID.from("minecraft:acacia_fence:13"), (short) 8691, Block.ACACIA_FENCE, "east=true","north=false","south=false","waterlogged=true","west=false");
 
-  public static final BlockState ACACIA_FENCE_14 = new BlockState(NamespaceID.from("minecraft:acacia_fence:14"), (short) 8692, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_14 = new BlockState(NamespaceID.from("minecraft:acacia_fence:14"), (short) 8692, Block.ACACIA_FENCE, "east=true","north=false","south=false","waterlogged=false","west=true");
 
-  public static final BlockState ACACIA_FENCE_15 = new BlockState(NamespaceID.from("minecraft:acacia_fence:15"), (short) 8693, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_15 = new BlockState(NamespaceID.from("minecraft:acacia_fence:15"), (short) 8693, Block.ACACIA_FENCE, "east=true","north=false","south=false","waterlogged=false","west=false");
 
-  public static final BlockState ACACIA_FENCE_16 = new BlockState(NamespaceID.from("minecraft:acacia_fence:16"), (short) 8694, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_16 = new BlockState(NamespaceID.from("minecraft:acacia_fence:16"), (short) 8694, Block.ACACIA_FENCE, "east=false","north=true","south=true","waterlogged=true","west=true");
 
-  public static final BlockState ACACIA_FENCE_17 = new BlockState(NamespaceID.from("minecraft:acacia_fence:17"), (short) 8695, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_17 = new BlockState(NamespaceID.from("minecraft:acacia_fence:17"), (short) 8695, Block.ACACIA_FENCE, "east=false","north=true","south=true","waterlogged=true","west=false");
 
-  public static final BlockState ACACIA_FENCE_18 = new BlockState(NamespaceID.from("minecraft:acacia_fence:18"), (short) 8696, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_18 = new BlockState(NamespaceID.from("minecraft:acacia_fence:18"), (short) 8696, Block.ACACIA_FENCE, "east=false","north=true","south=true","waterlogged=false","west=true");
 
-  public static final BlockState ACACIA_FENCE_19 = new BlockState(NamespaceID.from("minecraft:acacia_fence:19"), (short) 8697, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_19 = new BlockState(NamespaceID.from("minecraft:acacia_fence:19"), (short) 8697, Block.ACACIA_FENCE, "east=false","north=true","south=true","waterlogged=false","west=false");
 
-  public static final BlockState ACACIA_FENCE_20 = new BlockState(NamespaceID.from("minecraft:acacia_fence:20"), (short) 8698, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_20 = new BlockState(NamespaceID.from("minecraft:acacia_fence:20"), (short) 8698, Block.ACACIA_FENCE, "east=false","north=true","south=false","waterlogged=true","west=true");
 
-  public static final BlockState ACACIA_FENCE_21 = new BlockState(NamespaceID.from("minecraft:acacia_fence:21"), (short) 8699, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_21 = new BlockState(NamespaceID.from("minecraft:acacia_fence:21"), (short) 8699, Block.ACACIA_FENCE, "east=false","north=true","south=false","waterlogged=true","west=false");
 
-  public static final BlockState ACACIA_FENCE_22 = new BlockState(NamespaceID.from("minecraft:acacia_fence:22"), (short) 8700, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_22 = new BlockState(NamespaceID.from("minecraft:acacia_fence:22"), (short) 8700, Block.ACACIA_FENCE, "east=false","north=true","south=false","waterlogged=false","west=true");
 
-  public static final BlockState ACACIA_FENCE_23 = new BlockState(NamespaceID.from("minecraft:acacia_fence:23"), (short) 8701, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_23 = new BlockState(NamespaceID.from("minecraft:acacia_fence:23"), (short) 8701, Block.ACACIA_FENCE, "east=false","north=true","south=false","waterlogged=false","west=false");
 
-  public static final BlockState ACACIA_FENCE_24 = new BlockState(NamespaceID.from("minecraft:acacia_fence:24"), (short) 8702, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_24 = new BlockState(NamespaceID.from("minecraft:acacia_fence:24"), (short) 8702, Block.ACACIA_FENCE, "east=false","north=false","south=true","waterlogged=true","west=true");
 
-  public static final BlockState ACACIA_FENCE_25 = new BlockState(NamespaceID.from("minecraft:acacia_fence:25"), (short) 8703, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_25 = new BlockState(NamespaceID.from("minecraft:acacia_fence:25"), (short) 8703, Block.ACACIA_FENCE, "east=false","north=false","south=true","waterlogged=true","west=false");
 
-  public static final BlockState ACACIA_FENCE_26 = new BlockState(NamespaceID.from("minecraft:acacia_fence:26"), (short) 8704, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_26 = new BlockState(NamespaceID.from("minecraft:acacia_fence:26"), (short) 8704, Block.ACACIA_FENCE, "east=false","north=false","south=true","waterlogged=false","west=true");
 
-  public static final BlockState ACACIA_FENCE_27 = new BlockState(NamespaceID.from("minecraft:acacia_fence:27"), (short) 8705, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_27 = new BlockState(NamespaceID.from("minecraft:acacia_fence:27"), (short) 8705, Block.ACACIA_FENCE, "east=false","north=false","south=true","waterlogged=false","west=false");
 
-  public static final BlockState ACACIA_FENCE_28 = new BlockState(NamespaceID.from("minecraft:acacia_fence:28"), (short) 8706, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_28 = new BlockState(NamespaceID.from("minecraft:acacia_fence:28"), (short) 8706, Block.ACACIA_FENCE, "east=false","north=false","south=false","waterlogged=true","west=true");
 
-  public static final BlockState ACACIA_FENCE_29 = new BlockState(NamespaceID.from("minecraft:acacia_fence:29"), (short) 8707, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_29 = new BlockState(NamespaceID.from("minecraft:acacia_fence:29"), (short) 8707, Block.ACACIA_FENCE, "east=false","north=false","south=false","waterlogged=true","west=false");
 
-  public static final BlockState ACACIA_FENCE_30 = new BlockState(NamespaceID.from("minecraft:acacia_fence:30"), (short) 8708, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_30 = new BlockState(NamespaceID.from("minecraft:acacia_fence:30"), (short) 8708, Block.ACACIA_FENCE, "east=false","north=false","south=false","waterlogged=false","west=true");
 
-  public static final BlockState ACACIA_FENCE_31 = new BlockState(NamespaceID.from("minecraft:acacia_fence:31"), (short) 8709, Block.ACACIA_FENCE);
+  public static final BlockState ACACIA_FENCE_31 = new BlockState(NamespaceID.from("minecraft:acacia_fence:31"), (short) 8709, Block.ACACIA_FENCE, "east=false","north=false","south=false","waterlogged=false","west=false");
 
   public static void initStates() {
     Block.ACACIA_FENCE.addBlockState(ACACIA_FENCE_0);

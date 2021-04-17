@@ -13,9 +13,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DarkOakSapling {
-  public static final BlockState DARK_OAK_SAPLING_0 = new BlockState(NamespaceID.from("minecraft:dark_oak_sapling:0"), (short) 31, Block.DARK_OAK_SAPLING);
+  public static final BlockState DARK_OAK_SAPLING_0 = new BlockState(NamespaceID.from("minecraft:dark_oak_sapling:0"), (short) 31, Block.DARK_OAK_SAPLING, "stage=0");
 
-  public static final BlockState DARK_OAK_SAPLING_1 = new BlockState(NamespaceID.from("minecraft:dark_oak_sapling:1"), (short) 32, Block.DARK_OAK_SAPLING);
+  public static final BlockState DARK_OAK_SAPLING_1 = new BlockState(NamespaceID.from("minecraft:dark_oak_sapling:1"), (short) 32, Block.DARK_OAK_SAPLING, "stage=1");
 
   public static void initStates() {
     Block.DARK_OAK_SAPLING.addBlockState(DARK_OAK_SAPLING_0);

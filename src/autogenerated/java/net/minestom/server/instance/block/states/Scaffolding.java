@@ -13,69 +13,69 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Scaffolding {
-  public static final BlockState SCAFFOLDING_0 = new BlockState(NamespaceID.from("minecraft:scaffolding:0"), (short) 14759, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_0 = new BlockState(NamespaceID.from("minecraft:scaffolding:0"), (short) 14759, Block.SCAFFOLDING, "bottom=true","distance=0","waterlogged=true");
 
-  public static final BlockState SCAFFOLDING_1 = new BlockState(NamespaceID.from("minecraft:scaffolding:1"), (short) 14760, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_1 = new BlockState(NamespaceID.from("minecraft:scaffolding:1"), (short) 14760, Block.SCAFFOLDING, "bottom=true","distance=0","waterlogged=false");
 
-  public static final BlockState SCAFFOLDING_2 = new BlockState(NamespaceID.from("minecraft:scaffolding:2"), (short) 14761, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_2 = new BlockState(NamespaceID.from("minecraft:scaffolding:2"), (short) 14761, Block.SCAFFOLDING, "bottom=true","distance=1","waterlogged=true");
 
-  public static final BlockState SCAFFOLDING_3 = new BlockState(NamespaceID.from("minecraft:scaffolding:3"), (short) 14762, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_3 = new BlockState(NamespaceID.from("minecraft:scaffolding:3"), (short) 14762, Block.SCAFFOLDING, "bottom=true","distance=1","waterlogged=false");
 
-  public static final BlockState SCAFFOLDING_4 = new BlockState(NamespaceID.from("minecraft:scaffolding:4"), (short) 14763, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_4 = new BlockState(NamespaceID.from("minecraft:scaffolding:4"), (short) 14763, Block.SCAFFOLDING, "bottom=true","distance=2","waterlogged=true");
 
-  public static final BlockState SCAFFOLDING_5 = new BlockState(NamespaceID.from("minecraft:scaffolding:5"), (short) 14764, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_5 = new BlockState(NamespaceID.from("minecraft:scaffolding:5"), (short) 14764, Block.SCAFFOLDING, "bottom=true","distance=2","waterlogged=false");
 
-  public static final BlockState SCAFFOLDING_6 = new BlockState(NamespaceID.from("minecraft:scaffolding:6"), (short) 14765, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_6 = new BlockState(NamespaceID.from("minecraft:scaffolding:6"), (short) 14765, Block.SCAFFOLDING, "bottom=true","distance=3","waterlogged=true");
 
-  public static final BlockState SCAFFOLDING_7 = new BlockState(NamespaceID.from("minecraft:scaffolding:7"), (short) 14766, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_7 = new BlockState(NamespaceID.from("minecraft:scaffolding:7"), (short) 14766, Block.SCAFFOLDING, "bottom=true","distance=3","waterlogged=false");
 
-  public static final BlockState SCAFFOLDING_8 = new BlockState(NamespaceID.from("minecraft:scaffolding:8"), (short) 14767, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_8 = new BlockState(NamespaceID.from("minecraft:scaffolding:8"), (short) 14767, Block.SCAFFOLDING, "bottom=true","distance=4","waterlogged=true");
 
-  public static final BlockState SCAFFOLDING_9 = new BlockState(NamespaceID.from("minecraft:scaffolding:9"), (short) 14768, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_9 = new BlockState(NamespaceID.from("minecraft:scaffolding:9"), (short) 14768, Block.SCAFFOLDING, "bottom=true","distance=4","waterlogged=false");
 
-  public static final BlockState SCAFFOLDING_10 = new BlockState(NamespaceID.from("minecraft:scaffolding:10"), (short) 14769, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_10 = new BlockState(NamespaceID.from("minecraft:scaffolding:10"), (short) 14769, Block.SCAFFOLDING, "bottom=true","distance=5","waterlogged=true");
 
-  public static final BlockState SCAFFOLDING_11 = new BlockState(NamespaceID.from("minecraft:scaffolding:11"), (short) 14770, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_11 = new BlockState(NamespaceID.from("minecraft:scaffolding:11"), (short) 14770, Block.SCAFFOLDING, "bottom=true","distance=5","waterlogged=false");
 
-  public static final BlockState SCAFFOLDING_12 = new BlockState(NamespaceID.from("minecraft:scaffolding:12"), (short) 14771, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_12 = new BlockState(NamespaceID.from("minecraft:scaffolding:12"), (short) 14771, Block.SCAFFOLDING, "bottom=true","distance=6","waterlogged=true");
 
-  public static final BlockState SCAFFOLDING_13 = new BlockState(NamespaceID.from("minecraft:scaffolding:13"), (short) 14772, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_13 = new BlockState(NamespaceID.from("minecraft:scaffolding:13"), (short) 14772, Block.SCAFFOLDING, "bottom=true","distance=6","waterlogged=false");
 
-  public static final BlockState SCAFFOLDING_14 = new BlockState(NamespaceID.from("minecraft:scaffolding:14"), (short) 14773, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_14 = new BlockState(NamespaceID.from("minecraft:scaffolding:14"), (short) 14773, Block.SCAFFOLDING, "bottom=true","distance=7","waterlogged=true");
 
-  public static final BlockState SCAFFOLDING_15 = new BlockState(NamespaceID.from("minecraft:scaffolding:15"), (short) 14774, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_15 = new BlockState(NamespaceID.from("minecraft:scaffolding:15"), (short) 14774, Block.SCAFFOLDING, "bottom=true","distance=7","waterlogged=false");
 
-  public static final BlockState SCAFFOLDING_16 = new BlockState(NamespaceID.from("minecraft:scaffolding:16"), (short) 14775, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_16 = new BlockState(NamespaceID.from("minecraft:scaffolding:16"), (short) 14775, Block.SCAFFOLDING, "bottom=false","distance=0","waterlogged=true");
 
-  public static final BlockState SCAFFOLDING_17 = new BlockState(NamespaceID.from("minecraft:scaffolding:17"), (short) 14776, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_17 = new BlockState(NamespaceID.from("minecraft:scaffolding:17"), (short) 14776, Block.SCAFFOLDING, "bottom=false","distance=0","waterlogged=false");
 
-  public static final BlockState SCAFFOLDING_18 = new BlockState(NamespaceID.from("minecraft:scaffolding:18"), (short) 14777, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_18 = new BlockState(NamespaceID.from("minecraft:scaffolding:18"), (short) 14777, Block.SCAFFOLDING, "bottom=false","distance=1","waterlogged=true");
 
-  public static final BlockState SCAFFOLDING_19 = new BlockState(NamespaceID.from("minecraft:scaffolding:19"), (short) 14778, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_19 = new BlockState(NamespaceID.from("minecraft:scaffolding:19"), (short) 14778, Block.SCAFFOLDING, "bottom=false","distance=1","waterlogged=false");
 
-  public static final BlockState SCAFFOLDING_20 = new BlockState(NamespaceID.from("minecraft:scaffolding:20"), (short) 14779, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_20 = new BlockState(NamespaceID.from("minecraft:scaffolding:20"), (short) 14779, Block.SCAFFOLDING, "bottom=false","distance=2","waterlogged=true");
 
-  public static final BlockState SCAFFOLDING_21 = new BlockState(NamespaceID.from("minecraft:scaffolding:21"), (short) 14780, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_21 = new BlockState(NamespaceID.from("minecraft:scaffolding:21"), (short) 14780, Block.SCAFFOLDING, "bottom=false","distance=2","waterlogged=false");
 
-  public static final BlockState SCAFFOLDING_22 = new BlockState(NamespaceID.from("minecraft:scaffolding:22"), (short) 14781, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_22 = new BlockState(NamespaceID.from("minecraft:scaffolding:22"), (short) 14781, Block.SCAFFOLDING, "bottom=false","distance=3","waterlogged=true");
 
-  public static final BlockState SCAFFOLDING_23 = new BlockState(NamespaceID.from("minecraft:scaffolding:23"), (short) 14782, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_23 = new BlockState(NamespaceID.from("minecraft:scaffolding:23"), (short) 14782, Block.SCAFFOLDING, "bottom=false","distance=3","waterlogged=false");
 
-  public static final BlockState SCAFFOLDING_24 = new BlockState(NamespaceID.from("minecraft:scaffolding:24"), (short) 14783, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_24 = new BlockState(NamespaceID.from("minecraft:scaffolding:24"), (short) 14783, Block.SCAFFOLDING, "bottom=false","distance=4","waterlogged=true");
 
-  public static final BlockState SCAFFOLDING_25 = new BlockState(NamespaceID.from("minecraft:scaffolding:25"), (short) 14784, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_25 = new BlockState(NamespaceID.from("minecraft:scaffolding:25"), (short) 14784, Block.SCAFFOLDING, "bottom=false","distance=4","waterlogged=false");
 
-  public static final BlockState SCAFFOLDING_26 = new BlockState(NamespaceID.from("minecraft:scaffolding:26"), (short) 14785, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_26 = new BlockState(NamespaceID.from("minecraft:scaffolding:26"), (short) 14785, Block.SCAFFOLDING, "bottom=false","distance=5","waterlogged=true");
 
-  public static final BlockState SCAFFOLDING_27 = new BlockState(NamespaceID.from("minecraft:scaffolding:27"), (short) 14786, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_27 = new BlockState(NamespaceID.from("minecraft:scaffolding:27"), (short) 14786, Block.SCAFFOLDING, "bottom=false","distance=5","waterlogged=false");
 
-  public static final BlockState SCAFFOLDING_28 = new BlockState(NamespaceID.from("minecraft:scaffolding:28"), (short) 14787, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_28 = new BlockState(NamespaceID.from("minecraft:scaffolding:28"), (short) 14787, Block.SCAFFOLDING, "bottom=false","distance=6","waterlogged=true");
 
-  public static final BlockState SCAFFOLDING_29 = new BlockState(NamespaceID.from("minecraft:scaffolding:29"), (short) 14788, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_29 = new BlockState(NamespaceID.from("minecraft:scaffolding:29"), (short) 14788, Block.SCAFFOLDING, "bottom=false","distance=6","waterlogged=false");
 
-  public static final BlockState SCAFFOLDING_30 = new BlockState(NamespaceID.from("minecraft:scaffolding:30"), (short) 14789, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_30 = new BlockState(NamespaceID.from("minecraft:scaffolding:30"), (short) 14789, Block.SCAFFOLDING, "bottom=false","distance=7","waterlogged=true");
 
-  public static final BlockState SCAFFOLDING_31 = new BlockState(NamespaceID.from("minecraft:scaffolding:31"), (short) 14790, Block.SCAFFOLDING);
+  public static final BlockState SCAFFOLDING_31 = new BlockState(NamespaceID.from("minecraft:scaffolding:31"), (short) 14790, Block.SCAFFOLDING, "bottom=false","distance=7","waterlogged=false");
 
   public static void initStates() {
     Block.SCAFFOLDING.addBlockState(SCAFFOLDING_0);

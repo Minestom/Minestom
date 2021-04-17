@@ -1,21 +1,8 @@
 package net.minestom.code_generation.blocks;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import com.squareup.javapoet.AnnotationSpec;
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.CodeBlock;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
-import com.squareup.javapoet.TypeName;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
 import net.minestom.code_generation.MinestomCodeGenerator;
 import net.minestom.code_generation.util.NameUtil;
 import org.jetbrains.annotations.NotNull;
@@ -27,9 +14,7 @@ import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public final class BlockGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(BlockGenerator.class);
@@ -238,6 +223,24 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
+        // withProperties method
+        blockClass.addMethod(
+                MethodSpec.methodBuilder("withProperties")
+                        .returns(TypeName.SHORT)
+                        .addParameter(
+                                ParameterSpec.builder(ArrayTypeName.of(String.class), "properties").addAnnotation(NotNull.class).build()
+                        ).varargs()
+
+                        .beginControlFlow("for ($T state : blockStates)", blockStateClassName)
+                        .beginControlFlow("if ($T.equals(state.getProperties(), properties))", ClassName.get("java.util", "Arrays"))
+                        .addStatement("return state.getId()")
+                        .endControlFlow()
+                        .endControlFlow()
+                        .addStatement("return this.defaultBlockState")
+                        .addModifiers(Modifier.PUBLIC)
+
+                        .build()
+        );
         // getBlockState
         blockClass.addMethod(
                 MethodSpec.methodBuilder("getBlockState")
@@ -341,6 +344,12 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .addAnnotation(NotNull.class)
                         .build()
         );
+        blockStateClass.addField(
+                FieldSpec.builder(ArrayTypeName.of(String.class), "properties")
+                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
+                        .addAnnotation(NotNull.class)
+                        .build()
+        );
         // AIR_0 static field
         blockStateClass.addField(
                 FieldSpec.builder(blockStateClassName, "AIR_0")
@@ -354,10 +363,15 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .addParameter(ParameterSpec.builder(namespaceIDClassName, "namespaceId").addAnnotation(NotNull.class).build())
                         .addParameter(TypeName.SHORT, "id")
                         .addParameter(ParameterSpec.builder(blockClassName, "block").addAnnotation(NotNull.class).build())
+                        .addParameter(
+                                ParameterSpec.builder(ArrayTypeName.of(String.class), "properties").addAnnotation(NotNull.class).build()
+                        )
+                        .varargs()
 
                         .addStatement("this.namespaceId = namespaceId")
                         .addStatement("this.id = id")
                         .addStatement("this.block = block")
+                        .addStatement("this.properties = properties")
 
                         .addModifiers(Modifier.PUBLIC)
                         .build()
@@ -395,6 +409,53 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .returns(blockClassName)
                         .addAnnotation(NotNull.class)
                         .addStatement("return this.block")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // getProperties method
+        blockStateClass.addMethod(
+                MethodSpec.methodBuilder("getProperties")
+                        .returns(ArrayTypeName.of(String.class))
+                        .addAnnotation(NotNull.class)
+                        .addStatement("return this.properties")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // createPropertiesMap
+        blockStateClass.addMethod(
+                MethodSpec.methodBuilder("createPropertiesMap")
+                        .returns(ParameterizedTypeName.get(Map.class, String.class, String.class))
+                        .addAnnotation(NotNull.class)
+
+                        .addStatement(
+                                "$T map = new $T<>()",
+                                ParameterizedTypeName.get(Map.class, String.class, String.class),
+                                HashMap.class
+                        )
+                        .beginControlFlow("for (String p : this.properties)")
+                        .addStatement("String[] parts = p.split($S)", "=")
+                        .addStatement("map.put(parts[0], parts[1])")
+                        .endControlFlow()
+                        .addStatement("return map")
+
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // getProperty method
+        blockStateClass.addMethod(
+                MethodSpec.methodBuilder("getProperty")
+                        .addAnnotation(Nullable.class)
+                        .returns(String.class)
+                        .addParameter(ParameterSpec.builder(String.class, "key").addAnnotation(NotNull.class).build())
+
+                        .beginControlFlow("for (String p : this.properties)")
+                        .addStatement("String[] parts = p.split($S)", "=")
+                        .beginControlFlow("if (parts.length > 1 && parts[0].equals(key))")
+                        .addStatement("return parts[1]")
+                        .endControlFlow()
+                        .endControlFlow()
+                        .addStatement("return null")
+
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
@@ -479,59 +540,104 @@ public final class BlockGenerator extends MinestomCodeGenerator {
             );
 
             JsonArray states = block.get("states").getAsJsonArray();
+            // States should be split into a maximum size of maxSize to not reach the java limit.
+            // If we ever reach the java limit we can reduce this number, it does not change anything users should be using.
+            int maxSize = 1000;
 
-            ClassName blockStateSpecificClassName = ClassName.get(
-                    "net.minestom.server.instance.block.states",
-                    NameUtil.convertSnakeCaseToCamelCase(blockName.toLowerCase())
-            );
-
-            // Common blockStateSpecificClass structure
-            TypeSpec.Builder blockStateSpecificClass = TypeSpec.classBuilder(blockStateSpecificClassName)
-                    .addAnnotation(
-                            AnnotationSpec.builder(Deprecated.class)
-                                    .addMember("since", "$S", "forever")
-                                    .addMember("forRemoval", "$L", false).build()
-                    )
-                    .addModifiers(Modifier.PUBLIC, Modifier.FINAL).addJavadoc("AUTOGENERATED");
-            // initStates method
-            MethodSpec.Builder initStatesMethod = MethodSpec.methodBuilder("initStates")
-                    .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
-
-            for (int i = 0; i < states.size(); i++) {
-                JsonObject state = states.get(i).getAsJsonObject();
-                String stateName = blockName + "_" + i;
-
-                blockStateSpecificClass.addField(
-                        FieldSpec.builder(blockStateClassName, stateName)
-                                .initializer(
-                                        "new $T($T.from($S), (short) $L, $T.$N)",
-                                        blockStateClassName,
-                                        namespaceIDClassName,
-                                        block.get("id").getAsString() + ":" + i, // minecraft:stone:0
-                                        state.get("id").getAsString(),
-                                        blockClassName,
-                                        blockName
-                                )
-                                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                                .build()
+            for (int i=0; i < Math.ceil(states.size() / (double) maxSize); i++) {
+                String suffix = "";
+                if (i > 0) {
+                    suffix = String.valueOf(i + 1); // RedstoneWire, RedstoneWire2, RedstoneWire 3
+                }
+                ClassName blockStateSpecificClassName = ClassName.get(
+                        "net.minestom.server.instance.block.states",
+                        NameUtil.convertSnakeCaseToCamelCase(blockName.toLowerCase()) + suffix
                 );
-                // Add field to initStates method
-                initStatesMethod.addStatement(
-                        "Block.$N.addBlockState($N)",
-                        blockName,
-                        stateName
-                );
+
+                // Common blockStateSpecificClass structure
+                TypeSpec.Builder blockStateSpecificClass = TypeSpec.classBuilder(blockStateSpecificClassName)
+                        .addAnnotation(
+                                AnnotationSpec.builder(Deprecated.class)
+                                        .addMember("since", "$S", "forever")
+                                        .addMember("forRemoval", "$L", false).build()
+                        )
+                        .addModifiers(Modifier.PUBLIC, Modifier.FINAL).addJavadoc("AUTOGENERATED");
+
+                // initStates method
+                MethodSpec.Builder initStatesMethod = MethodSpec.methodBuilder("initStates")
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
+
+
+                for (int j = i*maxSize; j < Math.min((i+1)*maxSize, states.size()); j++) { // from 0 until maxSize or the rest of the array.
+                    JsonObject state = states.get(j).getAsJsonObject();
+                    String stateName = blockName + "_" + j;
+
+                    // block state properties
+                    JsonObject properties = state.get("properties").getAsJsonObject();
+                    // if not empty
+                    if (properties.size() != 0) {
+                        StringBuilder propertiesStr = new StringBuilder();
+                        // has properties
+                        for (Map.Entry<String, JsonElement> entry : properties.entrySet()) {
+                            String key = entry.getKey();
+                            String value = entry.getValue().getAsString();
+                            propertiesStr.append('"').append(key).append('=').append(value).append("\",");
+                        }
+                        // Delete last comma
+                        propertiesStr.deleteCharAt(propertiesStr.length() - 1);
+
+                        blockStateSpecificClass.addField(
+                                FieldSpec.builder(blockStateClassName, stateName)
+                                        .initializer(
+                                                "new $T($T.from($S), (short) $L, $T.$N, **REPLACE**)"
+                                                        .replace("**REPLACE**", propertiesStr.toString()),
+                                                blockStateClassName,
+                                                namespaceIDClassName,
+                                                block.get("id").getAsString() + ":" + j, // minecraft:stone:0
+                                                state.get("id").getAsString(),
+                                                blockClassName,
+                                                blockName
+                                        )
+                                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                                        .build()
+                        );
+                    } else {
+                        // has no properties
+                        blockStateSpecificClass.addField(
+                                FieldSpec.builder(blockStateClassName, stateName)
+                                        .initializer(
+                                                "new $T($T.from($S), (short) $L, $T.$N)",
+                                                blockStateClassName,
+                                                namespaceIDClassName,
+                                                block.get("id").getAsString() + ":" + j, // minecraft:stone:0
+                                                state.get("id").getAsString(),
+                                                blockClassName,
+                                                blockName
+                                        )
+                                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                                        .build()
+                        );
+                    }
+
+
+                    // Add field to initStates method
+                    initStatesMethod.addStatement(
+                            "Block.$N.addBlockState($N)",
+                            blockName,
+                            stateName
+                    );
+                }
+                // Add initStates Method
+                blockStateSpecificClass.addMethod(initStatesMethod.build());
+
+                // Add initStates method refence to static block
+                staticBlock.addStatement("$T.initStates()", blockStateSpecificClassName);
+
+                // Add BlockStates to list of files we need to write:
+                filesToWrite.add(JavaFile.builder("net.minestom.server.instance.block.states", blockStateSpecificClass.build()).build());
             }
-            // Add initStates Method
-            blockStateSpecificClass.addMethod(initStatesMethod.build());
-
-            // Add initStates method refence to static block
-            staticBlock.addStatement("$T.initStates()", blockStateSpecificClassName);
             // Add to static init.
             staticBlock2.addStatement("$T.registerBlock($N)", ClassName.get("net.minestom.server.registry", "Registries"), blockName);
-
-            // Add BlockStates to list of files we need to write:
-            filesToWrite.add(JavaFile.builder("net.minestom.server.instance.block.states", blockStateSpecificClass.build()).build());
         }
         blockClass.addStaticBlock(staticBlock.build());
         blockClass.addStaticBlock(staticBlock2.build());

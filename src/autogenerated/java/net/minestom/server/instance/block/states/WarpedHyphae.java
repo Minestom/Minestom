@@ -13,11 +13,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WarpedHyphae {
-  public static final BlockState WARPED_HYPHAE_0 = new BlockState(NamespaceID.from("minecraft:warped_hyphae:0"), (short) 14972, Block.WARPED_HYPHAE);
+  public static final BlockState WARPED_HYPHAE_0 = new BlockState(NamespaceID.from("minecraft:warped_hyphae:0"), (short) 14972, Block.WARPED_HYPHAE, "axis=x");
 
-  public static final BlockState WARPED_HYPHAE_1 = new BlockState(NamespaceID.from("minecraft:warped_hyphae:1"), (short) 14973, Block.WARPED_HYPHAE);
+  public static final BlockState WARPED_HYPHAE_1 = new BlockState(NamespaceID.from("minecraft:warped_hyphae:1"), (short) 14973, Block.WARPED_HYPHAE, "axis=y");
 
-  public static final BlockState WARPED_HYPHAE_2 = new BlockState(NamespaceID.from("minecraft:warped_hyphae:2"), (short) 14974, Block.WARPED_HYPHAE);
+  public static final BlockState WARPED_HYPHAE_2 = new BlockState(NamespaceID.from("minecraft:warped_hyphae:2"), (short) 14974, Block.WARPED_HYPHAE, "axis=z");
 
   public static void initStates() {
     Block.WARPED_HYPHAE.addBlockState(WARPED_HYPHAE_0);

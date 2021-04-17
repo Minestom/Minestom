@@ -13,37 +13,37 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CyanBed {
-  public static final BlockState CYAN_BED_0 = new BlockState(NamespaceID.from("minecraft:cyan_bed:0"), (short) 1193, Block.CYAN_BED);
+  public static final BlockState CYAN_BED_0 = new BlockState(NamespaceID.from("minecraft:cyan_bed:0"), (short) 1193, Block.CYAN_BED, "facing=north","occupied=true","part=head");
 
-  public static final BlockState CYAN_BED_1 = new BlockState(NamespaceID.from("minecraft:cyan_bed:1"), (short) 1194, Block.CYAN_BED);
+  public static final BlockState CYAN_BED_1 = new BlockState(NamespaceID.from("minecraft:cyan_bed:1"), (short) 1194, Block.CYAN_BED, "facing=north","occupied=true","part=foot");
 
-  public static final BlockState CYAN_BED_2 = new BlockState(NamespaceID.from("minecraft:cyan_bed:2"), (short) 1195, Block.CYAN_BED);
+  public static final BlockState CYAN_BED_2 = new BlockState(NamespaceID.from("minecraft:cyan_bed:2"), (short) 1195, Block.CYAN_BED, "facing=north","occupied=false","part=head");
 
-  public static final BlockState CYAN_BED_3 = new BlockState(NamespaceID.from("minecraft:cyan_bed:3"), (short) 1196, Block.CYAN_BED);
+  public static final BlockState CYAN_BED_3 = new BlockState(NamespaceID.from("minecraft:cyan_bed:3"), (short) 1196, Block.CYAN_BED, "facing=north","occupied=false","part=foot");
 
-  public static final BlockState CYAN_BED_4 = new BlockState(NamespaceID.from("minecraft:cyan_bed:4"), (short) 1197, Block.CYAN_BED);
+  public static final BlockState CYAN_BED_4 = new BlockState(NamespaceID.from("minecraft:cyan_bed:4"), (short) 1197, Block.CYAN_BED, "facing=south","occupied=true","part=head");
 
-  public static final BlockState CYAN_BED_5 = new BlockState(NamespaceID.from("minecraft:cyan_bed:5"), (short) 1198, Block.CYAN_BED);
+  public static final BlockState CYAN_BED_5 = new BlockState(NamespaceID.from("minecraft:cyan_bed:5"), (short) 1198, Block.CYAN_BED, "facing=south","occupied=true","part=foot");
 
-  public static final BlockState CYAN_BED_6 = new BlockState(NamespaceID.from("minecraft:cyan_bed:6"), (short) 1199, Block.CYAN_BED);
+  public static final BlockState CYAN_BED_6 = new BlockState(NamespaceID.from("minecraft:cyan_bed:6"), (short) 1199, Block.CYAN_BED, "facing=south","occupied=false","part=head");
 
-  public static final BlockState CYAN_BED_7 = new BlockState(NamespaceID.from("minecraft:cyan_bed:7"), (short) 1200, Block.CYAN_BED);
+  public static final BlockState CYAN_BED_7 = new BlockState(NamespaceID.from("minecraft:cyan_bed:7"), (short) 1200, Block.CYAN_BED, "facing=south","occupied=false","part=foot");
 
-  public static final BlockState CYAN_BED_8 = new BlockState(NamespaceID.from("minecraft:cyan_bed:8"), (short) 1201, Block.CYAN_BED);
+  public static final BlockState CYAN_BED_8 = new BlockState(NamespaceID.from("minecraft:cyan_bed:8"), (short) 1201, Block.CYAN_BED, "facing=west","occupied=true","part=head");
 
-  public static final BlockState CYAN_BED_9 = new BlockState(NamespaceID.from("minecraft:cyan_bed:9"), (short) 1202, Block.CYAN_BED);
+  public static final BlockState CYAN_BED_9 = new BlockState(NamespaceID.from("minecraft:cyan_bed:9"), (short) 1202, Block.CYAN_BED, "facing=west","occupied=true","part=foot");
 
-  public static final BlockState CYAN_BED_10 = new BlockState(NamespaceID.from("minecraft:cyan_bed:10"), (short) 1203, Block.CYAN_BED);
+  public static final BlockState CYAN_BED_10 = new BlockState(NamespaceID.from("minecraft:cyan_bed:10"), (short) 1203, Block.CYAN_BED, "facing=west","occupied=false","part=head");
 
-  public static final BlockState CYAN_BED_11 = new BlockState(NamespaceID.from("minecraft:cyan_bed:11"), (short) 1204, Block.CYAN_BED);
+  public static final BlockState CYAN_BED_11 = new BlockState(NamespaceID.from("minecraft:cyan_bed:11"), (short) 1204, Block.CYAN_BED, "facing=west","occupied=false","part=foot");
 
-  public static final BlockState CYAN_BED_12 = new BlockState(NamespaceID.from("minecraft:cyan_bed:12"), (short) 1205, Block.CYAN_BED);
+  public static final BlockState CYAN_BED_12 = new BlockState(NamespaceID.from("minecraft:cyan_bed:12"), (short) 1205, Block.CYAN_BED, "facing=east","occupied=true","part=head");
 
-  public static final BlockState CYAN_BED_13 = new BlockState(NamespaceID.from("minecraft:cyan_bed:13"), (short) 1206, Block.CYAN_BED);
+  public static final BlockState CYAN_BED_13 = new BlockState(NamespaceID.from("minecraft:cyan_bed:13"), (short) 1206, Block.CYAN_BED, "facing=east","occupied=true","part=foot");
 
-  public static final BlockState CYAN_BED_14 = new BlockState(NamespaceID.from("minecraft:cyan_bed:14"), (short) 1207, Block.CYAN_BED);
+  public static final BlockState CYAN_BED_14 = new BlockState(NamespaceID.from("minecraft:cyan_bed:14"), (short) 1207, Block.CYAN_BED, "facing=east","occupied=false","part=head");
 
-  public static final BlockState CYAN_BED_15 = new BlockState(NamespaceID.from("minecraft:cyan_bed:15"), (short) 1208, Block.CYAN_BED);
+  public static final BlockState CYAN_BED_15 = new BlockState(NamespaceID.from("minecraft:cyan_bed:15"), (short) 1208, Block.CYAN_BED, "facing=east","occupied=false","part=foot");
 
   public static void initStates() {
     Block.CYAN_BED.addBlockState(CYAN_BED_0);

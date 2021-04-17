@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class ZombieWallHead {
-  public static final BlockState ZOMBIE_WALL_HEAD_0 = new BlockState(NamespaceID.from("minecraft:zombie_wall_head:0"), (short) 6550, Block.ZOMBIE_WALL_HEAD);
+  public static final BlockState ZOMBIE_WALL_HEAD_0 = new BlockState(NamespaceID.from("minecraft:zombie_wall_head:0"), (short) 6550, Block.ZOMBIE_WALL_HEAD, "facing=north");
 
-  public static final BlockState ZOMBIE_WALL_HEAD_1 = new BlockState(NamespaceID.from("minecraft:zombie_wall_head:1"), (short) 6551, Block.ZOMBIE_WALL_HEAD);
+  public static final BlockState ZOMBIE_WALL_HEAD_1 = new BlockState(NamespaceID.from("minecraft:zombie_wall_head:1"), (short) 6551, Block.ZOMBIE_WALL_HEAD, "facing=south");
 
-  public static final BlockState ZOMBIE_WALL_HEAD_2 = new BlockState(NamespaceID.from("minecraft:zombie_wall_head:2"), (short) 6552, Block.ZOMBIE_WALL_HEAD);
+  public static final BlockState ZOMBIE_WALL_HEAD_2 = new BlockState(NamespaceID.from("minecraft:zombie_wall_head:2"), (short) 6552, Block.ZOMBIE_WALL_HEAD, "facing=west");
 
-  public static final BlockState ZOMBIE_WALL_HEAD_3 = new BlockState(NamespaceID.from("minecraft:zombie_wall_head:3"), (short) 6553, Block.ZOMBIE_WALL_HEAD);
+  public static final BlockState ZOMBIE_WALL_HEAD_3 = new BlockState(NamespaceID.from("minecraft:zombie_wall_head:3"), (short) 6553, Block.ZOMBIE_WALL_HEAD, "facing=east");
 
   public static void initStates() {
     Block.ZOMBIE_WALL_HEAD.addBlockState(ZOMBIE_WALL_HEAD_0);

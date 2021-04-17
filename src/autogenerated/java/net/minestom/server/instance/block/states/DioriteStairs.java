@@ -13,165 +13,165 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DioriteStairs {
-  public static final BlockState DIORITE_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:0"), (short) 10713, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:0"), (short) 10713, Block.DIORITE_STAIRS, "facing=north","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:1"), (short) 10714, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:1"), (short) 10714, Block.DIORITE_STAIRS, "facing=north","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:2"), (short) 10715, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:2"), (short) 10715, Block.DIORITE_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:3"), (short) 10716, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:3"), (short) 10716, Block.DIORITE_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:4"), (short) 10717, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:4"), (short) 10717, Block.DIORITE_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:5"), (short) 10718, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:5"), (short) 10718, Block.DIORITE_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:6"), (short) 10719, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:6"), (short) 10719, Block.DIORITE_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:7"), (short) 10720, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:7"), (short) 10720, Block.DIORITE_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:8"), (short) 10721, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:8"), (short) 10721, Block.DIORITE_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:9"), (short) 10722, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:9"), (short) 10722, Block.DIORITE_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:10"), (short) 10723, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:10"), (short) 10723, Block.DIORITE_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:11"), (short) 10724, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:11"), (short) 10724, Block.DIORITE_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:12"), (short) 10725, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:12"), (short) 10725, Block.DIORITE_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:13"), (short) 10726, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:13"), (short) 10726, Block.DIORITE_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:14"), (short) 10727, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:14"), (short) 10727, Block.DIORITE_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:15"), (short) 10728, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:15"), (short) 10728, Block.DIORITE_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:16"), (short) 10729, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:16"), (short) 10729, Block.DIORITE_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:17"), (short) 10730, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:17"), (short) 10730, Block.DIORITE_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:18"), (short) 10731, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:18"), (short) 10731, Block.DIORITE_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:19"), (short) 10732, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:19"), (short) 10732, Block.DIORITE_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:20"), (short) 10733, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:20"), (short) 10733, Block.DIORITE_STAIRS, "facing=south","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:21"), (short) 10734, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:21"), (short) 10734, Block.DIORITE_STAIRS, "facing=south","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:22"), (short) 10735, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:22"), (short) 10735, Block.DIORITE_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:23"), (short) 10736, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:23"), (short) 10736, Block.DIORITE_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:24"), (short) 10737, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:24"), (short) 10737, Block.DIORITE_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:25"), (short) 10738, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:25"), (short) 10738, Block.DIORITE_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:26"), (short) 10739, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:26"), (short) 10739, Block.DIORITE_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:27"), (short) 10740, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:27"), (short) 10740, Block.DIORITE_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:28"), (short) 10741, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:28"), (short) 10741, Block.DIORITE_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:29"), (short) 10742, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:29"), (short) 10742, Block.DIORITE_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:30"), (short) 10743, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:30"), (short) 10743, Block.DIORITE_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:31"), (short) 10744, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:31"), (short) 10744, Block.DIORITE_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:32"), (short) 10745, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:32"), (short) 10745, Block.DIORITE_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:33"), (short) 10746, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:33"), (short) 10746, Block.DIORITE_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:34"), (short) 10747, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:34"), (short) 10747, Block.DIORITE_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:35"), (short) 10748, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:35"), (short) 10748, Block.DIORITE_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:36"), (short) 10749, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:36"), (short) 10749, Block.DIORITE_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:37"), (short) 10750, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:37"), (short) 10750, Block.DIORITE_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:38"), (short) 10751, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:38"), (short) 10751, Block.DIORITE_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:39"), (short) 10752, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:39"), (short) 10752, Block.DIORITE_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:40"), (short) 10753, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:40"), (short) 10753, Block.DIORITE_STAIRS, "facing=west","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:41"), (short) 10754, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:41"), (short) 10754, Block.DIORITE_STAIRS, "facing=west","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:42"), (short) 10755, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:42"), (short) 10755, Block.DIORITE_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:43"), (short) 10756, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:43"), (short) 10756, Block.DIORITE_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:44"), (short) 10757, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:44"), (short) 10757, Block.DIORITE_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:45"), (short) 10758, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:45"), (short) 10758, Block.DIORITE_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:46"), (short) 10759, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:46"), (short) 10759, Block.DIORITE_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:47"), (short) 10760, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:47"), (short) 10760, Block.DIORITE_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:48"), (short) 10761, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:48"), (short) 10761, Block.DIORITE_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:49"), (short) 10762, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:49"), (short) 10762, Block.DIORITE_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:50"), (short) 10763, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:50"), (short) 10763, Block.DIORITE_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:51"), (short) 10764, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:51"), (short) 10764, Block.DIORITE_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:52"), (short) 10765, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:52"), (short) 10765, Block.DIORITE_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:53"), (short) 10766, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:53"), (short) 10766, Block.DIORITE_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:54"), (short) 10767, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:54"), (short) 10767, Block.DIORITE_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:55"), (short) 10768, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:55"), (short) 10768, Block.DIORITE_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:56"), (short) 10769, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:56"), (short) 10769, Block.DIORITE_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:57"), (short) 10770, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:57"), (short) 10770, Block.DIORITE_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:58"), (short) 10771, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:58"), (short) 10771, Block.DIORITE_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:59"), (short) 10772, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:59"), (short) 10772, Block.DIORITE_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:60"), (short) 10773, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:60"), (short) 10773, Block.DIORITE_STAIRS, "facing=east","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:61"), (short) 10774, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:61"), (short) 10774, Block.DIORITE_STAIRS, "facing=east","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:62"), (short) 10775, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:62"), (short) 10775, Block.DIORITE_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:63"), (short) 10776, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:63"), (short) 10776, Block.DIORITE_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:64"), (short) 10777, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:64"), (short) 10777, Block.DIORITE_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:65"), (short) 10778, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:65"), (short) 10778, Block.DIORITE_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:66"), (short) 10779, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:66"), (short) 10779, Block.DIORITE_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:67"), (short) 10780, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:67"), (short) 10780, Block.DIORITE_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:68"), (short) 10781, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:68"), (short) 10781, Block.DIORITE_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:69"), (short) 10782, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:69"), (short) 10782, Block.DIORITE_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:70"), (short) 10783, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:70"), (short) 10783, Block.DIORITE_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:71"), (short) 10784, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:71"), (short) 10784, Block.DIORITE_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:72"), (short) 10785, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:72"), (short) 10785, Block.DIORITE_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:73"), (short) 10786, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:73"), (short) 10786, Block.DIORITE_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:74"), (short) 10787, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:74"), (short) 10787, Block.DIORITE_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:75"), (short) 10788, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:75"), (short) 10788, Block.DIORITE_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:76"), (short) 10789, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:76"), (short) 10789, Block.DIORITE_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:77"), (short) 10790, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:77"), (short) 10790, Block.DIORITE_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState DIORITE_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:78"), (short) 10791, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:78"), (short) 10791, Block.DIORITE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState DIORITE_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:79"), (short) 10792, Block.DIORITE_STAIRS);
+  public static final BlockState DIORITE_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:diorite_stairs:79"), (short) 10792, Block.DIORITE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
 
   public static void initStates() {
     Block.DIORITE_STAIRS.addBlockState(DIORITE_STAIRS_0);

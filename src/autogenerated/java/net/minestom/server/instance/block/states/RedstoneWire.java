@@ -13,2597 +13,2005 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class RedstoneWire {
-  public static final BlockState REDSTONE_WIRE_0 = new BlockState(NamespaceID.from("minecraft:redstone_wire:0"), (short) 2058, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_0 = new BlockState(NamespaceID.from("minecraft:redstone_wire:0"), (short) 2058, Block.REDSTONE_WIRE, "east=up","north=up","power=0","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_1 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1"), (short) 2059, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_1 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1"), (short) 2059, Block.REDSTONE_WIRE, "east=up","north=up","power=0","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_2 = new BlockState(NamespaceID.from("minecraft:redstone_wire:2"), (short) 2060, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_2 = new BlockState(NamespaceID.from("minecraft:redstone_wire:2"), (short) 2060, Block.REDSTONE_WIRE, "east=up","north=up","power=0","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_3 = new BlockState(NamespaceID.from("minecraft:redstone_wire:3"), (short) 2061, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_3 = new BlockState(NamespaceID.from("minecraft:redstone_wire:3"), (short) 2061, Block.REDSTONE_WIRE, "east=up","north=up","power=0","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_4 = new BlockState(NamespaceID.from("minecraft:redstone_wire:4"), (short) 2062, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_4 = new BlockState(NamespaceID.from("minecraft:redstone_wire:4"), (short) 2062, Block.REDSTONE_WIRE, "east=up","north=up","power=0","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_5 = new BlockState(NamespaceID.from("minecraft:redstone_wire:5"), (short) 2063, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_5 = new BlockState(NamespaceID.from("minecraft:redstone_wire:5"), (short) 2063, Block.REDSTONE_WIRE, "east=up","north=up","power=0","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_6 = new BlockState(NamespaceID.from("minecraft:redstone_wire:6"), (short) 2064, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_6 = new BlockState(NamespaceID.from("minecraft:redstone_wire:6"), (short) 2064, Block.REDSTONE_WIRE, "east=up","north=up","power=0","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_7 = new BlockState(NamespaceID.from("minecraft:redstone_wire:7"), (short) 2065, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_7 = new BlockState(NamespaceID.from("minecraft:redstone_wire:7"), (short) 2065, Block.REDSTONE_WIRE, "east=up","north=up","power=0","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_8 = new BlockState(NamespaceID.from("minecraft:redstone_wire:8"), (short) 2066, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_8 = new BlockState(NamespaceID.from("minecraft:redstone_wire:8"), (short) 2066, Block.REDSTONE_WIRE, "east=up","north=up","power=0","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_9 = new BlockState(NamespaceID.from("minecraft:redstone_wire:9"), (short) 2067, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_9 = new BlockState(NamespaceID.from("minecraft:redstone_wire:9"), (short) 2067, Block.REDSTONE_WIRE, "east=up","north=up","power=1","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_10 = new BlockState(NamespaceID.from("minecraft:redstone_wire:10"), (short) 2068, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_10 = new BlockState(NamespaceID.from("minecraft:redstone_wire:10"), (short) 2068, Block.REDSTONE_WIRE, "east=up","north=up","power=1","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_11 = new BlockState(NamespaceID.from("minecraft:redstone_wire:11"), (short) 2069, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_11 = new BlockState(NamespaceID.from("minecraft:redstone_wire:11"), (short) 2069, Block.REDSTONE_WIRE, "east=up","north=up","power=1","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_12 = new BlockState(NamespaceID.from("minecraft:redstone_wire:12"), (short) 2070, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_12 = new BlockState(NamespaceID.from("minecraft:redstone_wire:12"), (short) 2070, Block.REDSTONE_WIRE, "east=up","north=up","power=1","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_13 = new BlockState(NamespaceID.from("minecraft:redstone_wire:13"), (short) 2071, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_13 = new BlockState(NamespaceID.from("minecraft:redstone_wire:13"), (short) 2071, Block.REDSTONE_WIRE, "east=up","north=up","power=1","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_14 = new BlockState(NamespaceID.from("minecraft:redstone_wire:14"), (short) 2072, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_14 = new BlockState(NamespaceID.from("minecraft:redstone_wire:14"), (short) 2072, Block.REDSTONE_WIRE, "east=up","north=up","power=1","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_15 = new BlockState(NamespaceID.from("minecraft:redstone_wire:15"), (short) 2073, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_15 = new BlockState(NamespaceID.from("minecraft:redstone_wire:15"), (short) 2073, Block.REDSTONE_WIRE, "east=up","north=up","power=1","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_16 = new BlockState(NamespaceID.from("minecraft:redstone_wire:16"), (short) 2074, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_16 = new BlockState(NamespaceID.from("minecraft:redstone_wire:16"), (short) 2074, Block.REDSTONE_WIRE, "east=up","north=up","power=1","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_17 = new BlockState(NamespaceID.from("minecraft:redstone_wire:17"), (short) 2075, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_17 = new BlockState(NamespaceID.from("minecraft:redstone_wire:17"), (short) 2075, Block.REDSTONE_WIRE, "east=up","north=up","power=1","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_18 = new BlockState(NamespaceID.from("minecraft:redstone_wire:18"), (short) 2076, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_18 = new BlockState(NamespaceID.from("minecraft:redstone_wire:18"), (short) 2076, Block.REDSTONE_WIRE, "east=up","north=up","power=2","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_19 = new BlockState(NamespaceID.from("minecraft:redstone_wire:19"), (short) 2077, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_19 = new BlockState(NamespaceID.from("minecraft:redstone_wire:19"), (short) 2077, Block.REDSTONE_WIRE, "east=up","north=up","power=2","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_20 = new BlockState(NamespaceID.from("minecraft:redstone_wire:20"), (short) 2078, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_20 = new BlockState(NamespaceID.from("minecraft:redstone_wire:20"), (short) 2078, Block.REDSTONE_WIRE, "east=up","north=up","power=2","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_21 = new BlockState(NamespaceID.from("minecraft:redstone_wire:21"), (short) 2079, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_21 = new BlockState(NamespaceID.from("minecraft:redstone_wire:21"), (short) 2079, Block.REDSTONE_WIRE, "east=up","north=up","power=2","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_22 = new BlockState(NamespaceID.from("minecraft:redstone_wire:22"), (short) 2080, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_22 = new BlockState(NamespaceID.from("minecraft:redstone_wire:22"), (short) 2080, Block.REDSTONE_WIRE, "east=up","north=up","power=2","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_23 = new BlockState(NamespaceID.from("minecraft:redstone_wire:23"), (short) 2081, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_23 = new BlockState(NamespaceID.from("minecraft:redstone_wire:23"), (short) 2081, Block.REDSTONE_WIRE, "east=up","north=up","power=2","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_24 = new BlockState(NamespaceID.from("minecraft:redstone_wire:24"), (short) 2082, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_24 = new BlockState(NamespaceID.from("minecraft:redstone_wire:24"), (short) 2082, Block.REDSTONE_WIRE, "east=up","north=up","power=2","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_25 = new BlockState(NamespaceID.from("minecraft:redstone_wire:25"), (short) 2083, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_25 = new BlockState(NamespaceID.from("minecraft:redstone_wire:25"), (short) 2083, Block.REDSTONE_WIRE, "east=up","north=up","power=2","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_26 = new BlockState(NamespaceID.from("minecraft:redstone_wire:26"), (short) 2084, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_26 = new BlockState(NamespaceID.from("minecraft:redstone_wire:26"), (short) 2084, Block.REDSTONE_WIRE, "east=up","north=up","power=2","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_27 = new BlockState(NamespaceID.from("minecraft:redstone_wire:27"), (short) 2085, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_27 = new BlockState(NamespaceID.from("minecraft:redstone_wire:27"), (short) 2085, Block.REDSTONE_WIRE, "east=up","north=up","power=3","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_28 = new BlockState(NamespaceID.from("minecraft:redstone_wire:28"), (short) 2086, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_28 = new BlockState(NamespaceID.from("minecraft:redstone_wire:28"), (short) 2086, Block.REDSTONE_WIRE, "east=up","north=up","power=3","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_29 = new BlockState(NamespaceID.from("minecraft:redstone_wire:29"), (short) 2087, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_29 = new BlockState(NamespaceID.from("minecraft:redstone_wire:29"), (short) 2087, Block.REDSTONE_WIRE, "east=up","north=up","power=3","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_30 = new BlockState(NamespaceID.from("minecraft:redstone_wire:30"), (short) 2088, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_30 = new BlockState(NamespaceID.from("minecraft:redstone_wire:30"), (short) 2088, Block.REDSTONE_WIRE, "east=up","north=up","power=3","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_31 = new BlockState(NamespaceID.from("minecraft:redstone_wire:31"), (short) 2089, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_31 = new BlockState(NamespaceID.from("minecraft:redstone_wire:31"), (short) 2089, Block.REDSTONE_WIRE, "east=up","north=up","power=3","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_32 = new BlockState(NamespaceID.from("minecraft:redstone_wire:32"), (short) 2090, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_32 = new BlockState(NamespaceID.from("minecraft:redstone_wire:32"), (short) 2090, Block.REDSTONE_WIRE, "east=up","north=up","power=3","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_33 = new BlockState(NamespaceID.from("minecraft:redstone_wire:33"), (short) 2091, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_33 = new BlockState(NamespaceID.from("minecraft:redstone_wire:33"), (short) 2091, Block.REDSTONE_WIRE, "east=up","north=up","power=3","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_34 = new BlockState(NamespaceID.from("minecraft:redstone_wire:34"), (short) 2092, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_34 = new BlockState(NamespaceID.from("minecraft:redstone_wire:34"), (short) 2092, Block.REDSTONE_WIRE, "east=up","north=up","power=3","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_35 = new BlockState(NamespaceID.from("minecraft:redstone_wire:35"), (short) 2093, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_35 = new BlockState(NamespaceID.from("minecraft:redstone_wire:35"), (short) 2093, Block.REDSTONE_WIRE, "east=up","north=up","power=3","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_36 = new BlockState(NamespaceID.from("minecraft:redstone_wire:36"), (short) 2094, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_36 = new BlockState(NamespaceID.from("minecraft:redstone_wire:36"), (short) 2094, Block.REDSTONE_WIRE, "east=up","north=up","power=4","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_37 = new BlockState(NamespaceID.from("minecraft:redstone_wire:37"), (short) 2095, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_37 = new BlockState(NamespaceID.from("minecraft:redstone_wire:37"), (short) 2095, Block.REDSTONE_WIRE, "east=up","north=up","power=4","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_38 = new BlockState(NamespaceID.from("minecraft:redstone_wire:38"), (short) 2096, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_38 = new BlockState(NamespaceID.from("minecraft:redstone_wire:38"), (short) 2096, Block.REDSTONE_WIRE, "east=up","north=up","power=4","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_39 = new BlockState(NamespaceID.from("minecraft:redstone_wire:39"), (short) 2097, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_39 = new BlockState(NamespaceID.from("minecraft:redstone_wire:39"), (short) 2097, Block.REDSTONE_WIRE, "east=up","north=up","power=4","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_40 = new BlockState(NamespaceID.from("minecraft:redstone_wire:40"), (short) 2098, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_40 = new BlockState(NamespaceID.from("minecraft:redstone_wire:40"), (short) 2098, Block.REDSTONE_WIRE, "east=up","north=up","power=4","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_41 = new BlockState(NamespaceID.from("minecraft:redstone_wire:41"), (short) 2099, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_41 = new BlockState(NamespaceID.from("minecraft:redstone_wire:41"), (short) 2099, Block.REDSTONE_WIRE, "east=up","north=up","power=4","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_42 = new BlockState(NamespaceID.from("minecraft:redstone_wire:42"), (short) 2100, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_42 = new BlockState(NamespaceID.from("minecraft:redstone_wire:42"), (short) 2100, Block.REDSTONE_WIRE, "east=up","north=up","power=4","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_43 = new BlockState(NamespaceID.from("minecraft:redstone_wire:43"), (short) 2101, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_43 = new BlockState(NamespaceID.from("minecraft:redstone_wire:43"), (short) 2101, Block.REDSTONE_WIRE, "east=up","north=up","power=4","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_44 = new BlockState(NamespaceID.from("minecraft:redstone_wire:44"), (short) 2102, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_44 = new BlockState(NamespaceID.from("minecraft:redstone_wire:44"), (short) 2102, Block.REDSTONE_WIRE, "east=up","north=up","power=4","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_45 = new BlockState(NamespaceID.from("minecraft:redstone_wire:45"), (short) 2103, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_45 = new BlockState(NamespaceID.from("minecraft:redstone_wire:45"), (short) 2103, Block.REDSTONE_WIRE, "east=up","north=up","power=5","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_46 = new BlockState(NamespaceID.from("minecraft:redstone_wire:46"), (short) 2104, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_46 = new BlockState(NamespaceID.from("minecraft:redstone_wire:46"), (short) 2104, Block.REDSTONE_WIRE, "east=up","north=up","power=5","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_47 = new BlockState(NamespaceID.from("minecraft:redstone_wire:47"), (short) 2105, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_47 = new BlockState(NamespaceID.from("minecraft:redstone_wire:47"), (short) 2105, Block.REDSTONE_WIRE, "east=up","north=up","power=5","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_48 = new BlockState(NamespaceID.from("minecraft:redstone_wire:48"), (short) 2106, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_48 = new BlockState(NamespaceID.from("minecraft:redstone_wire:48"), (short) 2106, Block.REDSTONE_WIRE, "east=up","north=up","power=5","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_49 = new BlockState(NamespaceID.from("minecraft:redstone_wire:49"), (short) 2107, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_49 = new BlockState(NamespaceID.from("minecraft:redstone_wire:49"), (short) 2107, Block.REDSTONE_WIRE, "east=up","north=up","power=5","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_50 = new BlockState(NamespaceID.from("minecraft:redstone_wire:50"), (short) 2108, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_50 = new BlockState(NamespaceID.from("minecraft:redstone_wire:50"), (short) 2108, Block.REDSTONE_WIRE, "east=up","north=up","power=5","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_51 = new BlockState(NamespaceID.from("minecraft:redstone_wire:51"), (short) 2109, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_51 = new BlockState(NamespaceID.from("minecraft:redstone_wire:51"), (short) 2109, Block.REDSTONE_WIRE, "east=up","north=up","power=5","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_52 = new BlockState(NamespaceID.from("minecraft:redstone_wire:52"), (short) 2110, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_52 = new BlockState(NamespaceID.from("minecraft:redstone_wire:52"), (short) 2110, Block.REDSTONE_WIRE, "east=up","north=up","power=5","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_53 = new BlockState(NamespaceID.from("minecraft:redstone_wire:53"), (short) 2111, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_53 = new BlockState(NamespaceID.from("minecraft:redstone_wire:53"), (short) 2111, Block.REDSTONE_WIRE, "east=up","north=up","power=5","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_54 = new BlockState(NamespaceID.from("minecraft:redstone_wire:54"), (short) 2112, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_54 = new BlockState(NamespaceID.from("minecraft:redstone_wire:54"), (short) 2112, Block.REDSTONE_WIRE, "east=up","north=up","power=6","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_55 = new BlockState(NamespaceID.from("minecraft:redstone_wire:55"), (short) 2113, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_55 = new BlockState(NamespaceID.from("minecraft:redstone_wire:55"), (short) 2113, Block.REDSTONE_WIRE, "east=up","north=up","power=6","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_56 = new BlockState(NamespaceID.from("minecraft:redstone_wire:56"), (short) 2114, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_56 = new BlockState(NamespaceID.from("minecraft:redstone_wire:56"), (short) 2114, Block.REDSTONE_WIRE, "east=up","north=up","power=6","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_57 = new BlockState(NamespaceID.from("minecraft:redstone_wire:57"), (short) 2115, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_57 = new BlockState(NamespaceID.from("minecraft:redstone_wire:57"), (short) 2115, Block.REDSTONE_WIRE, "east=up","north=up","power=6","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_58 = new BlockState(NamespaceID.from("minecraft:redstone_wire:58"), (short) 2116, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_58 = new BlockState(NamespaceID.from("minecraft:redstone_wire:58"), (short) 2116, Block.REDSTONE_WIRE, "east=up","north=up","power=6","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_59 = new BlockState(NamespaceID.from("minecraft:redstone_wire:59"), (short) 2117, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_59 = new BlockState(NamespaceID.from("minecraft:redstone_wire:59"), (short) 2117, Block.REDSTONE_WIRE, "east=up","north=up","power=6","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_60 = new BlockState(NamespaceID.from("minecraft:redstone_wire:60"), (short) 2118, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_60 = new BlockState(NamespaceID.from("minecraft:redstone_wire:60"), (short) 2118, Block.REDSTONE_WIRE, "east=up","north=up","power=6","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_61 = new BlockState(NamespaceID.from("minecraft:redstone_wire:61"), (short) 2119, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_61 = new BlockState(NamespaceID.from("minecraft:redstone_wire:61"), (short) 2119, Block.REDSTONE_WIRE, "east=up","north=up","power=6","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_62 = new BlockState(NamespaceID.from("minecraft:redstone_wire:62"), (short) 2120, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_62 = new BlockState(NamespaceID.from("minecraft:redstone_wire:62"), (short) 2120, Block.REDSTONE_WIRE, "east=up","north=up","power=6","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_63 = new BlockState(NamespaceID.from("minecraft:redstone_wire:63"), (short) 2121, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_63 = new BlockState(NamespaceID.from("minecraft:redstone_wire:63"), (short) 2121, Block.REDSTONE_WIRE, "east=up","north=up","power=7","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_64 = new BlockState(NamespaceID.from("minecraft:redstone_wire:64"), (short) 2122, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_64 = new BlockState(NamespaceID.from("minecraft:redstone_wire:64"), (short) 2122, Block.REDSTONE_WIRE, "east=up","north=up","power=7","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_65 = new BlockState(NamespaceID.from("minecraft:redstone_wire:65"), (short) 2123, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_65 = new BlockState(NamespaceID.from("minecraft:redstone_wire:65"), (short) 2123, Block.REDSTONE_WIRE, "east=up","north=up","power=7","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_66 = new BlockState(NamespaceID.from("minecraft:redstone_wire:66"), (short) 2124, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_66 = new BlockState(NamespaceID.from("minecraft:redstone_wire:66"), (short) 2124, Block.REDSTONE_WIRE, "east=up","north=up","power=7","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_67 = new BlockState(NamespaceID.from("minecraft:redstone_wire:67"), (short) 2125, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_67 = new BlockState(NamespaceID.from("minecraft:redstone_wire:67"), (short) 2125, Block.REDSTONE_WIRE, "east=up","north=up","power=7","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_68 = new BlockState(NamespaceID.from("minecraft:redstone_wire:68"), (short) 2126, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_68 = new BlockState(NamespaceID.from("minecraft:redstone_wire:68"), (short) 2126, Block.REDSTONE_WIRE, "east=up","north=up","power=7","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_69 = new BlockState(NamespaceID.from("minecraft:redstone_wire:69"), (short) 2127, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_69 = new BlockState(NamespaceID.from("minecraft:redstone_wire:69"), (short) 2127, Block.REDSTONE_WIRE, "east=up","north=up","power=7","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_70 = new BlockState(NamespaceID.from("minecraft:redstone_wire:70"), (short) 2128, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_70 = new BlockState(NamespaceID.from("minecraft:redstone_wire:70"), (short) 2128, Block.REDSTONE_WIRE, "east=up","north=up","power=7","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_71 = new BlockState(NamespaceID.from("minecraft:redstone_wire:71"), (short) 2129, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_71 = new BlockState(NamespaceID.from("minecraft:redstone_wire:71"), (short) 2129, Block.REDSTONE_WIRE, "east=up","north=up","power=7","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_72 = new BlockState(NamespaceID.from("minecraft:redstone_wire:72"), (short) 2130, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_72 = new BlockState(NamespaceID.from("minecraft:redstone_wire:72"), (short) 2130, Block.REDSTONE_WIRE, "east=up","north=up","power=8","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_73 = new BlockState(NamespaceID.from("minecraft:redstone_wire:73"), (short) 2131, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_73 = new BlockState(NamespaceID.from("minecraft:redstone_wire:73"), (short) 2131, Block.REDSTONE_WIRE, "east=up","north=up","power=8","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_74 = new BlockState(NamespaceID.from("minecraft:redstone_wire:74"), (short) 2132, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_74 = new BlockState(NamespaceID.from("minecraft:redstone_wire:74"), (short) 2132, Block.REDSTONE_WIRE, "east=up","north=up","power=8","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_75 = new BlockState(NamespaceID.from("minecraft:redstone_wire:75"), (short) 2133, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_75 = new BlockState(NamespaceID.from("minecraft:redstone_wire:75"), (short) 2133, Block.REDSTONE_WIRE, "east=up","north=up","power=8","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_76 = new BlockState(NamespaceID.from("minecraft:redstone_wire:76"), (short) 2134, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_76 = new BlockState(NamespaceID.from("minecraft:redstone_wire:76"), (short) 2134, Block.REDSTONE_WIRE, "east=up","north=up","power=8","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_77 = new BlockState(NamespaceID.from("minecraft:redstone_wire:77"), (short) 2135, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_77 = new BlockState(NamespaceID.from("minecraft:redstone_wire:77"), (short) 2135, Block.REDSTONE_WIRE, "east=up","north=up","power=8","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_78 = new BlockState(NamespaceID.from("minecraft:redstone_wire:78"), (short) 2136, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_78 = new BlockState(NamespaceID.from("minecraft:redstone_wire:78"), (short) 2136, Block.REDSTONE_WIRE, "east=up","north=up","power=8","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_79 = new BlockState(NamespaceID.from("minecraft:redstone_wire:79"), (short) 2137, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_79 = new BlockState(NamespaceID.from("minecraft:redstone_wire:79"), (short) 2137, Block.REDSTONE_WIRE, "east=up","north=up","power=8","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_80 = new BlockState(NamespaceID.from("minecraft:redstone_wire:80"), (short) 2138, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_80 = new BlockState(NamespaceID.from("minecraft:redstone_wire:80"), (short) 2138, Block.REDSTONE_WIRE, "east=up","north=up","power=8","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_81 = new BlockState(NamespaceID.from("minecraft:redstone_wire:81"), (short) 2139, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_81 = new BlockState(NamespaceID.from("minecraft:redstone_wire:81"), (short) 2139, Block.REDSTONE_WIRE, "east=up","north=up","power=9","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_82 = new BlockState(NamespaceID.from("minecraft:redstone_wire:82"), (short) 2140, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_82 = new BlockState(NamespaceID.from("minecraft:redstone_wire:82"), (short) 2140, Block.REDSTONE_WIRE, "east=up","north=up","power=9","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_83 = new BlockState(NamespaceID.from("minecraft:redstone_wire:83"), (short) 2141, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_83 = new BlockState(NamespaceID.from("minecraft:redstone_wire:83"), (short) 2141, Block.REDSTONE_WIRE, "east=up","north=up","power=9","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_84 = new BlockState(NamespaceID.from("minecraft:redstone_wire:84"), (short) 2142, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_84 = new BlockState(NamespaceID.from("minecraft:redstone_wire:84"), (short) 2142, Block.REDSTONE_WIRE, "east=up","north=up","power=9","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_85 = new BlockState(NamespaceID.from("minecraft:redstone_wire:85"), (short) 2143, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_85 = new BlockState(NamespaceID.from("minecraft:redstone_wire:85"), (short) 2143, Block.REDSTONE_WIRE, "east=up","north=up","power=9","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_86 = new BlockState(NamespaceID.from("minecraft:redstone_wire:86"), (short) 2144, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_86 = new BlockState(NamespaceID.from("minecraft:redstone_wire:86"), (short) 2144, Block.REDSTONE_WIRE, "east=up","north=up","power=9","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_87 = new BlockState(NamespaceID.from("minecraft:redstone_wire:87"), (short) 2145, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_87 = new BlockState(NamespaceID.from("minecraft:redstone_wire:87"), (short) 2145, Block.REDSTONE_WIRE, "east=up","north=up","power=9","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_88 = new BlockState(NamespaceID.from("minecraft:redstone_wire:88"), (short) 2146, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_88 = new BlockState(NamespaceID.from("minecraft:redstone_wire:88"), (short) 2146, Block.REDSTONE_WIRE, "east=up","north=up","power=9","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_89 = new BlockState(NamespaceID.from("minecraft:redstone_wire:89"), (short) 2147, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_89 = new BlockState(NamespaceID.from("minecraft:redstone_wire:89"), (short) 2147, Block.REDSTONE_WIRE, "east=up","north=up","power=9","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_90 = new BlockState(NamespaceID.from("minecraft:redstone_wire:90"), (short) 2148, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_90 = new BlockState(NamespaceID.from("minecraft:redstone_wire:90"), (short) 2148, Block.REDSTONE_WIRE, "east=up","north=up","power=10","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_91 = new BlockState(NamespaceID.from("minecraft:redstone_wire:91"), (short) 2149, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_91 = new BlockState(NamespaceID.from("minecraft:redstone_wire:91"), (short) 2149, Block.REDSTONE_WIRE, "east=up","north=up","power=10","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_92 = new BlockState(NamespaceID.from("minecraft:redstone_wire:92"), (short) 2150, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_92 = new BlockState(NamespaceID.from("minecraft:redstone_wire:92"), (short) 2150, Block.REDSTONE_WIRE, "east=up","north=up","power=10","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_93 = new BlockState(NamespaceID.from("minecraft:redstone_wire:93"), (short) 2151, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_93 = new BlockState(NamespaceID.from("minecraft:redstone_wire:93"), (short) 2151, Block.REDSTONE_WIRE, "east=up","north=up","power=10","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_94 = new BlockState(NamespaceID.from("minecraft:redstone_wire:94"), (short) 2152, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_94 = new BlockState(NamespaceID.from("minecraft:redstone_wire:94"), (short) 2152, Block.REDSTONE_WIRE, "east=up","north=up","power=10","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_95 = new BlockState(NamespaceID.from("minecraft:redstone_wire:95"), (short) 2153, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_95 = new BlockState(NamespaceID.from("minecraft:redstone_wire:95"), (short) 2153, Block.REDSTONE_WIRE, "east=up","north=up","power=10","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_96 = new BlockState(NamespaceID.from("minecraft:redstone_wire:96"), (short) 2154, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_96 = new BlockState(NamespaceID.from("minecraft:redstone_wire:96"), (short) 2154, Block.REDSTONE_WIRE, "east=up","north=up","power=10","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_97 = new BlockState(NamespaceID.from("minecraft:redstone_wire:97"), (short) 2155, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_97 = new BlockState(NamespaceID.from("minecraft:redstone_wire:97"), (short) 2155, Block.REDSTONE_WIRE, "east=up","north=up","power=10","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_98 = new BlockState(NamespaceID.from("minecraft:redstone_wire:98"), (short) 2156, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_98 = new BlockState(NamespaceID.from("minecraft:redstone_wire:98"), (short) 2156, Block.REDSTONE_WIRE, "east=up","north=up","power=10","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_99 = new BlockState(NamespaceID.from("minecraft:redstone_wire:99"), (short) 2157, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_99 = new BlockState(NamespaceID.from("minecraft:redstone_wire:99"), (short) 2157, Block.REDSTONE_WIRE, "east=up","north=up","power=11","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_100 = new BlockState(NamespaceID.from("minecraft:redstone_wire:100"), (short) 2158, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_100 = new BlockState(NamespaceID.from("minecraft:redstone_wire:100"), (short) 2158, Block.REDSTONE_WIRE, "east=up","north=up","power=11","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_101 = new BlockState(NamespaceID.from("minecraft:redstone_wire:101"), (short) 2159, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_101 = new BlockState(NamespaceID.from("minecraft:redstone_wire:101"), (short) 2159, Block.REDSTONE_WIRE, "east=up","north=up","power=11","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_102 = new BlockState(NamespaceID.from("minecraft:redstone_wire:102"), (short) 2160, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_102 = new BlockState(NamespaceID.from("minecraft:redstone_wire:102"), (short) 2160, Block.REDSTONE_WIRE, "east=up","north=up","power=11","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_103 = new BlockState(NamespaceID.from("minecraft:redstone_wire:103"), (short) 2161, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_103 = new BlockState(NamespaceID.from("minecraft:redstone_wire:103"), (short) 2161, Block.REDSTONE_WIRE, "east=up","north=up","power=11","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_104 = new BlockState(NamespaceID.from("minecraft:redstone_wire:104"), (short) 2162, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_104 = new BlockState(NamespaceID.from("minecraft:redstone_wire:104"), (short) 2162, Block.REDSTONE_WIRE, "east=up","north=up","power=11","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_105 = new BlockState(NamespaceID.from("minecraft:redstone_wire:105"), (short) 2163, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_105 = new BlockState(NamespaceID.from("minecraft:redstone_wire:105"), (short) 2163, Block.REDSTONE_WIRE, "east=up","north=up","power=11","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_106 = new BlockState(NamespaceID.from("minecraft:redstone_wire:106"), (short) 2164, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_106 = new BlockState(NamespaceID.from("minecraft:redstone_wire:106"), (short) 2164, Block.REDSTONE_WIRE, "east=up","north=up","power=11","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_107 = new BlockState(NamespaceID.from("minecraft:redstone_wire:107"), (short) 2165, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_107 = new BlockState(NamespaceID.from("minecraft:redstone_wire:107"), (short) 2165, Block.REDSTONE_WIRE, "east=up","north=up","power=11","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_108 = new BlockState(NamespaceID.from("minecraft:redstone_wire:108"), (short) 2166, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_108 = new BlockState(NamespaceID.from("minecraft:redstone_wire:108"), (short) 2166, Block.REDSTONE_WIRE, "east=up","north=up","power=12","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_109 = new BlockState(NamespaceID.from("minecraft:redstone_wire:109"), (short) 2167, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_109 = new BlockState(NamespaceID.from("minecraft:redstone_wire:109"), (short) 2167, Block.REDSTONE_WIRE, "east=up","north=up","power=12","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_110 = new BlockState(NamespaceID.from("minecraft:redstone_wire:110"), (short) 2168, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_110 = new BlockState(NamespaceID.from("minecraft:redstone_wire:110"), (short) 2168, Block.REDSTONE_WIRE, "east=up","north=up","power=12","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_111 = new BlockState(NamespaceID.from("minecraft:redstone_wire:111"), (short) 2169, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_111 = new BlockState(NamespaceID.from("minecraft:redstone_wire:111"), (short) 2169, Block.REDSTONE_WIRE, "east=up","north=up","power=12","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_112 = new BlockState(NamespaceID.from("minecraft:redstone_wire:112"), (short) 2170, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_112 = new BlockState(NamespaceID.from("minecraft:redstone_wire:112"), (short) 2170, Block.REDSTONE_WIRE, "east=up","north=up","power=12","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_113 = new BlockState(NamespaceID.from("minecraft:redstone_wire:113"), (short) 2171, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_113 = new BlockState(NamespaceID.from("minecraft:redstone_wire:113"), (short) 2171, Block.REDSTONE_WIRE, "east=up","north=up","power=12","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_114 = new BlockState(NamespaceID.from("minecraft:redstone_wire:114"), (short) 2172, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_114 = new BlockState(NamespaceID.from("minecraft:redstone_wire:114"), (short) 2172, Block.REDSTONE_WIRE, "east=up","north=up","power=12","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_115 = new BlockState(NamespaceID.from("minecraft:redstone_wire:115"), (short) 2173, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_115 = new BlockState(NamespaceID.from("minecraft:redstone_wire:115"), (short) 2173, Block.REDSTONE_WIRE, "east=up","north=up","power=12","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_116 = new BlockState(NamespaceID.from("minecraft:redstone_wire:116"), (short) 2174, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_116 = new BlockState(NamespaceID.from("minecraft:redstone_wire:116"), (short) 2174, Block.REDSTONE_WIRE, "east=up","north=up","power=12","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_117 = new BlockState(NamespaceID.from("minecraft:redstone_wire:117"), (short) 2175, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_117 = new BlockState(NamespaceID.from("minecraft:redstone_wire:117"), (short) 2175, Block.REDSTONE_WIRE, "east=up","north=up","power=13","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_118 = new BlockState(NamespaceID.from("minecraft:redstone_wire:118"), (short) 2176, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_118 = new BlockState(NamespaceID.from("minecraft:redstone_wire:118"), (short) 2176, Block.REDSTONE_WIRE, "east=up","north=up","power=13","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_119 = new BlockState(NamespaceID.from("minecraft:redstone_wire:119"), (short) 2177, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_119 = new BlockState(NamespaceID.from("minecraft:redstone_wire:119"), (short) 2177, Block.REDSTONE_WIRE, "east=up","north=up","power=13","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_120 = new BlockState(NamespaceID.from("minecraft:redstone_wire:120"), (short) 2178, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_120 = new BlockState(NamespaceID.from("minecraft:redstone_wire:120"), (short) 2178, Block.REDSTONE_WIRE, "east=up","north=up","power=13","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_121 = new BlockState(NamespaceID.from("minecraft:redstone_wire:121"), (short) 2179, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_121 = new BlockState(NamespaceID.from("minecraft:redstone_wire:121"), (short) 2179, Block.REDSTONE_WIRE, "east=up","north=up","power=13","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_122 = new BlockState(NamespaceID.from("minecraft:redstone_wire:122"), (short) 2180, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_122 = new BlockState(NamespaceID.from("minecraft:redstone_wire:122"), (short) 2180, Block.REDSTONE_WIRE, "east=up","north=up","power=13","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_123 = new BlockState(NamespaceID.from("minecraft:redstone_wire:123"), (short) 2181, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_123 = new BlockState(NamespaceID.from("minecraft:redstone_wire:123"), (short) 2181, Block.REDSTONE_WIRE, "east=up","north=up","power=13","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_124 = new BlockState(NamespaceID.from("minecraft:redstone_wire:124"), (short) 2182, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_124 = new BlockState(NamespaceID.from("minecraft:redstone_wire:124"), (short) 2182, Block.REDSTONE_WIRE, "east=up","north=up","power=13","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_125 = new BlockState(NamespaceID.from("minecraft:redstone_wire:125"), (short) 2183, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_125 = new BlockState(NamespaceID.from("minecraft:redstone_wire:125"), (short) 2183, Block.REDSTONE_WIRE, "east=up","north=up","power=13","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_126 = new BlockState(NamespaceID.from("minecraft:redstone_wire:126"), (short) 2184, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_126 = new BlockState(NamespaceID.from("minecraft:redstone_wire:126"), (short) 2184, Block.REDSTONE_WIRE, "east=up","north=up","power=14","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_127 = new BlockState(NamespaceID.from("minecraft:redstone_wire:127"), (short) 2185, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_127 = new BlockState(NamespaceID.from("minecraft:redstone_wire:127"), (short) 2185, Block.REDSTONE_WIRE, "east=up","north=up","power=14","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_128 = new BlockState(NamespaceID.from("minecraft:redstone_wire:128"), (short) 2186, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_128 = new BlockState(NamespaceID.from("minecraft:redstone_wire:128"), (short) 2186, Block.REDSTONE_WIRE, "east=up","north=up","power=14","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_129 = new BlockState(NamespaceID.from("minecraft:redstone_wire:129"), (short) 2187, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_129 = new BlockState(NamespaceID.from("minecraft:redstone_wire:129"), (short) 2187, Block.REDSTONE_WIRE, "east=up","north=up","power=14","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_130 = new BlockState(NamespaceID.from("minecraft:redstone_wire:130"), (short) 2188, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_130 = new BlockState(NamespaceID.from("minecraft:redstone_wire:130"), (short) 2188, Block.REDSTONE_WIRE, "east=up","north=up","power=14","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_131 = new BlockState(NamespaceID.from("minecraft:redstone_wire:131"), (short) 2189, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_131 = new BlockState(NamespaceID.from("minecraft:redstone_wire:131"), (short) 2189, Block.REDSTONE_WIRE, "east=up","north=up","power=14","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_132 = new BlockState(NamespaceID.from("minecraft:redstone_wire:132"), (short) 2190, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_132 = new BlockState(NamespaceID.from("minecraft:redstone_wire:132"), (short) 2190, Block.REDSTONE_WIRE, "east=up","north=up","power=14","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_133 = new BlockState(NamespaceID.from("minecraft:redstone_wire:133"), (short) 2191, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_133 = new BlockState(NamespaceID.from("minecraft:redstone_wire:133"), (short) 2191, Block.REDSTONE_WIRE, "east=up","north=up","power=14","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_134 = new BlockState(NamespaceID.from("minecraft:redstone_wire:134"), (short) 2192, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_134 = new BlockState(NamespaceID.from("minecraft:redstone_wire:134"), (short) 2192, Block.REDSTONE_WIRE, "east=up","north=up","power=14","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_135 = new BlockState(NamespaceID.from("minecraft:redstone_wire:135"), (short) 2193, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_135 = new BlockState(NamespaceID.from("minecraft:redstone_wire:135"), (short) 2193, Block.REDSTONE_WIRE, "east=up","north=up","power=15","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_136 = new BlockState(NamespaceID.from("minecraft:redstone_wire:136"), (short) 2194, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_136 = new BlockState(NamespaceID.from("minecraft:redstone_wire:136"), (short) 2194, Block.REDSTONE_WIRE, "east=up","north=up","power=15","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_137 = new BlockState(NamespaceID.from("minecraft:redstone_wire:137"), (short) 2195, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_137 = new BlockState(NamespaceID.from("minecraft:redstone_wire:137"), (short) 2195, Block.REDSTONE_WIRE, "east=up","north=up","power=15","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_138 = new BlockState(NamespaceID.from("minecraft:redstone_wire:138"), (short) 2196, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_138 = new BlockState(NamespaceID.from("minecraft:redstone_wire:138"), (short) 2196, Block.REDSTONE_WIRE, "east=up","north=up","power=15","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_139 = new BlockState(NamespaceID.from("minecraft:redstone_wire:139"), (short) 2197, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_139 = new BlockState(NamespaceID.from("minecraft:redstone_wire:139"), (short) 2197, Block.REDSTONE_WIRE, "east=up","north=up","power=15","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_140 = new BlockState(NamespaceID.from("minecraft:redstone_wire:140"), (short) 2198, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_140 = new BlockState(NamespaceID.from("minecraft:redstone_wire:140"), (short) 2198, Block.REDSTONE_WIRE, "east=up","north=up","power=15","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_141 = new BlockState(NamespaceID.from("minecraft:redstone_wire:141"), (short) 2199, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_141 = new BlockState(NamespaceID.from("minecraft:redstone_wire:141"), (short) 2199, Block.REDSTONE_WIRE, "east=up","north=up","power=15","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_142 = new BlockState(NamespaceID.from("minecraft:redstone_wire:142"), (short) 2200, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_142 = new BlockState(NamespaceID.from("minecraft:redstone_wire:142"), (short) 2200, Block.REDSTONE_WIRE, "east=up","north=up","power=15","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_143 = new BlockState(NamespaceID.from("minecraft:redstone_wire:143"), (short) 2201, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_143 = new BlockState(NamespaceID.from("minecraft:redstone_wire:143"), (short) 2201, Block.REDSTONE_WIRE, "east=up","north=up","power=15","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_144 = new BlockState(NamespaceID.from("minecraft:redstone_wire:144"), (short) 2202, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_144 = new BlockState(NamespaceID.from("minecraft:redstone_wire:144"), (short) 2202, Block.REDSTONE_WIRE, "east=up","north=side","power=0","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_145 = new BlockState(NamespaceID.from("minecraft:redstone_wire:145"), (short) 2203, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_145 = new BlockState(NamespaceID.from("minecraft:redstone_wire:145"), (short) 2203, Block.REDSTONE_WIRE, "east=up","north=side","power=0","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_146 = new BlockState(NamespaceID.from("minecraft:redstone_wire:146"), (short) 2204, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_146 = new BlockState(NamespaceID.from("minecraft:redstone_wire:146"), (short) 2204, Block.REDSTONE_WIRE, "east=up","north=side","power=0","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_147 = new BlockState(NamespaceID.from("minecraft:redstone_wire:147"), (short) 2205, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_147 = new BlockState(NamespaceID.from("minecraft:redstone_wire:147"), (short) 2205, Block.REDSTONE_WIRE, "east=up","north=side","power=0","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_148 = new BlockState(NamespaceID.from("minecraft:redstone_wire:148"), (short) 2206, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_148 = new BlockState(NamespaceID.from("minecraft:redstone_wire:148"), (short) 2206, Block.REDSTONE_WIRE, "east=up","north=side","power=0","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_149 = new BlockState(NamespaceID.from("minecraft:redstone_wire:149"), (short) 2207, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_149 = new BlockState(NamespaceID.from("minecraft:redstone_wire:149"), (short) 2207, Block.REDSTONE_WIRE, "east=up","north=side","power=0","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_150 = new BlockState(NamespaceID.from("minecraft:redstone_wire:150"), (short) 2208, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_150 = new BlockState(NamespaceID.from("minecraft:redstone_wire:150"), (short) 2208, Block.REDSTONE_WIRE, "east=up","north=side","power=0","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_151 = new BlockState(NamespaceID.from("minecraft:redstone_wire:151"), (short) 2209, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_151 = new BlockState(NamespaceID.from("minecraft:redstone_wire:151"), (short) 2209, Block.REDSTONE_WIRE, "east=up","north=side","power=0","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_152 = new BlockState(NamespaceID.from("minecraft:redstone_wire:152"), (short) 2210, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_152 = new BlockState(NamespaceID.from("minecraft:redstone_wire:152"), (short) 2210, Block.REDSTONE_WIRE, "east=up","north=side","power=0","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_153 = new BlockState(NamespaceID.from("minecraft:redstone_wire:153"), (short) 2211, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_153 = new BlockState(NamespaceID.from("minecraft:redstone_wire:153"), (short) 2211, Block.REDSTONE_WIRE, "east=up","north=side","power=1","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_154 = new BlockState(NamespaceID.from("minecraft:redstone_wire:154"), (short) 2212, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_154 = new BlockState(NamespaceID.from("minecraft:redstone_wire:154"), (short) 2212, Block.REDSTONE_WIRE, "east=up","north=side","power=1","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_155 = new BlockState(NamespaceID.from("minecraft:redstone_wire:155"), (short) 2213, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_155 = new BlockState(NamespaceID.from("minecraft:redstone_wire:155"), (short) 2213, Block.REDSTONE_WIRE, "east=up","north=side","power=1","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_156 = new BlockState(NamespaceID.from("minecraft:redstone_wire:156"), (short) 2214, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_156 = new BlockState(NamespaceID.from("minecraft:redstone_wire:156"), (short) 2214, Block.REDSTONE_WIRE, "east=up","north=side","power=1","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_157 = new BlockState(NamespaceID.from("minecraft:redstone_wire:157"), (short) 2215, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_157 = new BlockState(NamespaceID.from("minecraft:redstone_wire:157"), (short) 2215, Block.REDSTONE_WIRE, "east=up","north=side","power=1","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_158 = new BlockState(NamespaceID.from("minecraft:redstone_wire:158"), (short) 2216, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_158 = new BlockState(NamespaceID.from("minecraft:redstone_wire:158"), (short) 2216, Block.REDSTONE_WIRE, "east=up","north=side","power=1","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_159 = new BlockState(NamespaceID.from("minecraft:redstone_wire:159"), (short) 2217, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_159 = new BlockState(NamespaceID.from("minecraft:redstone_wire:159"), (short) 2217, Block.REDSTONE_WIRE, "east=up","north=side","power=1","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_160 = new BlockState(NamespaceID.from("minecraft:redstone_wire:160"), (short) 2218, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_160 = new BlockState(NamespaceID.from("minecraft:redstone_wire:160"), (short) 2218, Block.REDSTONE_WIRE, "east=up","north=side","power=1","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_161 = new BlockState(NamespaceID.from("minecraft:redstone_wire:161"), (short) 2219, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_161 = new BlockState(NamespaceID.from("minecraft:redstone_wire:161"), (short) 2219, Block.REDSTONE_WIRE, "east=up","north=side","power=1","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_162 = new BlockState(NamespaceID.from("minecraft:redstone_wire:162"), (short) 2220, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_162 = new BlockState(NamespaceID.from("minecraft:redstone_wire:162"), (short) 2220, Block.REDSTONE_WIRE, "east=up","north=side","power=2","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_163 = new BlockState(NamespaceID.from("minecraft:redstone_wire:163"), (short) 2221, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_163 = new BlockState(NamespaceID.from("minecraft:redstone_wire:163"), (short) 2221, Block.REDSTONE_WIRE, "east=up","north=side","power=2","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_164 = new BlockState(NamespaceID.from("minecraft:redstone_wire:164"), (short) 2222, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_164 = new BlockState(NamespaceID.from("minecraft:redstone_wire:164"), (short) 2222, Block.REDSTONE_WIRE, "east=up","north=side","power=2","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_165 = new BlockState(NamespaceID.from("minecraft:redstone_wire:165"), (short) 2223, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_165 = new BlockState(NamespaceID.from("minecraft:redstone_wire:165"), (short) 2223, Block.REDSTONE_WIRE, "east=up","north=side","power=2","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_166 = new BlockState(NamespaceID.from("minecraft:redstone_wire:166"), (short) 2224, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_166 = new BlockState(NamespaceID.from("minecraft:redstone_wire:166"), (short) 2224, Block.REDSTONE_WIRE, "east=up","north=side","power=2","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_167 = new BlockState(NamespaceID.from("minecraft:redstone_wire:167"), (short) 2225, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_167 = new BlockState(NamespaceID.from("minecraft:redstone_wire:167"), (short) 2225, Block.REDSTONE_WIRE, "east=up","north=side","power=2","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_168 = new BlockState(NamespaceID.from("minecraft:redstone_wire:168"), (short) 2226, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_168 = new BlockState(NamespaceID.from("minecraft:redstone_wire:168"), (short) 2226, Block.REDSTONE_WIRE, "east=up","north=side","power=2","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_169 = new BlockState(NamespaceID.from("minecraft:redstone_wire:169"), (short) 2227, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_169 = new BlockState(NamespaceID.from("minecraft:redstone_wire:169"), (short) 2227, Block.REDSTONE_WIRE, "east=up","north=side","power=2","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_170 = new BlockState(NamespaceID.from("minecraft:redstone_wire:170"), (short) 2228, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_170 = new BlockState(NamespaceID.from("minecraft:redstone_wire:170"), (short) 2228, Block.REDSTONE_WIRE, "east=up","north=side","power=2","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_171 = new BlockState(NamespaceID.from("minecraft:redstone_wire:171"), (short) 2229, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_171 = new BlockState(NamespaceID.from("minecraft:redstone_wire:171"), (short) 2229, Block.REDSTONE_WIRE, "east=up","north=side","power=3","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_172 = new BlockState(NamespaceID.from("minecraft:redstone_wire:172"), (short) 2230, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_172 = new BlockState(NamespaceID.from("minecraft:redstone_wire:172"), (short) 2230, Block.REDSTONE_WIRE, "east=up","north=side","power=3","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_173 = new BlockState(NamespaceID.from("minecraft:redstone_wire:173"), (short) 2231, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_173 = new BlockState(NamespaceID.from("minecraft:redstone_wire:173"), (short) 2231, Block.REDSTONE_WIRE, "east=up","north=side","power=3","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_174 = new BlockState(NamespaceID.from("minecraft:redstone_wire:174"), (short) 2232, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_174 = new BlockState(NamespaceID.from("minecraft:redstone_wire:174"), (short) 2232, Block.REDSTONE_WIRE, "east=up","north=side","power=3","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_175 = new BlockState(NamespaceID.from("minecraft:redstone_wire:175"), (short) 2233, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_175 = new BlockState(NamespaceID.from("minecraft:redstone_wire:175"), (short) 2233, Block.REDSTONE_WIRE, "east=up","north=side","power=3","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_176 = new BlockState(NamespaceID.from("minecraft:redstone_wire:176"), (short) 2234, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_176 = new BlockState(NamespaceID.from("minecraft:redstone_wire:176"), (short) 2234, Block.REDSTONE_WIRE, "east=up","north=side","power=3","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_177 = new BlockState(NamespaceID.from("minecraft:redstone_wire:177"), (short) 2235, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_177 = new BlockState(NamespaceID.from("minecraft:redstone_wire:177"), (short) 2235, Block.REDSTONE_WIRE, "east=up","north=side","power=3","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_178 = new BlockState(NamespaceID.from("minecraft:redstone_wire:178"), (short) 2236, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_178 = new BlockState(NamespaceID.from("minecraft:redstone_wire:178"), (short) 2236, Block.REDSTONE_WIRE, "east=up","north=side","power=3","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_179 = new BlockState(NamespaceID.from("minecraft:redstone_wire:179"), (short) 2237, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_179 = new BlockState(NamespaceID.from("minecraft:redstone_wire:179"), (short) 2237, Block.REDSTONE_WIRE, "east=up","north=side","power=3","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_180 = new BlockState(NamespaceID.from("minecraft:redstone_wire:180"), (short) 2238, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_180 = new BlockState(NamespaceID.from("minecraft:redstone_wire:180"), (short) 2238, Block.REDSTONE_WIRE, "east=up","north=side","power=4","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_181 = new BlockState(NamespaceID.from("minecraft:redstone_wire:181"), (short) 2239, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_181 = new BlockState(NamespaceID.from("minecraft:redstone_wire:181"), (short) 2239, Block.REDSTONE_WIRE, "east=up","north=side","power=4","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_182 = new BlockState(NamespaceID.from("minecraft:redstone_wire:182"), (short) 2240, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_182 = new BlockState(NamespaceID.from("minecraft:redstone_wire:182"), (short) 2240, Block.REDSTONE_WIRE, "east=up","north=side","power=4","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_183 = new BlockState(NamespaceID.from("minecraft:redstone_wire:183"), (short) 2241, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_183 = new BlockState(NamespaceID.from("minecraft:redstone_wire:183"), (short) 2241, Block.REDSTONE_WIRE, "east=up","north=side","power=4","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_184 = new BlockState(NamespaceID.from("minecraft:redstone_wire:184"), (short) 2242, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_184 = new BlockState(NamespaceID.from("minecraft:redstone_wire:184"), (short) 2242, Block.REDSTONE_WIRE, "east=up","north=side","power=4","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_185 = new BlockState(NamespaceID.from("minecraft:redstone_wire:185"), (short) 2243, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_185 = new BlockState(NamespaceID.from("minecraft:redstone_wire:185"), (short) 2243, Block.REDSTONE_WIRE, "east=up","north=side","power=4","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_186 = new BlockState(NamespaceID.from("minecraft:redstone_wire:186"), (short) 2244, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_186 = new BlockState(NamespaceID.from("minecraft:redstone_wire:186"), (short) 2244, Block.REDSTONE_WIRE, "east=up","north=side","power=4","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_187 = new BlockState(NamespaceID.from("minecraft:redstone_wire:187"), (short) 2245, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_187 = new BlockState(NamespaceID.from("minecraft:redstone_wire:187"), (short) 2245, Block.REDSTONE_WIRE, "east=up","north=side","power=4","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_188 = new BlockState(NamespaceID.from("minecraft:redstone_wire:188"), (short) 2246, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_188 = new BlockState(NamespaceID.from("minecraft:redstone_wire:188"), (short) 2246, Block.REDSTONE_WIRE, "east=up","north=side","power=4","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_189 = new BlockState(NamespaceID.from("minecraft:redstone_wire:189"), (short) 2247, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_189 = new BlockState(NamespaceID.from("minecraft:redstone_wire:189"), (short) 2247, Block.REDSTONE_WIRE, "east=up","north=side","power=5","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_190 = new BlockState(NamespaceID.from("minecraft:redstone_wire:190"), (short) 2248, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_190 = new BlockState(NamespaceID.from("minecraft:redstone_wire:190"), (short) 2248, Block.REDSTONE_WIRE, "east=up","north=side","power=5","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_191 = new BlockState(NamespaceID.from("minecraft:redstone_wire:191"), (short) 2249, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_191 = new BlockState(NamespaceID.from("minecraft:redstone_wire:191"), (short) 2249, Block.REDSTONE_WIRE, "east=up","north=side","power=5","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_192 = new BlockState(NamespaceID.from("minecraft:redstone_wire:192"), (short) 2250, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_192 = new BlockState(NamespaceID.from("minecraft:redstone_wire:192"), (short) 2250, Block.REDSTONE_WIRE, "east=up","north=side","power=5","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_193 = new BlockState(NamespaceID.from("minecraft:redstone_wire:193"), (short) 2251, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_193 = new BlockState(NamespaceID.from("minecraft:redstone_wire:193"), (short) 2251, Block.REDSTONE_WIRE, "east=up","north=side","power=5","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_194 = new BlockState(NamespaceID.from("minecraft:redstone_wire:194"), (short) 2252, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_194 = new BlockState(NamespaceID.from("minecraft:redstone_wire:194"), (short) 2252, Block.REDSTONE_WIRE, "east=up","north=side","power=5","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_195 = new BlockState(NamespaceID.from("minecraft:redstone_wire:195"), (short) 2253, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_195 = new BlockState(NamespaceID.from("minecraft:redstone_wire:195"), (short) 2253, Block.REDSTONE_WIRE, "east=up","north=side","power=5","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_196 = new BlockState(NamespaceID.from("minecraft:redstone_wire:196"), (short) 2254, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_196 = new BlockState(NamespaceID.from("minecraft:redstone_wire:196"), (short) 2254, Block.REDSTONE_WIRE, "east=up","north=side","power=5","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_197 = new BlockState(NamespaceID.from("minecraft:redstone_wire:197"), (short) 2255, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_197 = new BlockState(NamespaceID.from("minecraft:redstone_wire:197"), (short) 2255, Block.REDSTONE_WIRE, "east=up","north=side","power=5","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_198 = new BlockState(NamespaceID.from("minecraft:redstone_wire:198"), (short) 2256, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_198 = new BlockState(NamespaceID.from("minecraft:redstone_wire:198"), (short) 2256, Block.REDSTONE_WIRE, "east=up","north=side","power=6","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_199 = new BlockState(NamespaceID.from("minecraft:redstone_wire:199"), (short) 2257, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_199 = new BlockState(NamespaceID.from("minecraft:redstone_wire:199"), (short) 2257, Block.REDSTONE_WIRE, "east=up","north=side","power=6","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_200 = new BlockState(NamespaceID.from("minecraft:redstone_wire:200"), (short) 2258, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_200 = new BlockState(NamespaceID.from("minecraft:redstone_wire:200"), (short) 2258, Block.REDSTONE_WIRE, "east=up","north=side","power=6","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_201 = new BlockState(NamespaceID.from("minecraft:redstone_wire:201"), (short) 2259, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_201 = new BlockState(NamespaceID.from("minecraft:redstone_wire:201"), (short) 2259, Block.REDSTONE_WIRE, "east=up","north=side","power=6","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_202 = new BlockState(NamespaceID.from("minecraft:redstone_wire:202"), (short) 2260, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_202 = new BlockState(NamespaceID.from("minecraft:redstone_wire:202"), (short) 2260, Block.REDSTONE_WIRE, "east=up","north=side","power=6","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_203 = new BlockState(NamespaceID.from("minecraft:redstone_wire:203"), (short) 2261, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_203 = new BlockState(NamespaceID.from("minecraft:redstone_wire:203"), (short) 2261, Block.REDSTONE_WIRE, "east=up","north=side","power=6","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_204 = new BlockState(NamespaceID.from("minecraft:redstone_wire:204"), (short) 2262, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_204 = new BlockState(NamespaceID.from("minecraft:redstone_wire:204"), (short) 2262, Block.REDSTONE_WIRE, "east=up","north=side","power=6","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_205 = new BlockState(NamespaceID.from("minecraft:redstone_wire:205"), (short) 2263, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_205 = new BlockState(NamespaceID.from("minecraft:redstone_wire:205"), (short) 2263, Block.REDSTONE_WIRE, "east=up","north=side","power=6","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_206 = new BlockState(NamespaceID.from("minecraft:redstone_wire:206"), (short) 2264, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_206 = new BlockState(NamespaceID.from("minecraft:redstone_wire:206"), (short) 2264, Block.REDSTONE_WIRE, "east=up","north=side","power=6","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_207 = new BlockState(NamespaceID.from("minecraft:redstone_wire:207"), (short) 2265, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_207 = new BlockState(NamespaceID.from("minecraft:redstone_wire:207"), (short) 2265, Block.REDSTONE_WIRE, "east=up","north=side","power=7","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_208 = new BlockState(NamespaceID.from("minecraft:redstone_wire:208"), (short) 2266, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_208 = new BlockState(NamespaceID.from("minecraft:redstone_wire:208"), (short) 2266, Block.REDSTONE_WIRE, "east=up","north=side","power=7","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_209 = new BlockState(NamespaceID.from("minecraft:redstone_wire:209"), (short) 2267, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_209 = new BlockState(NamespaceID.from("minecraft:redstone_wire:209"), (short) 2267, Block.REDSTONE_WIRE, "east=up","north=side","power=7","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_210 = new BlockState(NamespaceID.from("minecraft:redstone_wire:210"), (short) 2268, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_210 = new BlockState(NamespaceID.from("minecraft:redstone_wire:210"), (short) 2268, Block.REDSTONE_WIRE, "east=up","north=side","power=7","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_211 = new BlockState(NamespaceID.from("minecraft:redstone_wire:211"), (short) 2269, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_211 = new BlockState(NamespaceID.from("minecraft:redstone_wire:211"), (short) 2269, Block.REDSTONE_WIRE, "east=up","north=side","power=7","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_212 = new BlockState(NamespaceID.from("minecraft:redstone_wire:212"), (short) 2270, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_212 = new BlockState(NamespaceID.from("minecraft:redstone_wire:212"), (short) 2270, Block.REDSTONE_WIRE, "east=up","north=side","power=7","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_213 = new BlockState(NamespaceID.from("minecraft:redstone_wire:213"), (short) 2271, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_213 = new BlockState(NamespaceID.from("minecraft:redstone_wire:213"), (short) 2271, Block.REDSTONE_WIRE, "east=up","north=side","power=7","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_214 = new BlockState(NamespaceID.from("minecraft:redstone_wire:214"), (short) 2272, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_214 = new BlockState(NamespaceID.from("minecraft:redstone_wire:214"), (short) 2272, Block.REDSTONE_WIRE, "east=up","north=side","power=7","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_215 = new BlockState(NamespaceID.from("minecraft:redstone_wire:215"), (short) 2273, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_215 = new BlockState(NamespaceID.from("minecraft:redstone_wire:215"), (short) 2273, Block.REDSTONE_WIRE, "east=up","north=side","power=7","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_216 = new BlockState(NamespaceID.from("minecraft:redstone_wire:216"), (short) 2274, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_216 = new BlockState(NamespaceID.from("minecraft:redstone_wire:216"), (short) 2274, Block.REDSTONE_WIRE, "east=up","north=side","power=8","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_217 = new BlockState(NamespaceID.from("minecraft:redstone_wire:217"), (short) 2275, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_217 = new BlockState(NamespaceID.from("minecraft:redstone_wire:217"), (short) 2275, Block.REDSTONE_WIRE, "east=up","north=side","power=8","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_218 = new BlockState(NamespaceID.from("minecraft:redstone_wire:218"), (short) 2276, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_218 = new BlockState(NamespaceID.from("minecraft:redstone_wire:218"), (short) 2276, Block.REDSTONE_WIRE, "east=up","north=side","power=8","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_219 = new BlockState(NamespaceID.from("minecraft:redstone_wire:219"), (short) 2277, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_219 = new BlockState(NamespaceID.from("minecraft:redstone_wire:219"), (short) 2277, Block.REDSTONE_WIRE, "east=up","north=side","power=8","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_220 = new BlockState(NamespaceID.from("minecraft:redstone_wire:220"), (short) 2278, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_220 = new BlockState(NamespaceID.from("minecraft:redstone_wire:220"), (short) 2278, Block.REDSTONE_WIRE, "east=up","north=side","power=8","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_221 = new BlockState(NamespaceID.from("minecraft:redstone_wire:221"), (short) 2279, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_221 = new BlockState(NamespaceID.from("minecraft:redstone_wire:221"), (short) 2279, Block.REDSTONE_WIRE, "east=up","north=side","power=8","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_222 = new BlockState(NamespaceID.from("minecraft:redstone_wire:222"), (short) 2280, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_222 = new BlockState(NamespaceID.from("minecraft:redstone_wire:222"), (short) 2280, Block.REDSTONE_WIRE, "east=up","north=side","power=8","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_223 = new BlockState(NamespaceID.from("minecraft:redstone_wire:223"), (short) 2281, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_223 = new BlockState(NamespaceID.from("minecraft:redstone_wire:223"), (short) 2281, Block.REDSTONE_WIRE, "east=up","north=side","power=8","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_224 = new BlockState(NamespaceID.from("minecraft:redstone_wire:224"), (short) 2282, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_224 = new BlockState(NamespaceID.from("minecraft:redstone_wire:224"), (short) 2282, Block.REDSTONE_WIRE, "east=up","north=side","power=8","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_225 = new BlockState(NamespaceID.from("minecraft:redstone_wire:225"), (short) 2283, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_225 = new BlockState(NamespaceID.from("minecraft:redstone_wire:225"), (short) 2283, Block.REDSTONE_WIRE, "east=up","north=side","power=9","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_226 = new BlockState(NamespaceID.from("minecraft:redstone_wire:226"), (short) 2284, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_226 = new BlockState(NamespaceID.from("minecraft:redstone_wire:226"), (short) 2284, Block.REDSTONE_WIRE, "east=up","north=side","power=9","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_227 = new BlockState(NamespaceID.from("minecraft:redstone_wire:227"), (short) 2285, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_227 = new BlockState(NamespaceID.from("minecraft:redstone_wire:227"), (short) 2285, Block.REDSTONE_WIRE, "east=up","north=side","power=9","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_228 = new BlockState(NamespaceID.from("minecraft:redstone_wire:228"), (short) 2286, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_228 = new BlockState(NamespaceID.from("minecraft:redstone_wire:228"), (short) 2286, Block.REDSTONE_WIRE, "east=up","north=side","power=9","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_229 = new BlockState(NamespaceID.from("minecraft:redstone_wire:229"), (short) 2287, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_229 = new BlockState(NamespaceID.from("minecraft:redstone_wire:229"), (short) 2287, Block.REDSTONE_WIRE, "east=up","north=side","power=9","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_230 = new BlockState(NamespaceID.from("minecraft:redstone_wire:230"), (short) 2288, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_230 = new BlockState(NamespaceID.from("minecraft:redstone_wire:230"), (short) 2288, Block.REDSTONE_WIRE, "east=up","north=side","power=9","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_231 = new BlockState(NamespaceID.from("minecraft:redstone_wire:231"), (short) 2289, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_231 = new BlockState(NamespaceID.from("minecraft:redstone_wire:231"), (short) 2289, Block.REDSTONE_WIRE, "east=up","north=side","power=9","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_232 = new BlockState(NamespaceID.from("minecraft:redstone_wire:232"), (short) 2290, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_232 = new BlockState(NamespaceID.from("minecraft:redstone_wire:232"), (short) 2290, Block.REDSTONE_WIRE, "east=up","north=side","power=9","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_233 = new BlockState(NamespaceID.from("minecraft:redstone_wire:233"), (short) 2291, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_233 = new BlockState(NamespaceID.from("minecraft:redstone_wire:233"), (short) 2291, Block.REDSTONE_WIRE, "east=up","north=side","power=9","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_234 = new BlockState(NamespaceID.from("minecraft:redstone_wire:234"), (short) 2292, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_234 = new BlockState(NamespaceID.from("minecraft:redstone_wire:234"), (short) 2292, Block.REDSTONE_WIRE, "east=up","north=side","power=10","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_235 = new BlockState(NamespaceID.from("minecraft:redstone_wire:235"), (short) 2293, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_235 = new BlockState(NamespaceID.from("minecraft:redstone_wire:235"), (short) 2293, Block.REDSTONE_WIRE, "east=up","north=side","power=10","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_236 = new BlockState(NamespaceID.from("minecraft:redstone_wire:236"), (short) 2294, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_236 = new BlockState(NamespaceID.from("minecraft:redstone_wire:236"), (short) 2294, Block.REDSTONE_WIRE, "east=up","north=side","power=10","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_237 = new BlockState(NamespaceID.from("minecraft:redstone_wire:237"), (short) 2295, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_237 = new BlockState(NamespaceID.from("minecraft:redstone_wire:237"), (short) 2295, Block.REDSTONE_WIRE, "east=up","north=side","power=10","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_238 = new BlockState(NamespaceID.from("minecraft:redstone_wire:238"), (short) 2296, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_238 = new BlockState(NamespaceID.from("minecraft:redstone_wire:238"), (short) 2296, Block.REDSTONE_WIRE, "east=up","north=side","power=10","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_239 = new BlockState(NamespaceID.from("minecraft:redstone_wire:239"), (short) 2297, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_239 = new BlockState(NamespaceID.from("minecraft:redstone_wire:239"), (short) 2297, Block.REDSTONE_WIRE, "east=up","north=side","power=10","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_240 = new BlockState(NamespaceID.from("minecraft:redstone_wire:240"), (short) 2298, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_240 = new BlockState(NamespaceID.from("minecraft:redstone_wire:240"), (short) 2298, Block.REDSTONE_WIRE, "east=up","north=side","power=10","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_241 = new BlockState(NamespaceID.from("minecraft:redstone_wire:241"), (short) 2299, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_241 = new BlockState(NamespaceID.from("minecraft:redstone_wire:241"), (short) 2299, Block.REDSTONE_WIRE, "east=up","north=side","power=10","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_242 = new BlockState(NamespaceID.from("minecraft:redstone_wire:242"), (short) 2300, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_242 = new BlockState(NamespaceID.from("minecraft:redstone_wire:242"), (short) 2300, Block.REDSTONE_WIRE, "east=up","north=side","power=10","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_243 = new BlockState(NamespaceID.from("minecraft:redstone_wire:243"), (short) 2301, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_243 = new BlockState(NamespaceID.from("minecraft:redstone_wire:243"), (short) 2301, Block.REDSTONE_WIRE, "east=up","north=side","power=11","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_244 = new BlockState(NamespaceID.from("minecraft:redstone_wire:244"), (short) 2302, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_244 = new BlockState(NamespaceID.from("minecraft:redstone_wire:244"), (short) 2302, Block.REDSTONE_WIRE, "east=up","north=side","power=11","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_245 = new BlockState(NamespaceID.from("minecraft:redstone_wire:245"), (short) 2303, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_245 = new BlockState(NamespaceID.from("minecraft:redstone_wire:245"), (short) 2303, Block.REDSTONE_WIRE, "east=up","north=side","power=11","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_246 = new BlockState(NamespaceID.from("minecraft:redstone_wire:246"), (short) 2304, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_246 = new BlockState(NamespaceID.from("minecraft:redstone_wire:246"), (short) 2304, Block.REDSTONE_WIRE, "east=up","north=side","power=11","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_247 = new BlockState(NamespaceID.from("minecraft:redstone_wire:247"), (short) 2305, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_247 = new BlockState(NamespaceID.from("minecraft:redstone_wire:247"), (short) 2305, Block.REDSTONE_WIRE, "east=up","north=side","power=11","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_248 = new BlockState(NamespaceID.from("minecraft:redstone_wire:248"), (short) 2306, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_248 = new BlockState(NamespaceID.from("minecraft:redstone_wire:248"), (short) 2306, Block.REDSTONE_WIRE, "east=up","north=side","power=11","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_249 = new BlockState(NamespaceID.from("minecraft:redstone_wire:249"), (short) 2307, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_249 = new BlockState(NamespaceID.from("minecraft:redstone_wire:249"), (short) 2307, Block.REDSTONE_WIRE, "east=up","north=side","power=11","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_250 = new BlockState(NamespaceID.from("minecraft:redstone_wire:250"), (short) 2308, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_250 = new BlockState(NamespaceID.from("minecraft:redstone_wire:250"), (short) 2308, Block.REDSTONE_WIRE, "east=up","north=side","power=11","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_251 = new BlockState(NamespaceID.from("minecraft:redstone_wire:251"), (short) 2309, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_251 = new BlockState(NamespaceID.from("minecraft:redstone_wire:251"), (short) 2309, Block.REDSTONE_WIRE, "east=up","north=side","power=11","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_252 = new BlockState(NamespaceID.from("minecraft:redstone_wire:252"), (short) 2310, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_252 = new BlockState(NamespaceID.from("minecraft:redstone_wire:252"), (short) 2310, Block.REDSTONE_WIRE, "east=up","north=side","power=12","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_253 = new BlockState(NamespaceID.from("minecraft:redstone_wire:253"), (short) 2311, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_253 = new BlockState(NamespaceID.from("minecraft:redstone_wire:253"), (short) 2311, Block.REDSTONE_WIRE, "east=up","north=side","power=12","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_254 = new BlockState(NamespaceID.from("minecraft:redstone_wire:254"), (short) 2312, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_254 = new BlockState(NamespaceID.from("minecraft:redstone_wire:254"), (short) 2312, Block.REDSTONE_WIRE, "east=up","north=side","power=12","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_255 = new BlockState(NamespaceID.from("minecraft:redstone_wire:255"), (short) 2313, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_255 = new BlockState(NamespaceID.from("minecraft:redstone_wire:255"), (short) 2313, Block.REDSTONE_WIRE, "east=up","north=side","power=12","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_256 = new BlockState(NamespaceID.from("minecraft:redstone_wire:256"), (short) 2314, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_256 = new BlockState(NamespaceID.from("minecraft:redstone_wire:256"), (short) 2314, Block.REDSTONE_WIRE, "east=up","north=side","power=12","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_257 = new BlockState(NamespaceID.from("minecraft:redstone_wire:257"), (short) 2315, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_257 = new BlockState(NamespaceID.from("minecraft:redstone_wire:257"), (short) 2315, Block.REDSTONE_WIRE, "east=up","north=side","power=12","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_258 = new BlockState(NamespaceID.from("minecraft:redstone_wire:258"), (short) 2316, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_258 = new BlockState(NamespaceID.from("minecraft:redstone_wire:258"), (short) 2316, Block.REDSTONE_WIRE, "east=up","north=side","power=12","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_259 = new BlockState(NamespaceID.from("minecraft:redstone_wire:259"), (short) 2317, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_259 = new BlockState(NamespaceID.from("minecraft:redstone_wire:259"), (short) 2317, Block.REDSTONE_WIRE, "east=up","north=side","power=12","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_260 = new BlockState(NamespaceID.from("minecraft:redstone_wire:260"), (short) 2318, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_260 = new BlockState(NamespaceID.from("minecraft:redstone_wire:260"), (short) 2318, Block.REDSTONE_WIRE, "east=up","north=side","power=12","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_261 = new BlockState(NamespaceID.from("minecraft:redstone_wire:261"), (short) 2319, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_261 = new BlockState(NamespaceID.from("minecraft:redstone_wire:261"), (short) 2319, Block.REDSTONE_WIRE, "east=up","north=side","power=13","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_262 = new BlockState(NamespaceID.from("minecraft:redstone_wire:262"), (short) 2320, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_262 = new BlockState(NamespaceID.from("minecraft:redstone_wire:262"), (short) 2320, Block.REDSTONE_WIRE, "east=up","north=side","power=13","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_263 = new BlockState(NamespaceID.from("minecraft:redstone_wire:263"), (short) 2321, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_263 = new BlockState(NamespaceID.from("minecraft:redstone_wire:263"), (short) 2321, Block.REDSTONE_WIRE, "east=up","north=side","power=13","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_264 = new BlockState(NamespaceID.from("minecraft:redstone_wire:264"), (short) 2322, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_264 = new BlockState(NamespaceID.from("minecraft:redstone_wire:264"), (short) 2322, Block.REDSTONE_WIRE, "east=up","north=side","power=13","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_265 = new BlockState(NamespaceID.from("minecraft:redstone_wire:265"), (short) 2323, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_265 = new BlockState(NamespaceID.from("minecraft:redstone_wire:265"), (short) 2323, Block.REDSTONE_WIRE, "east=up","north=side","power=13","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_266 = new BlockState(NamespaceID.from("minecraft:redstone_wire:266"), (short) 2324, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_266 = new BlockState(NamespaceID.from("minecraft:redstone_wire:266"), (short) 2324, Block.REDSTONE_WIRE, "east=up","north=side","power=13","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_267 = new BlockState(NamespaceID.from("minecraft:redstone_wire:267"), (short) 2325, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_267 = new BlockState(NamespaceID.from("minecraft:redstone_wire:267"), (short) 2325, Block.REDSTONE_WIRE, "east=up","north=side","power=13","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_268 = new BlockState(NamespaceID.from("minecraft:redstone_wire:268"), (short) 2326, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_268 = new BlockState(NamespaceID.from("minecraft:redstone_wire:268"), (short) 2326, Block.REDSTONE_WIRE, "east=up","north=side","power=13","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_269 = new BlockState(NamespaceID.from("minecraft:redstone_wire:269"), (short) 2327, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_269 = new BlockState(NamespaceID.from("minecraft:redstone_wire:269"), (short) 2327, Block.REDSTONE_WIRE, "east=up","north=side","power=13","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_270 = new BlockState(NamespaceID.from("minecraft:redstone_wire:270"), (short) 2328, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_270 = new BlockState(NamespaceID.from("minecraft:redstone_wire:270"), (short) 2328, Block.REDSTONE_WIRE, "east=up","north=side","power=14","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_271 = new BlockState(NamespaceID.from("minecraft:redstone_wire:271"), (short) 2329, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_271 = new BlockState(NamespaceID.from("minecraft:redstone_wire:271"), (short) 2329, Block.REDSTONE_WIRE, "east=up","north=side","power=14","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_272 = new BlockState(NamespaceID.from("minecraft:redstone_wire:272"), (short) 2330, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_272 = new BlockState(NamespaceID.from("minecraft:redstone_wire:272"), (short) 2330, Block.REDSTONE_WIRE, "east=up","north=side","power=14","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_273 = new BlockState(NamespaceID.from("minecraft:redstone_wire:273"), (short) 2331, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_273 = new BlockState(NamespaceID.from("minecraft:redstone_wire:273"), (short) 2331, Block.REDSTONE_WIRE, "east=up","north=side","power=14","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_274 = new BlockState(NamespaceID.from("minecraft:redstone_wire:274"), (short) 2332, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_274 = new BlockState(NamespaceID.from("minecraft:redstone_wire:274"), (short) 2332, Block.REDSTONE_WIRE, "east=up","north=side","power=14","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_275 = new BlockState(NamespaceID.from("minecraft:redstone_wire:275"), (short) 2333, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_275 = new BlockState(NamespaceID.from("minecraft:redstone_wire:275"), (short) 2333, Block.REDSTONE_WIRE, "east=up","north=side","power=14","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_276 = new BlockState(NamespaceID.from("minecraft:redstone_wire:276"), (short) 2334, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_276 = new BlockState(NamespaceID.from("minecraft:redstone_wire:276"), (short) 2334, Block.REDSTONE_WIRE, "east=up","north=side","power=14","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_277 = new BlockState(NamespaceID.from("minecraft:redstone_wire:277"), (short) 2335, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_277 = new BlockState(NamespaceID.from("minecraft:redstone_wire:277"), (short) 2335, Block.REDSTONE_WIRE, "east=up","north=side","power=14","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_278 = new BlockState(NamespaceID.from("minecraft:redstone_wire:278"), (short) 2336, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_278 = new BlockState(NamespaceID.from("minecraft:redstone_wire:278"), (short) 2336, Block.REDSTONE_WIRE, "east=up","north=side","power=14","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_279 = new BlockState(NamespaceID.from("minecraft:redstone_wire:279"), (short) 2337, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_279 = new BlockState(NamespaceID.from("minecraft:redstone_wire:279"), (short) 2337, Block.REDSTONE_WIRE, "east=up","north=side","power=15","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_280 = new BlockState(NamespaceID.from("minecraft:redstone_wire:280"), (short) 2338, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_280 = new BlockState(NamespaceID.from("minecraft:redstone_wire:280"), (short) 2338, Block.REDSTONE_WIRE, "east=up","north=side","power=15","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_281 = new BlockState(NamespaceID.from("minecraft:redstone_wire:281"), (short) 2339, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_281 = new BlockState(NamespaceID.from("minecraft:redstone_wire:281"), (short) 2339, Block.REDSTONE_WIRE, "east=up","north=side","power=15","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_282 = new BlockState(NamespaceID.from("minecraft:redstone_wire:282"), (short) 2340, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_282 = new BlockState(NamespaceID.from("minecraft:redstone_wire:282"), (short) 2340, Block.REDSTONE_WIRE, "east=up","north=side","power=15","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_283 = new BlockState(NamespaceID.from("minecraft:redstone_wire:283"), (short) 2341, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_283 = new BlockState(NamespaceID.from("minecraft:redstone_wire:283"), (short) 2341, Block.REDSTONE_WIRE, "east=up","north=side","power=15","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_284 = new BlockState(NamespaceID.from("minecraft:redstone_wire:284"), (short) 2342, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_284 = new BlockState(NamespaceID.from("minecraft:redstone_wire:284"), (short) 2342, Block.REDSTONE_WIRE, "east=up","north=side","power=15","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_285 = new BlockState(NamespaceID.from("minecraft:redstone_wire:285"), (short) 2343, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_285 = new BlockState(NamespaceID.from("minecraft:redstone_wire:285"), (short) 2343, Block.REDSTONE_WIRE, "east=up","north=side","power=15","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_286 = new BlockState(NamespaceID.from("minecraft:redstone_wire:286"), (short) 2344, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_286 = new BlockState(NamespaceID.from("minecraft:redstone_wire:286"), (short) 2344, Block.REDSTONE_WIRE, "east=up","north=side","power=15","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_287 = new BlockState(NamespaceID.from("minecraft:redstone_wire:287"), (short) 2345, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_287 = new BlockState(NamespaceID.from("minecraft:redstone_wire:287"), (short) 2345, Block.REDSTONE_WIRE, "east=up","north=side","power=15","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_288 = new BlockState(NamespaceID.from("minecraft:redstone_wire:288"), (short) 2346, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_288 = new BlockState(NamespaceID.from("minecraft:redstone_wire:288"), (short) 2346, Block.REDSTONE_WIRE, "east=up","north=none","power=0","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_289 = new BlockState(NamespaceID.from("minecraft:redstone_wire:289"), (short) 2347, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_289 = new BlockState(NamespaceID.from("minecraft:redstone_wire:289"), (short) 2347, Block.REDSTONE_WIRE, "east=up","north=none","power=0","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_290 = new BlockState(NamespaceID.from("minecraft:redstone_wire:290"), (short) 2348, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_290 = new BlockState(NamespaceID.from("minecraft:redstone_wire:290"), (short) 2348, Block.REDSTONE_WIRE, "east=up","north=none","power=0","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_291 = new BlockState(NamespaceID.from("minecraft:redstone_wire:291"), (short) 2349, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_291 = new BlockState(NamespaceID.from("minecraft:redstone_wire:291"), (short) 2349, Block.REDSTONE_WIRE, "east=up","north=none","power=0","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_292 = new BlockState(NamespaceID.from("minecraft:redstone_wire:292"), (short) 2350, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_292 = new BlockState(NamespaceID.from("minecraft:redstone_wire:292"), (short) 2350, Block.REDSTONE_WIRE, "east=up","north=none","power=0","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_293 = new BlockState(NamespaceID.from("minecraft:redstone_wire:293"), (short) 2351, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_293 = new BlockState(NamespaceID.from("minecraft:redstone_wire:293"), (short) 2351, Block.REDSTONE_WIRE, "east=up","north=none","power=0","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_294 = new BlockState(NamespaceID.from("minecraft:redstone_wire:294"), (short) 2352, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_294 = new BlockState(NamespaceID.from("minecraft:redstone_wire:294"), (short) 2352, Block.REDSTONE_WIRE, "east=up","north=none","power=0","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_295 = new BlockState(NamespaceID.from("minecraft:redstone_wire:295"), (short) 2353, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_295 = new BlockState(NamespaceID.from("minecraft:redstone_wire:295"), (short) 2353, Block.REDSTONE_WIRE, "east=up","north=none","power=0","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_296 = new BlockState(NamespaceID.from("minecraft:redstone_wire:296"), (short) 2354, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_296 = new BlockState(NamespaceID.from("minecraft:redstone_wire:296"), (short) 2354, Block.REDSTONE_WIRE, "east=up","north=none","power=0","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_297 = new BlockState(NamespaceID.from("minecraft:redstone_wire:297"), (short) 2355, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_297 = new BlockState(NamespaceID.from("minecraft:redstone_wire:297"), (short) 2355, Block.REDSTONE_WIRE, "east=up","north=none","power=1","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_298 = new BlockState(NamespaceID.from("minecraft:redstone_wire:298"), (short) 2356, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_298 = new BlockState(NamespaceID.from("minecraft:redstone_wire:298"), (short) 2356, Block.REDSTONE_WIRE, "east=up","north=none","power=1","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_299 = new BlockState(NamespaceID.from("minecraft:redstone_wire:299"), (short) 2357, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_299 = new BlockState(NamespaceID.from("minecraft:redstone_wire:299"), (short) 2357, Block.REDSTONE_WIRE, "east=up","north=none","power=1","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_300 = new BlockState(NamespaceID.from("minecraft:redstone_wire:300"), (short) 2358, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_300 = new BlockState(NamespaceID.from("minecraft:redstone_wire:300"), (short) 2358, Block.REDSTONE_WIRE, "east=up","north=none","power=1","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_301 = new BlockState(NamespaceID.from("minecraft:redstone_wire:301"), (short) 2359, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_301 = new BlockState(NamespaceID.from("minecraft:redstone_wire:301"), (short) 2359, Block.REDSTONE_WIRE, "east=up","north=none","power=1","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_302 = new BlockState(NamespaceID.from("minecraft:redstone_wire:302"), (short) 2360, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_302 = new BlockState(NamespaceID.from("minecraft:redstone_wire:302"), (short) 2360, Block.REDSTONE_WIRE, "east=up","north=none","power=1","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_303 = new BlockState(NamespaceID.from("minecraft:redstone_wire:303"), (short) 2361, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_303 = new BlockState(NamespaceID.from("minecraft:redstone_wire:303"), (short) 2361, Block.REDSTONE_WIRE, "east=up","north=none","power=1","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_304 = new BlockState(NamespaceID.from("minecraft:redstone_wire:304"), (short) 2362, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_304 = new BlockState(NamespaceID.from("minecraft:redstone_wire:304"), (short) 2362, Block.REDSTONE_WIRE, "east=up","north=none","power=1","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_305 = new BlockState(NamespaceID.from("minecraft:redstone_wire:305"), (short) 2363, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_305 = new BlockState(NamespaceID.from("minecraft:redstone_wire:305"), (short) 2363, Block.REDSTONE_WIRE, "east=up","north=none","power=1","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_306 = new BlockState(NamespaceID.from("minecraft:redstone_wire:306"), (short) 2364, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_306 = new BlockState(NamespaceID.from("minecraft:redstone_wire:306"), (short) 2364, Block.REDSTONE_WIRE, "east=up","north=none","power=2","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_307 = new BlockState(NamespaceID.from("minecraft:redstone_wire:307"), (short) 2365, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_307 = new BlockState(NamespaceID.from("minecraft:redstone_wire:307"), (short) 2365, Block.REDSTONE_WIRE, "east=up","north=none","power=2","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_308 = new BlockState(NamespaceID.from("minecraft:redstone_wire:308"), (short) 2366, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_308 = new BlockState(NamespaceID.from("minecraft:redstone_wire:308"), (short) 2366, Block.REDSTONE_WIRE, "east=up","north=none","power=2","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_309 = new BlockState(NamespaceID.from("minecraft:redstone_wire:309"), (short) 2367, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_309 = new BlockState(NamespaceID.from("minecraft:redstone_wire:309"), (short) 2367, Block.REDSTONE_WIRE, "east=up","north=none","power=2","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_310 = new BlockState(NamespaceID.from("minecraft:redstone_wire:310"), (short) 2368, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_310 = new BlockState(NamespaceID.from("minecraft:redstone_wire:310"), (short) 2368, Block.REDSTONE_WIRE, "east=up","north=none","power=2","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_311 = new BlockState(NamespaceID.from("minecraft:redstone_wire:311"), (short) 2369, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_311 = new BlockState(NamespaceID.from("minecraft:redstone_wire:311"), (short) 2369, Block.REDSTONE_WIRE, "east=up","north=none","power=2","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_312 = new BlockState(NamespaceID.from("minecraft:redstone_wire:312"), (short) 2370, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_312 = new BlockState(NamespaceID.from("minecraft:redstone_wire:312"), (short) 2370, Block.REDSTONE_WIRE, "east=up","north=none","power=2","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_313 = new BlockState(NamespaceID.from("minecraft:redstone_wire:313"), (short) 2371, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_313 = new BlockState(NamespaceID.from("minecraft:redstone_wire:313"), (short) 2371, Block.REDSTONE_WIRE, "east=up","north=none","power=2","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_314 = new BlockState(NamespaceID.from("minecraft:redstone_wire:314"), (short) 2372, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_314 = new BlockState(NamespaceID.from("minecraft:redstone_wire:314"), (short) 2372, Block.REDSTONE_WIRE, "east=up","north=none","power=2","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_315 = new BlockState(NamespaceID.from("minecraft:redstone_wire:315"), (short) 2373, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_315 = new BlockState(NamespaceID.from("minecraft:redstone_wire:315"), (short) 2373, Block.REDSTONE_WIRE, "east=up","north=none","power=3","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_316 = new BlockState(NamespaceID.from("minecraft:redstone_wire:316"), (short) 2374, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_316 = new BlockState(NamespaceID.from("minecraft:redstone_wire:316"), (short) 2374, Block.REDSTONE_WIRE, "east=up","north=none","power=3","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_317 = new BlockState(NamespaceID.from("minecraft:redstone_wire:317"), (short) 2375, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_317 = new BlockState(NamespaceID.from("minecraft:redstone_wire:317"), (short) 2375, Block.REDSTONE_WIRE, "east=up","north=none","power=3","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_318 = new BlockState(NamespaceID.from("minecraft:redstone_wire:318"), (short) 2376, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_318 = new BlockState(NamespaceID.from("minecraft:redstone_wire:318"), (short) 2376, Block.REDSTONE_WIRE, "east=up","north=none","power=3","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_319 = new BlockState(NamespaceID.from("minecraft:redstone_wire:319"), (short) 2377, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_319 = new BlockState(NamespaceID.from("minecraft:redstone_wire:319"), (short) 2377, Block.REDSTONE_WIRE, "east=up","north=none","power=3","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_320 = new BlockState(NamespaceID.from("minecraft:redstone_wire:320"), (short) 2378, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_320 = new BlockState(NamespaceID.from("minecraft:redstone_wire:320"), (short) 2378, Block.REDSTONE_WIRE, "east=up","north=none","power=3","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_321 = new BlockState(NamespaceID.from("minecraft:redstone_wire:321"), (short) 2379, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_321 = new BlockState(NamespaceID.from("minecraft:redstone_wire:321"), (short) 2379, Block.REDSTONE_WIRE, "east=up","north=none","power=3","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_322 = new BlockState(NamespaceID.from("minecraft:redstone_wire:322"), (short) 2380, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_322 = new BlockState(NamespaceID.from("minecraft:redstone_wire:322"), (short) 2380, Block.REDSTONE_WIRE, "east=up","north=none","power=3","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_323 = new BlockState(NamespaceID.from("minecraft:redstone_wire:323"), (short) 2381, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_323 = new BlockState(NamespaceID.from("minecraft:redstone_wire:323"), (short) 2381, Block.REDSTONE_WIRE, "east=up","north=none","power=3","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_324 = new BlockState(NamespaceID.from("minecraft:redstone_wire:324"), (short) 2382, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_324 = new BlockState(NamespaceID.from("minecraft:redstone_wire:324"), (short) 2382, Block.REDSTONE_WIRE, "east=up","north=none","power=4","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_325 = new BlockState(NamespaceID.from("minecraft:redstone_wire:325"), (short) 2383, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_325 = new BlockState(NamespaceID.from("minecraft:redstone_wire:325"), (short) 2383, Block.REDSTONE_WIRE, "east=up","north=none","power=4","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_326 = new BlockState(NamespaceID.from("minecraft:redstone_wire:326"), (short) 2384, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_326 = new BlockState(NamespaceID.from("minecraft:redstone_wire:326"), (short) 2384, Block.REDSTONE_WIRE, "east=up","north=none","power=4","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_327 = new BlockState(NamespaceID.from("minecraft:redstone_wire:327"), (short) 2385, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_327 = new BlockState(NamespaceID.from("minecraft:redstone_wire:327"), (short) 2385, Block.REDSTONE_WIRE, "east=up","north=none","power=4","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_328 = new BlockState(NamespaceID.from("minecraft:redstone_wire:328"), (short) 2386, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_328 = new BlockState(NamespaceID.from("minecraft:redstone_wire:328"), (short) 2386, Block.REDSTONE_WIRE, "east=up","north=none","power=4","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_329 = new BlockState(NamespaceID.from("minecraft:redstone_wire:329"), (short) 2387, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_329 = new BlockState(NamespaceID.from("minecraft:redstone_wire:329"), (short) 2387, Block.REDSTONE_WIRE, "east=up","north=none","power=4","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_330 = new BlockState(NamespaceID.from("minecraft:redstone_wire:330"), (short) 2388, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_330 = new BlockState(NamespaceID.from("minecraft:redstone_wire:330"), (short) 2388, Block.REDSTONE_WIRE, "east=up","north=none","power=4","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_331 = new BlockState(NamespaceID.from("minecraft:redstone_wire:331"), (short) 2389, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_331 = new BlockState(NamespaceID.from("minecraft:redstone_wire:331"), (short) 2389, Block.REDSTONE_WIRE, "east=up","north=none","power=4","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_332 = new BlockState(NamespaceID.from("minecraft:redstone_wire:332"), (short) 2390, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_332 = new BlockState(NamespaceID.from("minecraft:redstone_wire:332"), (short) 2390, Block.REDSTONE_WIRE, "east=up","north=none","power=4","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_333 = new BlockState(NamespaceID.from("minecraft:redstone_wire:333"), (short) 2391, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_333 = new BlockState(NamespaceID.from("minecraft:redstone_wire:333"), (short) 2391, Block.REDSTONE_WIRE, "east=up","north=none","power=5","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_334 = new BlockState(NamespaceID.from("minecraft:redstone_wire:334"), (short) 2392, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_334 = new BlockState(NamespaceID.from("minecraft:redstone_wire:334"), (short) 2392, Block.REDSTONE_WIRE, "east=up","north=none","power=5","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_335 = new BlockState(NamespaceID.from("minecraft:redstone_wire:335"), (short) 2393, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_335 = new BlockState(NamespaceID.from("minecraft:redstone_wire:335"), (short) 2393, Block.REDSTONE_WIRE, "east=up","north=none","power=5","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_336 = new BlockState(NamespaceID.from("minecraft:redstone_wire:336"), (short) 2394, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_336 = new BlockState(NamespaceID.from("minecraft:redstone_wire:336"), (short) 2394, Block.REDSTONE_WIRE, "east=up","north=none","power=5","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_337 = new BlockState(NamespaceID.from("minecraft:redstone_wire:337"), (short) 2395, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_337 = new BlockState(NamespaceID.from("minecraft:redstone_wire:337"), (short) 2395, Block.REDSTONE_WIRE, "east=up","north=none","power=5","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_338 = new BlockState(NamespaceID.from("minecraft:redstone_wire:338"), (short) 2396, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_338 = new BlockState(NamespaceID.from("minecraft:redstone_wire:338"), (short) 2396, Block.REDSTONE_WIRE, "east=up","north=none","power=5","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_339 = new BlockState(NamespaceID.from("minecraft:redstone_wire:339"), (short) 2397, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_339 = new BlockState(NamespaceID.from("minecraft:redstone_wire:339"), (short) 2397, Block.REDSTONE_WIRE, "east=up","north=none","power=5","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_340 = new BlockState(NamespaceID.from("minecraft:redstone_wire:340"), (short) 2398, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_340 = new BlockState(NamespaceID.from("minecraft:redstone_wire:340"), (short) 2398, Block.REDSTONE_WIRE, "east=up","north=none","power=5","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_341 = new BlockState(NamespaceID.from("minecraft:redstone_wire:341"), (short) 2399, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_341 = new BlockState(NamespaceID.from("minecraft:redstone_wire:341"), (short) 2399, Block.REDSTONE_WIRE, "east=up","north=none","power=5","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_342 = new BlockState(NamespaceID.from("minecraft:redstone_wire:342"), (short) 2400, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_342 = new BlockState(NamespaceID.from("minecraft:redstone_wire:342"), (short) 2400, Block.REDSTONE_WIRE, "east=up","north=none","power=6","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_343 = new BlockState(NamespaceID.from("minecraft:redstone_wire:343"), (short) 2401, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_343 = new BlockState(NamespaceID.from("minecraft:redstone_wire:343"), (short) 2401, Block.REDSTONE_WIRE, "east=up","north=none","power=6","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_344 = new BlockState(NamespaceID.from("minecraft:redstone_wire:344"), (short) 2402, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_344 = new BlockState(NamespaceID.from("minecraft:redstone_wire:344"), (short) 2402, Block.REDSTONE_WIRE, "east=up","north=none","power=6","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_345 = new BlockState(NamespaceID.from("minecraft:redstone_wire:345"), (short) 2403, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_345 = new BlockState(NamespaceID.from("minecraft:redstone_wire:345"), (short) 2403, Block.REDSTONE_WIRE, "east=up","north=none","power=6","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_346 = new BlockState(NamespaceID.from("minecraft:redstone_wire:346"), (short) 2404, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_346 = new BlockState(NamespaceID.from("minecraft:redstone_wire:346"), (short) 2404, Block.REDSTONE_WIRE, "east=up","north=none","power=6","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_347 = new BlockState(NamespaceID.from("minecraft:redstone_wire:347"), (short) 2405, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_347 = new BlockState(NamespaceID.from("minecraft:redstone_wire:347"), (short) 2405, Block.REDSTONE_WIRE, "east=up","north=none","power=6","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_348 = new BlockState(NamespaceID.from("minecraft:redstone_wire:348"), (short) 2406, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_348 = new BlockState(NamespaceID.from("minecraft:redstone_wire:348"), (short) 2406, Block.REDSTONE_WIRE, "east=up","north=none","power=6","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_349 = new BlockState(NamespaceID.from("minecraft:redstone_wire:349"), (short) 2407, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_349 = new BlockState(NamespaceID.from("minecraft:redstone_wire:349"), (short) 2407, Block.REDSTONE_WIRE, "east=up","north=none","power=6","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_350 = new BlockState(NamespaceID.from("minecraft:redstone_wire:350"), (short) 2408, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_350 = new BlockState(NamespaceID.from("minecraft:redstone_wire:350"), (short) 2408, Block.REDSTONE_WIRE, "east=up","north=none","power=6","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_351 = new BlockState(NamespaceID.from("minecraft:redstone_wire:351"), (short) 2409, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_351 = new BlockState(NamespaceID.from("minecraft:redstone_wire:351"), (short) 2409, Block.REDSTONE_WIRE, "east=up","north=none","power=7","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_352 = new BlockState(NamespaceID.from("minecraft:redstone_wire:352"), (short) 2410, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_352 = new BlockState(NamespaceID.from("minecraft:redstone_wire:352"), (short) 2410, Block.REDSTONE_WIRE, "east=up","north=none","power=7","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_353 = new BlockState(NamespaceID.from("minecraft:redstone_wire:353"), (short) 2411, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_353 = new BlockState(NamespaceID.from("minecraft:redstone_wire:353"), (short) 2411, Block.REDSTONE_WIRE, "east=up","north=none","power=7","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_354 = new BlockState(NamespaceID.from("minecraft:redstone_wire:354"), (short) 2412, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_354 = new BlockState(NamespaceID.from("minecraft:redstone_wire:354"), (short) 2412, Block.REDSTONE_WIRE, "east=up","north=none","power=7","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_355 = new BlockState(NamespaceID.from("minecraft:redstone_wire:355"), (short) 2413, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_355 = new BlockState(NamespaceID.from("minecraft:redstone_wire:355"), (short) 2413, Block.REDSTONE_WIRE, "east=up","north=none","power=7","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_356 = new BlockState(NamespaceID.from("minecraft:redstone_wire:356"), (short) 2414, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_356 = new BlockState(NamespaceID.from("minecraft:redstone_wire:356"), (short) 2414, Block.REDSTONE_WIRE, "east=up","north=none","power=7","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_357 = new BlockState(NamespaceID.from("minecraft:redstone_wire:357"), (short) 2415, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_357 = new BlockState(NamespaceID.from("minecraft:redstone_wire:357"), (short) 2415, Block.REDSTONE_WIRE, "east=up","north=none","power=7","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_358 = new BlockState(NamespaceID.from("minecraft:redstone_wire:358"), (short) 2416, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_358 = new BlockState(NamespaceID.from("minecraft:redstone_wire:358"), (short) 2416, Block.REDSTONE_WIRE, "east=up","north=none","power=7","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_359 = new BlockState(NamespaceID.from("minecraft:redstone_wire:359"), (short) 2417, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_359 = new BlockState(NamespaceID.from("minecraft:redstone_wire:359"), (short) 2417, Block.REDSTONE_WIRE, "east=up","north=none","power=7","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_360 = new BlockState(NamespaceID.from("minecraft:redstone_wire:360"), (short) 2418, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_360 = new BlockState(NamespaceID.from("minecraft:redstone_wire:360"), (short) 2418, Block.REDSTONE_WIRE, "east=up","north=none","power=8","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_361 = new BlockState(NamespaceID.from("minecraft:redstone_wire:361"), (short) 2419, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_361 = new BlockState(NamespaceID.from("minecraft:redstone_wire:361"), (short) 2419, Block.REDSTONE_WIRE, "east=up","north=none","power=8","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_362 = new BlockState(NamespaceID.from("minecraft:redstone_wire:362"), (short) 2420, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_362 = new BlockState(NamespaceID.from("minecraft:redstone_wire:362"), (short) 2420, Block.REDSTONE_WIRE, "east=up","north=none","power=8","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_363 = new BlockState(NamespaceID.from("minecraft:redstone_wire:363"), (short) 2421, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_363 = new BlockState(NamespaceID.from("minecraft:redstone_wire:363"), (short) 2421, Block.REDSTONE_WIRE, "east=up","north=none","power=8","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_364 = new BlockState(NamespaceID.from("minecraft:redstone_wire:364"), (short) 2422, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_364 = new BlockState(NamespaceID.from("minecraft:redstone_wire:364"), (short) 2422, Block.REDSTONE_WIRE, "east=up","north=none","power=8","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_365 = new BlockState(NamespaceID.from("minecraft:redstone_wire:365"), (short) 2423, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_365 = new BlockState(NamespaceID.from("minecraft:redstone_wire:365"), (short) 2423, Block.REDSTONE_WIRE, "east=up","north=none","power=8","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_366 = new BlockState(NamespaceID.from("minecraft:redstone_wire:366"), (short) 2424, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_366 = new BlockState(NamespaceID.from("minecraft:redstone_wire:366"), (short) 2424, Block.REDSTONE_WIRE, "east=up","north=none","power=8","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_367 = new BlockState(NamespaceID.from("minecraft:redstone_wire:367"), (short) 2425, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_367 = new BlockState(NamespaceID.from("minecraft:redstone_wire:367"), (short) 2425, Block.REDSTONE_WIRE, "east=up","north=none","power=8","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_368 = new BlockState(NamespaceID.from("minecraft:redstone_wire:368"), (short) 2426, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_368 = new BlockState(NamespaceID.from("minecraft:redstone_wire:368"), (short) 2426, Block.REDSTONE_WIRE, "east=up","north=none","power=8","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_369 = new BlockState(NamespaceID.from("minecraft:redstone_wire:369"), (short) 2427, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_369 = new BlockState(NamespaceID.from("minecraft:redstone_wire:369"), (short) 2427, Block.REDSTONE_WIRE, "east=up","north=none","power=9","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_370 = new BlockState(NamespaceID.from("minecraft:redstone_wire:370"), (short) 2428, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_370 = new BlockState(NamespaceID.from("minecraft:redstone_wire:370"), (short) 2428, Block.REDSTONE_WIRE, "east=up","north=none","power=9","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_371 = new BlockState(NamespaceID.from("minecraft:redstone_wire:371"), (short) 2429, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_371 = new BlockState(NamespaceID.from("minecraft:redstone_wire:371"), (short) 2429, Block.REDSTONE_WIRE, "east=up","north=none","power=9","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_372 = new BlockState(NamespaceID.from("minecraft:redstone_wire:372"), (short) 2430, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_372 = new BlockState(NamespaceID.from("minecraft:redstone_wire:372"), (short) 2430, Block.REDSTONE_WIRE, "east=up","north=none","power=9","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_373 = new BlockState(NamespaceID.from("minecraft:redstone_wire:373"), (short) 2431, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_373 = new BlockState(NamespaceID.from("minecraft:redstone_wire:373"), (short) 2431, Block.REDSTONE_WIRE, "east=up","north=none","power=9","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_374 = new BlockState(NamespaceID.from("minecraft:redstone_wire:374"), (short) 2432, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_374 = new BlockState(NamespaceID.from("minecraft:redstone_wire:374"), (short) 2432, Block.REDSTONE_WIRE, "east=up","north=none","power=9","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_375 = new BlockState(NamespaceID.from("minecraft:redstone_wire:375"), (short) 2433, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_375 = new BlockState(NamespaceID.from("minecraft:redstone_wire:375"), (short) 2433, Block.REDSTONE_WIRE, "east=up","north=none","power=9","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_376 = new BlockState(NamespaceID.from("minecraft:redstone_wire:376"), (short) 2434, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_376 = new BlockState(NamespaceID.from("minecraft:redstone_wire:376"), (short) 2434, Block.REDSTONE_WIRE, "east=up","north=none","power=9","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_377 = new BlockState(NamespaceID.from("minecraft:redstone_wire:377"), (short) 2435, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_377 = new BlockState(NamespaceID.from("minecraft:redstone_wire:377"), (short) 2435, Block.REDSTONE_WIRE, "east=up","north=none","power=9","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_378 = new BlockState(NamespaceID.from("minecraft:redstone_wire:378"), (short) 2436, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_378 = new BlockState(NamespaceID.from("minecraft:redstone_wire:378"), (short) 2436, Block.REDSTONE_WIRE, "east=up","north=none","power=10","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_379 = new BlockState(NamespaceID.from("minecraft:redstone_wire:379"), (short) 2437, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_379 = new BlockState(NamespaceID.from("minecraft:redstone_wire:379"), (short) 2437, Block.REDSTONE_WIRE, "east=up","north=none","power=10","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_380 = new BlockState(NamespaceID.from("minecraft:redstone_wire:380"), (short) 2438, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_380 = new BlockState(NamespaceID.from("minecraft:redstone_wire:380"), (short) 2438, Block.REDSTONE_WIRE, "east=up","north=none","power=10","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_381 = new BlockState(NamespaceID.from("minecraft:redstone_wire:381"), (short) 2439, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_381 = new BlockState(NamespaceID.from("minecraft:redstone_wire:381"), (short) 2439, Block.REDSTONE_WIRE, "east=up","north=none","power=10","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_382 = new BlockState(NamespaceID.from("minecraft:redstone_wire:382"), (short) 2440, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_382 = new BlockState(NamespaceID.from("minecraft:redstone_wire:382"), (short) 2440, Block.REDSTONE_WIRE, "east=up","north=none","power=10","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_383 = new BlockState(NamespaceID.from("minecraft:redstone_wire:383"), (short) 2441, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_383 = new BlockState(NamespaceID.from("minecraft:redstone_wire:383"), (short) 2441, Block.REDSTONE_WIRE, "east=up","north=none","power=10","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_384 = new BlockState(NamespaceID.from("minecraft:redstone_wire:384"), (short) 2442, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_384 = new BlockState(NamespaceID.from("minecraft:redstone_wire:384"), (short) 2442, Block.REDSTONE_WIRE, "east=up","north=none","power=10","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_385 = new BlockState(NamespaceID.from("minecraft:redstone_wire:385"), (short) 2443, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_385 = new BlockState(NamespaceID.from("minecraft:redstone_wire:385"), (short) 2443, Block.REDSTONE_WIRE, "east=up","north=none","power=10","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_386 = new BlockState(NamespaceID.from("minecraft:redstone_wire:386"), (short) 2444, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_386 = new BlockState(NamespaceID.from("minecraft:redstone_wire:386"), (short) 2444, Block.REDSTONE_WIRE, "east=up","north=none","power=10","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_387 = new BlockState(NamespaceID.from("minecraft:redstone_wire:387"), (short) 2445, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_387 = new BlockState(NamespaceID.from("minecraft:redstone_wire:387"), (short) 2445, Block.REDSTONE_WIRE, "east=up","north=none","power=11","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_388 = new BlockState(NamespaceID.from("minecraft:redstone_wire:388"), (short) 2446, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_388 = new BlockState(NamespaceID.from("minecraft:redstone_wire:388"), (short) 2446, Block.REDSTONE_WIRE, "east=up","north=none","power=11","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_389 = new BlockState(NamespaceID.from("minecraft:redstone_wire:389"), (short) 2447, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_389 = new BlockState(NamespaceID.from("minecraft:redstone_wire:389"), (short) 2447, Block.REDSTONE_WIRE, "east=up","north=none","power=11","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_390 = new BlockState(NamespaceID.from("minecraft:redstone_wire:390"), (short) 2448, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_390 = new BlockState(NamespaceID.from("minecraft:redstone_wire:390"), (short) 2448, Block.REDSTONE_WIRE, "east=up","north=none","power=11","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_391 = new BlockState(NamespaceID.from("minecraft:redstone_wire:391"), (short) 2449, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_391 = new BlockState(NamespaceID.from("minecraft:redstone_wire:391"), (short) 2449, Block.REDSTONE_WIRE, "east=up","north=none","power=11","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_392 = new BlockState(NamespaceID.from("minecraft:redstone_wire:392"), (short) 2450, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_392 = new BlockState(NamespaceID.from("minecraft:redstone_wire:392"), (short) 2450, Block.REDSTONE_WIRE, "east=up","north=none","power=11","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_393 = new BlockState(NamespaceID.from("minecraft:redstone_wire:393"), (short) 2451, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_393 = new BlockState(NamespaceID.from("minecraft:redstone_wire:393"), (short) 2451, Block.REDSTONE_WIRE, "east=up","north=none","power=11","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_394 = new BlockState(NamespaceID.from("minecraft:redstone_wire:394"), (short) 2452, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_394 = new BlockState(NamespaceID.from("minecraft:redstone_wire:394"), (short) 2452, Block.REDSTONE_WIRE, "east=up","north=none","power=11","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_395 = new BlockState(NamespaceID.from("minecraft:redstone_wire:395"), (short) 2453, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_395 = new BlockState(NamespaceID.from("minecraft:redstone_wire:395"), (short) 2453, Block.REDSTONE_WIRE, "east=up","north=none","power=11","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_396 = new BlockState(NamespaceID.from("minecraft:redstone_wire:396"), (short) 2454, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_396 = new BlockState(NamespaceID.from("minecraft:redstone_wire:396"), (short) 2454, Block.REDSTONE_WIRE, "east=up","north=none","power=12","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_397 = new BlockState(NamespaceID.from("minecraft:redstone_wire:397"), (short) 2455, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_397 = new BlockState(NamespaceID.from("minecraft:redstone_wire:397"), (short) 2455, Block.REDSTONE_WIRE, "east=up","north=none","power=12","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_398 = new BlockState(NamespaceID.from("minecraft:redstone_wire:398"), (short) 2456, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_398 = new BlockState(NamespaceID.from("minecraft:redstone_wire:398"), (short) 2456, Block.REDSTONE_WIRE, "east=up","north=none","power=12","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_399 = new BlockState(NamespaceID.from("minecraft:redstone_wire:399"), (short) 2457, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_399 = new BlockState(NamespaceID.from("minecraft:redstone_wire:399"), (short) 2457, Block.REDSTONE_WIRE, "east=up","north=none","power=12","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_400 = new BlockState(NamespaceID.from("minecraft:redstone_wire:400"), (short) 2458, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_400 = new BlockState(NamespaceID.from("minecraft:redstone_wire:400"), (short) 2458, Block.REDSTONE_WIRE, "east=up","north=none","power=12","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_401 = new BlockState(NamespaceID.from("minecraft:redstone_wire:401"), (short) 2459, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_401 = new BlockState(NamespaceID.from("minecraft:redstone_wire:401"), (short) 2459, Block.REDSTONE_WIRE, "east=up","north=none","power=12","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_402 = new BlockState(NamespaceID.from("minecraft:redstone_wire:402"), (short) 2460, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_402 = new BlockState(NamespaceID.from("minecraft:redstone_wire:402"), (short) 2460, Block.REDSTONE_WIRE, "east=up","north=none","power=12","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_403 = new BlockState(NamespaceID.from("minecraft:redstone_wire:403"), (short) 2461, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_403 = new BlockState(NamespaceID.from("minecraft:redstone_wire:403"), (short) 2461, Block.REDSTONE_WIRE, "east=up","north=none","power=12","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_404 = new BlockState(NamespaceID.from("minecraft:redstone_wire:404"), (short) 2462, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_404 = new BlockState(NamespaceID.from("minecraft:redstone_wire:404"), (short) 2462, Block.REDSTONE_WIRE, "east=up","north=none","power=12","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_405 = new BlockState(NamespaceID.from("minecraft:redstone_wire:405"), (short) 2463, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_405 = new BlockState(NamespaceID.from("minecraft:redstone_wire:405"), (short) 2463, Block.REDSTONE_WIRE, "east=up","north=none","power=13","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_406 = new BlockState(NamespaceID.from("minecraft:redstone_wire:406"), (short) 2464, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_406 = new BlockState(NamespaceID.from("minecraft:redstone_wire:406"), (short) 2464, Block.REDSTONE_WIRE, "east=up","north=none","power=13","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_407 = new BlockState(NamespaceID.from("minecraft:redstone_wire:407"), (short) 2465, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_407 = new BlockState(NamespaceID.from("minecraft:redstone_wire:407"), (short) 2465, Block.REDSTONE_WIRE, "east=up","north=none","power=13","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_408 = new BlockState(NamespaceID.from("minecraft:redstone_wire:408"), (short) 2466, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_408 = new BlockState(NamespaceID.from("minecraft:redstone_wire:408"), (short) 2466, Block.REDSTONE_WIRE, "east=up","north=none","power=13","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_409 = new BlockState(NamespaceID.from("minecraft:redstone_wire:409"), (short) 2467, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_409 = new BlockState(NamespaceID.from("minecraft:redstone_wire:409"), (short) 2467, Block.REDSTONE_WIRE, "east=up","north=none","power=13","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_410 = new BlockState(NamespaceID.from("minecraft:redstone_wire:410"), (short) 2468, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_410 = new BlockState(NamespaceID.from("minecraft:redstone_wire:410"), (short) 2468, Block.REDSTONE_WIRE, "east=up","north=none","power=13","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_411 = new BlockState(NamespaceID.from("minecraft:redstone_wire:411"), (short) 2469, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_411 = new BlockState(NamespaceID.from("minecraft:redstone_wire:411"), (short) 2469, Block.REDSTONE_WIRE, "east=up","north=none","power=13","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_412 = new BlockState(NamespaceID.from("minecraft:redstone_wire:412"), (short) 2470, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_412 = new BlockState(NamespaceID.from("minecraft:redstone_wire:412"), (short) 2470, Block.REDSTONE_WIRE, "east=up","north=none","power=13","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_413 = new BlockState(NamespaceID.from("minecraft:redstone_wire:413"), (short) 2471, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_413 = new BlockState(NamespaceID.from("minecraft:redstone_wire:413"), (short) 2471, Block.REDSTONE_WIRE, "east=up","north=none","power=13","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_414 = new BlockState(NamespaceID.from("minecraft:redstone_wire:414"), (short) 2472, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_414 = new BlockState(NamespaceID.from("minecraft:redstone_wire:414"), (short) 2472, Block.REDSTONE_WIRE, "east=up","north=none","power=14","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_415 = new BlockState(NamespaceID.from("minecraft:redstone_wire:415"), (short) 2473, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_415 = new BlockState(NamespaceID.from("minecraft:redstone_wire:415"), (short) 2473, Block.REDSTONE_WIRE, "east=up","north=none","power=14","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_416 = new BlockState(NamespaceID.from("minecraft:redstone_wire:416"), (short) 2474, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_416 = new BlockState(NamespaceID.from("minecraft:redstone_wire:416"), (short) 2474, Block.REDSTONE_WIRE, "east=up","north=none","power=14","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_417 = new BlockState(NamespaceID.from("minecraft:redstone_wire:417"), (short) 2475, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_417 = new BlockState(NamespaceID.from("minecraft:redstone_wire:417"), (short) 2475, Block.REDSTONE_WIRE, "east=up","north=none","power=14","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_418 = new BlockState(NamespaceID.from("minecraft:redstone_wire:418"), (short) 2476, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_418 = new BlockState(NamespaceID.from("minecraft:redstone_wire:418"), (short) 2476, Block.REDSTONE_WIRE, "east=up","north=none","power=14","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_419 = new BlockState(NamespaceID.from("minecraft:redstone_wire:419"), (short) 2477, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_419 = new BlockState(NamespaceID.from("minecraft:redstone_wire:419"), (short) 2477, Block.REDSTONE_WIRE, "east=up","north=none","power=14","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_420 = new BlockState(NamespaceID.from("minecraft:redstone_wire:420"), (short) 2478, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_420 = new BlockState(NamespaceID.from("minecraft:redstone_wire:420"), (short) 2478, Block.REDSTONE_WIRE, "east=up","north=none","power=14","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_421 = new BlockState(NamespaceID.from("minecraft:redstone_wire:421"), (short) 2479, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_421 = new BlockState(NamespaceID.from("minecraft:redstone_wire:421"), (short) 2479, Block.REDSTONE_WIRE, "east=up","north=none","power=14","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_422 = new BlockState(NamespaceID.from("minecraft:redstone_wire:422"), (short) 2480, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_422 = new BlockState(NamespaceID.from("minecraft:redstone_wire:422"), (short) 2480, Block.REDSTONE_WIRE, "east=up","north=none","power=14","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_423 = new BlockState(NamespaceID.from("minecraft:redstone_wire:423"), (short) 2481, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_423 = new BlockState(NamespaceID.from("minecraft:redstone_wire:423"), (short) 2481, Block.REDSTONE_WIRE, "east=up","north=none","power=15","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_424 = new BlockState(NamespaceID.from("minecraft:redstone_wire:424"), (short) 2482, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_424 = new BlockState(NamespaceID.from("minecraft:redstone_wire:424"), (short) 2482, Block.REDSTONE_WIRE, "east=up","north=none","power=15","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_425 = new BlockState(NamespaceID.from("minecraft:redstone_wire:425"), (short) 2483, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_425 = new BlockState(NamespaceID.from("minecraft:redstone_wire:425"), (short) 2483, Block.REDSTONE_WIRE, "east=up","north=none","power=15","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_426 = new BlockState(NamespaceID.from("minecraft:redstone_wire:426"), (short) 2484, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_426 = new BlockState(NamespaceID.from("minecraft:redstone_wire:426"), (short) 2484, Block.REDSTONE_WIRE, "east=up","north=none","power=15","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_427 = new BlockState(NamespaceID.from("minecraft:redstone_wire:427"), (short) 2485, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_427 = new BlockState(NamespaceID.from("minecraft:redstone_wire:427"), (short) 2485, Block.REDSTONE_WIRE, "east=up","north=none","power=15","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_428 = new BlockState(NamespaceID.from("minecraft:redstone_wire:428"), (short) 2486, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_428 = new BlockState(NamespaceID.from("minecraft:redstone_wire:428"), (short) 2486, Block.REDSTONE_WIRE, "east=up","north=none","power=15","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_429 = new BlockState(NamespaceID.from("minecraft:redstone_wire:429"), (short) 2487, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_429 = new BlockState(NamespaceID.from("minecraft:redstone_wire:429"), (short) 2487, Block.REDSTONE_WIRE, "east=up","north=none","power=15","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_430 = new BlockState(NamespaceID.from("minecraft:redstone_wire:430"), (short) 2488, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_430 = new BlockState(NamespaceID.from("minecraft:redstone_wire:430"), (short) 2488, Block.REDSTONE_WIRE, "east=up","north=none","power=15","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_431 = new BlockState(NamespaceID.from("minecraft:redstone_wire:431"), (short) 2489, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_431 = new BlockState(NamespaceID.from("minecraft:redstone_wire:431"), (short) 2489, Block.REDSTONE_WIRE, "east=up","north=none","power=15","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_432 = new BlockState(NamespaceID.from("minecraft:redstone_wire:432"), (short) 2490, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_432 = new BlockState(NamespaceID.from("minecraft:redstone_wire:432"), (short) 2490, Block.REDSTONE_WIRE, "east=side","north=up","power=0","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_433 = new BlockState(NamespaceID.from("minecraft:redstone_wire:433"), (short) 2491, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_433 = new BlockState(NamespaceID.from("minecraft:redstone_wire:433"), (short) 2491, Block.REDSTONE_WIRE, "east=side","north=up","power=0","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_434 = new BlockState(NamespaceID.from("minecraft:redstone_wire:434"), (short) 2492, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_434 = new BlockState(NamespaceID.from("minecraft:redstone_wire:434"), (short) 2492, Block.REDSTONE_WIRE, "east=side","north=up","power=0","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_435 = new BlockState(NamespaceID.from("minecraft:redstone_wire:435"), (short) 2493, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_435 = new BlockState(NamespaceID.from("minecraft:redstone_wire:435"), (short) 2493, Block.REDSTONE_WIRE, "east=side","north=up","power=0","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_436 = new BlockState(NamespaceID.from("minecraft:redstone_wire:436"), (short) 2494, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_436 = new BlockState(NamespaceID.from("minecraft:redstone_wire:436"), (short) 2494, Block.REDSTONE_WIRE, "east=side","north=up","power=0","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_437 = new BlockState(NamespaceID.from("minecraft:redstone_wire:437"), (short) 2495, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_437 = new BlockState(NamespaceID.from("minecraft:redstone_wire:437"), (short) 2495, Block.REDSTONE_WIRE, "east=side","north=up","power=0","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_438 = new BlockState(NamespaceID.from("minecraft:redstone_wire:438"), (short) 2496, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_438 = new BlockState(NamespaceID.from("minecraft:redstone_wire:438"), (short) 2496, Block.REDSTONE_WIRE, "east=side","north=up","power=0","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_439 = new BlockState(NamespaceID.from("minecraft:redstone_wire:439"), (short) 2497, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_439 = new BlockState(NamespaceID.from("minecraft:redstone_wire:439"), (short) 2497, Block.REDSTONE_WIRE, "east=side","north=up","power=0","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_440 = new BlockState(NamespaceID.from("minecraft:redstone_wire:440"), (short) 2498, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_440 = new BlockState(NamespaceID.from("minecraft:redstone_wire:440"), (short) 2498, Block.REDSTONE_WIRE, "east=side","north=up","power=0","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_441 = new BlockState(NamespaceID.from("minecraft:redstone_wire:441"), (short) 2499, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_441 = new BlockState(NamespaceID.from("minecraft:redstone_wire:441"), (short) 2499, Block.REDSTONE_WIRE, "east=side","north=up","power=1","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_442 = new BlockState(NamespaceID.from("minecraft:redstone_wire:442"), (short) 2500, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_442 = new BlockState(NamespaceID.from("minecraft:redstone_wire:442"), (short) 2500, Block.REDSTONE_WIRE, "east=side","north=up","power=1","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_443 = new BlockState(NamespaceID.from("minecraft:redstone_wire:443"), (short) 2501, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_443 = new BlockState(NamespaceID.from("minecraft:redstone_wire:443"), (short) 2501, Block.REDSTONE_WIRE, "east=side","north=up","power=1","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_444 = new BlockState(NamespaceID.from("minecraft:redstone_wire:444"), (short) 2502, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_444 = new BlockState(NamespaceID.from("minecraft:redstone_wire:444"), (short) 2502, Block.REDSTONE_WIRE, "east=side","north=up","power=1","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_445 = new BlockState(NamespaceID.from("minecraft:redstone_wire:445"), (short) 2503, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_445 = new BlockState(NamespaceID.from("minecraft:redstone_wire:445"), (short) 2503, Block.REDSTONE_WIRE, "east=side","north=up","power=1","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_446 = new BlockState(NamespaceID.from("minecraft:redstone_wire:446"), (short) 2504, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_446 = new BlockState(NamespaceID.from("minecraft:redstone_wire:446"), (short) 2504, Block.REDSTONE_WIRE, "east=side","north=up","power=1","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_447 = new BlockState(NamespaceID.from("minecraft:redstone_wire:447"), (short) 2505, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_447 = new BlockState(NamespaceID.from("minecraft:redstone_wire:447"), (short) 2505, Block.REDSTONE_WIRE, "east=side","north=up","power=1","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_448 = new BlockState(NamespaceID.from("minecraft:redstone_wire:448"), (short) 2506, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_448 = new BlockState(NamespaceID.from("minecraft:redstone_wire:448"), (short) 2506, Block.REDSTONE_WIRE, "east=side","north=up","power=1","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_449 = new BlockState(NamespaceID.from("minecraft:redstone_wire:449"), (short) 2507, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_449 = new BlockState(NamespaceID.from("minecraft:redstone_wire:449"), (short) 2507, Block.REDSTONE_WIRE, "east=side","north=up","power=1","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_450 = new BlockState(NamespaceID.from("minecraft:redstone_wire:450"), (short) 2508, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_450 = new BlockState(NamespaceID.from("minecraft:redstone_wire:450"), (short) 2508, Block.REDSTONE_WIRE, "east=side","north=up","power=2","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_451 = new BlockState(NamespaceID.from("minecraft:redstone_wire:451"), (short) 2509, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_451 = new BlockState(NamespaceID.from("minecraft:redstone_wire:451"), (short) 2509, Block.REDSTONE_WIRE, "east=side","north=up","power=2","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_452 = new BlockState(NamespaceID.from("minecraft:redstone_wire:452"), (short) 2510, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_452 = new BlockState(NamespaceID.from("minecraft:redstone_wire:452"), (short) 2510, Block.REDSTONE_WIRE, "east=side","north=up","power=2","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_453 = new BlockState(NamespaceID.from("minecraft:redstone_wire:453"), (short) 2511, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_453 = new BlockState(NamespaceID.from("minecraft:redstone_wire:453"), (short) 2511, Block.REDSTONE_WIRE, "east=side","north=up","power=2","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_454 = new BlockState(NamespaceID.from("minecraft:redstone_wire:454"), (short) 2512, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_454 = new BlockState(NamespaceID.from("minecraft:redstone_wire:454"), (short) 2512, Block.REDSTONE_WIRE, "east=side","north=up","power=2","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_455 = new BlockState(NamespaceID.from("minecraft:redstone_wire:455"), (short) 2513, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_455 = new BlockState(NamespaceID.from("minecraft:redstone_wire:455"), (short) 2513, Block.REDSTONE_WIRE, "east=side","north=up","power=2","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_456 = new BlockState(NamespaceID.from("minecraft:redstone_wire:456"), (short) 2514, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_456 = new BlockState(NamespaceID.from("minecraft:redstone_wire:456"), (short) 2514, Block.REDSTONE_WIRE, "east=side","north=up","power=2","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_457 = new BlockState(NamespaceID.from("minecraft:redstone_wire:457"), (short) 2515, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_457 = new BlockState(NamespaceID.from("minecraft:redstone_wire:457"), (short) 2515, Block.REDSTONE_WIRE, "east=side","north=up","power=2","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_458 = new BlockState(NamespaceID.from("minecraft:redstone_wire:458"), (short) 2516, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_458 = new BlockState(NamespaceID.from("minecraft:redstone_wire:458"), (short) 2516, Block.REDSTONE_WIRE, "east=side","north=up","power=2","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_459 = new BlockState(NamespaceID.from("minecraft:redstone_wire:459"), (short) 2517, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_459 = new BlockState(NamespaceID.from("minecraft:redstone_wire:459"), (short) 2517, Block.REDSTONE_WIRE, "east=side","north=up","power=3","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_460 = new BlockState(NamespaceID.from("minecraft:redstone_wire:460"), (short) 2518, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_460 = new BlockState(NamespaceID.from("minecraft:redstone_wire:460"), (short) 2518, Block.REDSTONE_WIRE, "east=side","north=up","power=3","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_461 = new BlockState(NamespaceID.from("minecraft:redstone_wire:461"), (short) 2519, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_461 = new BlockState(NamespaceID.from("minecraft:redstone_wire:461"), (short) 2519, Block.REDSTONE_WIRE, "east=side","north=up","power=3","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_462 = new BlockState(NamespaceID.from("minecraft:redstone_wire:462"), (short) 2520, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_462 = new BlockState(NamespaceID.from("minecraft:redstone_wire:462"), (short) 2520, Block.REDSTONE_WIRE, "east=side","north=up","power=3","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_463 = new BlockState(NamespaceID.from("minecraft:redstone_wire:463"), (short) 2521, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_463 = new BlockState(NamespaceID.from("minecraft:redstone_wire:463"), (short) 2521, Block.REDSTONE_WIRE, "east=side","north=up","power=3","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_464 = new BlockState(NamespaceID.from("minecraft:redstone_wire:464"), (short) 2522, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_464 = new BlockState(NamespaceID.from("minecraft:redstone_wire:464"), (short) 2522, Block.REDSTONE_WIRE, "east=side","north=up","power=3","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_465 = new BlockState(NamespaceID.from("minecraft:redstone_wire:465"), (short) 2523, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_465 = new BlockState(NamespaceID.from("minecraft:redstone_wire:465"), (short) 2523, Block.REDSTONE_WIRE, "east=side","north=up","power=3","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_466 = new BlockState(NamespaceID.from("minecraft:redstone_wire:466"), (short) 2524, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_466 = new BlockState(NamespaceID.from("minecraft:redstone_wire:466"), (short) 2524, Block.REDSTONE_WIRE, "east=side","north=up","power=3","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_467 = new BlockState(NamespaceID.from("minecraft:redstone_wire:467"), (short) 2525, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_467 = new BlockState(NamespaceID.from("minecraft:redstone_wire:467"), (short) 2525, Block.REDSTONE_WIRE, "east=side","north=up","power=3","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_468 = new BlockState(NamespaceID.from("minecraft:redstone_wire:468"), (short) 2526, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_468 = new BlockState(NamespaceID.from("minecraft:redstone_wire:468"), (short) 2526, Block.REDSTONE_WIRE, "east=side","north=up","power=4","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_469 = new BlockState(NamespaceID.from("minecraft:redstone_wire:469"), (short) 2527, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_469 = new BlockState(NamespaceID.from("minecraft:redstone_wire:469"), (short) 2527, Block.REDSTONE_WIRE, "east=side","north=up","power=4","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_470 = new BlockState(NamespaceID.from("minecraft:redstone_wire:470"), (short) 2528, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_470 = new BlockState(NamespaceID.from("minecraft:redstone_wire:470"), (short) 2528, Block.REDSTONE_WIRE, "east=side","north=up","power=4","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_471 = new BlockState(NamespaceID.from("minecraft:redstone_wire:471"), (short) 2529, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_471 = new BlockState(NamespaceID.from("minecraft:redstone_wire:471"), (short) 2529, Block.REDSTONE_WIRE, "east=side","north=up","power=4","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_472 = new BlockState(NamespaceID.from("minecraft:redstone_wire:472"), (short) 2530, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_472 = new BlockState(NamespaceID.from("minecraft:redstone_wire:472"), (short) 2530, Block.REDSTONE_WIRE, "east=side","north=up","power=4","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_473 = new BlockState(NamespaceID.from("minecraft:redstone_wire:473"), (short) 2531, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_473 = new BlockState(NamespaceID.from("minecraft:redstone_wire:473"), (short) 2531, Block.REDSTONE_WIRE, "east=side","north=up","power=4","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_474 = new BlockState(NamespaceID.from("minecraft:redstone_wire:474"), (short) 2532, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_474 = new BlockState(NamespaceID.from("minecraft:redstone_wire:474"), (short) 2532, Block.REDSTONE_WIRE, "east=side","north=up","power=4","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_475 = new BlockState(NamespaceID.from("minecraft:redstone_wire:475"), (short) 2533, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_475 = new BlockState(NamespaceID.from("minecraft:redstone_wire:475"), (short) 2533, Block.REDSTONE_WIRE, "east=side","north=up","power=4","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_476 = new BlockState(NamespaceID.from("minecraft:redstone_wire:476"), (short) 2534, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_476 = new BlockState(NamespaceID.from("minecraft:redstone_wire:476"), (short) 2534, Block.REDSTONE_WIRE, "east=side","north=up","power=4","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_477 = new BlockState(NamespaceID.from("minecraft:redstone_wire:477"), (short) 2535, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_477 = new BlockState(NamespaceID.from("minecraft:redstone_wire:477"), (short) 2535, Block.REDSTONE_WIRE, "east=side","north=up","power=5","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_478 = new BlockState(NamespaceID.from("minecraft:redstone_wire:478"), (short) 2536, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_478 = new BlockState(NamespaceID.from("minecraft:redstone_wire:478"), (short) 2536, Block.REDSTONE_WIRE, "east=side","north=up","power=5","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_479 = new BlockState(NamespaceID.from("minecraft:redstone_wire:479"), (short) 2537, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_479 = new BlockState(NamespaceID.from("minecraft:redstone_wire:479"), (short) 2537, Block.REDSTONE_WIRE, "east=side","north=up","power=5","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_480 = new BlockState(NamespaceID.from("minecraft:redstone_wire:480"), (short) 2538, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_480 = new BlockState(NamespaceID.from("minecraft:redstone_wire:480"), (short) 2538, Block.REDSTONE_WIRE, "east=side","north=up","power=5","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_481 = new BlockState(NamespaceID.from("minecraft:redstone_wire:481"), (short) 2539, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_481 = new BlockState(NamespaceID.from("minecraft:redstone_wire:481"), (short) 2539, Block.REDSTONE_WIRE, "east=side","north=up","power=5","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_482 = new BlockState(NamespaceID.from("minecraft:redstone_wire:482"), (short) 2540, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_482 = new BlockState(NamespaceID.from("minecraft:redstone_wire:482"), (short) 2540, Block.REDSTONE_WIRE, "east=side","north=up","power=5","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_483 = new BlockState(NamespaceID.from("minecraft:redstone_wire:483"), (short) 2541, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_483 = new BlockState(NamespaceID.from("minecraft:redstone_wire:483"), (short) 2541, Block.REDSTONE_WIRE, "east=side","north=up","power=5","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_484 = new BlockState(NamespaceID.from("minecraft:redstone_wire:484"), (short) 2542, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_484 = new BlockState(NamespaceID.from("minecraft:redstone_wire:484"), (short) 2542, Block.REDSTONE_WIRE, "east=side","north=up","power=5","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_485 = new BlockState(NamespaceID.from("minecraft:redstone_wire:485"), (short) 2543, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_485 = new BlockState(NamespaceID.from("minecraft:redstone_wire:485"), (short) 2543, Block.REDSTONE_WIRE, "east=side","north=up","power=5","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_486 = new BlockState(NamespaceID.from("minecraft:redstone_wire:486"), (short) 2544, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_486 = new BlockState(NamespaceID.from("minecraft:redstone_wire:486"), (short) 2544, Block.REDSTONE_WIRE, "east=side","north=up","power=6","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_487 = new BlockState(NamespaceID.from("minecraft:redstone_wire:487"), (short) 2545, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_487 = new BlockState(NamespaceID.from("minecraft:redstone_wire:487"), (short) 2545, Block.REDSTONE_WIRE, "east=side","north=up","power=6","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_488 = new BlockState(NamespaceID.from("minecraft:redstone_wire:488"), (short) 2546, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_488 = new BlockState(NamespaceID.from("minecraft:redstone_wire:488"), (short) 2546, Block.REDSTONE_WIRE, "east=side","north=up","power=6","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_489 = new BlockState(NamespaceID.from("minecraft:redstone_wire:489"), (short) 2547, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_489 = new BlockState(NamespaceID.from("minecraft:redstone_wire:489"), (short) 2547, Block.REDSTONE_WIRE, "east=side","north=up","power=6","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_490 = new BlockState(NamespaceID.from("minecraft:redstone_wire:490"), (short) 2548, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_490 = new BlockState(NamespaceID.from("minecraft:redstone_wire:490"), (short) 2548, Block.REDSTONE_WIRE, "east=side","north=up","power=6","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_491 = new BlockState(NamespaceID.from("minecraft:redstone_wire:491"), (short) 2549, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_491 = new BlockState(NamespaceID.from("minecraft:redstone_wire:491"), (short) 2549, Block.REDSTONE_WIRE, "east=side","north=up","power=6","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_492 = new BlockState(NamespaceID.from("minecraft:redstone_wire:492"), (short) 2550, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_492 = new BlockState(NamespaceID.from("minecraft:redstone_wire:492"), (short) 2550, Block.REDSTONE_WIRE, "east=side","north=up","power=6","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_493 = new BlockState(NamespaceID.from("minecraft:redstone_wire:493"), (short) 2551, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_493 = new BlockState(NamespaceID.from("minecraft:redstone_wire:493"), (short) 2551, Block.REDSTONE_WIRE, "east=side","north=up","power=6","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_494 = new BlockState(NamespaceID.from("minecraft:redstone_wire:494"), (short) 2552, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_494 = new BlockState(NamespaceID.from("minecraft:redstone_wire:494"), (short) 2552, Block.REDSTONE_WIRE, "east=side","north=up","power=6","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_495 = new BlockState(NamespaceID.from("minecraft:redstone_wire:495"), (short) 2553, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_495 = new BlockState(NamespaceID.from("minecraft:redstone_wire:495"), (short) 2553, Block.REDSTONE_WIRE, "east=side","north=up","power=7","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_496 = new BlockState(NamespaceID.from("minecraft:redstone_wire:496"), (short) 2554, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_496 = new BlockState(NamespaceID.from("minecraft:redstone_wire:496"), (short) 2554, Block.REDSTONE_WIRE, "east=side","north=up","power=7","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_497 = new BlockState(NamespaceID.from("minecraft:redstone_wire:497"), (short) 2555, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_497 = new BlockState(NamespaceID.from("minecraft:redstone_wire:497"), (short) 2555, Block.REDSTONE_WIRE, "east=side","north=up","power=7","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_498 = new BlockState(NamespaceID.from("minecraft:redstone_wire:498"), (short) 2556, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_498 = new BlockState(NamespaceID.from("minecraft:redstone_wire:498"), (short) 2556, Block.REDSTONE_WIRE, "east=side","north=up","power=7","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_499 = new BlockState(NamespaceID.from("minecraft:redstone_wire:499"), (short) 2557, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_499 = new BlockState(NamespaceID.from("minecraft:redstone_wire:499"), (short) 2557, Block.REDSTONE_WIRE, "east=side","north=up","power=7","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_500 = new BlockState(NamespaceID.from("minecraft:redstone_wire:500"), (short) 2558, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_500 = new BlockState(NamespaceID.from("minecraft:redstone_wire:500"), (short) 2558, Block.REDSTONE_WIRE, "east=side","north=up","power=7","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_501 = new BlockState(NamespaceID.from("minecraft:redstone_wire:501"), (short) 2559, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_501 = new BlockState(NamespaceID.from("minecraft:redstone_wire:501"), (short) 2559, Block.REDSTONE_WIRE, "east=side","north=up","power=7","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_502 = new BlockState(NamespaceID.from("minecraft:redstone_wire:502"), (short) 2560, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_502 = new BlockState(NamespaceID.from("minecraft:redstone_wire:502"), (short) 2560, Block.REDSTONE_WIRE, "east=side","north=up","power=7","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_503 = new BlockState(NamespaceID.from("minecraft:redstone_wire:503"), (short) 2561, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_503 = new BlockState(NamespaceID.from("minecraft:redstone_wire:503"), (short) 2561, Block.REDSTONE_WIRE, "east=side","north=up","power=7","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_504 = new BlockState(NamespaceID.from("minecraft:redstone_wire:504"), (short) 2562, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_504 = new BlockState(NamespaceID.from("minecraft:redstone_wire:504"), (short) 2562, Block.REDSTONE_WIRE, "east=side","north=up","power=8","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_505 = new BlockState(NamespaceID.from("minecraft:redstone_wire:505"), (short) 2563, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_505 = new BlockState(NamespaceID.from("minecraft:redstone_wire:505"), (short) 2563, Block.REDSTONE_WIRE, "east=side","north=up","power=8","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_506 = new BlockState(NamespaceID.from("minecraft:redstone_wire:506"), (short) 2564, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_506 = new BlockState(NamespaceID.from("minecraft:redstone_wire:506"), (short) 2564, Block.REDSTONE_WIRE, "east=side","north=up","power=8","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_507 = new BlockState(NamespaceID.from("minecraft:redstone_wire:507"), (short) 2565, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_507 = new BlockState(NamespaceID.from("minecraft:redstone_wire:507"), (short) 2565, Block.REDSTONE_WIRE, "east=side","north=up","power=8","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_508 = new BlockState(NamespaceID.from("minecraft:redstone_wire:508"), (short) 2566, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_508 = new BlockState(NamespaceID.from("minecraft:redstone_wire:508"), (short) 2566, Block.REDSTONE_WIRE, "east=side","north=up","power=8","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_509 = new BlockState(NamespaceID.from("minecraft:redstone_wire:509"), (short) 2567, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_509 = new BlockState(NamespaceID.from("minecraft:redstone_wire:509"), (short) 2567, Block.REDSTONE_WIRE, "east=side","north=up","power=8","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_510 = new BlockState(NamespaceID.from("minecraft:redstone_wire:510"), (short) 2568, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_510 = new BlockState(NamespaceID.from("minecraft:redstone_wire:510"), (short) 2568, Block.REDSTONE_WIRE, "east=side","north=up","power=8","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_511 = new BlockState(NamespaceID.from("minecraft:redstone_wire:511"), (short) 2569, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_511 = new BlockState(NamespaceID.from("minecraft:redstone_wire:511"), (short) 2569, Block.REDSTONE_WIRE, "east=side","north=up","power=8","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_512 = new BlockState(NamespaceID.from("minecraft:redstone_wire:512"), (short) 2570, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_512 = new BlockState(NamespaceID.from("minecraft:redstone_wire:512"), (short) 2570, Block.REDSTONE_WIRE, "east=side","north=up","power=8","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_513 = new BlockState(NamespaceID.from("minecraft:redstone_wire:513"), (short) 2571, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_513 = new BlockState(NamespaceID.from("minecraft:redstone_wire:513"), (short) 2571, Block.REDSTONE_WIRE, "east=side","north=up","power=9","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_514 = new BlockState(NamespaceID.from("minecraft:redstone_wire:514"), (short) 2572, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_514 = new BlockState(NamespaceID.from("minecraft:redstone_wire:514"), (short) 2572, Block.REDSTONE_WIRE, "east=side","north=up","power=9","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_515 = new BlockState(NamespaceID.from("minecraft:redstone_wire:515"), (short) 2573, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_515 = new BlockState(NamespaceID.from("minecraft:redstone_wire:515"), (short) 2573, Block.REDSTONE_WIRE, "east=side","north=up","power=9","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_516 = new BlockState(NamespaceID.from("minecraft:redstone_wire:516"), (short) 2574, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_516 = new BlockState(NamespaceID.from("minecraft:redstone_wire:516"), (short) 2574, Block.REDSTONE_WIRE, "east=side","north=up","power=9","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_517 = new BlockState(NamespaceID.from("minecraft:redstone_wire:517"), (short) 2575, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_517 = new BlockState(NamespaceID.from("minecraft:redstone_wire:517"), (short) 2575, Block.REDSTONE_WIRE, "east=side","north=up","power=9","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_518 = new BlockState(NamespaceID.from("minecraft:redstone_wire:518"), (short) 2576, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_518 = new BlockState(NamespaceID.from("minecraft:redstone_wire:518"), (short) 2576, Block.REDSTONE_WIRE, "east=side","north=up","power=9","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_519 = new BlockState(NamespaceID.from("minecraft:redstone_wire:519"), (short) 2577, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_519 = new BlockState(NamespaceID.from("minecraft:redstone_wire:519"), (short) 2577, Block.REDSTONE_WIRE, "east=side","north=up","power=9","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_520 = new BlockState(NamespaceID.from("minecraft:redstone_wire:520"), (short) 2578, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_520 = new BlockState(NamespaceID.from("minecraft:redstone_wire:520"), (short) 2578, Block.REDSTONE_WIRE, "east=side","north=up","power=9","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_521 = new BlockState(NamespaceID.from("minecraft:redstone_wire:521"), (short) 2579, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_521 = new BlockState(NamespaceID.from("minecraft:redstone_wire:521"), (short) 2579, Block.REDSTONE_WIRE, "east=side","north=up","power=9","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_522 = new BlockState(NamespaceID.from("minecraft:redstone_wire:522"), (short) 2580, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_522 = new BlockState(NamespaceID.from("minecraft:redstone_wire:522"), (short) 2580, Block.REDSTONE_WIRE, "east=side","north=up","power=10","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_523 = new BlockState(NamespaceID.from("minecraft:redstone_wire:523"), (short) 2581, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_523 = new BlockState(NamespaceID.from("minecraft:redstone_wire:523"), (short) 2581, Block.REDSTONE_WIRE, "east=side","north=up","power=10","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_524 = new BlockState(NamespaceID.from("minecraft:redstone_wire:524"), (short) 2582, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_524 = new BlockState(NamespaceID.from("minecraft:redstone_wire:524"), (short) 2582, Block.REDSTONE_WIRE, "east=side","north=up","power=10","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_525 = new BlockState(NamespaceID.from("minecraft:redstone_wire:525"), (short) 2583, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_525 = new BlockState(NamespaceID.from("minecraft:redstone_wire:525"), (short) 2583, Block.REDSTONE_WIRE, "east=side","north=up","power=10","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_526 = new BlockState(NamespaceID.from("minecraft:redstone_wire:526"), (short) 2584, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_526 = new BlockState(NamespaceID.from("minecraft:redstone_wire:526"), (short) 2584, Block.REDSTONE_WIRE, "east=side","north=up","power=10","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_527 = new BlockState(NamespaceID.from("minecraft:redstone_wire:527"), (short) 2585, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_527 = new BlockState(NamespaceID.from("minecraft:redstone_wire:527"), (short) 2585, Block.REDSTONE_WIRE, "east=side","north=up","power=10","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_528 = new BlockState(NamespaceID.from("minecraft:redstone_wire:528"), (short) 2586, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_528 = new BlockState(NamespaceID.from("minecraft:redstone_wire:528"), (short) 2586, Block.REDSTONE_WIRE, "east=side","north=up","power=10","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_529 = new BlockState(NamespaceID.from("minecraft:redstone_wire:529"), (short) 2587, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_529 = new BlockState(NamespaceID.from("minecraft:redstone_wire:529"), (short) 2587, Block.REDSTONE_WIRE, "east=side","north=up","power=10","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_530 = new BlockState(NamespaceID.from("minecraft:redstone_wire:530"), (short) 2588, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_530 = new BlockState(NamespaceID.from("minecraft:redstone_wire:530"), (short) 2588, Block.REDSTONE_WIRE, "east=side","north=up","power=10","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_531 = new BlockState(NamespaceID.from("minecraft:redstone_wire:531"), (short) 2589, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_531 = new BlockState(NamespaceID.from("minecraft:redstone_wire:531"), (short) 2589, Block.REDSTONE_WIRE, "east=side","north=up","power=11","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_532 = new BlockState(NamespaceID.from("minecraft:redstone_wire:532"), (short) 2590, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_532 = new BlockState(NamespaceID.from("minecraft:redstone_wire:532"), (short) 2590, Block.REDSTONE_WIRE, "east=side","north=up","power=11","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_533 = new BlockState(NamespaceID.from("minecraft:redstone_wire:533"), (short) 2591, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_533 = new BlockState(NamespaceID.from("minecraft:redstone_wire:533"), (short) 2591, Block.REDSTONE_WIRE, "east=side","north=up","power=11","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_534 = new BlockState(NamespaceID.from("minecraft:redstone_wire:534"), (short) 2592, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_534 = new BlockState(NamespaceID.from("minecraft:redstone_wire:534"), (short) 2592, Block.REDSTONE_WIRE, "east=side","north=up","power=11","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_535 = new BlockState(NamespaceID.from("minecraft:redstone_wire:535"), (short) 2593, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_535 = new BlockState(NamespaceID.from("minecraft:redstone_wire:535"), (short) 2593, Block.REDSTONE_WIRE, "east=side","north=up","power=11","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_536 = new BlockState(NamespaceID.from("minecraft:redstone_wire:536"), (short) 2594, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_536 = new BlockState(NamespaceID.from("minecraft:redstone_wire:536"), (short) 2594, Block.REDSTONE_WIRE, "east=side","north=up","power=11","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_537 = new BlockState(NamespaceID.from("minecraft:redstone_wire:537"), (short) 2595, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_537 = new BlockState(NamespaceID.from("minecraft:redstone_wire:537"), (short) 2595, Block.REDSTONE_WIRE, "east=side","north=up","power=11","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_538 = new BlockState(NamespaceID.from("minecraft:redstone_wire:538"), (short) 2596, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_538 = new BlockState(NamespaceID.from("minecraft:redstone_wire:538"), (short) 2596, Block.REDSTONE_WIRE, "east=side","north=up","power=11","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_539 = new BlockState(NamespaceID.from("minecraft:redstone_wire:539"), (short) 2597, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_539 = new BlockState(NamespaceID.from("minecraft:redstone_wire:539"), (short) 2597, Block.REDSTONE_WIRE, "east=side","north=up","power=11","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_540 = new BlockState(NamespaceID.from("minecraft:redstone_wire:540"), (short) 2598, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_540 = new BlockState(NamespaceID.from("minecraft:redstone_wire:540"), (short) 2598, Block.REDSTONE_WIRE, "east=side","north=up","power=12","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_541 = new BlockState(NamespaceID.from("minecraft:redstone_wire:541"), (short) 2599, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_541 = new BlockState(NamespaceID.from("minecraft:redstone_wire:541"), (short) 2599, Block.REDSTONE_WIRE, "east=side","north=up","power=12","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_542 = new BlockState(NamespaceID.from("minecraft:redstone_wire:542"), (short) 2600, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_542 = new BlockState(NamespaceID.from("minecraft:redstone_wire:542"), (short) 2600, Block.REDSTONE_WIRE, "east=side","north=up","power=12","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_543 = new BlockState(NamespaceID.from("minecraft:redstone_wire:543"), (short) 2601, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_543 = new BlockState(NamespaceID.from("minecraft:redstone_wire:543"), (short) 2601, Block.REDSTONE_WIRE, "east=side","north=up","power=12","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_544 = new BlockState(NamespaceID.from("minecraft:redstone_wire:544"), (short) 2602, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_544 = new BlockState(NamespaceID.from("minecraft:redstone_wire:544"), (short) 2602, Block.REDSTONE_WIRE, "east=side","north=up","power=12","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_545 = new BlockState(NamespaceID.from("minecraft:redstone_wire:545"), (short) 2603, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_545 = new BlockState(NamespaceID.from("minecraft:redstone_wire:545"), (short) 2603, Block.REDSTONE_WIRE, "east=side","north=up","power=12","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_546 = new BlockState(NamespaceID.from("minecraft:redstone_wire:546"), (short) 2604, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_546 = new BlockState(NamespaceID.from("minecraft:redstone_wire:546"), (short) 2604, Block.REDSTONE_WIRE, "east=side","north=up","power=12","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_547 = new BlockState(NamespaceID.from("minecraft:redstone_wire:547"), (short) 2605, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_547 = new BlockState(NamespaceID.from("minecraft:redstone_wire:547"), (short) 2605, Block.REDSTONE_WIRE, "east=side","north=up","power=12","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_548 = new BlockState(NamespaceID.from("minecraft:redstone_wire:548"), (short) 2606, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_548 = new BlockState(NamespaceID.from("minecraft:redstone_wire:548"), (short) 2606, Block.REDSTONE_WIRE, "east=side","north=up","power=12","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_549 = new BlockState(NamespaceID.from("minecraft:redstone_wire:549"), (short) 2607, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_549 = new BlockState(NamespaceID.from("minecraft:redstone_wire:549"), (short) 2607, Block.REDSTONE_WIRE, "east=side","north=up","power=13","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_550 = new BlockState(NamespaceID.from("minecraft:redstone_wire:550"), (short) 2608, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_550 = new BlockState(NamespaceID.from("minecraft:redstone_wire:550"), (short) 2608, Block.REDSTONE_WIRE, "east=side","north=up","power=13","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_551 = new BlockState(NamespaceID.from("minecraft:redstone_wire:551"), (short) 2609, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_551 = new BlockState(NamespaceID.from("minecraft:redstone_wire:551"), (short) 2609, Block.REDSTONE_WIRE, "east=side","north=up","power=13","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_552 = new BlockState(NamespaceID.from("minecraft:redstone_wire:552"), (short) 2610, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_552 = new BlockState(NamespaceID.from("minecraft:redstone_wire:552"), (short) 2610, Block.REDSTONE_WIRE, "east=side","north=up","power=13","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_553 = new BlockState(NamespaceID.from("minecraft:redstone_wire:553"), (short) 2611, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_553 = new BlockState(NamespaceID.from("minecraft:redstone_wire:553"), (short) 2611, Block.REDSTONE_WIRE, "east=side","north=up","power=13","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_554 = new BlockState(NamespaceID.from("minecraft:redstone_wire:554"), (short) 2612, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_554 = new BlockState(NamespaceID.from("minecraft:redstone_wire:554"), (short) 2612, Block.REDSTONE_WIRE, "east=side","north=up","power=13","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_555 = new BlockState(NamespaceID.from("minecraft:redstone_wire:555"), (short) 2613, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_555 = new BlockState(NamespaceID.from("minecraft:redstone_wire:555"), (short) 2613, Block.REDSTONE_WIRE, "east=side","north=up","power=13","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_556 = new BlockState(NamespaceID.from("minecraft:redstone_wire:556"), (short) 2614, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_556 = new BlockState(NamespaceID.from("minecraft:redstone_wire:556"), (short) 2614, Block.REDSTONE_WIRE, "east=side","north=up","power=13","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_557 = new BlockState(NamespaceID.from("minecraft:redstone_wire:557"), (short) 2615, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_557 = new BlockState(NamespaceID.from("minecraft:redstone_wire:557"), (short) 2615, Block.REDSTONE_WIRE, "east=side","north=up","power=13","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_558 = new BlockState(NamespaceID.from("minecraft:redstone_wire:558"), (short) 2616, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_558 = new BlockState(NamespaceID.from("minecraft:redstone_wire:558"), (short) 2616, Block.REDSTONE_WIRE, "east=side","north=up","power=14","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_559 = new BlockState(NamespaceID.from("minecraft:redstone_wire:559"), (short) 2617, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_559 = new BlockState(NamespaceID.from("minecraft:redstone_wire:559"), (short) 2617, Block.REDSTONE_WIRE, "east=side","north=up","power=14","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_560 = new BlockState(NamespaceID.from("minecraft:redstone_wire:560"), (short) 2618, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_560 = new BlockState(NamespaceID.from("minecraft:redstone_wire:560"), (short) 2618, Block.REDSTONE_WIRE, "east=side","north=up","power=14","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_561 = new BlockState(NamespaceID.from("minecraft:redstone_wire:561"), (short) 2619, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_561 = new BlockState(NamespaceID.from("minecraft:redstone_wire:561"), (short) 2619, Block.REDSTONE_WIRE, "east=side","north=up","power=14","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_562 = new BlockState(NamespaceID.from("minecraft:redstone_wire:562"), (short) 2620, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_562 = new BlockState(NamespaceID.from("minecraft:redstone_wire:562"), (short) 2620, Block.REDSTONE_WIRE, "east=side","north=up","power=14","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_563 = new BlockState(NamespaceID.from("minecraft:redstone_wire:563"), (short) 2621, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_563 = new BlockState(NamespaceID.from("minecraft:redstone_wire:563"), (short) 2621, Block.REDSTONE_WIRE, "east=side","north=up","power=14","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_564 = new BlockState(NamespaceID.from("minecraft:redstone_wire:564"), (short) 2622, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_564 = new BlockState(NamespaceID.from("minecraft:redstone_wire:564"), (short) 2622, Block.REDSTONE_WIRE, "east=side","north=up","power=14","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_565 = new BlockState(NamespaceID.from("minecraft:redstone_wire:565"), (short) 2623, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_565 = new BlockState(NamespaceID.from("minecraft:redstone_wire:565"), (short) 2623, Block.REDSTONE_WIRE, "east=side","north=up","power=14","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_566 = new BlockState(NamespaceID.from("minecraft:redstone_wire:566"), (short) 2624, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_566 = new BlockState(NamespaceID.from("minecraft:redstone_wire:566"), (short) 2624, Block.REDSTONE_WIRE, "east=side","north=up","power=14","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_567 = new BlockState(NamespaceID.from("minecraft:redstone_wire:567"), (short) 2625, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_567 = new BlockState(NamespaceID.from("minecraft:redstone_wire:567"), (short) 2625, Block.REDSTONE_WIRE, "east=side","north=up","power=15","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_568 = new BlockState(NamespaceID.from("minecraft:redstone_wire:568"), (short) 2626, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_568 = new BlockState(NamespaceID.from("minecraft:redstone_wire:568"), (short) 2626, Block.REDSTONE_WIRE, "east=side","north=up","power=15","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_569 = new BlockState(NamespaceID.from("minecraft:redstone_wire:569"), (short) 2627, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_569 = new BlockState(NamespaceID.from("minecraft:redstone_wire:569"), (short) 2627, Block.REDSTONE_WIRE, "east=side","north=up","power=15","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_570 = new BlockState(NamespaceID.from("minecraft:redstone_wire:570"), (short) 2628, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_570 = new BlockState(NamespaceID.from("minecraft:redstone_wire:570"), (short) 2628, Block.REDSTONE_WIRE, "east=side","north=up","power=15","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_571 = new BlockState(NamespaceID.from("minecraft:redstone_wire:571"), (short) 2629, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_571 = new BlockState(NamespaceID.from("minecraft:redstone_wire:571"), (short) 2629, Block.REDSTONE_WIRE, "east=side","north=up","power=15","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_572 = new BlockState(NamespaceID.from("minecraft:redstone_wire:572"), (short) 2630, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_572 = new BlockState(NamespaceID.from("minecraft:redstone_wire:572"), (short) 2630, Block.REDSTONE_WIRE, "east=side","north=up","power=15","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_573 = new BlockState(NamespaceID.from("minecraft:redstone_wire:573"), (short) 2631, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_573 = new BlockState(NamespaceID.from("minecraft:redstone_wire:573"), (short) 2631, Block.REDSTONE_WIRE, "east=side","north=up","power=15","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_574 = new BlockState(NamespaceID.from("minecraft:redstone_wire:574"), (short) 2632, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_574 = new BlockState(NamespaceID.from("minecraft:redstone_wire:574"), (short) 2632, Block.REDSTONE_WIRE, "east=side","north=up","power=15","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_575 = new BlockState(NamespaceID.from("minecraft:redstone_wire:575"), (short) 2633, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_575 = new BlockState(NamespaceID.from("minecraft:redstone_wire:575"), (short) 2633, Block.REDSTONE_WIRE, "east=side","north=up","power=15","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_576 = new BlockState(NamespaceID.from("minecraft:redstone_wire:576"), (short) 2634, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_576 = new BlockState(NamespaceID.from("minecraft:redstone_wire:576"), (short) 2634, Block.REDSTONE_WIRE, "east=side","north=side","power=0","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_577 = new BlockState(NamespaceID.from("minecraft:redstone_wire:577"), (short) 2635, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_577 = new BlockState(NamespaceID.from("minecraft:redstone_wire:577"), (short) 2635, Block.REDSTONE_WIRE, "east=side","north=side","power=0","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_578 = new BlockState(NamespaceID.from("minecraft:redstone_wire:578"), (short) 2636, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_578 = new BlockState(NamespaceID.from("minecraft:redstone_wire:578"), (short) 2636, Block.REDSTONE_WIRE, "east=side","north=side","power=0","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_579 = new BlockState(NamespaceID.from("minecraft:redstone_wire:579"), (short) 2637, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_579 = new BlockState(NamespaceID.from("minecraft:redstone_wire:579"), (short) 2637, Block.REDSTONE_WIRE, "east=side","north=side","power=0","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_580 = new BlockState(NamespaceID.from("minecraft:redstone_wire:580"), (short) 2638, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_580 = new BlockState(NamespaceID.from("minecraft:redstone_wire:580"), (short) 2638, Block.REDSTONE_WIRE, "east=side","north=side","power=0","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_581 = new BlockState(NamespaceID.from("minecraft:redstone_wire:581"), (short) 2639, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_581 = new BlockState(NamespaceID.from("minecraft:redstone_wire:581"), (short) 2639, Block.REDSTONE_WIRE, "east=side","north=side","power=0","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_582 = new BlockState(NamespaceID.from("minecraft:redstone_wire:582"), (short) 2640, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_582 = new BlockState(NamespaceID.from("minecraft:redstone_wire:582"), (short) 2640, Block.REDSTONE_WIRE, "east=side","north=side","power=0","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_583 = new BlockState(NamespaceID.from("minecraft:redstone_wire:583"), (short) 2641, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_583 = new BlockState(NamespaceID.from("minecraft:redstone_wire:583"), (short) 2641, Block.REDSTONE_WIRE, "east=side","north=side","power=0","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_584 = new BlockState(NamespaceID.from("minecraft:redstone_wire:584"), (short) 2642, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_584 = new BlockState(NamespaceID.from("minecraft:redstone_wire:584"), (short) 2642, Block.REDSTONE_WIRE, "east=side","north=side","power=0","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_585 = new BlockState(NamespaceID.from("minecraft:redstone_wire:585"), (short) 2643, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_585 = new BlockState(NamespaceID.from("minecraft:redstone_wire:585"), (short) 2643, Block.REDSTONE_WIRE, "east=side","north=side","power=1","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_586 = new BlockState(NamespaceID.from("minecraft:redstone_wire:586"), (short) 2644, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_586 = new BlockState(NamespaceID.from("minecraft:redstone_wire:586"), (short) 2644, Block.REDSTONE_WIRE, "east=side","north=side","power=1","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_587 = new BlockState(NamespaceID.from("minecraft:redstone_wire:587"), (short) 2645, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_587 = new BlockState(NamespaceID.from("minecraft:redstone_wire:587"), (short) 2645, Block.REDSTONE_WIRE, "east=side","north=side","power=1","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_588 = new BlockState(NamespaceID.from("minecraft:redstone_wire:588"), (short) 2646, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_588 = new BlockState(NamespaceID.from("minecraft:redstone_wire:588"), (short) 2646, Block.REDSTONE_WIRE, "east=side","north=side","power=1","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_589 = new BlockState(NamespaceID.from("minecraft:redstone_wire:589"), (short) 2647, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_589 = new BlockState(NamespaceID.from("minecraft:redstone_wire:589"), (short) 2647, Block.REDSTONE_WIRE, "east=side","north=side","power=1","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_590 = new BlockState(NamespaceID.from("minecraft:redstone_wire:590"), (short) 2648, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_590 = new BlockState(NamespaceID.from("minecraft:redstone_wire:590"), (short) 2648, Block.REDSTONE_WIRE, "east=side","north=side","power=1","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_591 = new BlockState(NamespaceID.from("minecraft:redstone_wire:591"), (short) 2649, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_591 = new BlockState(NamespaceID.from("minecraft:redstone_wire:591"), (short) 2649, Block.REDSTONE_WIRE, "east=side","north=side","power=1","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_592 = new BlockState(NamespaceID.from("minecraft:redstone_wire:592"), (short) 2650, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_592 = new BlockState(NamespaceID.from("minecraft:redstone_wire:592"), (short) 2650, Block.REDSTONE_WIRE, "east=side","north=side","power=1","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_593 = new BlockState(NamespaceID.from("minecraft:redstone_wire:593"), (short) 2651, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_593 = new BlockState(NamespaceID.from("minecraft:redstone_wire:593"), (short) 2651, Block.REDSTONE_WIRE, "east=side","north=side","power=1","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_594 = new BlockState(NamespaceID.from("minecraft:redstone_wire:594"), (short) 2652, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_594 = new BlockState(NamespaceID.from("minecraft:redstone_wire:594"), (short) 2652, Block.REDSTONE_WIRE, "east=side","north=side","power=2","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_595 = new BlockState(NamespaceID.from("minecraft:redstone_wire:595"), (short) 2653, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_595 = new BlockState(NamespaceID.from("minecraft:redstone_wire:595"), (short) 2653, Block.REDSTONE_WIRE, "east=side","north=side","power=2","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_596 = new BlockState(NamespaceID.from("minecraft:redstone_wire:596"), (short) 2654, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_596 = new BlockState(NamespaceID.from("minecraft:redstone_wire:596"), (short) 2654, Block.REDSTONE_WIRE, "east=side","north=side","power=2","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_597 = new BlockState(NamespaceID.from("minecraft:redstone_wire:597"), (short) 2655, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_597 = new BlockState(NamespaceID.from("minecraft:redstone_wire:597"), (short) 2655, Block.REDSTONE_WIRE, "east=side","north=side","power=2","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_598 = new BlockState(NamespaceID.from("minecraft:redstone_wire:598"), (short) 2656, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_598 = new BlockState(NamespaceID.from("minecraft:redstone_wire:598"), (short) 2656, Block.REDSTONE_WIRE, "east=side","north=side","power=2","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_599 = new BlockState(NamespaceID.from("minecraft:redstone_wire:599"), (short) 2657, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_599 = new BlockState(NamespaceID.from("minecraft:redstone_wire:599"), (short) 2657, Block.REDSTONE_WIRE, "east=side","north=side","power=2","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_600 = new BlockState(NamespaceID.from("minecraft:redstone_wire:600"), (short) 2658, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_600 = new BlockState(NamespaceID.from("minecraft:redstone_wire:600"), (short) 2658, Block.REDSTONE_WIRE, "east=side","north=side","power=2","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_601 = new BlockState(NamespaceID.from("minecraft:redstone_wire:601"), (short) 2659, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_601 = new BlockState(NamespaceID.from("minecraft:redstone_wire:601"), (short) 2659, Block.REDSTONE_WIRE, "east=side","north=side","power=2","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_602 = new BlockState(NamespaceID.from("minecraft:redstone_wire:602"), (short) 2660, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_602 = new BlockState(NamespaceID.from("minecraft:redstone_wire:602"), (short) 2660, Block.REDSTONE_WIRE, "east=side","north=side","power=2","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_603 = new BlockState(NamespaceID.from("minecraft:redstone_wire:603"), (short) 2661, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_603 = new BlockState(NamespaceID.from("minecraft:redstone_wire:603"), (short) 2661, Block.REDSTONE_WIRE, "east=side","north=side","power=3","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_604 = new BlockState(NamespaceID.from("minecraft:redstone_wire:604"), (short) 2662, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_604 = new BlockState(NamespaceID.from("minecraft:redstone_wire:604"), (short) 2662, Block.REDSTONE_WIRE, "east=side","north=side","power=3","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_605 = new BlockState(NamespaceID.from("minecraft:redstone_wire:605"), (short) 2663, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_605 = new BlockState(NamespaceID.from("minecraft:redstone_wire:605"), (short) 2663, Block.REDSTONE_WIRE, "east=side","north=side","power=3","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_606 = new BlockState(NamespaceID.from("minecraft:redstone_wire:606"), (short) 2664, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_606 = new BlockState(NamespaceID.from("minecraft:redstone_wire:606"), (short) 2664, Block.REDSTONE_WIRE, "east=side","north=side","power=3","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_607 = new BlockState(NamespaceID.from("minecraft:redstone_wire:607"), (short) 2665, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_607 = new BlockState(NamespaceID.from("minecraft:redstone_wire:607"), (short) 2665, Block.REDSTONE_WIRE, "east=side","north=side","power=3","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_608 = new BlockState(NamespaceID.from("minecraft:redstone_wire:608"), (short) 2666, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_608 = new BlockState(NamespaceID.from("minecraft:redstone_wire:608"), (short) 2666, Block.REDSTONE_WIRE, "east=side","north=side","power=3","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_609 = new BlockState(NamespaceID.from("minecraft:redstone_wire:609"), (short) 2667, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_609 = new BlockState(NamespaceID.from("minecraft:redstone_wire:609"), (short) 2667, Block.REDSTONE_WIRE, "east=side","north=side","power=3","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_610 = new BlockState(NamespaceID.from("minecraft:redstone_wire:610"), (short) 2668, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_610 = new BlockState(NamespaceID.from("minecraft:redstone_wire:610"), (short) 2668, Block.REDSTONE_WIRE, "east=side","north=side","power=3","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_611 = new BlockState(NamespaceID.from("minecraft:redstone_wire:611"), (short) 2669, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_611 = new BlockState(NamespaceID.from("minecraft:redstone_wire:611"), (short) 2669, Block.REDSTONE_WIRE, "east=side","north=side","power=3","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_612 = new BlockState(NamespaceID.from("minecraft:redstone_wire:612"), (short) 2670, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_612 = new BlockState(NamespaceID.from("minecraft:redstone_wire:612"), (short) 2670, Block.REDSTONE_WIRE, "east=side","north=side","power=4","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_613 = new BlockState(NamespaceID.from("minecraft:redstone_wire:613"), (short) 2671, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_613 = new BlockState(NamespaceID.from("minecraft:redstone_wire:613"), (short) 2671, Block.REDSTONE_WIRE, "east=side","north=side","power=4","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_614 = new BlockState(NamespaceID.from("minecraft:redstone_wire:614"), (short) 2672, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_614 = new BlockState(NamespaceID.from("minecraft:redstone_wire:614"), (short) 2672, Block.REDSTONE_WIRE, "east=side","north=side","power=4","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_615 = new BlockState(NamespaceID.from("minecraft:redstone_wire:615"), (short) 2673, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_615 = new BlockState(NamespaceID.from("minecraft:redstone_wire:615"), (short) 2673, Block.REDSTONE_WIRE, "east=side","north=side","power=4","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_616 = new BlockState(NamespaceID.from("minecraft:redstone_wire:616"), (short) 2674, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_616 = new BlockState(NamespaceID.from("minecraft:redstone_wire:616"), (short) 2674, Block.REDSTONE_WIRE, "east=side","north=side","power=4","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_617 = new BlockState(NamespaceID.from("minecraft:redstone_wire:617"), (short) 2675, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_617 = new BlockState(NamespaceID.from("minecraft:redstone_wire:617"), (short) 2675, Block.REDSTONE_WIRE, "east=side","north=side","power=4","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_618 = new BlockState(NamespaceID.from("minecraft:redstone_wire:618"), (short) 2676, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_618 = new BlockState(NamespaceID.from("minecraft:redstone_wire:618"), (short) 2676, Block.REDSTONE_WIRE, "east=side","north=side","power=4","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_619 = new BlockState(NamespaceID.from("minecraft:redstone_wire:619"), (short) 2677, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_619 = new BlockState(NamespaceID.from("minecraft:redstone_wire:619"), (short) 2677, Block.REDSTONE_WIRE, "east=side","north=side","power=4","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_620 = new BlockState(NamespaceID.from("minecraft:redstone_wire:620"), (short) 2678, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_620 = new BlockState(NamespaceID.from("minecraft:redstone_wire:620"), (short) 2678, Block.REDSTONE_WIRE, "east=side","north=side","power=4","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_621 = new BlockState(NamespaceID.from("minecraft:redstone_wire:621"), (short) 2679, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_621 = new BlockState(NamespaceID.from("minecraft:redstone_wire:621"), (short) 2679, Block.REDSTONE_WIRE, "east=side","north=side","power=5","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_622 = new BlockState(NamespaceID.from("minecraft:redstone_wire:622"), (short) 2680, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_622 = new BlockState(NamespaceID.from("minecraft:redstone_wire:622"), (short) 2680, Block.REDSTONE_WIRE, "east=side","north=side","power=5","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_623 = new BlockState(NamespaceID.from("minecraft:redstone_wire:623"), (short) 2681, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_623 = new BlockState(NamespaceID.from("minecraft:redstone_wire:623"), (short) 2681, Block.REDSTONE_WIRE, "east=side","north=side","power=5","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_624 = new BlockState(NamespaceID.from("minecraft:redstone_wire:624"), (short) 2682, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_624 = new BlockState(NamespaceID.from("minecraft:redstone_wire:624"), (short) 2682, Block.REDSTONE_WIRE, "east=side","north=side","power=5","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_625 = new BlockState(NamespaceID.from("minecraft:redstone_wire:625"), (short) 2683, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_625 = new BlockState(NamespaceID.from("minecraft:redstone_wire:625"), (short) 2683, Block.REDSTONE_WIRE, "east=side","north=side","power=5","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_626 = new BlockState(NamespaceID.from("minecraft:redstone_wire:626"), (short) 2684, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_626 = new BlockState(NamespaceID.from("minecraft:redstone_wire:626"), (short) 2684, Block.REDSTONE_WIRE, "east=side","north=side","power=5","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_627 = new BlockState(NamespaceID.from("minecraft:redstone_wire:627"), (short) 2685, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_627 = new BlockState(NamespaceID.from("minecraft:redstone_wire:627"), (short) 2685, Block.REDSTONE_WIRE, "east=side","north=side","power=5","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_628 = new BlockState(NamespaceID.from("minecraft:redstone_wire:628"), (short) 2686, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_628 = new BlockState(NamespaceID.from("minecraft:redstone_wire:628"), (short) 2686, Block.REDSTONE_WIRE, "east=side","north=side","power=5","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_629 = new BlockState(NamespaceID.from("minecraft:redstone_wire:629"), (short) 2687, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_629 = new BlockState(NamespaceID.from("minecraft:redstone_wire:629"), (short) 2687, Block.REDSTONE_WIRE, "east=side","north=side","power=5","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_630 = new BlockState(NamespaceID.from("minecraft:redstone_wire:630"), (short) 2688, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_630 = new BlockState(NamespaceID.from("minecraft:redstone_wire:630"), (short) 2688, Block.REDSTONE_WIRE, "east=side","north=side","power=6","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_631 = new BlockState(NamespaceID.from("minecraft:redstone_wire:631"), (short) 2689, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_631 = new BlockState(NamespaceID.from("minecraft:redstone_wire:631"), (short) 2689, Block.REDSTONE_WIRE, "east=side","north=side","power=6","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_632 = new BlockState(NamespaceID.from("minecraft:redstone_wire:632"), (short) 2690, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_632 = new BlockState(NamespaceID.from("minecraft:redstone_wire:632"), (short) 2690, Block.REDSTONE_WIRE, "east=side","north=side","power=6","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_633 = new BlockState(NamespaceID.from("minecraft:redstone_wire:633"), (short) 2691, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_633 = new BlockState(NamespaceID.from("minecraft:redstone_wire:633"), (short) 2691, Block.REDSTONE_WIRE, "east=side","north=side","power=6","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_634 = new BlockState(NamespaceID.from("minecraft:redstone_wire:634"), (short) 2692, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_634 = new BlockState(NamespaceID.from("minecraft:redstone_wire:634"), (short) 2692, Block.REDSTONE_WIRE, "east=side","north=side","power=6","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_635 = new BlockState(NamespaceID.from("minecraft:redstone_wire:635"), (short) 2693, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_635 = new BlockState(NamespaceID.from("minecraft:redstone_wire:635"), (short) 2693, Block.REDSTONE_WIRE, "east=side","north=side","power=6","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_636 = new BlockState(NamespaceID.from("minecraft:redstone_wire:636"), (short) 2694, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_636 = new BlockState(NamespaceID.from("minecraft:redstone_wire:636"), (short) 2694, Block.REDSTONE_WIRE, "east=side","north=side","power=6","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_637 = new BlockState(NamespaceID.from("minecraft:redstone_wire:637"), (short) 2695, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_637 = new BlockState(NamespaceID.from("minecraft:redstone_wire:637"), (short) 2695, Block.REDSTONE_WIRE, "east=side","north=side","power=6","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_638 = new BlockState(NamespaceID.from("minecraft:redstone_wire:638"), (short) 2696, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_638 = new BlockState(NamespaceID.from("minecraft:redstone_wire:638"), (short) 2696, Block.REDSTONE_WIRE, "east=side","north=side","power=6","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_639 = new BlockState(NamespaceID.from("minecraft:redstone_wire:639"), (short) 2697, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_639 = new BlockState(NamespaceID.from("minecraft:redstone_wire:639"), (short) 2697, Block.REDSTONE_WIRE, "east=side","north=side","power=7","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_640 = new BlockState(NamespaceID.from("minecraft:redstone_wire:640"), (short) 2698, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_640 = new BlockState(NamespaceID.from("minecraft:redstone_wire:640"), (short) 2698, Block.REDSTONE_WIRE, "east=side","north=side","power=7","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_641 = new BlockState(NamespaceID.from("minecraft:redstone_wire:641"), (short) 2699, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_641 = new BlockState(NamespaceID.from("minecraft:redstone_wire:641"), (short) 2699, Block.REDSTONE_WIRE, "east=side","north=side","power=7","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_642 = new BlockState(NamespaceID.from("minecraft:redstone_wire:642"), (short) 2700, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_642 = new BlockState(NamespaceID.from("minecraft:redstone_wire:642"), (short) 2700, Block.REDSTONE_WIRE, "east=side","north=side","power=7","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_643 = new BlockState(NamespaceID.from("minecraft:redstone_wire:643"), (short) 2701, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_643 = new BlockState(NamespaceID.from("minecraft:redstone_wire:643"), (short) 2701, Block.REDSTONE_WIRE, "east=side","north=side","power=7","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_644 = new BlockState(NamespaceID.from("minecraft:redstone_wire:644"), (short) 2702, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_644 = new BlockState(NamespaceID.from("minecraft:redstone_wire:644"), (short) 2702, Block.REDSTONE_WIRE, "east=side","north=side","power=7","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_645 = new BlockState(NamespaceID.from("minecraft:redstone_wire:645"), (short) 2703, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_645 = new BlockState(NamespaceID.from("minecraft:redstone_wire:645"), (short) 2703, Block.REDSTONE_WIRE, "east=side","north=side","power=7","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_646 = new BlockState(NamespaceID.from("minecraft:redstone_wire:646"), (short) 2704, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_646 = new BlockState(NamespaceID.from("minecraft:redstone_wire:646"), (short) 2704, Block.REDSTONE_WIRE, "east=side","north=side","power=7","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_647 = new BlockState(NamespaceID.from("minecraft:redstone_wire:647"), (short) 2705, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_647 = new BlockState(NamespaceID.from("minecraft:redstone_wire:647"), (short) 2705, Block.REDSTONE_WIRE, "east=side","north=side","power=7","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_648 = new BlockState(NamespaceID.from("minecraft:redstone_wire:648"), (short) 2706, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_648 = new BlockState(NamespaceID.from("minecraft:redstone_wire:648"), (short) 2706, Block.REDSTONE_WIRE, "east=side","north=side","power=8","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_649 = new BlockState(NamespaceID.from("minecraft:redstone_wire:649"), (short) 2707, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_649 = new BlockState(NamespaceID.from("minecraft:redstone_wire:649"), (short) 2707, Block.REDSTONE_WIRE, "east=side","north=side","power=8","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_650 = new BlockState(NamespaceID.from("minecraft:redstone_wire:650"), (short) 2708, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_650 = new BlockState(NamespaceID.from("minecraft:redstone_wire:650"), (short) 2708, Block.REDSTONE_WIRE, "east=side","north=side","power=8","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_651 = new BlockState(NamespaceID.from("minecraft:redstone_wire:651"), (short) 2709, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_651 = new BlockState(NamespaceID.from("minecraft:redstone_wire:651"), (short) 2709, Block.REDSTONE_WIRE, "east=side","north=side","power=8","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_652 = new BlockState(NamespaceID.from("minecraft:redstone_wire:652"), (short) 2710, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_652 = new BlockState(NamespaceID.from("minecraft:redstone_wire:652"), (short) 2710, Block.REDSTONE_WIRE, "east=side","north=side","power=8","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_653 = new BlockState(NamespaceID.from("minecraft:redstone_wire:653"), (short) 2711, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_653 = new BlockState(NamespaceID.from("minecraft:redstone_wire:653"), (short) 2711, Block.REDSTONE_WIRE, "east=side","north=side","power=8","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_654 = new BlockState(NamespaceID.from("minecraft:redstone_wire:654"), (short) 2712, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_654 = new BlockState(NamespaceID.from("minecraft:redstone_wire:654"), (short) 2712, Block.REDSTONE_WIRE, "east=side","north=side","power=8","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_655 = new BlockState(NamespaceID.from("minecraft:redstone_wire:655"), (short) 2713, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_655 = new BlockState(NamespaceID.from("minecraft:redstone_wire:655"), (short) 2713, Block.REDSTONE_WIRE, "east=side","north=side","power=8","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_656 = new BlockState(NamespaceID.from("minecraft:redstone_wire:656"), (short) 2714, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_656 = new BlockState(NamespaceID.from("minecraft:redstone_wire:656"), (short) 2714, Block.REDSTONE_WIRE, "east=side","north=side","power=8","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_657 = new BlockState(NamespaceID.from("minecraft:redstone_wire:657"), (short) 2715, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_657 = new BlockState(NamespaceID.from("minecraft:redstone_wire:657"), (short) 2715, Block.REDSTONE_WIRE, "east=side","north=side","power=9","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_658 = new BlockState(NamespaceID.from("minecraft:redstone_wire:658"), (short) 2716, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_658 = new BlockState(NamespaceID.from("minecraft:redstone_wire:658"), (short) 2716, Block.REDSTONE_WIRE, "east=side","north=side","power=9","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_659 = new BlockState(NamespaceID.from("minecraft:redstone_wire:659"), (short) 2717, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_659 = new BlockState(NamespaceID.from("minecraft:redstone_wire:659"), (short) 2717, Block.REDSTONE_WIRE, "east=side","north=side","power=9","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_660 = new BlockState(NamespaceID.from("minecraft:redstone_wire:660"), (short) 2718, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_660 = new BlockState(NamespaceID.from("minecraft:redstone_wire:660"), (short) 2718, Block.REDSTONE_WIRE, "east=side","north=side","power=9","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_661 = new BlockState(NamespaceID.from("minecraft:redstone_wire:661"), (short) 2719, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_661 = new BlockState(NamespaceID.from("minecraft:redstone_wire:661"), (short) 2719, Block.REDSTONE_WIRE, "east=side","north=side","power=9","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_662 = new BlockState(NamespaceID.from("minecraft:redstone_wire:662"), (short) 2720, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_662 = new BlockState(NamespaceID.from("minecraft:redstone_wire:662"), (short) 2720, Block.REDSTONE_WIRE, "east=side","north=side","power=9","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_663 = new BlockState(NamespaceID.from("minecraft:redstone_wire:663"), (short) 2721, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_663 = new BlockState(NamespaceID.from("minecraft:redstone_wire:663"), (short) 2721, Block.REDSTONE_WIRE, "east=side","north=side","power=9","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_664 = new BlockState(NamespaceID.from("minecraft:redstone_wire:664"), (short) 2722, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_664 = new BlockState(NamespaceID.from("minecraft:redstone_wire:664"), (short) 2722, Block.REDSTONE_WIRE, "east=side","north=side","power=9","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_665 = new BlockState(NamespaceID.from("minecraft:redstone_wire:665"), (short) 2723, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_665 = new BlockState(NamespaceID.from("minecraft:redstone_wire:665"), (short) 2723, Block.REDSTONE_WIRE, "east=side","north=side","power=9","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_666 = new BlockState(NamespaceID.from("minecraft:redstone_wire:666"), (short) 2724, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_666 = new BlockState(NamespaceID.from("minecraft:redstone_wire:666"), (short) 2724, Block.REDSTONE_WIRE, "east=side","north=side","power=10","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_667 = new BlockState(NamespaceID.from("minecraft:redstone_wire:667"), (short) 2725, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_667 = new BlockState(NamespaceID.from("minecraft:redstone_wire:667"), (short) 2725, Block.REDSTONE_WIRE, "east=side","north=side","power=10","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_668 = new BlockState(NamespaceID.from("minecraft:redstone_wire:668"), (short) 2726, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_668 = new BlockState(NamespaceID.from("minecraft:redstone_wire:668"), (short) 2726, Block.REDSTONE_WIRE, "east=side","north=side","power=10","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_669 = new BlockState(NamespaceID.from("minecraft:redstone_wire:669"), (short) 2727, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_669 = new BlockState(NamespaceID.from("minecraft:redstone_wire:669"), (short) 2727, Block.REDSTONE_WIRE, "east=side","north=side","power=10","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_670 = new BlockState(NamespaceID.from("minecraft:redstone_wire:670"), (short) 2728, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_670 = new BlockState(NamespaceID.from("minecraft:redstone_wire:670"), (short) 2728, Block.REDSTONE_WIRE, "east=side","north=side","power=10","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_671 = new BlockState(NamespaceID.from("minecraft:redstone_wire:671"), (short) 2729, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_671 = new BlockState(NamespaceID.from("minecraft:redstone_wire:671"), (short) 2729, Block.REDSTONE_WIRE, "east=side","north=side","power=10","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_672 = new BlockState(NamespaceID.from("minecraft:redstone_wire:672"), (short) 2730, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_672 = new BlockState(NamespaceID.from("minecraft:redstone_wire:672"), (short) 2730, Block.REDSTONE_WIRE, "east=side","north=side","power=10","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_673 = new BlockState(NamespaceID.from("minecraft:redstone_wire:673"), (short) 2731, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_673 = new BlockState(NamespaceID.from("minecraft:redstone_wire:673"), (short) 2731, Block.REDSTONE_WIRE, "east=side","north=side","power=10","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_674 = new BlockState(NamespaceID.from("minecraft:redstone_wire:674"), (short) 2732, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_674 = new BlockState(NamespaceID.from("minecraft:redstone_wire:674"), (short) 2732, Block.REDSTONE_WIRE, "east=side","north=side","power=10","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_675 = new BlockState(NamespaceID.from("minecraft:redstone_wire:675"), (short) 2733, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_675 = new BlockState(NamespaceID.from("minecraft:redstone_wire:675"), (short) 2733, Block.REDSTONE_WIRE, "east=side","north=side","power=11","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_676 = new BlockState(NamespaceID.from("minecraft:redstone_wire:676"), (short) 2734, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_676 = new BlockState(NamespaceID.from("minecraft:redstone_wire:676"), (short) 2734, Block.REDSTONE_WIRE, "east=side","north=side","power=11","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_677 = new BlockState(NamespaceID.from("minecraft:redstone_wire:677"), (short) 2735, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_677 = new BlockState(NamespaceID.from("minecraft:redstone_wire:677"), (short) 2735, Block.REDSTONE_WIRE, "east=side","north=side","power=11","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_678 = new BlockState(NamespaceID.from("minecraft:redstone_wire:678"), (short) 2736, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_678 = new BlockState(NamespaceID.from("minecraft:redstone_wire:678"), (short) 2736, Block.REDSTONE_WIRE, "east=side","north=side","power=11","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_679 = new BlockState(NamespaceID.from("minecraft:redstone_wire:679"), (short) 2737, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_679 = new BlockState(NamespaceID.from("minecraft:redstone_wire:679"), (short) 2737, Block.REDSTONE_WIRE, "east=side","north=side","power=11","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_680 = new BlockState(NamespaceID.from("minecraft:redstone_wire:680"), (short) 2738, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_680 = new BlockState(NamespaceID.from("minecraft:redstone_wire:680"), (short) 2738, Block.REDSTONE_WIRE, "east=side","north=side","power=11","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_681 = new BlockState(NamespaceID.from("minecraft:redstone_wire:681"), (short) 2739, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_681 = new BlockState(NamespaceID.from("minecraft:redstone_wire:681"), (short) 2739, Block.REDSTONE_WIRE, "east=side","north=side","power=11","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_682 = new BlockState(NamespaceID.from("minecraft:redstone_wire:682"), (short) 2740, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_682 = new BlockState(NamespaceID.from("minecraft:redstone_wire:682"), (short) 2740, Block.REDSTONE_WIRE, "east=side","north=side","power=11","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_683 = new BlockState(NamespaceID.from("minecraft:redstone_wire:683"), (short) 2741, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_683 = new BlockState(NamespaceID.from("minecraft:redstone_wire:683"), (short) 2741, Block.REDSTONE_WIRE, "east=side","north=side","power=11","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_684 = new BlockState(NamespaceID.from("minecraft:redstone_wire:684"), (short) 2742, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_684 = new BlockState(NamespaceID.from("minecraft:redstone_wire:684"), (short) 2742, Block.REDSTONE_WIRE, "east=side","north=side","power=12","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_685 = new BlockState(NamespaceID.from("minecraft:redstone_wire:685"), (short) 2743, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_685 = new BlockState(NamespaceID.from("minecraft:redstone_wire:685"), (short) 2743, Block.REDSTONE_WIRE, "east=side","north=side","power=12","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_686 = new BlockState(NamespaceID.from("minecraft:redstone_wire:686"), (short) 2744, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_686 = new BlockState(NamespaceID.from("minecraft:redstone_wire:686"), (short) 2744, Block.REDSTONE_WIRE, "east=side","north=side","power=12","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_687 = new BlockState(NamespaceID.from("minecraft:redstone_wire:687"), (short) 2745, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_687 = new BlockState(NamespaceID.from("minecraft:redstone_wire:687"), (short) 2745, Block.REDSTONE_WIRE, "east=side","north=side","power=12","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_688 = new BlockState(NamespaceID.from("minecraft:redstone_wire:688"), (short) 2746, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_688 = new BlockState(NamespaceID.from("minecraft:redstone_wire:688"), (short) 2746, Block.REDSTONE_WIRE, "east=side","north=side","power=12","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_689 = new BlockState(NamespaceID.from("minecraft:redstone_wire:689"), (short) 2747, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_689 = new BlockState(NamespaceID.from("minecraft:redstone_wire:689"), (short) 2747, Block.REDSTONE_WIRE, "east=side","north=side","power=12","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_690 = new BlockState(NamespaceID.from("minecraft:redstone_wire:690"), (short) 2748, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_690 = new BlockState(NamespaceID.from("minecraft:redstone_wire:690"), (short) 2748, Block.REDSTONE_WIRE, "east=side","north=side","power=12","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_691 = new BlockState(NamespaceID.from("minecraft:redstone_wire:691"), (short) 2749, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_691 = new BlockState(NamespaceID.from("minecraft:redstone_wire:691"), (short) 2749, Block.REDSTONE_WIRE, "east=side","north=side","power=12","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_692 = new BlockState(NamespaceID.from("minecraft:redstone_wire:692"), (short) 2750, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_692 = new BlockState(NamespaceID.from("minecraft:redstone_wire:692"), (short) 2750, Block.REDSTONE_WIRE, "east=side","north=side","power=12","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_693 = new BlockState(NamespaceID.from("minecraft:redstone_wire:693"), (short) 2751, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_693 = new BlockState(NamespaceID.from("minecraft:redstone_wire:693"), (short) 2751, Block.REDSTONE_WIRE, "east=side","north=side","power=13","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_694 = new BlockState(NamespaceID.from("minecraft:redstone_wire:694"), (short) 2752, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_694 = new BlockState(NamespaceID.from("minecraft:redstone_wire:694"), (short) 2752, Block.REDSTONE_WIRE, "east=side","north=side","power=13","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_695 = new BlockState(NamespaceID.from("minecraft:redstone_wire:695"), (short) 2753, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_695 = new BlockState(NamespaceID.from("minecraft:redstone_wire:695"), (short) 2753, Block.REDSTONE_WIRE, "east=side","north=side","power=13","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_696 = new BlockState(NamespaceID.from("minecraft:redstone_wire:696"), (short) 2754, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_696 = new BlockState(NamespaceID.from("minecraft:redstone_wire:696"), (short) 2754, Block.REDSTONE_WIRE, "east=side","north=side","power=13","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_697 = new BlockState(NamespaceID.from("minecraft:redstone_wire:697"), (short) 2755, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_697 = new BlockState(NamespaceID.from("minecraft:redstone_wire:697"), (short) 2755, Block.REDSTONE_WIRE, "east=side","north=side","power=13","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_698 = new BlockState(NamespaceID.from("minecraft:redstone_wire:698"), (short) 2756, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_698 = new BlockState(NamespaceID.from("minecraft:redstone_wire:698"), (short) 2756, Block.REDSTONE_WIRE, "east=side","north=side","power=13","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_699 = new BlockState(NamespaceID.from("minecraft:redstone_wire:699"), (short) 2757, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_699 = new BlockState(NamespaceID.from("minecraft:redstone_wire:699"), (short) 2757, Block.REDSTONE_WIRE, "east=side","north=side","power=13","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_700 = new BlockState(NamespaceID.from("minecraft:redstone_wire:700"), (short) 2758, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_700 = new BlockState(NamespaceID.from("minecraft:redstone_wire:700"), (short) 2758, Block.REDSTONE_WIRE, "east=side","north=side","power=13","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_701 = new BlockState(NamespaceID.from("minecraft:redstone_wire:701"), (short) 2759, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_701 = new BlockState(NamespaceID.from("minecraft:redstone_wire:701"), (short) 2759, Block.REDSTONE_WIRE, "east=side","north=side","power=13","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_702 = new BlockState(NamespaceID.from("minecraft:redstone_wire:702"), (short) 2760, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_702 = new BlockState(NamespaceID.from("minecraft:redstone_wire:702"), (short) 2760, Block.REDSTONE_WIRE, "east=side","north=side","power=14","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_703 = new BlockState(NamespaceID.from("minecraft:redstone_wire:703"), (short) 2761, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_703 = new BlockState(NamespaceID.from("minecraft:redstone_wire:703"), (short) 2761, Block.REDSTONE_WIRE, "east=side","north=side","power=14","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_704 = new BlockState(NamespaceID.from("minecraft:redstone_wire:704"), (short) 2762, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_704 = new BlockState(NamespaceID.from("minecraft:redstone_wire:704"), (short) 2762, Block.REDSTONE_WIRE, "east=side","north=side","power=14","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_705 = new BlockState(NamespaceID.from("minecraft:redstone_wire:705"), (short) 2763, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_705 = new BlockState(NamespaceID.from("minecraft:redstone_wire:705"), (short) 2763, Block.REDSTONE_WIRE, "east=side","north=side","power=14","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_706 = new BlockState(NamespaceID.from("minecraft:redstone_wire:706"), (short) 2764, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_706 = new BlockState(NamespaceID.from("minecraft:redstone_wire:706"), (short) 2764, Block.REDSTONE_WIRE, "east=side","north=side","power=14","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_707 = new BlockState(NamespaceID.from("minecraft:redstone_wire:707"), (short) 2765, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_707 = new BlockState(NamespaceID.from("minecraft:redstone_wire:707"), (short) 2765, Block.REDSTONE_WIRE, "east=side","north=side","power=14","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_708 = new BlockState(NamespaceID.from("minecraft:redstone_wire:708"), (short) 2766, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_708 = new BlockState(NamespaceID.from("minecraft:redstone_wire:708"), (short) 2766, Block.REDSTONE_WIRE, "east=side","north=side","power=14","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_709 = new BlockState(NamespaceID.from("minecraft:redstone_wire:709"), (short) 2767, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_709 = new BlockState(NamespaceID.from("minecraft:redstone_wire:709"), (short) 2767, Block.REDSTONE_WIRE, "east=side","north=side","power=14","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_710 = new BlockState(NamespaceID.from("minecraft:redstone_wire:710"), (short) 2768, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_710 = new BlockState(NamespaceID.from("minecraft:redstone_wire:710"), (short) 2768, Block.REDSTONE_WIRE, "east=side","north=side","power=14","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_711 = new BlockState(NamespaceID.from("minecraft:redstone_wire:711"), (short) 2769, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_711 = new BlockState(NamespaceID.from("minecraft:redstone_wire:711"), (short) 2769, Block.REDSTONE_WIRE, "east=side","north=side","power=15","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_712 = new BlockState(NamespaceID.from("minecraft:redstone_wire:712"), (short) 2770, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_712 = new BlockState(NamespaceID.from("minecraft:redstone_wire:712"), (short) 2770, Block.REDSTONE_WIRE, "east=side","north=side","power=15","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_713 = new BlockState(NamespaceID.from("minecraft:redstone_wire:713"), (short) 2771, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_713 = new BlockState(NamespaceID.from("minecraft:redstone_wire:713"), (short) 2771, Block.REDSTONE_WIRE, "east=side","north=side","power=15","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_714 = new BlockState(NamespaceID.from("minecraft:redstone_wire:714"), (short) 2772, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_714 = new BlockState(NamespaceID.from("minecraft:redstone_wire:714"), (short) 2772, Block.REDSTONE_WIRE, "east=side","north=side","power=15","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_715 = new BlockState(NamespaceID.from("minecraft:redstone_wire:715"), (short) 2773, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_715 = new BlockState(NamespaceID.from("minecraft:redstone_wire:715"), (short) 2773, Block.REDSTONE_WIRE, "east=side","north=side","power=15","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_716 = new BlockState(NamespaceID.from("minecraft:redstone_wire:716"), (short) 2774, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_716 = new BlockState(NamespaceID.from("minecraft:redstone_wire:716"), (short) 2774, Block.REDSTONE_WIRE, "east=side","north=side","power=15","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_717 = new BlockState(NamespaceID.from("minecraft:redstone_wire:717"), (short) 2775, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_717 = new BlockState(NamespaceID.from("minecraft:redstone_wire:717"), (short) 2775, Block.REDSTONE_WIRE, "east=side","north=side","power=15","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_718 = new BlockState(NamespaceID.from("minecraft:redstone_wire:718"), (short) 2776, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_718 = new BlockState(NamespaceID.from("minecraft:redstone_wire:718"), (short) 2776, Block.REDSTONE_WIRE, "east=side","north=side","power=15","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_719 = new BlockState(NamespaceID.from("minecraft:redstone_wire:719"), (short) 2777, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_719 = new BlockState(NamespaceID.from("minecraft:redstone_wire:719"), (short) 2777, Block.REDSTONE_WIRE, "east=side","north=side","power=15","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_720 = new BlockState(NamespaceID.from("minecraft:redstone_wire:720"), (short) 2778, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_720 = new BlockState(NamespaceID.from("minecraft:redstone_wire:720"), (short) 2778, Block.REDSTONE_WIRE, "east=side","north=none","power=0","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_721 = new BlockState(NamespaceID.from("minecraft:redstone_wire:721"), (short) 2779, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_721 = new BlockState(NamespaceID.from("minecraft:redstone_wire:721"), (short) 2779, Block.REDSTONE_WIRE, "east=side","north=none","power=0","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_722 = new BlockState(NamespaceID.from("minecraft:redstone_wire:722"), (short) 2780, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_722 = new BlockState(NamespaceID.from("minecraft:redstone_wire:722"), (short) 2780, Block.REDSTONE_WIRE, "east=side","north=none","power=0","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_723 = new BlockState(NamespaceID.from("minecraft:redstone_wire:723"), (short) 2781, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_723 = new BlockState(NamespaceID.from("minecraft:redstone_wire:723"), (short) 2781, Block.REDSTONE_WIRE, "east=side","north=none","power=0","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_724 = new BlockState(NamespaceID.from("minecraft:redstone_wire:724"), (short) 2782, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_724 = new BlockState(NamespaceID.from("minecraft:redstone_wire:724"), (short) 2782, Block.REDSTONE_WIRE, "east=side","north=none","power=0","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_725 = new BlockState(NamespaceID.from("minecraft:redstone_wire:725"), (short) 2783, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_725 = new BlockState(NamespaceID.from("minecraft:redstone_wire:725"), (short) 2783, Block.REDSTONE_WIRE, "east=side","north=none","power=0","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_726 = new BlockState(NamespaceID.from("minecraft:redstone_wire:726"), (short) 2784, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_726 = new BlockState(NamespaceID.from("minecraft:redstone_wire:726"), (short) 2784, Block.REDSTONE_WIRE, "east=side","north=none","power=0","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_727 = new BlockState(NamespaceID.from("minecraft:redstone_wire:727"), (short) 2785, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_727 = new BlockState(NamespaceID.from("minecraft:redstone_wire:727"), (short) 2785, Block.REDSTONE_WIRE, "east=side","north=none","power=0","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_728 = new BlockState(NamespaceID.from("minecraft:redstone_wire:728"), (short) 2786, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_728 = new BlockState(NamespaceID.from("minecraft:redstone_wire:728"), (short) 2786, Block.REDSTONE_WIRE, "east=side","north=none","power=0","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_729 = new BlockState(NamespaceID.from("minecraft:redstone_wire:729"), (short) 2787, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_729 = new BlockState(NamespaceID.from("minecraft:redstone_wire:729"), (short) 2787, Block.REDSTONE_WIRE, "east=side","north=none","power=1","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_730 = new BlockState(NamespaceID.from("minecraft:redstone_wire:730"), (short) 2788, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_730 = new BlockState(NamespaceID.from("minecraft:redstone_wire:730"), (short) 2788, Block.REDSTONE_WIRE, "east=side","north=none","power=1","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_731 = new BlockState(NamespaceID.from("minecraft:redstone_wire:731"), (short) 2789, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_731 = new BlockState(NamespaceID.from("minecraft:redstone_wire:731"), (short) 2789, Block.REDSTONE_WIRE, "east=side","north=none","power=1","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_732 = new BlockState(NamespaceID.from("minecraft:redstone_wire:732"), (short) 2790, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_732 = new BlockState(NamespaceID.from("minecraft:redstone_wire:732"), (short) 2790, Block.REDSTONE_WIRE, "east=side","north=none","power=1","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_733 = new BlockState(NamespaceID.from("minecraft:redstone_wire:733"), (short) 2791, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_733 = new BlockState(NamespaceID.from("minecraft:redstone_wire:733"), (short) 2791, Block.REDSTONE_WIRE, "east=side","north=none","power=1","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_734 = new BlockState(NamespaceID.from("minecraft:redstone_wire:734"), (short) 2792, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_734 = new BlockState(NamespaceID.from("minecraft:redstone_wire:734"), (short) 2792, Block.REDSTONE_WIRE, "east=side","north=none","power=1","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_735 = new BlockState(NamespaceID.from("minecraft:redstone_wire:735"), (short) 2793, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_735 = new BlockState(NamespaceID.from("minecraft:redstone_wire:735"), (short) 2793, Block.REDSTONE_WIRE, "east=side","north=none","power=1","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_736 = new BlockState(NamespaceID.from("minecraft:redstone_wire:736"), (short) 2794, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_736 = new BlockState(NamespaceID.from("minecraft:redstone_wire:736"), (short) 2794, Block.REDSTONE_WIRE, "east=side","north=none","power=1","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_737 = new BlockState(NamespaceID.from("minecraft:redstone_wire:737"), (short) 2795, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_737 = new BlockState(NamespaceID.from("minecraft:redstone_wire:737"), (short) 2795, Block.REDSTONE_WIRE, "east=side","north=none","power=1","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_738 = new BlockState(NamespaceID.from("minecraft:redstone_wire:738"), (short) 2796, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_738 = new BlockState(NamespaceID.from("minecraft:redstone_wire:738"), (short) 2796, Block.REDSTONE_WIRE, "east=side","north=none","power=2","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_739 = new BlockState(NamespaceID.from("minecraft:redstone_wire:739"), (short) 2797, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_739 = new BlockState(NamespaceID.from("minecraft:redstone_wire:739"), (short) 2797, Block.REDSTONE_WIRE, "east=side","north=none","power=2","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_740 = new BlockState(NamespaceID.from("minecraft:redstone_wire:740"), (short) 2798, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_740 = new BlockState(NamespaceID.from("minecraft:redstone_wire:740"), (short) 2798, Block.REDSTONE_WIRE, "east=side","north=none","power=2","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_741 = new BlockState(NamespaceID.from("minecraft:redstone_wire:741"), (short) 2799, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_741 = new BlockState(NamespaceID.from("minecraft:redstone_wire:741"), (short) 2799, Block.REDSTONE_WIRE, "east=side","north=none","power=2","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_742 = new BlockState(NamespaceID.from("minecraft:redstone_wire:742"), (short) 2800, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_742 = new BlockState(NamespaceID.from("minecraft:redstone_wire:742"), (short) 2800, Block.REDSTONE_WIRE, "east=side","north=none","power=2","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_743 = new BlockState(NamespaceID.from("minecraft:redstone_wire:743"), (short) 2801, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_743 = new BlockState(NamespaceID.from("minecraft:redstone_wire:743"), (short) 2801, Block.REDSTONE_WIRE, "east=side","north=none","power=2","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_744 = new BlockState(NamespaceID.from("minecraft:redstone_wire:744"), (short) 2802, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_744 = new BlockState(NamespaceID.from("minecraft:redstone_wire:744"), (short) 2802, Block.REDSTONE_WIRE, "east=side","north=none","power=2","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_745 = new BlockState(NamespaceID.from("minecraft:redstone_wire:745"), (short) 2803, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_745 = new BlockState(NamespaceID.from("minecraft:redstone_wire:745"), (short) 2803, Block.REDSTONE_WIRE, "east=side","north=none","power=2","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_746 = new BlockState(NamespaceID.from("minecraft:redstone_wire:746"), (short) 2804, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_746 = new BlockState(NamespaceID.from("minecraft:redstone_wire:746"), (short) 2804, Block.REDSTONE_WIRE, "east=side","north=none","power=2","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_747 = new BlockState(NamespaceID.from("minecraft:redstone_wire:747"), (short) 2805, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_747 = new BlockState(NamespaceID.from("minecraft:redstone_wire:747"), (short) 2805, Block.REDSTONE_WIRE, "east=side","north=none","power=3","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_748 = new BlockState(NamespaceID.from("minecraft:redstone_wire:748"), (short) 2806, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_748 = new BlockState(NamespaceID.from("minecraft:redstone_wire:748"), (short) 2806, Block.REDSTONE_WIRE, "east=side","north=none","power=3","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_749 = new BlockState(NamespaceID.from("minecraft:redstone_wire:749"), (short) 2807, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_749 = new BlockState(NamespaceID.from("minecraft:redstone_wire:749"), (short) 2807, Block.REDSTONE_WIRE, "east=side","north=none","power=3","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_750 = new BlockState(NamespaceID.from("minecraft:redstone_wire:750"), (short) 2808, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_750 = new BlockState(NamespaceID.from("minecraft:redstone_wire:750"), (short) 2808, Block.REDSTONE_WIRE, "east=side","north=none","power=3","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_751 = new BlockState(NamespaceID.from("minecraft:redstone_wire:751"), (short) 2809, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_751 = new BlockState(NamespaceID.from("minecraft:redstone_wire:751"), (short) 2809, Block.REDSTONE_WIRE, "east=side","north=none","power=3","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_752 = new BlockState(NamespaceID.from("minecraft:redstone_wire:752"), (short) 2810, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_752 = new BlockState(NamespaceID.from("minecraft:redstone_wire:752"), (short) 2810, Block.REDSTONE_WIRE, "east=side","north=none","power=3","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_753 = new BlockState(NamespaceID.from("minecraft:redstone_wire:753"), (short) 2811, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_753 = new BlockState(NamespaceID.from("minecraft:redstone_wire:753"), (short) 2811, Block.REDSTONE_WIRE, "east=side","north=none","power=3","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_754 = new BlockState(NamespaceID.from("minecraft:redstone_wire:754"), (short) 2812, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_754 = new BlockState(NamespaceID.from("minecraft:redstone_wire:754"), (short) 2812, Block.REDSTONE_WIRE, "east=side","north=none","power=3","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_755 = new BlockState(NamespaceID.from("minecraft:redstone_wire:755"), (short) 2813, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_755 = new BlockState(NamespaceID.from("minecraft:redstone_wire:755"), (short) 2813, Block.REDSTONE_WIRE, "east=side","north=none","power=3","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_756 = new BlockState(NamespaceID.from("minecraft:redstone_wire:756"), (short) 2814, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_756 = new BlockState(NamespaceID.from("minecraft:redstone_wire:756"), (short) 2814, Block.REDSTONE_WIRE, "east=side","north=none","power=4","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_757 = new BlockState(NamespaceID.from("minecraft:redstone_wire:757"), (short) 2815, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_757 = new BlockState(NamespaceID.from("minecraft:redstone_wire:757"), (short) 2815, Block.REDSTONE_WIRE, "east=side","north=none","power=4","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_758 = new BlockState(NamespaceID.from("minecraft:redstone_wire:758"), (short) 2816, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_758 = new BlockState(NamespaceID.from("minecraft:redstone_wire:758"), (short) 2816, Block.REDSTONE_WIRE, "east=side","north=none","power=4","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_759 = new BlockState(NamespaceID.from("minecraft:redstone_wire:759"), (short) 2817, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_759 = new BlockState(NamespaceID.from("minecraft:redstone_wire:759"), (short) 2817, Block.REDSTONE_WIRE, "east=side","north=none","power=4","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_760 = new BlockState(NamespaceID.from("minecraft:redstone_wire:760"), (short) 2818, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_760 = new BlockState(NamespaceID.from("minecraft:redstone_wire:760"), (short) 2818, Block.REDSTONE_WIRE, "east=side","north=none","power=4","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_761 = new BlockState(NamespaceID.from("minecraft:redstone_wire:761"), (short) 2819, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_761 = new BlockState(NamespaceID.from("minecraft:redstone_wire:761"), (short) 2819, Block.REDSTONE_WIRE, "east=side","north=none","power=4","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_762 = new BlockState(NamespaceID.from("minecraft:redstone_wire:762"), (short) 2820, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_762 = new BlockState(NamespaceID.from("minecraft:redstone_wire:762"), (short) 2820, Block.REDSTONE_WIRE, "east=side","north=none","power=4","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_763 = new BlockState(NamespaceID.from("minecraft:redstone_wire:763"), (short) 2821, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_763 = new BlockState(NamespaceID.from("minecraft:redstone_wire:763"), (short) 2821, Block.REDSTONE_WIRE, "east=side","north=none","power=4","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_764 = new BlockState(NamespaceID.from("minecraft:redstone_wire:764"), (short) 2822, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_764 = new BlockState(NamespaceID.from("minecraft:redstone_wire:764"), (short) 2822, Block.REDSTONE_WIRE, "east=side","north=none","power=4","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_765 = new BlockState(NamespaceID.from("minecraft:redstone_wire:765"), (short) 2823, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_765 = new BlockState(NamespaceID.from("minecraft:redstone_wire:765"), (short) 2823, Block.REDSTONE_WIRE, "east=side","north=none","power=5","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_766 = new BlockState(NamespaceID.from("minecraft:redstone_wire:766"), (short) 2824, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_766 = new BlockState(NamespaceID.from("minecraft:redstone_wire:766"), (short) 2824, Block.REDSTONE_WIRE, "east=side","north=none","power=5","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_767 = new BlockState(NamespaceID.from("minecraft:redstone_wire:767"), (short) 2825, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_767 = new BlockState(NamespaceID.from("minecraft:redstone_wire:767"), (short) 2825, Block.REDSTONE_WIRE, "east=side","north=none","power=5","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_768 = new BlockState(NamespaceID.from("minecraft:redstone_wire:768"), (short) 2826, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_768 = new BlockState(NamespaceID.from("minecraft:redstone_wire:768"), (short) 2826, Block.REDSTONE_WIRE, "east=side","north=none","power=5","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_769 = new BlockState(NamespaceID.from("minecraft:redstone_wire:769"), (short) 2827, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_769 = new BlockState(NamespaceID.from("minecraft:redstone_wire:769"), (short) 2827, Block.REDSTONE_WIRE, "east=side","north=none","power=5","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_770 = new BlockState(NamespaceID.from("minecraft:redstone_wire:770"), (short) 2828, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_770 = new BlockState(NamespaceID.from("minecraft:redstone_wire:770"), (short) 2828, Block.REDSTONE_WIRE, "east=side","north=none","power=5","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_771 = new BlockState(NamespaceID.from("minecraft:redstone_wire:771"), (short) 2829, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_771 = new BlockState(NamespaceID.from("minecraft:redstone_wire:771"), (short) 2829, Block.REDSTONE_WIRE, "east=side","north=none","power=5","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_772 = new BlockState(NamespaceID.from("minecraft:redstone_wire:772"), (short) 2830, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_772 = new BlockState(NamespaceID.from("minecraft:redstone_wire:772"), (short) 2830, Block.REDSTONE_WIRE, "east=side","north=none","power=5","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_773 = new BlockState(NamespaceID.from("minecraft:redstone_wire:773"), (short) 2831, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_773 = new BlockState(NamespaceID.from("minecraft:redstone_wire:773"), (short) 2831, Block.REDSTONE_WIRE, "east=side","north=none","power=5","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_774 = new BlockState(NamespaceID.from("minecraft:redstone_wire:774"), (short) 2832, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_774 = new BlockState(NamespaceID.from("minecraft:redstone_wire:774"), (short) 2832, Block.REDSTONE_WIRE, "east=side","north=none","power=6","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_775 = new BlockState(NamespaceID.from("minecraft:redstone_wire:775"), (short) 2833, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_775 = new BlockState(NamespaceID.from("minecraft:redstone_wire:775"), (short) 2833, Block.REDSTONE_WIRE, "east=side","north=none","power=6","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_776 = new BlockState(NamespaceID.from("minecraft:redstone_wire:776"), (short) 2834, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_776 = new BlockState(NamespaceID.from("minecraft:redstone_wire:776"), (short) 2834, Block.REDSTONE_WIRE, "east=side","north=none","power=6","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_777 = new BlockState(NamespaceID.from("minecraft:redstone_wire:777"), (short) 2835, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_777 = new BlockState(NamespaceID.from("minecraft:redstone_wire:777"), (short) 2835, Block.REDSTONE_WIRE, "east=side","north=none","power=6","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_778 = new BlockState(NamespaceID.from("minecraft:redstone_wire:778"), (short) 2836, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_778 = new BlockState(NamespaceID.from("minecraft:redstone_wire:778"), (short) 2836, Block.REDSTONE_WIRE, "east=side","north=none","power=6","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_779 = new BlockState(NamespaceID.from("minecraft:redstone_wire:779"), (short) 2837, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_779 = new BlockState(NamespaceID.from("minecraft:redstone_wire:779"), (short) 2837, Block.REDSTONE_WIRE, "east=side","north=none","power=6","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_780 = new BlockState(NamespaceID.from("minecraft:redstone_wire:780"), (short) 2838, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_780 = new BlockState(NamespaceID.from("minecraft:redstone_wire:780"), (short) 2838, Block.REDSTONE_WIRE, "east=side","north=none","power=6","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_781 = new BlockState(NamespaceID.from("minecraft:redstone_wire:781"), (short) 2839, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_781 = new BlockState(NamespaceID.from("minecraft:redstone_wire:781"), (short) 2839, Block.REDSTONE_WIRE, "east=side","north=none","power=6","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_782 = new BlockState(NamespaceID.from("minecraft:redstone_wire:782"), (short) 2840, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_782 = new BlockState(NamespaceID.from("minecraft:redstone_wire:782"), (short) 2840, Block.REDSTONE_WIRE, "east=side","north=none","power=6","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_783 = new BlockState(NamespaceID.from("minecraft:redstone_wire:783"), (short) 2841, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_783 = new BlockState(NamespaceID.from("minecraft:redstone_wire:783"), (short) 2841, Block.REDSTONE_WIRE, "east=side","north=none","power=7","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_784 = new BlockState(NamespaceID.from("minecraft:redstone_wire:784"), (short) 2842, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_784 = new BlockState(NamespaceID.from("minecraft:redstone_wire:784"), (short) 2842, Block.REDSTONE_WIRE, "east=side","north=none","power=7","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_785 = new BlockState(NamespaceID.from("minecraft:redstone_wire:785"), (short) 2843, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_785 = new BlockState(NamespaceID.from("minecraft:redstone_wire:785"), (short) 2843, Block.REDSTONE_WIRE, "east=side","north=none","power=7","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_786 = new BlockState(NamespaceID.from("minecraft:redstone_wire:786"), (short) 2844, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_786 = new BlockState(NamespaceID.from("minecraft:redstone_wire:786"), (short) 2844, Block.REDSTONE_WIRE, "east=side","north=none","power=7","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_787 = new BlockState(NamespaceID.from("minecraft:redstone_wire:787"), (short) 2845, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_787 = new BlockState(NamespaceID.from("minecraft:redstone_wire:787"), (short) 2845, Block.REDSTONE_WIRE, "east=side","north=none","power=7","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_788 = new BlockState(NamespaceID.from("minecraft:redstone_wire:788"), (short) 2846, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_788 = new BlockState(NamespaceID.from("minecraft:redstone_wire:788"), (short) 2846, Block.REDSTONE_WIRE, "east=side","north=none","power=7","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_789 = new BlockState(NamespaceID.from("minecraft:redstone_wire:789"), (short) 2847, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_789 = new BlockState(NamespaceID.from("minecraft:redstone_wire:789"), (short) 2847, Block.REDSTONE_WIRE, "east=side","north=none","power=7","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_790 = new BlockState(NamespaceID.from("minecraft:redstone_wire:790"), (short) 2848, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_790 = new BlockState(NamespaceID.from("minecraft:redstone_wire:790"), (short) 2848, Block.REDSTONE_WIRE, "east=side","north=none","power=7","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_791 = new BlockState(NamespaceID.from("minecraft:redstone_wire:791"), (short) 2849, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_791 = new BlockState(NamespaceID.from("minecraft:redstone_wire:791"), (short) 2849, Block.REDSTONE_WIRE, "east=side","north=none","power=7","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_792 = new BlockState(NamespaceID.from("minecraft:redstone_wire:792"), (short) 2850, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_792 = new BlockState(NamespaceID.from("minecraft:redstone_wire:792"), (short) 2850, Block.REDSTONE_WIRE, "east=side","north=none","power=8","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_793 = new BlockState(NamespaceID.from("minecraft:redstone_wire:793"), (short) 2851, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_793 = new BlockState(NamespaceID.from("minecraft:redstone_wire:793"), (short) 2851, Block.REDSTONE_WIRE, "east=side","north=none","power=8","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_794 = new BlockState(NamespaceID.from("minecraft:redstone_wire:794"), (short) 2852, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_794 = new BlockState(NamespaceID.from("minecraft:redstone_wire:794"), (short) 2852, Block.REDSTONE_WIRE, "east=side","north=none","power=8","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_795 = new BlockState(NamespaceID.from("minecraft:redstone_wire:795"), (short) 2853, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_795 = new BlockState(NamespaceID.from("minecraft:redstone_wire:795"), (short) 2853, Block.REDSTONE_WIRE, "east=side","north=none","power=8","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_796 = new BlockState(NamespaceID.from("minecraft:redstone_wire:796"), (short) 2854, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_796 = new BlockState(NamespaceID.from("minecraft:redstone_wire:796"), (short) 2854, Block.REDSTONE_WIRE, "east=side","north=none","power=8","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_797 = new BlockState(NamespaceID.from("minecraft:redstone_wire:797"), (short) 2855, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_797 = new BlockState(NamespaceID.from("minecraft:redstone_wire:797"), (short) 2855, Block.REDSTONE_WIRE, "east=side","north=none","power=8","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_798 = new BlockState(NamespaceID.from("minecraft:redstone_wire:798"), (short) 2856, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_798 = new BlockState(NamespaceID.from("minecraft:redstone_wire:798"), (short) 2856, Block.REDSTONE_WIRE, "east=side","north=none","power=8","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_799 = new BlockState(NamespaceID.from("minecraft:redstone_wire:799"), (short) 2857, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_799 = new BlockState(NamespaceID.from("minecraft:redstone_wire:799"), (short) 2857, Block.REDSTONE_WIRE, "east=side","north=none","power=8","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_800 = new BlockState(NamespaceID.from("minecraft:redstone_wire:800"), (short) 2858, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_800 = new BlockState(NamespaceID.from("minecraft:redstone_wire:800"), (short) 2858, Block.REDSTONE_WIRE, "east=side","north=none","power=8","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_801 = new BlockState(NamespaceID.from("minecraft:redstone_wire:801"), (short) 2859, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_801 = new BlockState(NamespaceID.from("minecraft:redstone_wire:801"), (short) 2859, Block.REDSTONE_WIRE, "east=side","north=none","power=9","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_802 = new BlockState(NamespaceID.from("minecraft:redstone_wire:802"), (short) 2860, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_802 = new BlockState(NamespaceID.from("minecraft:redstone_wire:802"), (short) 2860, Block.REDSTONE_WIRE, "east=side","north=none","power=9","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_803 = new BlockState(NamespaceID.from("minecraft:redstone_wire:803"), (short) 2861, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_803 = new BlockState(NamespaceID.from("minecraft:redstone_wire:803"), (short) 2861, Block.REDSTONE_WIRE, "east=side","north=none","power=9","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_804 = new BlockState(NamespaceID.from("minecraft:redstone_wire:804"), (short) 2862, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_804 = new BlockState(NamespaceID.from("minecraft:redstone_wire:804"), (short) 2862, Block.REDSTONE_WIRE, "east=side","north=none","power=9","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_805 = new BlockState(NamespaceID.from("minecraft:redstone_wire:805"), (short) 2863, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_805 = new BlockState(NamespaceID.from("minecraft:redstone_wire:805"), (short) 2863, Block.REDSTONE_WIRE, "east=side","north=none","power=9","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_806 = new BlockState(NamespaceID.from("minecraft:redstone_wire:806"), (short) 2864, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_806 = new BlockState(NamespaceID.from("minecraft:redstone_wire:806"), (short) 2864, Block.REDSTONE_WIRE, "east=side","north=none","power=9","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_807 = new BlockState(NamespaceID.from("minecraft:redstone_wire:807"), (short) 2865, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_807 = new BlockState(NamespaceID.from("minecraft:redstone_wire:807"), (short) 2865, Block.REDSTONE_WIRE, "east=side","north=none","power=9","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_808 = new BlockState(NamespaceID.from("minecraft:redstone_wire:808"), (short) 2866, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_808 = new BlockState(NamespaceID.from("minecraft:redstone_wire:808"), (short) 2866, Block.REDSTONE_WIRE, "east=side","north=none","power=9","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_809 = new BlockState(NamespaceID.from("minecraft:redstone_wire:809"), (short) 2867, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_809 = new BlockState(NamespaceID.from("minecraft:redstone_wire:809"), (short) 2867, Block.REDSTONE_WIRE, "east=side","north=none","power=9","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_810 = new BlockState(NamespaceID.from("minecraft:redstone_wire:810"), (short) 2868, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_810 = new BlockState(NamespaceID.from("minecraft:redstone_wire:810"), (short) 2868, Block.REDSTONE_WIRE, "east=side","north=none","power=10","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_811 = new BlockState(NamespaceID.from("minecraft:redstone_wire:811"), (short) 2869, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_811 = new BlockState(NamespaceID.from("minecraft:redstone_wire:811"), (short) 2869, Block.REDSTONE_WIRE, "east=side","north=none","power=10","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_812 = new BlockState(NamespaceID.from("minecraft:redstone_wire:812"), (short) 2870, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_812 = new BlockState(NamespaceID.from("minecraft:redstone_wire:812"), (short) 2870, Block.REDSTONE_WIRE, "east=side","north=none","power=10","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_813 = new BlockState(NamespaceID.from("minecraft:redstone_wire:813"), (short) 2871, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_813 = new BlockState(NamespaceID.from("minecraft:redstone_wire:813"), (short) 2871, Block.REDSTONE_WIRE, "east=side","north=none","power=10","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_814 = new BlockState(NamespaceID.from("minecraft:redstone_wire:814"), (short) 2872, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_814 = new BlockState(NamespaceID.from("minecraft:redstone_wire:814"), (short) 2872, Block.REDSTONE_WIRE, "east=side","north=none","power=10","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_815 = new BlockState(NamespaceID.from("minecraft:redstone_wire:815"), (short) 2873, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_815 = new BlockState(NamespaceID.from("minecraft:redstone_wire:815"), (short) 2873, Block.REDSTONE_WIRE, "east=side","north=none","power=10","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_816 = new BlockState(NamespaceID.from("minecraft:redstone_wire:816"), (short) 2874, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_816 = new BlockState(NamespaceID.from("minecraft:redstone_wire:816"), (short) 2874, Block.REDSTONE_WIRE, "east=side","north=none","power=10","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_817 = new BlockState(NamespaceID.from("minecraft:redstone_wire:817"), (short) 2875, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_817 = new BlockState(NamespaceID.from("minecraft:redstone_wire:817"), (short) 2875, Block.REDSTONE_WIRE, "east=side","north=none","power=10","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_818 = new BlockState(NamespaceID.from("minecraft:redstone_wire:818"), (short) 2876, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_818 = new BlockState(NamespaceID.from("minecraft:redstone_wire:818"), (short) 2876, Block.REDSTONE_WIRE, "east=side","north=none","power=10","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_819 = new BlockState(NamespaceID.from("minecraft:redstone_wire:819"), (short) 2877, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_819 = new BlockState(NamespaceID.from("minecraft:redstone_wire:819"), (short) 2877, Block.REDSTONE_WIRE, "east=side","north=none","power=11","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_820 = new BlockState(NamespaceID.from("minecraft:redstone_wire:820"), (short) 2878, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_820 = new BlockState(NamespaceID.from("minecraft:redstone_wire:820"), (short) 2878, Block.REDSTONE_WIRE, "east=side","north=none","power=11","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_821 = new BlockState(NamespaceID.from("minecraft:redstone_wire:821"), (short) 2879, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_821 = new BlockState(NamespaceID.from("minecraft:redstone_wire:821"), (short) 2879, Block.REDSTONE_WIRE, "east=side","north=none","power=11","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_822 = new BlockState(NamespaceID.from("minecraft:redstone_wire:822"), (short) 2880, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_822 = new BlockState(NamespaceID.from("minecraft:redstone_wire:822"), (short) 2880, Block.REDSTONE_WIRE, "east=side","north=none","power=11","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_823 = new BlockState(NamespaceID.from("minecraft:redstone_wire:823"), (short) 2881, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_823 = new BlockState(NamespaceID.from("minecraft:redstone_wire:823"), (short) 2881, Block.REDSTONE_WIRE, "east=side","north=none","power=11","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_824 = new BlockState(NamespaceID.from("minecraft:redstone_wire:824"), (short) 2882, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_824 = new BlockState(NamespaceID.from("minecraft:redstone_wire:824"), (short) 2882, Block.REDSTONE_WIRE, "east=side","north=none","power=11","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_825 = new BlockState(NamespaceID.from("minecraft:redstone_wire:825"), (short) 2883, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_825 = new BlockState(NamespaceID.from("minecraft:redstone_wire:825"), (short) 2883, Block.REDSTONE_WIRE, "east=side","north=none","power=11","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_826 = new BlockState(NamespaceID.from("minecraft:redstone_wire:826"), (short) 2884, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_826 = new BlockState(NamespaceID.from("minecraft:redstone_wire:826"), (short) 2884, Block.REDSTONE_WIRE, "east=side","north=none","power=11","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_827 = new BlockState(NamespaceID.from("minecraft:redstone_wire:827"), (short) 2885, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_827 = new BlockState(NamespaceID.from("minecraft:redstone_wire:827"), (short) 2885, Block.REDSTONE_WIRE, "east=side","north=none","power=11","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_828 = new BlockState(NamespaceID.from("minecraft:redstone_wire:828"), (short) 2886, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_828 = new BlockState(NamespaceID.from("minecraft:redstone_wire:828"), (short) 2886, Block.REDSTONE_WIRE, "east=side","north=none","power=12","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_829 = new BlockState(NamespaceID.from("minecraft:redstone_wire:829"), (short) 2887, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_829 = new BlockState(NamespaceID.from("minecraft:redstone_wire:829"), (short) 2887, Block.REDSTONE_WIRE, "east=side","north=none","power=12","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_830 = new BlockState(NamespaceID.from("minecraft:redstone_wire:830"), (short) 2888, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_830 = new BlockState(NamespaceID.from("minecraft:redstone_wire:830"), (short) 2888, Block.REDSTONE_WIRE, "east=side","north=none","power=12","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_831 = new BlockState(NamespaceID.from("minecraft:redstone_wire:831"), (short) 2889, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_831 = new BlockState(NamespaceID.from("minecraft:redstone_wire:831"), (short) 2889, Block.REDSTONE_WIRE, "east=side","north=none","power=12","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_832 = new BlockState(NamespaceID.from("minecraft:redstone_wire:832"), (short) 2890, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_832 = new BlockState(NamespaceID.from("minecraft:redstone_wire:832"), (short) 2890, Block.REDSTONE_WIRE, "east=side","north=none","power=12","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_833 = new BlockState(NamespaceID.from("minecraft:redstone_wire:833"), (short) 2891, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_833 = new BlockState(NamespaceID.from("minecraft:redstone_wire:833"), (short) 2891, Block.REDSTONE_WIRE, "east=side","north=none","power=12","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_834 = new BlockState(NamespaceID.from("minecraft:redstone_wire:834"), (short) 2892, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_834 = new BlockState(NamespaceID.from("minecraft:redstone_wire:834"), (short) 2892, Block.REDSTONE_WIRE, "east=side","north=none","power=12","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_835 = new BlockState(NamespaceID.from("minecraft:redstone_wire:835"), (short) 2893, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_835 = new BlockState(NamespaceID.from("minecraft:redstone_wire:835"), (short) 2893, Block.REDSTONE_WIRE, "east=side","north=none","power=12","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_836 = new BlockState(NamespaceID.from("minecraft:redstone_wire:836"), (short) 2894, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_836 = new BlockState(NamespaceID.from("minecraft:redstone_wire:836"), (short) 2894, Block.REDSTONE_WIRE, "east=side","north=none","power=12","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_837 = new BlockState(NamespaceID.from("minecraft:redstone_wire:837"), (short) 2895, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_837 = new BlockState(NamespaceID.from("minecraft:redstone_wire:837"), (short) 2895, Block.REDSTONE_WIRE, "east=side","north=none","power=13","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_838 = new BlockState(NamespaceID.from("minecraft:redstone_wire:838"), (short) 2896, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_838 = new BlockState(NamespaceID.from("minecraft:redstone_wire:838"), (short) 2896, Block.REDSTONE_WIRE, "east=side","north=none","power=13","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_839 = new BlockState(NamespaceID.from("minecraft:redstone_wire:839"), (short) 2897, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_839 = new BlockState(NamespaceID.from("minecraft:redstone_wire:839"), (short) 2897, Block.REDSTONE_WIRE, "east=side","north=none","power=13","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_840 = new BlockState(NamespaceID.from("minecraft:redstone_wire:840"), (short) 2898, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_840 = new BlockState(NamespaceID.from("minecraft:redstone_wire:840"), (short) 2898, Block.REDSTONE_WIRE, "east=side","north=none","power=13","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_841 = new BlockState(NamespaceID.from("minecraft:redstone_wire:841"), (short) 2899, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_841 = new BlockState(NamespaceID.from("minecraft:redstone_wire:841"), (short) 2899, Block.REDSTONE_WIRE, "east=side","north=none","power=13","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_842 = new BlockState(NamespaceID.from("minecraft:redstone_wire:842"), (short) 2900, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_842 = new BlockState(NamespaceID.from("minecraft:redstone_wire:842"), (short) 2900, Block.REDSTONE_WIRE, "east=side","north=none","power=13","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_843 = new BlockState(NamespaceID.from("minecraft:redstone_wire:843"), (short) 2901, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_843 = new BlockState(NamespaceID.from("minecraft:redstone_wire:843"), (short) 2901, Block.REDSTONE_WIRE, "east=side","north=none","power=13","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_844 = new BlockState(NamespaceID.from("minecraft:redstone_wire:844"), (short) 2902, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_844 = new BlockState(NamespaceID.from("minecraft:redstone_wire:844"), (short) 2902, Block.REDSTONE_WIRE, "east=side","north=none","power=13","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_845 = new BlockState(NamespaceID.from("minecraft:redstone_wire:845"), (short) 2903, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_845 = new BlockState(NamespaceID.from("minecraft:redstone_wire:845"), (short) 2903, Block.REDSTONE_WIRE, "east=side","north=none","power=13","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_846 = new BlockState(NamespaceID.from("minecraft:redstone_wire:846"), (short) 2904, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_846 = new BlockState(NamespaceID.from("minecraft:redstone_wire:846"), (short) 2904, Block.REDSTONE_WIRE, "east=side","north=none","power=14","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_847 = new BlockState(NamespaceID.from("minecraft:redstone_wire:847"), (short) 2905, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_847 = new BlockState(NamespaceID.from("minecraft:redstone_wire:847"), (short) 2905, Block.REDSTONE_WIRE, "east=side","north=none","power=14","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_848 = new BlockState(NamespaceID.from("minecraft:redstone_wire:848"), (short) 2906, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_848 = new BlockState(NamespaceID.from("minecraft:redstone_wire:848"), (short) 2906, Block.REDSTONE_WIRE, "east=side","north=none","power=14","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_849 = new BlockState(NamespaceID.from("minecraft:redstone_wire:849"), (short) 2907, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_849 = new BlockState(NamespaceID.from("minecraft:redstone_wire:849"), (short) 2907, Block.REDSTONE_WIRE, "east=side","north=none","power=14","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_850 = new BlockState(NamespaceID.from("minecraft:redstone_wire:850"), (short) 2908, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_850 = new BlockState(NamespaceID.from("minecraft:redstone_wire:850"), (short) 2908, Block.REDSTONE_WIRE, "east=side","north=none","power=14","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_851 = new BlockState(NamespaceID.from("minecraft:redstone_wire:851"), (short) 2909, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_851 = new BlockState(NamespaceID.from("minecraft:redstone_wire:851"), (short) 2909, Block.REDSTONE_WIRE, "east=side","north=none","power=14","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_852 = new BlockState(NamespaceID.from("minecraft:redstone_wire:852"), (short) 2910, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_852 = new BlockState(NamespaceID.from("minecraft:redstone_wire:852"), (short) 2910, Block.REDSTONE_WIRE, "east=side","north=none","power=14","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_853 = new BlockState(NamespaceID.from("minecraft:redstone_wire:853"), (short) 2911, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_853 = new BlockState(NamespaceID.from("minecraft:redstone_wire:853"), (short) 2911, Block.REDSTONE_WIRE, "east=side","north=none","power=14","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_854 = new BlockState(NamespaceID.from("minecraft:redstone_wire:854"), (short) 2912, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_854 = new BlockState(NamespaceID.from("minecraft:redstone_wire:854"), (short) 2912, Block.REDSTONE_WIRE, "east=side","north=none","power=14","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_855 = new BlockState(NamespaceID.from("minecraft:redstone_wire:855"), (short) 2913, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_855 = new BlockState(NamespaceID.from("minecraft:redstone_wire:855"), (short) 2913, Block.REDSTONE_WIRE, "east=side","north=none","power=15","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_856 = new BlockState(NamespaceID.from("minecraft:redstone_wire:856"), (short) 2914, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_856 = new BlockState(NamespaceID.from("minecraft:redstone_wire:856"), (short) 2914, Block.REDSTONE_WIRE, "east=side","north=none","power=15","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_857 = new BlockState(NamespaceID.from("minecraft:redstone_wire:857"), (short) 2915, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_857 = new BlockState(NamespaceID.from("minecraft:redstone_wire:857"), (short) 2915, Block.REDSTONE_WIRE, "east=side","north=none","power=15","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_858 = new BlockState(NamespaceID.from("minecraft:redstone_wire:858"), (short) 2916, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_858 = new BlockState(NamespaceID.from("minecraft:redstone_wire:858"), (short) 2916, Block.REDSTONE_WIRE, "east=side","north=none","power=15","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_859 = new BlockState(NamespaceID.from("minecraft:redstone_wire:859"), (short) 2917, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_859 = new BlockState(NamespaceID.from("minecraft:redstone_wire:859"), (short) 2917, Block.REDSTONE_WIRE, "east=side","north=none","power=15","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_860 = new BlockState(NamespaceID.from("minecraft:redstone_wire:860"), (short) 2918, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_860 = new BlockState(NamespaceID.from("minecraft:redstone_wire:860"), (short) 2918, Block.REDSTONE_WIRE, "east=side","north=none","power=15","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_861 = new BlockState(NamespaceID.from("minecraft:redstone_wire:861"), (short) 2919, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_861 = new BlockState(NamespaceID.from("minecraft:redstone_wire:861"), (short) 2919, Block.REDSTONE_WIRE, "east=side","north=none","power=15","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_862 = new BlockState(NamespaceID.from("minecraft:redstone_wire:862"), (short) 2920, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_862 = new BlockState(NamespaceID.from("minecraft:redstone_wire:862"), (short) 2920, Block.REDSTONE_WIRE, "east=side","north=none","power=15","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_863 = new BlockState(NamespaceID.from("minecraft:redstone_wire:863"), (short) 2921, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_863 = new BlockState(NamespaceID.from("minecraft:redstone_wire:863"), (short) 2921, Block.REDSTONE_WIRE, "east=side","north=none","power=15","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_864 = new BlockState(NamespaceID.from("minecraft:redstone_wire:864"), (short) 2922, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_864 = new BlockState(NamespaceID.from("minecraft:redstone_wire:864"), (short) 2922, Block.REDSTONE_WIRE, "east=none","north=up","power=0","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_865 = new BlockState(NamespaceID.from("minecraft:redstone_wire:865"), (short) 2923, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_865 = new BlockState(NamespaceID.from("minecraft:redstone_wire:865"), (short) 2923, Block.REDSTONE_WIRE, "east=none","north=up","power=0","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_866 = new BlockState(NamespaceID.from("minecraft:redstone_wire:866"), (short) 2924, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_866 = new BlockState(NamespaceID.from("minecraft:redstone_wire:866"), (short) 2924, Block.REDSTONE_WIRE, "east=none","north=up","power=0","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_867 = new BlockState(NamespaceID.from("minecraft:redstone_wire:867"), (short) 2925, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_867 = new BlockState(NamespaceID.from("minecraft:redstone_wire:867"), (short) 2925, Block.REDSTONE_WIRE, "east=none","north=up","power=0","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_868 = new BlockState(NamespaceID.from("minecraft:redstone_wire:868"), (short) 2926, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_868 = new BlockState(NamespaceID.from("minecraft:redstone_wire:868"), (short) 2926, Block.REDSTONE_WIRE, "east=none","north=up","power=0","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_869 = new BlockState(NamespaceID.from("minecraft:redstone_wire:869"), (short) 2927, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_869 = new BlockState(NamespaceID.from("minecraft:redstone_wire:869"), (short) 2927, Block.REDSTONE_WIRE, "east=none","north=up","power=0","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_870 = new BlockState(NamespaceID.from("minecraft:redstone_wire:870"), (short) 2928, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_870 = new BlockState(NamespaceID.from("minecraft:redstone_wire:870"), (short) 2928, Block.REDSTONE_WIRE, "east=none","north=up","power=0","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_871 = new BlockState(NamespaceID.from("minecraft:redstone_wire:871"), (short) 2929, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_871 = new BlockState(NamespaceID.from("minecraft:redstone_wire:871"), (short) 2929, Block.REDSTONE_WIRE, "east=none","north=up","power=0","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_872 = new BlockState(NamespaceID.from("minecraft:redstone_wire:872"), (short) 2930, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_872 = new BlockState(NamespaceID.from("minecraft:redstone_wire:872"), (short) 2930, Block.REDSTONE_WIRE, "east=none","north=up","power=0","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_873 = new BlockState(NamespaceID.from("minecraft:redstone_wire:873"), (short) 2931, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_873 = new BlockState(NamespaceID.from("minecraft:redstone_wire:873"), (short) 2931, Block.REDSTONE_WIRE, "east=none","north=up","power=1","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_874 = new BlockState(NamespaceID.from("minecraft:redstone_wire:874"), (short) 2932, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_874 = new BlockState(NamespaceID.from("minecraft:redstone_wire:874"), (short) 2932, Block.REDSTONE_WIRE, "east=none","north=up","power=1","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_875 = new BlockState(NamespaceID.from("minecraft:redstone_wire:875"), (short) 2933, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_875 = new BlockState(NamespaceID.from("minecraft:redstone_wire:875"), (short) 2933, Block.REDSTONE_WIRE, "east=none","north=up","power=1","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_876 = new BlockState(NamespaceID.from("minecraft:redstone_wire:876"), (short) 2934, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_876 = new BlockState(NamespaceID.from("minecraft:redstone_wire:876"), (short) 2934, Block.REDSTONE_WIRE, "east=none","north=up","power=1","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_877 = new BlockState(NamespaceID.from("minecraft:redstone_wire:877"), (short) 2935, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_877 = new BlockState(NamespaceID.from("minecraft:redstone_wire:877"), (short) 2935, Block.REDSTONE_WIRE, "east=none","north=up","power=1","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_878 = new BlockState(NamespaceID.from("minecraft:redstone_wire:878"), (short) 2936, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_878 = new BlockState(NamespaceID.from("minecraft:redstone_wire:878"), (short) 2936, Block.REDSTONE_WIRE, "east=none","north=up","power=1","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_879 = new BlockState(NamespaceID.from("minecraft:redstone_wire:879"), (short) 2937, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_879 = new BlockState(NamespaceID.from("minecraft:redstone_wire:879"), (short) 2937, Block.REDSTONE_WIRE, "east=none","north=up","power=1","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_880 = new BlockState(NamespaceID.from("minecraft:redstone_wire:880"), (short) 2938, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_880 = new BlockState(NamespaceID.from("minecraft:redstone_wire:880"), (short) 2938, Block.REDSTONE_WIRE, "east=none","north=up","power=1","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_881 = new BlockState(NamespaceID.from("minecraft:redstone_wire:881"), (short) 2939, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_881 = new BlockState(NamespaceID.from("minecraft:redstone_wire:881"), (short) 2939, Block.REDSTONE_WIRE, "east=none","north=up","power=1","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_882 = new BlockState(NamespaceID.from("minecraft:redstone_wire:882"), (short) 2940, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_882 = new BlockState(NamespaceID.from("minecraft:redstone_wire:882"), (short) 2940, Block.REDSTONE_WIRE, "east=none","north=up","power=2","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_883 = new BlockState(NamespaceID.from("minecraft:redstone_wire:883"), (short) 2941, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_883 = new BlockState(NamespaceID.from("minecraft:redstone_wire:883"), (short) 2941, Block.REDSTONE_WIRE, "east=none","north=up","power=2","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_884 = new BlockState(NamespaceID.from("minecraft:redstone_wire:884"), (short) 2942, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_884 = new BlockState(NamespaceID.from("minecraft:redstone_wire:884"), (short) 2942, Block.REDSTONE_WIRE, "east=none","north=up","power=2","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_885 = new BlockState(NamespaceID.from("minecraft:redstone_wire:885"), (short) 2943, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_885 = new BlockState(NamespaceID.from("minecraft:redstone_wire:885"), (short) 2943, Block.REDSTONE_WIRE, "east=none","north=up","power=2","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_886 = new BlockState(NamespaceID.from("minecraft:redstone_wire:886"), (short) 2944, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_886 = new BlockState(NamespaceID.from("minecraft:redstone_wire:886"), (short) 2944, Block.REDSTONE_WIRE, "east=none","north=up","power=2","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_887 = new BlockState(NamespaceID.from("minecraft:redstone_wire:887"), (short) 2945, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_887 = new BlockState(NamespaceID.from("minecraft:redstone_wire:887"), (short) 2945, Block.REDSTONE_WIRE, "east=none","north=up","power=2","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_888 = new BlockState(NamespaceID.from("minecraft:redstone_wire:888"), (short) 2946, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_888 = new BlockState(NamespaceID.from("minecraft:redstone_wire:888"), (short) 2946, Block.REDSTONE_WIRE, "east=none","north=up","power=2","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_889 = new BlockState(NamespaceID.from("minecraft:redstone_wire:889"), (short) 2947, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_889 = new BlockState(NamespaceID.from("minecraft:redstone_wire:889"), (short) 2947, Block.REDSTONE_WIRE, "east=none","north=up","power=2","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_890 = new BlockState(NamespaceID.from("minecraft:redstone_wire:890"), (short) 2948, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_890 = new BlockState(NamespaceID.from("minecraft:redstone_wire:890"), (short) 2948, Block.REDSTONE_WIRE, "east=none","north=up","power=2","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_891 = new BlockState(NamespaceID.from("minecraft:redstone_wire:891"), (short) 2949, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_891 = new BlockState(NamespaceID.from("minecraft:redstone_wire:891"), (short) 2949, Block.REDSTONE_WIRE, "east=none","north=up","power=3","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_892 = new BlockState(NamespaceID.from("minecraft:redstone_wire:892"), (short) 2950, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_892 = new BlockState(NamespaceID.from("minecraft:redstone_wire:892"), (short) 2950, Block.REDSTONE_WIRE, "east=none","north=up","power=3","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_893 = new BlockState(NamespaceID.from("minecraft:redstone_wire:893"), (short) 2951, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_893 = new BlockState(NamespaceID.from("minecraft:redstone_wire:893"), (short) 2951, Block.REDSTONE_WIRE, "east=none","north=up","power=3","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_894 = new BlockState(NamespaceID.from("minecraft:redstone_wire:894"), (short) 2952, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_894 = new BlockState(NamespaceID.from("minecraft:redstone_wire:894"), (short) 2952, Block.REDSTONE_WIRE, "east=none","north=up","power=3","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_895 = new BlockState(NamespaceID.from("minecraft:redstone_wire:895"), (short) 2953, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_895 = new BlockState(NamespaceID.from("minecraft:redstone_wire:895"), (short) 2953, Block.REDSTONE_WIRE, "east=none","north=up","power=3","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_896 = new BlockState(NamespaceID.from("minecraft:redstone_wire:896"), (short) 2954, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_896 = new BlockState(NamespaceID.from("minecraft:redstone_wire:896"), (short) 2954, Block.REDSTONE_WIRE, "east=none","north=up","power=3","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_897 = new BlockState(NamespaceID.from("minecraft:redstone_wire:897"), (short) 2955, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_897 = new BlockState(NamespaceID.from("minecraft:redstone_wire:897"), (short) 2955, Block.REDSTONE_WIRE, "east=none","north=up","power=3","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_898 = new BlockState(NamespaceID.from("minecraft:redstone_wire:898"), (short) 2956, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_898 = new BlockState(NamespaceID.from("minecraft:redstone_wire:898"), (short) 2956, Block.REDSTONE_WIRE, "east=none","north=up","power=3","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_899 = new BlockState(NamespaceID.from("minecraft:redstone_wire:899"), (short) 2957, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_899 = new BlockState(NamespaceID.from("minecraft:redstone_wire:899"), (short) 2957, Block.REDSTONE_WIRE, "east=none","north=up","power=3","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_900 = new BlockState(NamespaceID.from("minecraft:redstone_wire:900"), (short) 2958, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_900 = new BlockState(NamespaceID.from("minecraft:redstone_wire:900"), (short) 2958, Block.REDSTONE_WIRE, "east=none","north=up","power=4","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_901 = new BlockState(NamespaceID.from("minecraft:redstone_wire:901"), (short) 2959, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_901 = new BlockState(NamespaceID.from("minecraft:redstone_wire:901"), (short) 2959, Block.REDSTONE_WIRE, "east=none","north=up","power=4","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_902 = new BlockState(NamespaceID.from("minecraft:redstone_wire:902"), (short) 2960, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_902 = new BlockState(NamespaceID.from("minecraft:redstone_wire:902"), (short) 2960, Block.REDSTONE_WIRE, "east=none","north=up","power=4","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_903 = new BlockState(NamespaceID.from("minecraft:redstone_wire:903"), (short) 2961, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_903 = new BlockState(NamespaceID.from("minecraft:redstone_wire:903"), (short) 2961, Block.REDSTONE_WIRE, "east=none","north=up","power=4","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_904 = new BlockState(NamespaceID.from("minecraft:redstone_wire:904"), (short) 2962, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_904 = new BlockState(NamespaceID.from("minecraft:redstone_wire:904"), (short) 2962, Block.REDSTONE_WIRE, "east=none","north=up","power=4","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_905 = new BlockState(NamespaceID.from("minecraft:redstone_wire:905"), (short) 2963, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_905 = new BlockState(NamespaceID.from("minecraft:redstone_wire:905"), (short) 2963, Block.REDSTONE_WIRE, "east=none","north=up","power=4","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_906 = new BlockState(NamespaceID.from("minecraft:redstone_wire:906"), (short) 2964, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_906 = new BlockState(NamespaceID.from("minecraft:redstone_wire:906"), (short) 2964, Block.REDSTONE_WIRE, "east=none","north=up","power=4","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_907 = new BlockState(NamespaceID.from("minecraft:redstone_wire:907"), (short) 2965, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_907 = new BlockState(NamespaceID.from("minecraft:redstone_wire:907"), (short) 2965, Block.REDSTONE_WIRE, "east=none","north=up","power=4","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_908 = new BlockState(NamespaceID.from("minecraft:redstone_wire:908"), (short) 2966, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_908 = new BlockState(NamespaceID.from("minecraft:redstone_wire:908"), (short) 2966, Block.REDSTONE_WIRE, "east=none","north=up","power=4","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_909 = new BlockState(NamespaceID.from("minecraft:redstone_wire:909"), (short) 2967, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_909 = new BlockState(NamespaceID.from("minecraft:redstone_wire:909"), (short) 2967, Block.REDSTONE_WIRE, "east=none","north=up","power=5","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_910 = new BlockState(NamespaceID.from("minecraft:redstone_wire:910"), (short) 2968, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_910 = new BlockState(NamespaceID.from("minecraft:redstone_wire:910"), (short) 2968, Block.REDSTONE_WIRE, "east=none","north=up","power=5","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_911 = new BlockState(NamespaceID.from("minecraft:redstone_wire:911"), (short) 2969, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_911 = new BlockState(NamespaceID.from("minecraft:redstone_wire:911"), (short) 2969, Block.REDSTONE_WIRE, "east=none","north=up","power=5","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_912 = new BlockState(NamespaceID.from("minecraft:redstone_wire:912"), (short) 2970, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_912 = new BlockState(NamespaceID.from("minecraft:redstone_wire:912"), (short) 2970, Block.REDSTONE_WIRE, "east=none","north=up","power=5","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_913 = new BlockState(NamespaceID.from("minecraft:redstone_wire:913"), (short) 2971, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_913 = new BlockState(NamespaceID.from("minecraft:redstone_wire:913"), (short) 2971, Block.REDSTONE_WIRE, "east=none","north=up","power=5","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_914 = new BlockState(NamespaceID.from("minecraft:redstone_wire:914"), (short) 2972, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_914 = new BlockState(NamespaceID.from("minecraft:redstone_wire:914"), (short) 2972, Block.REDSTONE_WIRE, "east=none","north=up","power=5","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_915 = new BlockState(NamespaceID.from("minecraft:redstone_wire:915"), (short) 2973, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_915 = new BlockState(NamespaceID.from("minecraft:redstone_wire:915"), (short) 2973, Block.REDSTONE_WIRE, "east=none","north=up","power=5","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_916 = new BlockState(NamespaceID.from("minecraft:redstone_wire:916"), (short) 2974, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_916 = new BlockState(NamespaceID.from("minecraft:redstone_wire:916"), (short) 2974, Block.REDSTONE_WIRE, "east=none","north=up","power=5","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_917 = new BlockState(NamespaceID.from("minecraft:redstone_wire:917"), (short) 2975, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_917 = new BlockState(NamespaceID.from("minecraft:redstone_wire:917"), (short) 2975, Block.REDSTONE_WIRE, "east=none","north=up","power=5","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_918 = new BlockState(NamespaceID.from("minecraft:redstone_wire:918"), (short) 2976, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_918 = new BlockState(NamespaceID.from("minecraft:redstone_wire:918"), (short) 2976, Block.REDSTONE_WIRE, "east=none","north=up","power=6","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_919 = new BlockState(NamespaceID.from("minecraft:redstone_wire:919"), (short) 2977, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_919 = new BlockState(NamespaceID.from("minecraft:redstone_wire:919"), (short) 2977, Block.REDSTONE_WIRE, "east=none","north=up","power=6","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_920 = new BlockState(NamespaceID.from("minecraft:redstone_wire:920"), (short) 2978, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_920 = new BlockState(NamespaceID.from("minecraft:redstone_wire:920"), (short) 2978, Block.REDSTONE_WIRE, "east=none","north=up","power=6","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_921 = new BlockState(NamespaceID.from("minecraft:redstone_wire:921"), (short) 2979, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_921 = new BlockState(NamespaceID.from("minecraft:redstone_wire:921"), (short) 2979, Block.REDSTONE_WIRE, "east=none","north=up","power=6","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_922 = new BlockState(NamespaceID.from("minecraft:redstone_wire:922"), (short) 2980, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_922 = new BlockState(NamespaceID.from("minecraft:redstone_wire:922"), (short) 2980, Block.REDSTONE_WIRE, "east=none","north=up","power=6","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_923 = new BlockState(NamespaceID.from("minecraft:redstone_wire:923"), (short) 2981, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_923 = new BlockState(NamespaceID.from("minecraft:redstone_wire:923"), (short) 2981, Block.REDSTONE_WIRE, "east=none","north=up","power=6","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_924 = new BlockState(NamespaceID.from("minecraft:redstone_wire:924"), (short) 2982, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_924 = new BlockState(NamespaceID.from("minecraft:redstone_wire:924"), (short) 2982, Block.REDSTONE_WIRE, "east=none","north=up","power=6","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_925 = new BlockState(NamespaceID.from("minecraft:redstone_wire:925"), (short) 2983, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_925 = new BlockState(NamespaceID.from("minecraft:redstone_wire:925"), (short) 2983, Block.REDSTONE_WIRE, "east=none","north=up","power=6","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_926 = new BlockState(NamespaceID.from("minecraft:redstone_wire:926"), (short) 2984, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_926 = new BlockState(NamespaceID.from("minecraft:redstone_wire:926"), (short) 2984, Block.REDSTONE_WIRE, "east=none","north=up","power=6","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_927 = new BlockState(NamespaceID.from("minecraft:redstone_wire:927"), (short) 2985, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_927 = new BlockState(NamespaceID.from("minecraft:redstone_wire:927"), (short) 2985, Block.REDSTONE_WIRE, "east=none","north=up","power=7","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_928 = new BlockState(NamespaceID.from("minecraft:redstone_wire:928"), (short) 2986, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_928 = new BlockState(NamespaceID.from("minecraft:redstone_wire:928"), (short) 2986, Block.REDSTONE_WIRE, "east=none","north=up","power=7","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_929 = new BlockState(NamespaceID.from("minecraft:redstone_wire:929"), (short) 2987, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_929 = new BlockState(NamespaceID.from("minecraft:redstone_wire:929"), (short) 2987, Block.REDSTONE_WIRE, "east=none","north=up","power=7","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_930 = new BlockState(NamespaceID.from("minecraft:redstone_wire:930"), (short) 2988, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_930 = new BlockState(NamespaceID.from("minecraft:redstone_wire:930"), (short) 2988, Block.REDSTONE_WIRE, "east=none","north=up","power=7","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_931 = new BlockState(NamespaceID.from("minecraft:redstone_wire:931"), (short) 2989, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_931 = new BlockState(NamespaceID.from("minecraft:redstone_wire:931"), (short) 2989, Block.REDSTONE_WIRE, "east=none","north=up","power=7","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_932 = new BlockState(NamespaceID.from("minecraft:redstone_wire:932"), (short) 2990, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_932 = new BlockState(NamespaceID.from("minecraft:redstone_wire:932"), (short) 2990, Block.REDSTONE_WIRE, "east=none","north=up","power=7","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_933 = new BlockState(NamespaceID.from("minecraft:redstone_wire:933"), (short) 2991, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_933 = new BlockState(NamespaceID.from("minecraft:redstone_wire:933"), (short) 2991, Block.REDSTONE_WIRE, "east=none","north=up","power=7","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_934 = new BlockState(NamespaceID.from("minecraft:redstone_wire:934"), (short) 2992, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_934 = new BlockState(NamespaceID.from("minecraft:redstone_wire:934"), (short) 2992, Block.REDSTONE_WIRE, "east=none","north=up","power=7","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_935 = new BlockState(NamespaceID.from("minecraft:redstone_wire:935"), (short) 2993, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_935 = new BlockState(NamespaceID.from("minecraft:redstone_wire:935"), (short) 2993, Block.REDSTONE_WIRE, "east=none","north=up","power=7","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_936 = new BlockState(NamespaceID.from("minecraft:redstone_wire:936"), (short) 2994, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_936 = new BlockState(NamespaceID.from("minecraft:redstone_wire:936"), (short) 2994, Block.REDSTONE_WIRE, "east=none","north=up","power=8","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_937 = new BlockState(NamespaceID.from("minecraft:redstone_wire:937"), (short) 2995, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_937 = new BlockState(NamespaceID.from("minecraft:redstone_wire:937"), (short) 2995, Block.REDSTONE_WIRE, "east=none","north=up","power=8","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_938 = new BlockState(NamespaceID.from("minecraft:redstone_wire:938"), (short) 2996, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_938 = new BlockState(NamespaceID.from("minecraft:redstone_wire:938"), (short) 2996, Block.REDSTONE_WIRE, "east=none","north=up","power=8","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_939 = new BlockState(NamespaceID.from("minecraft:redstone_wire:939"), (short) 2997, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_939 = new BlockState(NamespaceID.from("minecraft:redstone_wire:939"), (short) 2997, Block.REDSTONE_WIRE, "east=none","north=up","power=8","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_940 = new BlockState(NamespaceID.from("minecraft:redstone_wire:940"), (short) 2998, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_940 = new BlockState(NamespaceID.from("minecraft:redstone_wire:940"), (short) 2998, Block.REDSTONE_WIRE, "east=none","north=up","power=8","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_941 = new BlockState(NamespaceID.from("minecraft:redstone_wire:941"), (short) 2999, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_941 = new BlockState(NamespaceID.from("minecraft:redstone_wire:941"), (short) 2999, Block.REDSTONE_WIRE, "east=none","north=up","power=8","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_942 = new BlockState(NamespaceID.from("minecraft:redstone_wire:942"), (short) 3000, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_942 = new BlockState(NamespaceID.from("minecraft:redstone_wire:942"), (short) 3000, Block.REDSTONE_WIRE, "east=none","north=up","power=8","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_943 = new BlockState(NamespaceID.from("minecraft:redstone_wire:943"), (short) 3001, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_943 = new BlockState(NamespaceID.from("minecraft:redstone_wire:943"), (short) 3001, Block.REDSTONE_WIRE, "east=none","north=up","power=8","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_944 = new BlockState(NamespaceID.from("minecraft:redstone_wire:944"), (short) 3002, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_944 = new BlockState(NamespaceID.from("minecraft:redstone_wire:944"), (short) 3002, Block.REDSTONE_WIRE, "east=none","north=up","power=8","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_945 = new BlockState(NamespaceID.from("minecraft:redstone_wire:945"), (short) 3003, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_945 = new BlockState(NamespaceID.from("minecraft:redstone_wire:945"), (short) 3003, Block.REDSTONE_WIRE, "east=none","north=up","power=9","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_946 = new BlockState(NamespaceID.from("minecraft:redstone_wire:946"), (short) 3004, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_946 = new BlockState(NamespaceID.from("minecraft:redstone_wire:946"), (short) 3004, Block.REDSTONE_WIRE, "east=none","north=up","power=9","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_947 = new BlockState(NamespaceID.from("minecraft:redstone_wire:947"), (short) 3005, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_947 = new BlockState(NamespaceID.from("minecraft:redstone_wire:947"), (short) 3005, Block.REDSTONE_WIRE, "east=none","north=up","power=9","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_948 = new BlockState(NamespaceID.from("minecraft:redstone_wire:948"), (short) 3006, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_948 = new BlockState(NamespaceID.from("minecraft:redstone_wire:948"), (short) 3006, Block.REDSTONE_WIRE, "east=none","north=up","power=9","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_949 = new BlockState(NamespaceID.from("minecraft:redstone_wire:949"), (short) 3007, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_949 = new BlockState(NamespaceID.from("minecraft:redstone_wire:949"), (short) 3007, Block.REDSTONE_WIRE, "east=none","north=up","power=9","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_950 = new BlockState(NamespaceID.from("minecraft:redstone_wire:950"), (short) 3008, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_950 = new BlockState(NamespaceID.from("minecraft:redstone_wire:950"), (short) 3008, Block.REDSTONE_WIRE, "east=none","north=up","power=9","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_951 = new BlockState(NamespaceID.from("minecraft:redstone_wire:951"), (short) 3009, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_951 = new BlockState(NamespaceID.from("minecraft:redstone_wire:951"), (short) 3009, Block.REDSTONE_WIRE, "east=none","north=up","power=9","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_952 = new BlockState(NamespaceID.from("minecraft:redstone_wire:952"), (short) 3010, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_952 = new BlockState(NamespaceID.from("minecraft:redstone_wire:952"), (short) 3010, Block.REDSTONE_WIRE, "east=none","north=up","power=9","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_953 = new BlockState(NamespaceID.from("minecraft:redstone_wire:953"), (short) 3011, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_953 = new BlockState(NamespaceID.from("minecraft:redstone_wire:953"), (short) 3011, Block.REDSTONE_WIRE, "east=none","north=up","power=9","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_954 = new BlockState(NamespaceID.from("minecraft:redstone_wire:954"), (short) 3012, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_954 = new BlockState(NamespaceID.from("minecraft:redstone_wire:954"), (short) 3012, Block.REDSTONE_WIRE, "east=none","north=up","power=10","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_955 = new BlockState(NamespaceID.from("minecraft:redstone_wire:955"), (short) 3013, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_955 = new BlockState(NamespaceID.from("minecraft:redstone_wire:955"), (short) 3013, Block.REDSTONE_WIRE, "east=none","north=up","power=10","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_956 = new BlockState(NamespaceID.from("minecraft:redstone_wire:956"), (short) 3014, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_956 = new BlockState(NamespaceID.from("minecraft:redstone_wire:956"), (short) 3014, Block.REDSTONE_WIRE, "east=none","north=up","power=10","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_957 = new BlockState(NamespaceID.from("minecraft:redstone_wire:957"), (short) 3015, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_957 = new BlockState(NamespaceID.from("minecraft:redstone_wire:957"), (short) 3015, Block.REDSTONE_WIRE, "east=none","north=up","power=10","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_958 = new BlockState(NamespaceID.from("minecraft:redstone_wire:958"), (short) 3016, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_958 = new BlockState(NamespaceID.from("minecraft:redstone_wire:958"), (short) 3016, Block.REDSTONE_WIRE, "east=none","north=up","power=10","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_959 = new BlockState(NamespaceID.from("minecraft:redstone_wire:959"), (short) 3017, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_959 = new BlockState(NamespaceID.from("minecraft:redstone_wire:959"), (short) 3017, Block.REDSTONE_WIRE, "east=none","north=up","power=10","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_960 = new BlockState(NamespaceID.from("minecraft:redstone_wire:960"), (short) 3018, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_960 = new BlockState(NamespaceID.from("minecraft:redstone_wire:960"), (short) 3018, Block.REDSTONE_WIRE, "east=none","north=up","power=10","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_961 = new BlockState(NamespaceID.from("minecraft:redstone_wire:961"), (short) 3019, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_961 = new BlockState(NamespaceID.from("minecraft:redstone_wire:961"), (short) 3019, Block.REDSTONE_WIRE, "east=none","north=up","power=10","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_962 = new BlockState(NamespaceID.from("minecraft:redstone_wire:962"), (short) 3020, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_962 = new BlockState(NamespaceID.from("minecraft:redstone_wire:962"), (short) 3020, Block.REDSTONE_WIRE, "east=none","north=up","power=10","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_963 = new BlockState(NamespaceID.from("minecraft:redstone_wire:963"), (short) 3021, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_963 = new BlockState(NamespaceID.from("minecraft:redstone_wire:963"), (short) 3021, Block.REDSTONE_WIRE, "east=none","north=up","power=11","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_964 = new BlockState(NamespaceID.from("minecraft:redstone_wire:964"), (short) 3022, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_964 = new BlockState(NamespaceID.from("minecraft:redstone_wire:964"), (short) 3022, Block.REDSTONE_WIRE, "east=none","north=up","power=11","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_965 = new BlockState(NamespaceID.from("minecraft:redstone_wire:965"), (short) 3023, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_965 = new BlockState(NamespaceID.from("minecraft:redstone_wire:965"), (short) 3023, Block.REDSTONE_WIRE, "east=none","north=up","power=11","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_966 = new BlockState(NamespaceID.from("minecraft:redstone_wire:966"), (short) 3024, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_966 = new BlockState(NamespaceID.from("minecraft:redstone_wire:966"), (short) 3024, Block.REDSTONE_WIRE, "east=none","north=up","power=11","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_967 = new BlockState(NamespaceID.from("minecraft:redstone_wire:967"), (short) 3025, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_967 = new BlockState(NamespaceID.from("minecraft:redstone_wire:967"), (short) 3025, Block.REDSTONE_WIRE, "east=none","north=up","power=11","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_968 = new BlockState(NamespaceID.from("minecraft:redstone_wire:968"), (short) 3026, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_968 = new BlockState(NamespaceID.from("minecraft:redstone_wire:968"), (short) 3026, Block.REDSTONE_WIRE, "east=none","north=up","power=11","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_969 = new BlockState(NamespaceID.from("minecraft:redstone_wire:969"), (short) 3027, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_969 = new BlockState(NamespaceID.from("minecraft:redstone_wire:969"), (short) 3027, Block.REDSTONE_WIRE, "east=none","north=up","power=11","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_970 = new BlockState(NamespaceID.from("minecraft:redstone_wire:970"), (short) 3028, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_970 = new BlockState(NamespaceID.from("minecraft:redstone_wire:970"), (short) 3028, Block.REDSTONE_WIRE, "east=none","north=up","power=11","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_971 = new BlockState(NamespaceID.from("minecraft:redstone_wire:971"), (short) 3029, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_971 = new BlockState(NamespaceID.from("minecraft:redstone_wire:971"), (short) 3029, Block.REDSTONE_WIRE, "east=none","north=up","power=11","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_972 = new BlockState(NamespaceID.from("minecraft:redstone_wire:972"), (short) 3030, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_972 = new BlockState(NamespaceID.from("minecraft:redstone_wire:972"), (short) 3030, Block.REDSTONE_WIRE, "east=none","north=up","power=12","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_973 = new BlockState(NamespaceID.from("minecraft:redstone_wire:973"), (short) 3031, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_973 = new BlockState(NamespaceID.from("minecraft:redstone_wire:973"), (short) 3031, Block.REDSTONE_WIRE, "east=none","north=up","power=12","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_974 = new BlockState(NamespaceID.from("minecraft:redstone_wire:974"), (short) 3032, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_974 = new BlockState(NamespaceID.from("minecraft:redstone_wire:974"), (short) 3032, Block.REDSTONE_WIRE, "east=none","north=up","power=12","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_975 = new BlockState(NamespaceID.from("minecraft:redstone_wire:975"), (short) 3033, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_975 = new BlockState(NamespaceID.from("minecraft:redstone_wire:975"), (short) 3033, Block.REDSTONE_WIRE, "east=none","north=up","power=12","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_976 = new BlockState(NamespaceID.from("minecraft:redstone_wire:976"), (short) 3034, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_976 = new BlockState(NamespaceID.from("minecraft:redstone_wire:976"), (short) 3034, Block.REDSTONE_WIRE, "east=none","north=up","power=12","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_977 = new BlockState(NamespaceID.from("minecraft:redstone_wire:977"), (short) 3035, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_977 = new BlockState(NamespaceID.from("minecraft:redstone_wire:977"), (short) 3035, Block.REDSTONE_WIRE, "east=none","north=up","power=12","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_978 = new BlockState(NamespaceID.from("minecraft:redstone_wire:978"), (short) 3036, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_978 = new BlockState(NamespaceID.from("minecraft:redstone_wire:978"), (short) 3036, Block.REDSTONE_WIRE, "east=none","north=up","power=12","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_979 = new BlockState(NamespaceID.from("minecraft:redstone_wire:979"), (short) 3037, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_979 = new BlockState(NamespaceID.from("minecraft:redstone_wire:979"), (short) 3037, Block.REDSTONE_WIRE, "east=none","north=up","power=12","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_980 = new BlockState(NamespaceID.from("minecraft:redstone_wire:980"), (short) 3038, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_980 = new BlockState(NamespaceID.from("minecraft:redstone_wire:980"), (short) 3038, Block.REDSTONE_WIRE, "east=none","north=up","power=12","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_981 = new BlockState(NamespaceID.from("minecraft:redstone_wire:981"), (short) 3039, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_981 = new BlockState(NamespaceID.from("minecraft:redstone_wire:981"), (short) 3039, Block.REDSTONE_WIRE, "east=none","north=up","power=13","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_982 = new BlockState(NamespaceID.from("minecraft:redstone_wire:982"), (short) 3040, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_982 = new BlockState(NamespaceID.from("minecraft:redstone_wire:982"), (short) 3040, Block.REDSTONE_WIRE, "east=none","north=up","power=13","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_983 = new BlockState(NamespaceID.from("minecraft:redstone_wire:983"), (short) 3041, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_983 = new BlockState(NamespaceID.from("minecraft:redstone_wire:983"), (short) 3041, Block.REDSTONE_WIRE, "east=none","north=up","power=13","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_984 = new BlockState(NamespaceID.from("minecraft:redstone_wire:984"), (short) 3042, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_984 = new BlockState(NamespaceID.from("minecraft:redstone_wire:984"), (short) 3042, Block.REDSTONE_WIRE, "east=none","north=up","power=13","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_985 = new BlockState(NamespaceID.from("minecraft:redstone_wire:985"), (short) 3043, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_985 = new BlockState(NamespaceID.from("minecraft:redstone_wire:985"), (short) 3043, Block.REDSTONE_WIRE, "east=none","north=up","power=13","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_986 = new BlockState(NamespaceID.from("minecraft:redstone_wire:986"), (short) 3044, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_986 = new BlockState(NamespaceID.from("minecraft:redstone_wire:986"), (short) 3044, Block.REDSTONE_WIRE, "east=none","north=up","power=13","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_987 = new BlockState(NamespaceID.from("minecraft:redstone_wire:987"), (short) 3045, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_987 = new BlockState(NamespaceID.from("minecraft:redstone_wire:987"), (short) 3045, Block.REDSTONE_WIRE, "east=none","north=up","power=13","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_988 = new BlockState(NamespaceID.from("minecraft:redstone_wire:988"), (short) 3046, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_988 = new BlockState(NamespaceID.from("minecraft:redstone_wire:988"), (short) 3046, Block.REDSTONE_WIRE, "east=none","north=up","power=13","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_989 = new BlockState(NamespaceID.from("minecraft:redstone_wire:989"), (short) 3047, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_989 = new BlockState(NamespaceID.from("minecraft:redstone_wire:989"), (short) 3047, Block.REDSTONE_WIRE, "east=none","north=up","power=13","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_990 = new BlockState(NamespaceID.from("minecraft:redstone_wire:990"), (short) 3048, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_990 = new BlockState(NamespaceID.from("minecraft:redstone_wire:990"), (short) 3048, Block.REDSTONE_WIRE, "east=none","north=up","power=14","south=up","west=up");
 
-  public static final BlockState REDSTONE_WIRE_991 = new BlockState(NamespaceID.from("minecraft:redstone_wire:991"), (short) 3049, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_991 = new BlockState(NamespaceID.from("minecraft:redstone_wire:991"), (short) 3049, Block.REDSTONE_WIRE, "east=none","north=up","power=14","south=up","west=side");
 
-  public static final BlockState REDSTONE_WIRE_992 = new BlockState(NamespaceID.from("minecraft:redstone_wire:992"), (short) 3050, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_992 = new BlockState(NamespaceID.from("minecraft:redstone_wire:992"), (short) 3050, Block.REDSTONE_WIRE, "east=none","north=up","power=14","south=up","west=none");
 
-  public static final BlockState REDSTONE_WIRE_993 = new BlockState(NamespaceID.from("minecraft:redstone_wire:993"), (short) 3051, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_993 = new BlockState(NamespaceID.from("minecraft:redstone_wire:993"), (short) 3051, Block.REDSTONE_WIRE, "east=none","north=up","power=14","south=side","west=up");
 
-  public static final BlockState REDSTONE_WIRE_994 = new BlockState(NamespaceID.from("minecraft:redstone_wire:994"), (short) 3052, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_994 = new BlockState(NamespaceID.from("minecraft:redstone_wire:994"), (short) 3052, Block.REDSTONE_WIRE, "east=none","north=up","power=14","south=side","west=side");
 
-  public static final BlockState REDSTONE_WIRE_995 = new BlockState(NamespaceID.from("minecraft:redstone_wire:995"), (short) 3053, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_995 = new BlockState(NamespaceID.from("minecraft:redstone_wire:995"), (short) 3053, Block.REDSTONE_WIRE, "east=none","north=up","power=14","south=side","west=none");
 
-  public static final BlockState REDSTONE_WIRE_996 = new BlockState(NamespaceID.from("minecraft:redstone_wire:996"), (short) 3054, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_996 = new BlockState(NamespaceID.from("minecraft:redstone_wire:996"), (short) 3054, Block.REDSTONE_WIRE, "east=none","north=up","power=14","south=none","west=up");
 
-  public static final BlockState REDSTONE_WIRE_997 = new BlockState(NamespaceID.from("minecraft:redstone_wire:997"), (short) 3055, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_997 = new BlockState(NamespaceID.from("minecraft:redstone_wire:997"), (short) 3055, Block.REDSTONE_WIRE, "east=none","north=up","power=14","south=none","west=side");
 
-  public static final BlockState REDSTONE_WIRE_998 = new BlockState(NamespaceID.from("minecraft:redstone_wire:998"), (short) 3056, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_998 = new BlockState(NamespaceID.from("minecraft:redstone_wire:998"), (short) 3056, Block.REDSTONE_WIRE, "east=none","north=up","power=14","south=none","west=none");
 
-  public static final BlockState REDSTONE_WIRE_999 = new BlockState(NamespaceID.from("minecraft:redstone_wire:999"), (short) 3057, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1000 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1000"), (short) 3058, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1001 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1001"), (short) 3059, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1002 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1002"), (short) 3060, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1003 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1003"), (short) 3061, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1004 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1004"), (short) 3062, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1005 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1005"), (short) 3063, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1006 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1006"), (short) 3064, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1007 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1007"), (short) 3065, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1008 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1008"), (short) 3066, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1009 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1009"), (short) 3067, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1010 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1010"), (short) 3068, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1011 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1011"), (short) 3069, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1012 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1012"), (short) 3070, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1013 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1013"), (short) 3071, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1014 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1014"), (short) 3072, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1015 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1015"), (short) 3073, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1016 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1016"), (short) 3074, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1017 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1017"), (short) 3075, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1018 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1018"), (short) 3076, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1019 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1019"), (short) 3077, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1020 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1020"), (short) 3078, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1021 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1021"), (short) 3079, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1022 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1022"), (short) 3080, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1023 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1023"), (short) 3081, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1024 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1024"), (short) 3082, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1025 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1025"), (short) 3083, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1026 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1026"), (short) 3084, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1027 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1027"), (short) 3085, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1028 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1028"), (short) 3086, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1029 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1029"), (short) 3087, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1030 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1030"), (short) 3088, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1031 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1031"), (short) 3089, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1032 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1032"), (short) 3090, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1033 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1033"), (short) 3091, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1034 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1034"), (short) 3092, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1035 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1035"), (short) 3093, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1036 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1036"), (short) 3094, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1037 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1037"), (short) 3095, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1038 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1038"), (short) 3096, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1039 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1039"), (short) 3097, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1040 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1040"), (short) 3098, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1041 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1041"), (short) 3099, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1042 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1042"), (short) 3100, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1043 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1043"), (short) 3101, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1044 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1044"), (short) 3102, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1045 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1045"), (short) 3103, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1046 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1046"), (short) 3104, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1047 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1047"), (short) 3105, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1048 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1048"), (short) 3106, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1049 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1049"), (short) 3107, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1050 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1050"), (short) 3108, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1051 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1051"), (short) 3109, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1052 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1052"), (short) 3110, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1053 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1053"), (short) 3111, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1054 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1054"), (short) 3112, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1055 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1055"), (short) 3113, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1056 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1056"), (short) 3114, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1057 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1057"), (short) 3115, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1058 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1058"), (short) 3116, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1059 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1059"), (short) 3117, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1060 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1060"), (short) 3118, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1061 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1061"), (short) 3119, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1062 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1062"), (short) 3120, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1063 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1063"), (short) 3121, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1064 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1064"), (short) 3122, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1065 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1065"), (short) 3123, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1066 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1066"), (short) 3124, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1067 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1067"), (short) 3125, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1068 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1068"), (short) 3126, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1069 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1069"), (short) 3127, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1070 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1070"), (short) 3128, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1071 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1071"), (short) 3129, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1072 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1072"), (short) 3130, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1073 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1073"), (short) 3131, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1074 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1074"), (short) 3132, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1075 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1075"), (short) 3133, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1076 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1076"), (short) 3134, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1077 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1077"), (short) 3135, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1078 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1078"), (short) 3136, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1079 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1079"), (short) 3137, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1080 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1080"), (short) 3138, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1081 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1081"), (short) 3139, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1082 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1082"), (short) 3140, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1083 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1083"), (short) 3141, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1084 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1084"), (short) 3142, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1085 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1085"), (short) 3143, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1086 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1086"), (short) 3144, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1087 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1087"), (short) 3145, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1088 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1088"), (short) 3146, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1089 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1089"), (short) 3147, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1090 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1090"), (short) 3148, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1091 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1091"), (short) 3149, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1092 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1092"), (short) 3150, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1093 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1093"), (short) 3151, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1094 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1094"), (short) 3152, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1095 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1095"), (short) 3153, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1096 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1096"), (short) 3154, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1097 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1097"), (short) 3155, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1098 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1098"), (short) 3156, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1099 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1099"), (short) 3157, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1100 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1100"), (short) 3158, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1101 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1101"), (short) 3159, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1102 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1102"), (short) 3160, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1103 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1103"), (short) 3161, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1104 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1104"), (short) 3162, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1105 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1105"), (short) 3163, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1106 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1106"), (short) 3164, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1107 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1107"), (short) 3165, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1108 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1108"), (short) 3166, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1109 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1109"), (short) 3167, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1110 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1110"), (short) 3168, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1111 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1111"), (short) 3169, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1112 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1112"), (short) 3170, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1113 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1113"), (short) 3171, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1114 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1114"), (short) 3172, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1115 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1115"), (short) 3173, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1116 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1116"), (short) 3174, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1117 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1117"), (short) 3175, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1118 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1118"), (short) 3176, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1119 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1119"), (short) 3177, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1120 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1120"), (short) 3178, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1121 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1121"), (short) 3179, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1122 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1122"), (short) 3180, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1123 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1123"), (short) 3181, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1124 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1124"), (short) 3182, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1125 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1125"), (short) 3183, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1126 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1126"), (short) 3184, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1127 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1127"), (short) 3185, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1128 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1128"), (short) 3186, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1129 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1129"), (short) 3187, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1130 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1130"), (short) 3188, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1131 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1131"), (short) 3189, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1132 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1132"), (short) 3190, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1133 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1133"), (short) 3191, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1134 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1134"), (short) 3192, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1135 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1135"), (short) 3193, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1136 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1136"), (short) 3194, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1137 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1137"), (short) 3195, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1138 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1138"), (short) 3196, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1139 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1139"), (short) 3197, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1140 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1140"), (short) 3198, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1141 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1141"), (short) 3199, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1142 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1142"), (short) 3200, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1143 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1143"), (short) 3201, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1144 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1144"), (short) 3202, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1145 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1145"), (short) 3203, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1146 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1146"), (short) 3204, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1147 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1147"), (short) 3205, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1148 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1148"), (short) 3206, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1149 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1149"), (short) 3207, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1150 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1150"), (short) 3208, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1151 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1151"), (short) 3209, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1152 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1152"), (short) 3210, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1153 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1153"), (short) 3211, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1154 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1154"), (short) 3212, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1155 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1155"), (short) 3213, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1156 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1156"), (short) 3214, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1157 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1157"), (short) 3215, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1158 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1158"), (short) 3216, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1159 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1159"), (short) 3217, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1160 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1160"), (short) 3218, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1161 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1161"), (short) 3219, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1162 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1162"), (short) 3220, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1163 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1163"), (short) 3221, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1164 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1164"), (short) 3222, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1165 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1165"), (short) 3223, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1166 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1166"), (short) 3224, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1167 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1167"), (short) 3225, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1168 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1168"), (short) 3226, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1169 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1169"), (short) 3227, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1170 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1170"), (short) 3228, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1171 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1171"), (short) 3229, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1172 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1172"), (short) 3230, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1173 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1173"), (short) 3231, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1174 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1174"), (short) 3232, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1175 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1175"), (short) 3233, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1176 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1176"), (short) 3234, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1177 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1177"), (short) 3235, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1178 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1178"), (short) 3236, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1179 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1179"), (short) 3237, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1180 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1180"), (short) 3238, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1181 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1181"), (short) 3239, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1182 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1182"), (short) 3240, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1183 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1183"), (short) 3241, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1184 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1184"), (short) 3242, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1185 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1185"), (short) 3243, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1186 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1186"), (short) 3244, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1187 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1187"), (short) 3245, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1188 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1188"), (short) 3246, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1189 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1189"), (short) 3247, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1190 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1190"), (short) 3248, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1191 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1191"), (short) 3249, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1192 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1192"), (short) 3250, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1193 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1193"), (short) 3251, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1194 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1194"), (short) 3252, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1195 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1195"), (short) 3253, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1196 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1196"), (short) 3254, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1197 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1197"), (short) 3255, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1198 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1198"), (short) 3256, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1199 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1199"), (short) 3257, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1200 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1200"), (short) 3258, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1201 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1201"), (short) 3259, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1202 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1202"), (short) 3260, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1203 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1203"), (short) 3261, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1204 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1204"), (short) 3262, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1205 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1205"), (short) 3263, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1206 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1206"), (short) 3264, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1207 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1207"), (short) 3265, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1208 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1208"), (short) 3266, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1209 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1209"), (short) 3267, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1210 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1210"), (short) 3268, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1211 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1211"), (short) 3269, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1212 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1212"), (short) 3270, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1213 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1213"), (short) 3271, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1214 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1214"), (short) 3272, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1215 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1215"), (short) 3273, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1216 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1216"), (short) 3274, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1217 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1217"), (short) 3275, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1218 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1218"), (short) 3276, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1219 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1219"), (short) 3277, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1220 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1220"), (short) 3278, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1221 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1221"), (short) 3279, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1222 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1222"), (short) 3280, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1223 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1223"), (short) 3281, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1224 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1224"), (short) 3282, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1225 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1225"), (short) 3283, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1226 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1226"), (short) 3284, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1227 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1227"), (short) 3285, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1228 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1228"), (short) 3286, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1229 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1229"), (short) 3287, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1230 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1230"), (short) 3288, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1231 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1231"), (short) 3289, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1232 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1232"), (short) 3290, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1233 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1233"), (short) 3291, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1234 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1234"), (short) 3292, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1235 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1235"), (short) 3293, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1236 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1236"), (short) 3294, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1237 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1237"), (short) 3295, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1238 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1238"), (short) 3296, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1239 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1239"), (short) 3297, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1240 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1240"), (short) 3298, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1241 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1241"), (short) 3299, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1242 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1242"), (short) 3300, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1243 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1243"), (short) 3301, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1244 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1244"), (short) 3302, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1245 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1245"), (short) 3303, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1246 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1246"), (short) 3304, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1247 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1247"), (short) 3305, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1248 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1248"), (short) 3306, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1249 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1249"), (short) 3307, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1250 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1250"), (short) 3308, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1251 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1251"), (short) 3309, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1252 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1252"), (short) 3310, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1253 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1253"), (short) 3311, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1254 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1254"), (short) 3312, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1255 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1255"), (short) 3313, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1256 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1256"), (short) 3314, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1257 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1257"), (short) 3315, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1258 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1258"), (short) 3316, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1259 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1259"), (short) 3317, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1260 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1260"), (short) 3318, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1261 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1261"), (short) 3319, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1262 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1262"), (short) 3320, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1263 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1263"), (short) 3321, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1264 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1264"), (short) 3322, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1265 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1265"), (short) 3323, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1266 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1266"), (short) 3324, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1267 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1267"), (short) 3325, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1268 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1268"), (short) 3326, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1269 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1269"), (short) 3327, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1270 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1270"), (short) 3328, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1271 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1271"), (short) 3329, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1272 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1272"), (short) 3330, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1273 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1273"), (short) 3331, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1274 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1274"), (short) 3332, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1275 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1275"), (short) 3333, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1276 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1276"), (short) 3334, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1277 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1277"), (short) 3335, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1278 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1278"), (short) 3336, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1279 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1279"), (short) 3337, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1280 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1280"), (short) 3338, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1281 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1281"), (short) 3339, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1282 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1282"), (short) 3340, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1283 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1283"), (short) 3341, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1284 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1284"), (short) 3342, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1285 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1285"), (short) 3343, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1286 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1286"), (short) 3344, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1287 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1287"), (short) 3345, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1288 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1288"), (short) 3346, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1289 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1289"), (short) 3347, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1290 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1290"), (short) 3348, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1291 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1291"), (short) 3349, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1292 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1292"), (short) 3350, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1293 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1293"), (short) 3351, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1294 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1294"), (short) 3352, Block.REDSTONE_WIRE);
-
-  public static final BlockState REDSTONE_WIRE_1295 = new BlockState(NamespaceID.from("minecraft:redstone_wire:1295"), (short) 3353, Block.REDSTONE_WIRE);
+  public static final BlockState REDSTONE_WIRE_999 = new BlockState(NamespaceID.from("minecraft:redstone_wire:999"), (short) 3057, Block.REDSTONE_WIRE, "east=none","north=up","power=15","south=up","west=up");
 
   public static void initStates() {
     Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_0);
@@ -3606,301 +3014,5 @@ public final class RedstoneWire {
     Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_997);
     Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_998);
     Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_999);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1000);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1001);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1002);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1003);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1004);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1005);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1006);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1007);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1008);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1009);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1010);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1011);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1012);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1013);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1014);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1015);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1016);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1017);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1018);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1019);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1020);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1021);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1022);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1023);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1024);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1025);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1026);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1027);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1028);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1029);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1030);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1031);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1032);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1033);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1034);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1035);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1036);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1037);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1038);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1039);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1040);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1041);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1042);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1043);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1044);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1045);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1046);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1047);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1048);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1049);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1050);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1051);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1052);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1053);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1054);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1055);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1056);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1057);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1058);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1059);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1060);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1061);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1062);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1063);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1064);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1065);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1066);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1067);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1068);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1069);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1070);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1071);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1072);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1073);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1074);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1075);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1076);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1077);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1078);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1079);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1080);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1081);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1082);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1083);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1084);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1085);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1086);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1087);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1088);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1089);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1090);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1091);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1092);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1093);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1094);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1095);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1096);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1097);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1098);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1099);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1100);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1101);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1102);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1103);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1104);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1105);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1106);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1107);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1108);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1109);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1110);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1111);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1112);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1113);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1114);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1115);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1116);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1117);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1118);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1119);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1120);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1121);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1122);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1123);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1124);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1125);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1126);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1127);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1128);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1129);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1130);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1131);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1132);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1133);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1134);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1135);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1136);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1137);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1138);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1139);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1140);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1141);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1142);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1143);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1144);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1145);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1146);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1147);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1148);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1149);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1150);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1151);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1152);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1153);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1154);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1155);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1156);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1157);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1158);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1159);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1160);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1161);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1162);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1163);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1164);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1165);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1166);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1167);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1168);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1169);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1170);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1171);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1172);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1173);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1174);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1175);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1176);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1177);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1178);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1179);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1180);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1181);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1182);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1183);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1184);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1185);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1186);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1187);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1188);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1189);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1190);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1191);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1192);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1193);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1194);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1195);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1196);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1197);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1198);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1199);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1200);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1201);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1202);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1203);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1204);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1205);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1206);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1207);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1208);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1209);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1210);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1211);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1212);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1213);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1214);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1215);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1216);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1217);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1218);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1219);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1220);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1221);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1222);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1223);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1224);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1225);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1226);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1227);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1228);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1229);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1230);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1231);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1232);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1233);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1234);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1235);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1236);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1237);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1238);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1239);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1240);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1241);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1242);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1243);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1244);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1245);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1246);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1247);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1248);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1249);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1250);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1251);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1252);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1253);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1254);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1255);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1256);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1257);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1258);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1259);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1260);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1261);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1262);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1263);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1264);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1265);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1266);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1267);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1268);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1269);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1270);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1271);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1272);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1273);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1274);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1275);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1276);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1277);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1278);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1279);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1280);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1281);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1282);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1283);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1284);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1285);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1286);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1287);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1288);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1289);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1290);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1291);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1292);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1293);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1294);
-    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1295);
   }
 }

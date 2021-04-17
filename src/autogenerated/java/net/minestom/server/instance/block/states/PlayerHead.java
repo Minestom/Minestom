@@ -13,37 +13,37 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PlayerHead {
-  public static final BlockState PLAYER_HEAD_0 = new BlockState(NamespaceID.from("minecraft:player_head:0"), (short) 6554, Block.PLAYER_HEAD);
+  public static final BlockState PLAYER_HEAD_0 = new BlockState(NamespaceID.from("minecraft:player_head:0"), (short) 6554, Block.PLAYER_HEAD, "rotation=0");
 
-  public static final BlockState PLAYER_HEAD_1 = new BlockState(NamespaceID.from("minecraft:player_head:1"), (short) 6555, Block.PLAYER_HEAD);
+  public static final BlockState PLAYER_HEAD_1 = new BlockState(NamespaceID.from("minecraft:player_head:1"), (short) 6555, Block.PLAYER_HEAD, "rotation=1");
 
-  public static final BlockState PLAYER_HEAD_2 = new BlockState(NamespaceID.from("minecraft:player_head:2"), (short) 6556, Block.PLAYER_HEAD);
+  public static final BlockState PLAYER_HEAD_2 = new BlockState(NamespaceID.from("minecraft:player_head:2"), (short) 6556, Block.PLAYER_HEAD, "rotation=2");
 
-  public static final BlockState PLAYER_HEAD_3 = new BlockState(NamespaceID.from("minecraft:player_head:3"), (short) 6557, Block.PLAYER_HEAD);
+  public static final BlockState PLAYER_HEAD_3 = new BlockState(NamespaceID.from("minecraft:player_head:3"), (short) 6557, Block.PLAYER_HEAD, "rotation=3");
 
-  public static final BlockState PLAYER_HEAD_4 = new BlockState(NamespaceID.from("minecraft:player_head:4"), (short) 6558, Block.PLAYER_HEAD);
+  public static final BlockState PLAYER_HEAD_4 = new BlockState(NamespaceID.from("minecraft:player_head:4"), (short) 6558, Block.PLAYER_HEAD, "rotation=4");
 
-  public static final BlockState PLAYER_HEAD_5 = new BlockState(NamespaceID.from("minecraft:player_head:5"), (short) 6559, Block.PLAYER_HEAD);
+  public static final BlockState PLAYER_HEAD_5 = new BlockState(NamespaceID.from("minecraft:player_head:5"), (short) 6559, Block.PLAYER_HEAD, "rotation=5");
 
-  public static final BlockState PLAYER_HEAD_6 = new BlockState(NamespaceID.from("minecraft:player_head:6"), (short) 6560, Block.PLAYER_HEAD);
+  public static final BlockState PLAYER_HEAD_6 = new BlockState(NamespaceID.from("minecraft:player_head:6"), (short) 6560, Block.PLAYER_HEAD, "rotation=6");
 
-  public static final BlockState PLAYER_HEAD_7 = new BlockState(NamespaceID.from("minecraft:player_head:7"), (short) 6561, Block.PLAYER_HEAD);
+  public static final BlockState PLAYER_HEAD_7 = new BlockState(NamespaceID.from("minecraft:player_head:7"), (short) 6561, Block.PLAYER_HEAD, "rotation=7");
 
-  public static final BlockState PLAYER_HEAD_8 = new BlockState(NamespaceID.from("minecraft:player_head:8"), (short) 6562, Block.PLAYER_HEAD);
+  public static final BlockState PLAYER_HEAD_8 = new BlockState(NamespaceID.from("minecraft:player_head:8"), (short) 6562, Block.PLAYER_HEAD, "rotation=8");
 
-  public static final BlockState PLAYER_HEAD_9 = new BlockState(NamespaceID.from("minecraft:player_head:9"), (short) 6563, Block.PLAYER_HEAD);
+  public static final BlockState PLAYER_HEAD_9 = new BlockState(NamespaceID.from("minecraft:player_head:9"), (short) 6563, Block.PLAYER_HEAD, "rotation=9");
 
-  public static final BlockState PLAYER_HEAD_10 = new BlockState(NamespaceID.from("minecraft:player_head:10"), (short) 6564, Block.PLAYER_HEAD);
+  public static final BlockState PLAYER_HEAD_10 = new BlockState(NamespaceID.from("minecraft:player_head:10"), (short) 6564, Block.PLAYER_HEAD, "rotation=10");
 
-  public static final BlockState PLAYER_HEAD_11 = new BlockState(NamespaceID.from("minecraft:player_head:11"), (short) 6565, Block.PLAYER_HEAD);
+  public static final BlockState PLAYER_HEAD_11 = new BlockState(NamespaceID.from("minecraft:player_head:11"), (short) 6565, Block.PLAYER_HEAD, "rotation=11");
 
-  public static final BlockState PLAYER_HEAD_12 = new BlockState(NamespaceID.from("minecraft:player_head:12"), (short) 6566, Block.PLAYER_HEAD);
+  public static final BlockState PLAYER_HEAD_12 = new BlockState(NamespaceID.from("minecraft:player_head:12"), (short) 6566, Block.PLAYER_HEAD, "rotation=12");
 
-  public static final BlockState PLAYER_HEAD_13 = new BlockState(NamespaceID.from("minecraft:player_head:13"), (short) 6567, Block.PLAYER_HEAD);
+  public static final BlockState PLAYER_HEAD_13 = new BlockState(NamespaceID.from("minecraft:player_head:13"), (short) 6567, Block.PLAYER_HEAD, "rotation=13");
 
-  public static final BlockState PLAYER_HEAD_14 = new BlockState(NamespaceID.from("minecraft:player_head:14"), (short) 6568, Block.PLAYER_HEAD);
+  public static final BlockState PLAYER_HEAD_14 = new BlockState(NamespaceID.from("minecraft:player_head:14"), (short) 6568, Block.PLAYER_HEAD, "rotation=14");
 
-  public static final BlockState PLAYER_HEAD_15 = new BlockState(NamespaceID.from("minecraft:player_head:15"), (short) 6569, Block.PLAYER_HEAD);
+  public static final BlockState PLAYER_HEAD_15 = new BlockState(NamespaceID.from("minecraft:player_head:15"), (short) 6569, Block.PLAYER_HEAD, "rotation=15");
 
   public static void initStates() {
     Block.PLAYER_HEAD.addBlockState(PLAYER_HEAD_0);

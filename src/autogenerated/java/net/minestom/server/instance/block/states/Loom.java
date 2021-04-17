@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Loom {
-  public static final BlockState LOOM_0 = new BlockState(NamespaceID.from("minecraft:loom:0"), (short) 14791, Block.LOOM);
+  public static final BlockState LOOM_0 = new BlockState(NamespaceID.from("minecraft:loom:0"), (short) 14791, Block.LOOM, "facing=north");
 
-  public static final BlockState LOOM_1 = new BlockState(NamespaceID.from("minecraft:loom:1"), (short) 14792, Block.LOOM);
+  public static final BlockState LOOM_1 = new BlockState(NamespaceID.from("minecraft:loom:1"), (short) 14792, Block.LOOM, "facing=south");
 
-  public static final BlockState LOOM_2 = new BlockState(NamespaceID.from("minecraft:loom:2"), (short) 14793, Block.LOOM);
+  public static final BlockState LOOM_2 = new BlockState(NamespaceID.from("minecraft:loom:2"), (short) 14793, Block.LOOM, "facing=west");
 
-  public static final BlockState LOOM_3 = new BlockState(NamespaceID.from("minecraft:loom:3"), (short) 14794, Block.LOOM);
+  public static final BlockState LOOM_3 = new BlockState(NamespaceID.from("minecraft:loom:3"), (short) 14794, Block.LOOM, "facing=east");
 
   public static void initStates() {
     Block.LOOM.addBlockState(LOOM_0);

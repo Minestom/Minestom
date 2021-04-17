@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SoulWallTorch {
-  public static final BlockState SOUL_WALL_TORCH_0 = new BlockState(NamespaceID.from("minecraft:soul_wall_torch:0"), (short) 4009, Block.SOUL_WALL_TORCH);
+  public static final BlockState SOUL_WALL_TORCH_0 = new BlockState(NamespaceID.from("minecraft:soul_wall_torch:0"), (short) 4009, Block.SOUL_WALL_TORCH, "facing=north");
 
-  public static final BlockState SOUL_WALL_TORCH_1 = new BlockState(NamespaceID.from("minecraft:soul_wall_torch:1"), (short) 4010, Block.SOUL_WALL_TORCH);
+  public static final BlockState SOUL_WALL_TORCH_1 = new BlockState(NamespaceID.from("minecraft:soul_wall_torch:1"), (short) 4010, Block.SOUL_WALL_TORCH, "facing=south");
 
-  public static final BlockState SOUL_WALL_TORCH_2 = new BlockState(NamespaceID.from("minecraft:soul_wall_torch:2"), (short) 4011, Block.SOUL_WALL_TORCH);
+  public static final BlockState SOUL_WALL_TORCH_2 = new BlockState(NamespaceID.from("minecraft:soul_wall_torch:2"), (short) 4011, Block.SOUL_WALL_TORCH, "facing=west");
 
-  public static final BlockState SOUL_WALL_TORCH_3 = new BlockState(NamespaceID.from("minecraft:soul_wall_torch:3"), (short) 4012, Block.SOUL_WALL_TORCH);
+  public static final BlockState SOUL_WALL_TORCH_3 = new BlockState(NamespaceID.from("minecraft:soul_wall_torch:3"), (short) 4012, Block.SOUL_WALL_TORCH, "facing=east");
 
   public static void initStates() {
     Block.SOUL_WALL_TORCH.addBlockState(SOUL_WALL_TORCH_0);

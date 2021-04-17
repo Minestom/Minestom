@@ -13,165 +13,165 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SmoothQuartzStairs {
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:0"), (short) 10313, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:0"), (short) 10313, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:1"), (short) 10314, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:1"), (short) 10314, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:2"), (short) 10315, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:2"), (short) 10315, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:3"), (short) 10316, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:3"), (short) 10316, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:4"), (short) 10317, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:4"), (short) 10317, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:5"), (short) 10318, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:5"), (short) 10318, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:6"), (short) 10319, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:6"), (short) 10319, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:7"), (short) 10320, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:7"), (short) 10320, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:8"), (short) 10321, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:8"), (short) 10321, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:9"), (short) 10322, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:9"), (short) 10322, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:10"), (short) 10323, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:10"), (short) 10323, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:11"), (short) 10324, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:11"), (short) 10324, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:12"), (short) 10325, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:12"), (short) 10325, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:13"), (short) 10326, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:13"), (short) 10326, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:14"), (short) 10327, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:14"), (short) 10327, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:15"), (short) 10328, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:15"), (short) 10328, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:16"), (short) 10329, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:16"), (short) 10329, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:17"), (short) 10330, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:17"), (short) 10330, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:18"), (short) 10331, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:18"), (short) 10331, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:19"), (short) 10332, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:19"), (short) 10332, Block.SMOOTH_QUARTZ_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:20"), (short) 10333, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:20"), (short) 10333, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:21"), (short) 10334, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:21"), (short) 10334, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:22"), (short) 10335, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:22"), (short) 10335, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:23"), (short) 10336, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:23"), (short) 10336, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:24"), (short) 10337, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:24"), (short) 10337, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:25"), (short) 10338, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:25"), (short) 10338, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:26"), (short) 10339, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:26"), (short) 10339, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:27"), (short) 10340, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:27"), (short) 10340, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:28"), (short) 10341, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:28"), (short) 10341, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:29"), (short) 10342, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:29"), (short) 10342, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:30"), (short) 10343, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:30"), (short) 10343, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:31"), (short) 10344, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:31"), (short) 10344, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:32"), (short) 10345, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:32"), (short) 10345, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:33"), (short) 10346, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:33"), (short) 10346, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:34"), (short) 10347, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:34"), (short) 10347, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:35"), (short) 10348, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:35"), (short) 10348, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:36"), (short) 10349, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:36"), (short) 10349, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:37"), (short) 10350, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:37"), (short) 10350, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:38"), (short) 10351, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:38"), (short) 10351, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:39"), (short) 10352, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:39"), (short) 10352, Block.SMOOTH_QUARTZ_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:40"), (short) 10353, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:40"), (short) 10353, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:41"), (short) 10354, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:41"), (short) 10354, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:42"), (short) 10355, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:42"), (short) 10355, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:43"), (short) 10356, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:43"), (short) 10356, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:44"), (short) 10357, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:44"), (short) 10357, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:45"), (short) 10358, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:45"), (short) 10358, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:46"), (short) 10359, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:46"), (short) 10359, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:47"), (short) 10360, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:47"), (short) 10360, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:48"), (short) 10361, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:48"), (short) 10361, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:49"), (short) 10362, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:49"), (short) 10362, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:50"), (short) 10363, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:50"), (short) 10363, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:51"), (short) 10364, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:51"), (short) 10364, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:52"), (short) 10365, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:52"), (short) 10365, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:53"), (short) 10366, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:53"), (short) 10366, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:54"), (short) 10367, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:54"), (short) 10367, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:55"), (short) 10368, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:55"), (short) 10368, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:56"), (short) 10369, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:56"), (short) 10369, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:57"), (short) 10370, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:57"), (short) 10370, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:58"), (short) 10371, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:58"), (short) 10371, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:59"), (short) 10372, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:59"), (short) 10372, Block.SMOOTH_QUARTZ_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:60"), (short) 10373, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:60"), (short) 10373, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:61"), (short) 10374, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:61"), (short) 10374, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:62"), (short) 10375, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:62"), (short) 10375, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:63"), (short) 10376, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:63"), (short) 10376, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:64"), (short) 10377, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:64"), (short) 10377, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:65"), (short) 10378, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:65"), (short) 10378, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:66"), (short) 10379, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:66"), (short) 10379, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:67"), (short) 10380, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:67"), (short) 10380, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:68"), (short) 10381, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:68"), (short) 10381, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:69"), (short) 10382, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:69"), (short) 10382, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:70"), (short) 10383, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:70"), (short) 10383, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:71"), (short) 10384, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:71"), (short) 10384, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:72"), (short) 10385, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:72"), (short) 10385, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:73"), (short) 10386, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:73"), (short) 10386, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:74"), (short) 10387, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:74"), (short) 10387, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:75"), (short) 10388, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:75"), (short) 10388, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:76"), (short) 10389, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:76"), (short) 10389, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:77"), (short) 10390, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:77"), (short) 10390, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:78"), (short) 10391, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:78"), (short) 10391, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState SMOOTH_QUARTZ_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:79"), (short) 10392, Block.SMOOTH_QUARTZ_STAIRS);
+  public static final BlockState SMOOTH_QUARTZ_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_stairs:79"), (short) 10392, Block.SMOOTH_QUARTZ_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
 
   public static void initStates() {
     Block.SMOOTH_QUARTZ_STAIRS.addBlockState(SMOOTH_QUARTZ_STAIRS_0);

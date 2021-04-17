@@ -13,17 +13,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class YellowShulkerBox {
-  public static final BlockState YELLOW_SHULKER_BOX_0 = new BlockState(NamespaceID.from("minecraft:yellow_shulker_box:0"), (short) 9306, Block.YELLOW_SHULKER_BOX);
+  public static final BlockState YELLOW_SHULKER_BOX_0 = new BlockState(NamespaceID.from("minecraft:yellow_shulker_box:0"), (short) 9306, Block.YELLOW_SHULKER_BOX, "facing=north");
 
-  public static final BlockState YELLOW_SHULKER_BOX_1 = new BlockState(NamespaceID.from("minecraft:yellow_shulker_box:1"), (short) 9307, Block.YELLOW_SHULKER_BOX);
+  public static final BlockState YELLOW_SHULKER_BOX_1 = new BlockState(NamespaceID.from("minecraft:yellow_shulker_box:1"), (short) 9307, Block.YELLOW_SHULKER_BOX, "facing=east");
 
-  public static final BlockState YELLOW_SHULKER_BOX_2 = new BlockState(NamespaceID.from("minecraft:yellow_shulker_box:2"), (short) 9308, Block.YELLOW_SHULKER_BOX);
+  public static final BlockState YELLOW_SHULKER_BOX_2 = new BlockState(NamespaceID.from("minecraft:yellow_shulker_box:2"), (short) 9308, Block.YELLOW_SHULKER_BOX, "facing=south");
 
-  public static final BlockState YELLOW_SHULKER_BOX_3 = new BlockState(NamespaceID.from("minecraft:yellow_shulker_box:3"), (short) 9309, Block.YELLOW_SHULKER_BOX);
+  public static final BlockState YELLOW_SHULKER_BOX_3 = new BlockState(NamespaceID.from("minecraft:yellow_shulker_box:3"), (short) 9309, Block.YELLOW_SHULKER_BOX, "facing=west");
 
-  public static final BlockState YELLOW_SHULKER_BOX_4 = new BlockState(NamespaceID.from("minecraft:yellow_shulker_box:4"), (short) 9310, Block.YELLOW_SHULKER_BOX);
+  public static final BlockState YELLOW_SHULKER_BOX_4 = new BlockState(NamespaceID.from("minecraft:yellow_shulker_box:4"), (short) 9310, Block.YELLOW_SHULKER_BOX, "facing=up");
 
-  public static final BlockState YELLOW_SHULKER_BOX_5 = new BlockState(NamespaceID.from("minecraft:yellow_shulker_box:5"), (short) 9311, Block.YELLOW_SHULKER_BOX);
+  public static final BlockState YELLOW_SHULKER_BOX_5 = new BlockState(NamespaceID.from("minecraft:yellow_shulker_box:5"), (short) 9311, Block.YELLOW_SHULKER_BOX, "facing=down");
 
   public static void initStates() {
     Block.YELLOW_SHULKER_BOX.addBlockState(YELLOW_SHULKER_BOX_0);

@@ -13,653 +13,653 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class GraniteWall {
-  public static final BlockState GRANITE_WALL_0 = new BlockState(NamespaceID.from("minecraft:granite_wall:0"), (short) 12167, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_0 = new BlockState(NamespaceID.from("minecraft:granite_wall:0"), (short) 12167, Block.GRANITE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_1 = new BlockState(NamespaceID.from("minecraft:granite_wall:1"), (short) 12168, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_1 = new BlockState(NamespaceID.from("minecraft:granite_wall:1"), (short) 12168, Block.GRANITE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_2 = new BlockState(NamespaceID.from("minecraft:granite_wall:2"), (short) 12169, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_2 = new BlockState(NamespaceID.from("minecraft:granite_wall:2"), (short) 12169, Block.GRANITE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_3 = new BlockState(NamespaceID.from("minecraft:granite_wall:3"), (short) 12170, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_3 = new BlockState(NamespaceID.from("minecraft:granite_wall:3"), (short) 12170, Block.GRANITE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_4 = new BlockState(NamespaceID.from("minecraft:granite_wall:4"), (short) 12171, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_4 = new BlockState(NamespaceID.from("minecraft:granite_wall:4"), (short) 12171, Block.GRANITE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_5 = new BlockState(NamespaceID.from("minecraft:granite_wall:5"), (short) 12172, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_5 = new BlockState(NamespaceID.from("minecraft:granite_wall:5"), (short) 12172, Block.GRANITE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_6 = new BlockState(NamespaceID.from("minecraft:granite_wall:6"), (short) 12173, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_6 = new BlockState(NamespaceID.from("minecraft:granite_wall:6"), (short) 12173, Block.GRANITE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_7 = new BlockState(NamespaceID.from("minecraft:granite_wall:7"), (short) 12174, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_7 = new BlockState(NamespaceID.from("minecraft:granite_wall:7"), (short) 12174, Block.GRANITE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_8 = new BlockState(NamespaceID.from("minecraft:granite_wall:8"), (short) 12175, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_8 = new BlockState(NamespaceID.from("minecraft:granite_wall:8"), (short) 12175, Block.GRANITE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_9 = new BlockState(NamespaceID.from("minecraft:granite_wall:9"), (short) 12176, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_9 = new BlockState(NamespaceID.from("minecraft:granite_wall:9"), (short) 12176, Block.GRANITE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_10 = new BlockState(NamespaceID.from("minecraft:granite_wall:10"), (short) 12177, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_10 = new BlockState(NamespaceID.from("minecraft:granite_wall:10"), (short) 12177, Block.GRANITE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_11 = new BlockState(NamespaceID.from("minecraft:granite_wall:11"), (short) 12178, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_11 = new BlockState(NamespaceID.from("minecraft:granite_wall:11"), (short) 12178, Block.GRANITE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_12 = new BlockState(NamespaceID.from("minecraft:granite_wall:12"), (short) 12179, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_12 = new BlockState(NamespaceID.from("minecraft:granite_wall:12"), (short) 12179, Block.GRANITE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_13 = new BlockState(NamespaceID.from("minecraft:granite_wall:13"), (short) 12180, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_13 = new BlockState(NamespaceID.from("minecraft:granite_wall:13"), (short) 12180, Block.GRANITE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_14 = new BlockState(NamespaceID.from("minecraft:granite_wall:14"), (short) 12181, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_14 = new BlockState(NamespaceID.from("minecraft:granite_wall:14"), (short) 12181, Block.GRANITE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_15 = new BlockState(NamespaceID.from("minecraft:granite_wall:15"), (short) 12182, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_15 = new BlockState(NamespaceID.from("minecraft:granite_wall:15"), (short) 12182, Block.GRANITE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_16 = new BlockState(NamespaceID.from("minecraft:granite_wall:16"), (short) 12183, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_16 = new BlockState(NamespaceID.from("minecraft:granite_wall:16"), (short) 12183, Block.GRANITE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_17 = new BlockState(NamespaceID.from("minecraft:granite_wall:17"), (short) 12184, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_17 = new BlockState(NamespaceID.from("minecraft:granite_wall:17"), (short) 12184, Block.GRANITE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_18 = new BlockState(NamespaceID.from("minecraft:granite_wall:18"), (short) 12185, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_18 = new BlockState(NamespaceID.from("minecraft:granite_wall:18"), (short) 12185, Block.GRANITE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_19 = new BlockState(NamespaceID.from("minecraft:granite_wall:19"), (short) 12186, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_19 = new BlockState(NamespaceID.from("minecraft:granite_wall:19"), (short) 12186, Block.GRANITE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_20 = new BlockState(NamespaceID.from("minecraft:granite_wall:20"), (short) 12187, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_20 = new BlockState(NamespaceID.from("minecraft:granite_wall:20"), (short) 12187, Block.GRANITE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_21 = new BlockState(NamespaceID.from("minecraft:granite_wall:21"), (short) 12188, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_21 = new BlockState(NamespaceID.from("minecraft:granite_wall:21"), (short) 12188, Block.GRANITE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_22 = new BlockState(NamespaceID.from("minecraft:granite_wall:22"), (short) 12189, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_22 = new BlockState(NamespaceID.from("minecraft:granite_wall:22"), (short) 12189, Block.GRANITE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_23 = new BlockState(NamespaceID.from("minecraft:granite_wall:23"), (short) 12190, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_23 = new BlockState(NamespaceID.from("minecraft:granite_wall:23"), (short) 12190, Block.GRANITE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_24 = new BlockState(NamespaceID.from("minecraft:granite_wall:24"), (short) 12191, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_24 = new BlockState(NamespaceID.from("minecraft:granite_wall:24"), (short) 12191, Block.GRANITE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_25 = new BlockState(NamespaceID.from("minecraft:granite_wall:25"), (short) 12192, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_25 = new BlockState(NamespaceID.from("minecraft:granite_wall:25"), (short) 12192, Block.GRANITE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_26 = new BlockState(NamespaceID.from("minecraft:granite_wall:26"), (short) 12193, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_26 = new BlockState(NamespaceID.from("minecraft:granite_wall:26"), (short) 12193, Block.GRANITE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_27 = new BlockState(NamespaceID.from("minecraft:granite_wall:27"), (short) 12194, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_27 = new BlockState(NamespaceID.from("minecraft:granite_wall:27"), (short) 12194, Block.GRANITE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_28 = new BlockState(NamespaceID.from("minecraft:granite_wall:28"), (short) 12195, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_28 = new BlockState(NamespaceID.from("minecraft:granite_wall:28"), (short) 12195, Block.GRANITE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_29 = new BlockState(NamespaceID.from("minecraft:granite_wall:29"), (short) 12196, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_29 = new BlockState(NamespaceID.from("minecraft:granite_wall:29"), (short) 12196, Block.GRANITE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_30 = new BlockState(NamespaceID.from("minecraft:granite_wall:30"), (short) 12197, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_30 = new BlockState(NamespaceID.from("minecraft:granite_wall:30"), (short) 12197, Block.GRANITE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_31 = new BlockState(NamespaceID.from("minecraft:granite_wall:31"), (short) 12198, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_31 = new BlockState(NamespaceID.from("minecraft:granite_wall:31"), (short) 12198, Block.GRANITE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_32 = new BlockState(NamespaceID.from("minecraft:granite_wall:32"), (short) 12199, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_32 = new BlockState(NamespaceID.from("minecraft:granite_wall:32"), (short) 12199, Block.GRANITE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_33 = new BlockState(NamespaceID.from("minecraft:granite_wall:33"), (short) 12200, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_33 = new BlockState(NamespaceID.from("minecraft:granite_wall:33"), (short) 12200, Block.GRANITE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_34 = new BlockState(NamespaceID.from("minecraft:granite_wall:34"), (short) 12201, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_34 = new BlockState(NamespaceID.from("minecraft:granite_wall:34"), (short) 12201, Block.GRANITE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_35 = new BlockState(NamespaceID.from("minecraft:granite_wall:35"), (short) 12202, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_35 = new BlockState(NamespaceID.from("minecraft:granite_wall:35"), (short) 12202, Block.GRANITE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_36 = new BlockState(NamespaceID.from("minecraft:granite_wall:36"), (short) 12203, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_36 = new BlockState(NamespaceID.from("minecraft:granite_wall:36"), (short) 12203, Block.GRANITE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_37 = new BlockState(NamespaceID.from("minecraft:granite_wall:37"), (short) 12204, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_37 = new BlockState(NamespaceID.from("minecraft:granite_wall:37"), (short) 12204, Block.GRANITE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_38 = new BlockState(NamespaceID.from("minecraft:granite_wall:38"), (short) 12205, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_38 = new BlockState(NamespaceID.from("minecraft:granite_wall:38"), (short) 12205, Block.GRANITE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_39 = new BlockState(NamespaceID.from("minecraft:granite_wall:39"), (short) 12206, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_39 = new BlockState(NamespaceID.from("minecraft:granite_wall:39"), (short) 12206, Block.GRANITE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_40 = new BlockState(NamespaceID.from("minecraft:granite_wall:40"), (short) 12207, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_40 = new BlockState(NamespaceID.from("minecraft:granite_wall:40"), (short) 12207, Block.GRANITE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_41 = new BlockState(NamespaceID.from("minecraft:granite_wall:41"), (short) 12208, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_41 = new BlockState(NamespaceID.from("minecraft:granite_wall:41"), (short) 12208, Block.GRANITE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_42 = new BlockState(NamespaceID.from("minecraft:granite_wall:42"), (short) 12209, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_42 = new BlockState(NamespaceID.from("minecraft:granite_wall:42"), (short) 12209, Block.GRANITE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_43 = new BlockState(NamespaceID.from("minecraft:granite_wall:43"), (short) 12210, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_43 = new BlockState(NamespaceID.from("minecraft:granite_wall:43"), (short) 12210, Block.GRANITE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_44 = new BlockState(NamespaceID.from("minecraft:granite_wall:44"), (short) 12211, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_44 = new BlockState(NamespaceID.from("minecraft:granite_wall:44"), (short) 12211, Block.GRANITE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_45 = new BlockState(NamespaceID.from("minecraft:granite_wall:45"), (short) 12212, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_45 = new BlockState(NamespaceID.from("minecraft:granite_wall:45"), (short) 12212, Block.GRANITE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_46 = new BlockState(NamespaceID.from("minecraft:granite_wall:46"), (short) 12213, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_46 = new BlockState(NamespaceID.from("minecraft:granite_wall:46"), (short) 12213, Block.GRANITE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_47 = new BlockState(NamespaceID.from("minecraft:granite_wall:47"), (short) 12214, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_47 = new BlockState(NamespaceID.from("minecraft:granite_wall:47"), (short) 12214, Block.GRANITE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_48 = new BlockState(NamespaceID.from("minecraft:granite_wall:48"), (short) 12215, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_48 = new BlockState(NamespaceID.from("minecraft:granite_wall:48"), (short) 12215, Block.GRANITE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_49 = new BlockState(NamespaceID.from("minecraft:granite_wall:49"), (short) 12216, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_49 = new BlockState(NamespaceID.from("minecraft:granite_wall:49"), (short) 12216, Block.GRANITE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_50 = new BlockState(NamespaceID.from("minecraft:granite_wall:50"), (short) 12217, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_50 = new BlockState(NamespaceID.from("minecraft:granite_wall:50"), (short) 12217, Block.GRANITE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_51 = new BlockState(NamespaceID.from("minecraft:granite_wall:51"), (short) 12218, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_51 = new BlockState(NamespaceID.from("minecraft:granite_wall:51"), (short) 12218, Block.GRANITE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_52 = new BlockState(NamespaceID.from("minecraft:granite_wall:52"), (short) 12219, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_52 = new BlockState(NamespaceID.from("minecraft:granite_wall:52"), (short) 12219, Block.GRANITE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_53 = new BlockState(NamespaceID.from("minecraft:granite_wall:53"), (short) 12220, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_53 = new BlockState(NamespaceID.from("minecraft:granite_wall:53"), (short) 12220, Block.GRANITE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_54 = new BlockState(NamespaceID.from("minecraft:granite_wall:54"), (short) 12221, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_54 = new BlockState(NamespaceID.from("minecraft:granite_wall:54"), (short) 12221, Block.GRANITE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_55 = new BlockState(NamespaceID.from("minecraft:granite_wall:55"), (short) 12222, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_55 = new BlockState(NamespaceID.from("minecraft:granite_wall:55"), (short) 12222, Block.GRANITE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_56 = new BlockState(NamespaceID.from("minecraft:granite_wall:56"), (short) 12223, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_56 = new BlockState(NamespaceID.from("minecraft:granite_wall:56"), (short) 12223, Block.GRANITE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_57 = new BlockState(NamespaceID.from("minecraft:granite_wall:57"), (short) 12224, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_57 = new BlockState(NamespaceID.from("minecraft:granite_wall:57"), (short) 12224, Block.GRANITE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_58 = new BlockState(NamespaceID.from("minecraft:granite_wall:58"), (short) 12225, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_58 = new BlockState(NamespaceID.from("minecraft:granite_wall:58"), (short) 12225, Block.GRANITE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_59 = new BlockState(NamespaceID.from("minecraft:granite_wall:59"), (short) 12226, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_59 = new BlockState(NamespaceID.from("minecraft:granite_wall:59"), (short) 12226, Block.GRANITE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_60 = new BlockState(NamespaceID.from("minecraft:granite_wall:60"), (short) 12227, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_60 = new BlockState(NamespaceID.from("minecraft:granite_wall:60"), (short) 12227, Block.GRANITE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_61 = new BlockState(NamespaceID.from("minecraft:granite_wall:61"), (short) 12228, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_61 = new BlockState(NamespaceID.from("minecraft:granite_wall:61"), (short) 12228, Block.GRANITE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_62 = new BlockState(NamespaceID.from("minecraft:granite_wall:62"), (short) 12229, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_62 = new BlockState(NamespaceID.from("minecraft:granite_wall:62"), (short) 12229, Block.GRANITE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_63 = new BlockState(NamespaceID.from("minecraft:granite_wall:63"), (short) 12230, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_63 = new BlockState(NamespaceID.from("minecraft:granite_wall:63"), (short) 12230, Block.GRANITE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_64 = new BlockState(NamespaceID.from("minecraft:granite_wall:64"), (short) 12231, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_64 = new BlockState(NamespaceID.from("minecraft:granite_wall:64"), (short) 12231, Block.GRANITE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_65 = new BlockState(NamespaceID.from("minecraft:granite_wall:65"), (short) 12232, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_65 = new BlockState(NamespaceID.from("minecraft:granite_wall:65"), (short) 12232, Block.GRANITE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_66 = new BlockState(NamespaceID.from("minecraft:granite_wall:66"), (short) 12233, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_66 = new BlockState(NamespaceID.from("minecraft:granite_wall:66"), (short) 12233, Block.GRANITE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_67 = new BlockState(NamespaceID.from("minecraft:granite_wall:67"), (short) 12234, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_67 = new BlockState(NamespaceID.from("minecraft:granite_wall:67"), (short) 12234, Block.GRANITE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_68 = new BlockState(NamespaceID.from("minecraft:granite_wall:68"), (short) 12235, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_68 = new BlockState(NamespaceID.from("minecraft:granite_wall:68"), (short) 12235, Block.GRANITE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_69 = new BlockState(NamespaceID.from("minecraft:granite_wall:69"), (short) 12236, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_69 = new BlockState(NamespaceID.from("minecraft:granite_wall:69"), (short) 12236, Block.GRANITE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_70 = new BlockState(NamespaceID.from("minecraft:granite_wall:70"), (short) 12237, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_70 = new BlockState(NamespaceID.from("minecraft:granite_wall:70"), (short) 12237, Block.GRANITE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_71 = new BlockState(NamespaceID.from("minecraft:granite_wall:71"), (short) 12238, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_71 = new BlockState(NamespaceID.from("minecraft:granite_wall:71"), (short) 12238, Block.GRANITE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_72 = new BlockState(NamespaceID.from("minecraft:granite_wall:72"), (short) 12239, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_72 = new BlockState(NamespaceID.from("minecraft:granite_wall:72"), (short) 12239, Block.GRANITE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_73 = new BlockState(NamespaceID.from("minecraft:granite_wall:73"), (short) 12240, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_73 = new BlockState(NamespaceID.from("minecraft:granite_wall:73"), (short) 12240, Block.GRANITE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_74 = new BlockState(NamespaceID.from("minecraft:granite_wall:74"), (short) 12241, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_74 = new BlockState(NamespaceID.from("minecraft:granite_wall:74"), (short) 12241, Block.GRANITE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_75 = new BlockState(NamespaceID.from("minecraft:granite_wall:75"), (short) 12242, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_75 = new BlockState(NamespaceID.from("minecraft:granite_wall:75"), (short) 12242, Block.GRANITE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_76 = new BlockState(NamespaceID.from("minecraft:granite_wall:76"), (short) 12243, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_76 = new BlockState(NamespaceID.from("minecraft:granite_wall:76"), (short) 12243, Block.GRANITE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_77 = new BlockState(NamespaceID.from("minecraft:granite_wall:77"), (short) 12244, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_77 = new BlockState(NamespaceID.from("minecraft:granite_wall:77"), (short) 12244, Block.GRANITE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_78 = new BlockState(NamespaceID.from("minecraft:granite_wall:78"), (short) 12245, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_78 = new BlockState(NamespaceID.from("minecraft:granite_wall:78"), (short) 12245, Block.GRANITE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_79 = new BlockState(NamespaceID.from("minecraft:granite_wall:79"), (short) 12246, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_79 = new BlockState(NamespaceID.from("minecraft:granite_wall:79"), (short) 12246, Block.GRANITE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_80 = new BlockState(NamespaceID.from("minecraft:granite_wall:80"), (short) 12247, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_80 = new BlockState(NamespaceID.from("minecraft:granite_wall:80"), (short) 12247, Block.GRANITE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_81 = new BlockState(NamespaceID.from("minecraft:granite_wall:81"), (short) 12248, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_81 = new BlockState(NamespaceID.from("minecraft:granite_wall:81"), (short) 12248, Block.GRANITE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_82 = new BlockState(NamespaceID.from("minecraft:granite_wall:82"), (short) 12249, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_82 = new BlockState(NamespaceID.from("minecraft:granite_wall:82"), (short) 12249, Block.GRANITE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_83 = new BlockState(NamespaceID.from("minecraft:granite_wall:83"), (short) 12250, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_83 = new BlockState(NamespaceID.from("minecraft:granite_wall:83"), (short) 12250, Block.GRANITE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_84 = new BlockState(NamespaceID.from("minecraft:granite_wall:84"), (short) 12251, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_84 = new BlockState(NamespaceID.from("minecraft:granite_wall:84"), (short) 12251, Block.GRANITE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_85 = new BlockState(NamespaceID.from("minecraft:granite_wall:85"), (short) 12252, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_85 = new BlockState(NamespaceID.from("minecraft:granite_wall:85"), (short) 12252, Block.GRANITE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_86 = new BlockState(NamespaceID.from("minecraft:granite_wall:86"), (short) 12253, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_86 = new BlockState(NamespaceID.from("minecraft:granite_wall:86"), (short) 12253, Block.GRANITE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_87 = new BlockState(NamespaceID.from("minecraft:granite_wall:87"), (short) 12254, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_87 = new BlockState(NamespaceID.from("minecraft:granite_wall:87"), (short) 12254, Block.GRANITE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_88 = new BlockState(NamespaceID.from("minecraft:granite_wall:88"), (short) 12255, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_88 = new BlockState(NamespaceID.from("minecraft:granite_wall:88"), (short) 12255, Block.GRANITE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_89 = new BlockState(NamespaceID.from("minecraft:granite_wall:89"), (short) 12256, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_89 = new BlockState(NamespaceID.from("minecraft:granite_wall:89"), (short) 12256, Block.GRANITE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_90 = new BlockState(NamespaceID.from("minecraft:granite_wall:90"), (short) 12257, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_90 = new BlockState(NamespaceID.from("minecraft:granite_wall:90"), (short) 12257, Block.GRANITE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_91 = new BlockState(NamespaceID.from("minecraft:granite_wall:91"), (short) 12258, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_91 = new BlockState(NamespaceID.from("minecraft:granite_wall:91"), (short) 12258, Block.GRANITE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_92 = new BlockState(NamespaceID.from("minecraft:granite_wall:92"), (short) 12259, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_92 = new BlockState(NamespaceID.from("minecraft:granite_wall:92"), (short) 12259, Block.GRANITE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_93 = new BlockState(NamespaceID.from("minecraft:granite_wall:93"), (short) 12260, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_93 = new BlockState(NamespaceID.from("minecraft:granite_wall:93"), (short) 12260, Block.GRANITE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_94 = new BlockState(NamespaceID.from("minecraft:granite_wall:94"), (short) 12261, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_94 = new BlockState(NamespaceID.from("minecraft:granite_wall:94"), (short) 12261, Block.GRANITE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_95 = new BlockState(NamespaceID.from("minecraft:granite_wall:95"), (short) 12262, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_95 = new BlockState(NamespaceID.from("minecraft:granite_wall:95"), (short) 12262, Block.GRANITE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_96 = new BlockState(NamespaceID.from("minecraft:granite_wall:96"), (short) 12263, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_96 = new BlockState(NamespaceID.from("minecraft:granite_wall:96"), (short) 12263, Block.GRANITE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_97 = new BlockState(NamespaceID.from("minecraft:granite_wall:97"), (short) 12264, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_97 = new BlockState(NamespaceID.from("minecraft:granite_wall:97"), (short) 12264, Block.GRANITE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_98 = new BlockState(NamespaceID.from("minecraft:granite_wall:98"), (short) 12265, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_98 = new BlockState(NamespaceID.from("minecraft:granite_wall:98"), (short) 12265, Block.GRANITE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_99 = new BlockState(NamespaceID.from("minecraft:granite_wall:99"), (short) 12266, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_99 = new BlockState(NamespaceID.from("minecraft:granite_wall:99"), (short) 12266, Block.GRANITE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_100 = new BlockState(NamespaceID.from("minecraft:granite_wall:100"), (short) 12267, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_100 = new BlockState(NamespaceID.from("minecraft:granite_wall:100"), (short) 12267, Block.GRANITE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_101 = new BlockState(NamespaceID.from("minecraft:granite_wall:101"), (short) 12268, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_101 = new BlockState(NamespaceID.from("minecraft:granite_wall:101"), (short) 12268, Block.GRANITE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_102 = new BlockState(NamespaceID.from("minecraft:granite_wall:102"), (short) 12269, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_102 = new BlockState(NamespaceID.from("minecraft:granite_wall:102"), (short) 12269, Block.GRANITE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_103 = new BlockState(NamespaceID.from("minecraft:granite_wall:103"), (short) 12270, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_103 = new BlockState(NamespaceID.from("minecraft:granite_wall:103"), (short) 12270, Block.GRANITE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_104 = new BlockState(NamespaceID.from("minecraft:granite_wall:104"), (short) 12271, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_104 = new BlockState(NamespaceID.from("minecraft:granite_wall:104"), (short) 12271, Block.GRANITE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_105 = new BlockState(NamespaceID.from("minecraft:granite_wall:105"), (short) 12272, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_105 = new BlockState(NamespaceID.from("minecraft:granite_wall:105"), (short) 12272, Block.GRANITE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_106 = new BlockState(NamespaceID.from("minecraft:granite_wall:106"), (short) 12273, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_106 = new BlockState(NamespaceID.from("minecraft:granite_wall:106"), (short) 12273, Block.GRANITE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_107 = new BlockState(NamespaceID.from("minecraft:granite_wall:107"), (short) 12274, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_107 = new BlockState(NamespaceID.from("minecraft:granite_wall:107"), (short) 12274, Block.GRANITE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_108 = new BlockState(NamespaceID.from("minecraft:granite_wall:108"), (short) 12275, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_108 = new BlockState(NamespaceID.from("minecraft:granite_wall:108"), (short) 12275, Block.GRANITE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_109 = new BlockState(NamespaceID.from("minecraft:granite_wall:109"), (short) 12276, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_109 = new BlockState(NamespaceID.from("minecraft:granite_wall:109"), (short) 12276, Block.GRANITE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_110 = new BlockState(NamespaceID.from("minecraft:granite_wall:110"), (short) 12277, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_110 = new BlockState(NamespaceID.from("minecraft:granite_wall:110"), (short) 12277, Block.GRANITE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_111 = new BlockState(NamespaceID.from("minecraft:granite_wall:111"), (short) 12278, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_111 = new BlockState(NamespaceID.from("minecraft:granite_wall:111"), (short) 12278, Block.GRANITE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_112 = new BlockState(NamespaceID.from("minecraft:granite_wall:112"), (short) 12279, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_112 = new BlockState(NamespaceID.from("minecraft:granite_wall:112"), (short) 12279, Block.GRANITE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_113 = new BlockState(NamespaceID.from("minecraft:granite_wall:113"), (short) 12280, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_113 = new BlockState(NamespaceID.from("minecraft:granite_wall:113"), (short) 12280, Block.GRANITE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_114 = new BlockState(NamespaceID.from("minecraft:granite_wall:114"), (short) 12281, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_114 = new BlockState(NamespaceID.from("minecraft:granite_wall:114"), (short) 12281, Block.GRANITE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_115 = new BlockState(NamespaceID.from("minecraft:granite_wall:115"), (short) 12282, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_115 = new BlockState(NamespaceID.from("minecraft:granite_wall:115"), (short) 12282, Block.GRANITE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_116 = new BlockState(NamespaceID.from("minecraft:granite_wall:116"), (short) 12283, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_116 = new BlockState(NamespaceID.from("minecraft:granite_wall:116"), (short) 12283, Block.GRANITE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_117 = new BlockState(NamespaceID.from("minecraft:granite_wall:117"), (short) 12284, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_117 = new BlockState(NamespaceID.from("minecraft:granite_wall:117"), (short) 12284, Block.GRANITE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_118 = new BlockState(NamespaceID.from("minecraft:granite_wall:118"), (short) 12285, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_118 = new BlockState(NamespaceID.from("minecraft:granite_wall:118"), (short) 12285, Block.GRANITE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_119 = new BlockState(NamespaceID.from("minecraft:granite_wall:119"), (short) 12286, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_119 = new BlockState(NamespaceID.from("minecraft:granite_wall:119"), (short) 12286, Block.GRANITE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_120 = new BlockState(NamespaceID.from("minecraft:granite_wall:120"), (short) 12287, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_120 = new BlockState(NamespaceID.from("minecraft:granite_wall:120"), (short) 12287, Block.GRANITE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_121 = new BlockState(NamespaceID.from("minecraft:granite_wall:121"), (short) 12288, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_121 = new BlockState(NamespaceID.from("minecraft:granite_wall:121"), (short) 12288, Block.GRANITE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_122 = new BlockState(NamespaceID.from("minecraft:granite_wall:122"), (short) 12289, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_122 = new BlockState(NamespaceID.from("minecraft:granite_wall:122"), (short) 12289, Block.GRANITE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_123 = new BlockState(NamespaceID.from("minecraft:granite_wall:123"), (short) 12290, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_123 = new BlockState(NamespaceID.from("minecraft:granite_wall:123"), (short) 12290, Block.GRANITE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_124 = new BlockState(NamespaceID.from("minecraft:granite_wall:124"), (short) 12291, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_124 = new BlockState(NamespaceID.from("minecraft:granite_wall:124"), (short) 12291, Block.GRANITE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_125 = new BlockState(NamespaceID.from("minecraft:granite_wall:125"), (short) 12292, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_125 = new BlockState(NamespaceID.from("minecraft:granite_wall:125"), (short) 12292, Block.GRANITE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_126 = new BlockState(NamespaceID.from("minecraft:granite_wall:126"), (short) 12293, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_126 = new BlockState(NamespaceID.from("minecraft:granite_wall:126"), (short) 12293, Block.GRANITE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_127 = new BlockState(NamespaceID.from("minecraft:granite_wall:127"), (short) 12294, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_127 = new BlockState(NamespaceID.from("minecraft:granite_wall:127"), (short) 12294, Block.GRANITE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_128 = new BlockState(NamespaceID.from("minecraft:granite_wall:128"), (short) 12295, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_128 = new BlockState(NamespaceID.from("minecraft:granite_wall:128"), (short) 12295, Block.GRANITE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_129 = new BlockState(NamespaceID.from("minecraft:granite_wall:129"), (short) 12296, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_129 = new BlockState(NamespaceID.from("minecraft:granite_wall:129"), (short) 12296, Block.GRANITE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_130 = new BlockState(NamespaceID.from("minecraft:granite_wall:130"), (short) 12297, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_130 = new BlockState(NamespaceID.from("minecraft:granite_wall:130"), (short) 12297, Block.GRANITE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_131 = new BlockState(NamespaceID.from("minecraft:granite_wall:131"), (short) 12298, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_131 = new BlockState(NamespaceID.from("minecraft:granite_wall:131"), (short) 12298, Block.GRANITE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_132 = new BlockState(NamespaceID.from("minecraft:granite_wall:132"), (short) 12299, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_132 = new BlockState(NamespaceID.from("minecraft:granite_wall:132"), (short) 12299, Block.GRANITE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_133 = new BlockState(NamespaceID.from("minecraft:granite_wall:133"), (short) 12300, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_133 = new BlockState(NamespaceID.from("minecraft:granite_wall:133"), (short) 12300, Block.GRANITE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_134 = new BlockState(NamespaceID.from("minecraft:granite_wall:134"), (short) 12301, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_134 = new BlockState(NamespaceID.from("minecraft:granite_wall:134"), (short) 12301, Block.GRANITE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_135 = new BlockState(NamespaceID.from("minecraft:granite_wall:135"), (short) 12302, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_135 = new BlockState(NamespaceID.from("minecraft:granite_wall:135"), (short) 12302, Block.GRANITE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_136 = new BlockState(NamespaceID.from("minecraft:granite_wall:136"), (short) 12303, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_136 = new BlockState(NamespaceID.from("minecraft:granite_wall:136"), (short) 12303, Block.GRANITE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_137 = new BlockState(NamespaceID.from("minecraft:granite_wall:137"), (short) 12304, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_137 = new BlockState(NamespaceID.from("minecraft:granite_wall:137"), (short) 12304, Block.GRANITE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_138 = new BlockState(NamespaceID.from("minecraft:granite_wall:138"), (short) 12305, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_138 = new BlockState(NamespaceID.from("minecraft:granite_wall:138"), (short) 12305, Block.GRANITE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_139 = new BlockState(NamespaceID.from("minecraft:granite_wall:139"), (short) 12306, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_139 = new BlockState(NamespaceID.from("minecraft:granite_wall:139"), (short) 12306, Block.GRANITE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_140 = new BlockState(NamespaceID.from("minecraft:granite_wall:140"), (short) 12307, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_140 = new BlockState(NamespaceID.from("minecraft:granite_wall:140"), (short) 12307, Block.GRANITE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_141 = new BlockState(NamespaceID.from("minecraft:granite_wall:141"), (short) 12308, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_141 = new BlockState(NamespaceID.from("minecraft:granite_wall:141"), (short) 12308, Block.GRANITE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_142 = new BlockState(NamespaceID.from("minecraft:granite_wall:142"), (short) 12309, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_142 = new BlockState(NamespaceID.from("minecraft:granite_wall:142"), (short) 12309, Block.GRANITE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_143 = new BlockState(NamespaceID.from("minecraft:granite_wall:143"), (short) 12310, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_143 = new BlockState(NamespaceID.from("minecraft:granite_wall:143"), (short) 12310, Block.GRANITE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_144 = new BlockState(NamespaceID.from("minecraft:granite_wall:144"), (short) 12311, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_144 = new BlockState(NamespaceID.from("minecraft:granite_wall:144"), (short) 12311, Block.GRANITE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_145 = new BlockState(NamespaceID.from("minecraft:granite_wall:145"), (short) 12312, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_145 = new BlockState(NamespaceID.from("minecraft:granite_wall:145"), (short) 12312, Block.GRANITE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_146 = new BlockState(NamespaceID.from("minecraft:granite_wall:146"), (short) 12313, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_146 = new BlockState(NamespaceID.from("minecraft:granite_wall:146"), (short) 12313, Block.GRANITE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_147 = new BlockState(NamespaceID.from("minecraft:granite_wall:147"), (short) 12314, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_147 = new BlockState(NamespaceID.from("minecraft:granite_wall:147"), (short) 12314, Block.GRANITE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_148 = new BlockState(NamespaceID.from("minecraft:granite_wall:148"), (short) 12315, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_148 = new BlockState(NamespaceID.from("minecraft:granite_wall:148"), (short) 12315, Block.GRANITE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_149 = new BlockState(NamespaceID.from("minecraft:granite_wall:149"), (short) 12316, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_149 = new BlockState(NamespaceID.from("minecraft:granite_wall:149"), (short) 12316, Block.GRANITE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_150 = new BlockState(NamespaceID.from("minecraft:granite_wall:150"), (short) 12317, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_150 = new BlockState(NamespaceID.from("minecraft:granite_wall:150"), (short) 12317, Block.GRANITE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_151 = new BlockState(NamespaceID.from("minecraft:granite_wall:151"), (short) 12318, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_151 = new BlockState(NamespaceID.from("minecraft:granite_wall:151"), (short) 12318, Block.GRANITE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_152 = new BlockState(NamespaceID.from("minecraft:granite_wall:152"), (short) 12319, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_152 = new BlockState(NamespaceID.from("minecraft:granite_wall:152"), (short) 12319, Block.GRANITE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_153 = new BlockState(NamespaceID.from("minecraft:granite_wall:153"), (short) 12320, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_153 = new BlockState(NamespaceID.from("minecraft:granite_wall:153"), (short) 12320, Block.GRANITE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_154 = new BlockState(NamespaceID.from("minecraft:granite_wall:154"), (short) 12321, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_154 = new BlockState(NamespaceID.from("minecraft:granite_wall:154"), (short) 12321, Block.GRANITE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_155 = new BlockState(NamespaceID.from("minecraft:granite_wall:155"), (short) 12322, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_155 = new BlockState(NamespaceID.from("minecraft:granite_wall:155"), (short) 12322, Block.GRANITE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_156 = new BlockState(NamespaceID.from("minecraft:granite_wall:156"), (short) 12323, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_156 = new BlockState(NamespaceID.from("minecraft:granite_wall:156"), (short) 12323, Block.GRANITE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_157 = new BlockState(NamespaceID.from("minecraft:granite_wall:157"), (short) 12324, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_157 = new BlockState(NamespaceID.from("minecraft:granite_wall:157"), (short) 12324, Block.GRANITE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_158 = new BlockState(NamespaceID.from("minecraft:granite_wall:158"), (short) 12325, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_158 = new BlockState(NamespaceID.from("minecraft:granite_wall:158"), (short) 12325, Block.GRANITE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_159 = new BlockState(NamespaceID.from("minecraft:granite_wall:159"), (short) 12326, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_159 = new BlockState(NamespaceID.from("minecraft:granite_wall:159"), (short) 12326, Block.GRANITE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_160 = new BlockState(NamespaceID.from("minecraft:granite_wall:160"), (short) 12327, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_160 = new BlockState(NamespaceID.from("minecraft:granite_wall:160"), (short) 12327, Block.GRANITE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_161 = new BlockState(NamespaceID.from("minecraft:granite_wall:161"), (short) 12328, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_161 = new BlockState(NamespaceID.from("minecraft:granite_wall:161"), (short) 12328, Block.GRANITE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_162 = new BlockState(NamespaceID.from("minecraft:granite_wall:162"), (short) 12329, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_162 = new BlockState(NamespaceID.from("minecraft:granite_wall:162"), (short) 12329, Block.GRANITE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_163 = new BlockState(NamespaceID.from("minecraft:granite_wall:163"), (short) 12330, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_163 = new BlockState(NamespaceID.from("minecraft:granite_wall:163"), (short) 12330, Block.GRANITE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_164 = new BlockState(NamespaceID.from("minecraft:granite_wall:164"), (short) 12331, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_164 = new BlockState(NamespaceID.from("minecraft:granite_wall:164"), (short) 12331, Block.GRANITE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_165 = new BlockState(NamespaceID.from("minecraft:granite_wall:165"), (short) 12332, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_165 = new BlockState(NamespaceID.from("minecraft:granite_wall:165"), (short) 12332, Block.GRANITE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_166 = new BlockState(NamespaceID.from("minecraft:granite_wall:166"), (short) 12333, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_166 = new BlockState(NamespaceID.from("minecraft:granite_wall:166"), (short) 12333, Block.GRANITE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_167 = new BlockState(NamespaceID.from("minecraft:granite_wall:167"), (short) 12334, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_167 = new BlockState(NamespaceID.from("minecraft:granite_wall:167"), (short) 12334, Block.GRANITE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_168 = new BlockState(NamespaceID.from("minecraft:granite_wall:168"), (short) 12335, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_168 = new BlockState(NamespaceID.from("minecraft:granite_wall:168"), (short) 12335, Block.GRANITE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_169 = new BlockState(NamespaceID.from("minecraft:granite_wall:169"), (short) 12336, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_169 = new BlockState(NamespaceID.from("minecraft:granite_wall:169"), (short) 12336, Block.GRANITE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_170 = new BlockState(NamespaceID.from("minecraft:granite_wall:170"), (short) 12337, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_170 = new BlockState(NamespaceID.from("minecraft:granite_wall:170"), (short) 12337, Block.GRANITE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_171 = new BlockState(NamespaceID.from("minecraft:granite_wall:171"), (short) 12338, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_171 = new BlockState(NamespaceID.from("minecraft:granite_wall:171"), (short) 12338, Block.GRANITE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_172 = new BlockState(NamespaceID.from("minecraft:granite_wall:172"), (short) 12339, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_172 = new BlockState(NamespaceID.from("minecraft:granite_wall:172"), (short) 12339, Block.GRANITE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_173 = new BlockState(NamespaceID.from("minecraft:granite_wall:173"), (short) 12340, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_173 = new BlockState(NamespaceID.from("minecraft:granite_wall:173"), (short) 12340, Block.GRANITE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_174 = new BlockState(NamespaceID.from("minecraft:granite_wall:174"), (short) 12341, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_174 = new BlockState(NamespaceID.from("minecraft:granite_wall:174"), (short) 12341, Block.GRANITE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_175 = new BlockState(NamespaceID.from("minecraft:granite_wall:175"), (short) 12342, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_175 = new BlockState(NamespaceID.from("minecraft:granite_wall:175"), (short) 12342, Block.GRANITE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_176 = new BlockState(NamespaceID.from("minecraft:granite_wall:176"), (short) 12343, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_176 = new BlockState(NamespaceID.from("minecraft:granite_wall:176"), (short) 12343, Block.GRANITE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_177 = new BlockState(NamespaceID.from("minecraft:granite_wall:177"), (short) 12344, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_177 = new BlockState(NamespaceID.from("minecraft:granite_wall:177"), (short) 12344, Block.GRANITE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_178 = new BlockState(NamespaceID.from("minecraft:granite_wall:178"), (short) 12345, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_178 = new BlockState(NamespaceID.from("minecraft:granite_wall:178"), (short) 12345, Block.GRANITE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_179 = new BlockState(NamespaceID.from("minecraft:granite_wall:179"), (short) 12346, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_179 = new BlockState(NamespaceID.from("minecraft:granite_wall:179"), (short) 12346, Block.GRANITE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_180 = new BlockState(NamespaceID.from("minecraft:granite_wall:180"), (short) 12347, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_180 = new BlockState(NamespaceID.from("minecraft:granite_wall:180"), (short) 12347, Block.GRANITE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_181 = new BlockState(NamespaceID.from("minecraft:granite_wall:181"), (short) 12348, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_181 = new BlockState(NamespaceID.from("minecraft:granite_wall:181"), (short) 12348, Block.GRANITE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_182 = new BlockState(NamespaceID.from("minecraft:granite_wall:182"), (short) 12349, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_182 = new BlockState(NamespaceID.from("minecraft:granite_wall:182"), (short) 12349, Block.GRANITE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_183 = new BlockState(NamespaceID.from("minecraft:granite_wall:183"), (short) 12350, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_183 = new BlockState(NamespaceID.from("minecraft:granite_wall:183"), (short) 12350, Block.GRANITE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_184 = new BlockState(NamespaceID.from("minecraft:granite_wall:184"), (short) 12351, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_184 = new BlockState(NamespaceID.from("minecraft:granite_wall:184"), (short) 12351, Block.GRANITE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_185 = new BlockState(NamespaceID.from("minecraft:granite_wall:185"), (short) 12352, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_185 = new BlockState(NamespaceID.from("minecraft:granite_wall:185"), (short) 12352, Block.GRANITE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_186 = new BlockState(NamespaceID.from("minecraft:granite_wall:186"), (short) 12353, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_186 = new BlockState(NamespaceID.from("minecraft:granite_wall:186"), (short) 12353, Block.GRANITE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_187 = new BlockState(NamespaceID.from("minecraft:granite_wall:187"), (short) 12354, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_187 = new BlockState(NamespaceID.from("minecraft:granite_wall:187"), (short) 12354, Block.GRANITE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_188 = new BlockState(NamespaceID.from("minecraft:granite_wall:188"), (short) 12355, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_188 = new BlockState(NamespaceID.from("minecraft:granite_wall:188"), (short) 12355, Block.GRANITE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_189 = new BlockState(NamespaceID.from("minecraft:granite_wall:189"), (short) 12356, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_189 = new BlockState(NamespaceID.from("minecraft:granite_wall:189"), (short) 12356, Block.GRANITE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_190 = new BlockState(NamespaceID.from("minecraft:granite_wall:190"), (short) 12357, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_190 = new BlockState(NamespaceID.from("minecraft:granite_wall:190"), (short) 12357, Block.GRANITE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_191 = new BlockState(NamespaceID.from("minecraft:granite_wall:191"), (short) 12358, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_191 = new BlockState(NamespaceID.from("minecraft:granite_wall:191"), (short) 12358, Block.GRANITE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_192 = new BlockState(NamespaceID.from("minecraft:granite_wall:192"), (short) 12359, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_192 = new BlockState(NamespaceID.from("minecraft:granite_wall:192"), (short) 12359, Block.GRANITE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_193 = new BlockState(NamespaceID.from("minecraft:granite_wall:193"), (short) 12360, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_193 = new BlockState(NamespaceID.from("minecraft:granite_wall:193"), (short) 12360, Block.GRANITE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_194 = new BlockState(NamespaceID.from("minecraft:granite_wall:194"), (short) 12361, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_194 = new BlockState(NamespaceID.from("minecraft:granite_wall:194"), (short) 12361, Block.GRANITE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_195 = new BlockState(NamespaceID.from("minecraft:granite_wall:195"), (short) 12362, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_195 = new BlockState(NamespaceID.from("minecraft:granite_wall:195"), (short) 12362, Block.GRANITE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_196 = new BlockState(NamespaceID.from("minecraft:granite_wall:196"), (short) 12363, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_196 = new BlockState(NamespaceID.from("minecraft:granite_wall:196"), (short) 12363, Block.GRANITE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_197 = new BlockState(NamespaceID.from("minecraft:granite_wall:197"), (short) 12364, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_197 = new BlockState(NamespaceID.from("minecraft:granite_wall:197"), (short) 12364, Block.GRANITE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_198 = new BlockState(NamespaceID.from("minecraft:granite_wall:198"), (short) 12365, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_198 = new BlockState(NamespaceID.from("minecraft:granite_wall:198"), (short) 12365, Block.GRANITE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_199 = new BlockState(NamespaceID.from("minecraft:granite_wall:199"), (short) 12366, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_199 = new BlockState(NamespaceID.from("minecraft:granite_wall:199"), (short) 12366, Block.GRANITE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_200 = new BlockState(NamespaceID.from("minecraft:granite_wall:200"), (short) 12367, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_200 = new BlockState(NamespaceID.from("minecraft:granite_wall:200"), (short) 12367, Block.GRANITE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_201 = new BlockState(NamespaceID.from("minecraft:granite_wall:201"), (short) 12368, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_201 = new BlockState(NamespaceID.from("minecraft:granite_wall:201"), (short) 12368, Block.GRANITE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_202 = new BlockState(NamespaceID.from("minecraft:granite_wall:202"), (short) 12369, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_202 = new BlockState(NamespaceID.from("minecraft:granite_wall:202"), (short) 12369, Block.GRANITE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_203 = new BlockState(NamespaceID.from("minecraft:granite_wall:203"), (short) 12370, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_203 = new BlockState(NamespaceID.from("minecraft:granite_wall:203"), (short) 12370, Block.GRANITE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_204 = new BlockState(NamespaceID.from("minecraft:granite_wall:204"), (short) 12371, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_204 = new BlockState(NamespaceID.from("minecraft:granite_wall:204"), (short) 12371, Block.GRANITE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_205 = new BlockState(NamespaceID.from("minecraft:granite_wall:205"), (short) 12372, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_205 = new BlockState(NamespaceID.from("minecraft:granite_wall:205"), (short) 12372, Block.GRANITE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_206 = new BlockState(NamespaceID.from("minecraft:granite_wall:206"), (short) 12373, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_206 = new BlockState(NamespaceID.from("minecraft:granite_wall:206"), (short) 12373, Block.GRANITE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_207 = new BlockState(NamespaceID.from("minecraft:granite_wall:207"), (short) 12374, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_207 = new BlockState(NamespaceID.from("minecraft:granite_wall:207"), (short) 12374, Block.GRANITE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_208 = new BlockState(NamespaceID.from("minecraft:granite_wall:208"), (short) 12375, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_208 = new BlockState(NamespaceID.from("minecraft:granite_wall:208"), (short) 12375, Block.GRANITE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_209 = new BlockState(NamespaceID.from("minecraft:granite_wall:209"), (short) 12376, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_209 = new BlockState(NamespaceID.from("minecraft:granite_wall:209"), (short) 12376, Block.GRANITE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_210 = new BlockState(NamespaceID.from("minecraft:granite_wall:210"), (short) 12377, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_210 = new BlockState(NamespaceID.from("minecraft:granite_wall:210"), (short) 12377, Block.GRANITE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_211 = new BlockState(NamespaceID.from("minecraft:granite_wall:211"), (short) 12378, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_211 = new BlockState(NamespaceID.from("minecraft:granite_wall:211"), (short) 12378, Block.GRANITE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_212 = new BlockState(NamespaceID.from("minecraft:granite_wall:212"), (short) 12379, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_212 = new BlockState(NamespaceID.from("minecraft:granite_wall:212"), (short) 12379, Block.GRANITE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_213 = new BlockState(NamespaceID.from("minecraft:granite_wall:213"), (short) 12380, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_213 = new BlockState(NamespaceID.from("minecraft:granite_wall:213"), (short) 12380, Block.GRANITE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_214 = new BlockState(NamespaceID.from("minecraft:granite_wall:214"), (short) 12381, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_214 = new BlockState(NamespaceID.from("minecraft:granite_wall:214"), (short) 12381, Block.GRANITE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_215 = new BlockState(NamespaceID.from("minecraft:granite_wall:215"), (short) 12382, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_215 = new BlockState(NamespaceID.from("minecraft:granite_wall:215"), (short) 12382, Block.GRANITE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_216 = new BlockState(NamespaceID.from("minecraft:granite_wall:216"), (short) 12383, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_216 = new BlockState(NamespaceID.from("minecraft:granite_wall:216"), (short) 12383, Block.GRANITE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_217 = new BlockState(NamespaceID.from("minecraft:granite_wall:217"), (short) 12384, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_217 = new BlockState(NamespaceID.from("minecraft:granite_wall:217"), (short) 12384, Block.GRANITE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_218 = new BlockState(NamespaceID.from("minecraft:granite_wall:218"), (short) 12385, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_218 = new BlockState(NamespaceID.from("minecraft:granite_wall:218"), (short) 12385, Block.GRANITE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_219 = new BlockState(NamespaceID.from("minecraft:granite_wall:219"), (short) 12386, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_219 = new BlockState(NamespaceID.from("minecraft:granite_wall:219"), (short) 12386, Block.GRANITE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_220 = new BlockState(NamespaceID.from("minecraft:granite_wall:220"), (short) 12387, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_220 = new BlockState(NamespaceID.from("minecraft:granite_wall:220"), (short) 12387, Block.GRANITE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_221 = new BlockState(NamespaceID.from("minecraft:granite_wall:221"), (short) 12388, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_221 = new BlockState(NamespaceID.from("minecraft:granite_wall:221"), (short) 12388, Block.GRANITE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_222 = new BlockState(NamespaceID.from("minecraft:granite_wall:222"), (short) 12389, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_222 = new BlockState(NamespaceID.from("minecraft:granite_wall:222"), (short) 12389, Block.GRANITE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_223 = new BlockState(NamespaceID.from("minecraft:granite_wall:223"), (short) 12390, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_223 = new BlockState(NamespaceID.from("minecraft:granite_wall:223"), (short) 12390, Block.GRANITE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_224 = new BlockState(NamespaceID.from("minecraft:granite_wall:224"), (short) 12391, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_224 = new BlockState(NamespaceID.from("minecraft:granite_wall:224"), (short) 12391, Block.GRANITE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_225 = new BlockState(NamespaceID.from("minecraft:granite_wall:225"), (short) 12392, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_225 = new BlockState(NamespaceID.from("minecraft:granite_wall:225"), (short) 12392, Block.GRANITE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_226 = new BlockState(NamespaceID.from("minecraft:granite_wall:226"), (short) 12393, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_226 = new BlockState(NamespaceID.from("minecraft:granite_wall:226"), (short) 12393, Block.GRANITE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_227 = new BlockState(NamespaceID.from("minecraft:granite_wall:227"), (short) 12394, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_227 = new BlockState(NamespaceID.from("minecraft:granite_wall:227"), (short) 12394, Block.GRANITE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_228 = new BlockState(NamespaceID.from("minecraft:granite_wall:228"), (short) 12395, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_228 = new BlockState(NamespaceID.from("minecraft:granite_wall:228"), (short) 12395, Block.GRANITE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_229 = new BlockState(NamespaceID.from("minecraft:granite_wall:229"), (short) 12396, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_229 = new BlockState(NamespaceID.from("minecraft:granite_wall:229"), (short) 12396, Block.GRANITE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_230 = new BlockState(NamespaceID.from("minecraft:granite_wall:230"), (short) 12397, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_230 = new BlockState(NamespaceID.from("minecraft:granite_wall:230"), (short) 12397, Block.GRANITE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_231 = new BlockState(NamespaceID.from("minecraft:granite_wall:231"), (short) 12398, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_231 = new BlockState(NamespaceID.from("minecraft:granite_wall:231"), (short) 12398, Block.GRANITE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_232 = new BlockState(NamespaceID.from("minecraft:granite_wall:232"), (short) 12399, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_232 = new BlockState(NamespaceID.from("minecraft:granite_wall:232"), (short) 12399, Block.GRANITE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_233 = new BlockState(NamespaceID.from("minecraft:granite_wall:233"), (short) 12400, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_233 = new BlockState(NamespaceID.from("minecraft:granite_wall:233"), (short) 12400, Block.GRANITE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_234 = new BlockState(NamespaceID.from("minecraft:granite_wall:234"), (short) 12401, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_234 = new BlockState(NamespaceID.from("minecraft:granite_wall:234"), (short) 12401, Block.GRANITE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_235 = new BlockState(NamespaceID.from("minecraft:granite_wall:235"), (short) 12402, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_235 = new BlockState(NamespaceID.from("minecraft:granite_wall:235"), (short) 12402, Block.GRANITE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_236 = new BlockState(NamespaceID.from("minecraft:granite_wall:236"), (short) 12403, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_236 = new BlockState(NamespaceID.from("minecraft:granite_wall:236"), (short) 12403, Block.GRANITE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_237 = new BlockState(NamespaceID.from("minecraft:granite_wall:237"), (short) 12404, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_237 = new BlockState(NamespaceID.from("minecraft:granite_wall:237"), (short) 12404, Block.GRANITE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_238 = new BlockState(NamespaceID.from("minecraft:granite_wall:238"), (short) 12405, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_238 = new BlockState(NamespaceID.from("minecraft:granite_wall:238"), (short) 12405, Block.GRANITE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_239 = new BlockState(NamespaceID.from("minecraft:granite_wall:239"), (short) 12406, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_239 = new BlockState(NamespaceID.from("minecraft:granite_wall:239"), (short) 12406, Block.GRANITE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_240 = new BlockState(NamespaceID.from("minecraft:granite_wall:240"), (short) 12407, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_240 = new BlockState(NamespaceID.from("minecraft:granite_wall:240"), (short) 12407, Block.GRANITE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_241 = new BlockState(NamespaceID.from("minecraft:granite_wall:241"), (short) 12408, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_241 = new BlockState(NamespaceID.from("minecraft:granite_wall:241"), (short) 12408, Block.GRANITE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_242 = new BlockState(NamespaceID.from("minecraft:granite_wall:242"), (short) 12409, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_242 = new BlockState(NamespaceID.from("minecraft:granite_wall:242"), (short) 12409, Block.GRANITE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_243 = new BlockState(NamespaceID.from("minecraft:granite_wall:243"), (short) 12410, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_243 = new BlockState(NamespaceID.from("minecraft:granite_wall:243"), (short) 12410, Block.GRANITE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_244 = new BlockState(NamespaceID.from("minecraft:granite_wall:244"), (short) 12411, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_244 = new BlockState(NamespaceID.from("minecraft:granite_wall:244"), (short) 12411, Block.GRANITE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_245 = new BlockState(NamespaceID.from("minecraft:granite_wall:245"), (short) 12412, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_245 = new BlockState(NamespaceID.from("minecraft:granite_wall:245"), (short) 12412, Block.GRANITE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_246 = new BlockState(NamespaceID.from("minecraft:granite_wall:246"), (short) 12413, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_246 = new BlockState(NamespaceID.from("minecraft:granite_wall:246"), (short) 12413, Block.GRANITE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_247 = new BlockState(NamespaceID.from("minecraft:granite_wall:247"), (short) 12414, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_247 = new BlockState(NamespaceID.from("minecraft:granite_wall:247"), (short) 12414, Block.GRANITE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_248 = new BlockState(NamespaceID.from("minecraft:granite_wall:248"), (short) 12415, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_248 = new BlockState(NamespaceID.from("minecraft:granite_wall:248"), (short) 12415, Block.GRANITE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_249 = new BlockState(NamespaceID.from("minecraft:granite_wall:249"), (short) 12416, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_249 = new BlockState(NamespaceID.from("minecraft:granite_wall:249"), (short) 12416, Block.GRANITE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_250 = new BlockState(NamespaceID.from("minecraft:granite_wall:250"), (short) 12417, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_250 = new BlockState(NamespaceID.from("minecraft:granite_wall:250"), (short) 12417, Block.GRANITE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_251 = new BlockState(NamespaceID.from("minecraft:granite_wall:251"), (short) 12418, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_251 = new BlockState(NamespaceID.from("minecraft:granite_wall:251"), (short) 12418, Block.GRANITE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_252 = new BlockState(NamespaceID.from("minecraft:granite_wall:252"), (short) 12419, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_252 = new BlockState(NamespaceID.from("minecraft:granite_wall:252"), (short) 12419, Block.GRANITE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_253 = new BlockState(NamespaceID.from("minecraft:granite_wall:253"), (short) 12420, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_253 = new BlockState(NamespaceID.from("minecraft:granite_wall:253"), (short) 12420, Block.GRANITE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_254 = new BlockState(NamespaceID.from("minecraft:granite_wall:254"), (short) 12421, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_254 = new BlockState(NamespaceID.from("minecraft:granite_wall:254"), (short) 12421, Block.GRANITE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_255 = new BlockState(NamespaceID.from("minecraft:granite_wall:255"), (short) 12422, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_255 = new BlockState(NamespaceID.from("minecraft:granite_wall:255"), (short) 12422, Block.GRANITE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_256 = new BlockState(NamespaceID.from("minecraft:granite_wall:256"), (short) 12423, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_256 = new BlockState(NamespaceID.from("minecraft:granite_wall:256"), (short) 12423, Block.GRANITE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_257 = new BlockState(NamespaceID.from("minecraft:granite_wall:257"), (short) 12424, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_257 = new BlockState(NamespaceID.from("minecraft:granite_wall:257"), (short) 12424, Block.GRANITE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_258 = new BlockState(NamespaceID.from("minecraft:granite_wall:258"), (short) 12425, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_258 = new BlockState(NamespaceID.from("minecraft:granite_wall:258"), (short) 12425, Block.GRANITE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_259 = new BlockState(NamespaceID.from("minecraft:granite_wall:259"), (short) 12426, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_259 = new BlockState(NamespaceID.from("minecraft:granite_wall:259"), (short) 12426, Block.GRANITE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_260 = new BlockState(NamespaceID.from("minecraft:granite_wall:260"), (short) 12427, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_260 = new BlockState(NamespaceID.from("minecraft:granite_wall:260"), (short) 12427, Block.GRANITE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_261 = new BlockState(NamespaceID.from("minecraft:granite_wall:261"), (short) 12428, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_261 = new BlockState(NamespaceID.from("minecraft:granite_wall:261"), (short) 12428, Block.GRANITE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_262 = new BlockState(NamespaceID.from("minecraft:granite_wall:262"), (short) 12429, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_262 = new BlockState(NamespaceID.from("minecraft:granite_wall:262"), (short) 12429, Block.GRANITE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_263 = new BlockState(NamespaceID.from("minecraft:granite_wall:263"), (short) 12430, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_263 = new BlockState(NamespaceID.from("minecraft:granite_wall:263"), (short) 12430, Block.GRANITE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_264 = new BlockState(NamespaceID.from("minecraft:granite_wall:264"), (short) 12431, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_264 = new BlockState(NamespaceID.from("minecraft:granite_wall:264"), (short) 12431, Block.GRANITE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_265 = new BlockState(NamespaceID.from("minecraft:granite_wall:265"), (short) 12432, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_265 = new BlockState(NamespaceID.from("minecraft:granite_wall:265"), (short) 12432, Block.GRANITE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_266 = new BlockState(NamespaceID.from("minecraft:granite_wall:266"), (short) 12433, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_266 = new BlockState(NamespaceID.from("minecraft:granite_wall:266"), (short) 12433, Block.GRANITE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_267 = new BlockState(NamespaceID.from("minecraft:granite_wall:267"), (short) 12434, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_267 = new BlockState(NamespaceID.from("minecraft:granite_wall:267"), (short) 12434, Block.GRANITE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_268 = new BlockState(NamespaceID.from("minecraft:granite_wall:268"), (short) 12435, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_268 = new BlockState(NamespaceID.from("minecraft:granite_wall:268"), (short) 12435, Block.GRANITE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_269 = new BlockState(NamespaceID.from("minecraft:granite_wall:269"), (short) 12436, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_269 = new BlockState(NamespaceID.from("minecraft:granite_wall:269"), (short) 12436, Block.GRANITE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_270 = new BlockState(NamespaceID.from("minecraft:granite_wall:270"), (short) 12437, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_270 = new BlockState(NamespaceID.from("minecraft:granite_wall:270"), (short) 12437, Block.GRANITE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_271 = new BlockState(NamespaceID.from("minecraft:granite_wall:271"), (short) 12438, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_271 = new BlockState(NamespaceID.from("minecraft:granite_wall:271"), (short) 12438, Block.GRANITE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_272 = new BlockState(NamespaceID.from("minecraft:granite_wall:272"), (short) 12439, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_272 = new BlockState(NamespaceID.from("minecraft:granite_wall:272"), (short) 12439, Block.GRANITE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_273 = new BlockState(NamespaceID.from("minecraft:granite_wall:273"), (short) 12440, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_273 = new BlockState(NamespaceID.from("minecraft:granite_wall:273"), (short) 12440, Block.GRANITE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_274 = new BlockState(NamespaceID.from("minecraft:granite_wall:274"), (short) 12441, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_274 = new BlockState(NamespaceID.from("minecraft:granite_wall:274"), (short) 12441, Block.GRANITE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_275 = new BlockState(NamespaceID.from("minecraft:granite_wall:275"), (short) 12442, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_275 = new BlockState(NamespaceID.from("minecraft:granite_wall:275"), (short) 12442, Block.GRANITE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_276 = new BlockState(NamespaceID.from("minecraft:granite_wall:276"), (short) 12443, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_276 = new BlockState(NamespaceID.from("minecraft:granite_wall:276"), (short) 12443, Block.GRANITE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_277 = new BlockState(NamespaceID.from("minecraft:granite_wall:277"), (short) 12444, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_277 = new BlockState(NamespaceID.from("minecraft:granite_wall:277"), (short) 12444, Block.GRANITE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_278 = new BlockState(NamespaceID.from("minecraft:granite_wall:278"), (short) 12445, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_278 = new BlockState(NamespaceID.from("minecraft:granite_wall:278"), (short) 12445, Block.GRANITE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_279 = new BlockState(NamespaceID.from("minecraft:granite_wall:279"), (short) 12446, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_279 = new BlockState(NamespaceID.from("minecraft:granite_wall:279"), (short) 12446, Block.GRANITE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_280 = new BlockState(NamespaceID.from("minecraft:granite_wall:280"), (short) 12447, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_280 = new BlockState(NamespaceID.from("minecraft:granite_wall:280"), (short) 12447, Block.GRANITE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_281 = new BlockState(NamespaceID.from("minecraft:granite_wall:281"), (short) 12448, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_281 = new BlockState(NamespaceID.from("minecraft:granite_wall:281"), (short) 12448, Block.GRANITE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_282 = new BlockState(NamespaceID.from("minecraft:granite_wall:282"), (short) 12449, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_282 = new BlockState(NamespaceID.from("minecraft:granite_wall:282"), (short) 12449, Block.GRANITE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_283 = new BlockState(NamespaceID.from("minecraft:granite_wall:283"), (short) 12450, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_283 = new BlockState(NamespaceID.from("minecraft:granite_wall:283"), (short) 12450, Block.GRANITE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_284 = new BlockState(NamespaceID.from("minecraft:granite_wall:284"), (short) 12451, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_284 = new BlockState(NamespaceID.from("minecraft:granite_wall:284"), (short) 12451, Block.GRANITE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_285 = new BlockState(NamespaceID.from("minecraft:granite_wall:285"), (short) 12452, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_285 = new BlockState(NamespaceID.from("minecraft:granite_wall:285"), (short) 12452, Block.GRANITE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_286 = new BlockState(NamespaceID.from("minecraft:granite_wall:286"), (short) 12453, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_286 = new BlockState(NamespaceID.from("minecraft:granite_wall:286"), (short) 12453, Block.GRANITE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_287 = new BlockState(NamespaceID.from("minecraft:granite_wall:287"), (short) 12454, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_287 = new BlockState(NamespaceID.from("minecraft:granite_wall:287"), (short) 12454, Block.GRANITE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_288 = new BlockState(NamespaceID.from("minecraft:granite_wall:288"), (short) 12455, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_288 = new BlockState(NamespaceID.from("minecraft:granite_wall:288"), (short) 12455, Block.GRANITE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_289 = new BlockState(NamespaceID.from("minecraft:granite_wall:289"), (short) 12456, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_289 = new BlockState(NamespaceID.from("minecraft:granite_wall:289"), (short) 12456, Block.GRANITE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_290 = new BlockState(NamespaceID.from("minecraft:granite_wall:290"), (short) 12457, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_290 = new BlockState(NamespaceID.from("minecraft:granite_wall:290"), (short) 12457, Block.GRANITE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_291 = new BlockState(NamespaceID.from("minecraft:granite_wall:291"), (short) 12458, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_291 = new BlockState(NamespaceID.from("minecraft:granite_wall:291"), (short) 12458, Block.GRANITE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_292 = new BlockState(NamespaceID.from("minecraft:granite_wall:292"), (short) 12459, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_292 = new BlockState(NamespaceID.from("minecraft:granite_wall:292"), (short) 12459, Block.GRANITE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_293 = new BlockState(NamespaceID.from("minecraft:granite_wall:293"), (short) 12460, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_293 = new BlockState(NamespaceID.from("minecraft:granite_wall:293"), (short) 12460, Block.GRANITE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_294 = new BlockState(NamespaceID.from("minecraft:granite_wall:294"), (short) 12461, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_294 = new BlockState(NamespaceID.from("minecraft:granite_wall:294"), (short) 12461, Block.GRANITE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_295 = new BlockState(NamespaceID.from("minecraft:granite_wall:295"), (short) 12462, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_295 = new BlockState(NamespaceID.from("minecraft:granite_wall:295"), (short) 12462, Block.GRANITE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_296 = new BlockState(NamespaceID.from("minecraft:granite_wall:296"), (short) 12463, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_296 = new BlockState(NamespaceID.from("minecraft:granite_wall:296"), (short) 12463, Block.GRANITE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_297 = new BlockState(NamespaceID.from("minecraft:granite_wall:297"), (short) 12464, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_297 = new BlockState(NamespaceID.from("minecraft:granite_wall:297"), (short) 12464, Block.GRANITE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_298 = new BlockState(NamespaceID.from("minecraft:granite_wall:298"), (short) 12465, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_298 = new BlockState(NamespaceID.from("minecraft:granite_wall:298"), (short) 12465, Block.GRANITE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_299 = new BlockState(NamespaceID.from("minecraft:granite_wall:299"), (short) 12466, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_299 = new BlockState(NamespaceID.from("minecraft:granite_wall:299"), (short) 12466, Block.GRANITE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_300 = new BlockState(NamespaceID.from("minecraft:granite_wall:300"), (short) 12467, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_300 = new BlockState(NamespaceID.from("minecraft:granite_wall:300"), (short) 12467, Block.GRANITE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_301 = new BlockState(NamespaceID.from("minecraft:granite_wall:301"), (short) 12468, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_301 = new BlockState(NamespaceID.from("minecraft:granite_wall:301"), (short) 12468, Block.GRANITE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_302 = new BlockState(NamespaceID.from("minecraft:granite_wall:302"), (short) 12469, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_302 = new BlockState(NamespaceID.from("minecraft:granite_wall:302"), (short) 12469, Block.GRANITE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_303 = new BlockState(NamespaceID.from("minecraft:granite_wall:303"), (short) 12470, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_303 = new BlockState(NamespaceID.from("minecraft:granite_wall:303"), (short) 12470, Block.GRANITE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_304 = new BlockState(NamespaceID.from("minecraft:granite_wall:304"), (short) 12471, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_304 = new BlockState(NamespaceID.from("minecraft:granite_wall:304"), (short) 12471, Block.GRANITE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_305 = new BlockState(NamespaceID.from("minecraft:granite_wall:305"), (short) 12472, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_305 = new BlockState(NamespaceID.from("minecraft:granite_wall:305"), (short) 12472, Block.GRANITE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_306 = new BlockState(NamespaceID.from("minecraft:granite_wall:306"), (short) 12473, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_306 = new BlockState(NamespaceID.from("minecraft:granite_wall:306"), (short) 12473, Block.GRANITE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_307 = new BlockState(NamespaceID.from("minecraft:granite_wall:307"), (short) 12474, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_307 = new BlockState(NamespaceID.from("minecraft:granite_wall:307"), (short) 12474, Block.GRANITE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_308 = new BlockState(NamespaceID.from("minecraft:granite_wall:308"), (short) 12475, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_308 = new BlockState(NamespaceID.from("minecraft:granite_wall:308"), (short) 12475, Block.GRANITE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_309 = new BlockState(NamespaceID.from("minecraft:granite_wall:309"), (short) 12476, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_309 = new BlockState(NamespaceID.from("minecraft:granite_wall:309"), (short) 12476, Block.GRANITE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_310 = new BlockState(NamespaceID.from("minecraft:granite_wall:310"), (short) 12477, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_310 = new BlockState(NamespaceID.from("minecraft:granite_wall:310"), (short) 12477, Block.GRANITE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_311 = new BlockState(NamespaceID.from("minecraft:granite_wall:311"), (short) 12478, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_311 = new BlockState(NamespaceID.from("minecraft:granite_wall:311"), (short) 12478, Block.GRANITE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_312 = new BlockState(NamespaceID.from("minecraft:granite_wall:312"), (short) 12479, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_312 = new BlockState(NamespaceID.from("minecraft:granite_wall:312"), (short) 12479, Block.GRANITE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_313 = new BlockState(NamespaceID.from("minecraft:granite_wall:313"), (short) 12480, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_313 = new BlockState(NamespaceID.from("minecraft:granite_wall:313"), (short) 12480, Block.GRANITE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_314 = new BlockState(NamespaceID.from("minecraft:granite_wall:314"), (short) 12481, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_314 = new BlockState(NamespaceID.from("minecraft:granite_wall:314"), (short) 12481, Block.GRANITE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_315 = new BlockState(NamespaceID.from("minecraft:granite_wall:315"), (short) 12482, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_315 = new BlockState(NamespaceID.from("minecraft:granite_wall:315"), (short) 12482, Block.GRANITE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_316 = new BlockState(NamespaceID.from("minecraft:granite_wall:316"), (short) 12483, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_316 = new BlockState(NamespaceID.from("minecraft:granite_wall:316"), (short) 12483, Block.GRANITE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_317 = new BlockState(NamespaceID.from("minecraft:granite_wall:317"), (short) 12484, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_317 = new BlockState(NamespaceID.from("minecraft:granite_wall:317"), (short) 12484, Block.GRANITE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState GRANITE_WALL_318 = new BlockState(NamespaceID.from("minecraft:granite_wall:318"), (short) 12485, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_318 = new BlockState(NamespaceID.from("minecraft:granite_wall:318"), (short) 12485, Block.GRANITE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState GRANITE_WALL_319 = new BlockState(NamespaceID.from("minecraft:granite_wall:319"), (short) 12486, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_319 = new BlockState(NamespaceID.from("minecraft:granite_wall:319"), (short) 12486, Block.GRANITE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState GRANITE_WALL_320 = new BlockState(NamespaceID.from("minecraft:granite_wall:320"), (short) 12487, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_320 = new BlockState(NamespaceID.from("minecraft:granite_wall:320"), (short) 12487, Block.GRANITE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState GRANITE_WALL_321 = new BlockState(NamespaceID.from("minecraft:granite_wall:321"), (short) 12488, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_321 = new BlockState(NamespaceID.from("minecraft:granite_wall:321"), (short) 12488, Block.GRANITE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState GRANITE_WALL_322 = new BlockState(NamespaceID.from("minecraft:granite_wall:322"), (short) 12489, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_322 = new BlockState(NamespaceID.from("minecraft:granite_wall:322"), (short) 12489, Block.GRANITE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState GRANITE_WALL_323 = new BlockState(NamespaceID.from("minecraft:granite_wall:323"), (short) 12490, Block.GRANITE_WALL);
+  public static final BlockState GRANITE_WALL_323 = new BlockState(NamespaceID.from("minecraft:granite_wall:323"), (short) 12490, Block.GRANITE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
   public static void initStates() {
     Block.GRANITE_WALL.addBlockState(GRANITE_WALL_0);

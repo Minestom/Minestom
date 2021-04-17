@@ -13,133 +13,133 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WarpedDoor {
-  public static final BlockState WARPED_DOOR_0 = new BlockState(NamespaceID.from("minecraft:warped_door:0"), (short) 15599, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_0 = new BlockState(NamespaceID.from("minecraft:warped_door:0"), (short) 15599, Block.WARPED_DOOR, "facing=north","half=upper","hinge=left","open=true","powered=true");
 
-  public static final BlockState WARPED_DOOR_1 = new BlockState(NamespaceID.from("minecraft:warped_door:1"), (short) 15600, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_1 = new BlockState(NamespaceID.from("minecraft:warped_door:1"), (short) 15600, Block.WARPED_DOOR, "facing=north","half=upper","hinge=left","open=true","powered=false");
 
-  public static final BlockState WARPED_DOOR_2 = new BlockState(NamespaceID.from("minecraft:warped_door:2"), (short) 15601, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_2 = new BlockState(NamespaceID.from("minecraft:warped_door:2"), (short) 15601, Block.WARPED_DOOR, "facing=north","half=upper","hinge=left","open=false","powered=true");
 
-  public static final BlockState WARPED_DOOR_3 = new BlockState(NamespaceID.from("minecraft:warped_door:3"), (short) 15602, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_3 = new BlockState(NamespaceID.from("minecraft:warped_door:3"), (short) 15602, Block.WARPED_DOOR, "facing=north","half=upper","hinge=left","open=false","powered=false");
 
-  public static final BlockState WARPED_DOOR_4 = new BlockState(NamespaceID.from("minecraft:warped_door:4"), (short) 15603, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_4 = new BlockState(NamespaceID.from("minecraft:warped_door:4"), (short) 15603, Block.WARPED_DOOR, "facing=north","half=upper","hinge=right","open=true","powered=true");
 
-  public static final BlockState WARPED_DOOR_5 = new BlockState(NamespaceID.from("minecraft:warped_door:5"), (short) 15604, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_5 = new BlockState(NamespaceID.from("minecraft:warped_door:5"), (short) 15604, Block.WARPED_DOOR, "facing=north","half=upper","hinge=right","open=true","powered=false");
 
-  public static final BlockState WARPED_DOOR_6 = new BlockState(NamespaceID.from("minecraft:warped_door:6"), (short) 15605, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_6 = new BlockState(NamespaceID.from("minecraft:warped_door:6"), (short) 15605, Block.WARPED_DOOR, "facing=north","half=upper","hinge=right","open=false","powered=true");
 
-  public static final BlockState WARPED_DOOR_7 = new BlockState(NamespaceID.from("minecraft:warped_door:7"), (short) 15606, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_7 = new BlockState(NamespaceID.from("minecraft:warped_door:7"), (short) 15606, Block.WARPED_DOOR, "facing=north","half=upper","hinge=right","open=false","powered=false");
 
-  public static final BlockState WARPED_DOOR_8 = new BlockState(NamespaceID.from("minecraft:warped_door:8"), (short) 15607, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_8 = new BlockState(NamespaceID.from("minecraft:warped_door:8"), (short) 15607, Block.WARPED_DOOR, "facing=north","half=lower","hinge=left","open=true","powered=true");
 
-  public static final BlockState WARPED_DOOR_9 = new BlockState(NamespaceID.from("minecraft:warped_door:9"), (short) 15608, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_9 = new BlockState(NamespaceID.from("minecraft:warped_door:9"), (short) 15608, Block.WARPED_DOOR, "facing=north","half=lower","hinge=left","open=true","powered=false");
 
-  public static final BlockState WARPED_DOOR_10 = new BlockState(NamespaceID.from("minecraft:warped_door:10"), (short) 15609, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_10 = new BlockState(NamespaceID.from("minecraft:warped_door:10"), (short) 15609, Block.WARPED_DOOR, "facing=north","half=lower","hinge=left","open=false","powered=true");
 
-  public static final BlockState WARPED_DOOR_11 = new BlockState(NamespaceID.from("minecraft:warped_door:11"), (short) 15610, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_11 = new BlockState(NamespaceID.from("minecraft:warped_door:11"), (short) 15610, Block.WARPED_DOOR, "facing=north","half=lower","hinge=left","open=false","powered=false");
 
-  public static final BlockState WARPED_DOOR_12 = new BlockState(NamespaceID.from("minecraft:warped_door:12"), (short) 15611, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_12 = new BlockState(NamespaceID.from("minecraft:warped_door:12"), (short) 15611, Block.WARPED_DOOR, "facing=north","half=lower","hinge=right","open=true","powered=true");
 
-  public static final BlockState WARPED_DOOR_13 = new BlockState(NamespaceID.from("minecraft:warped_door:13"), (short) 15612, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_13 = new BlockState(NamespaceID.from("minecraft:warped_door:13"), (short) 15612, Block.WARPED_DOOR, "facing=north","half=lower","hinge=right","open=true","powered=false");
 
-  public static final BlockState WARPED_DOOR_14 = new BlockState(NamespaceID.from("minecraft:warped_door:14"), (short) 15613, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_14 = new BlockState(NamespaceID.from("minecraft:warped_door:14"), (short) 15613, Block.WARPED_DOOR, "facing=north","half=lower","hinge=right","open=false","powered=true");
 
-  public static final BlockState WARPED_DOOR_15 = new BlockState(NamespaceID.from("minecraft:warped_door:15"), (short) 15614, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_15 = new BlockState(NamespaceID.from("minecraft:warped_door:15"), (short) 15614, Block.WARPED_DOOR, "facing=north","half=lower","hinge=right","open=false","powered=false");
 
-  public static final BlockState WARPED_DOOR_16 = new BlockState(NamespaceID.from("minecraft:warped_door:16"), (short) 15615, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_16 = new BlockState(NamespaceID.from("minecraft:warped_door:16"), (short) 15615, Block.WARPED_DOOR, "facing=south","half=upper","hinge=left","open=true","powered=true");
 
-  public static final BlockState WARPED_DOOR_17 = new BlockState(NamespaceID.from("minecraft:warped_door:17"), (short) 15616, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_17 = new BlockState(NamespaceID.from("minecraft:warped_door:17"), (short) 15616, Block.WARPED_DOOR, "facing=south","half=upper","hinge=left","open=true","powered=false");
 
-  public static final BlockState WARPED_DOOR_18 = new BlockState(NamespaceID.from("minecraft:warped_door:18"), (short) 15617, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_18 = new BlockState(NamespaceID.from("minecraft:warped_door:18"), (short) 15617, Block.WARPED_DOOR, "facing=south","half=upper","hinge=left","open=false","powered=true");
 
-  public static final BlockState WARPED_DOOR_19 = new BlockState(NamespaceID.from("minecraft:warped_door:19"), (short) 15618, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_19 = new BlockState(NamespaceID.from("minecraft:warped_door:19"), (short) 15618, Block.WARPED_DOOR, "facing=south","half=upper","hinge=left","open=false","powered=false");
 
-  public static final BlockState WARPED_DOOR_20 = new BlockState(NamespaceID.from("minecraft:warped_door:20"), (short) 15619, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_20 = new BlockState(NamespaceID.from("minecraft:warped_door:20"), (short) 15619, Block.WARPED_DOOR, "facing=south","half=upper","hinge=right","open=true","powered=true");
 
-  public static final BlockState WARPED_DOOR_21 = new BlockState(NamespaceID.from("minecraft:warped_door:21"), (short) 15620, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_21 = new BlockState(NamespaceID.from("minecraft:warped_door:21"), (short) 15620, Block.WARPED_DOOR, "facing=south","half=upper","hinge=right","open=true","powered=false");
 
-  public static final BlockState WARPED_DOOR_22 = new BlockState(NamespaceID.from("minecraft:warped_door:22"), (short) 15621, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_22 = new BlockState(NamespaceID.from("minecraft:warped_door:22"), (short) 15621, Block.WARPED_DOOR, "facing=south","half=upper","hinge=right","open=false","powered=true");
 
-  public static final BlockState WARPED_DOOR_23 = new BlockState(NamespaceID.from("minecraft:warped_door:23"), (short) 15622, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_23 = new BlockState(NamespaceID.from("minecraft:warped_door:23"), (short) 15622, Block.WARPED_DOOR, "facing=south","half=upper","hinge=right","open=false","powered=false");
 
-  public static final BlockState WARPED_DOOR_24 = new BlockState(NamespaceID.from("minecraft:warped_door:24"), (short) 15623, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_24 = new BlockState(NamespaceID.from("minecraft:warped_door:24"), (short) 15623, Block.WARPED_DOOR, "facing=south","half=lower","hinge=left","open=true","powered=true");
 
-  public static final BlockState WARPED_DOOR_25 = new BlockState(NamespaceID.from("minecraft:warped_door:25"), (short) 15624, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_25 = new BlockState(NamespaceID.from("minecraft:warped_door:25"), (short) 15624, Block.WARPED_DOOR, "facing=south","half=lower","hinge=left","open=true","powered=false");
 
-  public static final BlockState WARPED_DOOR_26 = new BlockState(NamespaceID.from("minecraft:warped_door:26"), (short) 15625, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_26 = new BlockState(NamespaceID.from("minecraft:warped_door:26"), (short) 15625, Block.WARPED_DOOR, "facing=south","half=lower","hinge=left","open=false","powered=true");
 
-  public static final BlockState WARPED_DOOR_27 = new BlockState(NamespaceID.from("minecraft:warped_door:27"), (short) 15626, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_27 = new BlockState(NamespaceID.from("minecraft:warped_door:27"), (short) 15626, Block.WARPED_DOOR, "facing=south","half=lower","hinge=left","open=false","powered=false");
 
-  public static final BlockState WARPED_DOOR_28 = new BlockState(NamespaceID.from("minecraft:warped_door:28"), (short) 15627, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_28 = new BlockState(NamespaceID.from("minecraft:warped_door:28"), (short) 15627, Block.WARPED_DOOR, "facing=south","half=lower","hinge=right","open=true","powered=true");
 
-  public static final BlockState WARPED_DOOR_29 = new BlockState(NamespaceID.from("minecraft:warped_door:29"), (short) 15628, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_29 = new BlockState(NamespaceID.from("minecraft:warped_door:29"), (short) 15628, Block.WARPED_DOOR, "facing=south","half=lower","hinge=right","open=true","powered=false");
 
-  public static final BlockState WARPED_DOOR_30 = new BlockState(NamespaceID.from("minecraft:warped_door:30"), (short) 15629, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_30 = new BlockState(NamespaceID.from("minecraft:warped_door:30"), (short) 15629, Block.WARPED_DOOR, "facing=south","half=lower","hinge=right","open=false","powered=true");
 
-  public static final BlockState WARPED_DOOR_31 = new BlockState(NamespaceID.from("minecraft:warped_door:31"), (short) 15630, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_31 = new BlockState(NamespaceID.from("minecraft:warped_door:31"), (short) 15630, Block.WARPED_DOOR, "facing=south","half=lower","hinge=right","open=false","powered=false");
 
-  public static final BlockState WARPED_DOOR_32 = new BlockState(NamespaceID.from("minecraft:warped_door:32"), (short) 15631, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_32 = new BlockState(NamespaceID.from("minecraft:warped_door:32"), (short) 15631, Block.WARPED_DOOR, "facing=west","half=upper","hinge=left","open=true","powered=true");
 
-  public static final BlockState WARPED_DOOR_33 = new BlockState(NamespaceID.from("minecraft:warped_door:33"), (short) 15632, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_33 = new BlockState(NamespaceID.from("minecraft:warped_door:33"), (short) 15632, Block.WARPED_DOOR, "facing=west","half=upper","hinge=left","open=true","powered=false");
 
-  public static final BlockState WARPED_DOOR_34 = new BlockState(NamespaceID.from("minecraft:warped_door:34"), (short) 15633, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_34 = new BlockState(NamespaceID.from("minecraft:warped_door:34"), (short) 15633, Block.WARPED_DOOR, "facing=west","half=upper","hinge=left","open=false","powered=true");
 
-  public static final BlockState WARPED_DOOR_35 = new BlockState(NamespaceID.from("minecraft:warped_door:35"), (short) 15634, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_35 = new BlockState(NamespaceID.from("minecraft:warped_door:35"), (short) 15634, Block.WARPED_DOOR, "facing=west","half=upper","hinge=left","open=false","powered=false");
 
-  public static final BlockState WARPED_DOOR_36 = new BlockState(NamespaceID.from("minecraft:warped_door:36"), (short) 15635, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_36 = new BlockState(NamespaceID.from("minecraft:warped_door:36"), (short) 15635, Block.WARPED_DOOR, "facing=west","half=upper","hinge=right","open=true","powered=true");
 
-  public static final BlockState WARPED_DOOR_37 = new BlockState(NamespaceID.from("minecraft:warped_door:37"), (short) 15636, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_37 = new BlockState(NamespaceID.from("minecraft:warped_door:37"), (short) 15636, Block.WARPED_DOOR, "facing=west","half=upper","hinge=right","open=true","powered=false");
 
-  public static final BlockState WARPED_DOOR_38 = new BlockState(NamespaceID.from("minecraft:warped_door:38"), (short) 15637, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_38 = new BlockState(NamespaceID.from("minecraft:warped_door:38"), (short) 15637, Block.WARPED_DOOR, "facing=west","half=upper","hinge=right","open=false","powered=true");
 
-  public static final BlockState WARPED_DOOR_39 = new BlockState(NamespaceID.from("minecraft:warped_door:39"), (short) 15638, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_39 = new BlockState(NamespaceID.from("minecraft:warped_door:39"), (short) 15638, Block.WARPED_DOOR, "facing=west","half=upper","hinge=right","open=false","powered=false");
 
-  public static final BlockState WARPED_DOOR_40 = new BlockState(NamespaceID.from("minecraft:warped_door:40"), (short) 15639, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_40 = new BlockState(NamespaceID.from("minecraft:warped_door:40"), (short) 15639, Block.WARPED_DOOR, "facing=west","half=lower","hinge=left","open=true","powered=true");
 
-  public static final BlockState WARPED_DOOR_41 = new BlockState(NamespaceID.from("minecraft:warped_door:41"), (short) 15640, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_41 = new BlockState(NamespaceID.from("minecraft:warped_door:41"), (short) 15640, Block.WARPED_DOOR, "facing=west","half=lower","hinge=left","open=true","powered=false");
 
-  public static final BlockState WARPED_DOOR_42 = new BlockState(NamespaceID.from("minecraft:warped_door:42"), (short) 15641, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_42 = new BlockState(NamespaceID.from("minecraft:warped_door:42"), (short) 15641, Block.WARPED_DOOR, "facing=west","half=lower","hinge=left","open=false","powered=true");
 
-  public static final BlockState WARPED_DOOR_43 = new BlockState(NamespaceID.from("minecraft:warped_door:43"), (short) 15642, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_43 = new BlockState(NamespaceID.from("minecraft:warped_door:43"), (short) 15642, Block.WARPED_DOOR, "facing=west","half=lower","hinge=left","open=false","powered=false");
 
-  public static final BlockState WARPED_DOOR_44 = new BlockState(NamespaceID.from("minecraft:warped_door:44"), (short) 15643, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_44 = new BlockState(NamespaceID.from("minecraft:warped_door:44"), (short) 15643, Block.WARPED_DOOR, "facing=west","half=lower","hinge=right","open=true","powered=true");
 
-  public static final BlockState WARPED_DOOR_45 = new BlockState(NamespaceID.from("minecraft:warped_door:45"), (short) 15644, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_45 = new BlockState(NamespaceID.from("minecraft:warped_door:45"), (short) 15644, Block.WARPED_DOOR, "facing=west","half=lower","hinge=right","open=true","powered=false");
 
-  public static final BlockState WARPED_DOOR_46 = new BlockState(NamespaceID.from("minecraft:warped_door:46"), (short) 15645, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_46 = new BlockState(NamespaceID.from("minecraft:warped_door:46"), (short) 15645, Block.WARPED_DOOR, "facing=west","half=lower","hinge=right","open=false","powered=true");
 
-  public static final BlockState WARPED_DOOR_47 = new BlockState(NamespaceID.from("minecraft:warped_door:47"), (short) 15646, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_47 = new BlockState(NamespaceID.from("minecraft:warped_door:47"), (short) 15646, Block.WARPED_DOOR, "facing=west","half=lower","hinge=right","open=false","powered=false");
 
-  public static final BlockState WARPED_DOOR_48 = new BlockState(NamespaceID.from("minecraft:warped_door:48"), (short) 15647, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_48 = new BlockState(NamespaceID.from("minecraft:warped_door:48"), (short) 15647, Block.WARPED_DOOR, "facing=east","half=upper","hinge=left","open=true","powered=true");
 
-  public static final BlockState WARPED_DOOR_49 = new BlockState(NamespaceID.from("minecraft:warped_door:49"), (short) 15648, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_49 = new BlockState(NamespaceID.from("minecraft:warped_door:49"), (short) 15648, Block.WARPED_DOOR, "facing=east","half=upper","hinge=left","open=true","powered=false");
 
-  public static final BlockState WARPED_DOOR_50 = new BlockState(NamespaceID.from("minecraft:warped_door:50"), (short) 15649, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_50 = new BlockState(NamespaceID.from("minecraft:warped_door:50"), (short) 15649, Block.WARPED_DOOR, "facing=east","half=upper","hinge=left","open=false","powered=true");
 
-  public static final BlockState WARPED_DOOR_51 = new BlockState(NamespaceID.from("minecraft:warped_door:51"), (short) 15650, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_51 = new BlockState(NamespaceID.from("minecraft:warped_door:51"), (short) 15650, Block.WARPED_DOOR, "facing=east","half=upper","hinge=left","open=false","powered=false");
 
-  public static final BlockState WARPED_DOOR_52 = new BlockState(NamespaceID.from("minecraft:warped_door:52"), (short) 15651, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_52 = new BlockState(NamespaceID.from("minecraft:warped_door:52"), (short) 15651, Block.WARPED_DOOR, "facing=east","half=upper","hinge=right","open=true","powered=true");
 
-  public static final BlockState WARPED_DOOR_53 = new BlockState(NamespaceID.from("minecraft:warped_door:53"), (short) 15652, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_53 = new BlockState(NamespaceID.from("minecraft:warped_door:53"), (short) 15652, Block.WARPED_DOOR, "facing=east","half=upper","hinge=right","open=true","powered=false");
 
-  public static final BlockState WARPED_DOOR_54 = new BlockState(NamespaceID.from("minecraft:warped_door:54"), (short) 15653, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_54 = new BlockState(NamespaceID.from("minecraft:warped_door:54"), (short) 15653, Block.WARPED_DOOR, "facing=east","half=upper","hinge=right","open=false","powered=true");
 
-  public static final BlockState WARPED_DOOR_55 = new BlockState(NamespaceID.from("minecraft:warped_door:55"), (short) 15654, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_55 = new BlockState(NamespaceID.from("minecraft:warped_door:55"), (short) 15654, Block.WARPED_DOOR, "facing=east","half=upper","hinge=right","open=false","powered=false");
 
-  public static final BlockState WARPED_DOOR_56 = new BlockState(NamespaceID.from("minecraft:warped_door:56"), (short) 15655, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_56 = new BlockState(NamespaceID.from("minecraft:warped_door:56"), (short) 15655, Block.WARPED_DOOR, "facing=east","half=lower","hinge=left","open=true","powered=true");
 
-  public static final BlockState WARPED_DOOR_57 = new BlockState(NamespaceID.from("minecraft:warped_door:57"), (short) 15656, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_57 = new BlockState(NamespaceID.from("minecraft:warped_door:57"), (short) 15656, Block.WARPED_DOOR, "facing=east","half=lower","hinge=left","open=true","powered=false");
 
-  public static final BlockState WARPED_DOOR_58 = new BlockState(NamespaceID.from("minecraft:warped_door:58"), (short) 15657, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_58 = new BlockState(NamespaceID.from("minecraft:warped_door:58"), (short) 15657, Block.WARPED_DOOR, "facing=east","half=lower","hinge=left","open=false","powered=true");
 
-  public static final BlockState WARPED_DOOR_59 = new BlockState(NamespaceID.from("minecraft:warped_door:59"), (short) 15658, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_59 = new BlockState(NamespaceID.from("minecraft:warped_door:59"), (short) 15658, Block.WARPED_DOOR, "facing=east","half=lower","hinge=left","open=false","powered=false");
 
-  public static final BlockState WARPED_DOOR_60 = new BlockState(NamespaceID.from("minecraft:warped_door:60"), (short) 15659, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_60 = new BlockState(NamespaceID.from("minecraft:warped_door:60"), (short) 15659, Block.WARPED_DOOR, "facing=east","half=lower","hinge=right","open=true","powered=true");
 
-  public static final BlockState WARPED_DOOR_61 = new BlockState(NamespaceID.from("minecraft:warped_door:61"), (short) 15660, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_61 = new BlockState(NamespaceID.from("minecraft:warped_door:61"), (short) 15660, Block.WARPED_DOOR, "facing=east","half=lower","hinge=right","open=true","powered=false");
 
-  public static final BlockState WARPED_DOOR_62 = new BlockState(NamespaceID.from("minecraft:warped_door:62"), (short) 15661, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_62 = new BlockState(NamespaceID.from("minecraft:warped_door:62"), (short) 15661, Block.WARPED_DOOR, "facing=east","half=lower","hinge=right","open=false","powered=true");
 
-  public static final BlockState WARPED_DOOR_63 = new BlockState(NamespaceID.from("minecraft:warped_door:63"), (short) 15662, Block.WARPED_DOOR);
+  public static final BlockState WARPED_DOOR_63 = new BlockState(NamespaceID.from("minecraft:warped_door:63"), (short) 15662, Block.WARPED_DOOR, "facing=east","half=lower","hinge=right","open=false","powered=false");
 
   public static void initStates() {
     Block.WARPED_DOOR.addBlockState(WARPED_DOOR_0);

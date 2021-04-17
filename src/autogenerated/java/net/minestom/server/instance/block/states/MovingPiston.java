@@ -13,29 +13,29 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class MovingPiston {
-  public static final BlockState MOVING_PISTON_0 = new BlockState(NamespaceID.from("minecraft:moving_piston:0"), (short) 1400, Block.MOVING_PISTON);
+  public static final BlockState MOVING_PISTON_0 = new BlockState(NamespaceID.from("minecraft:moving_piston:0"), (short) 1400, Block.MOVING_PISTON, "facing=north","type=normal");
 
-  public static final BlockState MOVING_PISTON_1 = new BlockState(NamespaceID.from("minecraft:moving_piston:1"), (short) 1401, Block.MOVING_PISTON);
+  public static final BlockState MOVING_PISTON_1 = new BlockState(NamespaceID.from("minecraft:moving_piston:1"), (short) 1401, Block.MOVING_PISTON, "facing=north","type=sticky");
 
-  public static final BlockState MOVING_PISTON_2 = new BlockState(NamespaceID.from("minecraft:moving_piston:2"), (short) 1402, Block.MOVING_PISTON);
+  public static final BlockState MOVING_PISTON_2 = new BlockState(NamespaceID.from("minecraft:moving_piston:2"), (short) 1402, Block.MOVING_PISTON, "facing=east","type=normal");
 
-  public static final BlockState MOVING_PISTON_3 = new BlockState(NamespaceID.from("minecraft:moving_piston:3"), (short) 1403, Block.MOVING_PISTON);
+  public static final BlockState MOVING_PISTON_3 = new BlockState(NamespaceID.from("minecraft:moving_piston:3"), (short) 1403, Block.MOVING_PISTON, "facing=east","type=sticky");
 
-  public static final BlockState MOVING_PISTON_4 = new BlockState(NamespaceID.from("minecraft:moving_piston:4"), (short) 1404, Block.MOVING_PISTON);
+  public static final BlockState MOVING_PISTON_4 = new BlockState(NamespaceID.from("minecraft:moving_piston:4"), (short) 1404, Block.MOVING_PISTON, "facing=south","type=normal");
 
-  public static final BlockState MOVING_PISTON_5 = new BlockState(NamespaceID.from("minecraft:moving_piston:5"), (short) 1405, Block.MOVING_PISTON);
+  public static final BlockState MOVING_PISTON_5 = new BlockState(NamespaceID.from("minecraft:moving_piston:5"), (short) 1405, Block.MOVING_PISTON, "facing=south","type=sticky");
 
-  public static final BlockState MOVING_PISTON_6 = new BlockState(NamespaceID.from("minecraft:moving_piston:6"), (short) 1406, Block.MOVING_PISTON);
+  public static final BlockState MOVING_PISTON_6 = new BlockState(NamespaceID.from("minecraft:moving_piston:6"), (short) 1406, Block.MOVING_PISTON, "facing=west","type=normal");
 
-  public static final BlockState MOVING_PISTON_7 = new BlockState(NamespaceID.from("minecraft:moving_piston:7"), (short) 1407, Block.MOVING_PISTON);
+  public static final BlockState MOVING_PISTON_7 = new BlockState(NamespaceID.from("minecraft:moving_piston:7"), (short) 1407, Block.MOVING_PISTON, "facing=west","type=sticky");
 
-  public static final BlockState MOVING_PISTON_8 = new BlockState(NamespaceID.from("minecraft:moving_piston:8"), (short) 1408, Block.MOVING_PISTON);
+  public static final BlockState MOVING_PISTON_8 = new BlockState(NamespaceID.from("minecraft:moving_piston:8"), (short) 1408, Block.MOVING_PISTON, "facing=up","type=normal");
 
-  public static final BlockState MOVING_PISTON_9 = new BlockState(NamespaceID.from("minecraft:moving_piston:9"), (short) 1409, Block.MOVING_PISTON);
+  public static final BlockState MOVING_PISTON_9 = new BlockState(NamespaceID.from("minecraft:moving_piston:9"), (short) 1409, Block.MOVING_PISTON, "facing=up","type=sticky");
 
-  public static final BlockState MOVING_PISTON_10 = new BlockState(NamespaceID.from("minecraft:moving_piston:10"), (short) 1410, Block.MOVING_PISTON);
+  public static final BlockState MOVING_PISTON_10 = new BlockState(NamespaceID.from("minecraft:moving_piston:10"), (short) 1410, Block.MOVING_PISTON, "facing=down","type=normal");
 
-  public static final BlockState MOVING_PISTON_11 = new BlockState(NamespaceID.from("minecraft:moving_piston:11"), (short) 1411, Block.MOVING_PISTON);
+  public static final BlockState MOVING_PISTON_11 = new BlockState(NamespaceID.from("minecraft:moving_piston:11"), (short) 1411, Block.MOVING_PISTON, "facing=down","type=sticky");
 
   public static void initStates() {
     Block.MOVING_PISTON.addBlockState(MOVING_PISTON_0);

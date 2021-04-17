@@ -13,17 +13,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class EndStoneBrickSlab {
-  public static final BlockState END_STONE_BRICK_SLAB_0 = new BlockState(NamespaceID.from("minecraft:end_stone_brick_slab:0"), (short) 10823, Block.END_STONE_BRICK_SLAB);
+  public static final BlockState END_STONE_BRICK_SLAB_0 = new BlockState(NamespaceID.from("minecraft:end_stone_brick_slab:0"), (short) 10823, Block.END_STONE_BRICK_SLAB, "type=top","waterlogged=true");
 
-  public static final BlockState END_STONE_BRICK_SLAB_1 = new BlockState(NamespaceID.from("minecraft:end_stone_brick_slab:1"), (short) 10824, Block.END_STONE_BRICK_SLAB);
+  public static final BlockState END_STONE_BRICK_SLAB_1 = new BlockState(NamespaceID.from("minecraft:end_stone_brick_slab:1"), (short) 10824, Block.END_STONE_BRICK_SLAB, "type=top","waterlogged=false");
 
-  public static final BlockState END_STONE_BRICK_SLAB_2 = new BlockState(NamespaceID.from("minecraft:end_stone_brick_slab:2"), (short) 10825, Block.END_STONE_BRICK_SLAB);
+  public static final BlockState END_STONE_BRICK_SLAB_2 = new BlockState(NamespaceID.from("minecraft:end_stone_brick_slab:2"), (short) 10825, Block.END_STONE_BRICK_SLAB, "type=bottom","waterlogged=true");
 
-  public static final BlockState END_STONE_BRICK_SLAB_3 = new BlockState(NamespaceID.from("minecraft:end_stone_brick_slab:3"), (short) 10826, Block.END_STONE_BRICK_SLAB);
+  public static final BlockState END_STONE_BRICK_SLAB_3 = new BlockState(NamespaceID.from("minecraft:end_stone_brick_slab:3"), (short) 10826, Block.END_STONE_BRICK_SLAB, "type=bottom","waterlogged=false");
 
-  public static final BlockState END_STONE_BRICK_SLAB_4 = new BlockState(NamespaceID.from("minecraft:end_stone_brick_slab:4"), (short) 10827, Block.END_STONE_BRICK_SLAB);
+  public static final BlockState END_STONE_BRICK_SLAB_4 = new BlockState(NamespaceID.from("minecraft:end_stone_brick_slab:4"), (short) 10827, Block.END_STONE_BRICK_SLAB, "type=double","waterlogged=true");
 
-  public static final BlockState END_STONE_BRICK_SLAB_5 = new BlockState(NamespaceID.from("minecraft:end_stone_brick_slab:5"), (short) 10828, Block.END_STONE_BRICK_SLAB);
+  public static final BlockState END_STONE_BRICK_SLAB_5 = new BlockState(NamespaceID.from("minecraft:end_stone_brick_slab:5"), (short) 10828, Block.END_STONE_BRICK_SLAB, "type=double","waterlogged=false");
 
   public static void initStates() {
     Block.END_STONE_BRICK_SLAB.addBlockState(END_STONE_BRICK_SLAB_0);

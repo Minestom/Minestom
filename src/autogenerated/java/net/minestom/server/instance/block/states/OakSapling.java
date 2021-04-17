@@ -13,9 +13,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class OakSapling {
-  public static final BlockState OAK_SAPLING_0 = new BlockState(NamespaceID.from("minecraft:oak_sapling:0"), (short) 21, Block.OAK_SAPLING);
+  public static final BlockState OAK_SAPLING_0 = new BlockState(NamespaceID.from("minecraft:oak_sapling:0"), (short) 21, Block.OAK_SAPLING, "stage=0");
 
-  public static final BlockState OAK_SAPLING_1 = new BlockState(NamespaceID.from("minecraft:oak_sapling:1"), (short) 22, Block.OAK_SAPLING);
+  public static final BlockState OAK_SAPLING_1 = new BlockState(NamespaceID.from("minecraft:oak_sapling:1"), (short) 22, Block.OAK_SAPLING, "stage=1");
 
   public static void initStates() {
     Block.OAK_SAPLING.addBlockState(OAK_SAPLING_0);

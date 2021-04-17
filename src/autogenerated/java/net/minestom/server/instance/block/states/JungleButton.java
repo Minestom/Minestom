@@ -13,53 +13,53 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class JungleButton {
-  public static final BlockState JUNGLE_BUTTON_0 = new BlockState(NamespaceID.from("minecraft:jungle_button:0"), (short) 6422, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_0 = new BlockState(NamespaceID.from("minecraft:jungle_button:0"), (short) 6422, Block.JUNGLE_BUTTON, "face=FLOOR","facing=north","powered=true");
 
-  public static final BlockState JUNGLE_BUTTON_1 = new BlockState(NamespaceID.from("minecraft:jungle_button:1"), (short) 6423, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_1 = new BlockState(NamespaceID.from("minecraft:jungle_button:1"), (short) 6423, Block.JUNGLE_BUTTON, "face=FLOOR","facing=north","powered=false");
 
-  public static final BlockState JUNGLE_BUTTON_2 = new BlockState(NamespaceID.from("minecraft:jungle_button:2"), (short) 6424, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_2 = new BlockState(NamespaceID.from("minecraft:jungle_button:2"), (short) 6424, Block.JUNGLE_BUTTON, "face=FLOOR","facing=south","powered=true");
 
-  public static final BlockState JUNGLE_BUTTON_3 = new BlockState(NamespaceID.from("minecraft:jungle_button:3"), (short) 6425, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_3 = new BlockState(NamespaceID.from("minecraft:jungle_button:3"), (short) 6425, Block.JUNGLE_BUTTON, "face=FLOOR","facing=south","powered=false");
 
-  public static final BlockState JUNGLE_BUTTON_4 = new BlockState(NamespaceID.from("minecraft:jungle_button:4"), (short) 6426, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_4 = new BlockState(NamespaceID.from("minecraft:jungle_button:4"), (short) 6426, Block.JUNGLE_BUTTON, "face=FLOOR","facing=west","powered=true");
 
-  public static final BlockState JUNGLE_BUTTON_5 = new BlockState(NamespaceID.from("minecraft:jungle_button:5"), (short) 6427, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_5 = new BlockState(NamespaceID.from("minecraft:jungle_button:5"), (short) 6427, Block.JUNGLE_BUTTON, "face=FLOOR","facing=west","powered=false");
 
-  public static final BlockState JUNGLE_BUTTON_6 = new BlockState(NamespaceID.from("minecraft:jungle_button:6"), (short) 6428, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_6 = new BlockState(NamespaceID.from("minecraft:jungle_button:6"), (short) 6428, Block.JUNGLE_BUTTON, "face=FLOOR","facing=east","powered=true");
 
-  public static final BlockState JUNGLE_BUTTON_7 = new BlockState(NamespaceID.from("minecraft:jungle_button:7"), (short) 6429, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_7 = new BlockState(NamespaceID.from("minecraft:jungle_button:7"), (short) 6429, Block.JUNGLE_BUTTON, "face=FLOOR","facing=east","powered=false");
 
-  public static final BlockState JUNGLE_BUTTON_8 = new BlockState(NamespaceID.from("minecraft:jungle_button:8"), (short) 6430, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_8 = new BlockState(NamespaceID.from("minecraft:jungle_button:8"), (short) 6430, Block.JUNGLE_BUTTON, "face=WALL","facing=north","powered=true");
 
-  public static final BlockState JUNGLE_BUTTON_9 = new BlockState(NamespaceID.from("minecraft:jungle_button:9"), (short) 6431, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_9 = new BlockState(NamespaceID.from("minecraft:jungle_button:9"), (short) 6431, Block.JUNGLE_BUTTON, "face=WALL","facing=north","powered=false");
 
-  public static final BlockState JUNGLE_BUTTON_10 = new BlockState(NamespaceID.from("minecraft:jungle_button:10"), (short) 6432, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_10 = new BlockState(NamespaceID.from("minecraft:jungle_button:10"), (short) 6432, Block.JUNGLE_BUTTON, "face=WALL","facing=south","powered=true");
 
-  public static final BlockState JUNGLE_BUTTON_11 = new BlockState(NamespaceID.from("minecraft:jungle_button:11"), (short) 6433, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_11 = new BlockState(NamespaceID.from("minecraft:jungle_button:11"), (short) 6433, Block.JUNGLE_BUTTON, "face=WALL","facing=south","powered=false");
 
-  public static final BlockState JUNGLE_BUTTON_12 = new BlockState(NamespaceID.from("minecraft:jungle_button:12"), (short) 6434, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_12 = new BlockState(NamespaceID.from("minecraft:jungle_button:12"), (short) 6434, Block.JUNGLE_BUTTON, "face=WALL","facing=west","powered=true");
 
-  public static final BlockState JUNGLE_BUTTON_13 = new BlockState(NamespaceID.from("minecraft:jungle_button:13"), (short) 6435, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_13 = new BlockState(NamespaceID.from("minecraft:jungle_button:13"), (short) 6435, Block.JUNGLE_BUTTON, "face=WALL","facing=west","powered=false");
 
-  public static final BlockState JUNGLE_BUTTON_14 = new BlockState(NamespaceID.from("minecraft:jungle_button:14"), (short) 6436, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_14 = new BlockState(NamespaceID.from("minecraft:jungle_button:14"), (short) 6436, Block.JUNGLE_BUTTON, "face=WALL","facing=east","powered=true");
 
-  public static final BlockState JUNGLE_BUTTON_15 = new BlockState(NamespaceID.from("minecraft:jungle_button:15"), (short) 6437, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_15 = new BlockState(NamespaceID.from("minecraft:jungle_button:15"), (short) 6437, Block.JUNGLE_BUTTON, "face=WALL","facing=east","powered=false");
 
-  public static final BlockState JUNGLE_BUTTON_16 = new BlockState(NamespaceID.from("minecraft:jungle_button:16"), (short) 6438, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_16 = new BlockState(NamespaceID.from("minecraft:jungle_button:16"), (short) 6438, Block.JUNGLE_BUTTON, "face=CEILING","facing=north","powered=true");
 
-  public static final BlockState JUNGLE_BUTTON_17 = new BlockState(NamespaceID.from("minecraft:jungle_button:17"), (short) 6439, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_17 = new BlockState(NamespaceID.from("minecraft:jungle_button:17"), (short) 6439, Block.JUNGLE_BUTTON, "face=CEILING","facing=north","powered=false");
 
-  public static final BlockState JUNGLE_BUTTON_18 = new BlockState(NamespaceID.from("minecraft:jungle_button:18"), (short) 6440, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_18 = new BlockState(NamespaceID.from("minecraft:jungle_button:18"), (short) 6440, Block.JUNGLE_BUTTON, "face=CEILING","facing=south","powered=true");
 
-  public static final BlockState JUNGLE_BUTTON_19 = new BlockState(NamespaceID.from("minecraft:jungle_button:19"), (short) 6441, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_19 = new BlockState(NamespaceID.from("minecraft:jungle_button:19"), (short) 6441, Block.JUNGLE_BUTTON, "face=CEILING","facing=south","powered=false");
 
-  public static final BlockState JUNGLE_BUTTON_20 = new BlockState(NamespaceID.from("minecraft:jungle_button:20"), (short) 6442, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_20 = new BlockState(NamespaceID.from("minecraft:jungle_button:20"), (short) 6442, Block.JUNGLE_BUTTON, "face=CEILING","facing=west","powered=true");
 
-  public static final BlockState JUNGLE_BUTTON_21 = new BlockState(NamespaceID.from("minecraft:jungle_button:21"), (short) 6443, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_21 = new BlockState(NamespaceID.from("minecraft:jungle_button:21"), (short) 6443, Block.JUNGLE_BUTTON, "face=CEILING","facing=west","powered=false");
 
-  public static final BlockState JUNGLE_BUTTON_22 = new BlockState(NamespaceID.from("minecraft:jungle_button:22"), (short) 6444, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_22 = new BlockState(NamespaceID.from("minecraft:jungle_button:22"), (short) 6444, Block.JUNGLE_BUTTON, "face=CEILING","facing=east","powered=true");
 
-  public static final BlockState JUNGLE_BUTTON_23 = new BlockState(NamespaceID.from("minecraft:jungle_button:23"), (short) 6445, Block.JUNGLE_BUTTON);
+  public static final BlockState JUNGLE_BUTTON_23 = new BlockState(NamespaceID.from("minecraft:jungle_button:23"), (short) 6445, Block.JUNGLE_BUTTON, "face=CEILING","facing=east","powered=false");
 
   public static void initStates() {
     Block.JUNGLE_BUTTON.addBlockState(JUNGLE_BUTTON_0);

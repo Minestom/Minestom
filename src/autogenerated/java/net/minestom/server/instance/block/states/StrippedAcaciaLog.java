@@ -13,11 +13,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class StrippedAcaciaLog {
-  public static final BlockState STRIPPED_ACACIA_LOG_0 = new BlockState(NamespaceID.from("minecraft:stripped_acacia_log:0"), (short) 100, Block.STRIPPED_ACACIA_LOG);
+  public static final BlockState STRIPPED_ACACIA_LOG_0 = new BlockState(NamespaceID.from("minecraft:stripped_acacia_log:0"), (short) 100, Block.STRIPPED_ACACIA_LOG, "axis=x");
 
-  public static final BlockState STRIPPED_ACACIA_LOG_1 = new BlockState(NamespaceID.from("minecraft:stripped_acacia_log:1"), (short) 101, Block.STRIPPED_ACACIA_LOG);
+  public static final BlockState STRIPPED_ACACIA_LOG_1 = new BlockState(NamespaceID.from("minecraft:stripped_acacia_log:1"), (short) 101, Block.STRIPPED_ACACIA_LOG, "axis=y");
 
-  public static final BlockState STRIPPED_ACACIA_LOG_2 = new BlockState(NamespaceID.from("minecraft:stripped_acacia_log:2"), (short) 102, Block.STRIPPED_ACACIA_LOG);
+  public static final BlockState STRIPPED_ACACIA_LOG_2 = new BlockState(NamespaceID.from("minecraft:stripped_acacia_log:2"), (short) 102, Block.STRIPPED_ACACIA_LOG, "axis=z");
 
   public static void initStates() {
     Block.STRIPPED_ACACIA_LOG.addBlockState(STRIPPED_ACACIA_LOG_0);

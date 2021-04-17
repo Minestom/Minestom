@@ -13,37 +13,37 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SkeletonSkull {
-  public static final BlockState SKELETON_SKULL_0 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:0"), (short) 6494, Block.SKELETON_SKULL);
+  public static final BlockState SKELETON_SKULL_0 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:0"), (short) 6494, Block.SKELETON_SKULL, "rotation=0");
 
-  public static final BlockState SKELETON_SKULL_1 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:1"), (short) 6495, Block.SKELETON_SKULL);
+  public static final BlockState SKELETON_SKULL_1 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:1"), (short) 6495, Block.SKELETON_SKULL, "rotation=1");
 
-  public static final BlockState SKELETON_SKULL_2 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:2"), (short) 6496, Block.SKELETON_SKULL);
+  public static final BlockState SKELETON_SKULL_2 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:2"), (short) 6496, Block.SKELETON_SKULL, "rotation=2");
 
-  public static final BlockState SKELETON_SKULL_3 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:3"), (short) 6497, Block.SKELETON_SKULL);
+  public static final BlockState SKELETON_SKULL_3 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:3"), (short) 6497, Block.SKELETON_SKULL, "rotation=3");
 
-  public static final BlockState SKELETON_SKULL_4 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:4"), (short) 6498, Block.SKELETON_SKULL);
+  public static final BlockState SKELETON_SKULL_4 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:4"), (short) 6498, Block.SKELETON_SKULL, "rotation=4");
 
-  public static final BlockState SKELETON_SKULL_5 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:5"), (short) 6499, Block.SKELETON_SKULL);
+  public static final BlockState SKELETON_SKULL_5 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:5"), (short) 6499, Block.SKELETON_SKULL, "rotation=5");
 
-  public static final BlockState SKELETON_SKULL_6 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:6"), (short) 6500, Block.SKELETON_SKULL);
+  public static final BlockState SKELETON_SKULL_6 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:6"), (short) 6500, Block.SKELETON_SKULL, "rotation=6");
 
-  public static final BlockState SKELETON_SKULL_7 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:7"), (short) 6501, Block.SKELETON_SKULL);
+  public static final BlockState SKELETON_SKULL_7 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:7"), (short) 6501, Block.SKELETON_SKULL, "rotation=7");
 
-  public static final BlockState SKELETON_SKULL_8 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:8"), (short) 6502, Block.SKELETON_SKULL);
+  public static final BlockState SKELETON_SKULL_8 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:8"), (short) 6502, Block.SKELETON_SKULL, "rotation=8");
 
-  public static final BlockState SKELETON_SKULL_9 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:9"), (short) 6503, Block.SKELETON_SKULL);
+  public static final BlockState SKELETON_SKULL_9 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:9"), (short) 6503, Block.SKELETON_SKULL, "rotation=9");
 
-  public static final BlockState SKELETON_SKULL_10 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:10"), (short) 6504, Block.SKELETON_SKULL);
+  public static final BlockState SKELETON_SKULL_10 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:10"), (short) 6504, Block.SKELETON_SKULL, "rotation=10");
 
-  public static final BlockState SKELETON_SKULL_11 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:11"), (short) 6505, Block.SKELETON_SKULL);
+  public static final BlockState SKELETON_SKULL_11 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:11"), (short) 6505, Block.SKELETON_SKULL, "rotation=11");
 
-  public static final BlockState SKELETON_SKULL_12 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:12"), (short) 6506, Block.SKELETON_SKULL);
+  public static final BlockState SKELETON_SKULL_12 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:12"), (short) 6506, Block.SKELETON_SKULL, "rotation=12");
 
-  public static final BlockState SKELETON_SKULL_13 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:13"), (short) 6507, Block.SKELETON_SKULL);
+  public static final BlockState SKELETON_SKULL_13 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:13"), (short) 6507, Block.SKELETON_SKULL, "rotation=13");
 
-  public static final BlockState SKELETON_SKULL_14 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:14"), (short) 6508, Block.SKELETON_SKULL);
+  public static final BlockState SKELETON_SKULL_14 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:14"), (short) 6508, Block.SKELETON_SKULL, "rotation=14");
 
-  public static final BlockState SKELETON_SKULL_15 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:15"), (short) 6509, Block.SKELETON_SKULL);
+  public static final BlockState SKELETON_SKULL_15 = new BlockState(NamespaceID.from("minecraft:skeleton_skull:15"), (short) 6509, Block.SKELETON_SKULL, "rotation=15");
 
   public static void initStates() {
     Block.SKELETON_SKULL.addBlockState(SKELETON_SKULL_0);

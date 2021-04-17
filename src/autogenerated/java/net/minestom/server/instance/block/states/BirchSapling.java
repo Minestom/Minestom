@@ -13,9 +13,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BirchSapling {
-  public static final BlockState BIRCH_SAPLING_0 = new BlockState(NamespaceID.from("minecraft:birch_sapling:0"), (short) 25, Block.BIRCH_SAPLING);
+  public static final BlockState BIRCH_SAPLING_0 = new BlockState(NamespaceID.from("minecraft:birch_sapling:0"), (short) 25, Block.BIRCH_SAPLING, "stage=0");
 
-  public static final BlockState BIRCH_SAPLING_1 = new BlockState(NamespaceID.from("minecraft:birch_sapling:1"), (short) 26, Block.BIRCH_SAPLING);
+  public static final BlockState BIRCH_SAPLING_1 = new BlockState(NamespaceID.from("minecraft:birch_sapling:1"), (short) 26, Block.BIRCH_SAPLING, "stage=1");
 
   public static void initStates() {
     Block.BIRCH_SAPLING.addBlockState(BIRCH_SAPLING_0);

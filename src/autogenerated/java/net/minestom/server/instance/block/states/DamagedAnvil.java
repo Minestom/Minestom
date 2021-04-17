@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DamagedAnvil {
-  public static final BlockState DAMAGED_ANVIL_0 = new BlockState(NamespaceID.from("minecraft:damaged_anvil:0"), (short) 6622, Block.DAMAGED_ANVIL);
+  public static final BlockState DAMAGED_ANVIL_0 = new BlockState(NamespaceID.from("minecraft:damaged_anvil:0"), (short) 6622, Block.DAMAGED_ANVIL, "facing=north");
 
-  public static final BlockState DAMAGED_ANVIL_1 = new BlockState(NamespaceID.from("minecraft:damaged_anvil:1"), (short) 6623, Block.DAMAGED_ANVIL);
+  public static final BlockState DAMAGED_ANVIL_1 = new BlockState(NamespaceID.from("minecraft:damaged_anvil:1"), (short) 6623, Block.DAMAGED_ANVIL, "facing=south");
 
-  public static final BlockState DAMAGED_ANVIL_2 = new BlockState(NamespaceID.from("minecraft:damaged_anvil:2"), (short) 6624, Block.DAMAGED_ANVIL);
+  public static final BlockState DAMAGED_ANVIL_2 = new BlockState(NamespaceID.from("minecraft:damaged_anvil:2"), (short) 6624, Block.DAMAGED_ANVIL, "facing=west");
 
-  public static final BlockState DAMAGED_ANVIL_3 = new BlockState(NamespaceID.from("minecraft:damaged_anvil:3"), (short) 6625, Block.DAMAGED_ANVIL);
+  public static final BlockState DAMAGED_ANVIL_3 = new BlockState(NamespaceID.from("minecraft:damaged_anvil:3"), (short) 6625, Block.DAMAGED_ANVIL, "facing=east");
 
   public static void initStates() {
     Block.DAMAGED_ANVIL.addBlockState(DAMAGED_ANVIL_0);

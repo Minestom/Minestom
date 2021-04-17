@@ -13,69 +13,69 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Campfire {
-  public static final BlockState CAMPFIRE_0 = new BlockState(NamespaceID.from("minecraft:campfire:0"), (short) 14898, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_0 = new BlockState(NamespaceID.from("minecraft:campfire:0"), (short) 14898, Block.CAMPFIRE, "facing=north","lit=true","signal_fire=true","waterlogged=true");
 
-  public static final BlockState CAMPFIRE_1 = new BlockState(NamespaceID.from("minecraft:campfire:1"), (short) 14899, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_1 = new BlockState(NamespaceID.from("minecraft:campfire:1"), (short) 14899, Block.CAMPFIRE, "facing=north","lit=true","signal_fire=true","waterlogged=false");
 
-  public static final BlockState CAMPFIRE_2 = new BlockState(NamespaceID.from("minecraft:campfire:2"), (short) 14900, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_2 = new BlockState(NamespaceID.from("minecraft:campfire:2"), (short) 14900, Block.CAMPFIRE, "facing=north","lit=true","signal_fire=false","waterlogged=true");
 
-  public static final BlockState CAMPFIRE_3 = new BlockState(NamespaceID.from("minecraft:campfire:3"), (short) 14901, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_3 = new BlockState(NamespaceID.from("minecraft:campfire:3"), (short) 14901, Block.CAMPFIRE, "facing=north","lit=true","signal_fire=false","waterlogged=false");
 
-  public static final BlockState CAMPFIRE_4 = new BlockState(NamespaceID.from("minecraft:campfire:4"), (short) 14902, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_4 = new BlockState(NamespaceID.from("minecraft:campfire:4"), (short) 14902, Block.CAMPFIRE, "facing=north","lit=false","signal_fire=true","waterlogged=true");
 
-  public static final BlockState CAMPFIRE_5 = new BlockState(NamespaceID.from("minecraft:campfire:5"), (short) 14903, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_5 = new BlockState(NamespaceID.from("minecraft:campfire:5"), (short) 14903, Block.CAMPFIRE, "facing=north","lit=false","signal_fire=true","waterlogged=false");
 
-  public static final BlockState CAMPFIRE_6 = new BlockState(NamespaceID.from("minecraft:campfire:6"), (short) 14904, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_6 = new BlockState(NamespaceID.from("minecraft:campfire:6"), (short) 14904, Block.CAMPFIRE, "facing=north","lit=false","signal_fire=false","waterlogged=true");
 
-  public static final BlockState CAMPFIRE_7 = new BlockState(NamespaceID.from("minecraft:campfire:7"), (short) 14905, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_7 = new BlockState(NamespaceID.from("minecraft:campfire:7"), (short) 14905, Block.CAMPFIRE, "facing=north","lit=false","signal_fire=false","waterlogged=false");
 
-  public static final BlockState CAMPFIRE_8 = new BlockState(NamespaceID.from("minecraft:campfire:8"), (short) 14906, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_8 = new BlockState(NamespaceID.from("minecraft:campfire:8"), (short) 14906, Block.CAMPFIRE, "facing=south","lit=true","signal_fire=true","waterlogged=true");
 
-  public static final BlockState CAMPFIRE_9 = new BlockState(NamespaceID.from("minecraft:campfire:9"), (short) 14907, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_9 = new BlockState(NamespaceID.from("minecraft:campfire:9"), (short) 14907, Block.CAMPFIRE, "facing=south","lit=true","signal_fire=true","waterlogged=false");
 
-  public static final BlockState CAMPFIRE_10 = new BlockState(NamespaceID.from("minecraft:campfire:10"), (short) 14908, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_10 = new BlockState(NamespaceID.from("minecraft:campfire:10"), (short) 14908, Block.CAMPFIRE, "facing=south","lit=true","signal_fire=false","waterlogged=true");
 
-  public static final BlockState CAMPFIRE_11 = new BlockState(NamespaceID.from("minecraft:campfire:11"), (short) 14909, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_11 = new BlockState(NamespaceID.from("minecraft:campfire:11"), (short) 14909, Block.CAMPFIRE, "facing=south","lit=true","signal_fire=false","waterlogged=false");
 
-  public static final BlockState CAMPFIRE_12 = new BlockState(NamespaceID.from("minecraft:campfire:12"), (short) 14910, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_12 = new BlockState(NamespaceID.from("minecraft:campfire:12"), (short) 14910, Block.CAMPFIRE, "facing=south","lit=false","signal_fire=true","waterlogged=true");
 
-  public static final BlockState CAMPFIRE_13 = new BlockState(NamespaceID.from("minecraft:campfire:13"), (short) 14911, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_13 = new BlockState(NamespaceID.from("minecraft:campfire:13"), (short) 14911, Block.CAMPFIRE, "facing=south","lit=false","signal_fire=true","waterlogged=false");
 
-  public static final BlockState CAMPFIRE_14 = new BlockState(NamespaceID.from("minecraft:campfire:14"), (short) 14912, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_14 = new BlockState(NamespaceID.from("minecraft:campfire:14"), (short) 14912, Block.CAMPFIRE, "facing=south","lit=false","signal_fire=false","waterlogged=true");
 
-  public static final BlockState CAMPFIRE_15 = new BlockState(NamespaceID.from("minecraft:campfire:15"), (short) 14913, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_15 = new BlockState(NamespaceID.from("minecraft:campfire:15"), (short) 14913, Block.CAMPFIRE, "facing=south","lit=false","signal_fire=false","waterlogged=false");
 
-  public static final BlockState CAMPFIRE_16 = new BlockState(NamespaceID.from("minecraft:campfire:16"), (short) 14914, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_16 = new BlockState(NamespaceID.from("minecraft:campfire:16"), (short) 14914, Block.CAMPFIRE, "facing=west","lit=true","signal_fire=true","waterlogged=true");
 
-  public static final BlockState CAMPFIRE_17 = new BlockState(NamespaceID.from("minecraft:campfire:17"), (short) 14915, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_17 = new BlockState(NamespaceID.from("minecraft:campfire:17"), (short) 14915, Block.CAMPFIRE, "facing=west","lit=true","signal_fire=true","waterlogged=false");
 
-  public static final BlockState CAMPFIRE_18 = new BlockState(NamespaceID.from("minecraft:campfire:18"), (short) 14916, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_18 = new BlockState(NamespaceID.from("minecraft:campfire:18"), (short) 14916, Block.CAMPFIRE, "facing=west","lit=true","signal_fire=false","waterlogged=true");
 
-  public static final BlockState CAMPFIRE_19 = new BlockState(NamespaceID.from("minecraft:campfire:19"), (short) 14917, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_19 = new BlockState(NamespaceID.from("minecraft:campfire:19"), (short) 14917, Block.CAMPFIRE, "facing=west","lit=true","signal_fire=false","waterlogged=false");
 
-  public static final BlockState CAMPFIRE_20 = new BlockState(NamespaceID.from("minecraft:campfire:20"), (short) 14918, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_20 = new BlockState(NamespaceID.from("minecraft:campfire:20"), (short) 14918, Block.CAMPFIRE, "facing=west","lit=false","signal_fire=true","waterlogged=true");
 
-  public static final BlockState CAMPFIRE_21 = new BlockState(NamespaceID.from("minecraft:campfire:21"), (short) 14919, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_21 = new BlockState(NamespaceID.from("minecraft:campfire:21"), (short) 14919, Block.CAMPFIRE, "facing=west","lit=false","signal_fire=true","waterlogged=false");
 
-  public static final BlockState CAMPFIRE_22 = new BlockState(NamespaceID.from("minecraft:campfire:22"), (short) 14920, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_22 = new BlockState(NamespaceID.from("minecraft:campfire:22"), (short) 14920, Block.CAMPFIRE, "facing=west","lit=false","signal_fire=false","waterlogged=true");
 
-  public static final BlockState CAMPFIRE_23 = new BlockState(NamespaceID.from("minecraft:campfire:23"), (short) 14921, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_23 = new BlockState(NamespaceID.from("minecraft:campfire:23"), (short) 14921, Block.CAMPFIRE, "facing=west","lit=false","signal_fire=false","waterlogged=false");
 
-  public static final BlockState CAMPFIRE_24 = new BlockState(NamespaceID.from("minecraft:campfire:24"), (short) 14922, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_24 = new BlockState(NamespaceID.from("minecraft:campfire:24"), (short) 14922, Block.CAMPFIRE, "facing=east","lit=true","signal_fire=true","waterlogged=true");
 
-  public static final BlockState CAMPFIRE_25 = new BlockState(NamespaceID.from("minecraft:campfire:25"), (short) 14923, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_25 = new BlockState(NamespaceID.from("minecraft:campfire:25"), (short) 14923, Block.CAMPFIRE, "facing=east","lit=true","signal_fire=true","waterlogged=false");
 
-  public static final BlockState CAMPFIRE_26 = new BlockState(NamespaceID.from("minecraft:campfire:26"), (short) 14924, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_26 = new BlockState(NamespaceID.from("minecraft:campfire:26"), (short) 14924, Block.CAMPFIRE, "facing=east","lit=true","signal_fire=false","waterlogged=true");
 
-  public static final BlockState CAMPFIRE_27 = new BlockState(NamespaceID.from("minecraft:campfire:27"), (short) 14925, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_27 = new BlockState(NamespaceID.from("minecraft:campfire:27"), (short) 14925, Block.CAMPFIRE, "facing=east","lit=true","signal_fire=false","waterlogged=false");
 
-  public static final BlockState CAMPFIRE_28 = new BlockState(NamespaceID.from("minecraft:campfire:28"), (short) 14926, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_28 = new BlockState(NamespaceID.from("minecraft:campfire:28"), (short) 14926, Block.CAMPFIRE, "facing=east","lit=false","signal_fire=true","waterlogged=true");
 
-  public static final BlockState CAMPFIRE_29 = new BlockState(NamespaceID.from("minecraft:campfire:29"), (short) 14927, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_29 = new BlockState(NamespaceID.from("minecraft:campfire:29"), (short) 14927, Block.CAMPFIRE, "facing=east","lit=false","signal_fire=true","waterlogged=false");
 
-  public static final BlockState CAMPFIRE_30 = new BlockState(NamespaceID.from("minecraft:campfire:30"), (short) 14928, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_30 = new BlockState(NamespaceID.from("minecraft:campfire:30"), (short) 14928, Block.CAMPFIRE, "facing=east","lit=false","signal_fire=false","waterlogged=true");
 
-  public static final BlockState CAMPFIRE_31 = new BlockState(NamespaceID.from("minecraft:campfire:31"), (short) 14929, Block.CAMPFIRE);
+  public static final BlockState CAMPFIRE_31 = new BlockState(NamespaceID.from("minecraft:campfire:31"), (short) 14929, Block.CAMPFIRE, "facing=east","lit=false","signal_fire=false","waterlogged=false");
 
   public static void initStates() {
     Block.CAMPFIRE.addBlockState(CAMPFIRE_0);

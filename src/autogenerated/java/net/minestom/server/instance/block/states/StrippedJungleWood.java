@@ -13,11 +13,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class StrippedJungleWood {
-  public static final BlockState STRIPPED_JUNGLE_WOOD_0 = new BlockState(NamespaceID.from("minecraft:stripped_jungle_wood:0"), (short) 136, Block.STRIPPED_JUNGLE_WOOD);
+  public static final BlockState STRIPPED_JUNGLE_WOOD_0 = new BlockState(NamespaceID.from("minecraft:stripped_jungle_wood:0"), (short) 136, Block.STRIPPED_JUNGLE_WOOD, "axis=x");
 
-  public static final BlockState STRIPPED_JUNGLE_WOOD_1 = new BlockState(NamespaceID.from("minecraft:stripped_jungle_wood:1"), (short) 137, Block.STRIPPED_JUNGLE_WOOD);
+  public static final BlockState STRIPPED_JUNGLE_WOOD_1 = new BlockState(NamespaceID.from("minecraft:stripped_jungle_wood:1"), (short) 137, Block.STRIPPED_JUNGLE_WOOD, "axis=y");
 
-  public static final BlockState STRIPPED_JUNGLE_WOOD_2 = new BlockState(NamespaceID.from("minecraft:stripped_jungle_wood:2"), (short) 138, Block.STRIPPED_JUNGLE_WOOD);
+  public static final BlockState STRIPPED_JUNGLE_WOOD_2 = new BlockState(NamespaceID.from("minecraft:stripped_jungle_wood:2"), (short) 138, Block.STRIPPED_JUNGLE_WOOD, "axis=z");
 
   public static void initStates() {
     Block.STRIPPED_JUNGLE_WOOD.addBlockState(STRIPPED_JUNGLE_WOOD_0);

@@ -13,9 +13,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BrainCoralFan {
-  public static final BlockState BRAIN_CORAL_FAN_0 = new BlockState(NamespaceID.from("minecraft:brain_coral_fan:0"), (short) 9556, Block.BRAIN_CORAL_FAN);
+  public static final BlockState BRAIN_CORAL_FAN_0 = new BlockState(NamespaceID.from("minecraft:brain_coral_fan:0"), (short) 9556, Block.BRAIN_CORAL_FAN, "waterlogged=true");
 
-  public static final BlockState BRAIN_CORAL_FAN_1 = new BlockState(NamespaceID.from("minecraft:brain_coral_fan:1"), (short) 9557, Block.BRAIN_CORAL_FAN);
+  public static final BlockState BRAIN_CORAL_FAN_1 = new BlockState(NamespaceID.from("minecraft:brain_coral_fan:1"), (short) 9557, Block.BRAIN_CORAL_FAN, "waterlogged=false");
 
   public static void initStates() {
     Block.BRAIN_CORAL_FAN.addBlockState(BRAIN_CORAL_FAN_0);

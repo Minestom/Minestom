@@ -13,69 +13,69 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DarkOakFence {
-  public static final BlockState DARK_OAK_FENCE_0 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:0"), (short) 8710, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_0 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:0"), (short) 8710, Block.DARK_OAK_FENCE, "east=true","north=true","south=true","waterlogged=true","west=true");
 
-  public static final BlockState DARK_OAK_FENCE_1 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:1"), (short) 8711, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_1 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:1"), (short) 8711, Block.DARK_OAK_FENCE, "east=true","north=true","south=true","waterlogged=true","west=false");
 
-  public static final BlockState DARK_OAK_FENCE_2 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:2"), (short) 8712, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_2 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:2"), (short) 8712, Block.DARK_OAK_FENCE, "east=true","north=true","south=true","waterlogged=false","west=true");
 
-  public static final BlockState DARK_OAK_FENCE_3 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:3"), (short) 8713, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_3 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:3"), (short) 8713, Block.DARK_OAK_FENCE, "east=true","north=true","south=true","waterlogged=false","west=false");
 
-  public static final BlockState DARK_OAK_FENCE_4 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:4"), (short) 8714, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_4 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:4"), (short) 8714, Block.DARK_OAK_FENCE, "east=true","north=true","south=false","waterlogged=true","west=true");
 
-  public static final BlockState DARK_OAK_FENCE_5 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:5"), (short) 8715, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_5 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:5"), (short) 8715, Block.DARK_OAK_FENCE, "east=true","north=true","south=false","waterlogged=true","west=false");
 
-  public static final BlockState DARK_OAK_FENCE_6 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:6"), (short) 8716, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_6 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:6"), (short) 8716, Block.DARK_OAK_FENCE, "east=true","north=true","south=false","waterlogged=false","west=true");
 
-  public static final BlockState DARK_OAK_FENCE_7 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:7"), (short) 8717, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_7 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:7"), (short) 8717, Block.DARK_OAK_FENCE, "east=true","north=true","south=false","waterlogged=false","west=false");
 
-  public static final BlockState DARK_OAK_FENCE_8 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:8"), (short) 8718, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_8 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:8"), (short) 8718, Block.DARK_OAK_FENCE, "east=true","north=false","south=true","waterlogged=true","west=true");
 
-  public static final BlockState DARK_OAK_FENCE_9 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:9"), (short) 8719, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_9 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:9"), (short) 8719, Block.DARK_OAK_FENCE, "east=true","north=false","south=true","waterlogged=true","west=false");
 
-  public static final BlockState DARK_OAK_FENCE_10 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:10"), (short) 8720, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_10 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:10"), (short) 8720, Block.DARK_OAK_FENCE, "east=true","north=false","south=true","waterlogged=false","west=true");
 
-  public static final BlockState DARK_OAK_FENCE_11 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:11"), (short) 8721, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_11 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:11"), (short) 8721, Block.DARK_OAK_FENCE, "east=true","north=false","south=true","waterlogged=false","west=false");
 
-  public static final BlockState DARK_OAK_FENCE_12 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:12"), (short) 8722, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_12 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:12"), (short) 8722, Block.DARK_OAK_FENCE, "east=true","north=false","south=false","waterlogged=true","west=true");
 
-  public static final BlockState DARK_OAK_FENCE_13 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:13"), (short) 8723, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_13 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:13"), (short) 8723, Block.DARK_OAK_FENCE, "east=true","north=false","south=false","waterlogged=true","west=false");
 
-  public static final BlockState DARK_OAK_FENCE_14 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:14"), (short) 8724, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_14 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:14"), (short) 8724, Block.DARK_OAK_FENCE, "east=true","north=false","south=false","waterlogged=false","west=true");
 
-  public static final BlockState DARK_OAK_FENCE_15 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:15"), (short) 8725, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_15 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:15"), (short) 8725, Block.DARK_OAK_FENCE, "east=true","north=false","south=false","waterlogged=false","west=false");
 
-  public static final BlockState DARK_OAK_FENCE_16 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:16"), (short) 8726, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_16 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:16"), (short) 8726, Block.DARK_OAK_FENCE, "east=false","north=true","south=true","waterlogged=true","west=true");
 
-  public static final BlockState DARK_OAK_FENCE_17 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:17"), (short) 8727, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_17 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:17"), (short) 8727, Block.DARK_OAK_FENCE, "east=false","north=true","south=true","waterlogged=true","west=false");
 
-  public static final BlockState DARK_OAK_FENCE_18 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:18"), (short) 8728, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_18 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:18"), (short) 8728, Block.DARK_OAK_FENCE, "east=false","north=true","south=true","waterlogged=false","west=true");
 
-  public static final BlockState DARK_OAK_FENCE_19 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:19"), (short) 8729, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_19 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:19"), (short) 8729, Block.DARK_OAK_FENCE, "east=false","north=true","south=true","waterlogged=false","west=false");
 
-  public static final BlockState DARK_OAK_FENCE_20 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:20"), (short) 8730, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_20 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:20"), (short) 8730, Block.DARK_OAK_FENCE, "east=false","north=true","south=false","waterlogged=true","west=true");
 
-  public static final BlockState DARK_OAK_FENCE_21 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:21"), (short) 8731, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_21 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:21"), (short) 8731, Block.DARK_OAK_FENCE, "east=false","north=true","south=false","waterlogged=true","west=false");
 
-  public static final BlockState DARK_OAK_FENCE_22 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:22"), (short) 8732, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_22 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:22"), (short) 8732, Block.DARK_OAK_FENCE, "east=false","north=true","south=false","waterlogged=false","west=true");
 
-  public static final BlockState DARK_OAK_FENCE_23 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:23"), (short) 8733, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_23 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:23"), (short) 8733, Block.DARK_OAK_FENCE, "east=false","north=true","south=false","waterlogged=false","west=false");
 
-  public static final BlockState DARK_OAK_FENCE_24 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:24"), (short) 8734, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_24 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:24"), (short) 8734, Block.DARK_OAK_FENCE, "east=false","north=false","south=true","waterlogged=true","west=true");
 
-  public static final BlockState DARK_OAK_FENCE_25 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:25"), (short) 8735, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_25 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:25"), (short) 8735, Block.DARK_OAK_FENCE, "east=false","north=false","south=true","waterlogged=true","west=false");
 
-  public static final BlockState DARK_OAK_FENCE_26 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:26"), (short) 8736, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_26 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:26"), (short) 8736, Block.DARK_OAK_FENCE, "east=false","north=false","south=true","waterlogged=false","west=true");
 
-  public static final BlockState DARK_OAK_FENCE_27 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:27"), (short) 8737, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_27 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:27"), (short) 8737, Block.DARK_OAK_FENCE, "east=false","north=false","south=true","waterlogged=false","west=false");
 
-  public static final BlockState DARK_OAK_FENCE_28 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:28"), (short) 8738, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_28 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:28"), (short) 8738, Block.DARK_OAK_FENCE, "east=false","north=false","south=false","waterlogged=true","west=true");
 
-  public static final BlockState DARK_OAK_FENCE_29 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:29"), (short) 8739, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_29 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:29"), (short) 8739, Block.DARK_OAK_FENCE, "east=false","north=false","south=false","waterlogged=true","west=false");
 
-  public static final BlockState DARK_OAK_FENCE_30 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:30"), (short) 8740, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_30 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:30"), (short) 8740, Block.DARK_OAK_FENCE, "east=false","north=false","south=false","waterlogged=false","west=true");
 
-  public static final BlockState DARK_OAK_FENCE_31 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:31"), (short) 8741, Block.DARK_OAK_FENCE);
+  public static final BlockState DARK_OAK_FENCE_31 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence:31"), (short) 8741, Block.DARK_OAK_FENCE, "east=false","north=false","south=false","waterlogged=false","west=false");
 
   public static void initStates() {
     Block.DARK_OAK_FENCE.addBlockState(DARK_OAK_FENCE_0);

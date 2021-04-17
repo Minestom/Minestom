@@ -13,9 +13,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Sunflower {
-  public static final BlockState SUNFLOWER_0 = new BlockState(NamespaceID.from("minecraft:sunflower:0"), (short) 7889, Block.SUNFLOWER);
+  public static final BlockState SUNFLOWER_0 = new BlockState(NamespaceID.from("minecraft:sunflower:0"), (short) 7889, Block.SUNFLOWER, "half=upper");
 
-  public static final BlockState SUNFLOWER_1 = new BlockState(NamespaceID.from("minecraft:sunflower:1"), (short) 7890, Block.SUNFLOWER);
+  public static final BlockState SUNFLOWER_1 = new BlockState(NamespaceID.from("minecraft:sunflower:1"), (short) 7890, Block.SUNFLOWER, "half=lower");
 
   public static void initStates() {
     Block.SUNFLOWER.addBlockState(SUNFLOWER_0);

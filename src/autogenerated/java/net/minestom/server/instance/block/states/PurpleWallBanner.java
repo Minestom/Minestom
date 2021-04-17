@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PurpleWallBanner {
-  public static final BlockState PURPLE_WALL_BANNER_0 = new BlockState(NamespaceID.from("minecraft:purple_wall_banner:0"), (short) 8197, Block.PURPLE_WALL_BANNER);
+  public static final BlockState PURPLE_WALL_BANNER_0 = new BlockState(NamespaceID.from("minecraft:purple_wall_banner:0"), (short) 8197, Block.PURPLE_WALL_BANNER, "facing=north");
 
-  public static final BlockState PURPLE_WALL_BANNER_1 = new BlockState(NamespaceID.from("minecraft:purple_wall_banner:1"), (short) 8198, Block.PURPLE_WALL_BANNER);
+  public static final BlockState PURPLE_WALL_BANNER_1 = new BlockState(NamespaceID.from("minecraft:purple_wall_banner:1"), (short) 8198, Block.PURPLE_WALL_BANNER, "facing=south");
 
-  public static final BlockState PURPLE_WALL_BANNER_2 = new BlockState(NamespaceID.from("minecraft:purple_wall_banner:2"), (short) 8199, Block.PURPLE_WALL_BANNER);
+  public static final BlockState PURPLE_WALL_BANNER_2 = new BlockState(NamespaceID.from("minecraft:purple_wall_banner:2"), (short) 8199, Block.PURPLE_WALL_BANNER, "facing=west");
 
-  public static final BlockState PURPLE_WALL_BANNER_3 = new BlockState(NamespaceID.from("minecraft:purple_wall_banner:3"), (short) 8200, Block.PURPLE_WALL_BANNER);
+  public static final BlockState PURPLE_WALL_BANNER_3 = new BlockState(NamespaceID.from("minecraft:purple_wall_banner:3"), (short) 8200, Block.PURPLE_WALL_BANNER, "facing=east");
 
   public static void initStates() {
     Block.PURPLE_WALL_BANNER.addBlockState(PURPLE_WALL_BANNER_0);

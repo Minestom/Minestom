@@ -13,69 +13,69 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DarkOakFenceGate {
-  public static final BlockState DARK_OAK_FENCE_GATE_0 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:0"), (short) 8550, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_0 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:0"), (short) 8550, Block.DARK_OAK_FENCE_GATE, "facing=north","in_wall=true","open=true","powered=true");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_1 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:1"), (short) 8551, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_1 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:1"), (short) 8551, Block.DARK_OAK_FENCE_GATE, "facing=north","in_wall=true","open=true","powered=false");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_2 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:2"), (short) 8552, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_2 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:2"), (short) 8552, Block.DARK_OAK_FENCE_GATE, "facing=north","in_wall=true","open=false","powered=true");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_3 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:3"), (short) 8553, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_3 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:3"), (short) 8553, Block.DARK_OAK_FENCE_GATE, "facing=north","in_wall=true","open=false","powered=false");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_4 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:4"), (short) 8554, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_4 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:4"), (short) 8554, Block.DARK_OAK_FENCE_GATE, "facing=north","in_wall=false","open=true","powered=true");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_5 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:5"), (short) 8555, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_5 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:5"), (short) 8555, Block.DARK_OAK_FENCE_GATE, "facing=north","in_wall=false","open=true","powered=false");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_6 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:6"), (short) 8556, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_6 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:6"), (short) 8556, Block.DARK_OAK_FENCE_GATE, "facing=north","in_wall=false","open=false","powered=true");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_7 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:7"), (short) 8557, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_7 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:7"), (short) 8557, Block.DARK_OAK_FENCE_GATE, "facing=north","in_wall=false","open=false","powered=false");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_8 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:8"), (short) 8558, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_8 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:8"), (short) 8558, Block.DARK_OAK_FENCE_GATE, "facing=south","in_wall=true","open=true","powered=true");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_9 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:9"), (short) 8559, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_9 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:9"), (short) 8559, Block.DARK_OAK_FENCE_GATE, "facing=south","in_wall=true","open=true","powered=false");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_10 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:10"), (short) 8560, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_10 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:10"), (short) 8560, Block.DARK_OAK_FENCE_GATE, "facing=south","in_wall=true","open=false","powered=true");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_11 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:11"), (short) 8561, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_11 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:11"), (short) 8561, Block.DARK_OAK_FENCE_GATE, "facing=south","in_wall=true","open=false","powered=false");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_12 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:12"), (short) 8562, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_12 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:12"), (short) 8562, Block.DARK_OAK_FENCE_GATE, "facing=south","in_wall=false","open=true","powered=true");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_13 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:13"), (short) 8563, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_13 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:13"), (short) 8563, Block.DARK_OAK_FENCE_GATE, "facing=south","in_wall=false","open=true","powered=false");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_14 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:14"), (short) 8564, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_14 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:14"), (short) 8564, Block.DARK_OAK_FENCE_GATE, "facing=south","in_wall=false","open=false","powered=true");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_15 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:15"), (short) 8565, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_15 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:15"), (short) 8565, Block.DARK_OAK_FENCE_GATE, "facing=south","in_wall=false","open=false","powered=false");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_16 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:16"), (short) 8566, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_16 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:16"), (short) 8566, Block.DARK_OAK_FENCE_GATE, "facing=west","in_wall=true","open=true","powered=true");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_17 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:17"), (short) 8567, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_17 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:17"), (short) 8567, Block.DARK_OAK_FENCE_GATE, "facing=west","in_wall=true","open=true","powered=false");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_18 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:18"), (short) 8568, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_18 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:18"), (short) 8568, Block.DARK_OAK_FENCE_GATE, "facing=west","in_wall=true","open=false","powered=true");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_19 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:19"), (short) 8569, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_19 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:19"), (short) 8569, Block.DARK_OAK_FENCE_GATE, "facing=west","in_wall=true","open=false","powered=false");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_20 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:20"), (short) 8570, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_20 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:20"), (short) 8570, Block.DARK_OAK_FENCE_GATE, "facing=west","in_wall=false","open=true","powered=true");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_21 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:21"), (short) 8571, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_21 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:21"), (short) 8571, Block.DARK_OAK_FENCE_GATE, "facing=west","in_wall=false","open=true","powered=false");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_22 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:22"), (short) 8572, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_22 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:22"), (short) 8572, Block.DARK_OAK_FENCE_GATE, "facing=west","in_wall=false","open=false","powered=true");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_23 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:23"), (short) 8573, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_23 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:23"), (short) 8573, Block.DARK_OAK_FENCE_GATE, "facing=west","in_wall=false","open=false","powered=false");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_24 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:24"), (short) 8574, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_24 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:24"), (short) 8574, Block.DARK_OAK_FENCE_GATE, "facing=east","in_wall=true","open=true","powered=true");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_25 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:25"), (short) 8575, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_25 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:25"), (short) 8575, Block.DARK_OAK_FENCE_GATE, "facing=east","in_wall=true","open=true","powered=false");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_26 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:26"), (short) 8576, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_26 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:26"), (short) 8576, Block.DARK_OAK_FENCE_GATE, "facing=east","in_wall=true","open=false","powered=true");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_27 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:27"), (short) 8577, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_27 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:27"), (short) 8577, Block.DARK_OAK_FENCE_GATE, "facing=east","in_wall=true","open=false","powered=false");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_28 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:28"), (short) 8578, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_28 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:28"), (short) 8578, Block.DARK_OAK_FENCE_GATE, "facing=east","in_wall=false","open=true","powered=true");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_29 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:29"), (short) 8579, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_29 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:29"), (short) 8579, Block.DARK_OAK_FENCE_GATE, "facing=east","in_wall=false","open=true","powered=false");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_30 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:30"), (short) 8580, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_30 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:30"), (short) 8580, Block.DARK_OAK_FENCE_GATE, "facing=east","in_wall=false","open=false","powered=true");
 
-  public static final BlockState DARK_OAK_FENCE_GATE_31 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:31"), (short) 8581, Block.DARK_OAK_FENCE_GATE);
+  public static final BlockState DARK_OAK_FENCE_GATE_31 = new BlockState(NamespaceID.from("minecraft:dark_oak_fence_gate:31"), (short) 8581, Block.DARK_OAK_FENCE_GATE, "facing=east","in_wall=false","open=false","powered=false");
 
   public static void initStates() {
     Block.DARK_OAK_FENCE_GATE.addBlockState(DARK_OAK_FENCE_GATE_0);

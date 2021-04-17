@@ -13,17 +13,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BrickSlab {
-  public static final BlockState BRICK_SLAB_0 = new BlockState(NamespaceID.from("minecraft:brick_slab:0"), (short) 8376, Block.BRICK_SLAB);
+  public static final BlockState BRICK_SLAB_0 = new BlockState(NamespaceID.from("minecraft:brick_slab:0"), (short) 8376, Block.BRICK_SLAB, "type=top","waterlogged=true");
 
-  public static final BlockState BRICK_SLAB_1 = new BlockState(NamespaceID.from("minecraft:brick_slab:1"), (short) 8377, Block.BRICK_SLAB);
+  public static final BlockState BRICK_SLAB_1 = new BlockState(NamespaceID.from("minecraft:brick_slab:1"), (short) 8377, Block.BRICK_SLAB, "type=top","waterlogged=false");
 
-  public static final BlockState BRICK_SLAB_2 = new BlockState(NamespaceID.from("minecraft:brick_slab:2"), (short) 8378, Block.BRICK_SLAB);
+  public static final BlockState BRICK_SLAB_2 = new BlockState(NamespaceID.from("minecraft:brick_slab:2"), (short) 8378, Block.BRICK_SLAB, "type=bottom","waterlogged=true");
 
-  public static final BlockState BRICK_SLAB_3 = new BlockState(NamespaceID.from("minecraft:brick_slab:3"), (short) 8379, Block.BRICK_SLAB);
+  public static final BlockState BRICK_SLAB_3 = new BlockState(NamespaceID.from("minecraft:brick_slab:3"), (short) 8379, Block.BRICK_SLAB, "type=bottom","waterlogged=false");
 
-  public static final BlockState BRICK_SLAB_4 = new BlockState(NamespaceID.from("minecraft:brick_slab:4"), (short) 8380, Block.BRICK_SLAB);
+  public static final BlockState BRICK_SLAB_4 = new BlockState(NamespaceID.from("minecraft:brick_slab:4"), (short) 8380, Block.BRICK_SLAB, "type=double","waterlogged=true");
 
-  public static final BlockState BRICK_SLAB_5 = new BlockState(NamespaceID.from("minecraft:brick_slab:5"), (short) 8381, Block.BRICK_SLAB);
+  public static final BlockState BRICK_SLAB_5 = new BlockState(NamespaceID.from("minecraft:brick_slab:5"), (short) 8381, Block.BRICK_SLAB, "type=double","waterlogged=false");
 
   public static void initStates() {
     Block.BRICK_SLAB.addBlockState(BRICK_SLAB_0);

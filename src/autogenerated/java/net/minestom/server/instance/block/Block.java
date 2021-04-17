@@ -5,6 +5,7 @@ import java.lang.Override;
 import java.lang.String;
 import java.lang.SuppressWarnings;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -611,6 +612,7 @@ import net.minestom.server.instance.block.states.RedstoneOre;
 import net.minestom.server.instance.block.states.RedstoneTorch;
 import net.minestom.server.instance.block.states.RedstoneWallTorch;
 import net.minestom.server.instance.block.states.RedstoneWire;
+import net.minestom.server.instance.block.states.RedstoneWire2;
 import net.minestom.server.instance.block.states.Repeater;
 import net.minestom.server.instance.block.states.RepeatingCommandBlock;
 import net.minestom.server.instance.block.states.RespawnAnchor;
@@ -2458,6 +2460,7 @@ public class Block implements Keyed {
     OakStairs.initStates();
     Chest.initStates();
     RedstoneWire.initStates();
+    RedstoneWire2.initStates();
     DiamondOre.initStates();
     DiamondBlock.initStates();
     CraftingTable.initStates();
@@ -3914,6 +3917,15 @@ public class Block implements Keyed {
   @Deprecated
   public BlockState getAlternative(short stateId) {
     return getBlockState(stateId);
+  }
+
+  public short withProperties(@NotNull String... properties) {
+    for (BlockState state : blockStates) {
+      if (Arrays.equals(state.getProperties(), properties)) {
+        return state.getId();
+      }
+    }
+    return this.defaultBlockState;
   }
 
   @Nullable

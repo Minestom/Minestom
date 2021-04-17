@@ -13,165 +13,165 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PolishedBlackstoneBrickStairs {
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:0"), (short) 16268, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:0"), (short) 16268, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:1"), (short) 16269, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:1"), (short) 16269, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:2"), (short) 16270, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:2"), (short) 16270, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:3"), (short) 16271, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:3"), (short) 16271, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:4"), (short) 16272, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:4"), (short) 16272, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:5"), (short) 16273, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:5"), (short) 16273, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:6"), (short) 16274, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:6"), (short) 16274, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:7"), (short) 16275, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:7"), (short) 16275, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:8"), (short) 16276, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:8"), (short) 16276, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:9"), (short) 16277, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:9"), (short) 16277, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:10"), (short) 16278, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:10"), (short) 16278, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:11"), (short) 16279, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:11"), (short) 16279, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:12"), (short) 16280, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:12"), (short) 16280, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:13"), (short) 16281, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:13"), (short) 16281, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:14"), (short) 16282, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:14"), (short) 16282, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:15"), (short) 16283, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:15"), (short) 16283, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:16"), (short) 16284, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:16"), (short) 16284, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:17"), (short) 16285, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:17"), (short) 16285, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:18"), (short) 16286, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:18"), (short) 16286, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:19"), (short) 16287, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:19"), (short) 16287, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:20"), (short) 16288, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:20"), (short) 16288, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:21"), (short) 16289, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:21"), (short) 16289, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:22"), (short) 16290, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:22"), (short) 16290, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:23"), (short) 16291, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:23"), (short) 16291, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:24"), (short) 16292, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:24"), (short) 16292, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:25"), (short) 16293, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:25"), (short) 16293, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:26"), (short) 16294, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:26"), (short) 16294, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:27"), (short) 16295, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:27"), (short) 16295, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:28"), (short) 16296, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:28"), (short) 16296, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:29"), (short) 16297, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:29"), (short) 16297, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:30"), (short) 16298, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:30"), (short) 16298, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:31"), (short) 16299, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:31"), (short) 16299, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:32"), (short) 16300, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:32"), (short) 16300, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:33"), (short) 16301, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:33"), (short) 16301, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:34"), (short) 16302, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:34"), (short) 16302, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:35"), (short) 16303, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:35"), (short) 16303, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:36"), (short) 16304, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:36"), (short) 16304, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:37"), (short) 16305, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:37"), (short) 16305, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:38"), (short) 16306, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:38"), (short) 16306, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:39"), (short) 16307, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:39"), (short) 16307, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:40"), (short) 16308, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:40"), (short) 16308, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:41"), (short) 16309, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:41"), (short) 16309, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:42"), (short) 16310, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:42"), (short) 16310, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:43"), (short) 16311, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:43"), (short) 16311, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:44"), (short) 16312, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:44"), (short) 16312, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:45"), (short) 16313, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:45"), (short) 16313, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:46"), (short) 16314, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:46"), (short) 16314, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:47"), (short) 16315, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:47"), (short) 16315, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:48"), (short) 16316, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:48"), (short) 16316, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:49"), (short) 16317, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:49"), (short) 16317, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:50"), (short) 16318, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:50"), (short) 16318, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:51"), (short) 16319, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:51"), (short) 16319, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:52"), (short) 16320, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:52"), (short) 16320, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:53"), (short) 16321, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:53"), (short) 16321, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:54"), (short) 16322, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:54"), (short) 16322, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:55"), (short) 16323, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:55"), (short) 16323, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:56"), (short) 16324, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:56"), (short) 16324, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:57"), (short) 16325, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:57"), (short) 16325, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:58"), (short) 16326, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:58"), (short) 16326, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:59"), (short) 16327, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:59"), (short) 16327, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:60"), (short) 16328, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:60"), (short) 16328, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:61"), (short) 16329, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:61"), (short) 16329, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:62"), (short) 16330, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:62"), (short) 16330, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:63"), (short) 16331, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:63"), (short) 16331, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:64"), (short) 16332, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:64"), (short) 16332, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:65"), (short) 16333, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:65"), (short) 16333, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:66"), (short) 16334, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:66"), (short) 16334, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:67"), (short) 16335, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:67"), (short) 16335, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:68"), (short) 16336, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:68"), (short) 16336, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:69"), (short) 16337, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:69"), (short) 16337, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:70"), (short) 16338, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:70"), (short) 16338, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:71"), (short) 16339, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:71"), (short) 16339, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:72"), (short) 16340, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:72"), (short) 16340, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:73"), (short) 16341, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:73"), (short) 16341, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:74"), (short) 16342, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:74"), (short) 16342, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:75"), (short) 16343, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:75"), (short) 16343, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:76"), (short) 16344, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:76"), (short) 16344, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:77"), (short) 16345, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:77"), (short) 16345, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:78"), (short) 16346, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:78"), (short) 16346, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:79"), (short) 16347, Block.POLISHED_BLACKSTONE_BRICK_STAIRS);
+  public static final BlockState POLISHED_BLACKSTONE_BRICK_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_brick_stairs:79"), (short) 16347, Block.POLISHED_BLACKSTONE_BRICK_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
 
   public static void initStates() {
     Block.POLISHED_BLACKSTONE_BRICK_STAIRS.addBlockState(POLISHED_BLACKSTONE_BRICK_STAIRS_0);

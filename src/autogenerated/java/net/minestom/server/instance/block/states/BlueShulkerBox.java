@@ -13,17 +13,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BlueShulkerBox {
-  public static final BlockState BLUE_SHULKER_BOX_0 = new BlockState(NamespaceID.from("minecraft:blue_shulker_box:0"), (short) 9348, Block.BLUE_SHULKER_BOX);
+  public static final BlockState BLUE_SHULKER_BOX_0 = new BlockState(NamespaceID.from("minecraft:blue_shulker_box:0"), (short) 9348, Block.BLUE_SHULKER_BOX, "facing=north");
 
-  public static final BlockState BLUE_SHULKER_BOX_1 = new BlockState(NamespaceID.from("minecraft:blue_shulker_box:1"), (short) 9349, Block.BLUE_SHULKER_BOX);
+  public static final BlockState BLUE_SHULKER_BOX_1 = new BlockState(NamespaceID.from("minecraft:blue_shulker_box:1"), (short) 9349, Block.BLUE_SHULKER_BOX, "facing=east");
 
-  public static final BlockState BLUE_SHULKER_BOX_2 = new BlockState(NamespaceID.from("minecraft:blue_shulker_box:2"), (short) 9350, Block.BLUE_SHULKER_BOX);
+  public static final BlockState BLUE_SHULKER_BOX_2 = new BlockState(NamespaceID.from("minecraft:blue_shulker_box:2"), (short) 9350, Block.BLUE_SHULKER_BOX, "facing=south");
 
-  public static final BlockState BLUE_SHULKER_BOX_3 = new BlockState(NamespaceID.from("minecraft:blue_shulker_box:3"), (short) 9351, Block.BLUE_SHULKER_BOX);
+  public static final BlockState BLUE_SHULKER_BOX_3 = new BlockState(NamespaceID.from("minecraft:blue_shulker_box:3"), (short) 9351, Block.BLUE_SHULKER_BOX, "facing=west");
 
-  public static final BlockState BLUE_SHULKER_BOX_4 = new BlockState(NamespaceID.from("minecraft:blue_shulker_box:4"), (short) 9352, Block.BLUE_SHULKER_BOX);
+  public static final BlockState BLUE_SHULKER_BOX_4 = new BlockState(NamespaceID.from("minecraft:blue_shulker_box:4"), (short) 9352, Block.BLUE_SHULKER_BOX, "facing=up");
 
-  public static final BlockState BLUE_SHULKER_BOX_5 = new BlockState(NamespaceID.from("minecraft:blue_shulker_box:5"), (short) 9353, Block.BLUE_SHULKER_BOX);
+  public static final BlockState BLUE_SHULKER_BOX_5 = new BlockState(NamespaceID.from("minecraft:blue_shulker_box:5"), (short) 9353, Block.BLUE_SHULKER_BOX, "facing=down");
 
   public static void initStates() {
     Block.BLUE_SHULKER_BOX.addBlockState(BLUE_SHULKER_BOX_0);

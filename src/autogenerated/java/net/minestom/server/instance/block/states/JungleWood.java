@@ -13,11 +13,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class JungleWood {
-  public static final BlockState JUNGLE_WOOD_0 = new BlockState(NamespaceID.from("minecraft:jungle_wood:0"), (short) 118, Block.JUNGLE_WOOD);
+  public static final BlockState JUNGLE_WOOD_0 = new BlockState(NamespaceID.from("minecraft:jungle_wood:0"), (short) 118, Block.JUNGLE_WOOD, "axis=x");
 
-  public static final BlockState JUNGLE_WOOD_1 = new BlockState(NamespaceID.from("minecraft:jungle_wood:1"), (short) 119, Block.JUNGLE_WOOD);
+  public static final BlockState JUNGLE_WOOD_1 = new BlockState(NamespaceID.from("minecraft:jungle_wood:1"), (short) 119, Block.JUNGLE_WOOD, "axis=y");
 
-  public static final BlockState JUNGLE_WOOD_2 = new BlockState(NamespaceID.from("minecraft:jungle_wood:2"), (short) 120, Block.JUNGLE_WOOD);
+  public static final BlockState JUNGLE_WOOD_2 = new BlockState(NamespaceID.from("minecraft:jungle_wood:2"), (short) 120, Block.JUNGLE_WOOD, "axis=z");
 
   public static void initStates() {
     Block.JUNGLE_WOOD.addBlockState(JUNGLE_WOOD_0);

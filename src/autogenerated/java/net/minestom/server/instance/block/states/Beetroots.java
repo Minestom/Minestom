@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Beetroots {
-  public static final BlockState BEETROOTS_0 = new BlockState(NamespaceID.from("minecraft:beetroots:0"), (short) 9223, Block.BEETROOTS);
+  public static final BlockState BEETROOTS_0 = new BlockState(NamespaceID.from("minecraft:beetroots:0"), (short) 9223, Block.BEETROOTS, "age=0");
 
-  public static final BlockState BEETROOTS_1 = new BlockState(NamespaceID.from("minecraft:beetroots:1"), (short) 9224, Block.BEETROOTS);
+  public static final BlockState BEETROOTS_1 = new BlockState(NamespaceID.from("minecraft:beetroots:1"), (short) 9224, Block.BEETROOTS, "age=1");
 
-  public static final BlockState BEETROOTS_2 = new BlockState(NamespaceID.from("minecraft:beetroots:2"), (short) 9225, Block.BEETROOTS);
+  public static final BlockState BEETROOTS_2 = new BlockState(NamespaceID.from("minecraft:beetroots:2"), (short) 9225, Block.BEETROOTS, "age=2");
 
-  public static final BlockState BEETROOTS_3 = new BlockState(NamespaceID.from("minecraft:beetroots:3"), (short) 9226, Block.BEETROOTS);
+  public static final BlockState BEETROOTS_3 = new BlockState(NamespaceID.from("minecraft:beetroots:3"), (short) 9226, Block.BEETROOTS, "age=3");
 
   public static void initStates() {
     Block.BEETROOTS.addBlockState(BEETROOTS_0);

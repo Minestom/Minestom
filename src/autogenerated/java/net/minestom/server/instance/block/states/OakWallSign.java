@@ -13,21 +13,21 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class OakWallSign {
-  public static final BlockState OAK_WALL_SIGN_0 = new BlockState(NamespaceID.from("minecraft:oak_wall_sign:0"), (short) 3735, Block.OAK_WALL_SIGN);
+  public static final BlockState OAK_WALL_SIGN_0 = new BlockState(NamespaceID.from("minecraft:oak_wall_sign:0"), (short) 3735, Block.OAK_WALL_SIGN, "facing=north","waterlogged=true");
 
-  public static final BlockState OAK_WALL_SIGN_1 = new BlockState(NamespaceID.from("minecraft:oak_wall_sign:1"), (short) 3736, Block.OAK_WALL_SIGN);
+  public static final BlockState OAK_WALL_SIGN_1 = new BlockState(NamespaceID.from("minecraft:oak_wall_sign:1"), (short) 3736, Block.OAK_WALL_SIGN, "facing=north","waterlogged=false");
 
-  public static final BlockState OAK_WALL_SIGN_2 = new BlockState(NamespaceID.from("minecraft:oak_wall_sign:2"), (short) 3737, Block.OAK_WALL_SIGN);
+  public static final BlockState OAK_WALL_SIGN_2 = new BlockState(NamespaceID.from("minecraft:oak_wall_sign:2"), (short) 3737, Block.OAK_WALL_SIGN, "facing=south","waterlogged=true");
 
-  public static final BlockState OAK_WALL_SIGN_3 = new BlockState(NamespaceID.from("minecraft:oak_wall_sign:3"), (short) 3738, Block.OAK_WALL_SIGN);
+  public static final BlockState OAK_WALL_SIGN_3 = new BlockState(NamespaceID.from("minecraft:oak_wall_sign:3"), (short) 3738, Block.OAK_WALL_SIGN, "facing=south","waterlogged=false");
 
-  public static final BlockState OAK_WALL_SIGN_4 = new BlockState(NamespaceID.from("minecraft:oak_wall_sign:4"), (short) 3739, Block.OAK_WALL_SIGN);
+  public static final BlockState OAK_WALL_SIGN_4 = new BlockState(NamespaceID.from("minecraft:oak_wall_sign:4"), (short) 3739, Block.OAK_WALL_SIGN, "facing=west","waterlogged=true");
 
-  public static final BlockState OAK_WALL_SIGN_5 = new BlockState(NamespaceID.from("minecraft:oak_wall_sign:5"), (short) 3740, Block.OAK_WALL_SIGN);
+  public static final BlockState OAK_WALL_SIGN_5 = new BlockState(NamespaceID.from("minecraft:oak_wall_sign:5"), (short) 3740, Block.OAK_WALL_SIGN, "facing=west","waterlogged=false");
 
-  public static final BlockState OAK_WALL_SIGN_6 = new BlockState(NamespaceID.from("minecraft:oak_wall_sign:6"), (short) 3741, Block.OAK_WALL_SIGN);
+  public static final BlockState OAK_WALL_SIGN_6 = new BlockState(NamespaceID.from("minecraft:oak_wall_sign:6"), (short) 3741, Block.OAK_WALL_SIGN, "facing=east","waterlogged=true");
 
-  public static final BlockState OAK_WALL_SIGN_7 = new BlockState(NamespaceID.from("minecraft:oak_wall_sign:7"), (short) 3742, Block.OAK_WALL_SIGN);
+  public static final BlockState OAK_WALL_SIGN_7 = new BlockState(NamespaceID.from("minecraft:oak_wall_sign:7"), (short) 3742, Block.OAK_WALL_SIGN, "facing=east","waterlogged=false");
 
   public static void initStates() {
     Block.OAK_WALL_SIGN.addBlockState(OAK_WALL_SIGN_0);

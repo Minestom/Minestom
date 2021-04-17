@@ -13,11 +13,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DarkOakWood {
-  public static final BlockState DARK_OAK_WOOD_0 = new BlockState(NamespaceID.from("minecraft:dark_oak_wood:0"), (short) 124, Block.DARK_OAK_WOOD);
+  public static final BlockState DARK_OAK_WOOD_0 = new BlockState(NamespaceID.from("minecraft:dark_oak_wood:0"), (short) 124, Block.DARK_OAK_WOOD, "axis=x");
 
-  public static final BlockState DARK_OAK_WOOD_1 = new BlockState(NamespaceID.from("minecraft:dark_oak_wood:1"), (short) 125, Block.DARK_OAK_WOOD);
+  public static final BlockState DARK_OAK_WOOD_1 = new BlockState(NamespaceID.from("minecraft:dark_oak_wood:1"), (short) 125, Block.DARK_OAK_WOOD, "axis=y");
 
-  public static final BlockState DARK_OAK_WOOD_2 = new BlockState(NamespaceID.from("minecraft:dark_oak_wood:2"), (short) 126, Block.DARK_OAK_WOOD);
+  public static final BlockState DARK_OAK_WOOD_2 = new BlockState(NamespaceID.from("minecraft:dark_oak_wood:2"), (short) 126, Block.DARK_OAK_WOOD, "axis=z");
 
   public static void initStates() {
     Block.DARK_OAK_WOOD.addBlockState(DARK_OAK_WOOD_0);

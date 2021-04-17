@@ -13,21 +13,21 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class AcaciaWallSign {
-  public static final BlockState ACACIA_WALL_SIGN_0 = new BlockState(NamespaceID.from("minecraft:acacia_wall_sign:0"), (short) 3759, Block.ACACIA_WALL_SIGN);
+  public static final BlockState ACACIA_WALL_SIGN_0 = new BlockState(NamespaceID.from("minecraft:acacia_wall_sign:0"), (short) 3759, Block.ACACIA_WALL_SIGN, "facing=north","waterlogged=true");
 
-  public static final BlockState ACACIA_WALL_SIGN_1 = new BlockState(NamespaceID.from("minecraft:acacia_wall_sign:1"), (short) 3760, Block.ACACIA_WALL_SIGN);
+  public static final BlockState ACACIA_WALL_SIGN_1 = new BlockState(NamespaceID.from("minecraft:acacia_wall_sign:1"), (short) 3760, Block.ACACIA_WALL_SIGN, "facing=north","waterlogged=false");
 
-  public static final BlockState ACACIA_WALL_SIGN_2 = new BlockState(NamespaceID.from("minecraft:acacia_wall_sign:2"), (short) 3761, Block.ACACIA_WALL_SIGN);
+  public static final BlockState ACACIA_WALL_SIGN_2 = new BlockState(NamespaceID.from("minecraft:acacia_wall_sign:2"), (short) 3761, Block.ACACIA_WALL_SIGN, "facing=south","waterlogged=true");
 
-  public static final BlockState ACACIA_WALL_SIGN_3 = new BlockState(NamespaceID.from("minecraft:acacia_wall_sign:3"), (short) 3762, Block.ACACIA_WALL_SIGN);
+  public static final BlockState ACACIA_WALL_SIGN_3 = new BlockState(NamespaceID.from("minecraft:acacia_wall_sign:3"), (short) 3762, Block.ACACIA_WALL_SIGN, "facing=south","waterlogged=false");
 
-  public static final BlockState ACACIA_WALL_SIGN_4 = new BlockState(NamespaceID.from("minecraft:acacia_wall_sign:4"), (short) 3763, Block.ACACIA_WALL_SIGN);
+  public static final BlockState ACACIA_WALL_SIGN_4 = new BlockState(NamespaceID.from("minecraft:acacia_wall_sign:4"), (short) 3763, Block.ACACIA_WALL_SIGN, "facing=west","waterlogged=true");
 
-  public static final BlockState ACACIA_WALL_SIGN_5 = new BlockState(NamespaceID.from("minecraft:acacia_wall_sign:5"), (short) 3764, Block.ACACIA_WALL_SIGN);
+  public static final BlockState ACACIA_WALL_SIGN_5 = new BlockState(NamespaceID.from("minecraft:acacia_wall_sign:5"), (short) 3764, Block.ACACIA_WALL_SIGN, "facing=west","waterlogged=false");
 
-  public static final BlockState ACACIA_WALL_SIGN_6 = new BlockState(NamespaceID.from("minecraft:acacia_wall_sign:6"), (short) 3765, Block.ACACIA_WALL_SIGN);
+  public static final BlockState ACACIA_WALL_SIGN_6 = new BlockState(NamespaceID.from("minecraft:acacia_wall_sign:6"), (short) 3765, Block.ACACIA_WALL_SIGN, "facing=east","waterlogged=true");
 
-  public static final BlockState ACACIA_WALL_SIGN_7 = new BlockState(NamespaceID.from("minecraft:acacia_wall_sign:7"), (short) 3766, Block.ACACIA_WALL_SIGN);
+  public static final BlockState ACACIA_WALL_SIGN_7 = new BlockState(NamespaceID.from("minecraft:acacia_wall_sign:7"), (short) 3766, Block.ACACIA_WALL_SIGN, "facing=east","waterlogged=false");
 
   public static void initStates() {
     Block.ACACIA_WALL_SIGN.addBlockState(ACACIA_WALL_SIGN_0);

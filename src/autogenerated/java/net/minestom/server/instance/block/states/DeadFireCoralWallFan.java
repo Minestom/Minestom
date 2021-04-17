@@ -13,21 +13,21 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DeadFireCoralWallFan {
-  public static final BlockState DEAD_FIRE_CORAL_WALL_FAN_0 = new BlockState(NamespaceID.from("minecraft:dead_fire_coral_wall_fan:0"), (short) 9588, Block.DEAD_FIRE_CORAL_WALL_FAN);
+  public static final BlockState DEAD_FIRE_CORAL_WALL_FAN_0 = new BlockState(NamespaceID.from("minecraft:dead_fire_coral_wall_fan:0"), (short) 9588, Block.DEAD_FIRE_CORAL_WALL_FAN, "facing=north","waterlogged=true");
 
-  public static final BlockState DEAD_FIRE_CORAL_WALL_FAN_1 = new BlockState(NamespaceID.from("minecraft:dead_fire_coral_wall_fan:1"), (short) 9589, Block.DEAD_FIRE_CORAL_WALL_FAN);
+  public static final BlockState DEAD_FIRE_CORAL_WALL_FAN_1 = new BlockState(NamespaceID.from("minecraft:dead_fire_coral_wall_fan:1"), (short) 9589, Block.DEAD_FIRE_CORAL_WALL_FAN, "facing=north","waterlogged=false");
 
-  public static final BlockState DEAD_FIRE_CORAL_WALL_FAN_2 = new BlockState(NamespaceID.from("minecraft:dead_fire_coral_wall_fan:2"), (short) 9590, Block.DEAD_FIRE_CORAL_WALL_FAN);
+  public static final BlockState DEAD_FIRE_CORAL_WALL_FAN_2 = new BlockState(NamespaceID.from("minecraft:dead_fire_coral_wall_fan:2"), (short) 9590, Block.DEAD_FIRE_CORAL_WALL_FAN, "facing=south","waterlogged=true");
 
-  public static final BlockState DEAD_FIRE_CORAL_WALL_FAN_3 = new BlockState(NamespaceID.from("minecraft:dead_fire_coral_wall_fan:3"), (short) 9591, Block.DEAD_FIRE_CORAL_WALL_FAN);
+  public static final BlockState DEAD_FIRE_CORAL_WALL_FAN_3 = new BlockState(NamespaceID.from("minecraft:dead_fire_coral_wall_fan:3"), (short) 9591, Block.DEAD_FIRE_CORAL_WALL_FAN, "facing=south","waterlogged=false");
 
-  public static final BlockState DEAD_FIRE_CORAL_WALL_FAN_4 = new BlockState(NamespaceID.from("minecraft:dead_fire_coral_wall_fan:4"), (short) 9592, Block.DEAD_FIRE_CORAL_WALL_FAN);
+  public static final BlockState DEAD_FIRE_CORAL_WALL_FAN_4 = new BlockState(NamespaceID.from("minecraft:dead_fire_coral_wall_fan:4"), (short) 9592, Block.DEAD_FIRE_CORAL_WALL_FAN, "facing=west","waterlogged=true");
 
-  public static final BlockState DEAD_FIRE_CORAL_WALL_FAN_5 = new BlockState(NamespaceID.from("minecraft:dead_fire_coral_wall_fan:5"), (short) 9593, Block.DEAD_FIRE_CORAL_WALL_FAN);
+  public static final BlockState DEAD_FIRE_CORAL_WALL_FAN_5 = new BlockState(NamespaceID.from("minecraft:dead_fire_coral_wall_fan:5"), (short) 9593, Block.DEAD_FIRE_CORAL_WALL_FAN, "facing=west","waterlogged=false");
 
-  public static final BlockState DEAD_FIRE_CORAL_WALL_FAN_6 = new BlockState(NamespaceID.from("minecraft:dead_fire_coral_wall_fan:6"), (short) 9594, Block.DEAD_FIRE_CORAL_WALL_FAN);
+  public static final BlockState DEAD_FIRE_CORAL_WALL_FAN_6 = new BlockState(NamespaceID.from("minecraft:dead_fire_coral_wall_fan:6"), (short) 9594, Block.DEAD_FIRE_CORAL_WALL_FAN, "facing=east","waterlogged=true");
 
-  public static final BlockState DEAD_FIRE_CORAL_WALL_FAN_7 = new BlockState(NamespaceID.from("minecraft:dead_fire_coral_wall_fan:7"), (short) 9595, Block.DEAD_FIRE_CORAL_WALL_FAN);
+  public static final BlockState DEAD_FIRE_CORAL_WALL_FAN_7 = new BlockState(NamespaceID.from("minecraft:dead_fire_coral_wall_fan:7"), (short) 9595, Block.DEAD_FIRE_CORAL_WALL_FAN, "facing=east","waterlogged=false");
 
   public static void initStates() {
     Block.DEAD_FIRE_CORAL_WALL_FAN.addBlockState(DEAD_FIRE_CORAL_WALL_FAN_0);

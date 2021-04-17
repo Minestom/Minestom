@@ -13,133 +13,133 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BrownMushroomBlock {
-  public static final BlockState BROWN_MUSHROOM_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:0"), (short) 4505, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:0"), (short) 4505, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=true","north=true","south=true","up=true","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_1 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:1"), (short) 4506, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_1 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:1"), (short) 4506, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=true","north=true","south=true","up=true","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_2 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:2"), (short) 4507, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_2 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:2"), (short) 4507, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=true","north=true","south=true","up=false","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_3 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:3"), (short) 4508, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_3 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:3"), (short) 4508, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=true","north=true","south=true","up=false","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_4 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:4"), (short) 4509, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_4 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:4"), (short) 4509, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=true","north=true","south=false","up=true","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_5 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:5"), (short) 4510, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_5 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:5"), (short) 4510, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=true","north=true","south=false","up=true","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_6 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:6"), (short) 4511, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_6 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:6"), (short) 4511, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=true","north=true","south=false","up=false","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_7 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:7"), (short) 4512, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_7 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:7"), (short) 4512, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=true","north=true","south=false","up=false","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_8 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:8"), (short) 4513, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_8 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:8"), (short) 4513, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=true","north=false","south=true","up=true","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_9 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:9"), (short) 4514, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_9 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:9"), (short) 4514, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=true","north=false","south=true","up=true","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_10 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:10"), (short) 4515, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_10 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:10"), (short) 4515, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=true","north=false","south=true","up=false","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_11 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:11"), (short) 4516, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_11 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:11"), (short) 4516, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=true","north=false","south=true","up=false","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_12 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:12"), (short) 4517, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_12 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:12"), (short) 4517, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=true","north=false","south=false","up=true","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_13 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:13"), (short) 4518, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_13 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:13"), (short) 4518, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=true","north=false","south=false","up=true","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_14 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:14"), (short) 4519, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_14 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:14"), (short) 4519, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=true","north=false","south=false","up=false","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_15 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:15"), (short) 4520, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_15 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:15"), (short) 4520, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=true","north=false","south=false","up=false","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_16 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:16"), (short) 4521, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_16 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:16"), (short) 4521, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=false","north=true","south=true","up=true","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_17 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:17"), (short) 4522, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_17 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:17"), (short) 4522, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=false","north=true","south=true","up=true","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_18 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:18"), (short) 4523, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_18 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:18"), (short) 4523, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=false","north=true","south=true","up=false","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_19 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:19"), (short) 4524, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_19 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:19"), (short) 4524, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=false","north=true","south=true","up=false","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_20 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:20"), (short) 4525, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_20 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:20"), (short) 4525, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=false","north=true","south=false","up=true","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_21 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:21"), (short) 4526, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_21 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:21"), (short) 4526, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=false","north=true","south=false","up=true","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_22 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:22"), (short) 4527, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_22 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:22"), (short) 4527, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=false","north=true","south=false","up=false","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_23 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:23"), (short) 4528, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_23 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:23"), (short) 4528, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=false","north=true","south=false","up=false","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_24 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:24"), (short) 4529, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_24 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:24"), (short) 4529, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=false","north=false","south=true","up=true","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_25 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:25"), (short) 4530, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_25 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:25"), (short) 4530, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=false","north=false","south=true","up=true","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_26 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:26"), (short) 4531, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_26 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:26"), (short) 4531, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=false","north=false","south=true","up=false","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_27 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:27"), (short) 4532, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_27 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:27"), (short) 4532, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=false","north=false","south=true","up=false","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_28 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:28"), (short) 4533, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_28 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:28"), (short) 4533, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=false","north=false","south=false","up=true","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_29 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:29"), (short) 4534, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_29 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:29"), (short) 4534, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=false","north=false","south=false","up=true","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_30 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:30"), (short) 4535, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_30 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:30"), (short) 4535, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=false","north=false","south=false","up=false","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_31 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:31"), (short) 4536, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_31 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:31"), (short) 4536, Block.BROWN_MUSHROOM_BLOCK, "down=true","east=false","north=false","south=false","up=false","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_32 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:32"), (short) 4537, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_32 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:32"), (short) 4537, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=true","north=true","south=true","up=true","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_33 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:33"), (short) 4538, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_33 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:33"), (short) 4538, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=true","north=true","south=true","up=true","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_34 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:34"), (short) 4539, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_34 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:34"), (short) 4539, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=true","north=true","south=true","up=false","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_35 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:35"), (short) 4540, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_35 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:35"), (short) 4540, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=true","north=true","south=true","up=false","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_36 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:36"), (short) 4541, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_36 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:36"), (short) 4541, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=true","north=true","south=false","up=true","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_37 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:37"), (short) 4542, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_37 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:37"), (short) 4542, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=true","north=true","south=false","up=true","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_38 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:38"), (short) 4543, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_38 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:38"), (short) 4543, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=true","north=true","south=false","up=false","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_39 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:39"), (short) 4544, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_39 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:39"), (short) 4544, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=true","north=true","south=false","up=false","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_40 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:40"), (short) 4545, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_40 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:40"), (short) 4545, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=true","north=false","south=true","up=true","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_41 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:41"), (short) 4546, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_41 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:41"), (short) 4546, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=true","north=false","south=true","up=true","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_42 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:42"), (short) 4547, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_42 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:42"), (short) 4547, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=true","north=false","south=true","up=false","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_43 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:43"), (short) 4548, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_43 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:43"), (short) 4548, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=true","north=false","south=true","up=false","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_44 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:44"), (short) 4549, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_44 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:44"), (short) 4549, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=true","north=false","south=false","up=true","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_45 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:45"), (short) 4550, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_45 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:45"), (short) 4550, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=true","north=false","south=false","up=true","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_46 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:46"), (short) 4551, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_46 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:46"), (short) 4551, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=true","north=false","south=false","up=false","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_47 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:47"), (short) 4552, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_47 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:47"), (short) 4552, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=true","north=false","south=false","up=false","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_48 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:48"), (short) 4553, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_48 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:48"), (short) 4553, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=false","north=true","south=true","up=true","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_49 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:49"), (short) 4554, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_49 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:49"), (short) 4554, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=false","north=true","south=true","up=true","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_50 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:50"), (short) 4555, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_50 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:50"), (short) 4555, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=false","north=true","south=true","up=false","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_51 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:51"), (short) 4556, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_51 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:51"), (short) 4556, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=false","north=true","south=true","up=false","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_52 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:52"), (short) 4557, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_52 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:52"), (short) 4557, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=false","north=true","south=false","up=true","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_53 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:53"), (short) 4558, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_53 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:53"), (short) 4558, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=false","north=true","south=false","up=true","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_54 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:54"), (short) 4559, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_54 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:54"), (short) 4559, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=false","north=true","south=false","up=false","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_55 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:55"), (short) 4560, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_55 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:55"), (short) 4560, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=false","north=true","south=false","up=false","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_56 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:56"), (short) 4561, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_56 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:56"), (short) 4561, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=false","north=false","south=true","up=true","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_57 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:57"), (short) 4562, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_57 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:57"), (short) 4562, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=false","north=false","south=true","up=true","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_58 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:58"), (short) 4563, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_58 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:58"), (short) 4563, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=false","north=false","south=true","up=false","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_59 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:59"), (short) 4564, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_59 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:59"), (short) 4564, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=false","north=false","south=true","up=false","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_60 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:60"), (short) 4565, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_60 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:60"), (short) 4565, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=false","north=false","south=false","up=true","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_61 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:61"), (short) 4566, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_61 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:61"), (short) 4566, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=false","north=false","south=false","up=true","west=false");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_62 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:62"), (short) 4567, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_62 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:62"), (short) 4567, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=false","north=false","south=false","up=false","west=true");
 
-  public static final BlockState BROWN_MUSHROOM_BLOCK_63 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:63"), (short) 4568, Block.BROWN_MUSHROOM_BLOCK);
+  public static final BlockState BROWN_MUSHROOM_BLOCK_63 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_block:63"), (short) 4568, Block.BROWN_MUSHROOM_BLOCK, "down=false","east=false","north=false","south=false","up=false","west=false");
 
   public static void initStates() {
     Block.BROWN_MUSHROOM_BLOCK.addBlockState(BROWN_MUSHROOM_BLOCK_0);

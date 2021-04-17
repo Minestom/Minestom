@@ -13,9 +13,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class RedstoneOre {
-  public static final BlockState REDSTONE_ORE_0 = new BlockState(NamespaceID.from("minecraft:redstone_ore:0"), (short) 3885, Block.REDSTONE_ORE);
+  public static final BlockState REDSTONE_ORE_0 = new BlockState(NamespaceID.from("minecraft:redstone_ore:0"), (short) 3885, Block.REDSTONE_ORE, "lit=true");
 
-  public static final BlockState REDSTONE_ORE_1 = new BlockState(NamespaceID.from("minecraft:redstone_ore:1"), (short) 3886, Block.REDSTONE_ORE);
+  public static final BlockState REDSTONE_ORE_1 = new BlockState(NamespaceID.from("minecraft:redstone_ore:1"), (short) 3886, Block.REDSTONE_ORE, "lit=false");
 
   public static void initStates() {
     Block.REDSTONE_ORE.addBlockState(REDSTONE_ORE_0);

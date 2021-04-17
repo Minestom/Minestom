@@ -13,69 +13,69 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class JungleFenceGate {
-  public static final BlockState JUNGLE_FENCE_GATE_0 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:0"), (short) 8486, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_0 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:0"), (short) 8486, Block.JUNGLE_FENCE_GATE, "facing=north","in_wall=true","open=true","powered=true");
 
-  public static final BlockState JUNGLE_FENCE_GATE_1 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:1"), (short) 8487, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_1 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:1"), (short) 8487, Block.JUNGLE_FENCE_GATE, "facing=north","in_wall=true","open=true","powered=false");
 
-  public static final BlockState JUNGLE_FENCE_GATE_2 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:2"), (short) 8488, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_2 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:2"), (short) 8488, Block.JUNGLE_FENCE_GATE, "facing=north","in_wall=true","open=false","powered=true");
 
-  public static final BlockState JUNGLE_FENCE_GATE_3 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:3"), (short) 8489, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_3 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:3"), (short) 8489, Block.JUNGLE_FENCE_GATE, "facing=north","in_wall=true","open=false","powered=false");
 
-  public static final BlockState JUNGLE_FENCE_GATE_4 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:4"), (short) 8490, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_4 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:4"), (short) 8490, Block.JUNGLE_FENCE_GATE, "facing=north","in_wall=false","open=true","powered=true");
 
-  public static final BlockState JUNGLE_FENCE_GATE_5 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:5"), (short) 8491, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_5 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:5"), (short) 8491, Block.JUNGLE_FENCE_GATE, "facing=north","in_wall=false","open=true","powered=false");
 
-  public static final BlockState JUNGLE_FENCE_GATE_6 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:6"), (short) 8492, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_6 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:6"), (short) 8492, Block.JUNGLE_FENCE_GATE, "facing=north","in_wall=false","open=false","powered=true");
 
-  public static final BlockState JUNGLE_FENCE_GATE_7 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:7"), (short) 8493, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_7 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:7"), (short) 8493, Block.JUNGLE_FENCE_GATE, "facing=north","in_wall=false","open=false","powered=false");
 
-  public static final BlockState JUNGLE_FENCE_GATE_8 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:8"), (short) 8494, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_8 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:8"), (short) 8494, Block.JUNGLE_FENCE_GATE, "facing=south","in_wall=true","open=true","powered=true");
 
-  public static final BlockState JUNGLE_FENCE_GATE_9 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:9"), (short) 8495, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_9 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:9"), (short) 8495, Block.JUNGLE_FENCE_GATE, "facing=south","in_wall=true","open=true","powered=false");
 
-  public static final BlockState JUNGLE_FENCE_GATE_10 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:10"), (short) 8496, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_10 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:10"), (short) 8496, Block.JUNGLE_FENCE_GATE, "facing=south","in_wall=true","open=false","powered=true");
 
-  public static final BlockState JUNGLE_FENCE_GATE_11 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:11"), (short) 8497, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_11 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:11"), (short) 8497, Block.JUNGLE_FENCE_GATE, "facing=south","in_wall=true","open=false","powered=false");
 
-  public static final BlockState JUNGLE_FENCE_GATE_12 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:12"), (short) 8498, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_12 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:12"), (short) 8498, Block.JUNGLE_FENCE_GATE, "facing=south","in_wall=false","open=true","powered=true");
 
-  public static final BlockState JUNGLE_FENCE_GATE_13 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:13"), (short) 8499, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_13 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:13"), (short) 8499, Block.JUNGLE_FENCE_GATE, "facing=south","in_wall=false","open=true","powered=false");
 
-  public static final BlockState JUNGLE_FENCE_GATE_14 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:14"), (short) 8500, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_14 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:14"), (short) 8500, Block.JUNGLE_FENCE_GATE, "facing=south","in_wall=false","open=false","powered=true");
 
-  public static final BlockState JUNGLE_FENCE_GATE_15 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:15"), (short) 8501, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_15 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:15"), (short) 8501, Block.JUNGLE_FENCE_GATE, "facing=south","in_wall=false","open=false","powered=false");
 
-  public static final BlockState JUNGLE_FENCE_GATE_16 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:16"), (short) 8502, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_16 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:16"), (short) 8502, Block.JUNGLE_FENCE_GATE, "facing=west","in_wall=true","open=true","powered=true");
 
-  public static final BlockState JUNGLE_FENCE_GATE_17 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:17"), (short) 8503, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_17 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:17"), (short) 8503, Block.JUNGLE_FENCE_GATE, "facing=west","in_wall=true","open=true","powered=false");
 
-  public static final BlockState JUNGLE_FENCE_GATE_18 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:18"), (short) 8504, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_18 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:18"), (short) 8504, Block.JUNGLE_FENCE_GATE, "facing=west","in_wall=true","open=false","powered=true");
 
-  public static final BlockState JUNGLE_FENCE_GATE_19 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:19"), (short) 8505, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_19 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:19"), (short) 8505, Block.JUNGLE_FENCE_GATE, "facing=west","in_wall=true","open=false","powered=false");
 
-  public static final BlockState JUNGLE_FENCE_GATE_20 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:20"), (short) 8506, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_20 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:20"), (short) 8506, Block.JUNGLE_FENCE_GATE, "facing=west","in_wall=false","open=true","powered=true");
 
-  public static final BlockState JUNGLE_FENCE_GATE_21 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:21"), (short) 8507, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_21 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:21"), (short) 8507, Block.JUNGLE_FENCE_GATE, "facing=west","in_wall=false","open=true","powered=false");
 
-  public static final BlockState JUNGLE_FENCE_GATE_22 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:22"), (short) 8508, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_22 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:22"), (short) 8508, Block.JUNGLE_FENCE_GATE, "facing=west","in_wall=false","open=false","powered=true");
 
-  public static final BlockState JUNGLE_FENCE_GATE_23 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:23"), (short) 8509, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_23 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:23"), (short) 8509, Block.JUNGLE_FENCE_GATE, "facing=west","in_wall=false","open=false","powered=false");
 
-  public static final BlockState JUNGLE_FENCE_GATE_24 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:24"), (short) 8510, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_24 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:24"), (short) 8510, Block.JUNGLE_FENCE_GATE, "facing=east","in_wall=true","open=true","powered=true");
 
-  public static final BlockState JUNGLE_FENCE_GATE_25 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:25"), (short) 8511, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_25 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:25"), (short) 8511, Block.JUNGLE_FENCE_GATE, "facing=east","in_wall=true","open=true","powered=false");
 
-  public static final BlockState JUNGLE_FENCE_GATE_26 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:26"), (short) 8512, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_26 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:26"), (short) 8512, Block.JUNGLE_FENCE_GATE, "facing=east","in_wall=true","open=false","powered=true");
 
-  public static final BlockState JUNGLE_FENCE_GATE_27 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:27"), (short) 8513, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_27 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:27"), (short) 8513, Block.JUNGLE_FENCE_GATE, "facing=east","in_wall=true","open=false","powered=false");
 
-  public static final BlockState JUNGLE_FENCE_GATE_28 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:28"), (short) 8514, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_28 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:28"), (short) 8514, Block.JUNGLE_FENCE_GATE, "facing=east","in_wall=false","open=true","powered=true");
 
-  public static final BlockState JUNGLE_FENCE_GATE_29 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:29"), (short) 8515, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_29 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:29"), (short) 8515, Block.JUNGLE_FENCE_GATE, "facing=east","in_wall=false","open=true","powered=false");
 
-  public static final BlockState JUNGLE_FENCE_GATE_30 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:30"), (short) 8516, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_30 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:30"), (short) 8516, Block.JUNGLE_FENCE_GATE, "facing=east","in_wall=false","open=false","powered=true");
 
-  public static final BlockState JUNGLE_FENCE_GATE_31 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:31"), (short) 8517, Block.JUNGLE_FENCE_GATE);
+  public static final BlockState JUNGLE_FENCE_GATE_31 = new BlockState(NamespaceID.from("minecraft:jungle_fence_gate:31"), (short) 8517, Block.JUNGLE_FENCE_GATE, "facing=east","in_wall=false","open=false","powered=false");
 
   public static void initStates() {
     Block.JUNGLE_FENCE_GATE.addBlockState(JUNGLE_FENCE_GATE_0);

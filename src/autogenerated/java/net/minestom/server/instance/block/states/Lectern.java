@@ -13,37 +13,37 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Lectern {
-  public static final BlockState LECTERN_0 = new BlockState(NamespaceID.from("minecraft:lectern:0"), (short) 14837, Block.LECTERN);
+  public static final BlockState LECTERN_0 = new BlockState(NamespaceID.from("minecraft:lectern:0"), (short) 14837, Block.LECTERN, "facing=north","has_book=true","powered=true");
 
-  public static final BlockState LECTERN_1 = new BlockState(NamespaceID.from("minecraft:lectern:1"), (short) 14838, Block.LECTERN);
+  public static final BlockState LECTERN_1 = new BlockState(NamespaceID.from("minecraft:lectern:1"), (short) 14838, Block.LECTERN, "facing=north","has_book=true","powered=false");
 
-  public static final BlockState LECTERN_2 = new BlockState(NamespaceID.from("minecraft:lectern:2"), (short) 14839, Block.LECTERN);
+  public static final BlockState LECTERN_2 = new BlockState(NamespaceID.from("minecraft:lectern:2"), (short) 14839, Block.LECTERN, "facing=north","has_book=false","powered=true");
 
-  public static final BlockState LECTERN_3 = new BlockState(NamespaceID.from("minecraft:lectern:3"), (short) 14840, Block.LECTERN);
+  public static final BlockState LECTERN_3 = new BlockState(NamespaceID.from("minecraft:lectern:3"), (short) 14840, Block.LECTERN, "facing=north","has_book=false","powered=false");
 
-  public static final BlockState LECTERN_4 = new BlockState(NamespaceID.from("minecraft:lectern:4"), (short) 14841, Block.LECTERN);
+  public static final BlockState LECTERN_4 = new BlockState(NamespaceID.from("minecraft:lectern:4"), (short) 14841, Block.LECTERN, "facing=south","has_book=true","powered=true");
 
-  public static final BlockState LECTERN_5 = new BlockState(NamespaceID.from("minecraft:lectern:5"), (short) 14842, Block.LECTERN);
+  public static final BlockState LECTERN_5 = new BlockState(NamespaceID.from("minecraft:lectern:5"), (short) 14842, Block.LECTERN, "facing=south","has_book=true","powered=false");
 
-  public static final BlockState LECTERN_6 = new BlockState(NamespaceID.from("minecraft:lectern:6"), (short) 14843, Block.LECTERN);
+  public static final BlockState LECTERN_6 = new BlockState(NamespaceID.from("minecraft:lectern:6"), (short) 14843, Block.LECTERN, "facing=south","has_book=false","powered=true");
 
-  public static final BlockState LECTERN_7 = new BlockState(NamespaceID.from("minecraft:lectern:7"), (short) 14844, Block.LECTERN);
+  public static final BlockState LECTERN_7 = new BlockState(NamespaceID.from("minecraft:lectern:7"), (short) 14844, Block.LECTERN, "facing=south","has_book=false","powered=false");
 
-  public static final BlockState LECTERN_8 = new BlockState(NamespaceID.from("minecraft:lectern:8"), (short) 14845, Block.LECTERN);
+  public static final BlockState LECTERN_8 = new BlockState(NamespaceID.from("minecraft:lectern:8"), (short) 14845, Block.LECTERN, "facing=west","has_book=true","powered=true");
 
-  public static final BlockState LECTERN_9 = new BlockState(NamespaceID.from("minecraft:lectern:9"), (short) 14846, Block.LECTERN);
+  public static final BlockState LECTERN_9 = new BlockState(NamespaceID.from("minecraft:lectern:9"), (short) 14846, Block.LECTERN, "facing=west","has_book=true","powered=false");
 
-  public static final BlockState LECTERN_10 = new BlockState(NamespaceID.from("minecraft:lectern:10"), (short) 14847, Block.LECTERN);
+  public static final BlockState LECTERN_10 = new BlockState(NamespaceID.from("minecraft:lectern:10"), (short) 14847, Block.LECTERN, "facing=west","has_book=false","powered=true");
 
-  public static final BlockState LECTERN_11 = new BlockState(NamespaceID.from("minecraft:lectern:11"), (short) 14848, Block.LECTERN);
+  public static final BlockState LECTERN_11 = new BlockState(NamespaceID.from("minecraft:lectern:11"), (short) 14848, Block.LECTERN, "facing=west","has_book=false","powered=false");
 
-  public static final BlockState LECTERN_12 = new BlockState(NamespaceID.from("minecraft:lectern:12"), (short) 14849, Block.LECTERN);
+  public static final BlockState LECTERN_12 = new BlockState(NamespaceID.from("minecraft:lectern:12"), (short) 14849, Block.LECTERN, "facing=east","has_book=true","powered=true");
 
-  public static final BlockState LECTERN_13 = new BlockState(NamespaceID.from("minecraft:lectern:13"), (short) 14850, Block.LECTERN);
+  public static final BlockState LECTERN_13 = new BlockState(NamespaceID.from("minecraft:lectern:13"), (short) 14850, Block.LECTERN, "facing=east","has_book=true","powered=false");
 
-  public static final BlockState LECTERN_14 = new BlockState(NamespaceID.from("minecraft:lectern:14"), (short) 14851, Block.LECTERN);
+  public static final BlockState LECTERN_14 = new BlockState(NamespaceID.from("minecraft:lectern:14"), (short) 14851, Block.LECTERN, "facing=east","has_book=false","powered=true");
 
-  public static final BlockState LECTERN_15 = new BlockState(NamespaceID.from("minecraft:lectern:15"), (short) 14852, Block.LECTERN);
+  public static final BlockState LECTERN_15 = new BlockState(NamespaceID.from("minecraft:lectern:15"), (short) 14852, Block.LECTERN, "facing=east","has_book=false","powered=false");
 
   public static void initStates() {
     Block.LECTERN.addBlockState(LECTERN_0);

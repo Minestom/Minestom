@@ -13,11 +13,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class AcaciaWood {
-  public static final BlockState ACACIA_WOOD_0 = new BlockState(NamespaceID.from("minecraft:acacia_wood:0"), (short) 121, Block.ACACIA_WOOD);
+  public static final BlockState ACACIA_WOOD_0 = new BlockState(NamespaceID.from("minecraft:acacia_wood:0"), (short) 121, Block.ACACIA_WOOD, "axis=x");
 
-  public static final BlockState ACACIA_WOOD_1 = new BlockState(NamespaceID.from("minecraft:acacia_wood:1"), (short) 122, Block.ACACIA_WOOD);
+  public static final BlockState ACACIA_WOOD_1 = new BlockState(NamespaceID.from("minecraft:acacia_wood:1"), (short) 122, Block.ACACIA_WOOD, "axis=y");
 
-  public static final BlockState ACACIA_WOOD_2 = new BlockState(NamespaceID.from("minecraft:acacia_wood:2"), (short) 123, Block.ACACIA_WOOD);
+  public static final BlockState ACACIA_WOOD_2 = new BlockState(NamespaceID.from("minecraft:acacia_wood:2"), (short) 123, Block.ACACIA_WOOD, "axis=z");
 
   public static void initStates() {
     Block.ACACIA_WOOD.addBlockState(ACACIA_WOOD_0);

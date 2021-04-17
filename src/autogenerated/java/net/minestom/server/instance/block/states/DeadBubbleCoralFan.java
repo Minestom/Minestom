@@ -13,9 +13,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DeadBubbleCoralFan {
-  public static final BlockState DEAD_BUBBLE_CORAL_FAN_0 = new BlockState(NamespaceID.from("minecraft:dead_bubble_coral_fan:0"), (short) 9548, Block.DEAD_BUBBLE_CORAL_FAN);
+  public static final BlockState DEAD_BUBBLE_CORAL_FAN_0 = new BlockState(NamespaceID.from("minecraft:dead_bubble_coral_fan:0"), (short) 9548, Block.DEAD_BUBBLE_CORAL_FAN, "waterlogged=true");
 
-  public static final BlockState DEAD_BUBBLE_CORAL_FAN_1 = new BlockState(NamespaceID.from("minecraft:dead_bubble_coral_fan:1"), (short) 9549, Block.DEAD_BUBBLE_CORAL_FAN);
+  public static final BlockState DEAD_BUBBLE_CORAL_FAN_1 = new BlockState(NamespaceID.from("minecraft:dead_bubble_coral_fan:1"), (short) 9549, Block.DEAD_BUBBLE_CORAL_FAN, "waterlogged=false");
 
   public static void initStates() {
     Block.DEAD_BUBBLE_CORAL_FAN.addBlockState(DEAD_BUBBLE_CORAL_FAN_0);

@@ -13,11 +13,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class JungleLog {
-  public static final BlockState JUNGLE_LOG_0 = new BlockState(NamespaceID.from("minecraft:jungle_log:0"), (short) 82, Block.JUNGLE_LOG);
+  public static final BlockState JUNGLE_LOG_0 = new BlockState(NamespaceID.from("minecraft:jungle_log:0"), (short) 82, Block.JUNGLE_LOG, "axis=x");
 
-  public static final BlockState JUNGLE_LOG_1 = new BlockState(NamespaceID.from("minecraft:jungle_log:1"), (short) 83, Block.JUNGLE_LOG);
+  public static final BlockState JUNGLE_LOG_1 = new BlockState(NamespaceID.from("minecraft:jungle_log:1"), (short) 83, Block.JUNGLE_LOG, "axis=y");
 
-  public static final BlockState JUNGLE_LOG_2 = new BlockState(NamespaceID.from("minecraft:jungle_log:2"), (short) 84, Block.JUNGLE_LOG);
+  public static final BlockState JUNGLE_LOG_2 = new BlockState(NamespaceID.from("minecraft:jungle_log:2"), (short) 84, Block.JUNGLE_LOG, "axis=z");
 
   public static void initStates() {
     Block.JUNGLE_LOG.addBlockState(JUNGLE_LOG_0);

@@ -13,17 +13,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PrismarineBrickSlab {
-  public static final BlockState PRISMARINE_BRICK_SLAB_0 = new BlockState(NamespaceID.from("minecraft:prismarine_brick_slab:0"), (short) 7854, Block.PRISMARINE_BRICK_SLAB);
+  public static final BlockState PRISMARINE_BRICK_SLAB_0 = new BlockState(NamespaceID.from("minecraft:prismarine_brick_slab:0"), (short) 7854, Block.PRISMARINE_BRICK_SLAB, "type=top","waterlogged=true");
 
-  public static final BlockState PRISMARINE_BRICK_SLAB_1 = new BlockState(NamespaceID.from("minecraft:prismarine_brick_slab:1"), (short) 7855, Block.PRISMARINE_BRICK_SLAB);
+  public static final BlockState PRISMARINE_BRICK_SLAB_1 = new BlockState(NamespaceID.from("minecraft:prismarine_brick_slab:1"), (short) 7855, Block.PRISMARINE_BRICK_SLAB, "type=top","waterlogged=false");
 
-  public static final BlockState PRISMARINE_BRICK_SLAB_2 = new BlockState(NamespaceID.from("minecraft:prismarine_brick_slab:2"), (short) 7856, Block.PRISMARINE_BRICK_SLAB);
+  public static final BlockState PRISMARINE_BRICK_SLAB_2 = new BlockState(NamespaceID.from("minecraft:prismarine_brick_slab:2"), (short) 7856, Block.PRISMARINE_BRICK_SLAB, "type=bottom","waterlogged=true");
 
-  public static final BlockState PRISMARINE_BRICK_SLAB_3 = new BlockState(NamespaceID.from("minecraft:prismarine_brick_slab:3"), (short) 7857, Block.PRISMARINE_BRICK_SLAB);
+  public static final BlockState PRISMARINE_BRICK_SLAB_3 = new BlockState(NamespaceID.from("minecraft:prismarine_brick_slab:3"), (short) 7857, Block.PRISMARINE_BRICK_SLAB, "type=bottom","waterlogged=false");
 
-  public static final BlockState PRISMARINE_BRICK_SLAB_4 = new BlockState(NamespaceID.from("minecraft:prismarine_brick_slab:4"), (short) 7858, Block.PRISMARINE_BRICK_SLAB);
+  public static final BlockState PRISMARINE_BRICK_SLAB_4 = new BlockState(NamespaceID.from("minecraft:prismarine_brick_slab:4"), (short) 7858, Block.PRISMARINE_BRICK_SLAB, "type=double","waterlogged=true");
 
-  public static final BlockState PRISMARINE_BRICK_SLAB_5 = new BlockState(NamespaceID.from("minecraft:prismarine_brick_slab:5"), (short) 7859, Block.PRISMARINE_BRICK_SLAB);
+  public static final BlockState PRISMARINE_BRICK_SLAB_5 = new BlockState(NamespaceID.from("minecraft:prismarine_brick_slab:5"), (short) 7859, Block.PRISMARINE_BRICK_SLAB, "type=double","waterlogged=false");
 
   public static void initStates() {
     Block.PRISMARINE_BRICK_SLAB.addBlockState(PRISMARINE_BRICK_SLAB_0);

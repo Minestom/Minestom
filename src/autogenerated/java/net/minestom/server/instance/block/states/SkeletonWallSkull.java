@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SkeletonWallSkull {
-  public static final BlockState SKELETON_WALL_SKULL_0 = new BlockState(NamespaceID.from("minecraft:skeleton_wall_skull:0"), (short) 6510, Block.SKELETON_WALL_SKULL);
+  public static final BlockState SKELETON_WALL_SKULL_0 = new BlockState(NamespaceID.from("minecraft:skeleton_wall_skull:0"), (short) 6510, Block.SKELETON_WALL_SKULL, "facing=north");
 
-  public static final BlockState SKELETON_WALL_SKULL_1 = new BlockState(NamespaceID.from("minecraft:skeleton_wall_skull:1"), (short) 6511, Block.SKELETON_WALL_SKULL);
+  public static final BlockState SKELETON_WALL_SKULL_1 = new BlockState(NamespaceID.from("minecraft:skeleton_wall_skull:1"), (short) 6511, Block.SKELETON_WALL_SKULL, "facing=south");
 
-  public static final BlockState SKELETON_WALL_SKULL_2 = new BlockState(NamespaceID.from("minecraft:skeleton_wall_skull:2"), (short) 6512, Block.SKELETON_WALL_SKULL);
+  public static final BlockState SKELETON_WALL_SKULL_2 = new BlockState(NamespaceID.from("minecraft:skeleton_wall_skull:2"), (short) 6512, Block.SKELETON_WALL_SKULL, "facing=west");
 
-  public static final BlockState SKELETON_WALL_SKULL_3 = new BlockState(NamespaceID.from("minecraft:skeleton_wall_skull:3"), (short) 6513, Block.SKELETON_WALL_SKULL);
+  public static final BlockState SKELETON_WALL_SKULL_3 = new BlockState(NamespaceID.from("minecraft:skeleton_wall_skull:3"), (short) 6513, Block.SKELETON_WALL_SKULL, "facing=east");
 
   public static void initStates() {
     Block.SKELETON_WALL_SKULL.addBlockState(SKELETON_WALL_SKULL_0);

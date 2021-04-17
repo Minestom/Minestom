@@ -13,17 +13,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class EndRod {
-  public static final BlockState END_ROD_0 = new BlockState(NamespaceID.from("minecraft:end_rod:0"), (short) 9062, Block.END_ROD);
+  public static final BlockState END_ROD_0 = new BlockState(NamespaceID.from("minecraft:end_rod:0"), (short) 9062, Block.END_ROD, "facing=north");
 
-  public static final BlockState END_ROD_1 = new BlockState(NamespaceID.from("minecraft:end_rod:1"), (short) 9063, Block.END_ROD);
+  public static final BlockState END_ROD_1 = new BlockState(NamespaceID.from("minecraft:end_rod:1"), (short) 9063, Block.END_ROD, "facing=east");
 
-  public static final BlockState END_ROD_2 = new BlockState(NamespaceID.from("minecraft:end_rod:2"), (short) 9064, Block.END_ROD);
+  public static final BlockState END_ROD_2 = new BlockState(NamespaceID.from("minecraft:end_rod:2"), (short) 9064, Block.END_ROD, "facing=south");
 
-  public static final BlockState END_ROD_3 = new BlockState(NamespaceID.from("minecraft:end_rod:3"), (short) 9065, Block.END_ROD);
+  public static final BlockState END_ROD_3 = new BlockState(NamespaceID.from("minecraft:end_rod:3"), (short) 9065, Block.END_ROD, "facing=west");
 
-  public static final BlockState END_ROD_4 = new BlockState(NamespaceID.from("minecraft:end_rod:4"), (short) 9066, Block.END_ROD);
+  public static final BlockState END_ROD_4 = new BlockState(NamespaceID.from("minecraft:end_rod:4"), (short) 9066, Block.END_ROD, "facing=up");
 
-  public static final BlockState END_ROD_5 = new BlockState(NamespaceID.from("minecraft:end_rod:5"), (short) 9067, Block.END_ROD);
+  public static final BlockState END_ROD_5 = new BlockState(NamespaceID.from("minecraft:end_rod:5"), (short) 9067, Block.END_ROD, "facing=down");
 
   public static void initStates() {
     Block.END_ROD.addBlockState(END_ROD_0);

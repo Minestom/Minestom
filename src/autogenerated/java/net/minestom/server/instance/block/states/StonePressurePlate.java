@@ -13,9 +13,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class StonePressurePlate {
-  public static final BlockState STONE_PRESSURE_PLATE_0 = new BlockState(NamespaceID.from("minecraft:stone_pressure_plate:0"), (short) 3807, Block.STONE_PRESSURE_PLATE);
+  public static final BlockState STONE_PRESSURE_PLATE_0 = new BlockState(NamespaceID.from("minecraft:stone_pressure_plate:0"), (short) 3807, Block.STONE_PRESSURE_PLATE, "powered=true");
 
-  public static final BlockState STONE_PRESSURE_PLATE_1 = new BlockState(NamespaceID.from("minecraft:stone_pressure_plate:1"), (short) 3808, Block.STONE_PRESSURE_PLATE);
+  public static final BlockState STONE_PRESSURE_PLATE_1 = new BlockState(NamespaceID.from("minecraft:stone_pressure_plate:1"), (short) 3808, Block.STONE_PRESSURE_PLATE, "powered=false");
 
   public static void initStates() {
     Block.STONE_PRESSURE_PLATE.addBlockState(STONE_PRESSURE_PLATE_0);

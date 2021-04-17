@@ -13,29 +13,29 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class StickyPiston {
-  public static final BlockState STICKY_PISTON_0 = new BlockState(NamespaceID.from("minecraft:sticky_piston:0"), (short) 1329, Block.STICKY_PISTON);
+  public static final BlockState STICKY_PISTON_0 = new BlockState(NamespaceID.from("minecraft:sticky_piston:0"), (short) 1329, Block.STICKY_PISTON, "extended=true","facing=north");
 
-  public static final BlockState STICKY_PISTON_1 = new BlockState(NamespaceID.from("minecraft:sticky_piston:1"), (short) 1330, Block.STICKY_PISTON);
+  public static final BlockState STICKY_PISTON_1 = new BlockState(NamespaceID.from("minecraft:sticky_piston:1"), (short) 1330, Block.STICKY_PISTON, "extended=true","facing=east");
 
-  public static final BlockState STICKY_PISTON_2 = new BlockState(NamespaceID.from("minecraft:sticky_piston:2"), (short) 1331, Block.STICKY_PISTON);
+  public static final BlockState STICKY_PISTON_2 = new BlockState(NamespaceID.from("minecraft:sticky_piston:2"), (short) 1331, Block.STICKY_PISTON, "extended=true","facing=south");
 
-  public static final BlockState STICKY_PISTON_3 = new BlockState(NamespaceID.from("minecraft:sticky_piston:3"), (short) 1332, Block.STICKY_PISTON);
+  public static final BlockState STICKY_PISTON_3 = new BlockState(NamespaceID.from("minecraft:sticky_piston:3"), (short) 1332, Block.STICKY_PISTON, "extended=true","facing=west");
 
-  public static final BlockState STICKY_PISTON_4 = new BlockState(NamespaceID.from("minecraft:sticky_piston:4"), (short) 1333, Block.STICKY_PISTON);
+  public static final BlockState STICKY_PISTON_4 = new BlockState(NamespaceID.from("minecraft:sticky_piston:4"), (short) 1333, Block.STICKY_PISTON, "extended=true","facing=up");
 
-  public static final BlockState STICKY_PISTON_5 = new BlockState(NamespaceID.from("minecraft:sticky_piston:5"), (short) 1334, Block.STICKY_PISTON);
+  public static final BlockState STICKY_PISTON_5 = new BlockState(NamespaceID.from("minecraft:sticky_piston:5"), (short) 1334, Block.STICKY_PISTON, "extended=true","facing=down");
 
-  public static final BlockState STICKY_PISTON_6 = new BlockState(NamespaceID.from("minecraft:sticky_piston:6"), (short) 1335, Block.STICKY_PISTON);
+  public static final BlockState STICKY_PISTON_6 = new BlockState(NamespaceID.from("minecraft:sticky_piston:6"), (short) 1335, Block.STICKY_PISTON, "extended=false","facing=north");
 
-  public static final BlockState STICKY_PISTON_7 = new BlockState(NamespaceID.from("minecraft:sticky_piston:7"), (short) 1336, Block.STICKY_PISTON);
+  public static final BlockState STICKY_PISTON_7 = new BlockState(NamespaceID.from("minecraft:sticky_piston:7"), (short) 1336, Block.STICKY_PISTON, "extended=false","facing=east");
 
-  public static final BlockState STICKY_PISTON_8 = new BlockState(NamespaceID.from("minecraft:sticky_piston:8"), (short) 1337, Block.STICKY_PISTON);
+  public static final BlockState STICKY_PISTON_8 = new BlockState(NamespaceID.from("minecraft:sticky_piston:8"), (short) 1337, Block.STICKY_PISTON, "extended=false","facing=south");
 
-  public static final BlockState STICKY_PISTON_9 = new BlockState(NamespaceID.from("minecraft:sticky_piston:9"), (short) 1338, Block.STICKY_PISTON);
+  public static final BlockState STICKY_PISTON_9 = new BlockState(NamespaceID.from("minecraft:sticky_piston:9"), (short) 1338, Block.STICKY_PISTON, "extended=false","facing=west");
 
-  public static final BlockState STICKY_PISTON_10 = new BlockState(NamespaceID.from("minecraft:sticky_piston:10"), (short) 1339, Block.STICKY_PISTON);
+  public static final BlockState STICKY_PISTON_10 = new BlockState(NamespaceID.from("minecraft:sticky_piston:10"), (short) 1339, Block.STICKY_PISTON, "extended=false","facing=up");
 
-  public static final BlockState STICKY_PISTON_11 = new BlockState(NamespaceID.from("minecraft:sticky_piston:11"), (short) 1340, Block.STICKY_PISTON);
+  public static final BlockState STICKY_PISTON_11 = new BlockState(NamespaceID.from("minecraft:sticky_piston:11"), (short) 1340, Block.STICKY_PISTON, "extended=false","facing=down");
 
   public static void initStates() {
     Block.STICKY_PISTON.addBlockState(STICKY_PISTON_0);

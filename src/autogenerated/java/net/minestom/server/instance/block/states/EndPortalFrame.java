@@ -13,21 +13,21 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class EndPortalFrame {
-  public static final BlockState END_PORTAL_FRAME_0 = new BlockState(NamespaceID.from("minecraft:end_portal_frame:0"), (short) 5150, Block.END_PORTAL_FRAME);
+  public static final BlockState END_PORTAL_FRAME_0 = new BlockState(NamespaceID.from("minecraft:end_portal_frame:0"), (short) 5150, Block.END_PORTAL_FRAME, "eye=true","facing=north");
 
-  public static final BlockState END_PORTAL_FRAME_1 = new BlockState(NamespaceID.from("minecraft:end_portal_frame:1"), (short) 5151, Block.END_PORTAL_FRAME);
+  public static final BlockState END_PORTAL_FRAME_1 = new BlockState(NamespaceID.from("minecraft:end_portal_frame:1"), (short) 5151, Block.END_PORTAL_FRAME, "eye=true","facing=south");
 
-  public static final BlockState END_PORTAL_FRAME_2 = new BlockState(NamespaceID.from("minecraft:end_portal_frame:2"), (short) 5152, Block.END_PORTAL_FRAME);
+  public static final BlockState END_PORTAL_FRAME_2 = new BlockState(NamespaceID.from("minecraft:end_portal_frame:2"), (short) 5152, Block.END_PORTAL_FRAME, "eye=true","facing=west");
 
-  public static final BlockState END_PORTAL_FRAME_3 = new BlockState(NamespaceID.from("minecraft:end_portal_frame:3"), (short) 5153, Block.END_PORTAL_FRAME);
+  public static final BlockState END_PORTAL_FRAME_3 = new BlockState(NamespaceID.from("minecraft:end_portal_frame:3"), (short) 5153, Block.END_PORTAL_FRAME, "eye=true","facing=east");
 
-  public static final BlockState END_PORTAL_FRAME_4 = new BlockState(NamespaceID.from("minecraft:end_portal_frame:4"), (short) 5154, Block.END_PORTAL_FRAME);
+  public static final BlockState END_PORTAL_FRAME_4 = new BlockState(NamespaceID.from("minecraft:end_portal_frame:4"), (short) 5154, Block.END_PORTAL_FRAME, "eye=false","facing=north");
 
-  public static final BlockState END_PORTAL_FRAME_5 = new BlockState(NamespaceID.from("minecraft:end_portal_frame:5"), (short) 5155, Block.END_PORTAL_FRAME);
+  public static final BlockState END_PORTAL_FRAME_5 = new BlockState(NamespaceID.from("minecraft:end_portal_frame:5"), (short) 5155, Block.END_PORTAL_FRAME, "eye=false","facing=south");
 
-  public static final BlockState END_PORTAL_FRAME_6 = new BlockState(NamespaceID.from("minecraft:end_portal_frame:6"), (short) 5156, Block.END_PORTAL_FRAME);
+  public static final BlockState END_PORTAL_FRAME_6 = new BlockState(NamespaceID.from("minecraft:end_portal_frame:6"), (short) 5156, Block.END_PORTAL_FRAME, "eye=false","facing=west");
 
-  public static final BlockState END_PORTAL_FRAME_7 = new BlockState(NamespaceID.from("minecraft:end_portal_frame:7"), (short) 5157, Block.END_PORTAL_FRAME);
+  public static final BlockState END_PORTAL_FRAME_7 = new BlockState(NamespaceID.from("minecraft:end_portal_frame:7"), (short) 5157, Block.END_PORTAL_FRAME, "eye=false","facing=east");
 
   public static void initStates() {
     Block.END_PORTAL_FRAME.addBlockState(END_PORTAL_FRAME_0);

@@ -13,9 +13,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class LargeFern {
-  public static final BlockState LARGE_FERN_0 = new BlockState(NamespaceID.from("minecraft:large_fern:0"), (short) 7899, Block.LARGE_FERN);
+  public static final BlockState LARGE_FERN_0 = new BlockState(NamespaceID.from("minecraft:large_fern:0"), (short) 7899, Block.LARGE_FERN, "half=upper");
 
-  public static final BlockState LARGE_FERN_1 = new BlockState(NamespaceID.from("minecraft:large_fern:1"), (short) 7900, Block.LARGE_FERN);
+  public static final BlockState LARGE_FERN_1 = new BlockState(NamespaceID.from("minecraft:large_fern:1"), (short) 7900, Block.LARGE_FERN, "half=lower");
 
   public static void initStates() {
     Block.LARGE_FERN.addBlockState(LARGE_FERN_0);

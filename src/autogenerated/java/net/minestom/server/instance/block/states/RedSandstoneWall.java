@@ -13,653 +13,653 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class RedSandstoneWall {
-  public static final BlockState RED_SANDSTONE_WALL_0 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:0"), (short) 11519, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_0 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:0"), (short) 11519, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_1 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:1"), (short) 11520, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_1 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:1"), (short) 11520, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_2 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:2"), (short) 11521, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_2 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:2"), (short) 11521, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_3 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:3"), (short) 11522, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_3 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:3"), (short) 11522, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_4 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:4"), (short) 11523, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_4 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:4"), (short) 11523, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_5 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:5"), (short) 11524, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_5 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:5"), (short) 11524, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_6 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:6"), (short) 11525, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_6 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:6"), (short) 11525, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_7 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:7"), (short) 11526, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_7 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:7"), (short) 11526, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_8 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:8"), (short) 11527, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_8 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:8"), (short) 11527, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_9 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:9"), (short) 11528, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_9 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:9"), (short) 11528, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_10 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:10"), (short) 11529, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_10 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:10"), (short) 11529, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_11 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:11"), (short) 11530, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_11 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:11"), (short) 11530, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_12 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:12"), (short) 11531, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_12 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:12"), (short) 11531, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_13 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:13"), (short) 11532, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_13 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:13"), (short) 11532, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_14 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:14"), (short) 11533, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_14 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:14"), (short) 11533, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_15 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:15"), (short) 11534, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_15 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:15"), (short) 11534, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_16 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:16"), (short) 11535, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_16 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:16"), (short) 11535, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_17 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:17"), (short) 11536, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_17 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:17"), (short) 11536, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_18 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:18"), (short) 11537, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_18 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:18"), (short) 11537, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_19 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:19"), (short) 11538, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_19 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:19"), (short) 11538, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_20 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:20"), (short) 11539, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_20 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:20"), (short) 11539, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_21 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:21"), (short) 11540, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_21 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:21"), (short) 11540, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_22 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:22"), (short) 11541, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_22 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:22"), (short) 11541, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_23 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:23"), (short) 11542, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_23 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:23"), (short) 11542, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_24 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:24"), (short) 11543, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_24 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:24"), (short) 11543, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_25 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:25"), (short) 11544, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_25 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:25"), (short) 11544, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_26 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:26"), (short) 11545, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_26 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:26"), (short) 11545, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_27 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:27"), (short) 11546, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_27 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:27"), (short) 11546, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_28 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:28"), (short) 11547, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_28 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:28"), (short) 11547, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_29 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:29"), (short) 11548, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_29 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:29"), (short) 11548, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_30 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:30"), (short) 11549, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_30 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:30"), (short) 11549, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_31 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:31"), (short) 11550, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_31 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:31"), (short) 11550, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_32 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:32"), (short) 11551, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_32 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:32"), (short) 11551, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_33 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:33"), (short) 11552, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_33 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:33"), (short) 11552, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_34 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:34"), (short) 11553, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_34 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:34"), (short) 11553, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_35 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:35"), (short) 11554, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_35 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:35"), (short) 11554, Block.RED_SANDSTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_36 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:36"), (short) 11555, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_36 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:36"), (short) 11555, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_37 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:37"), (short) 11556, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_37 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:37"), (short) 11556, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_38 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:38"), (short) 11557, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_38 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:38"), (short) 11557, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_39 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:39"), (short) 11558, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_39 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:39"), (short) 11558, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_40 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:40"), (short) 11559, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_40 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:40"), (short) 11559, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_41 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:41"), (short) 11560, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_41 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:41"), (short) 11560, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_42 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:42"), (short) 11561, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_42 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:42"), (short) 11561, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_43 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:43"), (short) 11562, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_43 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:43"), (short) 11562, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_44 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:44"), (short) 11563, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_44 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:44"), (short) 11563, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_45 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:45"), (short) 11564, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_45 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:45"), (short) 11564, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_46 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:46"), (short) 11565, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_46 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:46"), (short) 11565, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_47 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:47"), (short) 11566, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_47 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:47"), (short) 11566, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_48 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:48"), (short) 11567, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_48 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:48"), (short) 11567, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_49 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:49"), (short) 11568, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_49 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:49"), (short) 11568, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_50 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:50"), (short) 11569, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_50 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:50"), (short) 11569, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_51 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:51"), (short) 11570, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_51 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:51"), (short) 11570, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_52 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:52"), (short) 11571, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_52 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:52"), (short) 11571, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_53 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:53"), (short) 11572, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_53 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:53"), (short) 11572, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_54 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:54"), (short) 11573, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_54 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:54"), (short) 11573, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_55 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:55"), (short) 11574, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_55 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:55"), (short) 11574, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_56 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:56"), (short) 11575, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_56 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:56"), (short) 11575, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_57 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:57"), (short) 11576, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_57 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:57"), (short) 11576, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_58 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:58"), (short) 11577, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_58 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:58"), (short) 11577, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_59 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:59"), (short) 11578, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_59 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:59"), (short) 11578, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_60 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:60"), (short) 11579, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_60 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:60"), (short) 11579, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_61 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:61"), (short) 11580, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_61 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:61"), (short) 11580, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_62 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:62"), (short) 11581, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_62 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:62"), (short) 11581, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_63 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:63"), (short) 11582, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_63 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:63"), (short) 11582, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_64 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:64"), (short) 11583, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_64 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:64"), (short) 11583, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_65 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:65"), (short) 11584, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_65 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:65"), (short) 11584, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_66 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:66"), (short) 11585, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_66 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:66"), (short) 11585, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_67 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:67"), (short) 11586, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_67 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:67"), (short) 11586, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_68 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:68"), (short) 11587, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_68 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:68"), (short) 11587, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_69 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:69"), (short) 11588, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_69 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:69"), (short) 11588, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_70 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:70"), (short) 11589, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_70 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:70"), (short) 11589, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_71 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:71"), (short) 11590, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_71 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:71"), (short) 11590, Block.RED_SANDSTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_72 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:72"), (short) 11591, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_72 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:72"), (short) 11591, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_73 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:73"), (short) 11592, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_73 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:73"), (short) 11592, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_74 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:74"), (short) 11593, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_74 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:74"), (short) 11593, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_75 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:75"), (short) 11594, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_75 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:75"), (short) 11594, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_76 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:76"), (short) 11595, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_76 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:76"), (short) 11595, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_77 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:77"), (short) 11596, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_77 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:77"), (short) 11596, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_78 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:78"), (short) 11597, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_78 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:78"), (short) 11597, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_79 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:79"), (short) 11598, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_79 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:79"), (short) 11598, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_80 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:80"), (short) 11599, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_80 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:80"), (short) 11599, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_81 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:81"), (short) 11600, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_81 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:81"), (short) 11600, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_82 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:82"), (short) 11601, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_82 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:82"), (short) 11601, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_83 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:83"), (short) 11602, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_83 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:83"), (short) 11602, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_84 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:84"), (short) 11603, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_84 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:84"), (short) 11603, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_85 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:85"), (short) 11604, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_85 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:85"), (short) 11604, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_86 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:86"), (short) 11605, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_86 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:86"), (short) 11605, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_87 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:87"), (short) 11606, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_87 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:87"), (short) 11606, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_88 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:88"), (short) 11607, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_88 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:88"), (short) 11607, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_89 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:89"), (short) 11608, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_89 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:89"), (short) 11608, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_90 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:90"), (short) 11609, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_90 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:90"), (short) 11609, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_91 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:91"), (short) 11610, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_91 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:91"), (short) 11610, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_92 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:92"), (short) 11611, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_92 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:92"), (short) 11611, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_93 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:93"), (short) 11612, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_93 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:93"), (short) 11612, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_94 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:94"), (short) 11613, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_94 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:94"), (short) 11613, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_95 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:95"), (short) 11614, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_95 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:95"), (short) 11614, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_96 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:96"), (short) 11615, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_96 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:96"), (short) 11615, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_97 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:97"), (short) 11616, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_97 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:97"), (short) 11616, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_98 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:98"), (short) 11617, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_98 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:98"), (short) 11617, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_99 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:99"), (short) 11618, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_99 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:99"), (short) 11618, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_100 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:100"), (short) 11619, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_100 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:100"), (short) 11619, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_101 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:101"), (short) 11620, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_101 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:101"), (short) 11620, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_102 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:102"), (short) 11621, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_102 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:102"), (short) 11621, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_103 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:103"), (short) 11622, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_103 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:103"), (short) 11622, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_104 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:104"), (short) 11623, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_104 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:104"), (short) 11623, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_105 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:105"), (short) 11624, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_105 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:105"), (short) 11624, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_106 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:106"), (short) 11625, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_106 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:106"), (short) 11625, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_107 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:107"), (short) 11626, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_107 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:107"), (short) 11626, Block.RED_SANDSTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_108 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:108"), (short) 11627, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_108 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:108"), (short) 11627, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_109 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:109"), (short) 11628, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_109 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:109"), (short) 11628, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_110 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:110"), (short) 11629, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_110 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:110"), (short) 11629, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_111 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:111"), (short) 11630, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_111 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:111"), (short) 11630, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_112 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:112"), (short) 11631, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_112 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:112"), (short) 11631, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_113 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:113"), (short) 11632, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_113 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:113"), (short) 11632, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_114 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:114"), (short) 11633, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_114 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:114"), (short) 11633, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_115 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:115"), (short) 11634, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_115 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:115"), (short) 11634, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_116 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:116"), (short) 11635, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_116 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:116"), (short) 11635, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_117 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:117"), (short) 11636, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_117 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:117"), (short) 11636, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_118 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:118"), (short) 11637, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_118 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:118"), (short) 11637, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_119 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:119"), (short) 11638, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_119 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:119"), (short) 11638, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_120 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:120"), (short) 11639, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_120 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:120"), (short) 11639, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_121 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:121"), (short) 11640, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_121 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:121"), (short) 11640, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_122 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:122"), (short) 11641, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_122 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:122"), (short) 11641, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_123 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:123"), (short) 11642, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_123 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:123"), (short) 11642, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_124 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:124"), (short) 11643, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_124 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:124"), (short) 11643, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_125 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:125"), (short) 11644, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_125 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:125"), (short) 11644, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_126 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:126"), (short) 11645, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_126 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:126"), (short) 11645, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_127 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:127"), (short) 11646, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_127 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:127"), (short) 11646, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_128 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:128"), (short) 11647, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_128 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:128"), (short) 11647, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_129 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:129"), (short) 11648, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_129 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:129"), (short) 11648, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_130 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:130"), (short) 11649, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_130 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:130"), (short) 11649, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_131 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:131"), (short) 11650, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_131 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:131"), (short) 11650, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_132 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:132"), (short) 11651, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_132 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:132"), (short) 11651, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_133 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:133"), (short) 11652, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_133 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:133"), (short) 11652, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_134 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:134"), (short) 11653, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_134 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:134"), (short) 11653, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_135 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:135"), (short) 11654, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_135 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:135"), (short) 11654, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_136 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:136"), (short) 11655, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_136 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:136"), (short) 11655, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_137 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:137"), (short) 11656, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_137 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:137"), (short) 11656, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_138 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:138"), (short) 11657, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_138 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:138"), (short) 11657, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_139 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:139"), (short) 11658, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_139 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:139"), (short) 11658, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_140 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:140"), (short) 11659, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_140 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:140"), (short) 11659, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_141 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:141"), (short) 11660, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_141 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:141"), (short) 11660, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_142 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:142"), (short) 11661, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_142 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:142"), (short) 11661, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_143 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:143"), (short) 11662, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_143 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:143"), (short) 11662, Block.RED_SANDSTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_144 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:144"), (short) 11663, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_144 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:144"), (short) 11663, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_145 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:145"), (short) 11664, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_145 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:145"), (short) 11664, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_146 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:146"), (short) 11665, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_146 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:146"), (short) 11665, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_147 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:147"), (short) 11666, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_147 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:147"), (short) 11666, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_148 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:148"), (short) 11667, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_148 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:148"), (short) 11667, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_149 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:149"), (short) 11668, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_149 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:149"), (short) 11668, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_150 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:150"), (short) 11669, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_150 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:150"), (short) 11669, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_151 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:151"), (short) 11670, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_151 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:151"), (short) 11670, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_152 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:152"), (short) 11671, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_152 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:152"), (short) 11671, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_153 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:153"), (short) 11672, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_153 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:153"), (short) 11672, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_154 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:154"), (short) 11673, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_154 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:154"), (short) 11673, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_155 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:155"), (short) 11674, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_155 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:155"), (short) 11674, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_156 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:156"), (short) 11675, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_156 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:156"), (short) 11675, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_157 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:157"), (short) 11676, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_157 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:157"), (short) 11676, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_158 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:158"), (short) 11677, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_158 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:158"), (short) 11677, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_159 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:159"), (short) 11678, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_159 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:159"), (short) 11678, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_160 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:160"), (short) 11679, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_160 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:160"), (short) 11679, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_161 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:161"), (short) 11680, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_161 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:161"), (short) 11680, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_162 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:162"), (short) 11681, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_162 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:162"), (short) 11681, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_163 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:163"), (short) 11682, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_163 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:163"), (short) 11682, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_164 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:164"), (short) 11683, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_164 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:164"), (short) 11683, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_165 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:165"), (short) 11684, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_165 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:165"), (short) 11684, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_166 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:166"), (short) 11685, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_166 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:166"), (short) 11685, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_167 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:167"), (short) 11686, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_167 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:167"), (short) 11686, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_168 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:168"), (short) 11687, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_168 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:168"), (short) 11687, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_169 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:169"), (short) 11688, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_169 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:169"), (short) 11688, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_170 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:170"), (short) 11689, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_170 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:170"), (short) 11689, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_171 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:171"), (short) 11690, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_171 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:171"), (short) 11690, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_172 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:172"), (short) 11691, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_172 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:172"), (short) 11691, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_173 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:173"), (short) 11692, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_173 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:173"), (short) 11692, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_174 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:174"), (short) 11693, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_174 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:174"), (short) 11693, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_175 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:175"), (short) 11694, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_175 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:175"), (short) 11694, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_176 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:176"), (short) 11695, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_176 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:176"), (short) 11695, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_177 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:177"), (short) 11696, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_177 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:177"), (short) 11696, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_178 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:178"), (short) 11697, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_178 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:178"), (short) 11697, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_179 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:179"), (short) 11698, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_179 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:179"), (short) 11698, Block.RED_SANDSTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_180 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:180"), (short) 11699, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_180 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:180"), (short) 11699, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_181 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:181"), (short) 11700, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_181 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:181"), (short) 11700, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_182 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:182"), (short) 11701, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_182 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:182"), (short) 11701, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_183 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:183"), (short) 11702, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_183 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:183"), (short) 11702, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_184 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:184"), (short) 11703, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_184 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:184"), (short) 11703, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_185 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:185"), (short) 11704, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_185 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:185"), (short) 11704, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_186 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:186"), (short) 11705, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_186 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:186"), (short) 11705, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_187 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:187"), (short) 11706, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_187 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:187"), (short) 11706, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_188 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:188"), (short) 11707, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_188 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:188"), (short) 11707, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_189 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:189"), (short) 11708, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_189 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:189"), (short) 11708, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_190 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:190"), (short) 11709, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_190 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:190"), (short) 11709, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_191 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:191"), (short) 11710, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_191 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:191"), (short) 11710, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_192 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:192"), (short) 11711, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_192 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:192"), (short) 11711, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_193 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:193"), (short) 11712, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_193 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:193"), (short) 11712, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_194 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:194"), (short) 11713, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_194 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:194"), (short) 11713, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_195 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:195"), (short) 11714, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_195 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:195"), (short) 11714, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_196 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:196"), (short) 11715, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_196 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:196"), (short) 11715, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_197 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:197"), (short) 11716, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_197 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:197"), (short) 11716, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_198 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:198"), (short) 11717, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_198 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:198"), (short) 11717, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_199 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:199"), (short) 11718, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_199 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:199"), (short) 11718, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_200 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:200"), (short) 11719, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_200 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:200"), (short) 11719, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_201 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:201"), (short) 11720, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_201 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:201"), (short) 11720, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_202 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:202"), (short) 11721, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_202 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:202"), (short) 11721, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_203 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:203"), (short) 11722, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_203 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:203"), (short) 11722, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_204 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:204"), (short) 11723, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_204 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:204"), (short) 11723, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_205 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:205"), (short) 11724, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_205 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:205"), (short) 11724, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_206 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:206"), (short) 11725, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_206 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:206"), (short) 11725, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_207 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:207"), (short) 11726, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_207 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:207"), (short) 11726, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_208 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:208"), (short) 11727, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_208 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:208"), (short) 11727, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_209 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:209"), (short) 11728, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_209 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:209"), (short) 11728, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_210 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:210"), (short) 11729, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_210 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:210"), (short) 11729, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_211 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:211"), (short) 11730, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_211 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:211"), (short) 11730, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_212 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:212"), (short) 11731, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_212 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:212"), (short) 11731, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_213 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:213"), (short) 11732, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_213 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:213"), (short) 11732, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_214 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:214"), (short) 11733, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_214 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:214"), (short) 11733, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_215 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:215"), (short) 11734, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_215 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:215"), (short) 11734, Block.RED_SANDSTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_216 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:216"), (short) 11735, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_216 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:216"), (short) 11735, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_217 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:217"), (short) 11736, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_217 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:217"), (short) 11736, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_218 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:218"), (short) 11737, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_218 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:218"), (short) 11737, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_219 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:219"), (short) 11738, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_219 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:219"), (short) 11738, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_220 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:220"), (short) 11739, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_220 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:220"), (short) 11739, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_221 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:221"), (short) 11740, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_221 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:221"), (short) 11740, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_222 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:222"), (short) 11741, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_222 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:222"), (short) 11741, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_223 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:223"), (short) 11742, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_223 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:223"), (short) 11742, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_224 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:224"), (short) 11743, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_224 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:224"), (short) 11743, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_225 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:225"), (short) 11744, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_225 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:225"), (short) 11744, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_226 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:226"), (short) 11745, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_226 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:226"), (short) 11745, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_227 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:227"), (short) 11746, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_227 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:227"), (short) 11746, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_228 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:228"), (short) 11747, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_228 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:228"), (short) 11747, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_229 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:229"), (short) 11748, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_229 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:229"), (short) 11748, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_230 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:230"), (short) 11749, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_230 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:230"), (short) 11749, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_231 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:231"), (short) 11750, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_231 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:231"), (short) 11750, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_232 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:232"), (short) 11751, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_232 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:232"), (short) 11751, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_233 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:233"), (short) 11752, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_233 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:233"), (short) 11752, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_234 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:234"), (short) 11753, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_234 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:234"), (short) 11753, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_235 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:235"), (short) 11754, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_235 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:235"), (short) 11754, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_236 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:236"), (short) 11755, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_236 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:236"), (short) 11755, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_237 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:237"), (short) 11756, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_237 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:237"), (short) 11756, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_238 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:238"), (short) 11757, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_238 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:238"), (short) 11757, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_239 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:239"), (short) 11758, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_239 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:239"), (short) 11758, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_240 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:240"), (short) 11759, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_240 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:240"), (short) 11759, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_241 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:241"), (short) 11760, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_241 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:241"), (short) 11760, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_242 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:242"), (short) 11761, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_242 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:242"), (short) 11761, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_243 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:243"), (short) 11762, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_243 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:243"), (short) 11762, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_244 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:244"), (short) 11763, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_244 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:244"), (short) 11763, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_245 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:245"), (short) 11764, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_245 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:245"), (short) 11764, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_246 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:246"), (short) 11765, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_246 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:246"), (short) 11765, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_247 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:247"), (short) 11766, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_247 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:247"), (short) 11766, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_248 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:248"), (short) 11767, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_248 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:248"), (short) 11767, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_249 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:249"), (short) 11768, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_249 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:249"), (short) 11768, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_250 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:250"), (short) 11769, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_250 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:250"), (short) 11769, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_251 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:251"), (short) 11770, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_251 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:251"), (short) 11770, Block.RED_SANDSTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_252 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:252"), (short) 11771, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_252 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:252"), (short) 11771, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_253 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:253"), (short) 11772, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_253 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:253"), (short) 11772, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_254 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:254"), (short) 11773, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_254 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:254"), (short) 11773, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_255 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:255"), (short) 11774, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_255 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:255"), (short) 11774, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_256 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:256"), (short) 11775, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_256 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:256"), (short) 11775, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_257 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:257"), (short) 11776, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_257 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:257"), (short) 11776, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_258 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:258"), (short) 11777, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_258 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:258"), (short) 11777, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_259 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:259"), (short) 11778, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_259 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:259"), (short) 11778, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_260 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:260"), (short) 11779, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_260 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:260"), (short) 11779, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_261 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:261"), (short) 11780, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_261 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:261"), (short) 11780, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_262 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:262"), (short) 11781, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_262 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:262"), (short) 11781, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_263 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:263"), (short) 11782, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_263 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:263"), (short) 11782, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_264 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:264"), (short) 11783, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_264 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:264"), (short) 11783, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_265 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:265"), (short) 11784, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_265 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:265"), (short) 11784, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_266 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:266"), (short) 11785, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_266 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:266"), (short) 11785, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_267 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:267"), (short) 11786, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_267 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:267"), (short) 11786, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_268 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:268"), (short) 11787, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_268 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:268"), (short) 11787, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_269 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:269"), (short) 11788, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_269 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:269"), (short) 11788, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_270 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:270"), (short) 11789, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_270 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:270"), (short) 11789, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_271 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:271"), (short) 11790, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_271 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:271"), (short) 11790, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_272 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:272"), (short) 11791, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_272 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:272"), (short) 11791, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_273 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:273"), (short) 11792, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_273 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:273"), (short) 11792, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_274 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:274"), (short) 11793, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_274 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:274"), (short) 11793, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_275 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:275"), (short) 11794, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_275 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:275"), (short) 11794, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_276 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:276"), (short) 11795, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_276 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:276"), (short) 11795, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_277 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:277"), (short) 11796, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_277 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:277"), (short) 11796, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_278 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:278"), (short) 11797, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_278 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:278"), (short) 11797, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_279 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:279"), (short) 11798, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_279 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:279"), (short) 11798, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_280 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:280"), (short) 11799, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_280 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:280"), (short) 11799, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_281 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:281"), (short) 11800, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_281 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:281"), (short) 11800, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_282 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:282"), (short) 11801, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_282 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:282"), (short) 11801, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_283 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:283"), (short) 11802, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_283 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:283"), (short) 11802, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_284 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:284"), (short) 11803, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_284 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:284"), (short) 11803, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_285 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:285"), (short) 11804, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_285 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:285"), (short) 11804, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_286 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:286"), (short) 11805, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_286 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:286"), (short) 11805, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_287 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:287"), (short) 11806, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_287 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:287"), (short) 11806, Block.RED_SANDSTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_288 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:288"), (short) 11807, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_288 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:288"), (short) 11807, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_289 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:289"), (short) 11808, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_289 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:289"), (short) 11808, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_290 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:290"), (short) 11809, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_290 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:290"), (short) 11809, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_291 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:291"), (short) 11810, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_291 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:291"), (short) 11810, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_292 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:292"), (short) 11811, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_292 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:292"), (short) 11811, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_293 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:293"), (short) 11812, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_293 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:293"), (short) 11812, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_294 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:294"), (short) 11813, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_294 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:294"), (short) 11813, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_295 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:295"), (short) 11814, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_295 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:295"), (short) 11814, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_296 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:296"), (short) 11815, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_296 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:296"), (short) 11815, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_297 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:297"), (short) 11816, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_297 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:297"), (short) 11816, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_298 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:298"), (short) 11817, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_298 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:298"), (short) 11817, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_299 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:299"), (short) 11818, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_299 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:299"), (short) 11818, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_300 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:300"), (short) 11819, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_300 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:300"), (short) 11819, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_301 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:301"), (short) 11820, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_301 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:301"), (short) 11820, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_302 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:302"), (short) 11821, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_302 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:302"), (short) 11821, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_303 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:303"), (short) 11822, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_303 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:303"), (short) 11822, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_304 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:304"), (short) 11823, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_304 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:304"), (short) 11823, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_305 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:305"), (short) 11824, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_305 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:305"), (short) 11824, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_306 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:306"), (short) 11825, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_306 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:306"), (short) 11825, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_307 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:307"), (short) 11826, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_307 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:307"), (short) 11826, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_308 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:308"), (short) 11827, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_308 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:308"), (short) 11827, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_309 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:309"), (short) 11828, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_309 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:309"), (short) 11828, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_310 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:310"), (short) 11829, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_310 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:310"), (short) 11829, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_311 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:311"), (short) 11830, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_311 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:311"), (short) 11830, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_312 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:312"), (short) 11831, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_312 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:312"), (short) 11831, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_313 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:313"), (short) 11832, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_313 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:313"), (short) 11832, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_314 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:314"), (short) 11833, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_314 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:314"), (short) 11833, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_315 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:315"), (short) 11834, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_315 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:315"), (short) 11834, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_316 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:316"), (short) 11835, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_316 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:316"), (short) 11835, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_317 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:317"), (short) 11836, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_317 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:317"), (short) 11836, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_318 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:318"), (short) 11837, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_318 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:318"), (short) 11837, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_319 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:319"), (short) 11838, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_319 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:319"), (short) 11838, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_320 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:320"), (short) 11839, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_320 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:320"), (short) 11839, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState RED_SANDSTONE_WALL_321 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:321"), (short) 11840, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_321 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:321"), (short) 11840, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState RED_SANDSTONE_WALL_322 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:322"), (short) 11841, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_322 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:322"), (short) 11841, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState RED_SANDSTONE_WALL_323 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:323"), (short) 11842, Block.RED_SANDSTONE_WALL);
+  public static final BlockState RED_SANDSTONE_WALL_323 = new BlockState(NamespaceID.from("minecraft:red_sandstone_wall:323"), (short) 11842, Block.RED_SANDSTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
   public static void initStates() {
     Block.RED_SANDSTONE_WALL.addBlockState(RED_SANDSTONE_WALL_0);

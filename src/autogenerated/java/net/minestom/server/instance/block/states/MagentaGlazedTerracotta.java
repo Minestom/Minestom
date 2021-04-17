@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class MagentaGlazedTerracotta {
-  public static final BlockState MAGENTA_GLAZED_TERRACOTTA_0 = new BlockState(NamespaceID.from("minecraft:magenta_glazed_terracotta:0"), (short) 9386, Block.MAGENTA_GLAZED_TERRACOTTA);
+  public static final BlockState MAGENTA_GLAZED_TERRACOTTA_0 = new BlockState(NamespaceID.from("minecraft:magenta_glazed_terracotta:0"), (short) 9386, Block.MAGENTA_GLAZED_TERRACOTTA, "facing=north");
 
-  public static final BlockState MAGENTA_GLAZED_TERRACOTTA_1 = new BlockState(NamespaceID.from("minecraft:magenta_glazed_terracotta:1"), (short) 9387, Block.MAGENTA_GLAZED_TERRACOTTA);
+  public static final BlockState MAGENTA_GLAZED_TERRACOTTA_1 = new BlockState(NamespaceID.from("minecraft:magenta_glazed_terracotta:1"), (short) 9387, Block.MAGENTA_GLAZED_TERRACOTTA, "facing=south");
 
-  public static final BlockState MAGENTA_GLAZED_TERRACOTTA_2 = new BlockState(NamespaceID.from("minecraft:magenta_glazed_terracotta:2"), (short) 9388, Block.MAGENTA_GLAZED_TERRACOTTA);
+  public static final BlockState MAGENTA_GLAZED_TERRACOTTA_2 = new BlockState(NamespaceID.from("minecraft:magenta_glazed_terracotta:2"), (short) 9388, Block.MAGENTA_GLAZED_TERRACOTTA, "facing=west");
 
-  public static final BlockState MAGENTA_GLAZED_TERRACOTTA_3 = new BlockState(NamespaceID.from("minecraft:magenta_glazed_terracotta:3"), (short) 9389, Block.MAGENTA_GLAZED_TERRACOTTA);
+  public static final BlockState MAGENTA_GLAZED_TERRACOTTA_3 = new BlockState(NamespaceID.from("minecraft:magenta_glazed_terracotta:3"), (short) 9389, Block.MAGENTA_GLAZED_TERRACOTTA, "facing=east");
 
   public static void initStates() {
     Block.MAGENTA_GLAZED_TERRACOTTA.addBlockState(MAGENTA_GLAZED_TERRACOTTA_0);

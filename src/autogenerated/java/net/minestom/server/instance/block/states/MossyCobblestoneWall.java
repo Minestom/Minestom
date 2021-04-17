@@ -13,653 +13,653 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class MossyCobblestoneWall {
-  public static final BlockState MOSSY_COBBLESTONE_WALL_0 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:0"), (short) 5985, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_0 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:0"), (short) 5985, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_1 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:1"), (short) 5986, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_1 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:1"), (short) 5986, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_2 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:2"), (short) 5987, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_2 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:2"), (short) 5987, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_3 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:3"), (short) 5988, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_3 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:3"), (short) 5988, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_4 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:4"), (short) 5989, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_4 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:4"), (short) 5989, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_5 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:5"), (short) 5990, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_5 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:5"), (short) 5990, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_6 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:6"), (short) 5991, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_6 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:6"), (short) 5991, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_7 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:7"), (short) 5992, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_7 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:7"), (short) 5992, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_8 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:8"), (short) 5993, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_8 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:8"), (short) 5993, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_9 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:9"), (short) 5994, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_9 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:9"), (short) 5994, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_10 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:10"), (short) 5995, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_10 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:10"), (short) 5995, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_11 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:11"), (short) 5996, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_11 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:11"), (short) 5996, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_12 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:12"), (short) 5997, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_12 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:12"), (short) 5997, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_13 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:13"), (short) 5998, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_13 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:13"), (short) 5998, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_14 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:14"), (short) 5999, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_14 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:14"), (short) 5999, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_15 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:15"), (short) 6000, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_15 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:15"), (short) 6000, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_16 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:16"), (short) 6001, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_16 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:16"), (short) 6001, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_17 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:17"), (short) 6002, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_17 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:17"), (short) 6002, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_18 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:18"), (short) 6003, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_18 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:18"), (short) 6003, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_19 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:19"), (short) 6004, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_19 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:19"), (short) 6004, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_20 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:20"), (short) 6005, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_20 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:20"), (short) 6005, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_21 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:21"), (short) 6006, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_21 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:21"), (short) 6006, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_22 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:22"), (short) 6007, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_22 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:22"), (short) 6007, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_23 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:23"), (short) 6008, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_23 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:23"), (short) 6008, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_24 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:24"), (short) 6009, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_24 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:24"), (short) 6009, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_25 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:25"), (short) 6010, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_25 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:25"), (short) 6010, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_26 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:26"), (short) 6011, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_26 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:26"), (short) 6011, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_27 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:27"), (short) 6012, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_27 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:27"), (short) 6012, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_28 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:28"), (short) 6013, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_28 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:28"), (short) 6013, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_29 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:29"), (short) 6014, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_29 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:29"), (short) 6014, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_30 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:30"), (short) 6015, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_30 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:30"), (short) 6015, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_31 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:31"), (short) 6016, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_31 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:31"), (short) 6016, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_32 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:32"), (short) 6017, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_32 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:32"), (short) 6017, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_33 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:33"), (short) 6018, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_33 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:33"), (short) 6018, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_34 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:34"), (short) 6019, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_34 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:34"), (short) 6019, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_35 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:35"), (short) 6020, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_35 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:35"), (short) 6020, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_36 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:36"), (short) 6021, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_36 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:36"), (short) 6021, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_37 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:37"), (short) 6022, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_37 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:37"), (short) 6022, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_38 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:38"), (short) 6023, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_38 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:38"), (short) 6023, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_39 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:39"), (short) 6024, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_39 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:39"), (short) 6024, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_40 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:40"), (short) 6025, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_40 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:40"), (short) 6025, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_41 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:41"), (short) 6026, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_41 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:41"), (short) 6026, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_42 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:42"), (short) 6027, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_42 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:42"), (short) 6027, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_43 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:43"), (short) 6028, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_43 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:43"), (short) 6028, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_44 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:44"), (short) 6029, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_44 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:44"), (short) 6029, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_45 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:45"), (short) 6030, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_45 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:45"), (short) 6030, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_46 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:46"), (short) 6031, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_46 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:46"), (short) 6031, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_47 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:47"), (short) 6032, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_47 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:47"), (short) 6032, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_48 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:48"), (short) 6033, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_48 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:48"), (short) 6033, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_49 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:49"), (short) 6034, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_49 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:49"), (short) 6034, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_50 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:50"), (short) 6035, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_50 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:50"), (short) 6035, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_51 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:51"), (short) 6036, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_51 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:51"), (short) 6036, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_52 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:52"), (short) 6037, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_52 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:52"), (short) 6037, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_53 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:53"), (short) 6038, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_53 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:53"), (short) 6038, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_54 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:54"), (short) 6039, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_54 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:54"), (short) 6039, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_55 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:55"), (short) 6040, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_55 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:55"), (short) 6040, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_56 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:56"), (short) 6041, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_56 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:56"), (short) 6041, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_57 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:57"), (short) 6042, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_57 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:57"), (short) 6042, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_58 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:58"), (short) 6043, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_58 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:58"), (short) 6043, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_59 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:59"), (short) 6044, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_59 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:59"), (short) 6044, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_60 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:60"), (short) 6045, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_60 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:60"), (short) 6045, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_61 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:61"), (short) 6046, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_61 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:61"), (short) 6046, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_62 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:62"), (short) 6047, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_62 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:62"), (short) 6047, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_63 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:63"), (short) 6048, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_63 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:63"), (short) 6048, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_64 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:64"), (short) 6049, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_64 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:64"), (short) 6049, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_65 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:65"), (short) 6050, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_65 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:65"), (short) 6050, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_66 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:66"), (short) 6051, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_66 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:66"), (short) 6051, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_67 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:67"), (short) 6052, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_67 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:67"), (short) 6052, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_68 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:68"), (short) 6053, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_68 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:68"), (short) 6053, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_69 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:69"), (short) 6054, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_69 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:69"), (short) 6054, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_70 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:70"), (short) 6055, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_70 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:70"), (short) 6055, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_71 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:71"), (short) 6056, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_71 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:71"), (short) 6056, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_72 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:72"), (short) 6057, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_72 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:72"), (short) 6057, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_73 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:73"), (short) 6058, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_73 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:73"), (short) 6058, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_74 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:74"), (short) 6059, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_74 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:74"), (short) 6059, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_75 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:75"), (short) 6060, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_75 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:75"), (short) 6060, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_76 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:76"), (short) 6061, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_76 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:76"), (short) 6061, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_77 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:77"), (short) 6062, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_77 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:77"), (short) 6062, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_78 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:78"), (short) 6063, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_78 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:78"), (short) 6063, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_79 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:79"), (short) 6064, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_79 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:79"), (short) 6064, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_80 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:80"), (short) 6065, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_80 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:80"), (short) 6065, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_81 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:81"), (short) 6066, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_81 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:81"), (short) 6066, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_82 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:82"), (short) 6067, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_82 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:82"), (short) 6067, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_83 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:83"), (short) 6068, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_83 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:83"), (short) 6068, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_84 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:84"), (short) 6069, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_84 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:84"), (short) 6069, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_85 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:85"), (short) 6070, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_85 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:85"), (short) 6070, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_86 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:86"), (short) 6071, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_86 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:86"), (short) 6071, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_87 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:87"), (short) 6072, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_87 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:87"), (short) 6072, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_88 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:88"), (short) 6073, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_88 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:88"), (short) 6073, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_89 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:89"), (short) 6074, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_89 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:89"), (short) 6074, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_90 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:90"), (short) 6075, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_90 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:90"), (short) 6075, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_91 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:91"), (short) 6076, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_91 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:91"), (short) 6076, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_92 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:92"), (short) 6077, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_92 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:92"), (short) 6077, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_93 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:93"), (short) 6078, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_93 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:93"), (short) 6078, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_94 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:94"), (short) 6079, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_94 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:94"), (short) 6079, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_95 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:95"), (short) 6080, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_95 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:95"), (short) 6080, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_96 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:96"), (short) 6081, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_96 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:96"), (short) 6081, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_97 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:97"), (short) 6082, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_97 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:97"), (short) 6082, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_98 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:98"), (short) 6083, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_98 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:98"), (short) 6083, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_99 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:99"), (short) 6084, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_99 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:99"), (short) 6084, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_100 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:100"), (short) 6085, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_100 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:100"), (short) 6085, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_101 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:101"), (short) 6086, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_101 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:101"), (short) 6086, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_102 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:102"), (short) 6087, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_102 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:102"), (short) 6087, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_103 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:103"), (short) 6088, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_103 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:103"), (short) 6088, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_104 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:104"), (short) 6089, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_104 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:104"), (short) 6089, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_105 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:105"), (short) 6090, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_105 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:105"), (short) 6090, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_106 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:106"), (short) 6091, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_106 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:106"), (short) 6091, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_107 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:107"), (short) 6092, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_107 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:107"), (short) 6092, Block.MOSSY_COBBLESTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_108 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:108"), (short) 6093, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_108 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:108"), (short) 6093, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_109 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:109"), (short) 6094, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_109 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:109"), (short) 6094, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_110 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:110"), (short) 6095, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_110 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:110"), (short) 6095, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_111 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:111"), (short) 6096, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_111 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:111"), (short) 6096, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_112 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:112"), (short) 6097, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_112 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:112"), (short) 6097, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_113 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:113"), (short) 6098, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_113 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:113"), (short) 6098, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_114 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:114"), (short) 6099, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_114 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:114"), (short) 6099, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_115 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:115"), (short) 6100, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_115 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:115"), (short) 6100, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_116 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:116"), (short) 6101, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_116 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:116"), (short) 6101, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_117 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:117"), (short) 6102, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_117 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:117"), (short) 6102, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_118 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:118"), (short) 6103, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_118 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:118"), (short) 6103, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_119 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:119"), (short) 6104, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_119 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:119"), (short) 6104, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_120 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:120"), (short) 6105, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_120 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:120"), (short) 6105, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_121 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:121"), (short) 6106, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_121 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:121"), (short) 6106, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_122 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:122"), (short) 6107, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_122 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:122"), (short) 6107, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_123 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:123"), (short) 6108, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_123 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:123"), (short) 6108, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_124 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:124"), (short) 6109, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_124 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:124"), (short) 6109, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_125 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:125"), (short) 6110, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_125 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:125"), (short) 6110, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_126 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:126"), (short) 6111, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_126 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:126"), (short) 6111, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_127 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:127"), (short) 6112, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_127 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:127"), (short) 6112, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_128 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:128"), (short) 6113, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_128 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:128"), (short) 6113, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_129 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:129"), (short) 6114, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_129 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:129"), (short) 6114, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_130 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:130"), (short) 6115, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_130 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:130"), (short) 6115, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_131 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:131"), (short) 6116, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_131 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:131"), (short) 6116, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_132 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:132"), (short) 6117, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_132 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:132"), (short) 6117, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_133 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:133"), (short) 6118, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_133 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:133"), (short) 6118, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_134 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:134"), (short) 6119, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_134 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:134"), (short) 6119, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_135 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:135"), (short) 6120, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_135 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:135"), (short) 6120, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_136 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:136"), (short) 6121, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_136 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:136"), (short) 6121, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_137 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:137"), (short) 6122, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_137 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:137"), (short) 6122, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_138 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:138"), (short) 6123, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_138 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:138"), (short) 6123, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_139 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:139"), (short) 6124, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_139 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:139"), (short) 6124, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_140 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:140"), (short) 6125, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_140 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:140"), (short) 6125, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_141 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:141"), (short) 6126, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_141 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:141"), (short) 6126, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_142 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:142"), (short) 6127, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_142 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:142"), (short) 6127, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_143 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:143"), (short) 6128, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_143 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:143"), (short) 6128, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_144 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:144"), (short) 6129, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_144 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:144"), (short) 6129, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_145 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:145"), (short) 6130, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_145 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:145"), (short) 6130, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_146 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:146"), (short) 6131, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_146 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:146"), (short) 6131, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_147 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:147"), (short) 6132, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_147 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:147"), (short) 6132, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_148 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:148"), (short) 6133, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_148 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:148"), (short) 6133, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_149 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:149"), (short) 6134, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_149 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:149"), (short) 6134, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_150 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:150"), (short) 6135, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_150 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:150"), (short) 6135, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_151 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:151"), (short) 6136, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_151 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:151"), (short) 6136, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_152 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:152"), (short) 6137, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_152 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:152"), (short) 6137, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_153 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:153"), (short) 6138, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_153 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:153"), (short) 6138, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_154 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:154"), (short) 6139, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_154 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:154"), (short) 6139, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_155 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:155"), (short) 6140, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_155 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:155"), (short) 6140, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_156 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:156"), (short) 6141, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_156 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:156"), (short) 6141, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_157 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:157"), (short) 6142, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_157 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:157"), (short) 6142, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_158 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:158"), (short) 6143, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_158 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:158"), (short) 6143, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_159 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:159"), (short) 6144, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_159 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:159"), (short) 6144, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_160 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:160"), (short) 6145, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_160 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:160"), (short) 6145, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_161 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:161"), (short) 6146, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_161 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:161"), (short) 6146, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_162 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:162"), (short) 6147, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_162 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:162"), (short) 6147, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_163 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:163"), (short) 6148, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_163 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:163"), (short) 6148, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_164 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:164"), (short) 6149, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_164 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:164"), (short) 6149, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_165 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:165"), (short) 6150, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_165 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:165"), (short) 6150, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_166 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:166"), (short) 6151, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_166 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:166"), (short) 6151, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_167 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:167"), (short) 6152, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_167 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:167"), (short) 6152, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_168 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:168"), (short) 6153, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_168 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:168"), (short) 6153, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_169 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:169"), (short) 6154, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_169 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:169"), (short) 6154, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_170 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:170"), (short) 6155, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_170 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:170"), (short) 6155, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_171 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:171"), (short) 6156, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_171 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:171"), (short) 6156, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_172 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:172"), (short) 6157, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_172 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:172"), (short) 6157, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_173 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:173"), (short) 6158, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_173 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:173"), (short) 6158, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_174 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:174"), (short) 6159, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_174 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:174"), (short) 6159, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_175 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:175"), (short) 6160, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_175 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:175"), (short) 6160, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_176 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:176"), (short) 6161, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_176 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:176"), (short) 6161, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_177 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:177"), (short) 6162, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_177 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:177"), (short) 6162, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_178 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:178"), (short) 6163, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_178 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:178"), (short) 6163, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_179 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:179"), (short) 6164, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_179 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:179"), (short) 6164, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_180 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:180"), (short) 6165, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_180 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:180"), (short) 6165, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_181 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:181"), (short) 6166, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_181 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:181"), (short) 6166, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_182 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:182"), (short) 6167, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_182 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:182"), (short) 6167, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_183 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:183"), (short) 6168, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_183 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:183"), (short) 6168, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_184 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:184"), (short) 6169, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_184 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:184"), (short) 6169, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_185 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:185"), (short) 6170, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_185 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:185"), (short) 6170, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_186 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:186"), (short) 6171, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_186 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:186"), (short) 6171, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_187 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:187"), (short) 6172, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_187 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:187"), (short) 6172, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_188 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:188"), (short) 6173, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_188 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:188"), (short) 6173, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_189 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:189"), (short) 6174, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_189 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:189"), (short) 6174, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_190 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:190"), (short) 6175, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_190 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:190"), (short) 6175, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_191 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:191"), (short) 6176, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_191 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:191"), (short) 6176, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_192 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:192"), (short) 6177, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_192 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:192"), (short) 6177, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_193 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:193"), (short) 6178, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_193 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:193"), (short) 6178, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_194 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:194"), (short) 6179, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_194 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:194"), (short) 6179, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_195 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:195"), (short) 6180, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_195 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:195"), (short) 6180, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_196 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:196"), (short) 6181, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_196 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:196"), (short) 6181, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_197 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:197"), (short) 6182, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_197 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:197"), (short) 6182, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_198 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:198"), (short) 6183, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_198 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:198"), (short) 6183, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_199 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:199"), (short) 6184, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_199 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:199"), (short) 6184, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_200 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:200"), (short) 6185, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_200 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:200"), (short) 6185, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_201 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:201"), (short) 6186, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_201 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:201"), (short) 6186, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_202 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:202"), (short) 6187, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_202 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:202"), (short) 6187, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_203 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:203"), (short) 6188, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_203 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:203"), (short) 6188, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_204 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:204"), (short) 6189, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_204 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:204"), (short) 6189, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_205 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:205"), (short) 6190, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_205 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:205"), (short) 6190, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_206 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:206"), (short) 6191, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_206 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:206"), (short) 6191, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_207 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:207"), (short) 6192, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_207 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:207"), (short) 6192, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_208 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:208"), (short) 6193, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_208 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:208"), (short) 6193, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_209 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:209"), (short) 6194, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_209 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:209"), (short) 6194, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_210 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:210"), (short) 6195, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_210 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:210"), (short) 6195, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_211 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:211"), (short) 6196, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_211 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:211"), (short) 6196, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_212 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:212"), (short) 6197, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_212 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:212"), (short) 6197, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_213 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:213"), (short) 6198, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_213 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:213"), (short) 6198, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_214 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:214"), (short) 6199, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_214 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:214"), (short) 6199, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_215 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:215"), (short) 6200, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_215 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:215"), (short) 6200, Block.MOSSY_COBBLESTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_216 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:216"), (short) 6201, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_216 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:216"), (short) 6201, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_217 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:217"), (short) 6202, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_217 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:217"), (short) 6202, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_218 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:218"), (short) 6203, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_218 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:218"), (short) 6203, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_219 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:219"), (short) 6204, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_219 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:219"), (short) 6204, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_220 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:220"), (short) 6205, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_220 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:220"), (short) 6205, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_221 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:221"), (short) 6206, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_221 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:221"), (short) 6206, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_222 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:222"), (short) 6207, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_222 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:222"), (short) 6207, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_223 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:223"), (short) 6208, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_223 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:223"), (short) 6208, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_224 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:224"), (short) 6209, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_224 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:224"), (short) 6209, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_225 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:225"), (short) 6210, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_225 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:225"), (short) 6210, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_226 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:226"), (short) 6211, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_226 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:226"), (short) 6211, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_227 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:227"), (short) 6212, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_227 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:227"), (short) 6212, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_228 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:228"), (short) 6213, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_228 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:228"), (short) 6213, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_229 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:229"), (short) 6214, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_229 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:229"), (short) 6214, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_230 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:230"), (short) 6215, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_230 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:230"), (short) 6215, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_231 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:231"), (short) 6216, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_231 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:231"), (short) 6216, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_232 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:232"), (short) 6217, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_232 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:232"), (short) 6217, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_233 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:233"), (short) 6218, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_233 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:233"), (short) 6218, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_234 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:234"), (short) 6219, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_234 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:234"), (short) 6219, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_235 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:235"), (short) 6220, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_235 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:235"), (short) 6220, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_236 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:236"), (short) 6221, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_236 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:236"), (short) 6221, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_237 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:237"), (short) 6222, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_237 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:237"), (short) 6222, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_238 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:238"), (short) 6223, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_238 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:238"), (short) 6223, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_239 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:239"), (short) 6224, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_239 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:239"), (short) 6224, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_240 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:240"), (short) 6225, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_240 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:240"), (short) 6225, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_241 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:241"), (short) 6226, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_241 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:241"), (short) 6226, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_242 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:242"), (short) 6227, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_242 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:242"), (short) 6227, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_243 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:243"), (short) 6228, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_243 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:243"), (short) 6228, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_244 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:244"), (short) 6229, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_244 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:244"), (short) 6229, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_245 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:245"), (short) 6230, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_245 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:245"), (short) 6230, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_246 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:246"), (short) 6231, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_246 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:246"), (short) 6231, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_247 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:247"), (short) 6232, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_247 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:247"), (short) 6232, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_248 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:248"), (short) 6233, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_248 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:248"), (short) 6233, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_249 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:249"), (short) 6234, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_249 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:249"), (short) 6234, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_250 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:250"), (short) 6235, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_250 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:250"), (short) 6235, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_251 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:251"), (short) 6236, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_251 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:251"), (short) 6236, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_252 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:252"), (short) 6237, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_252 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:252"), (short) 6237, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_253 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:253"), (short) 6238, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_253 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:253"), (short) 6238, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_254 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:254"), (short) 6239, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_254 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:254"), (short) 6239, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_255 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:255"), (short) 6240, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_255 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:255"), (short) 6240, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_256 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:256"), (short) 6241, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_256 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:256"), (short) 6241, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_257 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:257"), (short) 6242, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_257 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:257"), (short) 6242, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_258 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:258"), (short) 6243, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_258 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:258"), (short) 6243, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_259 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:259"), (short) 6244, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_259 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:259"), (short) 6244, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_260 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:260"), (short) 6245, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_260 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:260"), (short) 6245, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_261 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:261"), (short) 6246, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_261 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:261"), (short) 6246, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_262 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:262"), (short) 6247, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_262 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:262"), (short) 6247, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_263 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:263"), (short) 6248, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_263 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:263"), (short) 6248, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_264 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:264"), (short) 6249, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_264 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:264"), (short) 6249, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_265 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:265"), (short) 6250, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_265 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:265"), (short) 6250, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_266 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:266"), (short) 6251, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_266 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:266"), (short) 6251, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_267 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:267"), (short) 6252, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_267 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:267"), (short) 6252, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_268 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:268"), (short) 6253, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_268 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:268"), (short) 6253, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_269 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:269"), (short) 6254, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_269 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:269"), (short) 6254, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_270 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:270"), (short) 6255, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_270 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:270"), (short) 6255, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_271 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:271"), (short) 6256, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_271 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:271"), (short) 6256, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_272 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:272"), (short) 6257, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_272 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:272"), (short) 6257, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_273 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:273"), (short) 6258, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_273 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:273"), (short) 6258, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_274 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:274"), (short) 6259, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_274 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:274"), (short) 6259, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_275 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:275"), (short) 6260, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_275 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:275"), (short) 6260, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_276 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:276"), (short) 6261, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_276 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:276"), (short) 6261, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_277 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:277"), (short) 6262, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_277 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:277"), (short) 6262, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_278 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:278"), (short) 6263, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_278 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:278"), (short) 6263, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_279 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:279"), (short) 6264, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_279 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:279"), (short) 6264, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_280 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:280"), (short) 6265, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_280 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:280"), (short) 6265, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_281 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:281"), (short) 6266, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_281 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:281"), (short) 6266, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_282 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:282"), (short) 6267, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_282 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:282"), (short) 6267, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_283 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:283"), (short) 6268, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_283 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:283"), (short) 6268, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_284 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:284"), (short) 6269, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_284 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:284"), (short) 6269, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_285 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:285"), (short) 6270, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_285 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:285"), (short) 6270, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_286 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:286"), (short) 6271, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_286 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:286"), (short) 6271, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_287 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:287"), (short) 6272, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_287 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:287"), (short) 6272, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_288 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:288"), (short) 6273, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_288 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:288"), (short) 6273, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_289 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:289"), (short) 6274, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_289 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:289"), (short) 6274, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_290 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:290"), (short) 6275, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_290 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:290"), (short) 6275, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_291 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:291"), (short) 6276, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_291 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:291"), (short) 6276, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_292 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:292"), (short) 6277, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_292 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:292"), (short) 6277, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_293 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:293"), (short) 6278, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_293 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:293"), (short) 6278, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_294 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:294"), (short) 6279, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_294 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:294"), (short) 6279, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_295 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:295"), (short) 6280, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_295 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:295"), (short) 6280, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_296 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:296"), (short) 6281, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_296 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:296"), (short) 6281, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_297 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:297"), (short) 6282, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_297 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:297"), (short) 6282, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_298 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:298"), (short) 6283, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_298 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:298"), (short) 6283, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_299 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:299"), (short) 6284, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_299 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:299"), (short) 6284, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_300 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:300"), (short) 6285, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_300 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:300"), (short) 6285, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_301 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:301"), (short) 6286, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_301 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:301"), (short) 6286, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_302 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:302"), (short) 6287, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_302 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:302"), (short) 6287, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_303 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:303"), (short) 6288, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_303 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:303"), (short) 6288, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_304 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:304"), (short) 6289, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_304 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:304"), (short) 6289, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_305 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:305"), (short) 6290, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_305 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:305"), (short) 6290, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_306 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:306"), (short) 6291, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_306 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:306"), (short) 6291, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_307 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:307"), (short) 6292, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_307 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:307"), (short) 6292, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_308 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:308"), (short) 6293, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_308 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:308"), (short) 6293, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_309 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:309"), (short) 6294, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_309 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:309"), (short) 6294, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_310 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:310"), (short) 6295, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_310 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:310"), (short) 6295, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_311 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:311"), (short) 6296, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_311 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:311"), (short) 6296, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_312 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:312"), (short) 6297, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_312 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:312"), (short) 6297, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_313 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:313"), (short) 6298, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_313 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:313"), (short) 6298, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_314 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:314"), (short) 6299, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_314 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:314"), (short) 6299, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_315 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:315"), (short) 6300, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_315 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:315"), (short) 6300, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_316 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:316"), (short) 6301, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_316 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:316"), (short) 6301, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_317 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:317"), (short) 6302, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_317 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:317"), (short) 6302, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_318 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:318"), (short) 6303, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_318 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:318"), (short) 6303, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_319 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:319"), (short) 6304, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_319 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:319"), (short) 6304, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_320 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:320"), (short) 6305, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_320 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:320"), (short) 6305, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_321 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:321"), (short) 6306, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_321 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:321"), (short) 6306, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_322 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:322"), (short) 6307, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_322 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:322"), (short) 6307, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_COBBLESTONE_WALL_323 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:323"), (short) 6308, Block.MOSSY_COBBLESTONE_WALL);
+  public static final BlockState MOSSY_COBBLESTONE_WALL_323 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_wall:323"), (short) 6308, Block.MOSSY_COBBLESTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
   public static void initStates() {
     Block.MOSSY_COBBLESTONE_WALL.addBlockState(MOSSY_COBBLESTONE_WALL_0);

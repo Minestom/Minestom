@@ -13,133 +13,133 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SpruceTrapdoor {
-  public static final BlockState SPRUCE_TRAPDOOR_0 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:0"), (short) 4175, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_0 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:0"), (short) 4175, Block.SPRUCE_TRAPDOOR, "facing=north","half=top","open=true","powered=true","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_1 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:1"), (short) 4176, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_1 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:1"), (short) 4176, Block.SPRUCE_TRAPDOOR, "facing=north","half=top","open=true","powered=true","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_2 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:2"), (short) 4177, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_2 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:2"), (short) 4177, Block.SPRUCE_TRAPDOOR, "facing=north","half=top","open=true","powered=false","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_3 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:3"), (short) 4178, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_3 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:3"), (short) 4178, Block.SPRUCE_TRAPDOOR, "facing=north","half=top","open=true","powered=false","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_4 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:4"), (short) 4179, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_4 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:4"), (short) 4179, Block.SPRUCE_TRAPDOOR, "facing=north","half=top","open=false","powered=true","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_5 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:5"), (short) 4180, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_5 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:5"), (short) 4180, Block.SPRUCE_TRAPDOOR, "facing=north","half=top","open=false","powered=true","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_6 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:6"), (short) 4181, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_6 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:6"), (short) 4181, Block.SPRUCE_TRAPDOOR, "facing=north","half=top","open=false","powered=false","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_7 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:7"), (short) 4182, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_7 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:7"), (short) 4182, Block.SPRUCE_TRAPDOOR, "facing=north","half=top","open=false","powered=false","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_8 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:8"), (short) 4183, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_8 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:8"), (short) 4183, Block.SPRUCE_TRAPDOOR, "facing=north","half=bottom","open=true","powered=true","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_9 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:9"), (short) 4184, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_9 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:9"), (short) 4184, Block.SPRUCE_TRAPDOOR, "facing=north","half=bottom","open=true","powered=true","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_10 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:10"), (short) 4185, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_10 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:10"), (short) 4185, Block.SPRUCE_TRAPDOOR, "facing=north","half=bottom","open=true","powered=false","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_11 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:11"), (short) 4186, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_11 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:11"), (short) 4186, Block.SPRUCE_TRAPDOOR, "facing=north","half=bottom","open=true","powered=false","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_12 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:12"), (short) 4187, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_12 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:12"), (short) 4187, Block.SPRUCE_TRAPDOOR, "facing=north","half=bottom","open=false","powered=true","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_13 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:13"), (short) 4188, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_13 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:13"), (short) 4188, Block.SPRUCE_TRAPDOOR, "facing=north","half=bottom","open=false","powered=true","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_14 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:14"), (short) 4189, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_14 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:14"), (short) 4189, Block.SPRUCE_TRAPDOOR, "facing=north","half=bottom","open=false","powered=false","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_15 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:15"), (short) 4190, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_15 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:15"), (short) 4190, Block.SPRUCE_TRAPDOOR, "facing=north","half=bottom","open=false","powered=false","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_16 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:16"), (short) 4191, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_16 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:16"), (short) 4191, Block.SPRUCE_TRAPDOOR, "facing=south","half=top","open=true","powered=true","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_17 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:17"), (short) 4192, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_17 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:17"), (short) 4192, Block.SPRUCE_TRAPDOOR, "facing=south","half=top","open=true","powered=true","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_18 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:18"), (short) 4193, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_18 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:18"), (short) 4193, Block.SPRUCE_TRAPDOOR, "facing=south","half=top","open=true","powered=false","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_19 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:19"), (short) 4194, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_19 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:19"), (short) 4194, Block.SPRUCE_TRAPDOOR, "facing=south","half=top","open=true","powered=false","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_20 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:20"), (short) 4195, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_20 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:20"), (short) 4195, Block.SPRUCE_TRAPDOOR, "facing=south","half=top","open=false","powered=true","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_21 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:21"), (short) 4196, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_21 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:21"), (short) 4196, Block.SPRUCE_TRAPDOOR, "facing=south","half=top","open=false","powered=true","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_22 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:22"), (short) 4197, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_22 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:22"), (short) 4197, Block.SPRUCE_TRAPDOOR, "facing=south","half=top","open=false","powered=false","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_23 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:23"), (short) 4198, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_23 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:23"), (short) 4198, Block.SPRUCE_TRAPDOOR, "facing=south","half=top","open=false","powered=false","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_24 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:24"), (short) 4199, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_24 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:24"), (short) 4199, Block.SPRUCE_TRAPDOOR, "facing=south","half=bottom","open=true","powered=true","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_25 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:25"), (short) 4200, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_25 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:25"), (short) 4200, Block.SPRUCE_TRAPDOOR, "facing=south","half=bottom","open=true","powered=true","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_26 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:26"), (short) 4201, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_26 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:26"), (short) 4201, Block.SPRUCE_TRAPDOOR, "facing=south","half=bottom","open=true","powered=false","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_27 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:27"), (short) 4202, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_27 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:27"), (short) 4202, Block.SPRUCE_TRAPDOOR, "facing=south","half=bottom","open=true","powered=false","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_28 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:28"), (short) 4203, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_28 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:28"), (short) 4203, Block.SPRUCE_TRAPDOOR, "facing=south","half=bottom","open=false","powered=true","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_29 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:29"), (short) 4204, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_29 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:29"), (short) 4204, Block.SPRUCE_TRAPDOOR, "facing=south","half=bottom","open=false","powered=true","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_30 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:30"), (short) 4205, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_30 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:30"), (short) 4205, Block.SPRUCE_TRAPDOOR, "facing=south","half=bottom","open=false","powered=false","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_31 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:31"), (short) 4206, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_31 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:31"), (short) 4206, Block.SPRUCE_TRAPDOOR, "facing=south","half=bottom","open=false","powered=false","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_32 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:32"), (short) 4207, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_32 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:32"), (short) 4207, Block.SPRUCE_TRAPDOOR, "facing=west","half=top","open=true","powered=true","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_33 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:33"), (short) 4208, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_33 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:33"), (short) 4208, Block.SPRUCE_TRAPDOOR, "facing=west","half=top","open=true","powered=true","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_34 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:34"), (short) 4209, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_34 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:34"), (short) 4209, Block.SPRUCE_TRAPDOOR, "facing=west","half=top","open=true","powered=false","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_35 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:35"), (short) 4210, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_35 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:35"), (short) 4210, Block.SPRUCE_TRAPDOOR, "facing=west","half=top","open=true","powered=false","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_36 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:36"), (short) 4211, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_36 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:36"), (short) 4211, Block.SPRUCE_TRAPDOOR, "facing=west","half=top","open=false","powered=true","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_37 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:37"), (short) 4212, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_37 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:37"), (short) 4212, Block.SPRUCE_TRAPDOOR, "facing=west","half=top","open=false","powered=true","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_38 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:38"), (short) 4213, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_38 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:38"), (short) 4213, Block.SPRUCE_TRAPDOOR, "facing=west","half=top","open=false","powered=false","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_39 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:39"), (short) 4214, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_39 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:39"), (short) 4214, Block.SPRUCE_TRAPDOOR, "facing=west","half=top","open=false","powered=false","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_40 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:40"), (short) 4215, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_40 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:40"), (short) 4215, Block.SPRUCE_TRAPDOOR, "facing=west","half=bottom","open=true","powered=true","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_41 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:41"), (short) 4216, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_41 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:41"), (short) 4216, Block.SPRUCE_TRAPDOOR, "facing=west","half=bottom","open=true","powered=true","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_42 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:42"), (short) 4217, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_42 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:42"), (short) 4217, Block.SPRUCE_TRAPDOOR, "facing=west","half=bottom","open=true","powered=false","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_43 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:43"), (short) 4218, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_43 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:43"), (short) 4218, Block.SPRUCE_TRAPDOOR, "facing=west","half=bottom","open=true","powered=false","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_44 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:44"), (short) 4219, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_44 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:44"), (short) 4219, Block.SPRUCE_TRAPDOOR, "facing=west","half=bottom","open=false","powered=true","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_45 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:45"), (short) 4220, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_45 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:45"), (short) 4220, Block.SPRUCE_TRAPDOOR, "facing=west","half=bottom","open=false","powered=true","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_46 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:46"), (short) 4221, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_46 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:46"), (short) 4221, Block.SPRUCE_TRAPDOOR, "facing=west","half=bottom","open=false","powered=false","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_47 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:47"), (short) 4222, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_47 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:47"), (short) 4222, Block.SPRUCE_TRAPDOOR, "facing=west","half=bottom","open=false","powered=false","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_48 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:48"), (short) 4223, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_48 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:48"), (short) 4223, Block.SPRUCE_TRAPDOOR, "facing=east","half=top","open=true","powered=true","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_49 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:49"), (short) 4224, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_49 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:49"), (short) 4224, Block.SPRUCE_TRAPDOOR, "facing=east","half=top","open=true","powered=true","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_50 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:50"), (short) 4225, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_50 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:50"), (short) 4225, Block.SPRUCE_TRAPDOOR, "facing=east","half=top","open=true","powered=false","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_51 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:51"), (short) 4226, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_51 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:51"), (short) 4226, Block.SPRUCE_TRAPDOOR, "facing=east","half=top","open=true","powered=false","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_52 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:52"), (short) 4227, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_52 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:52"), (short) 4227, Block.SPRUCE_TRAPDOOR, "facing=east","half=top","open=false","powered=true","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_53 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:53"), (short) 4228, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_53 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:53"), (short) 4228, Block.SPRUCE_TRAPDOOR, "facing=east","half=top","open=false","powered=true","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_54 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:54"), (short) 4229, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_54 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:54"), (short) 4229, Block.SPRUCE_TRAPDOOR, "facing=east","half=top","open=false","powered=false","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_55 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:55"), (short) 4230, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_55 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:55"), (short) 4230, Block.SPRUCE_TRAPDOOR, "facing=east","half=top","open=false","powered=false","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_56 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:56"), (short) 4231, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_56 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:56"), (short) 4231, Block.SPRUCE_TRAPDOOR, "facing=east","half=bottom","open=true","powered=true","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_57 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:57"), (short) 4232, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_57 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:57"), (short) 4232, Block.SPRUCE_TRAPDOOR, "facing=east","half=bottom","open=true","powered=true","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_58 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:58"), (short) 4233, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_58 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:58"), (short) 4233, Block.SPRUCE_TRAPDOOR, "facing=east","half=bottom","open=true","powered=false","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_59 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:59"), (short) 4234, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_59 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:59"), (short) 4234, Block.SPRUCE_TRAPDOOR, "facing=east","half=bottom","open=true","powered=false","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_60 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:60"), (short) 4235, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_60 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:60"), (short) 4235, Block.SPRUCE_TRAPDOOR, "facing=east","half=bottom","open=false","powered=true","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_61 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:61"), (short) 4236, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_61 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:61"), (short) 4236, Block.SPRUCE_TRAPDOOR, "facing=east","half=bottom","open=false","powered=true","waterlogged=false");
 
-  public static final BlockState SPRUCE_TRAPDOOR_62 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:62"), (short) 4237, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_62 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:62"), (short) 4237, Block.SPRUCE_TRAPDOOR, "facing=east","half=bottom","open=false","powered=false","waterlogged=true");
 
-  public static final BlockState SPRUCE_TRAPDOOR_63 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:63"), (short) 4238, Block.SPRUCE_TRAPDOOR);
+  public static final BlockState SPRUCE_TRAPDOOR_63 = new BlockState(NamespaceID.from("minecraft:spruce_trapdoor:63"), (short) 4238, Block.SPRUCE_TRAPDOOR, "facing=east","half=bottom","open=false","powered=false","waterlogged=false");
 
   public static void initStates() {
     Block.SPRUCE_TRAPDOOR.addBlockState(SPRUCE_TRAPDOOR_0);

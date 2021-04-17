@@ -13,15 +13,15 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class RespawnAnchor {
-  public static final BlockState RESPAWN_ANCHOR_0 = new BlockState(NamespaceID.from("minecraft:respawn_anchor:0"), (short) 15837, Block.RESPAWN_ANCHOR);
+  public static final BlockState RESPAWN_ANCHOR_0 = new BlockState(NamespaceID.from("minecraft:respawn_anchor:0"), (short) 15837, Block.RESPAWN_ANCHOR, "charges=0");
 
-  public static final BlockState RESPAWN_ANCHOR_1 = new BlockState(NamespaceID.from("minecraft:respawn_anchor:1"), (short) 15838, Block.RESPAWN_ANCHOR);
+  public static final BlockState RESPAWN_ANCHOR_1 = new BlockState(NamespaceID.from("minecraft:respawn_anchor:1"), (short) 15838, Block.RESPAWN_ANCHOR, "charges=1");
 
-  public static final BlockState RESPAWN_ANCHOR_2 = new BlockState(NamespaceID.from("minecraft:respawn_anchor:2"), (short) 15839, Block.RESPAWN_ANCHOR);
+  public static final BlockState RESPAWN_ANCHOR_2 = new BlockState(NamespaceID.from("minecraft:respawn_anchor:2"), (short) 15839, Block.RESPAWN_ANCHOR, "charges=2");
 
-  public static final BlockState RESPAWN_ANCHOR_3 = new BlockState(NamespaceID.from("minecraft:respawn_anchor:3"), (short) 15840, Block.RESPAWN_ANCHOR);
+  public static final BlockState RESPAWN_ANCHOR_3 = new BlockState(NamespaceID.from("minecraft:respawn_anchor:3"), (short) 15840, Block.RESPAWN_ANCHOR, "charges=3");
 
-  public static final BlockState RESPAWN_ANCHOR_4 = new BlockState(NamespaceID.from("minecraft:respawn_anchor:4"), (short) 15841, Block.RESPAWN_ANCHOR);
+  public static final BlockState RESPAWN_ANCHOR_4 = new BlockState(NamespaceID.from("minecraft:respawn_anchor:4"), (short) 15841, Block.RESPAWN_ANCHOR, "charges=4");
 
   public static void initStates() {
     Block.RESPAWN_ANCHOR.addBlockState(RESPAWN_ANCHOR_0);

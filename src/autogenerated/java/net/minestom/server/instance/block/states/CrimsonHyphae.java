@@ -13,11 +13,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CrimsonHyphae {
-  public static final BlockState CRIMSON_HYPHAE_0 = new BlockState(NamespaceID.from("minecraft:crimson_hyphae:0"), (short) 14989, Block.CRIMSON_HYPHAE);
+  public static final BlockState CRIMSON_HYPHAE_0 = new BlockState(NamespaceID.from("minecraft:crimson_hyphae:0"), (short) 14989, Block.CRIMSON_HYPHAE, "axis=x");
 
-  public static final BlockState CRIMSON_HYPHAE_1 = new BlockState(NamespaceID.from("minecraft:crimson_hyphae:1"), (short) 14990, Block.CRIMSON_HYPHAE);
+  public static final BlockState CRIMSON_HYPHAE_1 = new BlockState(NamespaceID.from("minecraft:crimson_hyphae:1"), (short) 14990, Block.CRIMSON_HYPHAE, "axis=y");
 
-  public static final BlockState CRIMSON_HYPHAE_2 = new BlockState(NamespaceID.from("minecraft:crimson_hyphae:2"), (short) 14991, Block.CRIMSON_HYPHAE);
+  public static final BlockState CRIMSON_HYPHAE_2 = new BlockState(NamespaceID.from("minecraft:crimson_hyphae:2"), (short) 14991, Block.CRIMSON_HYPHAE, "axis=z");
 
   public static void initStates() {
     Block.CRIMSON_HYPHAE.addBlockState(CRIMSON_HYPHAE_0);

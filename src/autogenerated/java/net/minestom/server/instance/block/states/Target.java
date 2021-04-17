@@ -13,37 +13,37 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Target {
-  public static final BlockState TARGET_0 = new BlockState(NamespaceID.from("minecraft:target:0"), (short) 15768, Block.TARGET);
+  public static final BlockState TARGET_0 = new BlockState(NamespaceID.from("minecraft:target:0"), (short) 15768, Block.TARGET, "power=0");
 
-  public static final BlockState TARGET_1 = new BlockState(NamespaceID.from("minecraft:target:1"), (short) 15769, Block.TARGET);
+  public static final BlockState TARGET_1 = new BlockState(NamespaceID.from("minecraft:target:1"), (short) 15769, Block.TARGET, "power=1");
 
-  public static final BlockState TARGET_2 = new BlockState(NamespaceID.from("minecraft:target:2"), (short) 15770, Block.TARGET);
+  public static final BlockState TARGET_2 = new BlockState(NamespaceID.from("minecraft:target:2"), (short) 15770, Block.TARGET, "power=2");
 
-  public static final BlockState TARGET_3 = new BlockState(NamespaceID.from("minecraft:target:3"), (short) 15771, Block.TARGET);
+  public static final BlockState TARGET_3 = new BlockState(NamespaceID.from("minecraft:target:3"), (short) 15771, Block.TARGET, "power=3");
 
-  public static final BlockState TARGET_4 = new BlockState(NamespaceID.from("minecraft:target:4"), (short) 15772, Block.TARGET);
+  public static final BlockState TARGET_4 = new BlockState(NamespaceID.from("minecraft:target:4"), (short) 15772, Block.TARGET, "power=4");
 
-  public static final BlockState TARGET_5 = new BlockState(NamespaceID.from("minecraft:target:5"), (short) 15773, Block.TARGET);
+  public static final BlockState TARGET_5 = new BlockState(NamespaceID.from("minecraft:target:5"), (short) 15773, Block.TARGET, "power=5");
 
-  public static final BlockState TARGET_6 = new BlockState(NamespaceID.from("minecraft:target:6"), (short) 15774, Block.TARGET);
+  public static final BlockState TARGET_6 = new BlockState(NamespaceID.from("minecraft:target:6"), (short) 15774, Block.TARGET, "power=6");
 
-  public static final BlockState TARGET_7 = new BlockState(NamespaceID.from("minecraft:target:7"), (short) 15775, Block.TARGET);
+  public static final BlockState TARGET_7 = new BlockState(NamespaceID.from("minecraft:target:7"), (short) 15775, Block.TARGET, "power=7");
 
-  public static final BlockState TARGET_8 = new BlockState(NamespaceID.from("minecraft:target:8"), (short) 15776, Block.TARGET);
+  public static final BlockState TARGET_8 = new BlockState(NamespaceID.from("minecraft:target:8"), (short) 15776, Block.TARGET, "power=8");
 
-  public static final BlockState TARGET_9 = new BlockState(NamespaceID.from("minecraft:target:9"), (short) 15777, Block.TARGET);
+  public static final BlockState TARGET_9 = new BlockState(NamespaceID.from("minecraft:target:9"), (short) 15777, Block.TARGET, "power=9");
 
-  public static final BlockState TARGET_10 = new BlockState(NamespaceID.from("minecraft:target:10"), (short) 15778, Block.TARGET);
+  public static final BlockState TARGET_10 = new BlockState(NamespaceID.from("minecraft:target:10"), (short) 15778, Block.TARGET, "power=10");
 
-  public static final BlockState TARGET_11 = new BlockState(NamespaceID.from("minecraft:target:11"), (short) 15779, Block.TARGET);
+  public static final BlockState TARGET_11 = new BlockState(NamespaceID.from("minecraft:target:11"), (short) 15779, Block.TARGET, "power=11");
 
-  public static final BlockState TARGET_12 = new BlockState(NamespaceID.from("minecraft:target:12"), (short) 15780, Block.TARGET);
+  public static final BlockState TARGET_12 = new BlockState(NamespaceID.from("minecraft:target:12"), (short) 15780, Block.TARGET, "power=12");
 
-  public static final BlockState TARGET_13 = new BlockState(NamespaceID.from("minecraft:target:13"), (short) 15781, Block.TARGET);
+  public static final BlockState TARGET_13 = new BlockState(NamespaceID.from("minecraft:target:13"), (short) 15781, Block.TARGET, "power=13");
 
-  public static final BlockState TARGET_14 = new BlockState(NamespaceID.from("minecraft:target:14"), (short) 15782, Block.TARGET);
+  public static final BlockState TARGET_14 = new BlockState(NamespaceID.from("minecraft:target:14"), (short) 15782, Block.TARGET, "power=14");
 
-  public static final BlockState TARGET_15 = new BlockState(NamespaceID.from("minecraft:target:15"), (short) 15783, Block.TARGET);
+  public static final BlockState TARGET_15 = new BlockState(NamespaceID.from("minecraft:target:15"), (short) 15783, Block.TARGET, "power=15");
 
   public static void initStates() {
     Block.TARGET.addBlockState(TARGET_0);

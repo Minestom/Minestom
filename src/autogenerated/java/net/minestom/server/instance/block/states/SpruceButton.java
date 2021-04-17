@@ -13,53 +13,53 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SpruceButton {
-  public static final BlockState SPRUCE_BUTTON_0 = new BlockState(NamespaceID.from("minecraft:spruce_button:0"), (short) 6374, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_0 = new BlockState(NamespaceID.from("minecraft:spruce_button:0"), (short) 6374, Block.SPRUCE_BUTTON, "face=FLOOR","facing=north","powered=true");
 
-  public static final BlockState SPRUCE_BUTTON_1 = new BlockState(NamespaceID.from("minecraft:spruce_button:1"), (short) 6375, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_1 = new BlockState(NamespaceID.from("minecraft:spruce_button:1"), (short) 6375, Block.SPRUCE_BUTTON, "face=FLOOR","facing=north","powered=false");
 
-  public static final BlockState SPRUCE_BUTTON_2 = new BlockState(NamespaceID.from("minecraft:spruce_button:2"), (short) 6376, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_2 = new BlockState(NamespaceID.from("minecraft:spruce_button:2"), (short) 6376, Block.SPRUCE_BUTTON, "face=FLOOR","facing=south","powered=true");
 
-  public static final BlockState SPRUCE_BUTTON_3 = new BlockState(NamespaceID.from("minecraft:spruce_button:3"), (short) 6377, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_3 = new BlockState(NamespaceID.from("minecraft:spruce_button:3"), (short) 6377, Block.SPRUCE_BUTTON, "face=FLOOR","facing=south","powered=false");
 
-  public static final BlockState SPRUCE_BUTTON_4 = new BlockState(NamespaceID.from("minecraft:spruce_button:4"), (short) 6378, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_4 = new BlockState(NamespaceID.from("minecraft:spruce_button:4"), (short) 6378, Block.SPRUCE_BUTTON, "face=FLOOR","facing=west","powered=true");
 
-  public static final BlockState SPRUCE_BUTTON_5 = new BlockState(NamespaceID.from("minecraft:spruce_button:5"), (short) 6379, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_5 = new BlockState(NamespaceID.from("minecraft:spruce_button:5"), (short) 6379, Block.SPRUCE_BUTTON, "face=FLOOR","facing=west","powered=false");
 
-  public static final BlockState SPRUCE_BUTTON_6 = new BlockState(NamespaceID.from("minecraft:spruce_button:6"), (short) 6380, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_6 = new BlockState(NamespaceID.from("minecraft:spruce_button:6"), (short) 6380, Block.SPRUCE_BUTTON, "face=FLOOR","facing=east","powered=true");
 
-  public static final BlockState SPRUCE_BUTTON_7 = new BlockState(NamespaceID.from("minecraft:spruce_button:7"), (short) 6381, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_7 = new BlockState(NamespaceID.from("minecraft:spruce_button:7"), (short) 6381, Block.SPRUCE_BUTTON, "face=FLOOR","facing=east","powered=false");
 
-  public static final BlockState SPRUCE_BUTTON_8 = new BlockState(NamespaceID.from("minecraft:spruce_button:8"), (short) 6382, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_8 = new BlockState(NamespaceID.from("minecraft:spruce_button:8"), (short) 6382, Block.SPRUCE_BUTTON, "face=WALL","facing=north","powered=true");
 
-  public static final BlockState SPRUCE_BUTTON_9 = new BlockState(NamespaceID.from("minecraft:spruce_button:9"), (short) 6383, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_9 = new BlockState(NamespaceID.from("minecraft:spruce_button:9"), (short) 6383, Block.SPRUCE_BUTTON, "face=WALL","facing=north","powered=false");
 
-  public static final BlockState SPRUCE_BUTTON_10 = new BlockState(NamespaceID.from("minecraft:spruce_button:10"), (short) 6384, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_10 = new BlockState(NamespaceID.from("minecraft:spruce_button:10"), (short) 6384, Block.SPRUCE_BUTTON, "face=WALL","facing=south","powered=true");
 
-  public static final BlockState SPRUCE_BUTTON_11 = new BlockState(NamespaceID.from("minecraft:spruce_button:11"), (short) 6385, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_11 = new BlockState(NamespaceID.from("minecraft:spruce_button:11"), (short) 6385, Block.SPRUCE_BUTTON, "face=WALL","facing=south","powered=false");
 
-  public static final BlockState SPRUCE_BUTTON_12 = new BlockState(NamespaceID.from("minecraft:spruce_button:12"), (short) 6386, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_12 = new BlockState(NamespaceID.from("minecraft:spruce_button:12"), (short) 6386, Block.SPRUCE_BUTTON, "face=WALL","facing=west","powered=true");
 
-  public static final BlockState SPRUCE_BUTTON_13 = new BlockState(NamespaceID.from("minecraft:spruce_button:13"), (short) 6387, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_13 = new BlockState(NamespaceID.from("minecraft:spruce_button:13"), (short) 6387, Block.SPRUCE_BUTTON, "face=WALL","facing=west","powered=false");
 
-  public static final BlockState SPRUCE_BUTTON_14 = new BlockState(NamespaceID.from("minecraft:spruce_button:14"), (short) 6388, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_14 = new BlockState(NamespaceID.from("minecraft:spruce_button:14"), (short) 6388, Block.SPRUCE_BUTTON, "face=WALL","facing=east","powered=true");
 
-  public static final BlockState SPRUCE_BUTTON_15 = new BlockState(NamespaceID.from("minecraft:spruce_button:15"), (short) 6389, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_15 = new BlockState(NamespaceID.from("minecraft:spruce_button:15"), (short) 6389, Block.SPRUCE_BUTTON, "face=WALL","facing=east","powered=false");
 
-  public static final BlockState SPRUCE_BUTTON_16 = new BlockState(NamespaceID.from("minecraft:spruce_button:16"), (short) 6390, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_16 = new BlockState(NamespaceID.from("minecraft:spruce_button:16"), (short) 6390, Block.SPRUCE_BUTTON, "face=CEILING","facing=north","powered=true");
 
-  public static final BlockState SPRUCE_BUTTON_17 = new BlockState(NamespaceID.from("minecraft:spruce_button:17"), (short) 6391, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_17 = new BlockState(NamespaceID.from("minecraft:spruce_button:17"), (short) 6391, Block.SPRUCE_BUTTON, "face=CEILING","facing=north","powered=false");
 
-  public static final BlockState SPRUCE_BUTTON_18 = new BlockState(NamespaceID.from("minecraft:spruce_button:18"), (short) 6392, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_18 = new BlockState(NamespaceID.from("minecraft:spruce_button:18"), (short) 6392, Block.SPRUCE_BUTTON, "face=CEILING","facing=south","powered=true");
 
-  public static final BlockState SPRUCE_BUTTON_19 = new BlockState(NamespaceID.from("minecraft:spruce_button:19"), (short) 6393, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_19 = new BlockState(NamespaceID.from("minecraft:spruce_button:19"), (short) 6393, Block.SPRUCE_BUTTON, "face=CEILING","facing=south","powered=false");
 
-  public static final BlockState SPRUCE_BUTTON_20 = new BlockState(NamespaceID.from("minecraft:spruce_button:20"), (short) 6394, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_20 = new BlockState(NamespaceID.from("minecraft:spruce_button:20"), (short) 6394, Block.SPRUCE_BUTTON, "face=CEILING","facing=west","powered=true");
 
-  public static final BlockState SPRUCE_BUTTON_21 = new BlockState(NamespaceID.from("minecraft:spruce_button:21"), (short) 6395, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_21 = new BlockState(NamespaceID.from("minecraft:spruce_button:21"), (short) 6395, Block.SPRUCE_BUTTON, "face=CEILING","facing=west","powered=false");
 
-  public static final BlockState SPRUCE_BUTTON_22 = new BlockState(NamespaceID.from("minecraft:spruce_button:22"), (short) 6396, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_22 = new BlockState(NamespaceID.from("minecraft:spruce_button:22"), (short) 6396, Block.SPRUCE_BUTTON, "face=CEILING","facing=east","powered=true");
 
-  public static final BlockState SPRUCE_BUTTON_23 = new BlockState(NamespaceID.from("minecraft:spruce_button:23"), (short) 6397, Block.SPRUCE_BUTTON);
+  public static final BlockState SPRUCE_BUTTON_23 = new BlockState(NamespaceID.from("minecraft:spruce_button:23"), (short) 6397, Block.SPRUCE_BUTTON, "face=CEILING","facing=east","powered=false");
 
   public static void initStates() {
     Block.SPRUCE_BUTTON.addBlockState(SPRUCE_BUTTON_0);

@@ -13,69 +13,69 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class OrangeStainedGlassPane {
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_0 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:0"), (short) 6899, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_0 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:0"), (short) 6899, Block.ORANGE_STAINED_GLASS_PANE, "east=true","north=true","south=true","waterlogged=true","west=true");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_1 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:1"), (short) 6900, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_1 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:1"), (short) 6900, Block.ORANGE_STAINED_GLASS_PANE, "east=true","north=true","south=true","waterlogged=true","west=false");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_2 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:2"), (short) 6901, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_2 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:2"), (short) 6901, Block.ORANGE_STAINED_GLASS_PANE, "east=true","north=true","south=true","waterlogged=false","west=true");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_3 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:3"), (short) 6902, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_3 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:3"), (short) 6902, Block.ORANGE_STAINED_GLASS_PANE, "east=true","north=true","south=true","waterlogged=false","west=false");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_4 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:4"), (short) 6903, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_4 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:4"), (short) 6903, Block.ORANGE_STAINED_GLASS_PANE, "east=true","north=true","south=false","waterlogged=true","west=true");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_5 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:5"), (short) 6904, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_5 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:5"), (short) 6904, Block.ORANGE_STAINED_GLASS_PANE, "east=true","north=true","south=false","waterlogged=true","west=false");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_6 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:6"), (short) 6905, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_6 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:6"), (short) 6905, Block.ORANGE_STAINED_GLASS_PANE, "east=true","north=true","south=false","waterlogged=false","west=true");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_7 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:7"), (short) 6906, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_7 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:7"), (short) 6906, Block.ORANGE_STAINED_GLASS_PANE, "east=true","north=true","south=false","waterlogged=false","west=false");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_8 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:8"), (short) 6907, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_8 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:8"), (short) 6907, Block.ORANGE_STAINED_GLASS_PANE, "east=true","north=false","south=true","waterlogged=true","west=true");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_9 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:9"), (short) 6908, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_9 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:9"), (short) 6908, Block.ORANGE_STAINED_GLASS_PANE, "east=true","north=false","south=true","waterlogged=true","west=false");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_10 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:10"), (short) 6909, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_10 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:10"), (short) 6909, Block.ORANGE_STAINED_GLASS_PANE, "east=true","north=false","south=true","waterlogged=false","west=true");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_11 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:11"), (short) 6910, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_11 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:11"), (short) 6910, Block.ORANGE_STAINED_GLASS_PANE, "east=true","north=false","south=true","waterlogged=false","west=false");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_12 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:12"), (short) 6911, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_12 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:12"), (short) 6911, Block.ORANGE_STAINED_GLASS_PANE, "east=true","north=false","south=false","waterlogged=true","west=true");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_13 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:13"), (short) 6912, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_13 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:13"), (short) 6912, Block.ORANGE_STAINED_GLASS_PANE, "east=true","north=false","south=false","waterlogged=true","west=false");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_14 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:14"), (short) 6913, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_14 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:14"), (short) 6913, Block.ORANGE_STAINED_GLASS_PANE, "east=true","north=false","south=false","waterlogged=false","west=true");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_15 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:15"), (short) 6914, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_15 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:15"), (short) 6914, Block.ORANGE_STAINED_GLASS_PANE, "east=true","north=false","south=false","waterlogged=false","west=false");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_16 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:16"), (short) 6915, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_16 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:16"), (short) 6915, Block.ORANGE_STAINED_GLASS_PANE, "east=false","north=true","south=true","waterlogged=true","west=true");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_17 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:17"), (short) 6916, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_17 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:17"), (short) 6916, Block.ORANGE_STAINED_GLASS_PANE, "east=false","north=true","south=true","waterlogged=true","west=false");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_18 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:18"), (short) 6917, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_18 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:18"), (short) 6917, Block.ORANGE_STAINED_GLASS_PANE, "east=false","north=true","south=true","waterlogged=false","west=true");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_19 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:19"), (short) 6918, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_19 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:19"), (short) 6918, Block.ORANGE_STAINED_GLASS_PANE, "east=false","north=true","south=true","waterlogged=false","west=false");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_20 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:20"), (short) 6919, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_20 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:20"), (short) 6919, Block.ORANGE_STAINED_GLASS_PANE, "east=false","north=true","south=false","waterlogged=true","west=true");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_21 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:21"), (short) 6920, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_21 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:21"), (short) 6920, Block.ORANGE_STAINED_GLASS_PANE, "east=false","north=true","south=false","waterlogged=true","west=false");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_22 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:22"), (short) 6921, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_22 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:22"), (short) 6921, Block.ORANGE_STAINED_GLASS_PANE, "east=false","north=true","south=false","waterlogged=false","west=true");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_23 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:23"), (short) 6922, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_23 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:23"), (short) 6922, Block.ORANGE_STAINED_GLASS_PANE, "east=false","north=true","south=false","waterlogged=false","west=false");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_24 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:24"), (short) 6923, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_24 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:24"), (short) 6923, Block.ORANGE_STAINED_GLASS_PANE, "east=false","north=false","south=true","waterlogged=true","west=true");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_25 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:25"), (short) 6924, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_25 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:25"), (short) 6924, Block.ORANGE_STAINED_GLASS_PANE, "east=false","north=false","south=true","waterlogged=true","west=false");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_26 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:26"), (short) 6925, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_26 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:26"), (short) 6925, Block.ORANGE_STAINED_GLASS_PANE, "east=false","north=false","south=true","waterlogged=false","west=true");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_27 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:27"), (short) 6926, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_27 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:27"), (short) 6926, Block.ORANGE_STAINED_GLASS_PANE, "east=false","north=false","south=true","waterlogged=false","west=false");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_28 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:28"), (short) 6927, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_28 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:28"), (short) 6927, Block.ORANGE_STAINED_GLASS_PANE, "east=false","north=false","south=false","waterlogged=true","west=true");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_29 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:29"), (short) 6928, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_29 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:29"), (short) 6928, Block.ORANGE_STAINED_GLASS_PANE, "east=false","north=false","south=false","waterlogged=true","west=false");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_30 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:30"), (short) 6929, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_30 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:30"), (short) 6929, Block.ORANGE_STAINED_GLASS_PANE, "east=false","north=false","south=false","waterlogged=false","west=true");
 
-  public static final BlockState ORANGE_STAINED_GLASS_PANE_31 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:31"), (short) 6930, Block.ORANGE_STAINED_GLASS_PANE);
+  public static final BlockState ORANGE_STAINED_GLASS_PANE_31 = new BlockState(NamespaceID.from("minecraft:orange_stained_glass_pane:31"), (short) 6930, Block.ORANGE_STAINED_GLASS_PANE, "east=false","north=false","south=false","waterlogged=false","west=false");
 
   public static void initStates() {
     Block.ORANGE_STAINED_GLASS_PANE.addBlockState(ORANGE_STAINED_GLASS_PANE_0);

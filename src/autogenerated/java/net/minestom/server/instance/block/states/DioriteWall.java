@@ -13,653 +13,653 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DioriteWall {
-  public static final BlockState DIORITE_WALL_0 = new BlockState(NamespaceID.from("minecraft:diorite_wall:0"), (short) 14435, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_0 = new BlockState(NamespaceID.from("minecraft:diorite_wall:0"), (short) 14435, Block.DIORITE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_1 = new BlockState(NamespaceID.from("minecraft:diorite_wall:1"), (short) 14436, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_1 = new BlockState(NamespaceID.from("minecraft:diorite_wall:1"), (short) 14436, Block.DIORITE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_2 = new BlockState(NamespaceID.from("minecraft:diorite_wall:2"), (short) 14437, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_2 = new BlockState(NamespaceID.from("minecraft:diorite_wall:2"), (short) 14437, Block.DIORITE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_3 = new BlockState(NamespaceID.from("minecraft:diorite_wall:3"), (short) 14438, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_3 = new BlockState(NamespaceID.from("minecraft:diorite_wall:3"), (short) 14438, Block.DIORITE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_4 = new BlockState(NamespaceID.from("minecraft:diorite_wall:4"), (short) 14439, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_4 = new BlockState(NamespaceID.from("minecraft:diorite_wall:4"), (short) 14439, Block.DIORITE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_5 = new BlockState(NamespaceID.from("minecraft:diorite_wall:5"), (short) 14440, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_5 = new BlockState(NamespaceID.from("minecraft:diorite_wall:5"), (short) 14440, Block.DIORITE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_6 = new BlockState(NamespaceID.from("minecraft:diorite_wall:6"), (short) 14441, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_6 = new BlockState(NamespaceID.from("minecraft:diorite_wall:6"), (short) 14441, Block.DIORITE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_7 = new BlockState(NamespaceID.from("minecraft:diorite_wall:7"), (short) 14442, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_7 = new BlockState(NamespaceID.from("minecraft:diorite_wall:7"), (short) 14442, Block.DIORITE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_8 = new BlockState(NamespaceID.from("minecraft:diorite_wall:8"), (short) 14443, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_8 = new BlockState(NamespaceID.from("minecraft:diorite_wall:8"), (short) 14443, Block.DIORITE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_9 = new BlockState(NamespaceID.from("minecraft:diorite_wall:9"), (short) 14444, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_9 = new BlockState(NamespaceID.from("minecraft:diorite_wall:9"), (short) 14444, Block.DIORITE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_10 = new BlockState(NamespaceID.from("minecraft:diorite_wall:10"), (short) 14445, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_10 = new BlockState(NamespaceID.from("minecraft:diorite_wall:10"), (short) 14445, Block.DIORITE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_11 = new BlockState(NamespaceID.from("minecraft:diorite_wall:11"), (short) 14446, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_11 = new BlockState(NamespaceID.from("minecraft:diorite_wall:11"), (short) 14446, Block.DIORITE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_12 = new BlockState(NamespaceID.from("minecraft:diorite_wall:12"), (short) 14447, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_12 = new BlockState(NamespaceID.from("minecraft:diorite_wall:12"), (short) 14447, Block.DIORITE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_13 = new BlockState(NamespaceID.from("minecraft:diorite_wall:13"), (short) 14448, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_13 = new BlockState(NamespaceID.from("minecraft:diorite_wall:13"), (short) 14448, Block.DIORITE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_14 = new BlockState(NamespaceID.from("minecraft:diorite_wall:14"), (short) 14449, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_14 = new BlockState(NamespaceID.from("minecraft:diorite_wall:14"), (short) 14449, Block.DIORITE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_15 = new BlockState(NamespaceID.from("minecraft:diorite_wall:15"), (short) 14450, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_15 = new BlockState(NamespaceID.from("minecraft:diorite_wall:15"), (short) 14450, Block.DIORITE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_16 = new BlockState(NamespaceID.from("minecraft:diorite_wall:16"), (short) 14451, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_16 = new BlockState(NamespaceID.from("minecraft:diorite_wall:16"), (short) 14451, Block.DIORITE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_17 = new BlockState(NamespaceID.from("minecraft:diorite_wall:17"), (short) 14452, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_17 = new BlockState(NamespaceID.from("minecraft:diorite_wall:17"), (short) 14452, Block.DIORITE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_18 = new BlockState(NamespaceID.from("minecraft:diorite_wall:18"), (short) 14453, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_18 = new BlockState(NamespaceID.from("minecraft:diorite_wall:18"), (short) 14453, Block.DIORITE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_19 = new BlockState(NamespaceID.from("minecraft:diorite_wall:19"), (short) 14454, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_19 = new BlockState(NamespaceID.from("minecraft:diorite_wall:19"), (short) 14454, Block.DIORITE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_20 = new BlockState(NamespaceID.from("minecraft:diorite_wall:20"), (short) 14455, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_20 = new BlockState(NamespaceID.from("minecraft:diorite_wall:20"), (short) 14455, Block.DIORITE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_21 = new BlockState(NamespaceID.from("minecraft:diorite_wall:21"), (short) 14456, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_21 = new BlockState(NamespaceID.from("minecraft:diorite_wall:21"), (short) 14456, Block.DIORITE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_22 = new BlockState(NamespaceID.from("minecraft:diorite_wall:22"), (short) 14457, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_22 = new BlockState(NamespaceID.from("minecraft:diorite_wall:22"), (short) 14457, Block.DIORITE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_23 = new BlockState(NamespaceID.from("minecraft:diorite_wall:23"), (short) 14458, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_23 = new BlockState(NamespaceID.from("minecraft:diorite_wall:23"), (short) 14458, Block.DIORITE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_24 = new BlockState(NamespaceID.from("minecraft:diorite_wall:24"), (short) 14459, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_24 = new BlockState(NamespaceID.from("minecraft:diorite_wall:24"), (short) 14459, Block.DIORITE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_25 = new BlockState(NamespaceID.from("minecraft:diorite_wall:25"), (short) 14460, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_25 = new BlockState(NamespaceID.from("minecraft:diorite_wall:25"), (short) 14460, Block.DIORITE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_26 = new BlockState(NamespaceID.from("minecraft:diorite_wall:26"), (short) 14461, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_26 = new BlockState(NamespaceID.from("minecraft:diorite_wall:26"), (short) 14461, Block.DIORITE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_27 = new BlockState(NamespaceID.from("minecraft:diorite_wall:27"), (short) 14462, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_27 = new BlockState(NamespaceID.from("minecraft:diorite_wall:27"), (short) 14462, Block.DIORITE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_28 = new BlockState(NamespaceID.from("minecraft:diorite_wall:28"), (short) 14463, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_28 = new BlockState(NamespaceID.from("minecraft:diorite_wall:28"), (short) 14463, Block.DIORITE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_29 = new BlockState(NamespaceID.from("minecraft:diorite_wall:29"), (short) 14464, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_29 = new BlockState(NamespaceID.from("minecraft:diorite_wall:29"), (short) 14464, Block.DIORITE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_30 = new BlockState(NamespaceID.from("minecraft:diorite_wall:30"), (short) 14465, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_30 = new BlockState(NamespaceID.from("minecraft:diorite_wall:30"), (short) 14465, Block.DIORITE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_31 = new BlockState(NamespaceID.from("minecraft:diorite_wall:31"), (short) 14466, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_31 = new BlockState(NamespaceID.from("minecraft:diorite_wall:31"), (short) 14466, Block.DIORITE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_32 = new BlockState(NamespaceID.from("minecraft:diorite_wall:32"), (short) 14467, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_32 = new BlockState(NamespaceID.from("minecraft:diorite_wall:32"), (short) 14467, Block.DIORITE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_33 = new BlockState(NamespaceID.from("minecraft:diorite_wall:33"), (short) 14468, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_33 = new BlockState(NamespaceID.from("minecraft:diorite_wall:33"), (short) 14468, Block.DIORITE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_34 = new BlockState(NamespaceID.from("minecraft:diorite_wall:34"), (short) 14469, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_34 = new BlockState(NamespaceID.from("minecraft:diorite_wall:34"), (short) 14469, Block.DIORITE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_35 = new BlockState(NamespaceID.from("minecraft:diorite_wall:35"), (short) 14470, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_35 = new BlockState(NamespaceID.from("minecraft:diorite_wall:35"), (short) 14470, Block.DIORITE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_36 = new BlockState(NamespaceID.from("minecraft:diorite_wall:36"), (short) 14471, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_36 = new BlockState(NamespaceID.from("minecraft:diorite_wall:36"), (short) 14471, Block.DIORITE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_37 = new BlockState(NamespaceID.from("minecraft:diorite_wall:37"), (short) 14472, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_37 = new BlockState(NamespaceID.from("minecraft:diorite_wall:37"), (short) 14472, Block.DIORITE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_38 = new BlockState(NamespaceID.from("minecraft:diorite_wall:38"), (short) 14473, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_38 = new BlockState(NamespaceID.from("minecraft:diorite_wall:38"), (short) 14473, Block.DIORITE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_39 = new BlockState(NamespaceID.from("minecraft:diorite_wall:39"), (short) 14474, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_39 = new BlockState(NamespaceID.from("minecraft:diorite_wall:39"), (short) 14474, Block.DIORITE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_40 = new BlockState(NamespaceID.from("minecraft:diorite_wall:40"), (short) 14475, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_40 = new BlockState(NamespaceID.from("minecraft:diorite_wall:40"), (short) 14475, Block.DIORITE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_41 = new BlockState(NamespaceID.from("minecraft:diorite_wall:41"), (short) 14476, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_41 = new BlockState(NamespaceID.from("minecraft:diorite_wall:41"), (short) 14476, Block.DIORITE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_42 = new BlockState(NamespaceID.from("minecraft:diorite_wall:42"), (short) 14477, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_42 = new BlockState(NamespaceID.from("minecraft:diorite_wall:42"), (short) 14477, Block.DIORITE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_43 = new BlockState(NamespaceID.from("minecraft:diorite_wall:43"), (short) 14478, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_43 = new BlockState(NamespaceID.from("minecraft:diorite_wall:43"), (short) 14478, Block.DIORITE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_44 = new BlockState(NamespaceID.from("minecraft:diorite_wall:44"), (short) 14479, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_44 = new BlockState(NamespaceID.from("minecraft:diorite_wall:44"), (short) 14479, Block.DIORITE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_45 = new BlockState(NamespaceID.from("minecraft:diorite_wall:45"), (short) 14480, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_45 = new BlockState(NamespaceID.from("minecraft:diorite_wall:45"), (short) 14480, Block.DIORITE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_46 = new BlockState(NamespaceID.from("minecraft:diorite_wall:46"), (short) 14481, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_46 = new BlockState(NamespaceID.from("minecraft:diorite_wall:46"), (short) 14481, Block.DIORITE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_47 = new BlockState(NamespaceID.from("minecraft:diorite_wall:47"), (short) 14482, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_47 = new BlockState(NamespaceID.from("minecraft:diorite_wall:47"), (short) 14482, Block.DIORITE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_48 = new BlockState(NamespaceID.from("minecraft:diorite_wall:48"), (short) 14483, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_48 = new BlockState(NamespaceID.from("minecraft:diorite_wall:48"), (short) 14483, Block.DIORITE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_49 = new BlockState(NamespaceID.from("minecraft:diorite_wall:49"), (short) 14484, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_49 = new BlockState(NamespaceID.from("minecraft:diorite_wall:49"), (short) 14484, Block.DIORITE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_50 = new BlockState(NamespaceID.from("minecraft:diorite_wall:50"), (short) 14485, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_50 = new BlockState(NamespaceID.from("minecraft:diorite_wall:50"), (short) 14485, Block.DIORITE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_51 = new BlockState(NamespaceID.from("minecraft:diorite_wall:51"), (short) 14486, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_51 = new BlockState(NamespaceID.from("minecraft:diorite_wall:51"), (short) 14486, Block.DIORITE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_52 = new BlockState(NamespaceID.from("minecraft:diorite_wall:52"), (short) 14487, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_52 = new BlockState(NamespaceID.from("minecraft:diorite_wall:52"), (short) 14487, Block.DIORITE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_53 = new BlockState(NamespaceID.from("minecraft:diorite_wall:53"), (short) 14488, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_53 = new BlockState(NamespaceID.from("minecraft:diorite_wall:53"), (short) 14488, Block.DIORITE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_54 = new BlockState(NamespaceID.from("minecraft:diorite_wall:54"), (short) 14489, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_54 = new BlockState(NamespaceID.from("minecraft:diorite_wall:54"), (short) 14489, Block.DIORITE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_55 = new BlockState(NamespaceID.from("minecraft:diorite_wall:55"), (short) 14490, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_55 = new BlockState(NamespaceID.from("minecraft:diorite_wall:55"), (short) 14490, Block.DIORITE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_56 = new BlockState(NamespaceID.from("minecraft:diorite_wall:56"), (short) 14491, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_56 = new BlockState(NamespaceID.from("minecraft:diorite_wall:56"), (short) 14491, Block.DIORITE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_57 = new BlockState(NamespaceID.from("minecraft:diorite_wall:57"), (short) 14492, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_57 = new BlockState(NamespaceID.from("minecraft:diorite_wall:57"), (short) 14492, Block.DIORITE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_58 = new BlockState(NamespaceID.from("minecraft:diorite_wall:58"), (short) 14493, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_58 = new BlockState(NamespaceID.from("minecraft:diorite_wall:58"), (short) 14493, Block.DIORITE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_59 = new BlockState(NamespaceID.from("minecraft:diorite_wall:59"), (short) 14494, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_59 = new BlockState(NamespaceID.from("minecraft:diorite_wall:59"), (short) 14494, Block.DIORITE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_60 = new BlockState(NamespaceID.from("minecraft:diorite_wall:60"), (short) 14495, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_60 = new BlockState(NamespaceID.from("minecraft:diorite_wall:60"), (short) 14495, Block.DIORITE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_61 = new BlockState(NamespaceID.from("minecraft:diorite_wall:61"), (short) 14496, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_61 = new BlockState(NamespaceID.from("minecraft:diorite_wall:61"), (short) 14496, Block.DIORITE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_62 = new BlockState(NamespaceID.from("minecraft:diorite_wall:62"), (short) 14497, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_62 = new BlockState(NamespaceID.from("minecraft:diorite_wall:62"), (short) 14497, Block.DIORITE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_63 = new BlockState(NamespaceID.from("minecraft:diorite_wall:63"), (short) 14498, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_63 = new BlockState(NamespaceID.from("minecraft:diorite_wall:63"), (short) 14498, Block.DIORITE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_64 = new BlockState(NamespaceID.from("minecraft:diorite_wall:64"), (short) 14499, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_64 = new BlockState(NamespaceID.from("minecraft:diorite_wall:64"), (short) 14499, Block.DIORITE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_65 = new BlockState(NamespaceID.from("minecraft:diorite_wall:65"), (short) 14500, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_65 = new BlockState(NamespaceID.from("minecraft:diorite_wall:65"), (short) 14500, Block.DIORITE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_66 = new BlockState(NamespaceID.from("minecraft:diorite_wall:66"), (short) 14501, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_66 = new BlockState(NamespaceID.from("minecraft:diorite_wall:66"), (short) 14501, Block.DIORITE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_67 = new BlockState(NamespaceID.from("minecraft:diorite_wall:67"), (short) 14502, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_67 = new BlockState(NamespaceID.from("minecraft:diorite_wall:67"), (short) 14502, Block.DIORITE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_68 = new BlockState(NamespaceID.from("minecraft:diorite_wall:68"), (short) 14503, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_68 = new BlockState(NamespaceID.from("minecraft:diorite_wall:68"), (short) 14503, Block.DIORITE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_69 = new BlockState(NamespaceID.from("minecraft:diorite_wall:69"), (short) 14504, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_69 = new BlockState(NamespaceID.from("minecraft:diorite_wall:69"), (short) 14504, Block.DIORITE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_70 = new BlockState(NamespaceID.from("minecraft:diorite_wall:70"), (short) 14505, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_70 = new BlockState(NamespaceID.from("minecraft:diorite_wall:70"), (short) 14505, Block.DIORITE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_71 = new BlockState(NamespaceID.from("minecraft:diorite_wall:71"), (short) 14506, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_71 = new BlockState(NamespaceID.from("minecraft:diorite_wall:71"), (short) 14506, Block.DIORITE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_72 = new BlockState(NamespaceID.from("minecraft:diorite_wall:72"), (short) 14507, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_72 = new BlockState(NamespaceID.from("minecraft:diorite_wall:72"), (short) 14507, Block.DIORITE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_73 = new BlockState(NamespaceID.from("minecraft:diorite_wall:73"), (short) 14508, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_73 = new BlockState(NamespaceID.from("minecraft:diorite_wall:73"), (short) 14508, Block.DIORITE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_74 = new BlockState(NamespaceID.from("minecraft:diorite_wall:74"), (short) 14509, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_74 = new BlockState(NamespaceID.from("minecraft:diorite_wall:74"), (short) 14509, Block.DIORITE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_75 = new BlockState(NamespaceID.from("minecraft:diorite_wall:75"), (short) 14510, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_75 = new BlockState(NamespaceID.from("minecraft:diorite_wall:75"), (short) 14510, Block.DIORITE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_76 = new BlockState(NamespaceID.from("minecraft:diorite_wall:76"), (short) 14511, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_76 = new BlockState(NamespaceID.from("minecraft:diorite_wall:76"), (short) 14511, Block.DIORITE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_77 = new BlockState(NamespaceID.from("minecraft:diorite_wall:77"), (short) 14512, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_77 = new BlockState(NamespaceID.from("minecraft:diorite_wall:77"), (short) 14512, Block.DIORITE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_78 = new BlockState(NamespaceID.from("minecraft:diorite_wall:78"), (short) 14513, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_78 = new BlockState(NamespaceID.from("minecraft:diorite_wall:78"), (short) 14513, Block.DIORITE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_79 = new BlockState(NamespaceID.from("minecraft:diorite_wall:79"), (short) 14514, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_79 = new BlockState(NamespaceID.from("minecraft:diorite_wall:79"), (short) 14514, Block.DIORITE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_80 = new BlockState(NamespaceID.from("minecraft:diorite_wall:80"), (short) 14515, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_80 = new BlockState(NamespaceID.from("minecraft:diorite_wall:80"), (short) 14515, Block.DIORITE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_81 = new BlockState(NamespaceID.from("minecraft:diorite_wall:81"), (short) 14516, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_81 = new BlockState(NamespaceID.from("minecraft:diorite_wall:81"), (short) 14516, Block.DIORITE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_82 = new BlockState(NamespaceID.from("minecraft:diorite_wall:82"), (short) 14517, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_82 = new BlockState(NamespaceID.from("minecraft:diorite_wall:82"), (short) 14517, Block.DIORITE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_83 = new BlockState(NamespaceID.from("minecraft:diorite_wall:83"), (short) 14518, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_83 = new BlockState(NamespaceID.from("minecraft:diorite_wall:83"), (short) 14518, Block.DIORITE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_84 = new BlockState(NamespaceID.from("minecraft:diorite_wall:84"), (short) 14519, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_84 = new BlockState(NamespaceID.from("minecraft:diorite_wall:84"), (short) 14519, Block.DIORITE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_85 = new BlockState(NamespaceID.from("minecraft:diorite_wall:85"), (short) 14520, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_85 = new BlockState(NamespaceID.from("minecraft:diorite_wall:85"), (short) 14520, Block.DIORITE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_86 = new BlockState(NamespaceID.from("minecraft:diorite_wall:86"), (short) 14521, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_86 = new BlockState(NamespaceID.from("minecraft:diorite_wall:86"), (short) 14521, Block.DIORITE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_87 = new BlockState(NamespaceID.from("minecraft:diorite_wall:87"), (short) 14522, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_87 = new BlockState(NamespaceID.from("minecraft:diorite_wall:87"), (short) 14522, Block.DIORITE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_88 = new BlockState(NamespaceID.from("minecraft:diorite_wall:88"), (short) 14523, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_88 = new BlockState(NamespaceID.from("minecraft:diorite_wall:88"), (short) 14523, Block.DIORITE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_89 = new BlockState(NamespaceID.from("minecraft:diorite_wall:89"), (short) 14524, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_89 = new BlockState(NamespaceID.from("minecraft:diorite_wall:89"), (short) 14524, Block.DIORITE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_90 = new BlockState(NamespaceID.from("minecraft:diorite_wall:90"), (short) 14525, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_90 = new BlockState(NamespaceID.from("minecraft:diorite_wall:90"), (short) 14525, Block.DIORITE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_91 = new BlockState(NamespaceID.from("minecraft:diorite_wall:91"), (short) 14526, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_91 = new BlockState(NamespaceID.from("minecraft:diorite_wall:91"), (short) 14526, Block.DIORITE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_92 = new BlockState(NamespaceID.from("minecraft:diorite_wall:92"), (short) 14527, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_92 = new BlockState(NamespaceID.from("minecraft:diorite_wall:92"), (short) 14527, Block.DIORITE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_93 = new BlockState(NamespaceID.from("minecraft:diorite_wall:93"), (short) 14528, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_93 = new BlockState(NamespaceID.from("minecraft:diorite_wall:93"), (short) 14528, Block.DIORITE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_94 = new BlockState(NamespaceID.from("minecraft:diorite_wall:94"), (short) 14529, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_94 = new BlockState(NamespaceID.from("minecraft:diorite_wall:94"), (short) 14529, Block.DIORITE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_95 = new BlockState(NamespaceID.from("minecraft:diorite_wall:95"), (short) 14530, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_95 = new BlockState(NamespaceID.from("minecraft:diorite_wall:95"), (short) 14530, Block.DIORITE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_96 = new BlockState(NamespaceID.from("minecraft:diorite_wall:96"), (short) 14531, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_96 = new BlockState(NamespaceID.from("minecraft:diorite_wall:96"), (short) 14531, Block.DIORITE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_97 = new BlockState(NamespaceID.from("minecraft:diorite_wall:97"), (short) 14532, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_97 = new BlockState(NamespaceID.from("minecraft:diorite_wall:97"), (short) 14532, Block.DIORITE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_98 = new BlockState(NamespaceID.from("minecraft:diorite_wall:98"), (short) 14533, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_98 = new BlockState(NamespaceID.from("minecraft:diorite_wall:98"), (short) 14533, Block.DIORITE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_99 = new BlockState(NamespaceID.from("minecraft:diorite_wall:99"), (short) 14534, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_99 = new BlockState(NamespaceID.from("minecraft:diorite_wall:99"), (short) 14534, Block.DIORITE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_100 = new BlockState(NamespaceID.from("minecraft:diorite_wall:100"), (short) 14535, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_100 = new BlockState(NamespaceID.from("minecraft:diorite_wall:100"), (short) 14535, Block.DIORITE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_101 = new BlockState(NamespaceID.from("minecraft:diorite_wall:101"), (short) 14536, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_101 = new BlockState(NamespaceID.from("minecraft:diorite_wall:101"), (short) 14536, Block.DIORITE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_102 = new BlockState(NamespaceID.from("minecraft:diorite_wall:102"), (short) 14537, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_102 = new BlockState(NamespaceID.from("minecraft:diorite_wall:102"), (short) 14537, Block.DIORITE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_103 = new BlockState(NamespaceID.from("minecraft:diorite_wall:103"), (short) 14538, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_103 = new BlockState(NamespaceID.from("minecraft:diorite_wall:103"), (short) 14538, Block.DIORITE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_104 = new BlockState(NamespaceID.from("minecraft:diorite_wall:104"), (short) 14539, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_104 = new BlockState(NamespaceID.from("minecraft:diorite_wall:104"), (short) 14539, Block.DIORITE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_105 = new BlockState(NamespaceID.from("minecraft:diorite_wall:105"), (short) 14540, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_105 = new BlockState(NamespaceID.from("minecraft:diorite_wall:105"), (short) 14540, Block.DIORITE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_106 = new BlockState(NamespaceID.from("minecraft:diorite_wall:106"), (short) 14541, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_106 = new BlockState(NamespaceID.from("minecraft:diorite_wall:106"), (short) 14541, Block.DIORITE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_107 = new BlockState(NamespaceID.from("minecraft:diorite_wall:107"), (short) 14542, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_107 = new BlockState(NamespaceID.from("minecraft:diorite_wall:107"), (short) 14542, Block.DIORITE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_108 = new BlockState(NamespaceID.from("minecraft:diorite_wall:108"), (short) 14543, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_108 = new BlockState(NamespaceID.from("minecraft:diorite_wall:108"), (short) 14543, Block.DIORITE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_109 = new BlockState(NamespaceID.from("minecraft:diorite_wall:109"), (short) 14544, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_109 = new BlockState(NamespaceID.from("minecraft:diorite_wall:109"), (short) 14544, Block.DIORITE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_110 = new BlockState(NamespaceID.from("minecraft:diorite_wall:110"), (short) 14545, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_110 = new BlockState(NamespaceID.from("minecraft:diorite_wall:110"), (short) 14545, Block.DIORITE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_111 = new BlockState(NamespaceID.from("minecraft:diorite_wall:111"), (short) 14546, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_111 = new BlockState(NamespaceID.from("minecraft:diorite_wall:111"), (short) 14546, Block.DIORITE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_112 = new BlockState(NamespaceID.from("minecraft:diorite_wall:112"), (short) 14547, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_112 = new BlockState(NamespaceID.from("minecraft:diorite_wall:112"), (short) 14547, Block.DIORITE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_113 = new BlockState(NamespaceID.from("minecraft:diorite_wall:113"), (short) 14548, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_113 = new BlockState(NamespaceID.from("minecraft:diorite_wall:113"), (short) 14548, Block.DIORITE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_114 = new BlockState(NamespaceID.from("minecraft:diorite_wall:114"), (short) 14549, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_114 = new BlockState(NamespaceID.from("minecraft:diorite_wall:114"), (short) 14549, Block.DIORITE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_115 = new BlockState(NamespaceID.from("minecraft:diorite_wall:115"), (short) 14550, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_115 = new BlockState(NamespaceID.from("minecraft:diorite_wall:115"), (short) 14550, Block.DIORITE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_116 = new BlockState(NamespaceID.from("minecraft:diorite_wall:116"), (short) 14551, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_116 = new BlockState(NamespaceID.from("minecraft:diorite_wall:116"), (short) 14551, Block.DIORITE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_117 = new BlockState(NamespaceID.from("minecraft:diorite_wall:117"), (short) 14552, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_117 = new BlockState(NamespaceID.from("minecraft:diorite_wall:117"), (short) 14552, Block.DIORITE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_118 = new BlockState(NamespaceID.from("minecraft:diorite_wall:118"), (short) 14553, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_118 = new BlockState(NamespaceID.from("minecraft:diorite_wall:118"), (short) 14553, Block.DIORITE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_119 = new BlockState(NamespaceID.from("minecraft:diorite_wall:119"), (short) 14554, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_119 = new BlockState(NamespaceID.from("minecraft:diorite_wall:119"), (short) 14554, Block.DIORITE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_120 = new BlockState(NamespaceID.from("minecraft:diorite_wall:120"), (short) 14555, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_120 = new BlockState(NamespaceID.from("minecraft:diorite_wall:120"), (short) 14555, Block.DIORITE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_121 = new BlockState(NamespaceID.from("minecraft:diorite_wall:121"), (short) 14556, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_121 = new BlockState(NamespaceID.from("minecraft:diorite_wall:121"), (short) 14556, Block.DIORITE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_122 = new BlockState(NamespaceID.from("minecraft:diorite_wall:122"), (short) 14557, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_122 = new BlockState(NamespaceID.from("minecraft:diorite_wall:122"), (short) 14557, Block.DIORITE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_123 = new BlockState(NamespaceID.from("minecraft:diorite_wall:123"), (short) 14558, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_123 = new BlockState(NamespaceID.from("minecraft:diorite_wall:123"), (short) 14558, Block.DIORITE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_124 = new BlockState(NamespaceID.from("minecraft:diorite_wall:124"), (short) 14559, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_124 = new BlockState(NamespaceID.from("minecraft:diorite_wall:124"), (short) 14559, Block.DIORITE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_125 = new BlockState(NamespaceID.from("minecraft:diorite_wall:125"), (short) 14560, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_125 = new BlockState(NamespaceID.from("minecraft:diorite_wall:125"), (short) 14560, Block.DIORITE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_126 = new BlockState(NamespaceID.from("minecraft:diorite_wall:126"), (short) 14561, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_126 = new BlockState(NamespaceID.from("minecraft:diorite_wall:126"), (short) 14561, Block.DIORITE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_127 = new BlockState(NamespaceID.from("minecraft:diorite_wall:127"), (short) 14562, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_127 = new BlockState(NamespaceID.from("minecraft:diorite_wall:127"), (short) 14562, Block.DIORITE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_128 = new BlockState(NamespaceID.from("minecraft:diorite_wall:128"), (short) 14563, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_128 = new BlockState(NamespaceID.from("minecraft:diorite_wall:128"), (short) 14563, Block.DIORITE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_129 = new BlockState(NamespaceID.from("minecraft:diorite_wall:129"), (short) 14564, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_129 = new BlockState(NamespaceID.from("minecraft:diorite_wall:129"), (short) 14564, Block.DIORITE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_130 = new BlockState(NamespaceID.from("minecraft:diorite_wall:130"), (short) 14565, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_130 = new BlockState(NamespaceID.from("minecraft:diorite_wall:130"), (short) 14565, Block.DIORITE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_131 = new BlockState(NamespaceID.from("minecraft:diorite_wall:131"), (short) 14566, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_131 = new BlockState(NamespaceID.from("minecraft:diorite_wall:131"), (short) 14566, Block.DIORITE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_132 = new BlockState(NamespaceID.from("minecraft:diorite_wall:132"), (short) 14567, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_132 = new BlockState(NamespaceID.from("minecraft:diorite_wall:132"), (short) 14567, Block.DIORITE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_133 = new BlockState(NamespaceID.from("minecraft:diorite_wall:133"), (short) 14568, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_133 = new BlockState(NamespaceID.from("minecraft:diorite_wall:133"), (short) 14568, Block.DIORITE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_134 = new BlockState(NamespaceID.from("minecraft:diorite_wall:134"), (short) 14569, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_134 = new BlockState(NamespaceID.from("minecraft:diorite_wall:134"), (short) 14569, Block.DIORITE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_135 = new BlockState(NamespaceID.from("minecraft:diorite_wall:135"), (short) 14570, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_135 = new BlockState(NamespaceID.from("minecraft:diorite_wall:135"), (short) 14570, Block.DIORITE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_136 = new BlockState(NamespaceID.from("minecraft:diorite_wall:136"), (short) 14571, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_136 = new BlockState(NamespaceID.from("minecraft:diorite_wall:136"), (short) 14571, Block.DIORITE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_137 = new BlockState(NamespaceID.from("minecraft:diorite_wall:137"), (short) 14572, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_137 = new BlockState(NamespaceID.from("minecraft:diorite_wall:137"), (short) 14572, Block.DIORITE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_138 = new BlockState(NamespaceID.from("minecraft:diorite_wall:138"), (short) 14573, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_138 = new BlockState(NamespaceID.from("minecraft:diorite_wall:138"), (short) 14573, Block.DIORITE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_139 = new BlockState(NamespaceID.from("minecraft:diorite_wall:139"), (short) 14574, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_139 = new BlockState(NamespaceID.from("minecraft:diorite_wall:139"), (short) 14574, Block.DIORITE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_140 = new BlockState(NamespaceID.from("minecraft:diorite_wall:140"), (short) 14575, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_140 = new BlockState(NamespaceID.from("minecraft:diorite_wall:140"), (short) 14575, Block.DIORITE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_141 = new BlockState(NamespaceID.from("minecraft:diorite_wall:141"), (short) 14576, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_141 = new BlockState(NamespaceID.from("minecraft:diorite_wall:141"), (short) 14576, Block.DIORITE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_142 = new BlockState(NamespaceID.from("minecraft:diorite_wall:142"), (short) 14577, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_142 = new BlockState(NamespaceID.from("minecraft:diorite_wall:142"), (short) 14577, Block.DIORITE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_143 = new BlockState(NamespaceID.from("minecraft:diorite_wall:143"), (short) 14578, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_143 = new BlockState(NamespaceID.from("minecraft:diorite_wall:143"), (short) 14578, Block.DIORITE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_144 = new BlockState(NamespaceID.from("minecraft:diorite_wall:144"), (short) 14579, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_144 = new BlockState(NamespaceID.from("minecraft:diorite_wall:144"), (short) 14579, Block.DIORITE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_145 = new BlockState(NamespaceID.from("minecraft:diorite_wall:145"), (short) 14580, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_145 = new BlockState(NamespaceID.from("minecraft:diorite_wall:145"), (short) 14580, Block.DIORITE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_146 = new BlockState(NamespaceID.from("minecraft:diorite_wall:146"), (short) 14581, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_146 = new BlockState(NamespaceID.from("minecraft:diorite_wall:146"), (short) 14581, Block.DIORITE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_147 = new BlockState(NamespaceID.from("minecraft:diorite_wall:147"), (short) 14582, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_147 = new BlockState(NamespaceID.from("minecraft:diorite_wall:147"), (short) 14582, Block.DIORITE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_148 = new BlockState(NamespaceID.from("minecraft:diorite_wall:148"), (short) 14583, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_148 = new BlockState(NamespaceID.from("minecraft:diorite_wall:148"), (short) 14583, Block.DIORITE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_149 = new BlockState(NamespaceID.from("minecraft:diorite_wall:149"), (short) 14584, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_149 = new BlockState(NamespaceID.from("minecraft:diorite_wall:149"), (short) 14584, Block.DIORITE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_150 = new BlockState(NamespaceID.from("minecraft:diorite_wall:150"), (short) 14585, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_150 = new BlockState(NamespaceID.from("minecraft:diorite_wall:150"), (short) 14585, Block.DIORITE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_151 = new BlockState(NamespaceID.from("minecraft:diorite_wall:151"), (short) 14586, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_151 = new BlockState(NamespaceID.from("minecraft:diorite_wall:151"), (short) 14586, Block.DIORITE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_152 = new BlockState(NamespaceID.from("minecraft:diorite_wall:152"), (short) 14587, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_152 = new BlockState(NamespaceID.from("minecraft:diorite_wall:152"), (short) 14587, Block.DIORITE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_153 = new BlockState(NamespaceID.from("minecraft:diorite_wall:153"), (short) 14588, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_153 = new BlockState(NamespaceID.from("minecraft:diorite_wall:153"), (short) 14588, Block.DIORITE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_154 = new BlockState(NamespaceID.from("minecraft:diorite_wall:154"), (short) 14589, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_154 = new BlockState(NamespaceID.from("minecraft:diorite_wall:154"), (short) 14589, Block.DIORITE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_155 = new BlockState(NamespaceID.from("minecraft:diorite_wall:155"), (short) 14590, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_155 = new BlockState(NamespaceID.from("minecraft:diorite_wall:155"), (short) 14590, Block.DIORITE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_156 = new BlockState(NamespaceID.from("minecraft:diorite_wall:156"), (short) 14591, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_156 = new BlockState(NamespaceID.from("minecraft:diorite_wall:156"), (short) 14591, Block.DIORITE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_157 = new BlockState(NamespaceID.from("minecraft:diorite_wall:157"), (short) 14592, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_157 = new BlockState(NamespaceID.from("minecraft:diorite_wall:157"), (short) 14592, Block.DIORITE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_158 = new BlockState(NamespaceID.from("minecraft:diorite_wall:158"), (short) 14593, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_158 = new BlockState(NamespaceID.from("minecraft:diorite_wall:158"), (short) 14593, Block.DIORITE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_159 = new BlockState(NamespaceID.from("minecraft:diorite_wall:159"), (short) 14594, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_159 = new BlockState(NamespaceID.from("minecraft:diorite_wall:159"), (short) 14594, Block.DIORITE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_160 = new BlockState(NamespaceID.from("minecraft:diorite_wall:160"), (short) 14595, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_160 = new BlockState(NamespaceID.from("minecraft:diorite_wall:160"), (short) 14595, Block.DIORITE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_161 = new BlockState(NamespaceID.from("minecraft:diorite_wall:161"), (short) 14596, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_161 = new BlockState(NamespaceID.from("minecraft:diorite_wall:161"), (short) 14596, Block.DIORITE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_162 = new BlockState(NamespaceID.from("minecraft:diorite_wall:162"), (short) 14597, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_162 = new BlockState(NamespaceID.from("minecraft:diorite_wall:162"), (short) 14597, Block.DIORITE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_163 = new BlockState(NamespaceID.from("minecraft:diorite_wall:163"), (short) 14598, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_163 = new BlockState(NamespaceID.from("minecraft:diorite_wall:163"), (short) 14598, Block.DIORITE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_164 = new BlockState(NamespaceID.from("minecraft:diorite_wall:164"), (short) 14599, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_164 = new BlockState(NamespaceID.from("minecraft:diorite_wall:164"), (short) 14599, Block.DIORITE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_165 = new BlockState(NamespaceID.from("minecraft:diorite_wall:165"), (short) 14600, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_165 = new BlockState(NamespaceID.from("minecraft:diorite_wall:165"), (short) 14600, Block.DIORITE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_166 = new BlockState(NamespaceID.from("minecraft:diorite_wall:166"), (short) 14601, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_166 = new BlockState(NamespaceID.from("minecraft:diorite_wall:166"), (short) 14601, Block.DIORITE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_167 = new BlockState(NamespaceID.from("minecraft:diorite_wall:167"), (short) 14602, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_167 = new BlockState(NamespaceID.from("minecraft:diorite_wall:167"), (short) 14602, Block.DIORITE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_168 = new BlockState(NamespaceID.from("minecraft:diorite_wall:168"), (short) 14603, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_168 = new BlockState(NamespaceID.from("minecraft:diorite_wall:168"), (short) 14603, Block.DIORITE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_169 = new BlockState(NamespaceID.from("minecraft:diorite_wall:169"), (short) 14604, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_169 = new BlockState(NamespaceID.from("minecraft:diorite_wall:169"), (short) 14604, Block.DIORITE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_170 = new BlockState(NamespaceID.from("minecraft:diorite_wall:170"), (short) 14605, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_170 = new BlockState(NamespaceID.from("minecraft:diorite_wall:170"), (short) 14605, Block.DIORITE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_171 = new BlockState(NamespaceID.from("minecraft:diorite_wall:171"), (short) 14606, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_171 = new BlockState(NamespaceID.from("minecraft:diorite_wall:171"), (short) 14606, Block.DIORITE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_172 = new BlockState(NamespaceID.from("minecraft:diorite_wall:172"), (short) 14607, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_172 = new BlockState(NamespaceID.from("minecraft:diorite_wall:172"), (short) 14607, Block.DIORITE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_173 = new BlockState(NamespaceID.from("minecraft:diorite_wall:173"), (short) 14608, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_173 = new BlockState(NamespaceID.from("minecraft:diorite_wall:173"), (short) 14608, Block.DIORITE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_174 = new BlockState(NamespaceID.from("minecraft:diorite_wall:174"), (short) 14609, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_174 = new BlockState(NamespaceID.from("minecraft:diorite_wall:174"), (short) 14609, Block.DIORITE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_175 = new BlockState(NamespaceID.from("minecraft:diorite_wall:175"), (short) 14610, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_175 = new BlockState(NamespaceID.from("minecraft:diorite_wall:175"), (short) 14610, Block.DIORITE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_176 = new BlockState(NamespaceID.from("minecraft:diorite_wall:176"), (short) 14611, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_176 = new BlockState(NamespaceID.from("minecraft:diorite_wall:176"), (short) 14611, Block.DIORITE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_177 = new BlockState(NamespaceID.from("minecraft:diorite_wall:177"), (short) 14612, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_177 = new BlockState(NamespaceID.from("minecraft:diorite_wall:177"), (short) 14612, Block.DIORITE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_178 = new BlockState(NamespaceID.from("minecraft:diorite_wall:178"), (short) 14613, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_178 = new BlockState(NamespaceID.from("minecraft:diorite_wall:178"), (short) 14613, Block.DIORITE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_179 = new BlockState(NamespaceID.from("minecraft:diorite_wall:179"), (short) 14614, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_179 = new BlockState(NamespaceID.from("minecraft:diorite_wall:179"), (short) 14614, Block.DIORITE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_180 = new BlockState(NamespaceID.from("minecraft:diorite_wall:180"), (short) 14615, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_180 = new BlockState(NamespaceID.from("minecraft:diorite_wall:180"), (short) 14615, Block.DIORITE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_181 = new BlockState(NamespaceID.from("minecraft:diorite_wall:181"), (short) 14616, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_181 = new BlockState(NamespaceID.from("minecraft:diorite_wall:181"), (short) 14616, Block.DIORITE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_182 = new BlockState(NamespaceID.from("minecraft:diorite_wall:182"), (short) 14617, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_182 = new BlockState(NamespaceID.from("minecraft:diorite_wall:182"), (short) 14617, Block.DIORITE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_183 = new BlockState(NamespaceID.from("minecraft:diorite_wall:183"), (short) 14618, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_183 = new BlockState(NamespaceID.from("minecraft:diorite_wall:183"), (short) 14618, Block.DIORITE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_184 = new BlockState(NamespaceID.from("minecraft:diorite_wall:184"), (short) 14619, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_184 = new BlockState(NamespaceID.from("minecraft:diorite_wall:184"), (short) 14619, Block.DIORITE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_185 = new BlockState(NamespaceID.from("minecraft:diorite_wall:185"), (short) 14620, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_185 = new BlockState(NamespaceID.from("minecraft:diorite_wall:185"), (short) 14620, Block.DIORITE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_186 = new BlockState(NamespaceID.from("minecraft:diorite_wall:186"), (short) 14621, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_186 = new BlockState(NamespaceID.from("minecraft:diorite_wall:186"), (short) 14621, Block.DIORITE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_187 = new BlockState(NamespaceID.from("minecraft:diorite_wall:187"), (short) 14622, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_187 = new BlockState(NamespaceID.from("minecraft:diorite_wall:187"), (short) 14622, Block.DIORITE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_188 = new BlockState(NamespaceID.from("minecraft:diorite_wall:188"), (short) 14623, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_188 = new BlockState(NamespaceID.from("minecraft:diorite_wall:188"), (short) 14623, Block.DIORITE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_189 = new BlockState(NamespaceID.from("minecraft:diorite_wall:189"), (short) 14624, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_189 = new BlockState(NamespaceID.from("minecraft:diorite_wall:189"), (short) 14624, Block.DIORITE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_190 = new BlockState(NamespaceID.from("minecraft:diorite_wall:190"), (short) 14625, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_190 = new BlockState(NamespaceID.from("minecraft:diorite_wall:190"), (short) 14625, Block.DIORITE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_191 = new BlockState(NamespaceID.from("minecraft:diorite_wall:191"), (short) 14626, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_191 = new BlockState(NamespaceID.from("minecraft:diorite_wall:191"), (short) 14626, Block.DIORITE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_192 = new BlockState(NamespaceID.from("minecraft:diorite_wall:192"), (short) 14627, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_192 = new BlockState(NamespaceID.from("minecraft:diorite_wall:192"), (short) 14627, Block.DIORITE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_193 = new BlockState(NamespaceID.from("minecraft:diorite_wall:193"), (short) 14628, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_193 = new BlockState(NamespaceID.from("minecraft:diorite_wall:193"), (short) 14628, Block.DIORITE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_194 = new BlockState(NamespaceID.from("minecraft:diorite_wall:194"), (short) 14629, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_194 = new BlockState(NamespaceID.from("minecraft:diorite_wall:194"), (short) 14629, Block.DIORITE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_195 = new BlockState(NamespaceID.from("minecraft:diorite_wall:195"), (short) 14630, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_195 = new BlockState(NamespaceID.from("minecraft:diorite_wall:195"), (short) 14630, Block.DIORITE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_196 = new BlockState(NamespaceID.from("minecraft:diorite_wall:196"), (short) 14631, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_196 = new BlockState(NamespaceID.from("minecraft:diorite_wall:196"), (short) 14631, Block.DIORITE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_197 = new BlockState(NamespaceID.from("minecraft:diorite_wall:197"), (short) 14632, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_197 = new BlockState(NamespaceID.from("minecraft:diorite_wall:197"), (short) 14632, Block.DIORITE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_198 = new BlockState(NamespaceID.from("minecraft:diorite_wall:198"), (short) 14633, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_198 = new BlockState(NamespaceID.from("minecraft:diorite_wall:198"), (short) 14633, Block.DIORITE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_199 = new BlockState(NamespaceID.from("minecraft:diorite_wall:199"), (short) 14634, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_199 = new BlockState(NamespaceID.from("minecraft:diorite_wall:199"), (short) 14634, Block.DIORITE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_200 = new BlockState(NamespaceID.from("minecraft:diorite_wall:200"), (short) 14635, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_200 = new BlockState(NamespaceID.from("minecraft:diorite_wall:200"), (short) 14635, Block.DIORITE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_201 = new BlockState(NamespaceID.from("minecraft:diorite_wall:201"), (short) 14636, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_201 = new BlockState(NamespaceID.from("minecraft:diorite_wall:201"), (short) 14636, Block.DIORITE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_202 = new BlockState(NamespaceID.from("minecraft:diorite_wall:202"), (short) 14637, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_202 = new BlockState(NamespaceID.from("minecraft:diorite_wall:202"), (short) 14637, Block.DIORITE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_203 = new BlockState(NamespaceID.from("minecraft:diorite_wall:203"), (short) 14638, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_203 = new BlockState(NamespaceID.from("minecraft:diorite_wall:203"), (short) 14638, Block.DIORITE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_204 = new BlockState(NamespaceID.from("minecraft:diorite_wall:204"), (short) 14639, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_204 = new BlockState(NamespaceID.from("minecraft:diorite_wall:204"), (short) 14639, Block.DIORITE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_205 = new BlockState(NamespaceID.from("minecraft:diorite_wall:205"), (short) 14640, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_205 = new BlockState(NamespaceID.from("minecraft:diorite_wall:205"), (short) 14640, Block.DIORITE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_206 = new BlockState(NamespaceID.from("minecraft:diorite_wall:206"), (short) 14641, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_206 = new BlockState(NamespaceID.from("minecraft:diorite_wall:206"), (short) 14641, Block.DIORITE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_207 = new BlockState(NamespaceID.from("minecraft:diorite_wall:207"), (short) 14642, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_207 = new BlockState(NamespaceID.from("minecraft:diorite_wall:207"), (short) 14642, Block.DIORITE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_208 = new BlockState(NamespaceID.from("minecraft:diorite_wall:208"), (short) 14643, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_208 = new BlockState(NamespaceID.from("minecraft:diorite_wall:208"), (short) 14643, Block.DIORITE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_209 = new BlockState(NamespaceID.from("minecraft:diorite_wall:209"), (short) 14644, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_209 = new BlockState(NamespaceID.from("minecraft:diorite_wall:209"), (short) 14644, Block.DIORITE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_210 = new BlockState(NamespaceID.from("minecraft:diorite_wall:210"), (short) 14645, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_210 = new BlockState(NamespaceID.from("minecraft:diorite_wall:210"), (short) 14645, Block.DIORITE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_211 = new BlockState(NamespaceID.from("minecraft:diorite_wall:211"), (short) 14646, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_211 = new BlockState(NamespaceID.from("minecraft:diorite_wall:211"), (short) 14646, Block.DIORITE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_212 = new BlockState(NamespaceID.from("minecraft:diorite_wall:212"), (short) 14647, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_212 = new BlockState(NamespaceID.from("minecraft:diorite_wall:212"), (short) 14647, Block.DIORITE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_213 = new BlockState(NamespaceID.from("minecraft:diorite_wall:213"), (short) 14648, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_213 = new BlockState(NamespaceID.from("minecraft:diorite_wall:213"), (short) 14648, Block.DIORITE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_214 = new BlockState(NamespaceID.from("minecraft:diorite_wall:214"), (short) 14649, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_214 = new BlockState(NamespaceID.from("minecraft:diorite_wall:214"), (short) 14649, Block.DIORITE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_215 = new BlockState(NamespaceID.from("minecraft:diorite_wall:215"), (short) 14650, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_215 = new BlockState(NamespaceID.from("minecraft:diorite_wall:215"), (short) 14650, Block.DIORITE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_216 = new BlockState(NamespaceID.from("minecraft:diorite_wall:216"), (short) 14651, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_216 = new BlockState(NamespaceID.from("minecraft:diorite_wall:216"), (short) 14651, Block.DIORITE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_217 = new BlockState(NamespaceID.from("minecraft:diorite_wall:217"), (short) 14652, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_217 = new BlockState(NamespaceID.from("minecraft:diorite_wall:217"), (short) 14652, Block.DIORITE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_218 = new BlockState(NamespaceID.from("minecraft:diorite_wall:218"), (short) 14653, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_218 = new BlockState(NamespaceID.from("minecraft:diorite_wall:218"), (short) 14653, Block.DIORITE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_219 = new BlockState(NamespaceID.from("minecraft:diorite_wall:219"), (short) 14654, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_219 = new BlockState(NamespaceID.from("minecraft:diorite_wall:219"), (short) 14654, Block.DIORITE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_220 = new BlockState(NamespaceID.from("minecraft:diorite_wall:220"), (short) 14655, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_220 = new BlockState(NamespaceID.from("minecraft:diorite_wall:220"), (short) 14655, Block.DIORITE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_221 = new BlockState(NamespaceID.from("minecraft:diorite_wall:221"), (short) 14656, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_221 = new BlockState(NamespaceID.from("minecraft:diorite_wall:221"), (short) 14656, Block.DIORITE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_222 = new BlockState(NamespaceID.from("minecraft:diorite_wall:222"), (short) 14657, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_222 = new BlockState(NamespaceID.from("minecraft:diorite_wall:222"), (short) 14657, Block.DIORITE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_223 = new BlockState(NamespaceID.from("minecraft:diorite_wall:223"), (short) 14658, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_223 = new BlockState(NamespaceID.from("minecraft:diorite_wall:223"), (short) 14658, Block.DIORITE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_224 = new BlockState(NamespaceID.from("minecraft:diorite_wall:224"), (short) 14659, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_224 = new BlockState(NamespaceID.from("minecraft:diorite_wall:224"), (short) 14659, Block.DIORITE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_225 = new BlockState(NamespaceID.from("minecraft:diorite_wall:225"), (short) 14660, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_225 = new BlockState(NamespaceID.from("minecraft:diorite_wall:225"), (short) 14660, Block.DIORITE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_226 = new BlockState(NamespaceID.from("minecraft:diorite_wall:226"), (short) 14661, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_226 = new BlockState(NamespaceID.from("minecraft:diorite_wall:226"), (short) 14661, Block.DIORITE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_227 = new BlockState(NamespaceID.from("minecraft:diorite_wall:227"), (short) 14662, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_227 = new BlockState(NamespaceID.from("minecraft:diorite_wall:227"), (short) 14662, Block.DIORITE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_228 = new BlockState(NamespaceID.from("minecraft:diorite_wall:228"), (short) 14663, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_228 = new BlockState(NamespaceID.from("minecraft:diorite_wall:228"), (short) 14663, Block.DIORITE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_229 = new BlockState(NamespaceID.from("minecraft:diorite_wall:229"), (short) 14664, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_229 = new BlockState(NamespaceID.from("minecraft:diorite_wall:229"), (short) 14664, Block.DIORITE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_230 = new BlockState(NamespaceID.from("minecraft:diorite_wall:230"), (short) 14665, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_230 = new BlockState(NamespaceID.from("minecraft:diorite_wall:230"), (short) 14665, Block.DIORITE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_231 = new BlockState(NamespaceID.from("minecraft:diorite_wall:231"), (short) 14666, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_231 = new BlockState(NamespaceID.from("minecraft:diorite_wall:231"), (short) 14666, Block.DIORITE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_232 = new BlockState(NamespaceID.from("minecraft:diorite_wall:232"), (short) 14667, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_232 = new BlockState(NamespaceID.from("minecraft:diorite_wall:232"), (short) 14667, Block.DIORITE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_233 = new BlockState(NamespaceID.from("minecraft:diorite_wall:233"), (short) 14668, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_233 = new BlockState(NamespaceID.from("minecraft:diorite_wall:233"), (short) 14668, Block.DIORITE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_234 = new BlockState(NamespaceID.from("minecraft:diorite_wall:234"), (short) 14669, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_234 = new BlockState(NamespaceID.from("minecraft:diorite_wall:234"), (short) 14669, Block.DIORITE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_235 = new BlockState(NamespaceID.from("minecraft:diorite_wall:235"), (short) 14670, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_235 = new BlockState(NamespaceID.from("minecraft:diorite_wall:235"), (short) 14670, Block.DIORITE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_236 = new BlockState(NamespaceID.from("minecraft:diorite_wall:236"), (short) 14671, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_236 = new BlockState(NamespaceID.from("minecraft:diorite_wall:236"), (short) 14671, Block.DIORITE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_237 = new BlockState(NamespaceID.from("minecraft:diorite_wall:237"), (short) 14672, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_237 = new BlockState(NamespaceID.from("minecraft:diorite_wall:237"), (short) 14672, Block.DIORITE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_238 = new BlockState(NamespaceID.from("minecraft:diorite_wall:238"), (short) 14673, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_238 = new BlockState(NamespaceID.from("minecraft:diorite_wall:238"), (short) 14673, Block.DIORITE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_239 = new BlockState(NamespaceID.from("minecraft:diorite_wall:239"), (short) 14674, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_239 = new BlockState(NamespaceID.from("minecraft:diorite_wall:239"), (short) 14674, Block.DIORITE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_240 = new BlockState(NamespaceID.from("minecraft:diorite_wall:240"), (short) 14675, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_240 = new BlockState(NamespaceID.from("minecraft:diorite_wall:240"), (short) 14675, Block.DIORITE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_241 = new BlockState(NamespaceID.from("minecraft:diorite_wall:241"), (short) 14676, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_241 = new BlockState(NamespaceID.from("minecraft:diorite_wall:241"), (short) 14676, Block.DIORITE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_242 = new BlockState(NamespaceID.from("minecraft:diorite_wall:242"), (short) 14677, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_242 = new BlockState(NamespaceID.from("minecraft:diorite_wall:242"), (short) 14677, Block.DIORITE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_243 = new BlockState(NamespaceID.from("minecraft:diorite_wall:243"), (short) 14678, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_243 = new BlockState(NamespaceID.from("minecraft:diorite_wall:243"), (short) 14678, Block.DIORITE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_244 = new BlockState(NamespaceID.from("minecraft:diorite_wall:244"), (short) 14679, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_244 = new BlockState(NamespaceID.from("minecraft:diorite_wall:244"), (short) 14679, Block.DIORITE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_245 = new BlockState(NamespaceID.from("minecraft:diorite_wall:245"), (short) 14680, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_245 = new BlockState(NamespaceID.from("minecraft:diorite_wall:245"), (short) 14680, Block.DIORITE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_246 = new BlockState(NamespaceID.from("minecraft:diorite_wall:246"), (short) 14681, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_246 = new BlockState(NamespaceID.from("minecraft:diorite_wall:246"), (short) 14681, Block.DIORITE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_247 = new BlockState(NamespaceID.from("minecraft:diorite_wall:247"), (short) 14682, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_247 = new BlockState(NamespaceID.from("minecraft:diorite_wall:247"), (short) 14682, Block.DIORITE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_248 = new BlockState(NamespaceID.from("minecraft:diorite_wall:248"), (short) 14683, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_248 = new BlockState(NamespaceID.from("minecraft:diorite_wall:248"), (short) 14683, Block.DIORITE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_249 = new BlockState(NamespaceID.from("minecraft:diorite_wall:249"), (short) 14684, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_249 = new BlockState(NamespaceID.from("minecraft:diorite_wall:249"), (short) 14684, Block.DIORITE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_250 = new BlockState(NamespaceID.from("minecraft:diorite_wall:250"), (short) 14685, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_250 = new BlockState(NamespaceID.from("minecraft:diorite_wall:250"), (short) 14685, Block.DIORITE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_251 = new BlockState(NamespaceID.from("minecraft:diorite_wall:251"), (short) 14686, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_251 = new BlockState(NamespaceID.from("minecraft:diorite_wall:251"), (short) 14686, Block.DIORITE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_252 = new BlockState(NamespaceID.from("minecraft:diorite_wall:252"), (short) 14687, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_252 = new BlockState(NamespaceID.from("minecraft:diorite_wall:252"), (short) 14687, Block.DIORITE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_253 = new BlockState(NamespaceID.from("minecraft:diorite_wall:253"), (short) 14688, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_253 = new BlockState(NamespaceID.from("minecraft:diorite_wall:253"), (short) 14688, Block.DIORITE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_254 = new BlockState(NamespaceID.from("minecraft:diorite_wall:254"), (short) 14689, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_254 = new BlockState(NamespaceID.from("minecraft:diorite_wall:254"), (short) 14689, Block.DIORITE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_255 = new BlockState(NamespaceID.from("minecraft:diorite_wall:255"), (short) 14690, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_255 = new BlockState(NamespaceID.from("minecraft:diorite_wall:255"), (short) 14690, Block.DIORITE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_256 = new BlockState(NamespaceID.from("minecraft:diorite_wall:256"), (short) 14691, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_256 = new BlockState(NamespaceID.from("minecraft:diorite_wall:256"), (short) 14691, Block.DIORITE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_257 = new BlockState(NamespaceID.from("minecraft:diorite_wall:257"), (short) 14692, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_257 = new BlockState(NamespaceID.from("minecraft:diorite_wall:257"), (short) 14692, Block.DIORITE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_258 = new BlockState(NamespaceID.from("minecraft:diorite_wall:258"), (short) 14693, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_258 = new BlockState(NamespaceID.from("minecraft:diorite_wall:258"), (short) 14693, Block.DIORITE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_259 = new BlockState(NamespaceID.from("minecraft:diorite_wall:259"), (short) 14694, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_259 = new BlockState(NamespaceID.from("minecraft:diorite_wall:259"), (short) 14694, Block.DIORITE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_260 = new BlockState(NamespaceID.from("minecraft:diorite_wall:260"), (short) 14695, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_260 = new BlockState(NamespaceID.from("minecraft:diorite_wall:260"), (short) 14695, Block.DIORITE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_261 = new BlockState(NamespaceID.from("minecraft:diorite_wall:261"), (short) 14696, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_261 = new BlockState(NamespaceID.from("minecraft:diorite_wall:261"), (short) 14696, Block.DIORITE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_262 = new BlockState(NamespaceID.from("minecraft:diorite_wall:262"), (short) 14697, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_262 = new BlockState(NamespaceID.from("minecraft:diorite_wall:262"), (short) 14697, Block.DIORITE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_263 = new BlockState(NamespaceID.from("minecraft:diorite_wall:263"), (short) 14698, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_263 = new BlockState(NamespaceID.from("minecraft:diorite_wall:263"), (short) 14698, Block.DIORITE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_264 = new BlockState(NamespaceID.from("minecraft:diorite_wall:264"), (short) 14699, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_264 = new BlockState(NamespaceID.from("minecraft:diorite_wall:264"), (short) 14699, Block.DIORITE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_265 = new BlockState(NamespaceID.from("minecraft:diorite_wall:265"), (short) 14700, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_265 = new BlockState(NamespaceID.from("minecraft:diorite_wall:265"), (short) 14700, Block.DIORITE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_266 = new BlockState(NamespaceID.from("minecraft:diorite_wall:266"), (short) 14701, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_266 = new BlockState(NamespaceID.from("minecraft:diorite_wall:266"), (short) 14701, Block.DIORITE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_267 = new BlockState(NamespaceID.from("minecraft:diorite_wall:267"), (short) 14702, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_267 = new BlockState(NamespaceID.from("minecraft:diorite_wall:267"), (short) 14702, Block.DIORITE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_268 = new BlockState(NamespaceID.from("minecraft:diorite_wall:268"), (short) 14703, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_268 = new BlockState(NamespaceID.from("minecraft:diorite_wall:268"), (short) 14703, Block.DIORITE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_269 = new BlockState(NamespaceID.from("minecraft:diorite_wall:269"), (short) 14704, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_269 = new BlockState(NamespaceID.from("minecraft:diorite_wall:269"), (short) 14704, Block.DIORITE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_270 = new BlockState(NamespaceID.from("minecraft:diorite_wall:270"), (short) 14705, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_270 = new BlockState(NamespaceID.from("minecraft:diorite_wall:270"), (short) 14705, Block.DIORITE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_271 = new BlockState(NamespaceID.from("minecraft:diorite_wall:271"), (short) 14706, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_271 = new BlockState(NamespaceID.from("minecraft:diorite_wall:271"), (short) 14706, Block.DIORITE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_272 = new BlockState(NamespaceID.from("minecraft:diorite_wall:272"), (short) 14707, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_272 = new BlockState(NamespaceID.from("minecraft:diorite_wall:272"), (short) 14707, Block.DIORITE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_273 = new BlockState(NamespaceID.from("minecraft:diorite_wall:273"), (short) 14708, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_273 = new BlockState(NamespaceID.from("minecraft:diorite_wall:273"), (short) 14708, Block.DIORITE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_274 = new BlockState(NamespaceID.from("minecraft:diorite_wall:274"), (short) 14709, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_274 = new BlockState(NamespaceID.from("minecraft:diorite_wall:274"), (short) 14709, Block.DIORITE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_275 = new BlockState(NamespaceID.from("minecraft:diorite_wall:275"), (short) 14710, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_275 = new BlockState(NamespaceID.from("minecraft:diorite_wall:275"), (short) 14710, Block.DIORITE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_276 = new BlockState(NamespaceID.from("minecraft:diorite_wall:276"), (short) 14711, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_276 = new BlockState(NamespaceID.from("minecraft:diorite_wall:276"), (short) 14711, Block.DIORITE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_277 = new BlockState(NamespaceID.from("minecraft:diorite_wall:277"), (short) 14712, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_277 = new BlockState(NamespaceID.from("minecraft:diorite_wall:277"), (short) 14712, Block.DIORITE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_278 = new BlockState(NamespaceID.from("minecraft:diorite_wall:278"), (short) 14713, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_278 = new BlockState(NamespaceID.from("minecraft:diorite_wall:278"), (short) 14713, Block.DIORITE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_279 = new BlockState(NamespaceID.from("minecraft:diorite_wall:279"), (short) 14714, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_279 = new BlockState(NamespaceID.from("minecraft:diorite_wall:279"), (short) 14714, Block.DIORITE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_280 = new BlockState(NamespaceID.from("minecraft:diorite_wall:280"), (short) 14715, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_280 = new BlockState(NamespaceID.from("minecraft:diorite_wall:280"), (short) 14715, Block.DIORITE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_281 = new BlockState(NamespaceID.from("minecraft:diorite_wall:281"), (short) 14716, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_281 = new BlockState(NamespaceID.from("minecraft:diorite_wall:281"), (short) 14716, Block.DIORITE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_282 = new BlockState(NamespaceID.from("minecraft:diorite_wall:282"), (short) 14717, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_282 = new BlockState(NamespaceID.from("minecraft:diorite_wall:282"), (short) 14717, Block.DIORITE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_283 = new BlockState(NamespaceID.from("minecraft:diorite_wall:283"), (short) 14718, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_283 = new BlockState(NamespaceID.from("minecraft:diorite_wall:283"), (short) 14718, Block.DIORITE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_284 = new BlockState(NamespaceID.from("minecraft:diorite_wall:284"), (short) 14719, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_284 = new BlockState(NamespaceID.from("minecraft:diorite_wall:284"), (short) 14719, Block.DIORITE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_285 = new BlockState(NamespaceID.from("minecraft:diorite_wall:285"), (short) 14720, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_285 = new BlockState(NamespaceID.from("minecraft:diorite_wall:285"), (short) 14720, Block.DIORITE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_286 = new BlockState(NamespaceID.from("minecraft:diorite_wall:286"), (short) 14721, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_286 = new BlockState(NamespaceID.from("minecraft:diorite_wall:286"), (short) 14721, Block.DIORITE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_287 = new BlockState(NamespaceID.from("minecraft:diorite_wall:287"), (short) 14722, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_287 = new BlockState(NamespaceID.from("minecraft:diorite_wall:287"), (short) 14722, Block.DIORITE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_288 = new BlockState(NamespaceID.from("minecraft:diorite_wall:288"), (short) 14723, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_288 = new BlockState(NamespaceID.from("minecraft:diorite_wall:288"), (short) 14723, Block.DIORITE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_289 = new BlockState(NamespaceID.from("minecraft:diorite_wall:289"), (short) 14724, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_289 = new BlockState(NamespaceID.from("minecraft:diorite_wall:289"), (short) 14724, Block.DIORITE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_290 = new BlockState(NamespaceID.from("minecraft:diorite_wall:290"), (short) 14725, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_290 = new BlockState(NamespaceID.from("minecraft:diorite_wall:290"), (short) 14725, Block.DIORITE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_291 = new BlockState(NamespaceID.from("minecraft:diorite_wall:291"), (short) 14726, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_291 = new BlockState(NamespaceID.from("minecraft:diorite_wall:291"), (short) 14726, Block.DIORITE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_292 = new BlockState(NamespaceID.from("minecraft:diorite_wall:292"), (short) 14727, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_292 = new BlockState(NamespaceID.from("minecraft:diorite_wall:292"), (short) 14727, Block.DIORITE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_293 = new BlockState(NamespaceID.from("minecraft:diorite_wall:293"), (short) 14728, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_293 = new BlockState(NamespaceID.from("minecraft:diorite_wall:293"), (short) 14728, Block.DIORITE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_294 = new BlockState(NamespaceID.from("minecraft:diorite_wall:294"), (short) 14729, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_294 = new BlockState(NamespaceID.from("minecraft:diorite_wall:294"), (short) 14729, Block.DIORITE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_295 = new BlockState(NamespaceID.from("minecraft:diorite_wall:295"), (short) 14730, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_295 = new BlockState(NamespaceID.from("minecraft:diorite_wall:295"), (short) 14730, Block.DIORITE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_296 = new BlockState(NamespaceID.from("minecraft:diorite_wall:296"), (short) 14731, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_296 = new BlockState(NamespaceID.from("minecraft:diorite_wall:296"), (short) 14731, Block.DIORITE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_297 = new BlockState(NamespaceID.from("minecraft:diorite_wall:297"), (short) 14732, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_297 = new BlockState(NamespaceID.from("minecraft:diorite_wall:297"), (short) 14732, Block.DIORITE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_298 = new BlockState(NamespaceID.from("minecraft:diorite_wall:298"), (short) 14733, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_298 = new BlockState(NamespaceID.from("minecraft:diorite_wall:298"), (short) 14733, Block.DIORITE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_299 = new BlockState(NamespaceID.from("minecraft:diorite_wall:299"), (short) 14734, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_299 = new BlockState(NamespaceID.from("minecraft:diorite_wall:299"), (short) 14734, Block.DIORITE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_300 = new BlockState(NamespaceID.from("minecraft:diorite_wall:300"), (short) 14735, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_300 = new BlockState(NamespaceID.from("minecraft:diorite_wall:300"), (short) 14735, Block.DIORITE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_301 = new BlockState(NamespaceID.from("minecraft:diorite_wall:301"), (short) 14736, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_301 = new BlockState(NamespaceID.from("minecraft:diorite_wall:301"), (short) 14736, Block.DIORITE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_302 = new BlockState(NamespaceID.from("minecraft:diorite_wall:302"), (short) 14737, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_302 = new BlockState(NamespaceID.from("minecraft:diorite_wall:302"), (short) 14737, Block.DIORITE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_303 = new BlockState(NamespaceID.from("minecraft:diorite_wall:303"), (short) 14738, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_303 = new BlockState(NamespaceID.from("minecraft:diorite_wall:303"), (short) 14738, Block.DIORITE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_304 = new BlockState(NamespaceID.from("minecraft:diorite_wall:304"), (short) 14739, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_304 = new BlockState(NamespaceID.from("minecraft:diorite_wall:304"), (short) 14739, Block.DIORITE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_305 = new BlockState(NamespaceID.from("minecraft:diorite_wall:305"), (short) 14740, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_305 = new BlockState(NamespaceID.from("minecraft:diorite_wall:305"), (short) 14740, Block.DIORITE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_306 = new BlockState(NamespaceID.from("minecraft:diorite_wall:306"), (short) 14741, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_306 = new BlockState(NamespaceID.from("minecraft:diorite_wall:306"), (short) 14741, Block.DIORITE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_307 = new BlockState(NamespaceID.from("minecraft:diorite_wall:307"), (short) 14742, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_307 = new BlockState(NamespaceID.from("minecraft:diorite_wall:307"), (short) 14742, Block.DIORITE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_308 = new BlockState(NamespaceID.from("minecraft:diorite_wall:308"), (short) 14743, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_308 = new BlockState(NamespaceID.from("minecraft:diorite_wall:308"), (short) 14743, Block.DIORITE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_309 = new BlockState(NamespaceID.from("minecraft:diorite_wall:309"), (short) 14744, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_309 = new BlockState(NamespaceID.from("minecraft:diorite_wall:309"), (short) 14744, Block.DIORITE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_310 = new BlockState(NamespaceID.from("minecraft:diorite_wall:310"), (short) 14745, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_310 = new BlockState(NamespaceID.from("minecraft:diorite_wall:310"), (short) 14745, Block.DIORITE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_311 = new BlockState(NamespaceID.from("minecraft:diorite_wall:311"), (short) 14746, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_311 = new BlockState(NamespaceID.from("minecraft:diorite_wall:311"), (short) 14746, Block.DIORITE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_312 = new BlockState(NamespaceID.from("minecraft:diorite_wall:312"), (short) 14747, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_312 = new BlockState(NamespaceID.from("minecraft:diorite_wall:312"), (short) 14747, Block.DIORITE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_313 = new BlockState(NamespaceID.from("minecraft:diorite_wall:313"), (short) 14748, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_313 = new BlockState(NamespaceID.from("minecraft:diorite_wall:313"), (short) 14748, Block.DIORITE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_314 = new BlockState(NamespaceID.from("minecraft:diorite_wall:314"), (short) 14749, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_314 = new BlockState(NamespaceID.from("minecraft:diorite_wall:314"), (short) 14749, Block.DIORITE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_315 = new BlockState(NamespaceID.from("minecraft:diorite_wall:315"), (short) 14750, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_315 = new BlockState(NamespaceID.from("minecraft:diorite_wall:315"), (short) 14750, Block.DIORITE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_316 = new BlockState(NamespaceID.from("minecraft:diorite_wall:316"), (short) 14751, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_316 = new BlockState(NamespaceID.from("minecraft:diorite_wall:316"), (short) 14751, Block.DIORITE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_317 = new BlockState(NamespaceID.from("minecraft:diorite_wall:317"), (short) 14752, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_317 = new BlockState(NamespaceID.from("minecraft:diorite_wall:317"), (short) 14752, Block.DIORITE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState DIORITE_WALL_318 = new BlockState(NamespaceID.from("minecraft:diorite_wall:318"), (short) 14753, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_318 = new BlockState(NamespaceID.from("minecraft:diorite_wall:318"), (short) 14753, Block.DIORITE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState DIORITE_WALL_319 = new BlockState(NamespaceID.from("minecraft:diorite_wall:319"), (short) 14754, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_319 = new BlockState(NamespaceID.from("minecraft:diorite_wall:319"), (short) 14754, Block.DIORITE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState DIORITE_WALL_320 = new BlockState(NamespaceID.from("minecraft:diorite_wall:320"), (short) 14755, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_320 = new BlockState(NamespaceID.from("minecraft:diorite_wall:320"), (short) 14755, Block.DIORITE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState DIORITE_WALL_321 = new BlockState(NamespaceID.from("minecraft:diorite_wall:321"), (short) 14756, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_321 = new BlockState(NamespaceID.from("minecraft:diorite_wall:321"), (short) 14756, Block.DIORITE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState DIORITE_WALL_322 = new BlockState(NamespaceID.from("minecraft:diorite_wall:322"), (short) 14757, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_322 = new BlockState(NamespaceID.from("minecraft:diorite_wall:322"), (short) 14757, Block.DIORITE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState DIORITE_WALL_323 = new BlockState(NamespaceID.from("minecraft:diorite_wall:323"), (short) 14758, Block.DIORITE_WALL);
+  public static final BlockState DIORITE_WALL_323 = new BlockState(NamespaceID.from("minecraft:diorite_wall:323"), (short) 14758, Block.DIORITE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
   public static void initStates() {
     Block.DIORITE_WALL.addBlockState(DIORITE_WALL_0);

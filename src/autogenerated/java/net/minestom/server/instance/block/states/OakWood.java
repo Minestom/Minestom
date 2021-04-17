@@ -13,11 +13,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class OakWood {
-  public static final BlockState OAK_WOOD_0 = new BlockState(NamespaceID.from("minecraft:oak_wood:0"), (short) 109, Block.OAK_WOOD);
+  public static final BlockState OAK_WOOD_0 = new BlockState(NamespaceID.from("minecraft:oak_wood:0"), (short) 109, Block.OAK_WOOD, "axis=x");
 
-  public static final BlockState OAK_WOOD_1 = new BlockState(NamespaceID.from("minecraft:oak_wood:1"), (short) 110, Block.OAK_WOOD);
+  public static final BlockState OAK_WOOD_1 = new BlockState(NamespaceID.from("minecraft:oak_wood:1"), (short) 110, Block.OAK_WOOD, "axis=y");
 
-  public static final BlockState OAK_WOOD_2 = new BlockState(NamespaceID.from("minecraft:oak_wood:2"), (short) 111, Block.OAK_WOOD);
+  public static final BlockState OAK_WOOD_2 = new BlockState(NamespaceID.from("minecraft:oak_wood:2"), (short) 111, Block.OAK_WOOD, "axis=z");
 
   public static void initStates() {
     Block.OAK_WOOD.addBlockState(OAK_WOOD_0);

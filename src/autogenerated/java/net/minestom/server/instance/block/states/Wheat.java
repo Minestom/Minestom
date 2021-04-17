@@ -13,21 +13,21 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Wheat {
-  public static final BlockState WHEAT_0 = new BlockState(NamespaceID.from("minecraft:wheat:0"), (short) 3357, Block.WHEAT);
+  public static final BlockState WHEAT_0 = new BlockState(NamespaceID.from("minecraft:wheat:0"), (short) 3357, Block.WHEAT, "age=0");
 
-  public static final BlockState WHEAT_1 = new BlockState(NamespaceID.from("minecraft:wheat:1"), (short) 3358, Block.WHEAT);
+  public static final BlockState WHEAT_1 = new BlockState(NamespaceID.from("minecraft:wheat:1"), (short) 3358, Block.WHEAT, "age=1");
 
-  public static final BlockState WHEAT_2 = new BlockState(NamespaceID.from("minecraft:wheat:2"), (short) 3359, Block.WHEAT);
+  public static final BlockState WHEAT_2 = new BlockState(NamespaceID.from("minecraft:wheat:2"), (short) 3359, Block.WHEAT, "age=2");
 
-  public static final BlockState WHEAT_3 = new BlockState(NamespaceID.from("minecraft:wheat:3"), (short) 3360, Block.WHEAT);
+  public static final BlockState WHEAT_3 = new BlockState(NamespaceID.from("minecraft:wheat:3"), (short) 3360, Block.WHEAT, "age=3");
 
-  public static final BlockState WHEAT_4 = new BlockState(NamespaceID.from("minecraft:wheat:4"), (short) 3361, Block.WHEAT);
+  public static final BlockState WHEAT_4 = new BlockState(NamespaceID.from("minecraft:wheat:4"), (short) 3361, Block.WHEAT, "age=4");
 
-  public static final BlockState WHEAT_5 = new BlockState(NamespaceID.from("minecraft:wheat:5"), (short) 3362, Block.WHEAT);
+  public static final BlockState WHEAT_5 = new BlockState(NamespaceID.from("minecraft:wheat:5"), (short) 3362, Block.WHEAT, "age=5");
 
-  public static final BlockState WHEAT_6 = new BlockState(NamespaceID.from("minecraft:wheat:6"), (short) 3363, Block.WHEAT);
+  public static final BlockState WHEAT_6 = new BlockState(NamespaceID.from("minecraft:wheat:6"), (short) 3363, Block.WHEAT, "age=6");
 
-  public static final BlockState WHEAT_7 = new BlockState(NamespaceID.from("minecraft:wheat:7"), (short) 3364, Block.WHEAT);
+  public static final BlockState WHEAT_7 = new BlockState(NamespaceID.from("minecraft:wheat:7"), (short) 3364, Block.WHEAT, "age=7");
 
   public static void initStates() {
     Block.WHEAT.addBlockState(WHEAT_0);

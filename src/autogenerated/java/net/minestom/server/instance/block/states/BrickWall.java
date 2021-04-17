@@ -13,653 +13,653 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BrickWall {
-  public static final BlockState BRICK_WALL_0 = new BlockState(NamespaceID.from("minecraft:brick_wall:0"), (short) 10871, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_0 = new BlockState(NamespaceID.from("minecraft:brick_wall:0"), (short) 10871, Block.BRICK_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_1 = new BlockState(NamespaceID.from("minecraft:brick_wall:1"), (short) 10872, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_1 = new BlockState(NamespaceID.from("minecraft:brick_wall:1"), (short) 10872, Block.BRICK_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_2 = new BlockState(NamespaceID.from("minecraft:brick_wall:2"), (short) 10873, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_2 = new BlockState(NamespaceID.from("minecraft:brick_wall:2"), (short) 10873, Block.BRICK_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_3 = new BlockState(NamespaceID.from("minecraft:brick_wall:3"), (short) 10874, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_3 = new BlockState(NamespaceID.from("minecraft:brick_wall:3"), (short) 10874, Block.BRICK_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_4 = new BlockState(NamespaceID.from("minecraft:brick_wall:4"), (short) 10875, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_4 = new BlockState(NamespaceID.from("minecraft:brick_wall:4"), (short) 10875, Block.BRICK_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_5 = new BlockState(NamespaceID.from("minecraft:brick_wall:5"), (short) 10876, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_5 = new BlockState(NamespaceID.from("minecraft:brick_wall:5"), (short) 10876, Block.BRICK_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_6 = new BlockState(NamespaceID.from("minecraft:brick_wall:6"), (short) 10877, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_6 = new BlockState(NamespaceID.from("minecraft:brick_wall:6"), (short) 10877, Block.BRICK_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_7 = new BlockState(NamespaceID.from("minecraft:brick_wall:7"), (short) 10878, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_7 = new BlockState(NamespaceID.from("minecraft:brick_wall:7"), (short) 10878, Block.BRICK_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_8 = new BlockState(NamespaceID.from("minecraft:brick_wall:8"), (short) 10879, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_8 = new BlockState(NamespaceID.from("minecraft:brick_wall:8"), (short) 10879, Block.BRICK_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_9 = new BlockState(NamespaceID.from("minecraft:brick_wall:9"), (short) 10880, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_9 = new BlockState(NamespaceID.from("minecraft:brick_wall:9"), (short) 10880, Block.BRICK_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_10 = new BlockState(NamespaceID.from("minecraft:brick_wall:10"), (short) 10881, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_10 = new BlockState(NamespaceID.from("minecraft:brick_wall:10"), (short) 10881, Block.BRICK_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_11 = new BlockState(NamespaceID.from("minecraft:brick_wall:11"), (short) 10882, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_11 = new BlockState(NamespaceID.from("minecraft:brick_wall:11"), (short) 10882, Block.BRICK_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_12 = new BlockState(NamespaceID.from("minecraft:brick_wall:12"), (short) 10883, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_12 = new BlockState(NamespaceID.from("minecraft:brick_wall:12"), (short) 10883, Block.BRICK_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_13 = new BlockState(NamespaceID.from("minecraft:brick_wall:13"), (short) 10884, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_13 = new BlockState(NamespaceID.from("minecraft:brick_wall:13"), (short) 10884, Block.BRICK_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_14 = new BlockState(NamespaceID.from("minecraft:brick_wall:14"), (short) 10885, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_14 = new BlockState(NamespaceID.from("minecraft:brick_wall:14"), (short) 10885, Block.BRICK_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_15 = new BlockState(NamespaceID.from("minecraft:brick_wall:15"), (short) 10886, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_15 = new BlockState(NamespaceID.from("minecraft:brick_wall:15"), (short) 10886, Block.BRICK_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_16 = new BlockState(NamespaceID.from("minecraft:brick_wall:16"), (short) 10887, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_16 = new BlockState(NamespaceID.from("minecraft:brick_wall:16"), (short) 10887, Block.BRICK_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_17 = new BlockState(NamespaceID.from("minecraft:brick_wall:17"), (short) 10888, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_17 = new BlockState(NamespaceID.from("minecraft:brick_wall:17"), (short) 10888, Block.BRICK_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_18 = new BlockState(NamespaceID.from("minecraft:brick_wall:18"), (short) 10889, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_18 = new BlockState(NamespaceID.from("minecraft:brick_wall:18"), (short) 10889, Block.BRICK_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_19 = new BlockState(NamespaceID.from("minecraft:brick_wall:19"), (short) 10890, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_19 = new BlockState(NamespaceID.from("minecraft:brick_wall:19"), (short) 10890, Block.BRICK_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_20 = new BlockState(NamespaceID.from("minecraft:brick_wall:20"), (short) 10891, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_20 = new BlockState(NamespaceID.from("minecraft:brick_wall:20"), (short) 10891, Block.BRICK_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_21 = new BlockState(NamespaceID.from("minecraft:brick_wall:21"), (short) 10892, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_21 = new BlockState(NamespaceID.from("minecraft:brick_wall:21"), (short) 10892, Block.BRICK_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_22 = new BlockState(NamespaceID.from("minecraft:brick_wall:22"), (short) 10893, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_22 = new BlockState(NamespaceID.from("minecraft:brick_wall:22"), (short) 10893, Block.BRICK_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_23 = new BlockState(NamespaceID.from("minecraft:brick_wall:23"), (short) 10894, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_23 = new BlockState(NamespaceID.from("minecraft:brick_wall:23"), (short) 10894, Block.BRICK_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_24 = new BlockState(NamespaceID.from("minecraft:brick_wall:24"), (short) 10895, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_24 = new BlockState(NamespaceID.from("minecraft:brick_wall:24"), (short) 10895, Block.BRICK_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_25 = new BlockState(NamespaceID.from("minecraft:brick_wall:25"), (short) 10896, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_25 = new BlockState(NamespaceID.from("minecraft:brick_wall:25"), (short) 10896, Block.BRICK_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_26 = new BlockState(NamespaceID.from("minecraft:brick_wall:26"), (short) 10897, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_26 = new BlockState(NamespaceID.from("minecraft:brick_wall:26"), (short) 10897, Block.BRICK_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_27 = new BlockState(NamespaceID.from("minecraft:brick_wall:27"), (short) 10898, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_27 = new BlockState(NamespaceID.from("minecraft:brick_wall:27"), (short) 10898, Block.BRICK_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_28 = new BlockState(NamespaceID.from("minecraft:brick_wall:28"), (short) 10899, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_28 = new BlockState(NamespaceID.from("minecraft:brick_wall:28"), (short) 10899, Block.BRICK_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_29 = new BlockState(NamespaceID.from("minecraft:brick_wall:29"), (short) 10900, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_29 = new BlockState(NamespaceID.from("minecraft:brick_wall:29"), (short) 10900, Block.BRICK_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_30 = new BlockState(NamespaceID.from("minecraft:brick_wall:30"), (short) 10901, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_30 = new BlockState(NamespaceID.from("minecraft:brick_wall:30"), (short) 10901, Block.BRICK_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_31 = new BlockState(NamespaceID.from("minecraft:brick_wall:31"), (short) 10902, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_31 = new BlockState(NamespaceID.from("minecraft:brick_wall:31"), (short) 10902, Block.BRICK_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_32 = new BlockState(NamespaceID.from("minecraft:brick_wall:32"), (short) 10903, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_32 = new BlockState(NamespaceID.from("minecraft:brick_wall:32"), (short) 10903, Block.BRICK_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_33 = new BlockState(NamespaceID.from("minecraft:brick_wall:33"), (short) 10904, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_33 = new BlockState(NamespaceID.from("minecraft:brick_wall:33"), (short) 10904, Block.BRICK_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_34 = new BlockState(NamespaceID.from("minecraft:brick_wall:34"), (short) 10905, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_34 = new BlockState(NamespaceID.from("minecraft:brick_wall:34"), (short) 10905, Block.BRICK_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_35 = new BlockState(NamespaceID.from("minecraft:brick_wall:35"), (short) 10906, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_35 = new BlockState(NamespaceID.from("minecraft:brick_wall:35"), (short) 10906, Block.BRICK_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_36 = new BlockState(NamespaceID.from("minecraft:brick_wall:36"), (short) 10907, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_36 = new BlockState(NamespaceID.from("minecraft:brick_wall:36"), (short) 10907, Block.BRICK_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_37 = new BlockState(NamespaceID.from("minecraft:brick_wall:37"), (short) 10908, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_37 = new BlockState(NamespaceID.from("minecraft:brick_wall:37"), (short) 10908, Block.BRICK_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_38 = new BlockState(NamespaceID.from("minecraft:brick_wall:38"), (short) 10909, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_38 = new BlockState(NamespaceID.from("minecraft:brick_wall:38"), (short) 10909, Block.BRICK_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_39 = new BlockState(NamespaceID.from("minecraft:brick_wall:39"), (short) 10910, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_39 = new BlockState(NamespaceID.from("minecraft:brick_wall:39"), (short) 10910, Block.BRICK_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_40 = new BlockState(NamespaceID.from("minecraft:brick_wall:40"), (short) 10911, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_40 = new BlockState(NamespaceID.from("minecraft:brick_wall:40"), (short) 10911, Block.BRICK_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_41 = new BlockState(NamespaceID.from("minecraft:brick_wall:41"), (short) 10912, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_41 = new BlockState(NamespaceID.from("minecraft:brick_wall:41"), (short) 10912, Block.BRICK_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_42 = new BlockState(NamespaceID.from("minecraft:brick_wall:42"), (short) 10913, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_42 = new BlockState(NamespaceID.from("minecraft:brick_wall:42"), (short) 10913, Block.BRICK_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_43 = new BlockState(NamespaceID.from("minecraft:brick_wall:43"), (short) 10914, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_43 = new BlockState(NamespaceID.from("minecraft:brick_wall:43"), (short) 10914, Block.BRICK_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_44 = new BlockState(NamespaceID.from("minecraft:brick_wall:44"), (short) 10915, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_44 = new BlockState(NamespaceID.from("minecraft:brick_wall:44"), (short) 10915, Block.BRICK_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_45 = new BlockState(NamespaceID.from("minecraft:brick_wall:45"), (short) 10916, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_45 = new BlockState(NamespaceID.from("minecraft:brick_wall:45"), (short) 10916, Block.BRICK_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_46 = new BlockState(NamespaceID.from("minecraft:brick_wall:46"), (short) 10917, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_46 = new BlockState(NamespaceID.from("minecraft:brick_wall:46"), (short) 10917, Block.BRICK_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_47 = new BlockState(NamespaceID.from("minecraft:brick_wall:47"), (short) 10918, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_47 = new BlockState(NamespaceID.from("minecraft:brick_wall:47"), (short) 10918, Block.BRICK_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_48 = new BlockState(NamespaceID.from("minecraft:brick_wall:48"), (short) 10919, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_48 = new BlockState(NamespaceID.from("minecraft:brick_wall:48"), (short) 10919, Block.BRICK_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_49 = new BlockState(NamespaceID.from("minecraft:brick_wall:49"), (short) 10920, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_49 = new BlockState(NamespaceID.from("minecraft:brick_wall:49"), (short) 10920, Block.BRICK_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_50 = new BlockState(NamespaceID.from("minecraft:brick_wall:50"), (short) 10921, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_50 = new BlockState(NamespaceID.from("minecraft:brick_wall:50"), (short) 10921, Block.BRICK_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_51 = new BlockState(NamespaceID.from("minecraft:brick_wall:51"), (short) 10922, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_51 = new BlockState(NamespaceID.from("minecraft:brick_wall:51"), (short) 10922, Block.BRICK_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_52 = new BlockState(NamespaceID.from("minecraft:brick_wall:52"), (short) 10923, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_52 = new BlockState(NamespaceID.from("minecraft:brick_wall:52"), (short) 10923, Block.BRICK_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_53 = new BlockState(NamespaceID.from("minecraft:brick_wall:53"), (short) 10924, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_53 = new BlockState(NamespaceID.from("minecraft:brick_wall:53"), (short) 10924, Block.BRICK_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_54 = new BlockState(NamespaceID.from("minecraft:brick_wall:54"), (short) 10925, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_54 = new BlockState(NamespaceID.from("minecraft:brick_wall:54"), (short) 10925, Block.BRICK_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_55 = new BlockState(NamespaceID.from("minecraft:brick_wall:55"), (short) 10926, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_55 = new BlockState(NamespaceID.from("minecraft:brick_wall:55"), (short) 10926, Block.BRICK_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_56 = new BlockState(NamespaceID.from("minecraft:brick_wall:56"), (short) 10927, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_56 = new BlockState(NamespaceID.from("minecraft:brick_wall:56"), (short) 10927, Block.BRICK_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_57 = new BlockState(NamespaceID.from("minecraft:brick_wall:57"), (short) 10928, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_57 = new BlockState(NamespaceID.from("minecraft:brick_wall:57"), (short) 10928, Block.BRICK_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_58 = new BlockState(NamespaceID.from("minecraft:brick_wall:58"), (short) 10929, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_58 = new BlockState(NamespaceID.from("minecraft:brick_wall:58"), (short) 10929, Block.BRICK_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_59 = new BlockState(NamespaceID.from("minecraft:brick_wall:59"), (short) 10930, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_59 = new BlockState(NamespaceID.from("minecraft:brick_wall:59"), (short) 10930, Block.BRICK_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_60 = new BlockState(NamespaceID.from("minecraft:brick_wall:60"), (short) 10931, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_60 = new BlockState(NamespaceID.from("minecraft:brick_wall:60"), (short) 10931, Block.BRICK_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_61 = new BlockState(NamespaceID.from("minecraft:brick_wall:61"), (short) 10932, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_61 = new BlockState(NamespaceID.from("minecraft:brick_wall:61"), (short) 10932, Block.BRICK_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_62 = new BlockState(NamespaceID.from("minecraft:brick_wall:62"), (short) 10933, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_62 = new BlockState(NamespaceID.from("minecraft:brick_wall:62"), (short) 10933, Block.BRICK_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_63 = new BlockState(NamespaceID.from("minecraft:brick_wall:63"), (short) 10934, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_63 = new BlockState(NamespaceID.from("minecraft:brick_wall:63"), (short) 10934, Block.BRICK_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_64 = new BlockState(NamespaceID.from("minecraft:brick_wall:64"), (short) 10935, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_64 = new BlockState(NamespaceID.from("minecraft:brick_wall:64"), (short) 10935, Block.BRICK_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_65 = new BlockState(NamespaceID.from("minecraft:brick_wall:65"), (short) 10936, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_65 = new BlockState(NamespaceID.from("minecraft:brick_wall:65"), (short) 10936, Block.BRICK_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_66 = new BlockState(NamespaceID.from("minecraft:brick_wall:66"), (short) 10937, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_66 = new BlockState(NamespaceID.from("minecraft:brick_wall:66"), (short) 10937, Block.BRICK_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_67 = new BlockState(NamespaceID.from("minecraft:brick_wall:67"), (short) 10938, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_67 = new BlockState(NamespaceID.from("minecraft:brick_wall:67"), (short) 10938, Block.BRICK_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_68 = new BlockState(NamespaceID.from("minecraft:brick_wall:68"), (short) 10939, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_68 = new BlockState(NamespaceID.from("minecraft:brick_wall:68"), (short) 10939, Block.BRICK_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_69 = new BlockState(NamespaceID.from("minecraft:brick_wall:69"), (short) 10940, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_69 = new BlockState(NamespaceID.from("minecraft:brick_wall:69"), (short) 10940, Block.BRICK_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_70 = new BlockState(NamespaceID.from("minecraft:brick_wall:70"), (short) 10941, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_70 = new BlockState(NamespaceID.from("minecraft:brick_wall:70"), (short) 10941, Block.BRICK_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_71 = new BlockState(NamespaceID.from("minecraft:brick_wall:71"), (short) 10942, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_71 = new BlockState(NamespaceID.from("minecraft:brick_wall:71"), (short) 10942, Block.BRICK_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_72 = new BlockState(NamespaceID.from("minecraft:brick_wall:72"), (short) 10943, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_72 = new BlockState(NamespaceID.from("minecraft:brick_wall:72"), (short) 10943, Block.BRICK_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_73 = new BlockState(NamespaceID.from("minecraft:brick_wall:73"), (short) 10944, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_73 = new BlockState(NamespaceID.from("minecraft:brick_wall:73"), (short) 10944, Block.BRICK_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_74 = new BlockState(NamespaceID.from("minecraft:brick_wall:74"), (short) 10945, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_74 = new BlockState(NamespaceID.from("minecraft:brick_wall:74"), (short) 10945, Block.BRICK_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_75 = new BlockState(NamespaceID.from("minecraft:brick_wall:75"), (short) 10946, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_75 = new BlockState(NamespaceID.from("minecraft:brick_wall:75"), (short) 10946, Block.BRICK_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_76 = new BlockState(NamespaceID.from("minecraft:brick_wall:76"), (short) 10947, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_76 = new BlockState(NamespaceID.from("minecraft:brick_wall:76"), (short) 10947, Block.BRICK_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_77 = new BlockState(NamespaceID.from("minecraft:brick_wall:77"), (short) 10948, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_77 = new BlockState(NamespaceID.from("minecraft:brick_wall:77"), (short) 10948, Block.BRICK_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_78 = new BlockState(NamespaceID.from("minecraft:brick_wall:78"), (short) 10949, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_78 = new BlockState(NamespaceID.from("minecraft:brick_wall:78"), (short) 10949, Block.BRICK_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_79 = new BlockState(NamespaceID.from("minecraft:brick_wall:79"), (short) 10950, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_79 = new BlockState(NamespaceID.from("minecraft:brick_wall:79"), (short) 10950, Block.BRICK_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_80 = new BlockState(NamespaceID.from("minecraft:brick_wall:80"), (short) 10951, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_80 = new BlockState(NamespaceID.from("minecraft:brick_wall:80"), (short) 10951, Block.BRICK_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_81 = new BlockState(NamespaceID.from("minecraft:brick_wall:81"), (short) 10952, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_81 = new BlockState(NamespaceID.from("minecraft:brick_wall:81"), (short) 10952, Block.BRICK_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_82 = new BlockState(NamespaceID.from("minecraft:brick_wall:82"), (short) 10953, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_82 = new BlockState(NamespaceID.from("minecraft:brick_wall:82"), (short) 10953, Block.BRICK_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_83 = new BlockState(NamespaceID.from("minecraft:brick_wall:83"), (short) 10954, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_83 = new BlockState(NamespaceID.from("minecraft:brick_wall:83"), (short) 10954, Block.BRICK_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_84 = new BlockState(NamespaceID.from("minecraft:brick_wall:84"), (short) 10955, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_84 = new BlockState(NamespaceID.from("minecraft:brick_wall:84"), (short) 10955, Block.BRICK_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_85 = new BlockState(NamespaceID.from("minecraft:brick_wall:85"), (short) 10956, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_85 = new BlockState(NamespaceID.from("minecraft:brick_wall:85"), (short) 10956, Block.BRICK_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_86 = new BlockState(NamespaceID.from("minecraft:brick_wall:86"), (short) 10957, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_86 = new BlockState(NamespaceID.from("minecraft:brick_wall:86"), (short) 10957, Block.BRICK_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_87 = new BlockState(NamespaceID.from("minecraft:brick_wall:87"), (short) 10958, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_87 = new BlockState(NamespaceID.from("minecraft:brick_wall:87"), (short) 10958, Block.BRICK_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_88 = new BlockState(NamespaceID.from("minecraft:brick_wall:88"), (short) 10959, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_88 = new BlockState(NamespaceID.from("minecraft:brick_wall:88"), (short) 10959, Block.BRICK_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_89 = new BlockState(NamespaceID.from("minecraft:brick_wall:89"), (short) 10960, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_89 = new BlockState(NamespaceID.from("minecraft:brick_wall:89"), (short) 10960, Block.BRICK_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_90 = new BlockState(NamespaceID.from("minecraft:brick_wall:90"), (short) 10961, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_90 = new BlockState(NamespaceID.from("minecraft:brick_wall:90"), (short) 10961, Block.BRICK_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_91 = new BlockState(NamespaceID.from("minecraft:brick_wall:91"), (short) 10962, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_91 = new BlockState(NamespaceID.from("minecraft:brick_wall:91"), (short) 10962, Block.BRICK_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_92 = new BlockState(NamespaceID.from("minecraft:brick_wall:92"), (short) 10963, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_92 = new BlockState(NamespaceID.from("minecraft:brick_wall:92"), (short) 10963, Block.BRICK_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_93 = new BlockState(NamespaceID.from("minecraft:brick_wall:93"), (short) 10964, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_93 = new BlockState(NamespaceID.from("minecraft:brick_wall:93"), (short) 10964, Block.BRICK_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_94 = new BlockState(NamespaceID.from("minecraft:brick_wall:94"), (short) 10965, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_94 = new BlockState(NamespaceID.from("minecraft:brick_wall:94"), (short) 10965, Block.BRICK_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_95 = new BlockState(NamespaceID.from("minecraft:brick_wall:95"), (short) 10966, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_95 = new BlockState(NamespaceID.from("minecraft:brick_wall:95"), (short) 10966, Block.BRICK_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_96 = new BlockState(NamespaceID.from("minecraft:brick_wall:96"), (short) 10967, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_96 = new BlockState(NamespaceID.from("minecraft:brick_wall:96"), (short) 10967, Block.BRICK_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_97 = new BlockState(NamespaceID.from("minecraft:brick_wall:97"), (short) 10968, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_97 = new BlockState(NamespaceID.from("minecraft:brick_wall:97"), (short) 10968, Block.BRICK_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_98 = new BlockState(NamespaceID.from("minecraft:brick_wall:98"), (short) 10969, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_98 = new BlockState(NamespaceID.from("minecraft:brick_wall:98"), (short) 10969, Block.BRICK_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_99 = new BlockState(NamespaceID.from("minecraft:brick_wall:99"), (short) 10970, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_99 = new BlockState(NamespaceID.from("minecraft:brick_wall:99"), (short) 10970, Block.BRICK_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_100 = new BlockState(NamespaceID.from("minecraft:brick_wall:100"), (short) 10971, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_100 = new BlockState(NamespaceID.from("minecraft:brick_wall:100"), (short) 10971, Block.BRICK_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_101 = new BlockState(NamespaceID.from("minecraft:brick_wall:101"), (short) 10972, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_101 = new BlockState(NamespaceID.from("minecraft:brick_wall:101"), (short) 10972, Block.BRICK_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_102 = new BlockState(NamespaceID.from("minecraft:brick_wall:102"), (short) 10973, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_102 = new BlockState(NamespaceID.from("minecraft:brick_wall:102"), (short) 10973, Block.BRICK_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_103 = new BlockState(NamespaceID.from("minecraft:brick_wall:103"), (short) 10974, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_103 = new BlockState(NamespaceID.from("minecraft:brick_wall:103"), (short) 10974, Block.BRICK_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_104 = new BlockState(NamespaceID.from("minecraft:brick_wall:104"), (short) 10975, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_104 = new BlockState(NamespaceID.from("minecraft:brick_wall:104"), (short) 10975, Block.BRICK_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_105 = new BlockState(NamespaceID.from("minecraft:brick_wall:105"), (short) 10976, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_105 = new BlockState(NamespaceID.from("minecraft:brick_wall:105"), (short) 10976, Block.BRICK_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_106 = new BlockState(NamespaceID.from("minecraft:brick_wall:106"), (short) 10977, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_106 = new BlockState(NamespaceID.from("minecraft:brick_wall:106"), (short) 10977, Block.BRICK_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_107 = new BlockState(NamespaceID.from("minecraft:brick_wall:107"), (short) 10978, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_107 = new BlockState(NamespaceID.from("minecraft:brick_wall:107"), (short) 10978, Block.BRICK_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_108 = new BlockState(NamespaceID.from("minecraft:brick_wall:108"), (short) 10979, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_108 = new BlockState(NamespaceID.from("minecraft:brick_wall:108"), (short) 10979, Block.BRICK_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_109 = new BlockState(NamespaceID.from("minecraft:brick_wall:109"), (short) 10980, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_109 = new BlockState(NamespaceID.from("minecraft:brick_wall:109"), (short) 10980, Block.BRICK_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_110 = new BlockState(NamespaceID.from("minecraft:brick_wall:110"), (short) 10981, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_110 = new BlockState(NamespaceID.from("minecraft:brick_wall:110"), (short) 10981, Block.BRICK_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_111 = new BlockState(NamespaceID.from("minecraft:brick_wall:111"), (short) 10982, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_111 = new BlockState(NamespaceID.from("minecraft:brick_wall:111"), (short) 10982, Block.BRICK_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_112 = new BlockState(NamespaceID.from("minecraft:brick_wall:112"), (short) 10983, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_112 = new BlockState(NamespaceID.from("minecraft:brick_wall:112"), (short) 10983, Block.BRICK_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_113 = new BlockState(NamespaceID.from("minecraft:brick_wall:113"), (short) 10984, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_113 = new BlockState(NamespaceID.from("minecraft:brick_wall:113"), (short) 10984, Block.BRICK_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_114 = new BlockState(NamespaceID.from("minecraft:brick_wall:114"), (short) 10985, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_114 = new BlockState(NamespaceID.from("minecraft:brick_wall:114"), (short) 10985, Block.BRICK_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_115 = new BlockState(NamespaceID.from("minecraft:brick_wall:115"), (short) 10986, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_115 = new BlockState(NamespaceID.from("minecraft:brick_wall:115"), (short) 10986, Block.BRICK_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_116 = new BlockState(NamespaceID.from("minecraft:brick_wall:116"), (short) 10987, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_116 = new BlockState(NamespaceID.from("minecraft:brick_wall:116"), (short) 10987, Block.BRICK_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_117 = new BlockState(NamespaceID.from("minecraft:brick_wall:117"), (short) 10988, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_117 = new BlockState(NamespaceID.from("minecraft:brick_wall:117"), (short) 10988, Block.BRICK_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_118 = new BlockState(NamespaceID.from("minecraft:brick_wall:118"), (short) 10989, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_118 = new BlockState(NamespaceID.from("minecraft:brick_wall:118"), (short) 10989, Block.BRICK_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_119 = new BlockState(NamespaceID.from("minecraft:brick_wall:119"), (short) 10990, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_119 = new BlockState(NamespaceID.from("minecraft:brick_wall:119"), (short) 10990, Block.BRICK_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_120 = new BlockState(NamespaceID.from("minecraft:brick_wall:120"), (short) 10991, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_120 = new BlockState(NamespaceID.from("minecraft:brick_wall:120"), (short) 10991, Block.BRICK_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_121 = new BlockState(NamespaceID.from("minecraft:brick_wall:121"), (short) 10992, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_121 = new BlockState(NamespaceID.from("minecraft:brick_wall:121"), (short) 10992, Block.BRICK_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_122 = new BlockState(NamespaceID.from("minecraft:brick_wall:122"), (short) 10993, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_122 = new BlockState(NamespaceID.from("minecraft:brick_wall:122"), (short) 10993, Block.BRICK_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_123 = new BlockState(NamespaceID.from("minecraft:brick_wall:123"), (short) 10994, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_123 = new BlockState(NamespaceID.from("minecraft:brick_wall:123"), (short) 10994, Block.BRICK_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_124 = new BlockState(NamespaceID.from("minecraft:brick_wall:124"), (short) 10995, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_124 = new BlockState(NamespaceID.from("minecraft:brick_wall:124"), (short) 10995, Block.BRICK_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_125 = new BlockState(NamespaceID.from("minecraft:brick_wall:125"), (short) 10996, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_125 = new BlockState(NamespaceID.from("minecraft:brick_wall:125"), (short) 10996, Block.BRICK_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_126 = new BlockState(NamespaceID.from("minecraft:brick_wall:126"), (short) 10997, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_126 = new BlockState(NamespaceID.from("minecraft:brick_wall:126"), (short) 10997, Block.BRICK_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_127 = new BlockState(NamespaceID.from("minecraft:brick_wall:127"), (short) 10998, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_127 = new BlockState(NamespaceID.from("minecraft:brick_wall:127"), (short) 10998, Block.BRICK_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_128 = new BlockState(NamespaceID.from("minecraft:brick_wall:128"), (short) 10999, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_128 = new BlockState(NamespaceID.from("minecraft:brick_wall:128"), (short) 10999, Block.BRICK_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_129 = new BlockState(NamespaceID.from("minecraft:brick_wall:129"), (short) 11000, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_129 = new BlockState(NamespaceID.from("minecraft:brick_wall:129"), (short) 11000, Block.BRICK_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_130 = new BlockState(NamespaceID.from("minecraft:brick_wall:130"), (short) 11001, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_130 = new BlockState(NamespaceID.from("minecraft:brick_wall:130"), (short) 11001, Block.BRICK_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_131 = new BlockState(NamespaceID.from("minecraft:brick_wall:131"), (short) 11002, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_131 = new BlockState(NamespaceID.from("minecraft:brick_wall:131"), (short) 11002, Block.BRICK_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_132 = new BlockState(NamespaceID.from("minecraft:brick_wall:132"), (short) 11003, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_132 = new BlockState(NamespaceID.from("minecraft:brick_wall:132"), (short) 11003, Block.BRICK_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_133 = new BlockState(NamespaceID.from("minecraft:brick_wall:133"), (short) 11004, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_133 = new BlockState(NamespaceID.from("minecraft:brick_wall:133"), (short) 11004, Block.BRICK_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_134 = new BlockState(NamespaceID.from("minecraft:brick_wall:134"), (short) 11005, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_134 = new BlockState(NamespaceID.from("minecraft:brick_wall:134"), (short) 11005, Block.BRICK_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_135 = new BlockState(NamespaceID.from("minecraft:brick_wall:135"), (short) 11006, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_135 = new BlockState(NamespaceID.from("minecraft:brick_wall:135"), (short) 11006, Block.BRICK_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_136 = new BlockState(NamespaceID.from("minecraft:brick_wall:136"), (short) 11007, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_136 = new BlockState(NamespaceID.from("minecraft:brick_wall:136"), (short) 11007, Block.BRICK_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_137 = new BlockState(NamespaceID.from("minecraft:brick_wall:137"), (short) 11008, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_137 = new BlockState(NamespaceID.from("minecraft:brick_wall:137"), (short) 11008, Block.BRICK_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_138 = new BlockState(NamespaceID.from("minecraft:brick_wall:138"), (short) 11009, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_138 = new BlockState(NamespaceID.from("minecraft:brick_wall:138"), (short) 11009, Block.BRICK_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_139 = new BlockState(NamespaceID.from("minecraft:brick_wall:139"), (short) 11010, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_139 = new BlockState(NamespaceID.from("minecraft:brick_wall:139"), (short) 11010, Block.BRICK_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_140 = new BlockState(NamespaceID.from("minecraft:brick_wall:140"), (short) 11011, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_140 = new BlockState(NamespaceID.from("minecraft:brick_wall:140"), (short) 11011, Block.BRICK_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_141 = new BlockState(NamespaceID.from("minecraft:brick_wall:141"), (short) 11012, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_141 = new BlockState(NamespaceID.from("minecraft:brick_wall:141"), (short) 11012, Block.BRICK_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_142 = new BlockState(NamespaceID.from("minecraft:brick_wall:142"), (short) 11013, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_142 = new BlockState(NamespaceID.from("minecraft:brick_wall:142"), (short) 11013, Block.BRICK_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_143 = new BlockState(NamespaceID.from("minecraft:brick_wall:143"), (short) 11014, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_143 = new BlockState(NamespaceID.from("minecraft:brick_wall:143"), (short) 11014, Block.BRICK_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_144 = new BlockState(NamespaceID.from("minecraft:brick_wall:144"), (short) 11015, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_144 = new BlockState(NamespaceID.from("minecraft:brick_wall:144"), (short) 11015, Block.BRICK_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_145 = new BlockState(NamespaceID.from("minecraft:brick_wall:145"), (short) 11016, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_145 = new BlockState(NamespaceID.from("minecraft:brick_wall:145"), (short) 11016, Block.BRICK_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_146 = new BlockState(NamespaceID.from("minecraft:brick_wall:146"), (short) 11017, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_146 = new BlockState(NamespaceID.from("minecraft:brick_wall:146"), (short) 11017, Block.BRICK_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_147 = new BlockState(NamespaceID.from("minecraft:brick_wall:147"), (short) 11018, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_147 = new BlockState(NamespaceID.from("minecraft:brick_wall:147"), (short) 11018, Block.BRICK_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_148 = new BlockState(NamespaceID.from("minecraft:brick_wall:148"), (short) 11019, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_148 = new BlockState(NamespaceID.from("minecraft:brick_wall:148"), (short) 11019, Block.BRICK_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_149 = new BlockState(NamespaceID.from("minecraft:brick_wall:149"), (short) 11020, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_149 = new BlockState(NamespaceID.from("minecraft:brick_wall:149"), (short) 11020, Block.BRICK_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_150 = new BlockState(NamespaceID.from("minecraft:brick_wall:150"), (short) 11021, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_150 = new BlockState(NamespaceID.from("minecraft:brick_wall:150"), (short) 11021, Block.BRICK_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_151 = new BlockState(NamespaceID.from("minecraft:brick_wall:151"), (short) 11022, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_151 = new BlockState(NamespaceID.from("minecraft:brick_wall:151"), (short) 11022, Block.BRICK_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_152 = new BlockState(NamespaceID.from("minecraft:brick_wall:152"), (short) 11023, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_152 = new BlockState(NamespaceID.from("minecraft:brick_wall:152"), (short) 11023, Block.BRICK_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_153 = new BlockState(NamespaceID.from("minecraft:brick_wall:153"), (short) 11024, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_153 = new BlockState(NamespaceID.from("minecraft:brick_wall:153"), (short) 11024, Block.BRICK_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_154 = new BlockState(NamespaceID.from("minecraft:brick_wall:154"), (short) 11025, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_154 = new BlockState(NamespaceID.from("minecraft:brick_wall:154"), (short) 11025, Block.BRICK_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_155 = new BlockState(NamespaceID.from("minecraft:brick_wall:155"), (short) 11026, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_155 = new BlockState(NamespaceID.from("minecraft:brick_wall:155"), (short) 11026, Block.BRICK_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_156 = new BlockState(NamespaceID.from("minecraft:brick_wall:156"), (short) 11027, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_156 = new BlockState(NamespaceID.from("minecraft:brick_wall:156"), (short) 11027, Block.BRICK_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_157 = new BlockState(NamespaceID.from("minecraft:brick_wall:157"), (short) 11028, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_157 = new BlockState(NamespaceID.from("minecraft:brick_wall:157"), (short) 11028, Block.BRICK_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_158 = new BlockState(NamespaceID.from("minecraft:brick_wall:158"), (short) 11029, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_158 = new BlockState(NamespaceID.from("minecraft:brick_wall:158"), (short) 11029, Block.BRICK_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_159 = new BlockState(NamespaceID.from("minecraft:brick_wall:159"), (short) 11030, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_159 = new BlockState(NamespaceID.from("minecraft:brick_wall:159"), (short) 11030, Block.BRICK_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_160 = new BlockState(NamespaceID.from("minecraft:brick_wall:160"), (short) 11031, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_160 = new BlockState(NamespaceID.from("minecraft:brick_wall:160"), (short) 11031, Block.BRICK_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_161 = new BlockState(NamespaceID.from("minecraft:brick_wall:161"), (short) 11032, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_161 = new BlockState(NamespaceID.from("minecraft:brick_wall:161"), (short) 11032, Block.BRICK_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_162 = new BlockState(NamespaceID.from("minecraft:brick_wall:162"), (short) 11033, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_162 = new BlockState(NamespaceID.from("minecraft:brick_wall:162"), (short) 11033, Block.BRICK_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_163 = new BlockState(NamespaceID.from("minecraft:brick_wall:163"), (short) 11034, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_163 = new BlockState(NamespaceID.from("minecraft:brick_wall:163"), (short) 11034, Block.BRICK_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_164 = new BlockState(NamespaceID.from("minecraft:brick_wall:164"), (short) 11035, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_164 = new BlockState(NamespaceID.from("minecraft:brick_wall:164"), (short) 11035, Block.BRICK_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_165 = new BlockState(NamespaceID.from("minecraft:brick_wall:165"), (short) 11036, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_165 = new BlockState(NamespaceID.from("minecraft:brick_wall:165"), (short) 11036, Block.BRICK_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_166 = new BlockState(NamespaceID.from("minecraft:brick_wall:166"), (short) 11037, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_166 = new BlockState(NamespaceID.from("minecraft:brick_wall:166"), (short) 11037, Block.BRICK_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_167 = new BlockState(NamespaceID.from("minecraft:brick_wall:167"), (short) 11038, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_167 = new BlockState(NamespaceID.from("minecraft:brick_wall:167"), (short) 11038, Block.BRICK_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_168 = new BlockState(NamespaceID.from("minecraft:brick_wall:168"), (short) 11039, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_168 = new BlockState(NamespaceID.from("minecraft:brick_wall:168"), (short) 11039, Block.BRICK_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_169 = new BlockState(NamespaceID.from("minecraft:brick_wall:169"), (short) 11040, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_169 = new BlockState(NamespaceID.from("minecraft:brick_wall:169"), (short) 11040, Block.BRICK_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_170 = new BlockState(NamespaceID.from("minecraft:brick_wall:170"), (short) 11041, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_170 = new BlockState(NamespaceID.from("minecraft:brick_wall:170"), (short) 11041, Block.BRICK_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_171 = new BlockState(NamespaceID.from("minecraft:brick_wall:171"), (short) 11042, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_171 = new BlockState(NamespaceID.from("minecraft:brick_wall:171"), (short) 11042, Block.BRICK_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_172 = new BlockState(NamespaceID.from("minecraft:brick_wall:172"), (short) 11043, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_172 = new BlockState(NamespaceID.from("minecraft:brick_wall:172"), (short) 11043, Block.BRICK_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_173 = new BlockState(NamespaceID.from("minecraft:brick_wall:173"), (short) 11044, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_173 = new BlockState(NamespaceID.from("minecraft:brick_wall:173"), (short) 11044, Block.BRICK_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_174 = new BlockState(NamespaceID.from("minecraft:brick_wall:174"), (short) 11045, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_174 = new BlockState(NamespaceID.from("minecraft:brick_wall:174"), (short) 11045, Block.BRICK_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_175 = new BlockState(NamespaceID.from("minecraft:brick_wall:175"), (short) 11046, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_175 = new BlockState(NamespaceID.from("minecraft:brick_wall:175"), (short) 11046, Block.BRICK_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_176 = new BlockState(NamespaceID.from("minecraft:brick_wall:176"), (short) 11047, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_176 = new BlockState(NamespaceID.from("minecraft:brick_wall:176"), (short) 11047, Block.BRICK_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_177 = new BlockState(NamespaceID.from("minecraft:brick_wall:177"), (short) 11048, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_177 = new BlockState(NamespaceID.from("minecraft:brick_wall:177"), (short) 11048, Block.BRICK_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_178 = new BlockState(NamespaceID.from("minecraft:brick_wall:178"), (short) 11049, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_178 = new BlockState(NamespaceID.from("minecraft:brick_wall:178"), (short) 11049, Block.BRICK_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_179 = new BlockState(NamespaceID.from("minecraft:brick_wall:179"), (short) 11050, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_179 = new BlockState(NamespaceID.from("minecraft:brick_wall:179"), (short) 11050, Block.BRICK_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_180 = new BlockState(NamespaceID.from("minecraft:brick_wall:180"), (short) 11051, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_180 = new BlockState(NamespaceID.from("minecraft:brick_wall:180"), (short) 11051, Block.BRICK_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_181 = new BlockState(NamespaceID.from("minecraft:brick_wall:181"), (short) 11052, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_181 = new BlockState(NamespaceID.from("minecraft:brick_wall:181"), (short) 11052, Block.BRICK_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_182 = new BlockState(NamespaceID.from("minecraft:brick_wall:182"), (short) 11053, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_182 = new BlockState(NamespaceID.from("minecraft:brick_wall:182"), (short) 11053, Block.BRICK_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_183 = new BlockState(NamespaceID.from("minecraft:brick_wall:183"), (short) 11054, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_183 = new BlockState(NamespaceID.from("minecraft:brick_wall:183"), (short) 11054, Block.BRICK_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_184 = new BlockState(NamespaceID.from("minecraft:brick_wall:184"), (short) 11055, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_184 = new BlockState(NamespaceID.from("minecraft:brick_wall:184"), (short) 11055, Block.BRICK_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_185 = new BlockState(NamespaceID.from("minecraft:brick_wall:185"), (short) 11056, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_185 = new BlockState(NamespaceID.from("minecraft:brick_wall:185"), (short) 11056, Block.BRICK_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_186 = new BlockState(NamespaceID.from("minecraft:brick_wall:186"), (short) 11057, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_186 = new BlockState(NamespaceID.from("minecraft:brick_wall:186"), (short) 11057, Block.BRICK_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_187 = new BlockState(NamespaceID.from("minecraft:brick_wall:187"), (short) 11058, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_187 = new BlockState(NamespaceID.from("minecraft:brick_wall:187"), (short) 11058, Block.BRICK_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_188 = new BlockState(NamespaceID.from("minecraft:brick_wall:188"), (short) 11059, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_188 = new BlockState(NamespaceID.from("minecraft:brick_wall:188"), (short) 11059, Block.BRICK_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_189 = new BlockState(NamespaceID.from("minecraft:brick_wall:189"), (short) 11060, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_189 = new BlockState(NamespaceID.from("minecraft:brick_wall:189"), (short) 11060, Block.BRICK_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_190 = new BlockState(NamespaceID.from("minecraft:brick_wall:190"), (short) 11061, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_190 = new BlockState(NamespaceID.from("minecraft:brick_wall:190"), (short) 11061, Block.BRICK_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_191 = new BlockState(NamespaceID.from("minecraft:brick_wall:191"), (short) 11062, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_191 = new BlockState(NamespaceID.from("minecraft:brick_wall:191"), (short) 11062, Block.BRICK_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_192 = new BlockState(NamespaceID.from("minecraft:brick_wall:192"), (short) 11063, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_192 = new BlockState(NamespaceID.from("minecraft:brick_wall:192"), (short) 11063, Block.BRICK_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_193 = new BlockState(NamespaceID.from("minecraft:brick_wall:193"), (short) 11064, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_193 = new BlockState(NamespaceID.from("minecraft:brick_wall:193"), (short) 11064, Block.BRICK_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_194 = new BlockState(NamespaceID.from("minecraft:brick_wall:194"), (short) 11065, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_194 = new BlockState(NamespaceID.from("minecraft:brick_wall:194"), (short) 11065, Block.BRICK_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_195 = new BlockState(NamespaceID.from("minecraft:brick_wall:195"), (short) 11066, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_195 = new BlockState(NamespaceID.from("minecraft:brick_wall:195"), (short) 11066, Block.BRICK_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_196 = new BlockState(NamespaceID.from("minecraft:brick_wall:196"), (short) 11067, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_196 = new BlockState(NamespaceID.from("minecraft:brick_wall:196"), (short) 11067, Block.BRICK_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_197 = new BlockState(NamespaceID.from("minecraft:brick_wall:197"), (short) 11068, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_197 = new BlockState(NamespaceID.from("minecraft:brick_wall:197"), (short) 11068, Block.BRICK_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_198 = new BlockState(NamespaceID.from("minecraft:brick_wall:198"), (short) 11069, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_198 = new BlockState(NamespaceID.from("minecraft:brick_wall:198"), (short) 11069, Block.BRICK_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_199 = new BlockState(NamespaceID.from("minecraft:brick_wall:199"), (short) 11070, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_199 = new BlockState(NamespaceID.from("minecraft:brick_wall:199"), (short) 11070, Block.BRICK_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_200 = new BlockState(NamespaceID.from("minecraft:brick_wall:200"), (short) 11071, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_200 = new BlockState(NamespaceID.from("minecraft:brick_wall:200"), (short) 11071, Block.BRICK_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_201 = new BlockState(NamespaceID.from("minecraft:brick_wall:201"), (short) 11072, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_201 = new BlockState(NamespaceID.from("minecraft:brick_wall:201"), (short) 11072, Block.BRICK_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_202 = new BlockState(NamespaceID.from("minecraft:brick_wall:202"), (short) 11073, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_202 = new BlockState(NamespaceID.from("minecraft:brick_wall:202"), (short) 11073, Block.BRICK_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_203 = new BlockState(NamespaceID.from("minecraft:brick_wall:203"), (short) 11074, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_203 = new BlockState(NamespaceID.from("minecraft:brick_wall:203"), (short) 11074, Block.BRICK_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_204 = new BlockState(NamespaceID.from("minecraft:brick_wall:204"), (short) 11075, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_204 = new BlockState(NamespaceID.from("minecraft:brick_wall:204"), (short) 11075, Block.BRICK_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_205 = new BlockState(NamespaceID.from("minecraft:brick_wall:205"), (short) 11076, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_205 = new BlockState(NamespaceID.from("minecraft:brick_wall:205"), (short) 11076, Block.BRICK_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_206 = new BlockState(NamespaceID.from("minecraft:brick_wall:206"), (short) 11077, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_206 = new BlockState(NamespaceID.from("minecraft:brick_wall:206"), (short) 11077, Block.BRICK_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_207 = new BlockState(NamespaceID.from("minecraft:brick_wall:207"), (short) 11078, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_207 = new BlockState(NamespaceID.from("minecraft:brick_wall:207"), (short) 11078, Block.BRICK_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_208 = new BlockState(NamespaceID.from("minecraft:brick_wall:208"), (short) 11079, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_208 = new BlockState(NamespaceID.from("minecraft:brick_wall:208"), (short) 11079, Block.BRICK_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_209 = new BlockState(NamespaceID.from("minecraft:brick_wall:209"), (short) 11080, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_209 = new BlockState(NamespaceID.from("minecraft:brick_wall:209"), (short) 11080, Block.BRICK_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_210 = new BlockState(NamespaceID.from("minecraft:brick_wall:210"), (short) 11081, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_210 = new BlockState(NamespaceID.from("minecraft:brick_wall:210"), (short) 11081, Block.BRICK_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_211 = new BlockState(NamespaceID.from("minecraft:brick_wall:211"), (short) 11082, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_211 = new BlockState(NamespaceID.from("minecraft:brick_wall:211"), (short) 11082, Block.BRICK_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_212 = new BlockState(NamespaceID.from("minecraft:brick_wall:212"), (short) 11083, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_212 = new BlockState(NamespaceID.from("minecraft:brick_wall:212"), (short) 11083, Block.BRICK_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_213 = new BlockState(NamespaceID.from("minecraft:brick_wall:213"), (short) 11084, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_213 = new BlockState(NamespaceID.from("minecraft:brick_wall:213"), (short) 11084, Block.BRICK_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_214 = new BlockState(NamespaceID.from("minecraft:brick_wall:214"), (short) 11085, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_214 = new BlockState(NamespaceID.from("minecraft:brick_wall:214"), (short) 11085, Block.BRICK_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_215 = new BlockState(NamespaceID.from("minecraft:brick_wall:215"), (short) 11086, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_215 = new BlockState(NamespaceID.from("minecraft:brick_wall:215"), (short) 11086, Block.BRICK_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_216 = new BlockState(NamespaceID.from("minecraft:brick_wall:216"), (short) 11087, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_216 = new BlockState(NamespaceID.from("minecraft:brick_wall:216"), (short) 11087, Block.BRICK_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_217 = new BlockState(NamespaceID.from("minecraft:brick_wall:217"), (short) 11088, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_217 = new BlockState(NamespaceID.from("minecraft:brick_wall:217"), (short) 11088, Block.BRICK_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_218 = new BlockState(NamespaceID.from("minecraft:brick_wall:218"), (short) 11089, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_218 = new BlockState(NamespaceID.from("minecraft:brick_wall:218"), (short) 11089, Block.BRICK_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_219 = new BlockState(NamespaceID.from("minecraft:brick_wall:219"), (short) 11090, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_219 = new BlockState(NamespaceID.from("minecraft:brick_wall:219"), (short) 11090, Block.BRICK_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_220 = new BlockState(NamespaceID.from("minecraft:brick_wall:220"), (short) 11091, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_220 = new BlockState(NamespaceID.from("minecraft:brick_wall:220"), (short) 11091, Block.BRICK_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_221 = new BlockState(NamespaceID.from("minecraft:brick_wall:221"), (short) 11092, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_221 = new BlockState(NamespaceID.from("minecraft:brick_wall:221"), (short) 11092, Block.BRICK_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_222 = new BlockState(NamespaceID.from("minecraft:brick_wall:222"), (short) 11093, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_222 = new BlockState(NamespaceID.from("minecraft:brick_wall:222"), (short) 11093, Block.BRICK_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_223 = new BlockState(NamespaceID.from("minecraft:brick_wall:223"), (short) 11094, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_223 = new BlockState(NamespaceID.from("minecraft:brick_wall:223"), (short) 11094, Block.BRICK_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_224 = new BlockState(NamespaceID.from("minecraft:brick_wall:224"), (short) 11095, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_224 = new BlockState(NamespaceID.from("minecraft:brick_wall:224"), (short) 11095, Block.BRICK_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_225 = new BlockState(NamespaceID.from("minecraft:brick_wall:225"), (short) 11096, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_225 = new BlockState(NamespaceID.from("minecraft:brick_wall:225"), (short) 11096, Block.BRICK_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_226 = new BlockState(NamespaceID.from("minecraft:brick_wall:226"), (short) 11097, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_226 = new BlockState(NamespaceID.from("minecraft:brick_wall:226"), (short) 11097, Block.BRICK_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_227 = new BlockState(NamespaceID.from("minecraft:brick_wall:227"), (short) 11098, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_227 = new BlockState(NamespaceID.from("minecraft:brick_wall:227"), (short) 11098, Block.BRICK_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_228 = new BlockState(NamespaceID.from("minecraft:brick_wall:228"), (short) 11099, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_228 = new BlockState(NamespaceID.from("minecraft:brick_wall:228"), (short) 11099, Block.BRICK_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_229 = new BlockState(NamespaceID.from("minecraft:brick_wall:229"), (short) 11100, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_229 = new BlockState(NamespaceID.from("minecraft:brick_wall:229"), (short) 11100, Block.BRICK_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_230 = new BlockState(NamespaceID.from("minecraft:brick_wall:230"), (short) 11101, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_230 = new BlockState(NamespaceID.from("minecraft:brick_wall:230"), (short) 11101, Block.BRICK_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_231 = new BlockState(NamespaceID.from("minecraft:brick_wall:231"), (short) 11102, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_231 = new BlockState(NamespaceID.from("minecraft:brick_wall:231"), (short) 11102, Block.BRICK_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_232 = new BlockState(NamespaceID.from("minecraft:brick_wall:232"), (short) 11103, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_232 = new BlockState(NamespaceID.from("minecraft:brick_wall:232"), (short) 11103, Block.BRICK_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_233 = new BlockState(NamespaceID.from("minecraft:brick_wall:233"), (short) 11104, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_233 = new BlockState(NamespaceID.from("minecraft:brick_wall:233"), (short) 11104, Block.BRICK_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_234 = new BlockState(NamespaceID.from("minecraft:brick_wall:234"), (short) 11105, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_234 = new BlockState(NamespaceID.from("minecraft:brick_wall:234"), (short) 11105, Block.BRICK_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_235 = new BlockState(NamespaceID.from("minecraft:brick_wall:235"), (short) 11106, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_235 = new BlockState(NamespaceID.from("minecraft:brick_wall:235"), (short) 11106, Block.BRICK_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_236 = new BlockState(NamespaceID.from("minecraft:brick_wall:236"), (short) 11107, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_236 = new BlockState(NamespaceID.from("minecraft:brick_wall:236"), (short) 11107, Block.BRICK_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_237 = new BlockState(NamespaceID.from("minecraft:brick_wall:237"), (short) 11108, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_237 = new BlockState(NamespaceID.from("minecraft:brick_wall:237"), (short) 11108, Block.BRICK_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_238 = new BlockState(NamespaceID.from("minecraft:brick_wall:238"), (short) 11109, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_238 = new BlockState(NamespaceID.from("minecraft:brick_wall:238"), (short) 11109, Block.BRICK_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_239 = new BlockState(NamespaceID.from("minecraft:brick_wall:239"), (short) 11110, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_239 = new BlockState(NamespaceID.from("minecraft:brick_wall:239"), (short) 11110, Block.BRICK_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_240 = new BlockState(NamespaceID.from("minecraft:brick_wall:240"), (short) 11111, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_240 = new BlockState(NamespaceID.from("minecraft:brick_wall:240"), (short) 11111, Block.BRICK_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_241 = new BlockState(NamespaceID.from("minecraft:brick_wall:241"), (short) 11112, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_241 = new BlockState(NamespaceID.from("minecraft:brick_wall:241"), (short) 11112, Block.BRICK_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_242 = new BlockState(NamespaceID.from("minecraft:brick_wall:242"), (short) 11113, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_242 = new BlockState(NamespaceID.from("minecraft:brick_wall:242"), (short) 11113, Block.BRICK_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_243 = new BlockState(NamespaceID.from("minecraft:brick_wall:243"), (short) 11114, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_243 = new BlockState(NamespaceID.from("minecraft:brick_wall:243"), (short) 11114, Block.BRICK_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_244 = new BlockState(NamespaceID.from("minecraft:brick_wall:244"), (short) 11115, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_244 = new BlockState(NamespaceID.from("minecraft:brick_wall:244"), (short) 11115, Block.BRICK_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_245 = new BlockState(NamespaceID.from("minecraft:brick_wall:245"), (short) 11116, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_245 = new BlockState(NamespaceID.from("minecraft:brick_wall:245"), (short) 11116, Block.BRICK_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_246 = new BlockState(NamespaceID.from("minecraft:brick_wall:246"), (short) 11117, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_246 = new BlockState(NamespaceID.from("minecraft:brick_wall:246"), (short) 11117, Block.BRICK_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_247 = new BlockState(NamespaceID.from("minecraft:brick_wall:247"), (short) 11118, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_247 = new BlockState(NamespaceID.from("minecraft:brick_wall:247"), (short) 11118, Block.BRICK_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_248 = new BlockState(NamespaceID.from("minecraft:brick_wall:248"), (short) 11119, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_248 = new BlockState(NamespaceID.from("minecraft:brick_wall:248"), (short) 11119, Block.BRICK_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_249 = new BlockState(NamespaceID.from("minecraft:brick_wall:249"), (short) 11120, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_249 = new BlockState(NamespaceID.from("minecraft:brick_wall:249"), (short) 11120, Block.BRICK_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_250 = new BlockState(NamespaceID.from("minecraft:brick_wall:250"), (short) 11121, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_250 = new BlockState(NamespaceID.from("minecraft:brick_wall:250"), (short) 11121, Block.BRICK_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_251 = new BlockState(NamespaceID.from("minecraft:brick_wall:251"), (short) 11122, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_251 = new BlockState(NamespaceID.from("minecraft:brick_wall:251"), (short) 11122, Block.BRICK_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_252 = new BlockState(NamespaceID.from("minecraft:brick_wall:252"), (short) 11123, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_252 = new BlockState(NamespaceID.from("minecraft:brick_wall:252"), (short) 11123, Block.BRICK_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_253 = new BlockState(NamespaceID.from("minecraft:brick_wall:253"), (short) 11124, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_253 = new BlockState(NamespaceID.from("minecraft:brick_wall:253"), (short) 11124, Block.BRICK_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_254 = new BlockState(NamespaceID.from("minecraft:brick_wall:254"), (short) 11125, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_254 = new BlockState(NamespaceID.from("minecraft:brick_wall:254"), (short) 11125, Block.BRICK_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_255 = new BlockState(NamespaceID.from("minecraft:brick_wall:255"), (short) 11126, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_255 = new BlockState(NamespaceID.from("minecraft:brick_wall:255"), (short) 11126, Block.BRICK_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_256 = new BlockState(NamespaceID.from("minecraft:brick_wall:256"), (short) 11127, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_256 = new BlockState(NamespaceID.from("minecraft:brick_wall:256"), (short) 11127, Block.BRICK_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_257 = new BlockState(NamespaceID.from("minecraft:brick_wall:257"), (short) 11128, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_257 = new BlockState(NamespaceID.from("minecraft:brick_wall:257"), (short) 11128, Block.BRICK_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_258 = new BlockState(NamespaceID.from("minecraft:brick_wall:258"), (short) 11129, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_258 = new BlockState(NamespaceID.from("minecraft:brick_wall:258"), (short) 11129, Block.BRICK_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_259 = new BlockState(NamespaceID.from("minecraft:brick_wall:259"), (short) 11130, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_259 = new BlockState(NamespaceID.from("minecraft:brick_wall:259"), (short) 11130, Block.BRICK_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_260 = new BlockState(NamespaceID.from("minecraft:brick_wall:260"), (short) 11131, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_260 = new BlockState(NamespaceID.from("minecraft:brick_wall:260"), (short) 11131, Block.BRICK_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_261 = new BlockState(NamespaceID.from("minecraft:brick_wall:261"), (short) 11132, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_261 = new BlockState(NamespaceID.from("minecraft:brick_wall:261"), (short) 11132, Block.BRICK_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_262 = new BlockState(NamespaceID.from("minecraft:brick_wall:262"), (short) 11133, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_262 = new BlockState(NamespaceID.from("minecraft:brick_wall:262"), (short) 11133, Block.BRICK_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_263 = new BlockState(NamespaceID.from("minecraft:brick_wall:263"), (short) 11134, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_263 = new BlockState(NamespaceID.from("minecraft:brick_wall:263"), (short) 11134, Block.BRICK_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_264 = new BlockState(NamespaceID.from("minecraft:brick_wall:264"), (short) 11135, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_264 = new BlockState(NamespaceID.from("minecraft:brick_wall:264"), (short) 11135, Block.BRICK_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_265 = new BlockState(NamespaceID.from("minecraft:brick_wall:265"), (short) 11136, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_265 = new BlockState(NamespaceID.from("minecraft:brick_wall:265"), (short) 11136, Block.BRICK_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_266 = new BlockState(NamespaceID.from("minecraft:brick_wall:266"), (short) 11137, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_266 = new BlockState(NamespaceID.from("minecraft:brick_wall:266"), (short) 11137, Block.BRICK_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_267 = new BlockState(NamespaceID.from("minecraft:brick_wall:267"), (short) 11138, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_267 = new BlockState(NamespaceID.from("minecraft:brick_wall:267"), (short) 11138, Block.BRICK_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_268 = new BlockState(NamespaceID.from("minecraft:brick_wall:268"), (short) 11139, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_268 = new BlockState(NamespaceID.from("minecraft:brick_wall:268"), (short) 11139, Block.BRICK_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_269 = new BlockState(NamespaceID.from("minecraft:brick_wall:269"), (short) 11140, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_269 = new BlockState(NamespaceID.from("minecraft:brick_wall:269"), (short) 11140, Block.BRICK_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_270 = new BlockState(NamespaceID.from("minecraft:brick_wall:270"), (short) 11141, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_270 = new BlockState(NamespaceID.from("minecraft:brick_wall:270"), (short) 11141, Block.BRICK_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_271 = new BlockState(NamespaceID.from("minecraft:brick_wall:271"), (short) 11142, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_271 = new BlockState(NamespaceID.from("minecraft:brick_wall:271"), (short) 11142, Block.BRICK_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_272 = new BlockState(NamespaceID.from("minecraft:brick_wall:272"), (short) 11143, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_272 = new BlockState(NamespaceID.from("minecraft:brick_wall:272"), (short) 11143, Block.BRICK_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_273 = new BlockState(NamespaceID.from("minecraft:brick_wall:273"), (short) 11144, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_273 = new BlockState(NamespaceID.from("minecraft:brick_wall:273"), (short) 11144, Block.BRICK_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_274 = new BlockState(NamespaceID.from("minecraft:brick_wall:274"), (short) 11145, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_274 = new BlockState(NamespaceID.from("minecraft:brick_wall:274"), (short) 11145, Block.BRICK_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_275 = new BlockState(NamespaceID.from("minecraft:brick_wall:275"), (short) 11146, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_275 = new BlockState(NamespaceID.from("minecraft:brick_wall:275"), (short) 11146, Block.BRICK_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_276 = new BlockState(NamespaceID.from("minecraft:brick_wall:276"), (short) 11147, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_276 = new BlockState(NamespaceID.from("minecraft:brick_wall:276"), (short) 11147, Block.BRICK_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_277 = new BlockState(NamespaceID.from("minecraft:brick_wall:277"), (short) 11148, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_277 = new BlockState(NamespaceID.from("minecraft:brick_wall:277"), (short) 11148, Block.BRICK_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_278 = new BlockState(NamespaceID.from("minecraft:brick_wall:278"), (short) 11149, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_278 = new BlockState(NamespaceID.from("minecraft:brick_wall:278"), (short) 11149, Block.BRICK_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_279 = new BlockState(NamespaceID.from("minecraft:brick_wall:279"), (short) 11150, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_279 = new BlockState(NamespaceID.from("minecraft:brick_wall:279"), (short) 11150, Block.BRICK_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_280 = new BlockState(NamespaceID.from("minecraft:brick_wall:280"), (short) 11151, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_280 = new BlockState(NamespaceID.from("minecraft:brick_wall:280"), (short) 11151, Block.BRICK_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_281 = new BlockState(NamespaceID.from("minecraft:brick_wall:281"), (short) 11152, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_281 = new BlockState(NamespaceID.from("minecraft:brick_wall:281"), (short) 11152, Block.BRICK_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_282 = new BlockState(NamespaceID.from("minecraft:brick_wall:282"), (short) 11153, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_282 = new BlockState(NamespaceID.from("minecraft:brick_wall:282"), (short) 11153, Block.BRICK_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_283 = new BlockState(NamespaceID.from("minecraft:brick_wall:283"), (short) 11154, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_283 = new BlockState(NamespaceID.from("minecraft:brick_wall:283"), (short) 11154, Block.BRICK_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_284 = new BlockState(NamespaceID.from("minecraft:brick_wall:284"), (short) 11155, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_284 = new BlockState(NamespaceID.from("minecraft:brick_wall:284"), (short) 11155, Block.BRICK_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_285 = new BlockState(NamespaceID.from("minecraft:brick_wall:285"), (short) 11156, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_285 = new BlockState(NamespaceID.from("minecraft:brick_wall:285"), (short) 11156, Block.BRICK_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_286 = new BlockState(NamespaceID.from("minecraft:brick_wall:286"), (short) 11157, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_286 = new BlockState(NamespaceID.from("minecraft:brick_wall:286"), (short) 11157, Block.BRICK_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_287 = new BlockState(NamespaceID.from("minecraft:brick_wall:287"), (short) 11158, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_287 = new BlockState(NamespaceID.from("minecraft:brick_wall:287"), (short) 11158, Block.BRICK_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_288 = new BlockState(NamespaceID.from("minecraft:brick_wall:288"), (short) 11159, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_288 = new BlockState(NamespaceID.from("minecraft:brick_wall:288"), (short) 11159, Block.BRICK_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_289 = new BlockState(NamespaceID.from("minecraft:brick_wall:289"), (short) 11160, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_289 = new BlockState(NamespaceID.from("minecraft:brick_wall:289"), (short) 11160, Block.BRICK_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_290 = new BlockState(NamespaceID.from("minecraft:brick_wall:290"), (short) 11161, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_290 = new BlockState(NamespaceID.from("minecraft:brick_wall:290"), (short) 11161, Block.BRICK_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_291 = new BlockState(NamespaceID.from("minecraft:brick_wall:291"), (short) 11162, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_291 = new BlockState(NamespaceID.from("minecraft:brick_wall:291"), (short) 11162, Block.BRICK_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_292 = new BlockState(NamespaceID.from("minecraft:brick_wall:292"), (short) 11163, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_292 = new BlockState(NamespaceID.from("minecraft:brick_wall:292"), (short) 11163, Block.BRICK_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_293 = new BlockState(NamespaceID.from("minecraft:brick_wall:293"), (short) 11164, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_293 = new BlockState(NamespaceID.from("minecraft:brick_wall:293"), (short) 11164, Block.BRICK_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_294 = new BlockState(NamespaceID.from("minecraft:brick_wall:294"), (short) 11165, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_294 = new BlockState(NamespaceID.from("minecraft:brick_wall:294"), (short) 11165, Block.BRICK_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_295 = new BlockState(NamespaceID.from("minecraft:brick_wall:295"), (short) 11166, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_295 = new BlockState(NamespaceID.from("minecraft:brick_wall:295"), (short) 11166, Block.BRICK_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_296 = new BlockState(NamespaceID.from("minecraft:brick_wall:296"), (short) 11167, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_296 = new BlockState(NamespaceID.from("minecraft:brick_wall:296"), (short) 11167, Block.BRICK_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_297 = new BlockState(NamespaceID.from("minecraft:brick_wall:297"), (short) 11168, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_297 = new BlockState(NamespaceID.from("minecraft:brick_wall:297"), (short) 11168, Block.BRICK_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_298 = new BlockState(NamespaceID.from("minecraft:brick_wall:298"), (short) 11169, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_298 = new BlockState(NamespaceID.from("minecraft:brick_wall:298"), (short) 11169, Block.BRICK_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_299 = new BlockState(NamespaceID.from("minecraft:brick_wall:299"), (short) 11170, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_299 = new BlockState(NamespaceID.from("minecraft:brick_wall:299"), (short) 11170, Block.BRICK_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_300 = new BlockState(NamespaceID.from("minecraft:brick_wall:300"), (short) 11171, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_300 = new BlockState(NamespaceID.from("minecraft:brick_wall:300"), (short) 11171, Block.BRICK_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_301 = new BlockState(NamespaceID.from("minecraft:brick_wall:301"), (short) 11172, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_301 = new BlockState(NamespaceID.from("minecraft:brick_wall:301"), (short) 11172, Block.BRICK_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_302 = new BlockState(NamespaceID.from("minecraft:brick_wall:302"), (short) 11173, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_302 = new BlockState(NamespaceID.from("minecraft:brick_wall:302"), (short) 11173, Block.BRICK_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_303 = new BlockState(NamespaceID.from("minecraft:brick_wall:303"), (short) 11174, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_303 = new BlockState(NamespaceID.from("minecraft:brick_wall:303"), (short) 11174, Block.BRICK_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_304 = new BlockState(NamespaceID.from("minecraft:brick_wall:304"), (short) 11175, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_304 = new BlockState(NamespaceID.from("minecraft:brick_wall:304"), (short) 11175, Block.BRICK_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_305 = new BlockState(NamespaceID.from("minecraft:brick_wall:305"), (short) 11176, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_305 = new BlockState(NamespaceID.from("minecraft:brick_wall:305"), (short) 11176, Block.BRICK_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_306 = new BlockState(NamespaceID.from("minecraft:brick_wall:306"), (short) 11177, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_306 = new BlockState(NamespaceID.from("minecraft:brick_wall:306"), (short) 11177, Block.BRICK_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_307 = new BlockState(NamespaceID.from("minecraft:brick_wall:307"), (short) 11178, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_307 = new BlockState(NamespaceID.from("minecraft:brick_wall:307"), (short) 11178, Block.BRICK_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_308 = new BlockState(NamespaceID.from("minecraft:brick_wall:308"), (short) 11179, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_308 = new BlockState(NamespaceID.from("minecraft:brick_wall:308"), (short) 11179, Block.BRICK_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_309 = new BlockState(NamespaceID.from("minecraft:brick_wall:309"), (short) 11180, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_309 = new BlockState(NamespaceID.from("minecraft:brick_wall:309"), (short) 11180, Block.BRICK_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_310 = new BlockState(NamespaceID.from("minecraft:brick_wall:310"), (short) 11181, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_310 = new BlockState(NamespaceID.from("minecraft:brick_wall:310"), (short) 11181, Block.BRICK_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_311 = new BlockState(NamespaceID.from("minecraft:brick_wall:311"), (short) 11182, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_311 = new BlockState(NamespaceID.from("minecraft:brick_wall:311"), (short) 11182, Block.BRICK_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_312 = new BlockState(NamespaceID.from("minecraft:brick_wall:312"), (short) 11183, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_312 = new BlockState(NamespaceID.from("minecraft:brick_wall:312"), (short) 11183, Block.BRICK_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_313 = new BlockState(NamespaceID.from("minecraft:brick_wall:313"), (short) 11184, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_313 = new BlockState(NamespaceID.from("minecraft:brick_wall:313"), (short) 11184, Block.BRICK_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_314 = new BlockState(NamespaceID.from("minecraft:brick_wall:314"), (short) 11185, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_314 = new BlockState(NamespaceID.from("minecraft:brick_wall:314"), (short) 11185, Block.BRICK_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_315 = new BlockState(NamespaceID.from("minecraft:brick_wall:315"), (short) 11186, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_315 = new BlockState(NamespaceID.from("minecraft:brick_wall:315"), (short) 11186, Block.BRICK_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_316 = new BlockState(NamespaceID.from("minecraft:brick_wall:316"), (short) 11187, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_316 = new BlockState(NamespaceID.from("minecraft:brick_wall:316"), (short) 11187, Block.BRICK_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_317 = new BlockState(NamespaceID.from("minecraft:brick_wall:317"), (short) 11188, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_317 = new BlockState(NamespaceID.from("minecraft:brick_wall:317"), (short) 11188, Block.BRICK_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState BRICK_WALL_318 = new BlockState(NamespaceID.from("minecraft:brick_wall:318"), (short) 11189, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_318 = new BlockState(NamespaceID.from("minecraft:brick_wall:318"), (short) 11189, Block.BRICK_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState BRICK_WALL_319 = new BlockState(NamespaceID.from("minecraft:brick_wall:319"), (short) 11190, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_319 = new BlockState(NamespaceID.from("minecraft:brick_wall:319"), (short) 11190, Block.BRICK_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState BRICK_WALL_320 = new BlockState(NamespaceID.from("minecraft:brick_wall:320"), (short) 11191, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_320 = new BlockState(NamespaceID.from("minecraft:brick_wall:320"), (short) 11191, Block.BRICK_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState BRICK_WALL_321 = new BlockState(NamespaceID.from("minecraft:brick_wall:321"), (short) 11192, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_321 = new BlockState(NamespaceID.from("minecraft:brick_wall:321"), (short) 11192, Block.BRICK_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState BRICK_WALL_322 = new BlockState(NamespaceID.from("minecraft:brick_wall:322"), (short) 11193, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_322 = new BlockState(NamespaceID.from("minecraft:brick_wall:322"), (short) 11193, Block.BRICK_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState BRICK_WALL_323 = new BlockState(NamespaceID.from("minecraft:brick_wall:323"), (short) 11194, Block.BRICK_WALL);
+  public static final BlockState BRICK_WALL_323 = new BlockState(NamespaceID.from("minecraft:brick_wall:323"), (short) 11194, Block.BRICK_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
   public static void initStates() {
     Block.BRICK_WALL.addBlockState(BRICK_WALL_0);

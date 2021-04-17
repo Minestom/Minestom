@@ -13,37 +13,37 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Lava {
-  public static final BlockState LAVA_0 = new BlockState(NamespaceID.from("minecraft:lava:0"), (short) 50, Block.LAVA);
+  public static final BlockState LAVA_0 = new BlockState(NamespaceID.from("minecraft:lava:0"), (short) 50, Block.LAVA, "level=0");
 
-  public static final BlockState LAVA_1 = new BlockState(NamespaceID.from("minecraft:lava:1"), (short) 51, Block.LAVA);
+  public static final BlockState LAVA_1 = new BlockState(NamespaceID.from("minecraft:lava:1"), (short) 51, Block.LAVA, "level=1");
 
-  public static final BlockState LAVA_2 = new BlockState(NamespaceID.from("minecraft:lava:2"), (short) 52, Block.LAVA);
+  public static final BlockState LAVA_2 = new BlockState(NamespaceID.from("minecraft:lava:2"), (short) 52, Block.LAVA, "level=2");
 
-  public static final BlockState LAVA_3 = new BlockState(NamespaceID.from("minecraft:lava:3"), (short) 53, Block.LAVA);
+  public static final BlockState LAVA_3 = new BlockState(NamespaceID.from("minecraft:lava:3"), (short) 53, Block.LAVA, "level=3");
 
-  public static final BlockState LAVA_4 = new BlockState(NamespaceID.from("minecraft:lava:4"), (short) 54, Block.LAVA);
+  public static final BlockState LAVA_4 = new BlockState(NamespaceID.from("minecraft:lava:4"), (short) 54, Block.LAVA, "level=4");
 
-  public static final BlockState LAVA_5 = new BlockState(NamespaceID.from("minecraft:lava:5"), (short) 55, Block.LAVA);
+  public static final BlockState LAVA_5 = new BlockState(NamespaceID.from("minecraft:lava:5"), (short) 55, Block.LAVA, "level=5");
 
-  public static final BlockState LAVA_6 = new BlockState(NamespaceID.from("minecraft:lava:6"), (short) 56, Block.LAVA);
+  public static final BlockState LAVA_6 = new BlockState(NamespaceID.from("minecraft:lava:6"), (short) 56, Block.LAVA, "level=6");
 
-  public static final BlockState LAVA_7 = new BlockState(NamespaceID.from("minecraft:lava:7"), (short) 57, Block.LAVA);
+  public static final BlockState LAVA_7 = new BlockState(NamespaceID.from("minecraft:lava:7"), (short) 57, Block.LAVA, "level=7");
 
-  public static final BlockState LAVA_8 = new BlockState(NamespaceID.from("minecraft:lava:8"), (short) 58, Block.LAVA);
+  public static final BlockState LAVA_8 = new BlockState(NamespaceID.from("minecraft:lava:8"), (short) 58, Block.LAVA, "level=8");
 
-  public static final BlockState LAVA_9 = new BlockState(NamespaceID.from("minecraft:lava:9"), (short) 59, Block.LAVA);
+  public static final BlockState LAVA_9 = new BlockState(NamespaceID.from("minecraft:lava:9"), (short) 59, Block.LAVA, "level=9");
 
-  public static final BlockState LAVA_10 = new BlockState(NamespaceID.from("minecraft:lava:10"), (short) 60, Block.LAVA);
+  public static final BlockState LAVA_10 = new BlockState(NamespaceID.from("minecraft:lava:10"), (short) 60, Block.LAVA, "level=10");
 
-  public static final BlockState LAVA_11 = new BlockState(NamespaceID.from("minecraft:lava:11"), (short) 61, Block.LAVA);
+  public static final BlockState LAVA_11 = new BlockState(NamespaceID.from("minecraft:lava:11"), (short) 61, Block.LAVA, "level=11");
 
-  public static final BlockState LAVA_12 = new BlockState(NamespaceID.from("minecraft:lava:12"), (short) 62, Block.LAVA);
+  public static final BlockState LAVA_12 = new BlockState(NamespaceID.from("minecraft:lava:12"), (short) 62, Block.LAVA, "level=12");
 
-  public static final BlockState LAVA_13 = new BlockState(NamespaceID.from("minecraft:lava:13"), (short) 63, Block.LAVA);
+  public static final BlockState LAVA_13 = new BlockState(NamespaceID.from("minecraft:lava:13"), (short) 63, Block.LAVA, "level=13");
 
-  public static final BlockState LAVA_14 = new BlockState(NamespaceID.from("minecraft:lava:14"), (short) 64, Block.LAVA);
+  public static final BlockState LAVA_14 = new BlockState(NamespaceID.from("minecraft:lava:14"), (short) 64, Block.LAVA, "level=14");
 
-  public static final BlockState LAVA_15 = new BlockState(NamespaceID.from("minecraft:lava:15"), (short) 65, Block.LAVA);
+  public static final BlockState LAVA_15 = new BlockState(NamespaceID.from("minecraft:lava:15"), (short) 65, Block.LAVA, "level=15");
 
   public static void initStates() {
     Block.LAVA.addBlockState(LAVA_0);

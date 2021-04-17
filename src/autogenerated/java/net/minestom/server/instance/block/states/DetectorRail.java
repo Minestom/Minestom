@@ -13,29 +13,29 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DetectorRail {
-  public static final BlockState DETECTOR_RAIL_0 = new BlockState(NamespaceID.from("minecraft:detector_rail:0"), (short) 1317, Block.DETECTOR_RAIL);
+  public static final BlockState DETECTOR_RAIL_0 = new BlockState(NamespaceID.from("minecraft:detector_rail:0"), (short) 1317, Block.DETECTOR_RAIL, "powered=true","shape=north_south");
 
-  public static final BlockState DETECTOR_RAIL_1 = new BlockState(NamespaceID.from("minecraft:detector_rail:1"), (short) 1318, Block.DETECTOR_RAIL);
+  public static final BlockState DETECTOR_RAIL_1 = new BlockState(NamespaceID.from("minecraft:detector_rail:1"), (short) 1318, Block.DETECTOR_RAIL, "powered=true","shape=east_west");
 
-  public static final BlockState DETECTOR_RAIL_2 = new BlockState(NamespaceID.from("minecraft:detector_rail:2"), (short) 1319, Block.DETECTOR_RAIL);
+  public static final BlockState DETECTOR_RAIL_2 = new BlockState(NamespaceID.from("minecraft:detector_rail:2"), (short) 1319, Block.DETECTOR_RAIL, "powered=true","shape=ascending_east");
 
-  public static final BlockState DETECTOR_RAIL_3 = new BlockState(NamespaceID.from("minecraft:detector_rail:3"), (short) 1320, Block.DETECTOR_RAIL);
+  public static final BlockState DETECTOR_RAIL_3 = new BlockState(NamespaceID.from("minecraft:detector_rail:3"), (short) 1320, Block.DETECTOR_RAIL, "powered=true","shape=ascending_west");
 
-  public static final BlockState DETECTOR_RAIL_4 = new BlockState(NamespaceID.from("minecraft:detector_rail:4"), (short) 1321, Block.DETECTOR_RAIL);
+  public static final BlockState DETECTOR_RAIL_4 = new BlockState(NamespaceID.from("minecraft:detector_rail:4"), (short) 1321, Block.DETECTOR_RAIL, "powered=true","shape=ascending_north");
 
-  public static final BlockState DETECTOR_RAIL_5 = new BlockState(NamespaceID.from("minecraft:detector_rail:5"), (short) 1322, Block.DETECTOR_RAIL);
+  public static final BlockState DETECTOR_RAIL_5 = new BlockState(NamespaceID.from("minecraft:detector_rail:5"), (short) 1322, Block.DETECTOR_RAIL, "powered=true","shape=ascending_south");
 
-  public static final BlockState DETECTOR_RAIL_6 = new BlockState(NamespaceID.from("minecraft:detector_rail:6"), (short) 1323, Block.DETECTOR_RAIL);
+  public static final BlockState DETECTOR_RAIL_6 = new BlockState(NamespaceID.from("minecraft:detector_rail:6"), (short) 1323, Block.DETECTOR_RAIL, "powered=false","shape=north_south");
 
-  public static final BlockState DETECTOR_RAIL_7 = new BlockState(NamespaceID.from("minecraft:detector_rail:7"), (short) 1324, Block.DETECTOR_RAIL);
+  public static final BlockState DETECTOR_RAIL_7 = new BlockState(NamespaceID.from("minecraft:detector_rail:7"), (short) 1324, Block.DETECTOR_RAIL, "powered=false","shape=east_west");
 
-  public static final BlockState DETECTOR_RAIL_8 = new BlockState(NamespaceID.from("minecraft:detector_rail:8"), (short) 1325, Block.DETECTOR_RAIL);
+  public static final BlockState DETECTOR_RAIL_8 = new BlockState(NamespaceID.from("minecraft:detector_rail:8"), (short) 1325, Block.DETECTOR_RAIL, "powered=false","shape=ascending_east");
 
-  public static final BlockState DETECTOR_RAIL_9 = new BlockState(NamespaceID.from("minecraft:detector_rail:9"), (short) 1326, Block.DETECTOR_RAIL);
+  public static final BlockState DETECTOR_RAIL_9 = new BlockState(NamespaceID.from("minecraft:detector_rail:9"), (short) 1326, Block.DETECTOR_RAIL, "powered=false","shape=ascending_west");
 
-  public static final BlockState DETECTOR_RAIL_10 = new BlockState(NamespaceID.from("minecraft:detector_rail:10"), (short) 1327, Block.DETECTOR_RAIL);
+  public static final BlockState DETECTOR_RAIL_10 = new BlockState(NamespaceID.from("minecraft:detector_rail:10"), (short) 1327, Block.DETECTOR_RAIL, "powered=false","shape=ascending_north");
 
-  public static final BlockState DETECTOR_RAIL_11 = new BlockState(NamespaceID.from("minecraft:detector_rail:11"), (short) 1328, Block.DETECTOR_RAIL);
+  public static final BlockState DETECTOR_RAIL_11 = new BlockState(NamespaceID.from("minecraft:detector_rail:11"), (short) 1328, Block.DETECTOR_RAIL, "powered=false","shape=ascending_south");
 
   public static void initStates() {
     Block.DETECTOR_RAIL.addBlockState(DETECTOR_RAIL_0);

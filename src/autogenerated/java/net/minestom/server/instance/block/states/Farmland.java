@@ -13,21 +13,21 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Farmland {
-  public static final BlockState FARMLAND_0 = new BlockState(NamespaceID.from("minecraft:farmland:0"), (short) 3365, Block.FARMLAND);
+  public static final BlockState FARMLAND_0 = new BlockState(NamespaceID.from("minecraft:farmland:0"), (short) 3365, Block.FARMLAND, "moisture=0");
 
-  public static final BlockState FARMLAND_1 = new BlockState(NamespaceID.from("minecraft:farmland:1"), (short) 3366, Block.FARMLAND);
+  public static final BlockState FARMLAND_1 = new BlockState(NamespaceID.from("minecraft:farmland:1"), (short) 3366, Block.FARMLAND, "moisture=1");
 
-  public static final BlockState FARMLAND_2 = new BlockState(NamespaceID.from("minecraft:farmland:2"), (short) 3367, Block.FARMLAND);
+  public static final BlockState FARMLAND_2 = new BlockState(NamespaceID.from("minecraft:farmland:2"), (short) 3367, Block.FARMLAND, "moisture=2");
 
-  public static final BlockState FARMLAND_3 = new BlockState(NamespaceID.from("minecraft:farmland:3"), (short) 3368, Block.FARMLAND);
+  public static final BlockState FARMLAND_3 = new BlockState(NamespaceID.from("minecraft:farmland:3"), (short) 3368, Block.FARMLAND, "moisture=3");
 
-  public static final BlockState FARMLAND_4 = new BlockState(NamespaceID.from("minecraft:farmland:4"), (short) 3369, Block.FARMLAND);
+  public static final BlockState FARMLAND_4 = new BlockState(NamespaceID.from("minecraft:farmland:4"), (short) 3369, Block.FARMLAND, "moisture=4");
 
-  public static final BlockState FARMLAND_5 = new BlockState(NamespaceID.from("minecraft:farmland:5"), (short) 3370, Block.FARMLAND);
+  public static final BlockState FARMLAND_5 = new BlockState(NamespaceID.from("minecraft:farmland:5"), (short) 3370, Block.FARMLAND, "moisture=5");
 
-  public static final BlockState FARMLAND_6 = new BlockState(NamespaceID.from("minecraft:farmland:6"), (short) 3371, Block.FARMLAND);
+  public static final BlockState FARMLAND_6 = new BlockState(NamespaceID.from("minecraft:farmland:6"), (short) 3371, Block.FARMLAND, "moisture=6");
 
-  public static final BlockState FARMLAND_7 = new BlockState(NamespaceID.from("minecraft:farmland:7"), (short) 3372, Block.FARMLAND);
+  public static final BlockState FARMLAND_7 = new BlockState(NamespaceID.from("minecraft:farmland:7"), (short) 3372, Block.FARMLAND, "moisture=7");
 
   public static void initStates() {
     Block.FARMLAND.addBlockState(FARMLAND_0);

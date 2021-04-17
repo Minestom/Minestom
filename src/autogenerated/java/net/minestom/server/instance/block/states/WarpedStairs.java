@@ -13,165 +13,165 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WarpedStairs {
-  public static final BlockState WARPED_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:warped_stairs:0"), (short) 15407, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:warped_stairs:0"), (short) 15407, Block.WARPED_STAIRS, "facing=north","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:warped_stairs:1"), (short) 15408, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:warped_stairs:1"), (short) 15408, Block.WARPED_STAIRS, "facing=north","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:warped_stairs:2"), (short) 15409, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:warped_stairs:2"), (short) 15409, Block.WARPED_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:warped_stairs:3"), (short) 15410, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:warped_stairs:3"), (short) 15410, Block.WARPED_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:warped_stairs:4"), (short) 15411, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:warped_stairs:4"), (short) 15411, Block.WARPED_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:warped_stairs:5"), (short) 15412, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:warped_stairs:5"), (short) 15412, Block.WARPED_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:warped_stairs:6"), (short) 15413, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:warped_stairs:6"), (short) 15413, Block.WARPED_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:warped_stairs:7"), (short) 15414, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:warped_stairs:7"), (short) 15414, Block.WARPED_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:warped_stairs:8"), (short) 15415, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:warped_stairs:8"), (short) 15415, Block.WARPED_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:warped_stairs:9"), (short) 15416, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:warped_stairs:9"), (short) 15416, Block.WARPED_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:warped_stairs:10"), (short) 15417, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:warped_stairs:10"), (short) 15417, Block.WARPED_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:warped_stairs:11"), (short) 15418, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:warped_stairs:11"), (short) 15418, Block.WARPED_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:warped_stairs:12"), (short) 15419, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:warped_stairs:12"), (short) 15419, Block.WARPED_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:warped_stairs:13"), (short) 15420, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:warped_stairs:13"), (short) 15420, Block.WARPED_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:warped_stairs:14"), (short) 15421, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:warped_stairs:14"), (short) 15421, Block.WARPED_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:warped_stairs:15"), (short) 15422, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:warped_stairs:15"), (short) 15422, Block.WARPED_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:warped_stairs:16"), (short) 15423, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:warped_stairs:16"), (short) 15423, Block.WARPED_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:warped_stairs:17"), (short) 15424, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:warped_stairs:17"), (short) 15424, Block.WARPED_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:warped_stairs:18"), (short) 15425, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:warped_stairs:18"), (short) 15425, Block.WARPED_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:warped_stairs:19"), (short) 15426, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:warped_stairs:19"), (short) 15426, Block.WARPED_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:warped_stairs:20"), (short) 15427, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:warped_stairs:20"), (short) 15427, Block.WARPED_STAIRS, "facing=south","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:warped_stairs:21"), (short) 15428, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:warped_stairs:21"), (short) 15428, Block.WARPED_STAIRS, "facing=south","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:warped_stairs:22"), (short) 15429, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:warped_stairs:22"), (short) 15429, Block.WARPED_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:warped_stairs:23"), (short) 15430, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:warped_stairs:23"), (short) 15430, Block.WARPED_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:warped_stairs:24"), (short) 15431, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:warped_stairs:24"), (short) 15431, Block.WARPED_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:warped_stairs:25"), (short) 15432, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:warped_stairs:25"), (short) 15432, Block.WARPED_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:warped_stairs:26"), (short) 15433, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:warped_stairs:26"), (short) 15433, Block.WARPED_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:warped_stairs:27"), (short) 15434, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:warped_stairs:27"), (short) 15434, Block.WARPED_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:warped_stairs:28"), (short) 15435, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:warped_stairs:28"), (short) 15435, Block.WARPED_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:warped_stairs:29"), (short) 15436, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:warped_stairs:29"), (short) 15436, Block.WARPED_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:warped_stairs:30"), (short) 15437, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:warped_stairs:30"), (short) 15437, Block.WARPED_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:warped_stairs:31"), (short) 15438, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:warped_stairs:31"), (short) 15438, Block.WARPED_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:warped_stairs:32"), (short) 15439, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:warped_stairs:32"), (short) 15439, Block.WARPED_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:warped_stairs:33"), (short) 15440, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:warped_stairs:33"), (short) 15440, Block.WARPED_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:warped_stairs:34"), (short) 15441, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:warped_stairs:34"), (short) 15441, Block.WARPED_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:warped_stairs:35"), (short) 15442, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:warped_stairs:35"), (short) 15442, Block.WARPED_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:warped_stairs:36"), (short) 15443, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:warped_stairs:36"), (short) 15443, Block.WARPED_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:warped_stairs:37"), (short) 15444, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:warped_stairs:37"), (short) 15444, Block.WARPED_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:warped_stairs:38"), (short) 15445, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:warped_stairs:38"), (short) 15445, Block.WARPED_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:warped_stairs:39"), (short) 15446, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:warped_stairs:39"), (short) 15446, Block.WARPED_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:warped_stairs:40"), (short) 15447, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:warped_stairs:40"), (short) 15447, Block.WARPED_STAIRS, "facing=west","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:warped_stairs:41"), (short) 15448, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:warped_stairs:41"), (short) 15448, Block.WARPED_STAIRS, "facing=west","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:warped_stairs:42"), (short) 15449, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:warped_stairs:42"), (short) 15449, Block.WARPED_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:warped_stairs:43"), (short) 15450, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:warped_stairs:43"), (short) 15450, Block.WARPED_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:warped_stairs:44"), (short) 15451, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:warped_stairs:44"), (short) 15451, Block.WARPED_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:warped_stairs:45"), (short) 15452, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:warped_stairs:45"), (short) 15452, Block.WARPED_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:warped_stairs:46"), (short) 15453, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:warped_stairs:46"), (short) 15453, Block.WARPED_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:warped_stairs:47"), (short) 15454, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:warped_stairs:47"), (short) 15454, Block.WARPED_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:warped_stairs:48"), (short) 15455, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:warped_stairs:48"), (short) 15455, Block.WARPED_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:warped_stairs:49"), (short) 15456, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:warped_stairs:49"), (short) 15456, Block.WARPED_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:warped_stairs:50"), (short) 15457, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:warped_stairs:50"), (short) 15457, Block.WARPED_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:warped_stairs:51"), (short) 15458, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:warped_stairs:51"), (short) 15458, Block.WARPED_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:warped_stairs:52"), (short) 15459, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:warped_stairs:52"), (short) 15459, Block.WARPED_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:warped_stairs:53"), (short) 15460, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:warped_stairs:53"), (short) 15460, Block.WARPED_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:warped_stairs:54"), (short) 15461, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:warped_stairs:54"), (short) 15461, Block.WARPED_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:warped_stairs:55"), (short) 15462, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:warped_stairs:55"), (short) 15462, Block.WARPED_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:warped_stairs:56"), (short) 15463, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:warped_stairs:56"), (short) 15463, Block.WARPED_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:warped_stairs:57"), (short) 15464, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:warped_stairs:57"), (short) 15464, Block.WARPED_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:warped_stairs:58"), (short) 15465, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:warped_stairs:58"), (short) 15465, Block.WARPED_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:warped_stairs:59"), (short) 15466, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:warped_stairs:59"), (short) 15466, Block.WARPED_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:warped_stairs:60"), (short) 15467, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:warped_stairs:60"), (short) 15467, Block.WARPED_STAIRS, "facing=east","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:warped_stairs:61"), (short) 15468, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:warped_stairs:61"), (short) 15468, Block.WARPED_STAIRS, "facing=east","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:warped_stairs:62"), (short) 15469, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:warped_stairs:62"), (short) 15469, Block.WARPED_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:warped_stairs:63"), (short) 15470, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:warped_stairs:63"), (short) 15470, Block.WARPED_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:warped_stairs:64"), (short) 15471, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:warped_stairs:64"), (short) 15471, Block.WARPED_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:warped_stairs:65"), (short) 15472, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:warped_stairs:65"), (short) 15472, Block.WARPED_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:warped_stairs:66"), (short) 15473, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:warped_stairs:66"), (short) 15473, Block.WARPED_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:warped_stairs:67"), (short) 15474, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:warped_stairs:67"), (short) 15474, Block.WARPED_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:warped_stairs:68"), (short) 15475, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:warped_stairs:68"), (short) 15475, Block.WARPED_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:warped_stairs:69"), (short) 15476, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:warped_stairs:69"), (short) 15476, Block.WARPED_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:warped_stairs:70"), (short) 15477, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:warped_stairs:70"), (short) 15477, Block.WARPED_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:warped_stairs:71"), (short) 15478, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:warped_stairs:71"), (short) 15478, Block.WARPED_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:warped_stairs:72"), (short) 15479, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:warped_stairs:72"), (short) 15479, Block.WARPED_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:warped_stairs:73"), (short) 15480, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:warped_stairs:73"), (short) 15480, Block.WARPED_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:warped_stairs:74"), (short) 15481, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:warped_stairs:74"), (short) 15481, Block.WARPED_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:warped_stairs:75"), (short) 15482, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:warped_stairs:75"), (short) 15482, Block.WARPED_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:warped_stairs:76"), (short) 15483, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:warped_stairs:76"), (short) 15483, Block.WARPED_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:warped_stairs:77"), (short) 15484, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:warped_stairs:77"), (short) 15484, Block.WARPED_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState WARPED_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:warped_stairs:78"), (short) 15485, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:warped_stairs:78"), (short) 15485, Block.WARPED_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState WARPED_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:warped_stairs:79"), (short) 15486, Block.WARPED_STAIRS);
+  public static final BlockState WARPED_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:warped_stairs:79"), (short) 15486, Block.WARPED_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
 
   public static void initStates() {
     Block.WARPED_STAIRS.addBlockState(WARPED_STAIRS_0);

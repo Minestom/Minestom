@@ -13,21 +13,21 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Carrots {
-  public static final BlockState CARROTS_0 = new BlockState(NamespaceID.from("minecraft:carrots:0"), (short) 6334, Block.CARROTS);
+  public static final BlockState CARROTS_0 = new BlockState(NamespaceID.from("minecraft:carrots:0"), (short) 6334, Block.CARROTS, "age=0");
 
-  public static final BlockState CARROTS_1 = new BlockState(NamespaceID.from("minecraft:carrots:1"), (short) 6335, Block.CARROTS);
+  public static final BlockState CARROTS_1 = new BlockState(NamespaceID.from("minecraft:carrots:1"), (short) 6335, Block.CARROTS, "age=1");
 
-  public static final BlockState CARROTS_2 = new BlockState(NamespaceID.from("minecraft:carrots:2"), (short) 6336, Block.CARROTS);
+  public static final BlockState CARROTS_2 = new BlockState(NamespaceID.from("minecraft:carrots:2"), (short) 6336, Block.CARROTS, "age=2");
 
-  public static final BlockState CARROTS_3 = new BlockState(NamespaceID.from("minecraft:carrots:3"), (short) 6337, Block.CARROTS);
+  public static final BlockState CARROTS_3 = new BlockState(NamespaceID.from("minecraft:carrots:3"), (short) 6337, Block.CARROTS, "age=3");
 
-  public static final BlockState CARROTS_4 = new BlockState(NamespaceID.from("minecraft:carrots:4"), (short) 6338, Block.CARROTS);
+  public static final BlockState CARROTS_4 = new BlockState(NamespaceID.from("minecraft:carrots:4"), (short) 6338, Block.CARROTS, "age=4");
 
-  public static final BlockState CARROTS_5 = new BlockState(NamespaceID.from("minecraft:carrots:5"), (short) 6339, Block.CARROTS);
+  public static final BlockState CARROTS_5 = new BlockState(NamespaceID.from("minecraft:carrots:5"), (short) 6339, Block.CARROTS, "age=5");
 
-  public static final BlockState CARROTS_6 = new BlockState(NamespaceID.from("minecraft:carrots:6"), (short) 6340, Block.CARROTS);
+  public static final BlockState CARROTS_6 = new BlockState(NamespaceID.from("minecraft:carrots:6"), (short) 6340, Block.CARROTS, "age=6");
 
-  public static final BlockState CARROTS_7 = new BlockState(NamespaceID.from("minecraft:carrots:7"), (short) 6341, Block.CARROTS);
+  public static final BlockState CARROTS_7 = new BlockState(NamespaceID.from("minecraft:carrots:7"), (short) 6341, Block.CARROTS, "age=7");
 
   public static void initStates() {
     Block.CARROTS.addBlockState(CARROTS_0);

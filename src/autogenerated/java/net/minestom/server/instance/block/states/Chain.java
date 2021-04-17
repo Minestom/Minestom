@@ -13,17 +13,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Chain {
-  public static final BlockState CHAIN_0 = new BlockState(NamespaceID.from("minecraft:chain:0"), (short) 4729, Block.CHAIN);
+  public static final BlockState CHAIN_0 = new BlockState(NamespaceID.from("minecraft:chain:0"), (short) 4729, Block.CHAIN, "axis=x","waterlogged=true");
 
-  public static final BlockState CHAIN_1 = new BlockState(NamespaceID.from("minecraft:chain:1"), (short) 4730, Block.CHAIN);
+  public static final BlockState CHAIN_1 = new BlockState(NamespaceID.from("minecraft:chain:1"), (short) 4730, Block.CHAIN, "axis=x","waterlogged=false");
 
-  public static final BlockState CHAIN_2 = new BlockState(NamespaceID.from("minecraft:chain:2"), (short) 4731, Block.CHAIN);
+  public static final BlockState CHAIN_2 = new BlockState(NamespaceID.from("minecraft:chain:2"), (short) 4731, Block.CHAIN, "axis=y","waterlogged=true");
 
-  public static final BlockState CHAIN_3 = new BlockState(NamespaceID.from("minecraft:chain:3"), (short) 4732, Block.CHAIN);
+  public static final BlockState CHAIN_3 = new BlockState(NamespaceID.from("minecraft:chain:3"), (short) 4732, Block.CHAIN, "axis=y","waterlogged=false");
 
-  public static final BlockState CHAIN_4 = new BlockState(NamespaceID.from("minecraft:chain:4"), (short) 4733, Block.CHAIN);
+  public static final BlockState CHAIN_4 = new BlockState(NamespaceID.from("minecraft:chain:4"), (short) 4733, Block.CHAIN, "axis=z","waterlogged=true");
 
-  public static final BlockState CHAIN_5 = new BlockState(NamespaceID.from("minecraft:chain:5"), (short) 4734, Block.CHAIN);
+  public static final BlockState CHAIN_5 = new BlockState(NamespaceID.from("minecraft:chain:5"), (short) 4734, Block.CHAIN, "axis=z","waterlogged=false");
 
   public static void initStates() {
     Block.CHAIN.addBlockState(CHAIN_0);

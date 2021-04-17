@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class FrostedIce {
-  public static final BlockState FROSTED_ICE_0 = new BlockState(NamespaceID.from("minecraft:frosted_ice:0"), (short) 9253, Block.FROSTED_ICE);
+  public static final BlockState FROSTED_ICE_0 = new BlockState(NamespaceID.from("minecraft:frosted_ice:0"), (short) 9253, Block.FROSTED_ICE, "age=0");
 
-  public static final BlockState FROSTED_ICE_1 = new BlockState(NamespaceID.from("minecraft:frosted_ice:1"), (short) 9254, Block.FROSTED_ICE);
+  public static final BlockState FROSTED_ICE_1 = new BlockState(NamespaceID.from("minecraft:frosted_ice:1"), (short) 9254, Block.FROSTED_ICE, "age=1");
 
-  public static final BlockState FROSTED_ICE_2 = new BlockState(NamespaceID.from("minecraft:frosted_ice:2"), (short) 9255, Block.FROSTED_ICE);
+  public static final BlockState FROSTED_ICE_2 = new BlockState(NamespaceID.from("minecraft:frosted_ice:2"), (short) 9255, Block.FROSTED_ICE, "age=2");
 
-  public static final BlockState FROSTED_ICE_3 = new BlockState(NamespaceID.from("minecraft:frosted_ice:3"), (short) 9256, Block.FROSTED_ICE);
+  public static final BlockState FROSTED_ICE_3 = new BlockState(NamespaceID.from("minecraft:frosted_ice:3"), (short) 9256, Block.FROSTED_ICE, "age=3");
 
   public static void initStates() {
     Block.FROSTED_ICE.addBlockState(FROSTED_ICE_0);

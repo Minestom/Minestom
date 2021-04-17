@@ -13,37 +13,37 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SugarCane {
-  public static final BlockState SUGAR_CANE_0 = new BlockState(NamespaceID.from("minecraft:sugar_cane:0"), (short) 3948, Block.SUGAR_CANE);
+  public static final BlockState SUGAR_CANE_0 = new BlockState(NamespaceID.from("minecraft:sugar_cane:0"), (short) 3948, Block.SUGAR_CANE, "age=0");
 
-  public static final BlockState SUGAR_CANE_1 = new BlockState(NamespaceID.from("minecraft:sugar_cane:1"), (short) 3949, Block.SUGAR_CANE);
+  public static final BlockState SUGAR_CANE_1 = new BlockState(NamespaceID.from("minecraft:sugar_cane:1"), (short) 3949, Block.SUGAR_CANE, "age=1");
 
-  public static final BlockState SUGAR_CANE_2 = new BlockState(NamespaceID.from("minecraft:sugar_cane:2"), (short) 3950, Block.SUGAR_CANE);
+  public static final BlockState SUGAR_CANE_2 = new BlockState(NamespaceID.from("minecraft:sugar_cane:2"), (short) 3950, Block.SUGAR_CANE, "age=2");
 
-  public static final BlockState SUGAR_CANE_3 = new BlockState(NamespaceID.from("minecraft:sugar_cane:3"), (short) 3951, Block.SUGAR_CANE);
+  public static final BlockState SUGAR_CANE_3 = new BlockState(NamespaceID.from("minecraft:sugar_cane:3"), (short) 3951, Block.SUGAR_CANE, "age=3");
 
-  public static final BlockState SUGAR_CANE_4 = new BlockState(NamespaceID.from("minecraft:sugar_cane:4"), (short) 3952, Block.SUGAR_CANE);
+  public static final BlockState SUGAR_CANE_4 = new BlockState(NamespaceID.from("minecraft:sugar_cane:4"), (short) 3952, Block.SUGAR_CANE, "age=4");
 
-  public static final BlockState SUGAR_CANE_5 = new BlockState(NamespaceID.from("minecraft:sugar_cane:5"), (short) 3953, Block.SUGAR_CANE);
+  public static final BlockState SUGAR_CANE_5 = new BlockState(NamespaceID.from("minecraft:sugar_cane:5"), (short) 3953, Block.SUGAR_CANE, "age=5");
 
-  public static final BlockState SUGAR_CANE_6 = new BlockState(NamespaceID.from("minecraft:sugar_cane:6"), (short) 3954, Block.SUGAR_CANE);
+  public static final BlockState SUGAR_CANE_6 = new BlockState(NamespaceID.from("minecraft:sugar_cane:6"), (short) 3954, Block.SUGAR_CANE, "age=6");
 
-  public static final BlockState SUGAR_CANE_7 = new BlockState(NamespaceID.from("minecraft:sugar_cane:7"), (short) 3955, Block.SUGAR_CANE);
+  public static final BlockState SUGAR_CANE_7 = new BlockState(NamespaceID.from("minecraft:sugar_cane:7"), (short) 3955, Block.SUGAR_CANE, "age=7");
 
-  public static final BlockState SUGAR_CANE_8 = new BlockState(NamespaceID.from("minecraft:sugar_cane:8"), (short) 3956, Block.SUGAR_CANE);
+  public static final BlockState SUGAR_CANE_8 = new BlockState(NamespaceID.from("minecraft:sugar_cane:8"), (short) 3956, Block.SUGAR_CANE, "age=8");
 
-  public static final BlockState SUGAR_CANE_9 = new BlockState(NamespaceID.from("minecraft:sugar_cane:9"), (short) 3957, Block.SUGAR_CANE);
+  public static final BlockState SUGAR_CANE_9 = new BlockState(NamespaceID.from("minecraft:sugar_cane:9"), (short) 3957, Block.SUGAR_CANE, "age=9");
 
-  public static final BlockState SUGAR_CANE_10 = new BlockState(NamespaceID.from("minecraft:sugar_cane:10"), (short) 3958, Block.SUGAR_CANE);
+  public static final BlockState SUGAR_CANE_10 = new BlockState(NamespaceID.from("minecraft:sugar_cane:10"), (short) 3958, Block.SUGAR_CANE, "age=10");
 
-  public static final BlockState SUGAR_CANE_11 = new BlockState(NamespaceID.from("minecraft:sugar_cane:11"), (short) 3959, Block.SUGAR_CANE);
+  public static final BlockState SUGAR_CANE_11 = new BlockState(NamespaceID.from("minecraft:sugar_cane:11"), (short) 3959, Block.SUGAR_CANE, "age=11");
 
-  public static final BlockState SUGAR_CANE_12 = new BlockState(NamespaceID.from("minecraft:sugar_cane:12"), (short) 3960, Block.SUGAR_CANE);
+  public static final BlockState SUGAR_CANE_12 = new BlockState(NamespaceID.from("minecraft:sugar_cane:12"), (short) 3960, Block.SUGAR_CANE, "age=12");
 
-  public static final BlockState SUGAR_CANE_13 = new BlockState(NamespaceID.from("minecraft:sugar_cane:13"), (short) 3961, Block.SUGAR_CANE);
+  public static final BlockState SUGAR_CANE_13 = new BlockState(NamespaceID.from("minecraft:sugar_cane:13"), (short) 3961, Block.SUGAR_CANE, "age=13");
 
-  public static final BlockState SUGAR_CANE_14 = new BlockState(NamespaceID.from("minecraft:sugar_cane:14"), (short) 3962, Block.SUGAR_CANE);
+  public static final BlockState SUGAR_CANE_14 = new BlockState(NamespaceID.from("minecraft:sugar_cane:14"), (short) 3962, Block.SUGAR_CANE, "age=14");
 
-  public static final BlockState SUGAR_CANE_15 = new BlockState(NamespaceID.from("minecraft:sugar_cane:15"), (short) 3963, Block.SUGAR_CANE);
+  public static final BlockState SUGAR_CANE_15 = new BlockState(NamespaceID.from("minecraft:sugar_cane:15"), (short) 3963, Block.SUGAR_CANE, "age=15");
 
   public static void initStates() {
     Block.SUGAR_CANE.addBlockState(SUGAR_CANE_0);

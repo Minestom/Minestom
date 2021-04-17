@@ -13,133 +13,133 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WarpedTrapdoor {
-  public static final BlockState WARPED_TRAPDOOR_0 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:0"), (short) 15199, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_0 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:0"), (short) 15199, Block.WARPED_TRAPDOOR, "facing=north","half=top","open=true","powered=true","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_1 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:1"), (short) 15200, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_1 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:1"), (short) 15200, Block.WARPED_TRAPDOOR, "facing=north","half=top","open=true","powered=true","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_2 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:2"), (short) 15201, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_2 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:2"), (short) 15201, Block.WARPED_TRAPDOOR, "facing=north","half=top","open=true","powered=false","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_3 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:3"), (short) 15202, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_3 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:3"), (short) 15202, Block.WARPED_TRAPDOOR, "facing=north","half=top","open=true","powered=false","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_4 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:4"), (short) 15203, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_4 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:4"), (short) 15203, Block.WARPED_TRAPDOOR, "facing=north","half=top","open=false","powered=true","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_5 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:5"), (short) 15204, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_5 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:5"), (short) 15204, Block.WARPED_TRAPDOOR, "facing=north","half=top","open=false","powered=true","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_6 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:6"), (short) 15205, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_6 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:6"), (short) 15205, Block.WARPED_TRAPDOOR, "facing=north","half=top","open=false","powered=false","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_7 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:7"), (short) 15206, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_7 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:7"), (short) 15206, Block.WARPED_TRAPDOOR, "facing=north","half=top","open=false","powered=false","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_8 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:8"), (short) 15207, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_8 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:8"), (short) 15207, Block.WARPED_TRAPDOOR, "facing=north","half=bottom","open=true","powered=true","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_9 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:9"), (short) 15208, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_9 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:9"), (short) 15208, Block.WARPED_TRAPDOOR, "facing=north","half=bottom","open=true","powered=true","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_10 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:10"), (short) 15209, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_10 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:10"), (short) 15209, Block.WARPED_TRAPDOOR, "facing=north","half=bottom","open=true","powered=false","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_11 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:11"), (short) 15210, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_11 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:11"), (short) 15210, Block.WARPED_TRAPDOOR, "facing=north","half=bottom","open=true","powered=false","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_12 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:12"), (short) 15211, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_12 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:12"), (short) 15211, Block.WARPED_TRAPDOOR, "facing=north","half=bottom","open=false","powered=true","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_13 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:13"), (short) 15212, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_13 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:13"), (short) 15212, Block.WARPED_TRAPDOOR, "facing=north","half=bottom","open=false","powered=true","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_14 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:14"), (short) 15213, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_14 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:14"), (short) 15213, Block.WARPED_TRAPDOOR, "facing=north","half=bottom","open=false","powered=false","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_15 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:15"), (short) 15214, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_15 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:15"), (short) 15214, Block.WARPED_TRAPDOOR, "facing=north","half=bottom","open=false","powered=false","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_16 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:16"), (short) 15215, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_16 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:16"), (short) 15215, Block.WARPED_TRAPDOOR, "facing=south","half=top","open=true","powered=true","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_17 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:17"), (short) 15216, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_17 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:17"), (short) 15216, Block.WARPED_TRAPDOOR, "facing=south","half=top","open=true","powered=true","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_18 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:18"), (short) 15217, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_18 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:18"), (short) 15217, Block.WARPED_TRAPDOOR, "facing=south","half=top","open=true","powered=false","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_19 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:19"), (short) 15218, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_19 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:19"), (short) 15218, Block.WARPED_TRAPDOOR, "facing=south","half=top","open=true","powered=false","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_20 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:20"), (short) 15219, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_20 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:20"), (short) 15219, Block.WARPED_TRAPDOOR, "facing=south","half=top","open=false","powered=true","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_21 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:21"), (short) 15220, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_21 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:21"), (short) 15220, Block.WARPED_TRAPDOOR, "facing=south","half=top","open=false","powered=true","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_22 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:22"), (short) 15221, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_22 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:22"), (short) 15221, Block.WARPED_TRAPDOOR, "facing=south","half=top","open=false","powered=false","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_23 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:23"), (short) 15222, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_23 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:23"), (short) 15222, Block.WARPED_TRAPDOOR, "facing=south","half=top","open=false","powered=false","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_24 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:24"), (short) 15223, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_24 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:24"), (short) 15223, Block.WARPED_TRAPDOOR, "facing=south","half=bottom","open=true","powered=true","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_25 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:25"), (short) 15224, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_25 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:25"), (short) 15224, Block.WARPED_TRAPDOOR, "facing=south","half=bottom","open=true","powered=true","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_26 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:26"), (short) 15225, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_26 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:26"), (short) 15225, Block.WARPED_TRAPDOOR, "facing=south","half=bottom","open=true","powered=false","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_27 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:27"), (short) 15226, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_27 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:27"), (short) 15226, Block.WARPED_TRAPDOOR, "facing=south","half=bottom","open=true","powered=false","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_28 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:28"), (short) 15227, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_28 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:28"), (short) 15227, Block.WARPED_TRAPDOOR, "facing=south","half=bottom","open=false","powered=true","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_29 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:29"), (short) 15228, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_29 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:29"), (short) 15228, Block.WARPED_TRAPDOOR, "facing=south","half=bottom","open=false","powered=true","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_30 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:30"), (short) 15229, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_30 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:30"), (short) 15229, Block.WARPED_TRAPDOOR, "facing=south","half=bottom","open=false","powered=false","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_31 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:31"), (short) 15230, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_31 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:31"), (short) 15230, Block.WARPED_TRAPDOOR, "facing=south","half=bottom","open=false","powered=false","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_32 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:32"), (short) 15231, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_32 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:32"), (short) 15231, Block.WARPED_TRAPDOOR, "facing=west","half=top","open=true","powered=true","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_33 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:33"), (short) 15232, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_33 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:33"), (short) 15232, Block.WARPED_TRAPDOOR, "facing=west","half=top","open=true","powered=true","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_34 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:34"), (short) 15233, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_34 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:34"), (short) 15233, Block.WARPED_TRAPDOOR, "facing=west","half=top","open=true","powered=false","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_35 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:35"), (short) 15234, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_35 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:35"), (short) 15234, Block.WARPED_TRAPDOOR, "facing=west","half=top","open=true","powered=false","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_36 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:36"), (short) 15235, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_36 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:36"), (short) 15235, Block.WARPED_TRAPDOOR, "facing=west","half=top","open=false","powered=true","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_37 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:37"), (short) 15236, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_37 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:37"), (short) 15236, Block.WARPED_TRAPDOOR, "facing=west","half=top","open=false","powered=true","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_38 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:38"), (short) 15237, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_38 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:38"), (short) 15237, Block.WARPED_TRAPDOOR, "facing=west","half=top","open=false","powered=false","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_39 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:39"), (short) 15238, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_39 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:39"), (short) 15238, Block.WARPED_TRAPDOOR, "facing=west","half=top","open=false","powered=false","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_40 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:40"), (short) 15239, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_40 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:40"), (short) 15239, Block.WARPED_TRAPDOOR, "facing=west","half=bottom","open=true","powered=true","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_41 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:41"), (short) 15240, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_41 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:41"), (short) 15240, Block.WARPED_TRAPDOOR, "facing=west","half=bottom","open=true","powered=true","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_42 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:42"), (short) 15241, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_42 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:42"), (short) 15241, Block.WARPED_TRAPDOOR, "facing=west","half=bottom","open=true","powered=false","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_43 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:43"), (short) 15242, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_43 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:43"), (short) 15242, Block.WARPED_TRAPDOOR, "facing=west","half=bottom","open=true","powered=false","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_44 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:44"), (short) 15243, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_44 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:44"), (short) 15243, Block.WARPED_TRAPDOOR, "facing=west","half=bottom","open=false","powered=true","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_45 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:45"), (short) 15244, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_45 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:45"), (short) 15244, Block.WARPED_TRAPDOOR, "facing=west","half=bottom","open=false","powered=true","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_46 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:46"), (short) 15245, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_46 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:46"), (short) 15245, Block.WARPED_TRAPDOOR, "facing=west","half=bottom","open=false","powered=false","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_47 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:47"), (short) 15246, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_47 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:47"), (short) 15246, Block.WARPED_TRAPDOOR, "facing=west","half=bottom","open=false","powered=false","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_48 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:48"), (short) 15247, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_48 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:48"), (short) 15247, Block.WARPED_TRAPDOOR, "facing=east","half=top","open=true","powered=true","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_49 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:49"), (short) 15248, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_49 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:49"), (short) 15248, Block.WARPED_TRAPDOOR, "facing=east","half=top","open=true","powered=true","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_50 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:50"), (short) 15249, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_50 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:50"), (short) 15249, Block.WARPED_TRAPDOOR, "facing=east","half=top","open=true","powered=false","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_51 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:51"), (short) 15250, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_51 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:51"), (short) 15250, Block.WARPED_TRAPDOOR, "facing=east","half=top","open=true","powered=false","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_52 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:52"), (short) 15251, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_52 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:52"), (short) 15251, Block.WARPED_TRAPDOOR, "facing=east","half=top","open=false","powered=true","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_53 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:53"), (short) 15252, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_53 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:53"), (short) 15252, Block.WARPED_TRAPDOOR, "facing=east","half=top","open=false","powered=true","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_54 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:54"), (short) 15253, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_54 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:54"), (short) 15253, Block.WARPED_TRAPDOOR, "facing=east","half=top","open=false","powered=false","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_55 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:55"), (short) 15254, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_55 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:55"), (short) 15254, Block.WARPED_TRAPDOOR, "facing=east","half=top","open=false","powered=false","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_56 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:56"), (short) 15255, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_56 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:56"), (short) 15255, Block.WARPED_TRAPDOOR, "facing=east","half=bottom","open=true","powered=true","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_57 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:57"), (short) 15256, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_57 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:57"), (short) 15256, Block.WARPED_TRAPDOOR, "facing=east","half=bottom","open=true","powered=true","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_58 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:58"), (short) 15257, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_58 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:58"), (short) 15257, Block.WARPED_TRAPDOOR, "facing=east","half=bottom","open=true","powered=false","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_59 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:59"), (short) 15258, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_59 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:59"), (short) 15258, Block.WARPED_TRAPDOOR, "facing=east","half=bottom","open=true","powered=false","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_60 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:60"), (short) 15259, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_60 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:60"), (short) 15259, Block.WARPED_TRAPDOOR, "facing=east","half=bottom","open=false","powered=true","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_61 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:61"), (short) 15260, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_61 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:61"), (short) 15260, Block.WARPED_TRAPDOOR, "facing=east","half=bottom","open=false","powered=true","waterlogged=false");
 
-  public static final BlockState WARPED_TRAPDOOR_62 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:62"), (short) 15261, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_62 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:62"), (short) 15261, Block.WARPED_TRAPDOOR, "facing=east","half=bottom","open=false","powered=false","waterlogged=true");
 
-  public static final BlockState WARPED_TRAPDOOR_63 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:63"), (short) 15262, Block.WARPED_TRAPDOOR);
+  public static final BlockState WARPED_TRAPDOOR_63 = new BlockState(NamespaceID.from("minecraft:warped_trapdoor:63"), (short) 15262, Block.WARPED_TRAPDOOR, "facing=east","half=bottom","open=false","powered=false","waterlogged=false");
 
   public static void initStates() {
     Block.WARPED_TRAPDOOR.addBlockState(WARPED_TRAPDOOR_0);

@@ -13,11 +13,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BoneBlock {
-  public static final BlockState BONE_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:bone_block:0"), (short) 9260, Block.BONE_BLOCK);
+  public static final BlockState BONE_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:bone_block:0"), (short) 9260, Block.BONE_BLOCK, "axis=x");
 
-  public static final BlockState BONE_BLOCK_1 = new BlockState(NamespaceID.from("minecraft:bone_block:1"), (short) 9261, Block.BONE_BLOCK);
+  public static final BlockState BONE_BLOCK_1 = new BlockState(NamespaceID.from("minecraft:bone_block:1"), (short) 9261, Block.BONE_BLOCK, "axis=y");
 
-  public static final BlockState BONE_BLOCK_2 = new BlockState(NamespaceID.from("minecraft:bone_block:2"), (short) 9262, Block.BONE_BLOCK);
+  public static final BlockState BONE_BLOCK_2 = new BlockState(NamespaceID.from("minecraft:bone_block:2"), (short) 9262, Block.BONE_BLOCK, "axis=z");
 
   public static void initStates() {
     Block.BONE_BLOCK.addBlockState(BONE_BLOCK_0);

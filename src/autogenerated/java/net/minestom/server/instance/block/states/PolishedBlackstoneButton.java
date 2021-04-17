@@ -13,53 +13,53 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PolishedBlackstoneButton {
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_0 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:0"), (short) 16761, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_0 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:0"), (short) 16761, Block.POLISHED_BLACKSTONE_BUTTON, "face=FLOOR","facing=north","powered=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_1 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:1"), (short) 16762, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_1 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:1"), (short) 16762, Block.POLISHED_BLACKSTONE_BUTTON, "face=FLOOR","facing=north","powered=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_2 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:2"), (short) 16763, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_2 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:2"), (short) 16763, Block.POLISHED_BLACKSTONE_BUTTON, "face=FLOOR","facing=south","powered=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_3 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:3"), (short) 16764, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_3 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:3"), (short) 16764, Block.POLISHED_BLACKSTONE_BUTTON, "face=FLOOR","facing=south","powered=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_4 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:4"), (short) 16765, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_4 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:4"), (short) 16765, Block.POLISHED_BLACKSTONE_BUTTON, "face=FLOOR","facing=west","powered=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_5 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:5"), (short) 16766, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_5 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:5"), (short) 16766, Block.POLISHED_BLACKSTONE_BUTTON, "face=FLOOR","facing=west","powered=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_6 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:6"), (short) 16767, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_6 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:6"), (short) 16767, Block.POLISHED_BLACKSTONE_BUTTON, "face=FLOOR","facing=east","powered=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_7 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:7"), (short) 16768, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_7 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:7"), (short) 16768, Block.POLISHED_BLACKSTONE_BUTTON, "face=FLOOR","facing=east","powered=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_8 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:8"), (short) 16769, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_8 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:8"), (short) 16769, Block.POLISHED_BLACKSTONE_BUTTON, "face=WALL","facing=north","powered=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_9 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:9"), (short) 16770, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_9 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:9"), (short) 16770, Block.POLISHED_BLACKSTONE_BUTTON, "face=WALL","facing=north","powered=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_10 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:10"), (short) 16771, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_10 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:10"), (short) 16771, Block.POLISHED_BLACKSTONE_BUTTON, "face=WALL","facing=south","powered=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_11 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:11"), (short) 16772, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_11 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:11"), (short) 16772, Block.POLISHED_BLACKSTONE_BUTTON, "face=WALL","facing=south","powered=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_12 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:12"), (short) 16773, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_12 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:12"), (short) 16773, Block.POLISHED_BLACKSTONE_BUTTON, "face=WALL","facing=west","powered=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_13 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:13"), (short) 16774, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_13 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:13"), (short) 16774, Block.POLISHED_BLACKSTONE_BUTTON, "face=WALL","facing=west","powered=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_14 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:14"), (short) 16775, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_14 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:14"), (short) 16775, Block.POLISHED_BLACKSTONE_BUTTON, "face=WALL","facing=east","powered=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_15 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:15"), (short) 16776, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_15 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:15"), (short) 16776, Block.POLISHED_BLACKSTONE_BUTTON, "face=WALL","facing=east","powered=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_16 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:16"), (short) 16777, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_16 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:16"), (short) 16777, Block.POLISHED_BLACKSTONE_BUTTON, "face=CEILING","facing=north","powered=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_17 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:17"), (short) 16778, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_17 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:17"), (short) 16778, Block.POLISHED_BLACKSTONE_BUTTON, "face=CEILING","facing=north","powered=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_18 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:18"), (short) 16779, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_18 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:18"), (short) 16779, Block.POLISHED_BLACKSTONE_BUTTON, "face=CEILING","facing=south","powered=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_19 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:19"), (short) 16780, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_19 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:19"), (short) 16780, Block.POLISHED_BLACKSTONE_BUTTON, "face=CEILING","facing=south","powered=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_20 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:20"), (short) 16781, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_20 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:20"), (short) 16781, Block.POLISHED_BLACKSTONE_BUTTON, "face=CEILING","facing=west","powered=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_21 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:21"), (short) 16782, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_21 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:21"), (short) 16782, Block.POLISHED_BLACKSTONE_BUTTON, "face=CEILING","facing=west","powered=false");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_22 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:22"), (short) 16783, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_22 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:22"), (short) 16783, Block.POLISHED_BLACKSTONE_BUTTON, "face=CEILING","facing=east","powered=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_BUTTON_23 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:23"), (short) 16784, Block.POLISHED_BLACKSTONE_BUTTON);
+  public static final BlockState POLISHED_BLACKSTONE_BUTTON_23 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_button:23"), (short) 16784, Block.POLISHED_BLACKSTONE_BUTTON, "face=CEILING","facing=east","powered=false");
 
   public static void initStates() {
     Block.POLISHED_BLACKSTONE_BUTTON.addBlockState(POLISHED_BLACKSTONE_BUTTON_0);

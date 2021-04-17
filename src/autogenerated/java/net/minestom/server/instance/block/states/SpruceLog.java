@@ -13,11 +13,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SpruceLog {
-  public static final BlockState SPRUCE_LOG_0 = new BlockState(NamespaceID.from("minecraft:spruce_log:0"), (short) 76, Block.SPRUCE_LOG);
+  public static final BlockState SPRUCE_LOG_0 = new BlockState(NamespaceID.from("minecraft:spruce_log:0"), (short) 76, Block.SPRUCE_LOG, "axis=x");
 
-  public static final BlockState SPRUCE_LOG_1 = new BlockState(NamespaceID.from("minecraft:spruce_log:1"), (short) 77, Block.SPRUCE_LOG);
+  public static final BlockState SPRUCE_LOG_1 = new BlockState(NamespaceID.from("minecraft:spruce_log:1"), (short) 77, Block.SPRUCE_LOG, "axis=y");
 
-  public static final BlockState SPRUCE_LOG_2 = new BlockState(NamespaceID.from("minecraft:spruce_log:2"), (short) 78, Block.SPRUCE_LOG);
+  public static final BlockState SPRUCE_LOG_2 = new BlockState(NamespaceID.from("minecraft:spruce_log:2"), (short) 78, Block.SPRUCE_LOG, "axis=z");
 
   public static void initStates() {
     Block.SPRUCE_LOG.addBlockState(SPRUCE_LOG_0);

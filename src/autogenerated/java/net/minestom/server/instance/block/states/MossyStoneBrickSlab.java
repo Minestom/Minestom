@@ -13,17 +13,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class MossyStoneBrickSlab {
-  public static final BlockState MOSSY_STONE_BRICK_SLAB_0 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_slab:0"), (short) 10805, Block.MOSSY_STONE_BRICK_SLAB);
+  public static final BlockState MOSSY_STONE_BRICK_SLAB_0 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_slab:0"), (short) 10805, Block.MOSSY_STONE_BRICK_SLAB, "type=top","waterlogged=true");
 
-  public static final BlockState MOSSY_STONE_BRICK_SLAB_1 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_slab:1"), (short) 10806, Block.MOSSY_STONE_BRICK_SLAB);
+  public static final BlockState MOSSY_STONE_BRICK_SLAB_1 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_slab:1"), (short) 10806, Block.MOSSY_STONE_BRICK_SLAB, "type=top","waterlogged=false");
 
-  public static final BlockState MOSSY_STONE_BRICK_SLAB_2 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_slab:2"), (short) 10807, Block.MOSSY_STONE_BRICK_SLAB);
+  public static final BlockState MOSSY_STONE_BRICK_SLAB_2 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_slab:2"), (short) 10807, Block.MOSSY_STONE_BRICK_SLAB, "type=bottom","waterlogged=true");
 
-  public static final BlockState MOSSY_STONE_BRICK_SLAB_3 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_slab:3"), (short) 10808, Block.MOSSY_STONE_BRICK_SLAB);
+  public static final BlockState MOSSY_STONE_BRICK_SLAB_3 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_slab:3"), (short) 10808, Block.MOSSY_STONE_BRICK_SLAB, "type=bottom","waterlogged=false");
 
-  public static final BlockState MOSSY_STONE_BRICK_SLAB_4 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_slab:4"), (short) 10809, Block.MOSSY_STONE_BRICK_SLAB);
+  public static final BlockState MOSSY_STONE_BRICK_SLAB_4 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_slab:4"), (short) 10809, Block.MOSSY_STONE_BRICK_SLAB, "type=double","waterlogged=true");
 
-  public static final BlockState MOSSY_STONE_BRICK_SLAB_5 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_slab:5"), (short) 10810, Block.MOSSY_STONE_BRICK_SLAB);
+  public static final BlockState MOSSY_STONE_BRICK_SLAB_5 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_slab:5"), (short) 10810, Block.MOSSY_STONE_BRICK_SLAB, "type=double","waterlogged=false");
 
   public static void initStates() {
     Block.MOSSY_STONE_BRICK_SLAB.addBlockState(MOSSY_STONE_BRICK_SLAB_0);

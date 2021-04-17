@@ -13,9 +13,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class TubeCoral {
-  public static final BlockState TUBE_CORAL_0 = new BlockState(NamespaceID.from("minecraft:tube_coral:0"), (short) 9534, Block.TUBE_CORAL);
+  public static final BlockState TUBE_CORAL_0 = new BlockState(NamespaceID.from("minecraft:tube_coral:0"), (short) 9534, Block.TUBE_CORAL, "waterlogged=true");
 
-  public static final BlockState TUBE_CORAL_1 = new BlockState(NamespaceID.from("minecraft:tube_coral:1"), (short) 9535, Block.TUBE_CORAL);
+  public static final BlockState TUBE_CORAL_1 = new BlockState(NamespaceID.from("minecraft:tube_coral:1"), (short) 9535, Block.TUBE_CORAL, "waterlogged=false");
 
   public static void initStates() {
     Block.TUBE_CORAL.addBlockState(TUBE_CORAL_0);

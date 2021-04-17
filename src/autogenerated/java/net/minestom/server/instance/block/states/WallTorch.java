@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WallTorch {
-  public static final BlockState WALL_TORCH_0 = new BlockState(NamespaceID.from("minecraft:wall_torch:0"), (short) 1436, Block.WALL_TORCH);
+  public static final BlockState WALL_TORCH_0 = new BlockState(NamespaceID.from("minecraft:wall_torch:0"), (short) 1436, Block.WALL_TORCH, "facing=north");
 
-  public static final BlockState WALL_TORCH_1 = new BlockState(NamespaceID.from("minecraft:wall_torch:1"), (short) 1437, Block.WALL_TORCH);
+  public static final BlockState WALL_TORCH_1 = new BlockState(NamespaceID.from("minecraft:wall_torch:1"), (short) 1437, Block.WALL_TORCH, "facing=south");
 
-  public static final BlockState WALL_TORCH_2 = new BlockState(NamespaceID.from("minecraft:wall_torch:2"), (short) 1438, Block.WALL_TORCH);
+  public static final BlockState WALL_TORCH_2 = new BlockState(NamespaceID.from("minecraft:wall_torch:2"), (short) 1438, Block.WALL_TORCH, "facing=west");
 
-  public static final BlockState WALL_TORCH_3 = new BlockState(NamespaceID.from("minecraft:wall_torch:3"), (short) 1439, Block.WALL_TORCH);
+  public static final BlockState WALL_TORCH_3 = new BlockState(NamespaceID.from("minecraft:wall_torch:3"), (short) 1439, Block.WALL_TORCH, "facing=east");
 
   public static void initStates() {
     Block.WALL_TORCH.addBlockState(WALL_TORCH_0);

@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class LimeWallBanner {
-  public static final BlockState LIME_WALL_BANNER_0 = new BlockState(NamespaceID.from("minecraft:lime_wall_banner:0"), (short) 8177, Block.LIME_WALL_BANNER);
+  public static final BlockState LIME_WALL_BANNER_0 = new BlockState(NamespaceID.from("minecraft:lime_wall_banner:0"), (short) 8177, Block.LIME_WALL_BANNER, "facing=north");
 
-  public static final BlockState LIME_WALL_BANNER_1 = new BlockState(NamespaceID.from("minecraft:lime_wall_banner:1"), (short) 8178, Block.LIME_WALL_BANNER);
+  public static final BlockState LIME_WALL_BANNER_1 = new BlockState(NamespaceID.from("minecraft:lime_wall_banner:1"), (short) 8178, Block.LIME_WALL_BANNER, "facing=south");
 
-  public static final BlockState LIME_WALL_BANNER_2 = new BlockState(NamespaceID.from("minecraft:lime_wall_banner:2"), (short) 8179, Block.LIME_WALL_BANNER);
+  public static final BlockState LIME_WALL_BANNER_2 = new BlockState(NamespaceID.from("minecraft:lime_wall_banner:2"), (short) 8179, Block.LIME_WALL_BANNER, "facing=west");
 
-  public static final BlockState LIME_WALL_BANNER_3 = new BlockState(NamespaceID.from("minecraft:lime_wall_banner:3"), (short) 8180, Block.LIME_WALL_BANNER);
+  public static final BlockState LIME_WALL_BANNER_3 = new BlockState(NamespaceID.from("minecraft:lime_wall_banner:3"), (short) 8180, Block.LIME_WALL_BANNER, "facing=east");
 
   public static void initStates() {
     Block.LIME_WALL_BANNER.addBlockState(LIME_WALL_BANNER_0);

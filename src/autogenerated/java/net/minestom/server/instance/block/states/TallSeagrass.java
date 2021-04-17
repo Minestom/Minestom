@@ -13,9 +13,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class TallSeagrass {
-  public static final BlockState TALL_SEAGRASS_0 = new BlockState(NamespaceID.from("minecraft:tall_seagrass:0"), (short) 1346, Block.TALL_SEAGRASS);
+  public static final BlockState TALL_SEAGRASS_0 = new BlockState(NamespaceID.from("minecraft:tall_seagrass:0"), (short) 1346, Block.TALL_SEAGRASS, "half=upper");
 
-  public static final BlockState TALL_SEAGRASS_1 = new BlockState(NamespaceID.from("minecraft:tall_seagrass:1"), (short) 1347, Block.TALL_SEAGRASS);
+  public static final BlockState TALL_SEAGRASS_1 = new BlockState(NamespaceID.from("minecraft:tall_seagrass:1"), (short) 1347, Block.TALL_SEAGRASS, "half=lower");
 
   public static void initStates() {
     Block.TALL_SEAGRASS.addBlockState(TALL_SEAGRASS_0);

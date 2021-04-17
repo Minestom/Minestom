@@ -13,13 +13,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PlayerWallHead {
-  public static final BlockState PLAYER_WALL_HEAD_0 = new BlockState(NamespaceID.from("minecraft:player_wall_head:0"), (short) 6570, Block.PLAYER_WALL_HEAD);
+  public static final BlockState PLAYER_WALL_HEAD_0 = new BlockState(NamespaceID.from("minecraft:player_wall_head:0"), (short) 6570, Block.PLAYER_WALL_HEAD, "facing=north");
 
-  public static final BlockState PLAYER_WALL_HEAD_1 = new BlockState(NamespaceID.from("minecraft:player_wall_head:1"), (short) 6571, Block.PLAYER_WALL_HEAD);
+  public static final BlockState PLAYER_WALL_HEAD_1 = new BlockState(NamespaceID.from("minecraft:player_wall_head:1"), (short) 6571, Block.PLAYER_WALL_HEAD, "facing=south");
 
-  public static final BlockState PLAYER_WALL_HEAD_2 = new BlockState(NamespaceID.from("minecraft:player_wall_head:2"), (short) 6572, Block.PLAYER_WALL_HEAD);
+  public static final BlockState PLAYER_WALL_HEAD_2 = new BlockState(NamespaceID.from("minecraft:player_wall_head:2"), (short) 6572, Block.PLAYER_WALL_HEAD, "facing=west");
 
-  public static final BlockState PLAYER_WALL_HEAD_3 = new BlockState(NamespaceID.from("minecraft:player_wall_head:3"), (short) 6573, Block.PLAYER_WALL_HEAD);
+  public static final BlockState PLAYER_WALL_HEAD_3 = new BlockState(NamespaceID.from("minecraft:player_wall_head:3"), (short) 6573, Block.PLAYER_WALL_HEAD, "facing=east");
 
   public static void initStates() {
     Block.PLAYER_WALL_HEAD.addBlockState(PLAYER_WALL_HEAD_0);

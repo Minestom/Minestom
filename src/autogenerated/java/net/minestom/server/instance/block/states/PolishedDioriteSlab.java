@@ -13,17 +13,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PolishedDioriteSlab {
-  public static final BlockState POLISHED_DIORITE_SLAB_0 = new BlockState(NamespaceID.from("minecraft:polished_diorite_slab:0"), (short) 10811, Block.POLISHED_DIORITE_SLAB);
+  public static final BlockState POLISHED_DIORITE_SLAB_0 = new BlockState(NamespaceID.from("minecraft:polished_diorite_slab:0"), (short) 10811, Block.POLISHED_DIORITE_SLAB, "type=top","waterlogged=true");
 
-  public static final BlockState POLISHED_DIORITE_SLAB_1 = new BlockState(NamespaceID.from("minecraft:polished_diorite_slab:1"), (short) 10812, Block.POLISHED_DIORITE_SLAB);
+  public static final BlockState POLISHED_DIORITE_SLAB_1 = new BlockState(NamespaceID.from("minecraft:polished_diorite_slab:1"), (short) 10812, Block.POLISHED_DIORITE_SLAB, "type=top","waterlogged=false");
 
-  public static final BlockState POLISHED_DIORITE_SLAB_2 = new BlockState(NamespaceID.from("minecraft:polished_diorite_slab:2"), (short) 10813, Block.POLISHED_DIORITE_SLAB);
+  public static final BlockState POLISHED_DIORITE_SLAB_2 = new BlockState(NamespaceID.from("minecraft:polished_diorite_slab:2"), (short) 10813, Block.POLISHED_DIORITE_SLAB, "type=bottom","waterlogged=true");
 
-  public static final BlockState POLISHED_DIORITE_SLAB_3 = new BlockState(NamespaceID.from("minecraft:polished_diorite_slab:3"), (short) 10814, Block.POLISHED_DIORITE_SLAB);
+  public static final BlockState POLISHED_DIORITE_SLAB_3 = new BlockState(NamespaceID.from("minecraft:polished_diorite_slab:3"), (short) 10814, Block.POLISHED_DIORITE_SLAB, "type=bottom","waterlogged=false");
 
-  public static final BlockState POLISHED_DIORITE_SLAB_4 = new BlockState(NamespaceID.from("minecraft:polished_diorite_slab:4"), (short) 10815, Block.POLISHED_DIORITE_SLAB);
+  public static final BlockState POLISHED_DIORITE_SLAB_4 = new BlockState(NamespaceID.from("minecraft:polished_diorite_slab:4"), (short) 10815, Block.POLISHED_DIORITE_SLAB, "type=double","waterlogged=true");
 
-  public static final BlockState POLISHED_DIORITE_SLAB_5 = new BlockState(NamespaceID.from("minecraft:polished_diorite_slab:5"), (short) 10816, Block.POLISHED_DIORITE_SLAB);
+  public static final BlockState POLISHED_DIORITE_SLAB_5 = new BlockState(NamespaceID.from("minecraft:polished_diorite_slab:5"), (short) 10816, Block.POLISHED_DIORITE_SLAB, "type=double","waterlogged=false");
 
   public static void initStates() {
     Block.POLISHED_DIORITE_SLAB.addBlockState(POLISHED_DIORITE_SLAB_0);

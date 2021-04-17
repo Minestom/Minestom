@@ -13,17 +13,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BrownShulkerBox {
-  public static final BlockState BROWN_SHULKER_BOX_0 = new BlockState(NamespaceID.from("minecraft:brown_shulker_box:0"), (short) 9354, Block.BROWN_SHULKER_BOX);
+  public static final BlockState BROWN_SHULKER_BOX_0 = new BlockState(NamespaceID.from("minecraft:brown_shulker_box:0"), (short) 9354, Block.BROWN_SHULKER_BOX, "facing=north");
 
-  public static final BlockState BROWN_SHULKER_BOX_1 = new BlockState(NamespaceID.from("minecraft:brown_shulker_box:1"), (short) 9355, Block.BROWN_SHULKER_BOX);
+  public static final BlockState BROWN_SHULKER_BOX_1 = new BlockState(NamespaceID.from("minecraft:brown_shulker_box:1"), (short) 9355, Block.BROWN_SHULKER_BOX, "facing=east");
 
-  public static final BlockState BROWN_SHULKER_BOX_2 = new BlockState(NamespaceID.from("minecraft:brown_shulker_box:2"), (short) 9356, Block.BROWN_SHULKER_BOX);
+  public static final BlockState BROWN_SHULKER_BOX_2 = new BlockState(NamespaceID.from("minecraft:brown_shulker_box:2"), (short) 9356, Block.BROWN_SHULKER_BOX, "facing=south");
 
-  public static final BlockState BROWN_SHULKER_BOX_3 = new BlockState(NamespaceID.from("minecraft:brown_shulker_box:3"), (short) 9357, Block.BROWN_SHULKER_BOX);
+  public static final BlockState BROWN_SHULKER_BOX_3 = new BlockState(NamespaceID.from("minecraft:brown_shulker_box:3"), (short) 9357, Block.BROWN_SHULKER_BOX, "facing=west");
 
-  public static final BlockState BROWN_SHULKER_BOX_4 = new BlockState(NamespaceID.from("minecraft:brown_shulker_box:4"), (short) 9358, Block.BROWN_SHULKER_BOX);
+  public static final BlockState BROWN_SHULKER_BOX_4 = new BlockState(NamespaceID.from("minecraft:brown_shulker_box:4"), (short) 9358, Block.BROWN_SHULKER_BOX, "facing=up");
 
-  public static final BlockState BROWN_SHULKER_BOX_5 = new BlockState(NamespaceID.from("minecraft:brown_shulker_box:5"), (short) 9359, Block.BROWN_SHULKER_BOX);
+  public static final BlockState BROWN_SHULKER_BOX_5 = new BlockState(NamespaceID.from("minecraft:brown_shulker_box:5"), (short) 9359, Block.BROWN_SHULKER_BOX, "facing=down");
 
   public static void initStates() {
     Block.BROWN_SHULKER_BOX.addBlockState(BROWN_SHULKER_BOX_0);
