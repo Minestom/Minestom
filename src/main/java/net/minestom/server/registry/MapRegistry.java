@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 public class MapRegistry<T extends Keyed> implements IRegistry.Writable<T> {
     private final Map<Key, T> namespaceToValue = new ConcurrentHashMap<>();
@@ -35,16 +36,16 @@ public class MapRegistry<T extends Keyed> implements IRegistry.Writable<T> {
     }
 
     public static class Defaulted<T extends Keyed> extends MapRegistry<T> {
-        private final T defaultValue;
+        private final Supplier<T> defaultValue;
 
-        public Defaulted(T defaultValue) {
+        public Defaulted(Supplier<T> defaultValue) {
             this.defaultValue = defaultValue;
         }
 
         @Override
         public @NotNull T get(@NotNull Key id) {
             final T value = super.get(id);
-            return value != null ? value : defaultValue;
+            return value != null ? value : defaultValue.get();
         }
     }
 }

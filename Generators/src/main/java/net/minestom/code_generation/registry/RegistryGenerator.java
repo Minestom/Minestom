@@ -69,7 +69,7 @@ public final class RegistryGenerator extends MinestomCodeGenerator {
             CodeBlock.Builder init = CodeBlock.builder();
             if (defaultValue != null) {
                 init.addStatement(
-                        "new $T<>($T.$N)",
+                        "new $T<>(() -> $T.$N)",
                         registryType,
                         type,
                         defaultValue

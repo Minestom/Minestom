@@ -2,12 +2,15 @@ package net.minestom.server;
 
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
+import net.minestom.server.attribute.Attribute;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.data.DataType;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.metadata.villager.VillagerProfession;
+import net.minestom.server.entity.metadata.villager.VillagerType;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.Extension;
@@ -18,6 +21,7 @@ import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockEntity;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
@@ -36,6 +40,7 @@ import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.recipe.RecipeManager;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.sound.SoundEvent;
@@ -155,16 +160,26 @@ public final class MinecraftServer {
         // without this line, registry types that are not loaded explicitly will have an internal empty registry in Registries
         // That can happen with PotionType for instance, if no code tries to access a PotionType field
         // TODO: automate (probably with code generation)
+        // Load Registry
+        try {
+            Class.forName(Registries.class.getName(), true, MinecraftServer.class.getClassLoader());
+        } catch (ClassNotFoundException e) {
+            LOGGER.error("An error happened while loading the registry. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
+        }
         Block.values();
+        Fluid.values();
+        BlockEntity.values();
+        EntityType.values();
+        VillagerProfession.values();
+        VillagerType.values();
         Material.values();
+        Enchantment.values();
         PotionType.values();
         PotionEffect.values();
-        Enchantment.values();
-        EntityType.values();
         SoundEvent.values();
         Particle.values();
+        Attribute.values();
         StatisticType.values();
-        Fluid.values();
 
         connectionManager = new ConnectionManager();
         // Networking

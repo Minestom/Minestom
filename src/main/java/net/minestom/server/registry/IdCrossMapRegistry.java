@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class IdCrossMapRegistry<T extends Keyed> extends MapRegistry<T> implements IdCrossRegistry.Writable<T> {
     protected final List<T> values = Collections.synchronizedList(new ArrayList<>(Short.MAX_VALUE));
@@ -53,9 +54,9 @@ public class IdCrossMapRegistry<T extends Keyed> extends MapRegistry<T> implemen
     }
 
     public static class Defaulted<T extends Keyed> extends IdCrossMapRegistry<T> {
-        private final T defaultValue;
+        private final Supplier<T> defaultValue;
 
-        public Defaulted(T defaultValue) {
+        public Defaulted(Supplier<T> defaultValue) {
             this.defaultValue = defaultValue;
         }
 
@@ -65,14 +66,14 @@ public class IdCrossMapRegistry<T extends Keyed> extends MapRegistry<T> implemen
             try {
                 return values.get(id);
             } catch (IndexOutOfBoundsException e) {
-                return defaultValue;
+                return defaultValue.get();
             }
         }
 
         @Override
         public @NotNull T get(@NotNull Key id) {
             final T value = super.get(id);
-            return value != null ? value : defaultValue;
+            return value != null ? value : defaultValue.get();
         }
     }
 }
